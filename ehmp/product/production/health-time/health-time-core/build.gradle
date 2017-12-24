@@ -9,16 +9,26 @@ version = '2.0.23'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
 
+configurations {
+    exportedLibs
+}
+
 dependencies {
-	compile 'joda-time:joda-time:2.2'
+	compile "joda-time:joda-time:${versions.jodaTimeVersion}"
 
   testCompile "junit:junit:${versions.junitVersion}"
   testCompile group: 'org.mockito', name: 'mockito-core', version: versions.mockitoVersion
+  
+  exportedLibs group: 'joda-time', name: 'joda-time', version:"${versions.jodaTimeVersion}" 
 }
 
 jar {
     manifest {
         attributes 'Implementation-Title': 'CPE Health-Time Library'
+    }
+    // Include libs in the exportedLibs variable as part of this jar.
+    from {
+        configurations.exportedLibs.collect{ it.isDirectory() ? it : zipTree(it) }
     }
 }
 

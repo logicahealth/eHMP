@@ -38,8 +38,10 @@ define([
             var buttonOptions = this.getOption('buttonOptions') || {};
             return {
                 target: "helpIconUniqueWindow",
+                role: "link",
                 href: this.model.get('url'),
                 title: _.isString(_.get(buttonOptions, 'title')) ? _.get(buttonOptions, 'title') : 'Help',
+                'aria-label': 'Access Help content. External link.',
                 'data-toggle': 'tooltip'
             };
         },
@@ -51,7 +53,7 @@ define([
                 }
             };
         },
-        template: Handlebars.compile('<i class="fa {{getIcon}} fa-lg"><span class="sr-only">Press enter to access the help content in a new browser window.</span></i>') //add icon option support
+        template: Handlebars.compile('<i class="fa {{getIcon}} fa-lg"></i>') //add icon option support
     });
 
     var HelpLinkBehavior = Backbone.Marionette.Behavior.extend({

@@ -3,8 +3,12 @@ define([
     "app/applets/narrative_lab_results_grid/gridView",
     'app/applets/orders/tray/labs/trayView',
     'app/applets/narrative_lab_results_grid/detailsListener'
-], function (GridView, trayView, DetailsListener) {
+], function(GridView, trayView, DetailsListener) {
     "use strict";
+
+    (function initListener() {
+        return new DetailsListener();
+    })();
 
     return {
         id: 'narrative_lab_results_grid',
@@ -25,7 +29,6 @@ define([
             view: trayView,
             chromeEnabled: false
         }],
-        defaultViewType: 'summary',
-        detailsListener: new DetailsListener()
+        defaultViewType: 'summary'
     };
 });

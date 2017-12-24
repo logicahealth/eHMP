@@ -1,6 +1,23 @@
 'use strict';
 
-function RpcClient() {}
+function RpcClient(logger, config) {
+    this.logger = logger;
+    this.config = config;
+    this.error = null;
+    this.response = null;
+}
+
+//----------------------------------------------------------------------------------------------------------
+// This method is used to set up an error and response that the called function should return.
+//
+// error: The error that should be returned.
+// response: The response that should be returned.
+//----------------------------------------------------------------------------------------------------------
+RpcClient.prototype.setErrorAndResponse = function(error, response){
+    var self = this;
+    self.error = error;
+    self.response = response;
+};
 
 RpcClient.create = function create(logger, config) {
     return new RpcClient(logger, config);
@@ -12,9 +29,8 @@ RpcClient.create = function create(logger, config) {
 // The callback will be called with the parameters:
 //    callback(error, loginInfo)
 RpcClient.prototype.connect = function connect(callback) {
-    var error = null;
-    var results = '';
-    return callback(error, results);
+    var self = this;
+    return setTimeout(callback, 0, self.error, self.response);
 };
 
 
@@ -22,34 +38,40 @@ RpcClient.prototype.createSender = function() {};
 
 
 RpcClient.prototype.execute = function execute(rpcCall, params, callback) {
-    callback(null, null);
+    var self = this;
+    setTimeout(callback, 0, self.error, self.response);
 };
 
 
 RpcClient.prototype.close = function close(callback) {
-    callback(null, null);
+    var self = this;
+    setTimeout(callback, 0, self.error, self.response);
 };
 
 
 RpcClient.prototype.greetingCommand = function greetingCommand(callback) {
-    callback(null, 'HANDSHAKE SUCCESSFUL');
+    var self = this;
+    setTimeout(callback, 0, self.error, 'HANDSHAKE SUCCESSFUL');
 };
 
 RpcClient.prototype.signonCommand = function signonCommand(callback) {
-    callback(null, 'SIGNON SETUP SUCCESSFUL');
+    var self = this;
+    setTimeout(callback, 0, self.error, 'SIGNON SETUP SUCCESSFUL');
 };
 
 RpcClient.prototype.verifyCommand = function verifyCommand(callback) {
-    callback(null, null);
+    var self = this;
+    setTimeout(callback, 0, self.error, self.response);
 };
 
 RpcClient.prototype.contextCommand = function contextCommand(callback) {
-    var context = null;
-    callback(null, context);
+    var self = this;
+    setTimeout(callback, 0, self.error, self.response);
 };
 
 RpcClient.prototype.signoffCommand = function signoffCommand(callback) {
-    callback(null, 'SIGNOFF SUCCESSFUL');
+    var self = this;
+    setTimeout(callback, 0, self.error, 'SIGNOFF SUCCESSFUL');
 };
 
 
@@ -78,7 +100,7 @@ number of times. Also, it can be an array (of parameters).
 function callRpc(logger, config, rpc, parameters, callback) {
     var error = null;
     var rpcResult = null;
-    callback(error, rpcResult);
+    setTimeout(callback, 0, error, rpcResult);
 }
 
 
@@ -96,7 +118,7 @@ The last parameter must *always* be a callback.
 */
 function authenticate(logger, config, callback) {
     var authResult = null;
-    callback(null, authResult);
+    setTimeout(callback, 0, null, authResult);
 }
 
 

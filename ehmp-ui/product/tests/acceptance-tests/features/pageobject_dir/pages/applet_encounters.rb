@@ -34,7 +34,7 @@ class PobEncountersApplet < PobParentApplet
   # *****************  All_Button_Elements  ******************* #
   element :btn_encounter_form, "#patientDemographic-encounter [type='button']"
   element :btn_set_encounter, "#currentVisitContextButton"  
-  element :current_encounter_text, '#currentVisitContextButton .encounter-location-provider span:first-of-type'
+  element :current_encounter_text, '#currentVisitContextButton .encounter-location-provider p:first-of-type'
   element :btn_confirm_encounter, "#viewEncounters-btn"
   element :btn_confirm_encounter_enabled, "#viewEncounters-btn:not([disabled])"
   element :btn_confirm_encounter_disabled, "#viewEncounters-btn[disabled]"
@@ -47,7 +47,9 @@ class PobEncountersApplet < PobParentApplet
   elements :btn_remove_primary_provider, "[title='Press enter to remove Audiologist,One.']"
   elements :btn_remove_diagnosis, ".remove-panel-button"
   
-  element :btn_visits_encounter_arrow, "[data-group-instanceid='panel-Visit'] i"
+  element :btn_visits_encounter_arrow_down, "[data-group-instanceid='panel-Visit'] i[arrowposition='down']"
+  element :btn_visits_encounter_arrow_right, "[data-group-instanceid='panel-Visit'] i[arrowposition='right']"
+  element :btn_admissions_encounter_arrow_down, "[data-group-instanceid='panel-Admission'] i[arrowposition='down']"
   element :btn_visits_encounter, "[data-group-instanceid='panel-Visit'] button"
   element :btn_procedures_encounter, "[data-group-instanceid='panel-Procedure'] button"
   element :btn_admissions_encounter, "[data-group-instanceid='panel-Admission'] button"
@@ -59,7 +61,9 @@ class PobEncountersApplet < PobParentApplet
   element :btn_first_appointment, "[data-cell-instanceid='event_name_AUDIOLOGY']"
   element :btn_first_visit, "[data-cell-instanceid='event_name_GENERALINTERNALMEDICINE']"
   element :btn_first_procedure, "[data-cell-instanceid='event_name_PULMONARYFUNCTIONINTERPRET']"
-  element :btn_first_admission, "[data-cell-instanceid='event_name_SLKJFLKSDJF']"
+  element :btn_first_admission, "[data-cell-instanceid='event_name_htn']"
+
+  #elements :btn_first_admission, "[data-group-instanceid='panel-Admission'] [data-cell-instanceid^=event_name]:nth-of-type(1)"
   element :btn_spinal_cord_admission, "[data-cell-instanceid^='event_name_SPINALCORDINJURY']"
   
   # *****************  All_Drop_down_Elements  ******************* #
@@ -70,8 +74,9 @@ class PobEncountersApplet < PobParentApplet
   
   # *****************  All_Table_Elements  ******************* #
   element :tbl_clinic_appointment, "#selectableTableAppointments .body .table-row:nth-child(1)"
-  element :tbl_active_appointment_location, "#selectableTableAppointments .body .table-row.active div.table-cell:nth-of-type(3)"
+  element :tbl_active_appointment_location, "#selectableTableAppointments .body .table-row.active div.table-cell:nth-of-type(3) span:not(.sr-only)"
   element :tbl_hosptial_admission, "#selectableTableAdmissions .body .table-row:nth-child(1)"
+  element :tbl_hosptial_admission_location, "#selectableTableAdmissions .body .table-row:nth-child(1) div.table-cell:nth-of-type(3) span:not(.sr-only)"
   
   element :col_visit_type, "[data-appletid='encounters'] [data-group-instanceid='panel-Visit'] [data-header-instanceid='name-header']"
   element :col_hx_occurrence, "[data-appletid='encounters'] [data-group-instanceid='panel-Visit'] [data-header-instanceid='count-header1']"
@@ -79,7 +84,7 @@ class PobEncountersApplet < PobParentApplet
   
   element :encounter_procedure, "[data-group-instanceid='panel-Procedure'] button"
   
-  elements :tbl_encounters_headers, "#grid-panel-encounters .header span[data-header-instanceid]"
+  elements :tbl_encounters_headers, "[data-appletid=encounters] .grid-applet-panel .header span[data-header-instanceid]"
   elements :tbl_encounters_visit_type_headers, "[data-group-instanceid='panel-Visit'] .header [data-header-instanceid]"
   elements :tbl_encounters_procedures_type_headers, "[data-group-instanceid='panel-Procedure'] .header [data-header-instanceid]"
   elements :tbl_encounters_admissions_type_headers, "[data-group-instanceid='panel-Admission'] .header [data-header-instanceid]"
@@ -105,7 +110,8 @@ class PobEncountersApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
     add_text_filter appletid_css
   end
 

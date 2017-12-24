@@ -5,16 +5,16 @@ Feature: F142 VX Cache Management and Expiration/Sync Stabilization
 
 @f142_2_1 @US2004 @debug @DE588
 Scenario: Manual expiration of sync status with specified time parameter
-    Given a patient with pid "9E7A;3" has been synced through the RDK API
-    When the client requests manual expiration time "20030916170915.999" for patient with pid "9E7A;3" and site "DOD"
+    Given a patient with pid "SITE;3" has been synced through the RDK API
+    When the client requests manual expiration time "20030916170915.999" for patient with pid "SITE;3" and site "DOD"
     Then a successful response is returned
-    When the client requests manual expiration time "20140916170915.999" for patient with pid "9E7A;3" and site "HDR"
+    When the client requests manual expiration time "20140916170915.999" for patient with pid "SITE;3" and site "HDR"
     Then a successful response is returned
-    When the client requests manual expiration time "20140916170915.999" for patient with pid "9E7A;3" and site "DAS"
+    When the client requests manual expiration time "20140916170915.999" for patient with pid "SITE;3" and site "DAS"
     Then a successful response is returned
-    When the client requests manual expiration time "20140916170915.996" for patient with pid "9E7A;3" and site "VLER"
+    When the client requests manual expiration time "20140916170915.996" for patient with pid "SITE;3" and site "VLER"
     Then a successful response is returned
-    When the client requests sync status for the patient "9E7A;3" in RDK format
+    When the client requests sync status for the patient "SITE;3" in RDK format
     Then the sync status for patient contain:
       | field										                  | value					      |
       | syncStatusByVistaSystemId.DOD.expiresOn		| 20030916170915.999	|

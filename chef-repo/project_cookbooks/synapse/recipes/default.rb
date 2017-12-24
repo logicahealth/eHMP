@@ -32,6 +32,15 @@ template node['synapse']['config_file'] do
   notifies :restart, 'service[synapse]'
 end
 
+logrotate_app 'synapse' do
+  path node['synapse']['logrotate']['path']
+  options node['synapse']['logrotate']['options']
+  enable true
+  rotate node['synapse']['logrotate']['rotate']
+  frequency node['synapse']['logrotate']['frequency']
+  dateformat node['synapse']['logrotate']['dateformat']
+end
+
 include_recipe 'build-essential'
 
 yum_package 'haproxy' do
@@ -45,7 +54,17 @@ gem_package 'synapse' do
   not_if "GEM_HOME=#{node['synapse']['install_dir']} gem list synapse -i -v #{node['synapse']['version']}"
 end
 
-template '/etc/init.d/synapse' do
+execute 'stop-systemv-style-synapse' do
+  command '/sbin/service synapse stop'
+  notifies :delete, 'file[/etc/init.d/synapse]'
+  only_if {File.exist?('/etc/init.d/synapse')}
+end
+
+file '/etc/init.d/synapse' do
+  action :nothing
+end
+
+template '/etc/init/synapse.conf' do
   variables(
     deploy_path: node['synapse']['install_dir'],
     user: node['synapse']['user'],
@@ -53,12 +72,12 @@ template '/etc/init.d/synapse' do
     config_file: node['synapse']['config_file'],
     gem_home: node['synapse']['install_dir']
   )
-  source 'synapse.init.erb'
-  mode 0755
-  notifies :restart, 'service[synapse]'
+  source 'synapse.conf.erb'
+  notifies :stop, 'service[synapse]', :before
+  notifies :start, 'service[synapse]'
 end
 
 service 'synapse' do
+  provider Chef::Provider::Service::Upstart
   action :enable
-  supports status: true, start: true, stop: true, restart: true
 end

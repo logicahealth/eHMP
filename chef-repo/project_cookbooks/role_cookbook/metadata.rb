@@ -4,9 +4,9 @@ maintainer_email 'vistacore@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures role_cookbook cookbooks against a vm'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.3"
+version          "2.233.10"
 
-depends "beats", "=2.1.0"
+depends "beats", "=2.233.0"
 
 #############################
 # 3rd party
@@ -19,5 +19,6 @@ depends "swap", "=0.3.8"
 #############################
 # wrapper_cookbook
 #############################
-depends "sssd_ldap_wrapper", "2.1.1"
-depends "ohai", "2.1.0"
+depends "sssd_ldap_wrapper", "2.233.1"
+depends "ohai", "2.233.0"
+depends "yum_wrapper", "2.233.1"

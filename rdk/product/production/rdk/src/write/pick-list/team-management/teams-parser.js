@@ -9,7 +9,8 @@ module.exports.parse = function (rows, sites, patientRelated) {
             'teamID': _.get(row, 'TEAM_ID'),
             'teamName': _.get(row, 'TEAM_NAME') + ' - ' + utils.getSiteAbbreviation(sites, _.get(row, 'STATIONNUMBER')),
             'teamPrimaryFoci': _.get(row, 'PCM_STD_TEAM_FOCUS_ID', ''),
-            'teamSecondaryFoci': _.get(row, 'PCM_STD_TEAM_FOCUS2_ID', '')
+            'teamSecondaryFoci': _.get(row, 'PCM_STD_TEAM_FOCUS2_ID', ''),
+            'careTypeId': _.get(row, 'PCM_STD_TEAM_CARE_TYPE_ID', '')
         };
     });
     return result;

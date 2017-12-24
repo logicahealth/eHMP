@@ -6,12 +6,12 @@ var clinicalObject = require('../../../subsystems/clinical-objects/clinical-obje
 
 describe('orders-common-save-draft-write', function() {
     var readStub;
-    var testUid = 'urn:va:ehmp:9E7A;3:01234567-1337-dead-beef-fedcba987654';
+    var testUid = 'urn:va:ehmp:SITE;3:01234567-1337-dead-beef-fedcba987654';
     var writebackContext = {
         logger: sinon.stub(bunyan.createLogger({
             name: 'orders-common-read-draft-spec'
         })),
-        pid: '9E7A;3',
+        pid: 'SITE;3',
         resourceId: testUid,
         appConfig: {
             generalPurposeJdsServer: {

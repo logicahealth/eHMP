@@ -12,7 +12,7 @@ Get tasks with given context and assigned to certain parties
             {
                 "context": "ssss",
                 "subContext": "ssss",
-                "pid": "9E7A;3",
+                "pid": "SITE;3",
                 "status": "ssss",
                 "priority": "ssss",
                 "getNotifications": false,
@@ -145,7 +145,7 @@ Get current tasks with given context
 
             {
                 "processInstanceId": 23,
-                "pid": "9E7A;3",
+                "pid": "SITE;3",
                 "priority": "ssss"
             }
 

@@ -15,16 +15,16 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var _ = require('underscore');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
-var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var solrSmartClient = require('solr-smart-client');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
 var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var VxSyncForeverAgent = require('http').Agent;
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
@@ -51,6 +51,7 @@ config.recordRetirement = {
 };
 
 config.syncRequestApi.host = host;
+config.syncRequestApi.port = testConfig.vxsyncPort;
 
 var tubePrefix = 'retirement-util-test';
 var jobType = 'patient-record-retirement';
@@ -59,7 +60,7 @@ var publisherRouter;
 /*
 	*** Note ***
 	This test requires a patient to be synced before it can test the utility.
-	The patient used here is 9E7A;21.
+	The patient used here is SITE;21.
 	This patient will remain synced after the test runs.
  */
 
@@ -70,12 +71,12 @@ describe('patient-record-retirement-util', function() {
 			utilityType: 'Patient Record Retirement Util Integration Test'
 		};
 
-		var pid = '9E7A;21';
+		var pid = 'SITE;21';
 
 		var environment = {
 			vistaClient: new VistaClient(log, log, config, null),
 			jds: new JdsClient(log, log, config),
-			solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log, new VxSyncForeverAgent()),
+			solr: solrSmartClient.createClient(log, config.solrClient, new VxSyncForeverAgent({keepAlive: true, maxSockets: config.handlerMaxSockets || 5})),
 			hdrClient: new HdrClient(log, log, config),
 			beanstalk: new BeanstalkClient(log, host, config.beanstalk.repoDefaults.port),
 			jobStatusUpdater: {

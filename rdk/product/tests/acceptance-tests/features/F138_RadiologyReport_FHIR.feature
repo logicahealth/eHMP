@@ -8,7 +8,7 @@ Feature: F138 Return of Radiology Reports in FHIR format
  Scenario: Client can request Radiology Reports in FHIR format
    Given a patient with "radiology report results" in multiple VistAs
   # And a patient with pid "10107V395912" has been synced through the RDK API
-   When the client requests radiology report results for the patient "9E7A;253" in FHIR format
+   When the client requests radiology report results for the patient "SITE;253" in FHIR format
    Then a successful response is returned
    #Then the client receives 88 FHIR "VistA" result(s)
    #And the client receives 44 FHIR "panorama" result(s)
@@ -21,11 +21,11 @@ Feature: F138 Return of Radiology Reports in FHIR format
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#hasImages       |
        | resource.extension.valueString         | false                                                   |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerUid     |
-       | resource.extension.valueString         | urn:va:user:9E7A:1595                                   |
+       | resource.extension.valueString         | urn:va:user:SITE:1595                                   |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerName    |
        | resource.extension.valueString         | PROVIDER,FIFTY                                          |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationUid     |
-       | resource.extension.valueString         | urn:va:location:9E7A:40                                 |
+       | resource.extension.valueString         | urn:va:location:SITE:40                                 |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationName    |
        | resource.extension.valueString         | RADIOLOGY MAIN FLOOR                                |
        | resource.text.status                   | generated                                           |
@@ -35,10 +35,10 @@ Feature: F138 Return of Radiology Reports in FHIR format
        | resource.name.text                     | ANKLE 2 VIEWS                                       |
        | resource.status                        | final                                               |
        | resource.issued                        | IS_FHIR_FORMATTED_DATE                              |
-       | resource.subject.reference             | Patient/9E7A;253                                    |
+       | resource.subject.reference             | Patient/SITE;253                                    |
        | resource.performer.reference           | IS_SET                                              |
        | resource.identifier.system             | urn:oid:2.16.840.1.113883.6.233                     |
-       | resource.identifier.value              | urn:va:image:9E7A:253:7059382.8387-1                |
+       | resource.identifier.value              | urn:va:image:SITE:253:7059382.8387-1                |
        | resource.serviceCategory.coding.code   | RAD                                                 |
        | resource.serviceCategory.coding.display| Radiology                                           |
        | resource.serviceCategory.coding.system | http://hl7.org/fhir/v2/0074                         |
@@ -52,7 +52,7 @@ Feature: F138 Return of Radiology Reports in FHIR format
  @F138_2_radiologyreport_fhir @fhir @10146V393772
  Scenario: Client can request Radiology Reports in FHIR format
    Given a patient with "radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;301" in FHIR format
+   When the client requests radiology report results for the patient "SITE;301" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "radiology report results"
        | field                                         | panorama_value                              |
@@ -61,7 +61,7 @@ Feature: F138 Return of Radiology Reports in FHIR format
  @F138_3_radiologyreport_fhir @fhir @10107V395912
  Scenario: Client can request Radiology Reports in FHIR format
    Given a patient with "radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;253" in FHIR format
+   When the client requests radiology report results for the patient "SITE;253" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "radiology report results"
        | field                                  | kodak_value                                             |
@@ -72,11 +72,11 @@ Feature: F138 Return of Radiology Reports in FHIR format
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#hasImages       |
        | resource.extension.valueString         | false                                                   |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerUid     |
-       | resource.extension.valueString         | urn:va:user:9E7A:1595                                   |
+       | resource.extension.valueString         | urn:va:user:SITE:1595                                   |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerName    |
        | resource.extension.valueString         | PROVIDER,FIFTY                                          |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationUid     |
-       | resource.extension.valueString         | urn:va:location:9E7A:40                                 |
+       | resource.extension.valueString         | urn:va:location:SITE:40                                 |
        | resource.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationName    |
        | resource.extension.valueString         | RADIOLOGY MAIN FLOOR                                |
        | resource.text.status                   | generated                                           |
@@ -86,10 +86,10 @@ Feature: F138 Return of Radiology Reports in FHIR format
        | resource.name.text                     | ANKLE 2 VIEWS                                       |
        | resource.status                        | final                                               |
        | resource.issued                        | IS_FHIR_FORMATTED_DATE                              |
-       | resource.subject.reference             | Patient/9E7A;253                                    |
+       | resource.subject.reference             | Patient/SITE;253                                    |
        | resource.performer.reference           | IS_SET                                              |
        | resource.identifier.system             | urn:oid:2.16.840.1.113883.6.233                     |
-       | resource.identifier.value              | urn:va:image:9E7A:253:7059382.8387-1                |
+       | resource.identifier.value              | urn:va:image:SITE:253:7059382.8387-1                |
        | resource.serviceCategory.coding.code   | RAD                                                 |
        | resource.serviceCategory.coding.display| Radiology                                           |
        | resource.serviceCategory.coding.system | http://hl7.org/fhir/v2/0074                         |
@@ -103,25 +103,25 @@ Feature: F138 Return of Radiology Reports in FHIR format
  @F138_4_radiologyreport_fhir @fhir @10146V393772
  Scenario: Client can request Radiology Reports in FHIR format
    Given a patient with "radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;301" in FHIR format
+   When the client requests radiology report results for the patient "SITE;301" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "radiology report results"
      | field                                         | kodak_value            |
      | resource.requestDetail.reference              | IS_SET                |
 
  # negative test case.
- @F138_7_radiologyreport_neg_fhir @fhir @9E7A100184
+ @F138_7_radiologyreport_neg_fhir @fhir @SITE100184
  Scenario: Negative scenario.  Client can request radiology results in FHIR format
    Given a patient with "No radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;100184" in FHIR format
+   When the client requests radiology report results for the patient "SITE;100184" in FHIR format
    Then a successful response is returned
    Then corresponding matching FHIR records totaling "0" are displayed
 
  @F138_8_radiologyreport_fhir @fhir @10107V395912 @DE974
  Scenario: Client can request Radiology Reports in FHIR format
    Given a patient with "radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;253" in FHIR format
+   When the client requests radiology report results for the patient "SITE;253" in FHIR format
    Then a successful response is returned
 
-   When the client requests radiology report results for the patient "9E7A;253" in FHIR format with no domain param
+   When the client requests radiology report results for the patient "SITE;253" in FHIR format with no domain param
    Then a successful response is returned

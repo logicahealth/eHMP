@@ -220,7 +220,7 @@ Lucene will flush based on whichever limit is hit first.  -->
     -->
     <!-- <jmx agentId="myAgent" /> -->
     <!-- If you want to start a new MBeanServer, specify the serviceUrl -->
-    <!-- <jmx serviceUrl="service:jmx:rmi:///jndi/rmi://localhost:9999/solr"/>
+    <!-- <jmx serviceUrl="service:jmx:rmi:///jndi/rmi://localhost:PORT/solr"/>
     -->
 
     <!-- The default high-performance update handler -->
@@ -258,22 +258,41 @@ Lucene will flush based on whichever limit is hit first.  -->
              have some sort of hard autoCommit to limit the log size.
           -->
 
-        <!--autoCommit will force changes to be flushed to stable storage.  However, openSearcher is false, so changes
-        will not immediately be seen.  The autoSoftCommit will make changes visible.  The frequency is set so
-        autoSoftcommit is not a multiple of autoCommit, reducing the frequency of both events firing at same time.-->
+        <!--
+             autoCommit will force changes to be flushed to durable storage based either on time since a document was added OR on number of documents added since the last commit. A hard commit will be triggered whenever either of those criteria are met.
+
+             Values:
+                 - maxTime (required) should be chosen to ensure that a commit occurs even during periods of low document activity.
+                 - maxDocs (optional) should be chosen to ensure the transaction log does not grow so large, before a commit occurs based on maxTime, that recovery time is excessive during a restart.
+                 - openSearcher should be true when soft commit is not enabled. However, when soft commit is enabled, this value should be false since the soft commit will automatically open a new searcher object to make document changes visible.
+
+              The template has been written to support either:
+                1) continued use of hard commit alone without corresponding soft commit. This is the current eHMP implementation.
+                2) use of hard commit and soft commit
+
+              For hard commit alone, maxTime must be specified. maxDocs may be specified. openSearcher should be set to true.
+              For hard commit and soft commit together, both maxTime and maxDocs should be specified for autoCommit. This will limit transaction log size and also ensure durability within a reasonable timeframe.  For autoSoftCommit, maxTime is the only option currently supported.  openSearcher should be set to false for autoCommit.
+        -->
         <autoCommit>
-            <maxTime>2000</maxTime>
-            <openSearcher>true</openSearcher>
+            <maxTime><%= @commitMaxTime %></maxTime>
+            <% if !@commitMaxDocs.nil? %>
+            <maxDocs><%= @commitMaxDocs %></maxDocs>
+            <% end %>
+            <openSearcher><%= @commitOpenSearcher %></openSearcher>
         </autoCommit>
 
-        <!-- softAutoCommit is like autoCommit except it causes a
-             'soft' commit which only ensures that changes are visible
-             but does not ensure that data is synced to disk.  This is
-             faster and more near-realtime friendly than a hard commit.
-          -->
-        <!--<autoSoftCommit>-->
-            <!--<maxTime>65000</maxTime>-->
-        <!--</autoSoftCommit>-->
+        <!-- 
+            autoSoftCommit ensures that changes are visible but does not ensure that data is synced to disk.
+            This is faster and more near-realtime friendly than a hard commit. 
+            The value for maxTime should be chosen to ensure new documents are visible as quickly as possible while still minimizing the frequency of commit activity.
+            Soft commit can be disabled by setting the soft commit maxTime value to nil. In that case the autoCommit maxTime should be set
+            to a lower value to ensure changes are visible, as well as durable, as soon as possible.
+        -->
+        <% if !@softCommitMaxTime.nil? %>
+        <autoSoftCommit>
+            <maxTime><%= @softCommitMaxTime %></maxTime>
+        </autoSoftCommit>
+        <% end %>
 
         <!-- Update Related Event Listeners
 
@@ -792,7 +811,7 @@ Lucene will flush based on whichever limit is hit first.  -->
                  org.apache.solr.spelling.suggest.tst.TSTLookup   [ternary trees]
             -->
             <str name="field">phrase</str>  <!-- the indexed field to derive suggestions from -->
-            <float name="threshold">0.</float>
+            <float name="threshold">0.001</float>  <!-- limit uncommon or misspelled terms. See Threshold at https://wiki.apache.org/solr/Suggester -->
             <str name="buildOnCommit">false</str>
             <str name="buildOnOptimize">true</str>
             <str name="storeDir">./spellcheckerSuggesterFSTLookup</str>
@@ -818,6 +837,7 @@ Lucene will flush based on whichever limit is hit first.  -->
         <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
         <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
         <str name="field">phrase</str>
+        <float name="threshold">0.001</float>  <!-- limit uncommon or misspelled terms. See Threshold at https://wiki.apache.org/solr/Suggester -->
         <!--  <str name="weightField">kind</str> -->
         <str name="payloadField">pid</str>
         <str name="indexPath">./phraseSuggestIndex</str> <!--indexPath is used for storing in disk the suggester structure for AnalyzingInfixLookupFactory per reference guide -->
@@ -830,6 +850,7 @@ Lucene will flush based on whichever limit is hit first.  -->
         <str name="lookupImpl">FreeTextLookupFactory</str>
         <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
         <str name="field">spell</str>
+        <float name="threshold">0.001</float>  <!-- limit uncommon or misspelled terms. See Threshold at https://wiki.apache.org/solr/Suggester -->
         <str name="payloadField">pid</str>
         <str name="storeDir">./freetextSuggestStore</str> <!-- while not clearly stated on ref guide, indexPath is used for storing in disk the suggester structure for FreeTextLookupFactory. Find one such example at https://searchcode.com/codesearch/view/25293183/  -->
         <str name="suggestFreeTextAnalyzerFieldType">text_general</str>

@@ -8,13 +8,13 @@ class Vitals < AllApplets
     super
     @appletid = 'vitals'
     appletid_css = "[data-appletid=#{@appletid}]"
-    add_verify(CucumberLabel.new('Empty Vital Row'), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-vitals tr.empty'))
-    add_action(CucumberLabel.new('Search Filter'), ClickAction.new, AccessHtmlElement.new(:id, 'grid-filter-button-vitals'))
+    add_verify(CucumberLabel.new('Empty Vital Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=vitals] table tr.empty'))
+    add_action(CucumberLabel.new('Search Filter'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid=vitals] .applet-filter-button'))
     # Vital Rows
     rows = AccessHtmlElement.new(:css, '#data-grid-vitals tbody tr.selectable')
     add_verify(CucumberLabel.new('Vital Rows'), VerifyXpathCount.new(rows), rows)
     # First Vital Row
-    add_action(CucumberLabel.new('First Vital Row'), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-vitals']/descendant::td[contains(string(),'BMI')]"))
+    add_action(CucumberLabel.new('First Vital Row'), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='vitals']//table/descendant::td[contains(string(),'BMI')]"))
     add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '[button-type=detailView-button-toolbar]'))
 
     add_verify(CucumberLabel.new("Vital"), VerifyText.new, AccessHtmlElement.new(:id, "vitalsModalDisplayName"))
@@ -32,7 +32,7 @@ class Vitals < AllApplets
 
   def applet_loaded?
     return true if am_i_visible? 'Empty Vital Row'
-    return TestSupport.driver.find_elements(:css, '#data-grid-vitals tr.selectable').length > 0
+    return TestSupport.driver.find_elements(:css, '[data-appletid=vitals] .grid-container tr.selectable').length > 0
   rescue => e
     p e
     false
@@ -44,23 +44,24 @@ When(/^the user clears any existing filters$/) do
 end
 
 Then(/^the Vitals expanded headers are$/) do |table|
-  ehmp = PobVitalsApplet.new
-  existing_headers = ehmp.expanded_headers_text_only
-  table.rows.each do | temp_header |
-    expect(existing_headers).to include(temp_header[0].upcase)
-  end  
+  ehmp = PobVitalsApplet.new  
+  ehmp.wait_for_fld_expanded_headers
+  expect(ehmp.fld_expanded_headers.length).to be > 0
+  table.rows.each do |headers|
+    expect(object_exists_in_list(ehmp.fld_expanded_headers, "#{headers[0]}")).to eq(true), "Field '#{headers[0]}' was not found"
+  end
 end #Vitals Headers
 
 #Validate the Problems rows in the coversheet view
 Then(/^the Vitals table contains the rows$/) do |table|
   driver = TestSupport.driver
-  num_of_rows = driver.find_elements(:css, "#data-grid-vitals tbody tr")
+  num_of_rows = driver.find_elements(:css, "[data-appletid=vitals] tbody tr")
   #Loop through rows in cucumber   
   table.rows.each do |row_defined_in_cucumber|
     matched = false
     #Loop through UI rows
     for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:css, "#data-grid-vitals tbody tr:nth-child(#{i}) td")     
+      row_data = driver.find_elements(:css, "[data-appletid=vitals] tbody tr:nth-child(#{i}) td")
       if row_defined_in_cucumber.length != row_data.length
         matched = false
         p "The number of columns in the UI is #{row_data.length} but in cucumber it's #{row_defined_in_cucumber.length}"
@@ -77,38 +78,35 @@ Then(/^the Vitals table contains the rows$/) do |table|
   end #do loop  
 end #Problems Pills
 
-Then(/^the user filters the Vitals Applet by text "([^"]*)"$/) do |input_text|
+Then(/^the user filters the Vitals Applet by text "([^"]*)"$/) do |filter_text|            
+  ehmp = PobVitalsApplet.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { infiniate_scroll('#data-grid-vitals tbody') }
-  row_count = TableContainer.instance.get_elements("Rows - Vitals Applet").size
-  p "row_count: #{row_count}"
-  #expect(@active_problems.perform_action('Control - applet - Text Filter', input_text)).to eq(true)
-  html_element = 'Vitals Filter Field'
-  navigation = Navigation.instance
-  navigation.wait_until_action_element_visible(html_element, DefaultLogin.wait_time)
-  expect(navigation.perform_action(html_element, input_text)).to be_true, "Error when attempting to enter '#{input_text}' into #{html_element}"
-  
-  wait.until { row_count != TableContainer.instance.get_elements("Rows - Vitals Applet").size }
+  wait.until { infiniate_scroll('[data-appletid=vitals] tbody') }
+  row_count = ehmp.tbl_vitals_grid.length
+  ehmp.wait_until_fld_vitals_search_filter_visible
+  expect(ehmp).to have_fld_vitals_search_filter
+  ehmp.fld_vitals_search_filter.set filter_text
+  ehmp.fld_vitals_search_filter.native.send_keys(:enter)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { row_count != ehmp.tbl_vitals_grid.length }
 end
 
 Then(/^the vitals table only diplays rows including text "([^"]*)"$/) do |input_text|
-  upper = input_text.upcase
-  lower = input_text.downcase
-
-  path =  "//table[@id='data-grid-vitals']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
-
-  row_count = TableContainer.instance.get_elements("Rows - Vitals Applet").size 
-  rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
-  expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_until_tbl_vitals_type_cell_data_visible
+  expect(only_text_exists_in_list(ehmp.tbl_vitals_type_cell_data, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
 end
 
-When(/^the user clicks the all\-range\-vitals$/) do
-  ehmp = PobVitalsApplet.new
-  expect(ehmp).to have_btn_expanded_all_range
-  ehmp.btn_expanded_all_range.click
-  ehmp.wait_for_btn_expanded_all_range_active
-  expect(ehmp).to have_btn_expanded_all_range_active
-  wait_until { ehmp.applet_loaded? }  
+When(/^the user clicks the All vitals range$/) do
+  @ehmp = PobVitalsApplet.new
+  expect(@ehmp.wait_for_date_range_filter).to eq(true), "Expected date range filter to display"
+  expect(@ehmp.date_range_filter.wait_for_btn_all).to eq(true), "Expected date range filter to display btn all"
+
+  @ehmp.date_range_filter.btn_all.click
+  expect(@ehmp.date_range_filter.wait_for_btn_all_active).to eq(true), "Expected All button to be active"
+
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until {  Vitals.instance.applet_loaded? }
 end
 
 When(/^the user expands the vitals applet$/) do
@@ -135,7 +133,7 @@ Then(/^the expanded vitals applet is displayed$/) do
 end
 
 Then(/^the Vitals Applet contains data rows$/) do
-  compare_item_counts("#grid-panel-vitals tr")
+  compare_item_counts("[data-appletid=vitals] .grid-container table tr")
 end
 
 When(/^user refreshes Vitals Applet$/) do
@@ -175,10 +173,10 @@ When(/^the user minimizes the vitals applet$/) do
 end
 
 When(/^the user views the first Vital detail view$/) do
-  vital_applet = Vitals.instance
-  expect(vital_applet.wait_until_xpath_count_greater_than('Vital Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(vital_applet.perform_action('First Vital Row')).to eq(true)
-  expect(vital_applet.perform_action('Detail View Button')).to eq(true)
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_tbl_vitals_grid
+  expect(ehmp.tbl_vitals_grid.length).to be > 0
+  ehmp.tbl_vitals_grid[0].click
 end
 
 Then(/^the Vital Detail modal displays$/) do |table|
@@ -261,7 +259,7 @@ end
 
 Then(/^the Expanded Vitals applet only displays rows from the last (\d+) year$/) do |year|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
-  wait.until { verify_rows_within_year('#data-grid-vitals tbody tr td:nth-child(1)', year.to_i) }
+  wait.until { verify_rows_within_year('[data-appletid=vitals] tbody tr td:nth-child(2)', year.to_i) }
 end
 
 def verify_rows_last_hours(css_string, hours, empty_row = 'tr.empty')
@@ -288,7 +286,7 @@ end
 
 Then(/^the Expanded Vitals applet only displays rows from the last (\d+) hours$/) do |hour|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
-  wait.until { verify_rows_last_hours('#data-grid-vitals tbody tr td:nth-child(1)', hour.to_i) }
+  wait.until { verify_rows_last_hours('[data-appletid=vitals] tbody tr td:nth-child(2)', hour.to_i) }
 end
 
 Then(/^the BMI Vital detail modal is displayed$/) do
@@ -302,49 +300,82 @@ Then(/^the BMI Vital detail modal is displayed$/) do
   expect(@ehmp.tbl_vital_tests.length).to be > 0
 end
 
-Then(/^vitals gist is loaded successfully$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.wait_until_applet_gist_loaded 
-end
-
-When(/^user opens the first vitals gist item$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.wait_until_fld_vitals_gist_item_visible
-  expect(@ehmp).to have_fld_vitals_gist_item
-  @ehmp.fld_vitals_gist_item.click
-end
-  
-Then(/^vitals info button is displayed$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.wait_for_btn_info
-  expect(@ehmp).to have_btn_info
-end
-
 Then(/^user navigates to Vitals expanded view$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.load_and_wait_for_screenname
-  @ehmp.wait_until_applet_loaded
-  expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Vitals".upcase)
+  ehmp = PobVitalsApplet.new
+  
+  p "On url: #{TestSupport.driver.current_url}" 
+  navigate_in_ehmp "#/patient/vitals-full"  
+  p "On url: #{TestSupport.driver.current_url}"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { ehmp.applet_loaded? }
+
+  expect(ehmp.menu.fld_screen_name.text.upcase).to eq('VITALS')
 end
 
-When(/^user opens the first Vitals row$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.wait_until_tbl_vitals_grid_visible
-  expect(@ehmp).to have_tbl_vitals_grid
-  rows = @ehmp.tbl_vitals_grid
-  expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
-  rows[0].click
+Given(/^user navigates to expanded Vitals applet$/) do
+  applet = PobVitalsApplet.new
+  expected_screen = "Vitals"
+  applet.load
+  expect(applet).to have_menu
+  expect(applet.menu).to have_fld_screen_name
+  expect(applet.menu.fld_screen_name.text.upcase).to eq(expected_screen.upcase)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { applet.applet_loaded? }
 end
 
-When(/^the user clicks the All vitals range$/) do
-  @ehmp = PobVitalsApplet.new
-  @ehmp.wait_until_btn_expanded_all_range_visible
-  expect(@ehmp).to have_btn_expanded_all_range
-  @ehmp.btn_expanded_all_range.click
-  @ehmp.wait_until_btn_expanded_all_range_active_visible
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until {  Vitals.instance.applet_loaded? }
+Given(/^user can view the Quick Menu Icon in vitals applet$/) do
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
 end
 
+Given(/^Quick Menu Icon is collapsed in vitals applet$/) do
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in vitals applet$/) do
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the vitals applet$/) do |table|
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+Then(/^there exists a quick view popover table in vitals applet$/) do 
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.verify_popover_table ehmp
+end
+
+When(/^user hovers over the vitals applet trend view row$/) do
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_fld_vitals_gist
+  expect(ehmp).to have_fld_vitals_gist
+  rows = ehmp.fld_vitals_gist
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+When(/^user hovers over the vitals applet row$/) do
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_tbl_vitals_grid
+  expect(ehmp).to have_tbl_vitals_grid
+  rows = ehmp.tbl_vitals_grid
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+When(/^user selects the detail view from Quick Menu Icon of vitals applet$/) do
+  ehmp = PobVitalsApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+
+Then(/^the Vitals Summary view contain (\d+) items$/) do |arg1|
+  applet = PobVitalsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { VitalsCoversheet.instance.applet_loaded }
+  expect(applet.tbl_vitals_grid.length).to eq(arg1.to_i)
+end
 

@@ -1,4 +1,4 @@
-#Team Pluto
+#Team Pluto @orders_applet
 @F693_OrdersAppletEnhancements @US10791  @reg1
 Feature: F693 - Orders Applet Enhancements
 

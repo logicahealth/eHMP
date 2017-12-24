@@ -21,7 +21,7 @@ define([
         icon: null,
         tagName: 'li',
         template: Handlebars.compile([
-            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the {{getLabel}} centric workspaces." {{/if}}id="current-{{contextName}}-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
+            '{{#if isActive}}<p {{else}}<a href="#" title="Navigate to the {{getLabel}} centric workspaces." {{/if}}id="current-{{contextName}}-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
             '{{getIcon}} {{getLabel}}',
             '{{#if isActive}}</p>{{else}}</a>{{/if}}'
         ].join('\n')),

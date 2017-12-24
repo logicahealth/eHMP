@@ -20,7 +20,7 @@ define([
         author: {
             name: "USER,PANORAMA",
             duz: {
-                "9E7A": "10000000255"
+                "SITE": "10000000255"
             }
         },
         timeStamp: "12/14/2014 11:15PM"
@@ -29,7 +29,7 @@ define([
         author: {
             name: "USER,OTHER",
             duz: {
-                "9E7A": "10000000238"
+                "SITE": "10000000238"
             }
         },
         timeStamp: "12/13/2014 11:17PM"
@@ -39,7 +39,7 @@ define([
         author: {
             name: "USER,PANORAMA",
             duz: {
-                "9E7A": "10000000255"
+                "SITE": "10000000255"
             }
         },
         timeStamp: "12/14/2014 11:15PM"
@@ -48,7 +48,7 @@ define([
         author: {
             name: "USER,OTHER",
             duz: {
-                "9E7A": "10000000238"
+                "SITE": "10000000238"
             }
         },
         timeStamp: "12/13/2014 11:17PM"
@@ -187,8 +187,8 @@ define([
                 addNewComment();
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-edit-button')).toHaveLength(1);
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-delete-button')).toHaveLength(1);
-                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-edit-button').attr('title')).toContain('Press enter to edit comment: New comment');
-                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-delete-button').attr('title')).toContain('Press enter to delete comment: New comment');
+                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-edit-button').attr('title')).toContain('Edit comment: New comment');
+                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-delete-button').attr('title')).toContain('Delete comment: New comment');
             });
             it('edits correctly', function() {
                 // edit is inline, val of input is comment, all other comments buttons are disabled, and updating the text

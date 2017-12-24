@@ -32,7 +32,7 @@ function transformRecord(vprRecord, log, xformConfig, callback) {
     solrXformUtil.setCommonFields(solrRecord, vprRecord);
     setDomainSpecificFields(solrRecord, vprRecord);
     xformHtmlToTxt(solrRecord, vprRecord, log, xformConfig, function(error) {
-        if(error){
+        if (error) {
             var errorMessage = format('solr-vlerdocument-xform.transformRecord: transformation encountered error: %s, SOLR record: %j', error, solrRecord);
             log.error(errorMessage);
             return callback(errorMessage);
@@ -96,14 +96,30 @@ function getTextFromHtml(xformConfig, htmlString){
     //Remove any Base64 encoded multiparts
     //htmlString = htmlString.replace(/\^multipart\^\^Base64\^\w*/g, '');
 
-    if(xformConfig && xformConfig.vlerdocument){
-        _.each(xformConfig.vlerdocument.regexFilters, function(regexString){
+    if (xformConfig && xformConfig.vlerdocument) {
+        _.each(xformConfig.vlerdocument.regexFilters, function(regexString) {
             var regex = new RegExp(regexString, 'g');
             htmlString = htmlString.replace(regex, '');
         });
     }
 
-    return html2text.fromString(htmlString, {ignoreHref: true, ignoreImage: true});
+    return html2text.fromString(htmlString, {
+        wordwrap: false,
+        ignoreHref: true,
+        ignoreImage: true,
+        format: {
+            text: function(node) {
+                var text = node.data;
+                if (/^\s+$/.test(text)) {
+                    return '';
+                }
+                return text + ' ';
+            },
+            lineBreak: function() {
+                return '';
+            }
+        }
+    });
 }
 
 

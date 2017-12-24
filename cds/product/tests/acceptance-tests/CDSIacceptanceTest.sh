@@ -6,15 +6,15 @@ then
 	ping -c 3 $1 > /dev/null
 	if [ $? -eq 0 ]
 	then
-		TCPport=8080
+		TCPport=PORT
 		targetURL=http://$IPaddr:$TCPport/cds-results-service/rest/invokeRulesForPatient
 		jsonPayload=/tmp/jasonPayload.$$
 
 	cat << EOF > $jsonPayload
 {
       "context": {
-          "patientId" : "9E7A;100599",
-          "userId" : "REDACTED",
+          "patientId" : "SITE;100599",
+          "userId" : "24",
           "siteId" : "111"
         },
       "reason":"providerInteractiveAdvice"

@@ -1,11 +1,15 @@
 <div class="container-fluid">
     <div class="row" role="grid" aria-label="Stacked Graphs Grid">
         <div class="col-xs-12" role="row">
+            <div class="sr-only" role="gridcell">More Options</div>
             <div class="col-xs-3 top-padding-xs" role="columnheader">Concept</div>
+            <div class="sr-only" role="columnheader"></div> <!-- empty placeholders to align headers and columns for screenreader-->
+            <div class="sr-only" role="columnheader"></div> <!-- empty placeholders to align headers and columns for screenreader-->
             <div class="col-xs-1 top-padding-xs" role="columnheader">Last</div>
-            <div class="pointer-container">
+            <div class="sr-only" role="columnheader">Graph</div> <!-- Screen reader header to only contain pertinent information -->
+            <div class="pointer-container" aria-hidden="true">
                 <span class="stacked-graph-pointer top"></span>
-                <div class="col-xs-8 header-placeholder" role="columnheader" aria-label="Heading graph showing the date range represented in the graphs below."></div>
+                <div class="col-xs-8 header-placeholder"></div>
             </div>
         </div>
         <div class="col-xs-12 collection-container" role="presentation">

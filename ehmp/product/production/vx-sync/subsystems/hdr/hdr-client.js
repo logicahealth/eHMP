@@ -11,7 +11,6 @@ var request = require('request');
 var querystring = require('querystring');
 var format = require('util').format;
 var moment = require('moment');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 
 var JsonErrorString = 'Error parsing JSON body';
 
@@ -293,7 +292,8 @@ HDRClient.prototype._sendRequest = function (path, method, extraQueryParam, call
         url: url,
         method: method || 'GET',
         timeout: self.hdrConfig.timeout,
-        agentClass: VxSyncForeverAgent
+        forever: true,
+        agentOptions: {maxSockets: self.config.handlerMaxSockets || 5}
     };
 
     request(hdrReqOpt, function(error, response, body) {

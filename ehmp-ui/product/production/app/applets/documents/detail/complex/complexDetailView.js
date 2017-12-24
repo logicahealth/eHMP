@@ -31,7 +31,7 @@ define([
 
     // An item view representing a shortcut link to a child/result document
     var ResultLinkItemView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<button type="button" class="detail-result-link btn btn-link btn-sm" data-doc-uid="{{uid}}" title="Press enter to view results">{{localTitle}}</button>'),
+        template: Handlebars.compile('<button type="button" class="detail-result-link btn btn-link btn-sm" data-doc-uid="{{uid}}" aria-label="View results for {{localTitle}}">{{localTitle}}</button>'),
     });
 
     // An item view representing a single child/result document, of which there may be several

@@ -6,25 +6,25 @@ Feature: F498 Return sync results for VistA only, ICN only and DOD only patients
 
 @sync_panorama
 Scenario: Client can request sync for a patient on one VistA with a single PID (Panorama)
-	Given a patient with pid "9E7A;1" has been synced through VX-Sync API for "9E7A" site(s) 
-	When the client requests sync status for patient with pid "9E7A;1"
-	Then the client recieved data just for site(s) "9E7A"
+	Given a patient with pid "SITE;1" has been synced through VX-Sync API for "SITE" site(s) 
+	When the client requests sync status for patient with pid "SITE;1"
+	Then the client recieved data just for site(s) "SITE"
 	And the job status array and inProgress array are empty
 	
 	
 @sync_Kodak
 Scenario: Client can request sync for a patient on one VistA with a single PID (Kodak)
-	Given a patient with pid "C877;1" has been synced through VX-Sync API for "C877" site(s) 
-	When the client requests sync status for patient with pid "C877;1"
-	Then the client recieved data just for site(s) "C877"
+	Given a patient with pid "SITE;1" has been synced through VX-Sync API for "SITE" site(s) 
+	When the client requests sync status for patient with pid "SITE;1"
+	Then the client recieved data just for site(s) "SITE"
 	And the job status array and inProgress array are empty
 	
 	
 @sync_icn
 Scenario: Client can request sync for a patient for multiple VistAs and secondary sites with the ICN (Panorama, Kodak, DoD, HDR, and VLER)	
-	Given a patient with pid "11016V630869" has been synced through VX-Sync API for "9E7A;C877;DOD;HDR;VLER" site(s) 
+	Given a patient with pid "11016V630869" has been synced through VX-Sync API for "SITE;SITE;DOD;HDR;VLER" site(s) 
 	When the client requests sync status for patient with pid "11016V630869"
-	Then the client recieved data just for site(s) "9E7A;C877;DOD;HDR;VLER"
+	Then the client recieved data just for site(s) "SITE;SITE;DOD;HDR;VLER"
 	And the job status array and inProgress array are empty
 
 

@@ -1,6 +1,5 @@
 package gov.va.ehmp.services.exception;
 
-import org.jboss.logging.Logger;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -10,7 +9,6 @@ public class EhmpServicesException extends Exception {
 	private static final long serialVersionUID = 2719127462276038656L;
 	private HttpStatus httpStatus;
 	private String serverResponse = null;
-	private static final Logger LOGGER = Logger.getLogger(EhmpServicesException.class);
 	
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
@@ -27,7 +25,6 @@ public class EhmpServicesException extends Exception {
 	public EhmpServicesException(HttpStatus httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 	/**
@@ -39,11 +36,10 @@ public class EhmpServicesException extends Exception {
 	 * @param message The message for why the system is unable to provide a valid response to the UI.
 	 * @param serverResponse The message from an external system as to why we were unable to provide a valid response to the UI.
 	 */
-	public EhmpServicesException(HttpStatus httpStatus, String message, String serverResponse) {
-		super(message + ", response from external server: " + serverResponse);
+	public EhmpServicesException(HttpStatus httpStatus, String message, Throwable cause, String serverResponse) {
+		super(message + ", response from external server: " + serverResponse, cause);
 		this.httpStatus = httpStatus;
 		this.serverResponse = serverResponse;
-		LOGGER.error(message + ", response from external server: " + serverResponse);
 	}
 
 	/**
@@ -58,7 +54,6 @@ public class EhmpServicesException extends Exception {
 	public EhmpServicesException(HttpStatus httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------
@@ -82,18 +77,18 @@ public class EhmpServicesException extends Exception {
 
 
 	/**
-	 * Calls {@link #toJsonString()} to generate a JSON response that can be sent back to the UI<br/>
+	 * Calls {@link #createJsonErrorResponse()} to generate a JSON response that can be sent back to the UI<br/>
 	 * <font color="red"><b>It's preferred that you use toJsonString</b></font>
 	 */
 	@Override
 	public String toString() {
-		return toJsonString();
+		return createJsonErrorResponse();
 	}
 	
 	/**
-	 * Generates a JSON response that can be sent back to the UI (using {@link ErrorResponseUtil#create(HttpStatus, String, String)}).
+	 * Generates a JSON response that can be sent back to the UI (using {@link ErrorResponseUtil#createJsonErrorResponse(HttpStatus, String, String)}).
 	 */
-	public String toJsonString() {
-		return ErrorResponseUtil.create(this.httpStatus, this.getMessage(), this.getServerResponse());
+	public String createJsonErrorResponse() {
+		return ErrorResponseUtil.createJsonErrorResponse(this.httpStatus, this.getMessage(), this.getServerResponse());
 	}
 }

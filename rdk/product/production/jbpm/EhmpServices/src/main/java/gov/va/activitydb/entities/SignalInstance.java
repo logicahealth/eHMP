@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.AM_SIGNALINSTANCE")
+@Table(name = "AM_SIGNALINSTANCE", schema = "ACTIVITYDB")
 public class SignalInstance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "signalInstanceIdId_seq")	

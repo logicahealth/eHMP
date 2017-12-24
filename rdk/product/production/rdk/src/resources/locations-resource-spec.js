@@ -33,7 +33,7 @@ function createReqWithParam(map) {
         }).bind(null, map),
         session: {
             user: {
-                site: '9E7A'
+                site: 'SITE'
             }
         },
         query: map,
@@ -281,7 +281,7 @@ describe('selectPatientsFromDfnsInBatches', function() {
                 }, ]
             }
         };
-        locationsResource._selectPatientsFromDfnsInBatches(req, 'clinic', '9E7A', dfns, function(err, patientItems) {
+        locationsResource._selectPatientsFromDfnsInBatches(req, 'clinic', 'SITE', dfns, function(err, patientItems) {
             expect(err).to.be.falsy();
             jdsCalls.must.equal(3);
             patientItems.must.eql(expectedPatientItems);
@@ -303,10 +303,10 @@ describe('RPC calls', function() {
             config: {
                 rpcConfig: {
                     context: 'ORQOR DETAIL',
-                    siteHash: '9E7A'
+                    siteHash: 'SITE'
                 },
                 vistaSites: {
-                    '9E7A': {
+                    'SITE': {
                         division: [{
                             id: '500',
                             name: 'PANORAMA'
@@ -314,12 +314,12 @@ describe('RPC calls', function() {
                         host: 'IP        ',
                         port: PORT,
                         production: false,
-                        accessCode: 'REDACTED',
-                        verifyCode: 'REDACTED',
+                        accessCode: 'USER  ',
+                        verifyCode: 'PW      ',
                         localIP: 'IP      ',
                         localAddress: 'localhost'
                     },
-                    'C877': {
+                    'SITE': {
                         division: [{
                             id: '500',
                             name: 'KODAK'
@@ -327,8 +327,8 @@ describe('RPC calls', function() {
                         host: 'IP        ',
                         port: PORT,
                         production: false,
-                        accessCode: 'REDACTED',
-                        verifyCode: 'REDACTED'
+                        accessCode: 'USER  ',
+                        verifyCode: 'PW      '
                     }
                 }
             }
@@ -338,7 +338,7 @@ describe('RPC calls', function() {
     };
 
     it('Tests that config returns correct config', function() {
-        var config = locationsResource._getVistaConfig(req, '9E7A');
+        var config = locationsResource._getVistaConfig(req, 'SITE');
 
         expect(config).not.to.be.null();
 

@@ -28,9 +28,9 @@ module.exports.getResourceConfig = function() {
         //Please refer to https://wiki.vistacore.us/pages/viewpage.action?pageId=20055119 for information on permissions and permission sets
         isPatientCentric: true
     }, {
-        name: 'get',
+        name: 'nex-time',
         path: '',
-        post: getNexTime,
+        post: readNexTime,
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
@@ -59,7 +59,7 @@ function updateExample(req, res) {
     writebackWorkflow(req, res, tasks);
 }
 
-function getNexTime(req, res, next) {
+function readNexTime(req, res, next) {
     var tasks = [
         writeExampleToVista.readNexTime
     ];

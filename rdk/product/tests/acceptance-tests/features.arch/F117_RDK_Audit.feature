@@ -6,11 +6,11 @@ Background:
 
 @future
 Scenario: An authorized client request for patient search is audited
-    Given an authorized client "REDACTED" has requested patient search for patient "Eight,Patient"
-    When audit logs for user "REDACTED" are requested
+    Given an authorized client "SITE;USER  " has requested patient search for patient "Eight,Patient"
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field                                  | value                                                         |
-      | audit.authuser                         | REDACTED                                                   |
+      | audit.authuser                         | SITE;USER                                                     |
       | audit.status                           | 200                                                           |
       | audit.patientId                        | -                                                             |
       | audit.dataDomain                       | -                                                             |
@@ -35,11 +35,11 @@ Scenario: An unauthorized client request for patient search is audited
 
 @future
 Scenario: An authorized client request for recsource directory is audited
-    Given an authorized client "REDACTED" has requested resource directory
-    When audit logs for user "REDACTED" are requested
+    Given an authorized client "SITE;USER  " has requested resource directory
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field      | value             |
-      | audit.authuser   | REDACTED       |
+      | audit.authuser   | SITE;USER         |
       | audit.status     | 200               |
       | audit.patientId  | -                 |
       | audit.dataDomain | -                 |
@@ -61,21 +61,21 @@ Scenario: An unauthorized client request for resource directory is audited
 
 @future
 Scenario: An authorized client request for clinical notes is audited
-    Given an authorized client "REDACTED" has requested clinical notes for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested clinical notes for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                                 |
-      | audit.authuser    | REDACTED                                           |
+      | audit.authuser    | SITE;USER                                             |
       | audit.status      | 200                                                   |
       | audit.patientId   | 10108V420871                                          |
       | audit.dataDomain  | document                                              |
       | audit.date        | IS_FORMATTED_DATE                                     |
       | audit.logCategory | RETRIEVE                                              |
       | audit.request     | GET /patientrecord/domain/document?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                                 |
-      | audit.authuser    | REDACTED                                           |
+      | audit.authuser    | SITE;USER                                             |
       | audit.status      | 200                                                   |
       | audit.patientId   | 10108V420871                                          |
       | audit.dataDomain  | document                                              |
@@ -85,7 +85,7 @@ Scenario: An authorized client request for clinical notes is audited
 
 @future
 Scenario: An unauthorized client request for clinical notes is audited
-    Given an authorized client "UNAUTH" has requested clinical notes for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested clinical notes for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                                 |
@@ -98,21 +98,21 @@ Scenario: An unauthorized client request for clinical notes is audited
 
 @future
 Scenario: An authorized client request for problem list is audited
-    Given an authorized client "REDACTED" has requested problem list for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested problem list for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | problem                                              |
       | audit.date        | IS_FORMATTED_DATE                                    |
       | audit.logCategory | RETRIEVE                                             |
       | audit.request     | GET /patientrecord/domain/problem?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | problem                                              |
@@ -122,7 +122,7 @@ Scenario: An authorized client request for problem list is audited
 
 @future
 Scenario: An unauthorized client request for problem list is audited
-    Given an authorized client "UNAUTH" has requested problem list for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested problem list for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                                |
@@ -135,21 +135,21 @@ Scenario: An unauthorized client request for problem list is audited
 
 @future
 Scenario: An authorized client request for lab is audited
-    Given an authorized client "REDACTED" has requested lab for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested lab for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                            |
-      | audit.authuser    | REDACTED                                      |
+      | audit.authuser    | SITE;USER                                        |
       | audit.status      | 200                                              |
       | audit.patientId   | 10108V420871                                     |
       | audit.dataDomain  | laboratory                                       |
       | audit.date        | IS_FORMATTED_DATE                                |
       | audit.logCategory | RETRIEVE                                         |
       | audit.request     | GET /patientrecord/domain/lab?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                            |
-      | audit.authuser    | REDACTED                                      |
+      | audit.authuser    | SITE;USER                                        |
       | audit.status      | 200                                              |
       | audit.patientId   | 10108V420871                                     |
       | audit.dataDomain  | laboratory                                       |
@@ -159,7 +159,7 @@ Scenario: An authorized client request for lab is audited
 
 @future
 Scenario: An unauthorized client request for lab is audited
-    Given an authorized client "UNAUTH" has requested lab for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested lab for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                            |
@@ -172,20 +172,20 @@ Scenario: An unauthorized client request for lab is audited
 
 @future
 Scenario: An authorized client request for radiology is audited
-    Given an authorized client "REDACTED" has requested radiology for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested radiology for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field            | value                                            |
-      | audit.authuser   | REDACTED                                      |
+      | audit.authuser   | SITE;USER                                        |
       | audit.status     | 200                                              |
       | audit.patientId  | 10108V420871                                     |
       | audit.dataDomain | imaging                                          |
       | audit.date       | IS_FORMATTED_DATE                                |
       | audit.request    | GET /patientrecord/domain/rad?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field            | value                                            |
-      | audit.authuser   | REDACTED                                      |
+      | audit.authuser   | SITE;USER                                        |
       | audit.status     | 200                                              |
       | audit.patientId  | 10108V420871                                     |
       | audit.dataDomain | imaging                                          |
@@ -194,7 +194,7 @@ Scenario: An authorized client request for radiology is audited
 
 @future
 Scenario: An unauthorized client request for radiology is audited
-    Given an authorized client "UNAUTH" has requested radiology for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested radiology for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                            |
@@ -207,21 +207,21 @@ Scenario: An unauthorized client request for radiology is audited
 
 @future
 Scenario: An authorized client request for medications (inpatient or outpatient) is audited
-    Given an authorized client "REDACTED" has requested medications for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested medications for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                            |
-      | audit.authuser    | REDACTED                                      |
+      | audit.authuser    | SITE;USER                                        |
       | audit.status      | 200                                              |
       | audit.patientId   | 10108V420871                                     |
       | audit.dataDomain  | medication                                       |
       | audit.date        | IS_FORMATTED_DATE                                |
       | audit.logCategory | RETRIEVE                                         |
       | audit.request     | GET /patientrecord/domain/med?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                            |
-      | audit.authuser    | REDACTED                                      |
+      | audit.authuser    | SITE;USER                                        |
       | audit.status      | 200                                              |
       | audit.patientId   | 10108V420871                                     |
       | audit.dataDomain  | medication                                       |
@@ -231,7 +231,7 @@ Scenario: An authorized client request for medications (inpatient or outpatient)
 
 @future
 Scenario: An unauthorized client request for medications (inpatint or outpatient) is audited
-    Given an authorized client "UNAUTH" has requested medications for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested medications for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                            |
@@ -244,21 +244,21 @@ Scenario: An unauthorized client request for medications (inpatint or outpatient
 
 @future
 Scenario: An authorized client request for demographics is audited
-    Given an authorized client "REDACTED" has requested demographics for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested demographics for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | patient                                              |
       | audit.date        | IS_FORMATTED_DATE                                    |
       | audit.logCategory | RETRIEVE                                             |
       | audit.request     | GET /patientrecord/domain/patient?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | patient                                              |
@@ -269,7 +269,7 @@ Scenario: An authorized client request for demographics is audited
 
 @future
 Scenario: An unauthorized client request for demographics is audited
-    Given an authorized client "UNAUTH" has requested demographics for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested demographics for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                                |
@@ -282,21 +282,21 @@ Scenario: An unauthorized client request for demographics is audited
 
 @future
 Scenario: An authorized client request for allergies is audited
-    Given an authorized client "REDACTED" has requested allergies for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested allergies for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | allergy                                              |
       | audit.date        | IS_FORMATTED_DATE                                    |
       | audit.logCategory | RETRIEVE                                             |
       | audit.request     | GET /patientrecord/domain/allergy?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | audit.field       | value                                                |
-      | audit.authuser    | REDACTED                                          |
+      | audit.authuser    | SITE;USER                                            |
       | audit.status      | 200                                                  |
       | audit.patientId   | 10108V420871                                         |
       | audit.dataDomain  | allergy                                              |
@@ -307,7 +307,7 @@ Scenario: An authorized client request for allergies is audited
 
 @future
 Scenario: An unauthorized client request for allergies is audited
-    Given an authorized client "UNAUTH" has requested allergies for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested allergies for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field            | value                                                |
@@ -320,35 +320,35 @@ Scenario: An unauthorized client request for allergies is audited
 
 @future
 Scenario: An authorized client request for vitals for sensitive pateint is audited
-    Given an authorized client "REDACTED       " has requested vitals for patient "9E7A;1"
-    When audit logs for user "REDACTED       " are requested
+    Given an authorized client "PW         " has requested vitals for patient "SITE;1"
+    When audit logs for user "PW         " are requested
     Then the audit log entry contains
       | field             | value                                               |
-      | audit.authuser    | REDACTED                                                |
+      | audit.authuser    | PW                                                  |
       | audit.status      | 307                                                 |
-      | audit.patientId   | 9E7A;1                                              |
+      | audit.patientId   | SITE;1                                              |
       | audit.dataDomain  | -                                                   |
       | audit.date        | IS_FORMATTED_DATE                                   |
       | audit.logCategory | -                                                   |
-      | audit.request     | GET /patientrecord/domain/vital?pid=9E7A;1 HTTP/1.1 |
+      | audit.request     | GET /patientrecord/domain/vital?pid=SITE;1 HTTP/1.1 |
 
 @future
 Scenario: An authorized client request for vitals is audited
-    Given an authorized client "REDACTED" has requested vitals for patient "9E7A;3"
-    When audit logs for patient "9E7A;3" are requested
+    Given an authorized client "SITE;USER  " has requested vitals for patient "SITE;3"
+    When audit logs for patient "SITE;3" are requested
     Then the audit log entry contains
       | field             | value                                              |
-      | audit.authuser    | REDACTED                                        |
+      | audit.authuser    | SITE;USER                                          |
       | audit.status      | 200                                                |
       | audit.patientId   | 10108V420871                                       |
       | audit.dataDomain  | vitalsign                                          |
       | audit.date        | IS_FORMATTED_DATE                                  |
       | audit.logCategory | RETRIEVE                                           |
       | audit.request     | GET /patientrecord/domain/vital?pid=10108V420871 HTTP/1.1 |
-    When audit logs for user "REDACTED" are requested
+    When audit logs for user "SITE;USER  " are requested
     Then the audit log entry contains
       | field             | value                                              |
-      | audit.authuser    | REDACTED                                        |
+      | audit.authuser    | SITE;USER                                          |
       | audit.status      | 200                                                |
       | audit.patientId   | 10108V420871                                       |
       | audit.dataDomain  | vitalsign                                          |
@@ -359,7 +359,7 @@ Scenario: An authorized client request for vitals is audited
 
 @future
 Scenario: An unauthorized client request for vitals is audited
-    Given an authorized client "UNAUTH" has requested vitals for patient "9E7A;3"
+    Given an authorized client "UNAUTH" has requested vitals for patient "SITE;3"
     When audit logs for user "UNAUTH" are requested
     Then the audit log entry contains
       | field             | value                                              |

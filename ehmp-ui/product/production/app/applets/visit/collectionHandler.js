@@ -60,7 +60,7 @@ define([
                 patient: currentPatient,
                 resourceTitle: 'visits-appointments',
                 criteria: {
-                    pid: criteria.pid,
+                    pid: currentPatient.getIdentifier(),
                     site: criteria.site,
                     'date.start': moment(criteria.fromDate, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
                     'date.end': moment(criteria.toDate, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)

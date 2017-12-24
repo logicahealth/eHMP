@@ -3,20 +3,21 @@
 # Recipe:: default
 #
 
+include_recipe 'build-essential'
 # Be sure swap is provisioned on dirty deploys
 include_recipe "ehmp_oracle::swap"
 
-
-# oracle_wrapper or oracle-xe_wrapper
 if ::File.exists?("/etc/oratab")
-  include_recipe "#{node['ehmp_oracle']['oracle_cookbook']}::env_vars"
-  include_recipe "#{node['ehmp_oracle']['oracle_cookbook']}::apex"
+  include_recipe "oracle_wrapper::apex"
+  include_recipe "oracle_wrapper::configure_tls"
 else
-  include_recipe "#{node['ehmp_oracle']['oracle_cookbook']}"
+  include_recipe "oracle_wrapper"
 end
 
 # Install gateways
 include_recipe "ehmp_oracle::gateway_config"
-
 include_recipe "ehmp_oracle::oracle_config"
-include_recipe "ehmp_oracle::communication"
+include_recipe "ehmp_oracle::oracle_load"
+
+include_recipe "ehmp_oracle::upgrade_scripts"
+include_recipe "ehmp_oracle::oracle_patch"

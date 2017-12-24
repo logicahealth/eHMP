@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.time.DateFormatUtils;
 
 import us.vistacore.vxsync.config.HdrConfiguration;
+import us.vistacore.vxsync.utility.Utils;
 
 public class HdrConnection {
     public static final String DIVISION="500";
@@ -54,11 +55,11 @@ public class HdrConnection {
             if (Pattern.matches("-\\d+-[A-Z\\da-z]+", excludeIdentifier)) {
                 answer += "&excludeIdentifier=" + excludeIdentifier;
             } else {
-                LOG.debug("Invalid identifier provided: " + excludeIdentifier);
+                LOG.debug("Invalid identifier provided: " + Utils.avoidLogForging(excludeIdentifier));
             }
         }
 
-        LOG.debug("Using HDR url: " + answer);
+        LOG.debug("Using HDR url: " + Utils.avoidLogForging(answer));
 
         return answer;
     }

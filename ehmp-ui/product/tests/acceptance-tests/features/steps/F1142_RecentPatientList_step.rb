@@ -1,63 +1,9 @@
-
-
-When(/^user selects the recent patient dropdown$/) do
-  @ehmp = PobHeaderFooter.new
-  expect(@ehmp.wait_for_btn_recent_patient). to eq(true), "Recent patient button is not visible"
-  expect(@ehmp).to have_btn_recent_patient
-  @ehmp.btn_recent_patient.click
-end
-
-Then(/^recent patient list is displayed$/) do
-  @ehmp = PobHeaderFooter.new
-  max_attempt = 4
-  begin
-    expect(@ehmp.wait_for_fld_recent_patient_header). to eq(true), "Recent patient header is not visible"
-    expect(@ehmp).to have_fld_recent_patient_header
-    expect(@ehmp.fld_recent_patient_header.text.upcase).to eq("RECENT PATIENTS")
-    expect(@ehmp.wait_for_fld_recent_patient_list).to eq(true)
-    expect(@ehmp).to have_fld_recent_patient_list
-    rows = @ehmp.fld_recent_patient_list
-    expect(rows.length).to be > 0
-  rescue Exception => e
-    p "*** entered rescue block ***"
-    p "#{e}"
-    sleep(1)
-    max_attempt-=1
-    retry if max_attempt > 0
-    raise e if max_attempt <= 0
-  end
-end
-
-Given(/^the user opens the recent patient dropdown$/) do
-  @ehmp = PobHeaderFooter.new
-  expect(@ehmp.wait_for_btn_recent_patient). to eq(true), "Recent patient button is not visible"
-  expect(@ehmp).to have_btn_recent_patient
-  max_attempt = 4
-  begin
-    @ehmp.btn_recent_patient.click
-    expect(@ehmp.wait_for_fld_recent_patient_header). to eq(true), "Recent patient header is not visible"
-    expect(@ehmp).to have_fld_recent_patient_header
-    expect(@ehmp.fld_recent_patient_header.text.upcase).to eq("RECENT PATIENTS")
-    #@ehmp.wait_until_fld_recent_patient_list_visible(30)
-    expect(@ehmp.wait_for_fld_recent_patient_list).to eq(true)
-    expect(@ehmp).to have_fld_recent_patient_list
-    rows = @ehmp.fld_recent_patient_list
-    expect(rows.length).to be > 0
-  rescue Exception => e
-    p "*** entered rescue block ***"
-    p "#{e}"
-    max_attempt-=1
-    raise e if max_attempt <= 0
-    step 'the user closes the recent patient dropdown'
-    retry if max_attempt > 0
-  end
-end
-
 Then(/^the first record in the list is "(.*?)"$/) do |most_recent_patient|
-  @ehmp = PobHeaderFooter.new
-  @ehmp.wait_until_fld_recent_patient_list_visible
-  rows = @ehmp.fld_recent_patient_list
-  expect(rows[0].text.upcase).to have_text(most_recent_patient.upcase), "Expected #{rows[0].text} to have #{most_recent_patient}"
+  rp_tray = PobStaffView.new
+  names = rp_tray.fld_rp_result_name_text
+
+  expect(names.length).to be > 0
+  expect(names[0].upcase).to have_text(most_recent_patient.upcase), "Expected #{names[0]} to have #{most_recent_patient}"
 end
 
 Then(/^the patient names in the Recent Patients list are in format Last Name, First Name \+ \(First Letter in Last Name \+ Last (\d+) SSN \)$/) do |arg1|
@@ -83,15 +29,13 @@ Then(/^user navigates to the staff view screen$/) do
   expect(@ehmp).to have_fld_active_staff_view
 end
 
-Given(/^the user closes the recent patient dropdown$/) do
-  @ehmp = PobHeaderFooter.new
-  expect(@ehmp.wait_for_btn_recent_patient). to eq(true), "Recent patient button is not visible"
-  expect(@ehmp).to have_btn_recent_patient
-  @ehmp.btn_recent_patient.click
-  begin
-    @ehmp.wait_until_fld_recent_patient_header_invisible
-  rescue Exception => e
-    p "Error waiting for invisiblity #{e}"
-  end
-  expect(@ehmp).to_not have_fld_recent_patient_header
+When(/^the user selects Patients header button and views the Recent Patients tray$/) do
+  page = PobHeaderFooter.new
+  expect(page.wait_for_btn_patients).to eq(true), "Expected a Patients button"
+  page.btn_patients.click
+  rp_try = PobStaffView.new
+  expect(rp_try.wait_for_btn_search_tray_close).to eq(true), "X (close) button in tray header did not display"
+  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+  wait.until { rp_try.recentpatient_search_results_loaded? }
+  step 'the Patients header button is highlighted'
 end

@@ -1,4 +1,4 @@
-@F1142_logout @regression @reg2
+@F1142_logout @regression @reg4
 Feature: Home Page usability  (Staff View)
 
 #Team Application

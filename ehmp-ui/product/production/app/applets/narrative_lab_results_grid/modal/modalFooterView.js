@@ -6,7 +6,7 @@ define([
 	'use strict';
 
 	return Backbone.Marionette.ItemView.extend({
-		template: Handlebars.compile('<button type="button" data-dismiss="modal" id="modalCloseButton" title="Press enter to close." class="btn btn-default btn-sm">Close</button>')
+		template: Handlebars.compile('<button type="button" data-dismiss="modal" id="modalCloseButton" class="btn btn-default btn-sm">Close</button>')
 	});
 });
 

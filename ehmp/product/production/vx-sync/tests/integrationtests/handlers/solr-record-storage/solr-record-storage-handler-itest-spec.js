@@ -72,7 +72,7 @@ function resetPatientIdentifiers(pid, environment, callback) {
 // returns: The environment variable.
 //-----------------------------------------------------------------------------------------------
 function createEnvironment(config) {
-    var solrTestClient = solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log);
+    var solrTestClient = solrSmartClient.createClient(log, config.solrClient);
     var jdsClient = new JdsClient(log, log, config);
 
     var environment = {
@@ -142,7 +142,7 @@ function createAllergyEvent(pid, uid) {
 //-----------------------------------------------------------------------------------------------
 function createPtfEvent(pid, uid) {
     var ptfEvent = {
-        'admissionUid': 'urn:va:visit:9E7A:8:H493',
+        'admissionUid': 'urn:va:visit:SITE:8:H493',
         'arrivalDateTime': '19910904094159',
         'dischargeDateTime': '19920128160000',
         'drg': '999',
@@ -244,8 +244,8 @@ describe('solr-record-storage-handler.js', function() {
         it('Full test to be sure that SOLR record is written and SOLR status tracking is correctly done.', function() {
             var environment = createEnvironment(wConfig);
 
-            var pid = '9E7A;123456789';
-            var uid = 'urn:va:allergy:9E7A:123456789:874';
+            var pid = 'SITE;123456789';
+            var uid = 'urn:va:allergy:SITE:123456789:874';
             var patientIdentifier = pidUtil.create('pid', pid);
             var jpid = '8107cc41-69eb-4060-8813-a82db245a11a'; // Note that we really do not care what this is for this test...
 
@@ -316,7 +316,7 @@ describe('solr-record-storage-handler.js', function() {
 
                     expect(results).not.toBeUndefined();
 
-                    var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', '9E7A', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
+                    var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', 'SITE', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
                     expect(eventMetaStamp).toBeTruthy();
                     expect(eventMetaStamp[uid].solrStored).toBe(true);
 
@@ -363,8 +363,8 @@ describe('solr-record-storage-handler.js', function() {
         it('Test that ptf event stores to SOLR.', function() {
             var environment = createEnvironment(wConfig);
 
-            var pid = '9E7A;111222333';
-            var uid = 'urn:va:ptf:9E7A:111222333:874';
+            var pid = 'SITE;111222333';
+            var uid = 'urn:va:ptf:SITE:111222333:874';
             var patientIdentifier = pidUtil.create('pid', pid);
             var jpid = '8107cc41-69eb-4060-8813-a82db245a11a'; // Note that we really do not care what this is for this test...
 
@@ -436,7 +436,7 @@ describe('solr-record-storage-handler.js', function() {
 
                     expect(results).not.toBeUndefined();
 
-                    var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', '9E7A', 'domainMetaStamp', 'ptf', 'eventMetaStamp');
+                    var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', 'SITE', 'domainMetaStamp', 'ptf', 'eventMetaStamp');
                     expect(eventMetaStamp).toBeTruthy();
                     expect(eventMetaStamp[uid].solrStored).toBe(true);
 
@@ -456,7 +456,9 @@ describe('solr-record-storage-handler.js', function() {
                 environment.solr.commit(function() {
                     var hash = patientIdentifier.value.split(';').join('%3B');
                     environment.solr.search('q=(pid%3A' + hash + ')', function(error, response) {
-                        expect(response.response.numFound).toEqual(1);
+                        log.debug('solr-record-storage-handler-istest-spec:Test that ptf event stores to SOLR.:  After call to solr.search: error: %s; response: %j', error, response);
+                        expect(error).toBeFalsy();
+                        expect(val(response, 'response', 'numFound')).toEqual(1);
                         solrVerifiedFinished = true;
                     });
                 });
@@ -639,7 +641,7 @@ describe('solr-record-storage-handler.js', function() {
 
             var environment = createEnvironment(wConfig);
 
-            var recordUid = 'urn:va:allergy:9E7A:123456:0654321';
+            var recordUid = 'urn:va:allergy:SITE:123456:0654321';
             var allergyRecord = {
                 entered: '200712171513',
                 facilityCode: '500',
@@ -659,7 +661,7 @@ describe('solr-record-storage-handler.js', function() {
                 uid: recordUid,
                 verified: '20071217151354',
                 verifierName: '<auto-verified>',
-                pid: '9E7A;123456',
+                pid: 'SITE;123456',
                 codesCode: ['C0008299'],
                 codesSystem: ['urn:oid:2.16.840.1.113883.6.86'],
                 codesDisplay: ['Chocolate'],
@@ -669,7 +671,7 @@ describe('solr-record-storage-handler.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;123456'
+                'value': 'SITE;123456'
             };
 
             var storageJob = {
@@ -687,7 +689,9 @@ describe('solr-record-storage-handler.js', function() {
                     environment.solr.commit(function() {
                         var hash = patientIdentifier.value.split(';').join('%3B');
                         environment.solr.search('q=(pid%3A' + hash + ')', function(error, response) {
-                            expect(response.response.numFound).toEqual(1);
+                            log.debug('solr-record-storage-handler-istest-spec:handles a solr-record-storage job:  After call to solr.search: error: %s; response: %j', error, response);
+                            expect(error).toBeFalsy();
+                            expect(val(response, 'response', 'numFound')).toEqual(1);
                             finished = true;
                         });
                     });
@@ -696,7 +700,7 @@ describe('solr-record-storage-handler.js', function() {
 
             waitsFor(function() {
                 return finished;
-            }, 'the job to complete and be verified', 60000);
+            }, 'the job to complete and be verified', 90000);
 
             // Clean up what we have created from Solr
             //----------------------------------------

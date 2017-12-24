@@ -8,8 +8,8 @@ Scenario: Login to ADK
     And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER  |
+        |VerifyCode|USER  !!|
         |SignIn||
     And the main page displays
     Then the user attempts signout
@@ -20,8 +20,8 @@ Scenario: Test logout after successful login
     And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER  |
+        |VerifyCode|USER  !!|
         |SignIn||
     Then the user attempts signout
 
@@ -31,8 +31,8 @@ Scenario: Login to ADK
     And user attempts login
         |field | value|
         |Facility|Kodak|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|PW    |
+        |VerifyCode|PW    |
         |SignIn||
     Then the main page displays
     Then the user attempts signout
@@ -43,8 +43,8 @@ Scenario: Attempt login with incorrect credentials
     And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|kkk1234|
+        |VerifyCode|lu12lkk!!|
         |SignIn||
     Then the page displays "Login Error Message"
 
@@ -54,22 +54,22 @@ Scenario:Test valid login (VerifyCode  is obfuscated, accesscode is case sensiti
       And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER|
+        |VerifyCode|USER  !!|
         |SignIn||
     Then the page displays "Login Error Message"
      And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER|
+        |VerifyCode|USER!!|
         |SignIn||
     Then the page displays "Login Error Message" 
         And user attempts login
         |field | value|
         |Facility|Kodak|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER|
+        |VerifyCode|USER!!|
         |SignIn||
     Then the page displays "Login Error Message" 
 
@@ -79,15 +79,15 @@ Scenario:Test valid login when felled is blank
       And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode||
+        |VerifyCode|USER  !!|
         |SignIn||
     Then the page displays "Login Error Message" 
      And user attempts login
         |field | value|
         |Facility|Panorama|
-        |AccessCode|REDACTED|
-        |VerifyCode|REDACTED|
+        |AccessCode|USER  |
+        |VerifyCode||
         |SignIn||
     Then the page displays "Login Error Message"
 

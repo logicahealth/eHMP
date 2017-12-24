@@ -21,7 +21,7 @@ describe('MVI Patient Sync', function() {
                     'completedStamp': {
                         'icn': '10108V420871',
                         'sourceMetaStamp': {
-                            '9E7A': {
+                            'SITE': {
                                 'domainMetaStamp': {
                                     'document': {
                                         'domain': 'document',
@@ -50,11 +50,11 @@ describe('MVI Patient Sync', function() {
                                     }
                                 },
                                 'localId': 3,
-                                'pid': '9E7A;3',
+                                'pid': 'SITE;3',
                                 'stampTime': 20150305113256,
                                 'syncCompleted': true
                             },
-                            'C877': {
+                            'SITE': {
                                 'domainMetaStamp': {
                                     'factor': {
                                         'domain': 'factor',
@@ -78,7 +78,7 @@ describe('MVI Patient Sync', function() {
                                     }
                                 },
                                 'localId': 3,
-                                'pid': 'C877;3',
+                                'pid': 'SITE;3',
                                 'stampTime': 20150305113259,
                                 'syncCompleted': true
                             },

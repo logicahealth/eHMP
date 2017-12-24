@@ -8,11 +8,11 @@ Feature: F144 - eHMP Viewer GUI
 
   @US2094 @US3759 @vimm
   Scenario: When a user searches for default patient and gets results back
-    When the client requests default patient search with accessCode "9E7A;1tdnurse" in VPR format from RDK API
+    When the client requests default patient search with accessCode "SITE;USER    " in VPR format from RDK API
     Then a successful response is returned
     And the VPR results contain
       | field       | value                                   |
-      | pid         | 9E7A;100726                             |
+      | pid         | SITE;100726                             |
       | familyName  | EIGHTEEN                                |
       | givenNames  | INPATIENT                               |
       | fullName    | EIGHTEEN,INPATIENT                      |

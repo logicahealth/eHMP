@@ -13,6 +13,7 @@
 require('../../env-setup');
 var _ = require('underscore');
 var fs = require('fs');
+var uuid = require('node-uuid');
 
 var adminUtils = require(global.VX_TOOLS + 'beanstalk/admin-utils');
 var config = require(global.VX_ROOT + 'worker-config');
@@ -92,7 +93,16 @@ function jobFilePathAndName(tubeDir, jobType, beanstalkJobId, suffix) {
 	if (/\/$/.test(filePathAndName) === false) {
 		filePathAndName += '/';
 	}
-	filePathAndName += jobType + '_' + beanstalkJobId;
+
+	var jobId = beanstalkJobId;
+
+    // If for some reason there is no jobId, then create a new UUID to use for the jobId to make the filename unique.
+    //----------------------------------------------------------------------------------------------------------------
+	if (!jobId) {
+        jobId = uuid.v4();
+    }
+
+	filePathAndName += jobType + '_' + jobId;
 
 	if (suffix) {
 		filePathAndName += '_' + suffix;
@@ -192,7 +202,7 @@ function fetchStats(logger, host, port, callback) {
 // tubeDir: The directory where jobs for the tibe will be placed.
 // jobType the type of job ('DELAYED', 'READY', 'BURIED')
 // jobId: The VX-Sync jobId of the beanstalk Job.
-// suffix: The suffix to add to the job_id to see if it is unique.  Null means add no suffix.
+// suffix: The suffix to append to the job_id to make the file name unique.  Null means add no suffix.
 // callback:  function (error, filePathAndNameResolved)
 //        where:  error: null if there is no error, and the text identifying the
 //                       error if one occurs.
@@ -206,11 +216,7 @@ function resolveConflictingFileNames(tubeDir, jobType, jobId, suffix, callback) 
 			return callback(null, filePathAndName);
 		}
 		else {
-			if ((suffix === null) || (suffix === undefined)) {
-				suffix = 1;
-			} else {
-				suffix += 1;
-			}
+            suffix = uuid.v4();
 			return resolveConflictingFileNames(tubeDir, jobType, jobId, suffix, callback);
 		}
 	});

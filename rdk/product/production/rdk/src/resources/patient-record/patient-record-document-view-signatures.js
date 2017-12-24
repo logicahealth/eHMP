@@ -91,15 +91,19 @@ function addSignatureInformation(req, clinician, users, callback) {
 
             httpUtil.get(options, function(err, response, body) {
                 if (err) {
-                    req.logger.error('Error retreiving user to add signature information ' + err);
+                    req.logger.error('Error retrieving user to add signature information ' + err);
                     return callback(err);
                 }
 
-                var user = body.data.items[0];
-                clinician.signaturePrintedName = user.signaturePrintedName;
-                clinician.signatureTitle = user.signatureTitle;
-
-                users.push(user);
+                if(!_.isEmpty(_.get(body, 'data.items'))){
+                    //DE8224: RDK Uncaught Exception - patient-record-document-view-signatures
+                    //In production we see this is not necessarily populated.
+                    // We've seen that when this info is missing, UI falls back to showing just the author name.
+                    var user = body.data.items[0];
+                    clinician.signaturePrintedName = user.signaturePrintedName;
+                    clinician.signatureTitle = user.signatureTitle;
+                    users.push(user);
+                }
                 return callback(null);
             });
         }

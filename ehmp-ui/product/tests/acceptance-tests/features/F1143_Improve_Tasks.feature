@@ -1,4 +1,4 @@
-@F1143_Tasks_improvements @reg1
+@F1143_Tasks_improvements @tasks_applet @reg1
 
 Feature: F1143 : Improve Task Management usability (Allow early response to tasks)
 
@@ -33,7 +33,7 @@ Scenario: Task applet displays column Created On in proper format
 @task_headers_provider_view @US18232 @US18233 @US18234 
 Scenario: Task applet displays all the columns
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "two1234" verifycode as  "two1234!!"
   And staff view screen is displayed
   And user navigates to expanded tasks applet from staff view
   And task applet displays columns
@@ -54,9 +54,10 @@ Scenario: Task applet displays all the columns
 @task_column_format_provider_view @US18232 
 Scenario: Task applet displays column Created On in proper format
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "two1234" verifycode as  "two1234!!"
   And staff view screen is displayed
   And user navigates to expanded tasks applet from staff view
+  Then user makes sure there is at least one task in the provider task applet view
   Then provider view task applet displays Created On field in the correct format
 
  

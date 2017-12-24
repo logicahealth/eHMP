@@ -1,11 +1,10 @@
 'use strict';
 
-var _ = require('underscore');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 
-function dodNoteToVPR(dodNote, edipi){
+function dodNoteToVPR(logger, dodNote, edipi){
     var vprNote = {};
     vprNote.referenceDateTime = moment(dodNote.noteDate, 'x').format('YYYYMMDDHHmmss');
     vprNote.codes = xformUtils.transformCodes(dodNote.codes);

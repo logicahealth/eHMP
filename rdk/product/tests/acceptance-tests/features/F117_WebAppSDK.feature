@@ -24,7 +24,7 @@ Scenario: Search for existing patient by full name through RDK
       | genderName  | Male                              |
       | givenNames  | IMAGEPATIENT                      |
       | icn         | 5000000317V387446                 |
-      | pid         | 9E7A;100816                       |
+      | pid         | SITE;100816                       |
       | ssn         |  ***-**-1008                      |
 
 

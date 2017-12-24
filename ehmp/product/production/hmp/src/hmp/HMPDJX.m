@@ -1,5 +1,5 @@
-HMPDJX ;SLC/MKB,ASMR/RRB,BL - New data update;Aug 29, 2016 20:06:27
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
+HMPDJX ;SLC/MKB,ASMR/RRB,BL,CPC - New data update;Aug 29, 2016 20:06:27
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -69,7 +69,7 @@ A . ; HMP=$NA(^TMP("HMP",$J)) again
  ;
  S Y=$G(^TMP("HMPX",$J,0)) S:Y="" Y=LAST
  S T=$$NOW^XLFDT()
- S @HMP@(.5)="{""apiVersion"":""1.01"",""data"":{""lastUpdate"":"""_Y_""",""startDateTime"":"""_TSTART_""",""totalPatients"":"_PATCNT
+ S @HMP@(.5)="{"_$$APIVERS^HMPDJFS()_",""data"":{""lastUpdate"":"""_Y_""",""startDateTime"":"""_TSTART_""",""totalPatients"":"_PATCNT
  S:PATCNT @HMP@(.6)=",""patients"":[",PATCNT=PATCNT+1,@HMP@(PATCNT)="]"
  ;
 B ;

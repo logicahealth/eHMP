@@ -1,0 +1,13 @@
+
+task :security_scan => [:retire]
+
+project_home = File.expand_path("../../", File.dirname(__FILE__))
+puts "#{project_home}"
+
+task :retire do
+  `cd #{project_home}; retire`
+end
+
+task :fortify do
+  `cd #{project_home}/product; gradle fortifySetup fortifyReport`
+end

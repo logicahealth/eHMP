@@ -1,16 +1,26 @@
 'use strict';
 var rdk = require('../../../core/rdk');
 var httpUtil = rdk.utils.http;
+var RdkError = rdk.utils.RdkError;
 var _ = require('lodash');
 var async = require('async');
 var getFormattedRoutesString = require('../activity-utils').getFormattedRoutesString;
 var parseAssignedTo = require('../activity-utils').parseAssignedTo;
+var getDatabaseConfigFromRequest = require('../activity-utils').getDatabaseConfigFromRequest;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var parse = require('../../../write/pick-list/team-management/teams-parser').parse;
 var helpers = require('./all-instances-helper');
 var resultUtils = rdk.utils.results;
 
 function getTeams(req, callback) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var site = req.session.user.site;
     var userDuz = req.session.user.duz[site];
     var stationNumber = req.session.user.division;
@@ -20,10 +30,10 @@ function getTeams(req, callback) {
         p_station_number: stationNumber
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getTeamsForUser(:p_user_duz, :p_station_number, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.activities.getTeamsForUser(:p_user_duz, :p_station_number, :recordset); END;';
     req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getTeams executing stored procedure');
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, function (err, data) {
         req.logger.debug({
             err: err,
             rows: data
@@ -58,6 +68,14 @@ function getTeamMembers(req, teams, callback) {
         return callback(null, retVal);
     }
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: logger
+        }));
+    }
+
     var teamsIds = '';
 
     _.map(teams, function(team, index) {
@@ -71,10 +89,10 @@ function getTeamMembers(req, teams, callback) {
         p_team_ids: teamsIds
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getMembersForTeam(:p_team_ids, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.activities.getMembersForTeam(:p_team_ids, :recordset); END;';
     req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getTeamMembers executing stored procedure');
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, function (err, data) {
         req.logger.debug({
             err: err,
             rows: data
@@ -238,6 +256,14 @@ function runJDSQuery(req, query, callback) {
 }
 
 function getInstances(req, results, callback) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var teamIds = '';
     var teamPrimaryFociIds = '';
     var teamSecondaryFociIds = '';
@@ -292,10 +318,10 @@ function getInstances(req, results, callback) {
         p_show_only_flagged: convertReqBooleanToNumber(req.query.showOnlyFlagged)
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getActivites(:p_created_by_me, :p_intended_for_me, :p_user_id, :p_patient_ids, :p_team_ids, :p_team_focus_ids, :p_mode, :p_start_date, :p_end_date, :p_process_definition_id, :p_show_only_flagged, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.activities.getActivites(:p_created_by_me, :p_intended_for_me, :p_user_id, :p_patient_ids, :p_team_ids, :p_team_focus_ids, :p_mode, :p_start_date, :p_end_date, :p_process_definition_id, :p_show_only_flagged, :recordset); END;';
     req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getInstances executing stored procedure');
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);

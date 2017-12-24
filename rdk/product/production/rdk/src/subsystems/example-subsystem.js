@@ -15,7 +15,7 @@ function getSubsystemConfig(app, logger) {
             check: function(callback) {
                 var localConfig = {
                     timeout: 4000,
-                    baseUrl: 'http://127.0.0.1:8888',
+                    baseUrl: 'http://127.0.0.1:PORT',
                     url: '/ping',
                     logger: logger
                 };

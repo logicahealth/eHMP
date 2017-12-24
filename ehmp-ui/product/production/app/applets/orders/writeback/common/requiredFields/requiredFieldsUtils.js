@@ -1,6 +1,7 @@
 define([
+    'underscore',
     'app/applets/orders/writeback/common/buttons/buttonUtils'
-], function(ButtonUtils) {
+], function(_, ButtonUtils) {
     'use strict';
 
     var addRequiredField = function(form, fieldName) {
@@ -33,27 +34,49 @@ define([
     };
 
     var makeButtonDependOnRequiredFields = function(form, button) {
-        if (_.every(form.requiredFields, function(fieldName) {
-            if (form.model.has(fieldName) && !form.model.errorModel.has(fieldName)) {
-                if (_.isArray(form.model.get(fieldName))) {
-                    return _.some(form.model.get(fieldName), function(element) {
-                        return !(_.isEmpty(element));
-                    });
-                } else {
-                    return !(_.isEmpty(form.model.get(fieldName)));
-                }
-            }
+        var formModel = _.get(form, 'model');
+        var requiredFields = _.get(form, 'requiredFields');
+        var errorModel = _.get(form, 'model.errorModel');
+        var errorModelAttributes = _.get(errorModel, 'attributes');
+        var validRequiredFields = isValidRequiredFields(requiredFields, formModel, errorModel);
 
-            return false;
-        })) {
+        if (validRequiredFields) {
             ButtonUtils.enable(button);
         } else {
             ButtonUtils.disable(button);
         }
 
-        if (!_.isEmpty(form.model.errorModel.attributes)) {
+        if (!_.result(formModel, 'isValid') || !_.isEmpty(errorModelAttributes)) {
             ButtonUtils.disable(button);
         }
+    };
+
+    var isValidRequiredFields = function(requiredFields, formModel, errorModel) {
+        var valid = false;
+        if (formModel && errorModel) {
+            valid = _.every(requiredFields, function(fieldName) {
+                if (formModel.has(fieldName) && !errorModel.has(fieldName)) {
+                    return isValidFormField(formModel, fieldName);
+                }
+                return false;
+            });
+        }
+
+        return valid;
+    };
+
+    var isValidFormField = function(formModel, fieldName) {
+        var field = formModel.get(fieldName);
+        var isValid = false;
+        if (_.isArray(field)) {
+            isValid = _.some(field, function(element) {
+                return !(_.isEmpty(element));
+            });
+        } else {
+            isValid = !(_.isEmpty(field));
+        }
+
+        return isValid;
     };
 
     return {

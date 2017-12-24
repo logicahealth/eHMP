@@ -2,7 +2,7 @@ When(/^the client requests to view all teams$/) do
   query = RDKQuery.new('teams-list')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
+  @response = HTTPartyRDK.get_as_user(path, "SITE;USER  ", "PW      ")
 end
 
 Then(/^the teams results contain more than (\d+) records$/) do |count|

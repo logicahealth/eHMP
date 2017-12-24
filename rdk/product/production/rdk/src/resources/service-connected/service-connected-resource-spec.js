@@ -50,7 +50,7 @@ describe('Service Connected Resource', function(){
             var req = {
                 interceptorResults: {
                     patientIdentifiers: {
-                        siteDfn: '9E7A;3'
+                        siteDfn: 'SITE;3'
                     }
                 },
                 logger: {
@@ -63,7 +63,7 @@ describe('Service Connected Resource', function(){
                 },
                 session: {
                     user: {
-                        site: '9E7A'
+                        site: 'SITE'
                     }
                 },
                 param: function(name){
@@ -75,26 +75,26 @@ describe('Service Connected Resource', function(){
                     config: {
                         rpcConfig: {
                             context: 'HMP UI CONTEXT',
-                            siteHash: '9E7A'
+                            siteHash: 'SITE'
                         },
                         vistaSites: {
-                            '9E7A': {
+                            'SITE': {
                                 name: 'PANORAMA',
                                 division: '500',
                                 host: 'IP        ',
                                 port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             },
-                            'C877': {
+                            'SITE': {
                                 name: 'KODAK',
                                 division: '500',
                                 host: 'IP        ',
                                 port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             }
                         }
                     }
@@ -124,7 +124,7 @@ describe('Service Connected Resource', function(){
             var req = {
                 interceptorResults: {
                     patientIdentifiers: {
-                        siteDfn: '9E7A;3'
+                        siteDfn: 'SITE;3'
                     }
                 },
                 logger: {
@@ -137,7 +137,7 @@ describe('Service Connected Resource', function(){
                 },
                 session: {
                     user: {
-                        site: '9E7A'
+                        site: 'SITE'
                     }
                 },
                 param: function(name){
@@ -149,26 +149,26 @@ describe('Service Connected Resource', function(){
                     config: {
                         rpcConfig: {
                             context: 'HMP UI CONTEXT',
-                            siteHash: '9E7A'
+                            siteHash: 'SITE'
                         },
                         vistaSites: {
-                            '9E7A': {
+                            'SITE': {
                                 name: 'PANORAMA',
                                 division: '500',
                                 host: 'IP        ',
                                 port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             },
-                            'C877': {
+                            'SITE': {
                                 name: 'KODAK',
                                 division: '500',
                                 host: 'IP        ',
                                 port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             }
                         }
                     }

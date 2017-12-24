@@ -81,7 +81,7 @@ Then(/^the Community Health Summary View detail view displays$/) do
 end
 
 When(/^the Community Health Summary Applet contains data rows$/) do
-  compare_item_counts("#data-grid-ccd_grid tr")
+  compare_item_counts("[data-appletid=ccd_grid] table tr")
 end
 
 When(/^user refreshes Community Health Summary Applet$/) do
@@ -360,3 +360,38 @@ Then(/^the summary community health summary detail title is correct$/) do
   result = title_format.match(modal.fld_modal_title.text.upcase)
   expect(result).to_not be_nil, "title #{modal.fld_modal_title.text.upcase} was not in expected format"
 end
+
+When(/^user hovers over the CommunityHealthSummaries applet row$/) do
+  ehmp = PobCommunityHealthApplet.new
+  ehmp.wait_for_tbl_data_rows
+  expect(ehmp).to have_tbl_data_rows
+  rows = ehmp.tbl_data_rows
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+Given(/^user can view the Quick Menu Icon in CommunityHealthSummaries applet$/) do
+  ehmp = PobCommunityHealthApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in CommunityHealthSummaries applet$/) do
+  ehmp = PobCommunityHealthApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in CommunityHealthSummaries applet$/) do
+  ehmp = PobCommunityHealthApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the CommunityHealthSummaries applet$/) do |table|
+  ehmp = PobCommunityHealthApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+When(/^user selects the detail view from Quick Menu Icon of CommunityHealthSummaries applet$/) do
+  ehmp = PobCommunityHealthApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+

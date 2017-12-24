@@ -7,14 +7,14 @@
     And the results contain data group
       | field            | value                          |
       | summary          | TEMPERATURE 98.6 F             |
-      | uid              | urn:va:vital:9E7A:3:12447      |
+      | uid              | urn:va:vital:SITE:3:12447      |
       | typeName         | TEMPERATURE                    |
       | result           | 98.6                           |
       | units            | F                              |
     And the results contain data group
       | field            | value                          |
       | summary          | BLOOD PRESSURE 120/86 mm[Hg]   |
-      | uid              | urn:va:vital:9E7A:3:12450"     |
+      | uid              | urn:va:vital:SITE:3:12450"     |
       | typeName         | BLOOD PRESSURE                 |
       | result           | 120/86                         |
       | units            | mm[Hg]                         |

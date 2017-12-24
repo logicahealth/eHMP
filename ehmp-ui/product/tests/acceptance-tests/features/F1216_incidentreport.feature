@@ -1,4 +1,4 @@
-@F1216 @reg2
+@F1216 @reg2 @debug @DE8236
 Feature: Create eHMP UI ability to report an incident and send that incident to the VA directly from the UI - footer
 
 @US17910 @US17910_1

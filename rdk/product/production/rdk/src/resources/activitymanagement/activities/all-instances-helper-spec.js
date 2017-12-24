@@ -10,20 +10,20 @@ describe('All activity instances utility functions', function () {
         req.app = {};
         req.app.config = {};
         req.app.config.vistaSites = {
-            'C877': {
+            'SITE': {
                 'name': 'KODAK',
                 'division': '500'
             },
-            '9E7A': {
+            'SITE': {
                 'name': 'PANORAMA',
                 'division': '500'
             }
         };
         req.session = {};
         req.session.user = {};
-        req.session.user.site = '9E7A';
+        req.session.user.site = 'SITE';
         req.session.user.duz = [];
-        req.session.user.duz['9E7A'] = '3';
+        req.session.user.duz['SITE'] = '3';
         req.app.config = {
             'maximum_resultset_record': 500
         };
@@ -34,26 +34,26 @@ describe('All activity instances utility functions', function () {
         var ids = [];
         expect(helper.adjustUserIds(req.logger, ids)).to.be.eql([]);
 
-        ids = ['9E7A:3'];
+        ids = ['SITE:3'];
         expect(helper.adjustUserIds(req.logger, ids)).to.be.eql([]);
 
-        ids = ['9E7A;3'];
-        expect(helper.adjustUserIds(req.logger, ids)).to.be.eql(['urn:va:user:9E7A:3']);
+        ids = ['SITE;3'];
+        expect(helper.adjustUserIds(req.logger, ids)).to.be.eql(['urn:va:user:SITE:3']);
 
-        ids = ['9E7A;1', '9E7A;2', '9E7A;3', '9E7A;4', '9E7A;5', '9E7A;6',
-            '9E7A;7', '9E7A;8', '9E7A;9', '9E7A;10'
+        ids = ['SITE;1', 'SITE;2', 'SITE;3', 'SITE;4', 'SITE;5', 'SITE;6',
+            'SITE;7', 'SITE;8', 'SITE;9', 'SITE;10'
         ];
         expect(helper.adjustUserIds(req.logger, ids)).to.be.eql([
-            'urn:va:user:9E7A:1', 'urn:va:user:9E7A:2', 'urn:va:user:9E7A:3', 'urn:va:user:9E7A:4', 'urn:va:user:9E7A:5',
-            'urn:va:user:9E7A:6', 'urn:va:user:9E7A:7', 'urn:va:user:9E7A:8', 'urn:va:user:9E7A:9', 'urn:va:user:9E7A:10'
+            'urn:va:user:SITE:1', 'urn:va:user:SITE:2', 'urn:va:user:SITE:3', 'urn:va:user:SITE:4', 'urn:va:user:SITE:5',
+            'urn:va:user:SITE:6', 'urn:va:user:SITE:7', 'urn:va:user:SITE:8', 'urn:va:user:SITE:9', 'urn:va:user:SITE:10'
         ]);
-        ids = ['9E7A;1', '9E7A;2', '9E7A;3', '9E7A;4', '9E7A;5', '9E7A;6',
-            '9E7A;7', '9E7A;8', '9E7A;9', '9E7A;10', '9E7A;11'
+        ids = ['SITE;1', 'SITE;2', 'SITE;3', 'SITE;4', 'SITE;5', 'SITE;6',
+            'SITE;7', 'SITE;8', 'SITE;9', 'SITE;10', 'SITE;11'
         ];
         expect(helper.adjustUserIds(req.logger, ids)).to.be.eql([
-            'urn:va:user:9E7A:1', 'urn:va:user:9E7A:2', 'urn:va:user:9E7A:3', 'urn:va:user:9E7A:4', 'urn:va:user:9E7A:5',
-            'urn:va:user:9E7A:6', 'urn:va:user:9E7A:7', 'urn:va:user:9E7A:8', 'urn:va:user:9E7A:9', 'urn:va:user:9E7A:10',
-            'urn:va:user:9E7A:11'
+            'urn:va:user:SITE:1', 'urn:va:user:SITE:2', 'urn:va:user:SITE:3', 'urn:va:user:SITE:4', 'urn:va:user:SITE:5',
+            'urn:va:user:SITE:6', 'urn:va:user:SITE:7', 'urn:va:user:SITE:8', 'urn:va:user:SITE:9', 'urn:va:user:SITE:10',
+            'urn:va:user:SITE:11'
         ]);
     });
 
@@ -74,7 +74,7 @@ describe('All activity instances utility functions', function () {
         req.query.context = 'patient';
         expect(helper.getErrorMessage(req)).to.be.equal('Missing pid for patient context request.');
 
-        req.query.pid = '9E7A;3';
+        req.query.pid = 'SITE;3';
         req.query.startDate = '201601010000';
         expect(helper.getErrorMessage(req)).to.be.equal('start date or end date is missing.');
 
@@ -90,7 +90,7 @@ describe('All activity instances utility functions', function () {
     });
 
     it('getUserId', function () {
-        expect(helper.getUserId(req)).to.be.equal('9E7A;3');
+        expect(helper.getUserId(req)).to.be.equal('SITE;3');
     });
 
     it('isStaffRequest', function () {

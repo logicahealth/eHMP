@@ -16,7 +16,8 @@ var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
 // var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 // var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var MviClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
@@ -58,10 +59,10 @@ xdescribe('enterprise-sync-request-handler.js', function() {
             'enterprise-sync-request': {},
             'vista-operational-subscribe-request': {},
 
-            'vista-9E7A-subscribe-request': {},
-            'vista-C877-subscribe-request': {},
-            'vistahdr-2939-subscribe-request': {},
-            'vistahdr-FFC7-subscribe-request': {},
+            'vista-SITE-subscribe-request': {},
+            'vista-SITE-subscribe-request': {},
+            'vistahdr-SITE-subscribe-request': {},
+            'vistahdr-SITE-subscribe-request': {},
 
             'hdr-sync-request': {},
             'vler-sync-request': {},
@@ -118,24 +119,24 @@ xdescribe('enterprise-sync-request-handler.js', function() {
 
     var vistaHdrConfig = {
         'vistaSites': {
-            '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
+            'SITE': _.defaults(wConfig.vistaSites['SITE'], {
                 'name': 'panorama',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000,
                 'stationNumber': 500
             }),
-            'C877': _.defaults(wConfig.vistaSites.C877, {
+            'SITE': _.defaults(wConfig.vistaSites.SITE, {
                 'name': 'kodak',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -152,7 +153,7 @@ xdescribe('enterprise-sync-request-handler.js', function() {
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'REDACTED    ',
+            host: 'IP        ',
             port: PORT
         }),
         rules: {
@@ -168,73 +169,73 @@ xdescribe('enterprise-sync-request-handler.js', function() {
         'hdr': {
             'operationMode': 'PUB/SUB',
             'hdrSites': {
-                'FFC7': {
+                'SITE': {
                     'stationNumber': '536'
                 },
-                '2939': {
+                'SITE': {
                     'stationNumber': '551'
                 },
-                '76C6': {
+                'SITE': {
                     'stationNumber': '547'
                 }
             }
         },
         'vistaSitesByStationCombined': {
-            '500': _.defaults(wConfig.vistaSites['9E7A'], {
+            '500': _.defaults(wConfig.vistaSites['SITE'], {
                 'name': 'panorama',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000,
                 'stationNumber': 500,
-                'siteHash': '9E7A'
+                'siteHash': 'SITE'
             }),
-            '507': _.defaults(wConfig.vistaSites.C877, {
+            '507': _.defaults(wConfig.vistaSites.SITE, {
                 'name': 'kodak',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000,
                 'stationNumber':507,
-                'siteHash': 'C877'
+                'siteHash': 'SITE'
             }),
-            '536': _.defaults(wConfig.hdr.hdrSites.FFC7, {
+            '536': _.defaults(wConfig.hdr.hdrSites.SITE, {
                 'name': 'panorama',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000,
                 'stationNumber': 536,
-                'siteHash': 'FFC7'
+                'siteHash': 'SITE'
             }),
-            '551': _.defaults(wConfig.hdr.hdrSites['2939'], {
+            '551': _.defaults(wConfig.hdr.hdrSites['SITE'], {
                 'name': 'panorama',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000,
                 'stationNumber': 551,
-                'siteHash': '2939'
+                'siteHash': 'SITE'
             }),
             '547': {
                 'stationNumber': 547,
-                'siteHash': '76C6'
+                'siteHash': 'SITE'
             }
         }
     };
@@ -250,11 +251,11 @@ xdescribe('enterprise-sync-request-handler.js', function() {
     // vistaHdrEnvironment.publisherRouter = new PublisherRouter(logger, vistaHdrConfig, vistaHdrEnvironment.jobStatusUpdater);
 
     var vistaHdrMatchingJobTypes = [
-        jobUtil.vistaSubscribeRequestType('9E7A'),
-        jobUtil.vistaSubscribeRequestType('C877'),
-        jobUtil.vistahdrSubScribeRequestType('FFC7'),
-        jobUtil.vistahdrSubScribeRequestType('2939'),
-        jobUtil.vistahdrSubScribeRequestType('76C6'),
+        jobUtil.vistaSubscribeRequestType('SITE'),
+        jobUtil.vistaSubscribeRequestType('SITE'),
+        jobUtil.vistahdrSubScribeRequestType('SITE'),
+        jobUtil.vistahdrSubScribeRequestType('SITE'),
+        jobUtil.vistahdrSubScribeRequestType('SITE'),
         // jobUtil.pgdSyncRequestType(),
         jobUtil.vlerSyncRequestType(),
         // jobUtil.jmeadowsSyncRequestType()    //5000000123V015819 does not have a DOD record
@@ -290,8 +291,8 @@ xdescribe('enterprise-sync-request-handler.js', function() {
 
     afterEach(function() {
         var checkIdentifiersDone = false;
-        // var expectedPatientIdentifierValues = [ '5000000123V015819', '9E7A;100625', 'C877;100625', 'HDR;5000000123V015819', 'DAS;5000000123V015819', 'VLER;5000000123V015819' ];
-        var expectedPatientIdentifierValues = ['2939;258', '5000000123V015819', '76C6;268', '9E7A;100622', 'C877;100622', 'FFC7;249', 'JPID;' + jpid, 'VLER;5000000123V015819'];
+        // var expectedPatientIdentifierValues = [ '5000000123V015819', 'SITE;100625', 'SITE;100625', 'HDR;5000000123V015819', 'DAS;5000000123V015819', 'VLER;5000000123V015819' ];
+        var expectedPatientIdentifierValues = ['SITE;258', '5000000123V015819', 'SITE;268', 'SITE;100622', 'SITE;100622', 'SITE;249', 'JPID;' + jpid, 'VLER;5000000123V015819'];
         var jdsError, jdsResponse;
         runs(function() {
             vistaHdrEnvironment.jds.getPatientIdentifier(job, function(error, response) {

@@ -5,7 +5,7 @@ var async = require('async');
 var rdk = require('../../../core/rdk');
 var RdkTimer = rdk.utils.RdkTimer;
 var RdkError = rdk.utils.RdkError;
-var authUtils = require('../../../subsystems/authentication/utils');
+var authUtils = rdk.utils.authentication;
 var pjdsUserData = require('../../../subsystems/authentication/modules/pjds-user-data');
 
 var finalizeCall = function(req, res, params) {
@@ -56,7 +56,8 @@ var getSession = function(req, res) {
 
     if (_.isEmpty(name)) {
         var errorObj = new RdkError({
-            code: 'rdk.400.1001'
+            code: 'rdk.400.1001',
+            logger: req.logger
         });
         return finalizeCall(req, res, {
             timer: authenticationTimer,
@@ -70,11 +71,6 @@ var getSession = function(req, res) {
             pjdsUserData.getTrustedSystemData(req, res, authenticationCB, {
                 name: name
             });
-        },
-        function authorization(data, authorizationCB) {
-            pjdsUserData.getPermissionsData(req, res, authorizationCB, {
-                data: data
-            });
         }
     ], function finalCallback(err, data) {
         req.logger.trace(data, 'Session data returned in finalCallback.');
@@ -83,7 +79,8 @@ var getSession = function(req, res) {
             if (!_.has(error, 'log')) {
                 error = new RdkError({
                     code: 'pjds.401.1002',
-                    error: err
+                    error: err,
+                    logger: req.logger
                 });
             }
             return finalizeCall(req, res, {

@@ -1,1 +1,7 @@
-/target/
+build.gradle
+.project
+.settings
+.classpath
+global
+project.imports
+package-names-white-list

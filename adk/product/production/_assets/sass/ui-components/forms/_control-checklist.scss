@@ -16,9 +16,6 @@
     &.items-shown-lg > .childView-container {
         height: calc((#{$lg} * (19px - 5px)));
     }
-    > .childView-container {
-        overflow-y: auto;
-    }
     .form-group {
         margin: -13px 0px 0px 5px;;
     }
@@ -34,5 +31,8 @@
                 margin: 5px;
             }
         }
+    }
+    legend:not(.sr-only) + .childView-container .checkbox label {
+        font-weight: normal;
     }
 }

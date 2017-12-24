@@ -12,7 +12,7 @@ var inputValue =
                 'categoryUid': 'urn:va:factor-category:500069',
                 'display': true,
                 'encounterName': '20 MINUTE Apr 09, 2001',
-                'encounterUid': 'urn:va:visit:9E7A:253:2800',
+                'encounterUid': 'urn:va:visit:SITE:253:2800',
                 'entered': '20010409134626',
                 'facilityCode': '888',
                 'facilityName': 'FT. LOGAN',
@@ -21,12 +21,12 @@ var inputValue =
                 'localId': '25',
                 'locationDisplayName': '20 Minute',
                 'locationName': '20 MINUTE',
-                'locationUid': 'urn:va:location:9E7A:240',
+                'locationUid': 'urn:va:location:SITE:240',
                 'name': 'REFUSES HEPATITIS C TESTING',
-                'pid': '9E7A;253',
+                'pid': 'SITE;253',
                 'stampTime': '20010409134626',
                 'summary': 'REFUSES HEPATITIS C TESTING',
-                'uid': 'urn:va:factor:9E7A:253:25'
+                'uid': 'urn:va:factor:SITE:253:25'
             },
             {
                 'categoryName': 'DEPRESSION SCREENING',
@@ -53,7 +53,7 @@ var inputValue =
                 'categoryUid': 'urn:va:factor-category:500069',
                 'display': true,
                 'encounterName': '20 MINUTE Apr 09, 2001',
-                'encounterUid': 'urn:va:visit:C877:253:2800',
+                'encounterUid': 'urn:va:visit:SITE:253:2800',
                 'entered': '20010409134626',
                 'facilityCode': '888',
                 'facilityName': 'FT. LOGAN',
@@ -62,12 +62,12 @@ var inputValue =
                 'localId': '25',
                 'locationDisplayName': '20 Minute',
                 'locationName': '20 MINUTE',
-                'locationUid': 'urn:va:location:C877:240',
+                'locationUid': 'urn:va:location:SITE:240',
                 'name': 'REFUSES HEPATITIS C TESTING',
-                'pid': 'C877;253',
+                'pid': 'SITE;253',
                 'stampTime': '20010409134626',
                 'summary': 'REFUSES HEPATITIS C TESTING',
-                'uid': 'urn:va:factor:C877:253:25'
+                'uid': 'urn:va:factor:SITE:253:25'
             }
         ]
     }

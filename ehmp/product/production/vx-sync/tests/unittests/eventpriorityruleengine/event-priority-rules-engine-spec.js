@@ -35,27 +35,27 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'REDACTED    ',
-		port: REDACTED
+		host: 'IP        ',
+		port: PORT
 	},
 	'vistaSites': {
-		'9E7A': {
+		'SITE': {
 			'name': 'panorama',
-			'host': 'REDACTED    ',
-			'port': REDACTED,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'host': 'IP        ',
+			'port': PORT,
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
 			'sendTimeout': 10000
 		},
-		'C877': {
+		'SITE': {
 			'name': 'kodak',
-			'host': 'REDACTED    ',
-			'port': REDACTED,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'host': 'IP        ',
+			'port': PORT,
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -191,8 +191,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('9E7A', 1, 'appointment');
-			var jobStatus = createJobStatus('9E7A', 1);
+			var job = createJob('SITE', 1, 'appointment');
+			var jobStatus = createJobStatus('SITE', 1);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;
@@ -231,8 +231,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('9E7A', 1, 'order');
-			var jobStatus = createJobStatus('9E7A', 1);
+			var job = createJob('SITE', 1, 'order');
+			var jobStatus = createJobStatus('SITE', 1);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;
@@ -271,8 +271,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('C877', 1, 'appointment');
-			var jobStatus = createJobStatus('9E7A', 1);
+			var job = createJob('SITE', 1, 'appointment');
+			var jobStatus = createJobStatus('SITE', 1);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;
@@ -320,8 +320,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('C877', undefined, 'appointment');
-			var jobStatus = createJobStatus('9E7A', undefined);
+			var job = createJob('SITE', undefined, 'appointment');
+			var jobStatus = createJobStatus('SITE', undefined);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;
@@ -369,8 +369,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('C877', -50, 'appointment');
-			var jobStatus = createJobStatus('9E7A', -50);
+			var job = createJob('SITE', -50, 'appointment');
+			var jobStatus = createJobStatus('SITE', -50);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;
@@ -418,8 +418,8 @@ describe('event-priority-rules-engine.js', function() {
 			var rulesEngine = new EventPriorityRulesEngine(log, config, environment);
 			spyOn(rulesEngine, '_runRule').andCallThrough();
 
-			var job = createJob('C877', 200, 'appointment');
-			var jobStatus = createJobStatus('9E7A', 200);
+			var job = createJob('SITE', 200, 'appointment');
+			var jobStatus = createJobStatus('SITE', 200);
 			setupDummyJds(environment, jobStatus);
 
 			var finished = false;

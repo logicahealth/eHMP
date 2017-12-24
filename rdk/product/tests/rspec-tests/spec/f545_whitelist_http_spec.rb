@@ -19,7 +19,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
 
   before(:all) do
     @test_pid = '10108V420871'
-    @test_uid = 'urn%3Ava%3Avisit%3A9E7A%3A3%3AH4612'
+    @test_uid = 'urn%3Ava%3Avisit%3ASITE%3A3%3AH4612'
 
     rdk_sync(@test_pid)
     # fetch_base_url = DefaultLogin.rdk_fetch_url
@@ -41,15 +41,15 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
             'localId' => 'H4612',
             'locationDisplayName' => '7A Gen Med',
             'locationName' => '7A GEN MED',
-            'locationUid' => 'urn:va:location:9E7A:158',
+            'locationUid' => 'urn:va:location:SITE:158',
             'patientClassCode' => 'urn:va:patient-class:IMP',
             'patientClassName' => 'Inpatient',
-            'pid' => '9E7A;3',
+            'pid' => 'SITE;3',
             'primaryProvider' => {
               'primary' => true,
               'providerDisplayName' => 'Provider,Twenty',
               'providerName' => 'PROVIDER,TWENTY',
-              'providerUid' => 'urn:va:user:9E7A:1005',
+              'providerUid' => 'urn:va:user:SITE:1005',
               'role' => 'P',
               'summary' => "EncounterProvider{uid=\'\'}"
             },
@@ -57,7 +57,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
               {
                 'providerDisplayName' => 'Provider,Thirty',
                 'providerName' => 'PROVIDER,THIRTY',
-                'providerUid' => 'urn:va:user:9E7A:1057',
+                'providerUid' => 'urn:va:user:SITE:1057',
                 'role' => 'A',
                 'summary' => "EncounterProvider{uid=\'\'}"
               },
@@ -65,7 +65,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
                 'primary' => true,
                 'providerDisplayName' => 'Provider,Twenty',
                 'providerName' => 'PROVIDER,TWENTY',
-                'providerUid' => 'urn:va:user:9E7A:1005',
+                'providerUid' => 'urn:va:user:SITE:1005',
                 'role' => 'P',
                 'summary' => "EncounterProvider{uid=\'\'}"
               }
@@ -82,7 +82,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
             },
             'typeDisplayName' => 'Hospitalization',
             'typeName' => 'HOSPITALIZATION',
-            'uid' => 'urn:va:visit:9E7A:3:H4612',
+            'uid' => 'urn:va:visit:SITE:3:H4612',
             'activityDateTime' => '20140814130730'
           }
         ]
@@ -101,7 +101,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
               'primary' => true,
               'providerDisplayName' => 'Provider,Twenty',
               'providerName' => 'PROVIDER,TWENTY',
-              'providerUid' => 'urn:va:user:9E7A:1005',
+              'providerUid' => 'urn:va:user:SITE:1005',
               'role' => 'P',
               'summary' => "EncounterProvider{uid=\'\'}"
             },
@@ -123,7 +123,7 @@ describe 'Story#US7278: f545_whitelist_http_spec.rb', acceptance: true do
               'primary' => true,
               'providerDisplayName' => 'Provider,Twenty',
               'providerName' => 'PROVIDER,TWENTY',
-              'providerUid' => 'urn:va:user:9E7A:1005',
+              'providerUid' => 'urn:va:user:SITE:1005',
               'role' => 'P',
               'summary' => "EncounterProvider{uid=\'\'}"
             },

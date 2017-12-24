@@ -8,13 +8,13 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
     describe('Test utility function findUser', function(){
         it('Should return undefined if it cannot find the provider', function(){
-            var user = new Backbone.Model({duz: {'9E7A': '100000027'}, site: '9E7A'});
+            var user = new Backbone.Model({duz: {'SITE': '100000027'}, site: 'SITE'});
             var providerList = new Backbone.Collection([{code: '123456789', name: 'TEST,USER'}]);
             expect(ParseUtils.findUser(providerList, user)).toBeUndefined();
         });
 
         it('Should return the correct provider in the list', function(){
-            var user = new Backbone.Model({duz: {'9E7A': '100000027'}, site: '9E7A'});
+            var user = new Backbone.Model({duz: {'SITE': '100000027'}, site: 'SITE'});
             var providerList = new Backbone.Collection([{code: '123456789', name: 'TEST,USER'}, {code: '100000027', name: 'USER,PANORAMA'}]);
             var result = ParseUtils.findUser(providerList, user);
             expect(result.get('code')).toEqual('100000027');
@@ -229,14 +229,14 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
 
         it('Test copying provider property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = getExistingBackboneModel({providerUid: 'urn:va:user:9E7A:1234'});
+            var existingModel = getExistingBackboneModel({providerUid: 'urn:va:user:SITE:1234'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('existingProviderId')).toEqual('1234');
         });
 
         it('Test copying location property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = getExistingBackboneModel({locationUid: 'urn:va:location:9E7A:64'});
+            var existingModel = getExistingBackboneModel({locationUid: 'urn:va:location:SITE:64'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('existingLocationId')).toEqual('64');
             expect(formModel.get('existingLocationName')).toBeUndefined();
@@ -256,13 +256,13 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
                 {
                     comment: 'test comment 1',
                     entered: 20151228,
-                    enteredByCode: 'urn:va:user:9E7A:123456789',
+                    enteredByCode: 'urn:va:user:SITE:123456789',
                     enteredByName: 'TEST,USERONE'
                 },
                 {
                     comment: 'test comment 2',
                     entered: 20151230,
-                    enteredByCode: 'urn:va:user:9E7A:987654321',
+                    enteredByCode: 'urn:va:user:SITE:987654321',
                     enteredByName: 'TEST,USERTWO'
                 }
             ];
@@ -270,15 +270,15 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('annotations').at(0).get('commentString')).toEqual('test comment 2');
             expect(formModel.get('annotations').at(1).get('commentString')).toEqual('test comment 1');
-            expect(formModel.get('annotations').at(0).get('author')).toEqual({name: 'TEST,USERTWO', duz: {'9E7A': '987654321'}});
-            expect(formModel.get('annotations').at(1).get('author')).toEqual({name: 'TEST,USERONE', duz: {'9E7A': '123456789'}});
+            expect(formModel.get('annotations').at(0).get('author')).toEqual({name: 'TEST,USERTWO', duz: {'SITE': '987654321'}});
+            expect(formModel.get('annotations').at(1).get('author')).toEqual({name: 'TEST,USERONE', duz: {'SITE': '123456789'}});
             expect(formModel.get('annotations').at(0).get('timeStamp')).toEqual('12/30/2015');
             expect(formModel.get('annotations').at(1).get('timeStamp')).toEqual('12/28/2015');
         });
 
         it('Test copying ien property', function(){
             var formModel = new Backbone.Model();
-            var existingModel = getExistingBackboneModel({uid: 'urn:va:problem:9E7A:3:12345'});
+            var existingModel = getExistingBackboneModel({uid: 'urn:va:problem:SITE:3:12345'});
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
             expect(formModel.get('problemIEN')).toEqual('12345');
         });

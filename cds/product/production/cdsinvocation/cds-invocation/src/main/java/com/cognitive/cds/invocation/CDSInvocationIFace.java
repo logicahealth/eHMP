@@ -25,7 +25,7 @@
 package com.cognitive.cds.invocation;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import com.cognitive.cds.invocation.model.CallMetrics;
 import com.cognitive.cds.invocation.model.Context;
@@ -99,13 +99,13 @@ public interface CDSInvocationIFace {
 	 * @param context
 	 *            The context provides the environment in which the reasoning is
 	 *            occurring
-	 * @param parameters
+	 * @param map
 	 *            The parameters provide input to parameterized reasoning. Might also be used in guiding context and data queries
 	 * @param dataModel
 	 *            The data model define the data used for reasoning (in addition
 	 *            to data queries embedded in the the intent)
 	 */
-	public ResultBundle invoke(InvocationTarget invocationTarget, Context context, Properties parameters,
+	public ResultBundle invoke(InvocationTarget invocationTarget, Context context, Map<String, Object> map,
 			Object dataModel);
 
 	/**

@@ -3,7 +3,7 @@ define([
 ], function(_) {
     'use strict';
 
-    var RESOURCE = 'authentication-list';
+    var RESOURCE = 'facility-list';
 
     var sites = ADK.Resources.Collection.extend({
         model: ADK.Resources.Model,

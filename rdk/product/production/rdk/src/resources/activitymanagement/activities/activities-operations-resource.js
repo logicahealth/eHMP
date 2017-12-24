@@ -10,10 +10,12 @@ var processJsonObject = activityUtils.processJsonObject;
 var processValue = activityUtils.processValue;
 var wrapValueInCData = activityUtils.wrapValueInCData;
 var getGenericJbpmConfig = activityUtils.getGenericJbpmConfig;
+var getGenericJbpmConfigByUser = activityUtils.getGenericJbpmConfigByUser;
 var nullchecker = rdk.utils.nullchecker;
 var xmlTemplates = activityUtils.xmlTemplates;
 var activityMockQuery = require('./activity-query-service-mock');
-
+var versionCompare = require('./../../../utils/version-compare').versionCompare;
+var RdkError = rdk.utils.RdkError;
 
 JBPMServerError.prototype = Error.prototype;
 
@@ -106,6 +108,9 @@ function doStartProcess(config, deploymentId, processDefId, parameters, processC
             httpUtil.post(config, function(err, response, result) {
                 if (err) {
                     return processCallback(err);
+                }
+                else if (response.statusCode >= 300) {
+                    return processCallback('Failed to start JBPM process. Received statusCode ' + response.statusCode);
                 }
 
                 parseString(result, function(err, jsonResult) {
@@ -277,6 +282,22 @@ function getDefinitionsFetchConfig(req, pagesize) {
     return config;
 }
 
+function getDefinitionsFetchConfigByUser(appConfig, loginSite, loginCredential, logger, pagesize) {
+    var config = getGenericJbpmConfigByUser(appConfig, loginSite, loginCredential, logger);
+
+    var uri = uriBuilder.fromUri(config.url).path('/deployment/processes');
+
+    // Pagination not working correctly for the above rest api in RedHat BPM 6.1 to get all available process definitions in batches,
+    // so as a short term fix, increasing default pagesize to 2000 (from 200).
+    // This needs to be revisited once BPM is migrated to a new version.
+    pagesize = pagesize || 2000;
+
+    uri.query('pagesize', pagesize);
+    config.url = uri.build();
+
+    return config;
+}
+
 // Activity Query Service
 function getActivityDefinitionsByQuery(req, res) {
     req.audit.dataDomain = 'Tasks';
@@ -355,11 +376,8 @@ function doProcessDefinitionsFetch(config, callback) {
             return callback(err);
         }
 
-        var formattedResponse = {
-            data: {
-                items: []
-            }
-        };
+        var processDefinitionsOrganizer = {};
+        var processDefinitions = [];
 
         if (returnedData.hasOwnProperty('processDefinitionList') && Array.isArray(returnedData.processDefinitionList)) {
             _.each(returnedData.processDefinitionList, function(processDefinition) {
@@ -375,9 +393,36 @@ function doProcessDefinitionsFetch(config, callback) {
                     processDefinition.deploymentId = processDefinition['deployment-id'];
                 }
 
-                formattedResponse.data.items.push(processDefinition);
+                //validate well-formed process definition before allowing it to be sorted
+                if (processDefinition.hasOwnProperty('deploymentId') &&
+                    _.size(activityUtils.parseVersionFromDeploymentId(processDefinition.deploymentId)) > 0) {
+                    //Group activities by type before sorting versions based on deployment and process IDs
+                    var deploymentKey = processDefinition.deploymentId.substring(0, processDefinition.deploymentId.lastIndexOf(':'));
+                    if (processDefinition.hasOwnProperty('id')) {
+                        deploymentKey += '.' + processDefinition.id;
+                    }
+
+                    if (!processDefinitionsOrganizer.hasOwnProperty(deploymentKey)) {
+                        processDefinitionsOrganizer[deploymentKey] = [];
+                    }
+                    processDefinitionsOrganizer[deploymentKey].push(processDefinition);
+                }
             });
         }
+
+        _.each(processDefinitionsOrganizer, function(deploymentsArr) {
+            deploymentsArr.sort(function(a, b) {
+                //intentionally swap version orders to reverse default sort order
+                return versionCompare(activityUtils.parseVersionFromDeploymentId(b.deploymentId), activityUtils.parseVersionFromDeploymentId(a.deploymentId));
+            });
+            processDefinitions = processDefinitions.concat(deploymentsArr);
+        });
+
+        var formattedResponse = {
+            data: {
+                items: processDefinitions
+            }
+        };
 
         return callback(null, formattedResponse);
     });
@@ -533,6 +578,9 @@ function doSignal(config, deploymentId, processInstanceId, signalName, signalCon
                 if (err) {
                     return cb(err);
                 }
+                else if (response.statusCode >= 300) {
+                    return cb(new JBPMServerError('Failed to post JBPM signal. Received statusCode ' + response.statusCode));
+                }
 
                 parseString(result, function(err, jsonResult) {
                     if (err) {
@@ -580,14 +628,34 @@ function getCdsIntentResults(req, res) {
     };
 
     httpUtil.post(config, function(err, response, body) {
-        req.logger.debug('callback from fetch()');
+        req.logger.debug({body: body}, 'Response from CDS intent POST call');
 
         if (err) {
             req.logger.error(err);
-            return res.status(rdk.httpstatus.bad_request).rdkSend(err);
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        }
+        else if (response.statusCode >= 300) {
+            // Log the actual response
+            req.logger.error('Failed to post CDS intent. Received statusCode ' + response.statusCode);
+            // Return RdkError with HTTP 500 status to the caller
+            var postError = new RdkError({
+                    code: 'cds.500.1000',
+                    logger: req.logger
+            });
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(postError);
         }
 
-        if (body.status && body.status.code !== '0') { // 0 == OK
+        // Validate the CDS status code
+        var cdsStatus = (body && _.has(body, 'status.code')) ? _.get(body,'status.code') : null;
+        if (!cdsStatus) {
+            var malformedResponseError = new RdkError({
+                    code: 'cds.500.1000',
+                    error: 'CDS intent POST returned with malformed response body - status.code missing',
+                    logger: req.logger
+            });
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(malformedResponseError);
+        }
+        else if (cdsStatus !== '0') { // 0 == OK
             var invocationError = getInvocationError(body.faultInfo);
             // HTTP request was successful but the CDS Invocation service reported an error.
             req.logger.debug({
@@ -595,7 +663,9 @@ function getCdsIntentResults(req, res) {
             }, 'CDS Intent Results: cds invocation server returned error');
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(invocationError);
         }
-        return res.rdkSend(body);
+
+        // Send validated body as response
+        return res.status(rdk.httpstatus.ok).rdkSend(body);
     });
 }
 
@@ -734,4 +804,5 @@ module.exports.getCdsIntentResults = getCdsIntentResults;
 module.exports.doSignal = doSignal;
 module.exports.doProcessDefinitionsFetch = doProcessDefinitionsFetch;
 module.exports.getDefinitionsFetchConfig = getDefinitionsFetchConfig;
+module.exports.getDefinitionsFetchConfigByUser = getDefinitionsFetchConfigByUser;
 module.exports.getJbpmInstanceByInstanceId = getJbpmInstanceByInstanceId;

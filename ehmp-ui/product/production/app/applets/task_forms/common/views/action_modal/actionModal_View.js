@@ -64,16 +64,14 @@ define([
                         id: 'form-cancel-btn',
                         extraClasses: ['btn-primary', 'btn-sm'],
                         type: 'button',
-                        label: 'Cancel',
-                        title: 'Press enter to cancel'
+                        label: 'Cancel'
                     }, {
                         control: 'button',
                         disabled: true,
                         extraClasses: ['btn-primary', 'btn-sm'],
                         label: 'Accept',
                         name: 'submit-accept',
-                        id: 'submit-accept',
-                        title: 'Press enter to accept'
+                        id: 'submit-accept'
                     }]
                 }]
             }]
@@ -108,7 +106,9 @@ define([
                             ADK.Checks.unregister('discontinue-consult-form-id');
                             ADK.Messaging.getChannel('tray-tasks').trigger('action:refresh');
                             ADK.Messaging.getChannel('task_forms').request('activity_detail', {
-                                processId: self.model.get('processId')
+                                processId: self.model.get('processId'),
+                                showHighlights: self.model.get('showHighlights'),
+                                highlights: self.model.get('detailsHighlights')
                             });
                         },
                         function() {

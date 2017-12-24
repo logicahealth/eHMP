@@ -1,32 +1,27 @@
-<div role="row" class="table-row" {{#if userWorkspace}} draggable="true" {{/if}}>
-    <div role="presentation" class="selectable flex-width-1">
-        <div data-cell-instanceid="event_name_{{id}}" role="gridcell" class="table-cell flex-width-2 {{#unless acuityName}}border-vertical {{/unless}}transform-text-capitalize" data-cell-tilesort="tilesort">
-            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
-            <div role="presentation" class="toolbar-container"></div>
-            <span>
-            {{formatNewLine groupName}}
-            {{#if allGroupedComments}}
-                <sup>
-                    <i data-item-instanceid="comment_{{id}}" class="fa fa-comment"></i>
-                </sup>
-                {{else}}
-                <sup>
-                    <i data-item-instanceid="transparent_{{id}}" class="fa fa-transparent-comment"></i>
-                </sup>
-            {{/if}}
-            </span>
-        </div>
-            {{#if acuityName}}
-                <div data-item-instanceid="acuity_{{id}}" role="gridcell" class="table-cell text-center border-vertical">
-                    {{acuityName}}
-                </div>
-            {{/if}}
+<div role="row" class="table-row" {{#if userWorkspace}} draggable="true" {{/if}} data-toggle="popover" data-content="{{tooltip}}">
+    <!-- tile button wrapped in a role="gridcell" div will be injected here -->
+    <div data-cell-instanceid="event_name_{{id}}" role="gridcell" class="table-cell flex-width-2_5 {{#unless acuityName}}border-vertical {{/unless}}transform-text-capitalize" data-cell-tilesort="tilesort">
+        <span>
+        {{formatNewLine groupName}}
+        {{#if allGroupedComments}}
+            <sup>
+                <i data-item-instanceid="comment_{{id}}" class="fa fa-comment"></i>
+            </sup>
+            {{else}}
+            <sup>
+                <i data-item-instanceid="transparent_{{id}}" class="fa fa-transparent-comment"></i>
+            </sup>
+        {{/if}}
+        </span>
     </div>
-    <div role="presentation" class="selectable flex-width-1" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{groupName}}. Button.">
-        <div data-cell-instanceid="time_since_{{id}}" role="gridcell" class="table-cell border-vertical">{{timeSince}}</div>
-        <div data-cell-instanceid="encounter_count_{{id}}" role="gridcell" class="table-cell flex-width-0_5">{{encounterCount}}</div>
-        <div role="gridcell" class="table-cell all-padding-no flex-width-3">
-            <div data-cell-instanceid="graph_{{id}}" class="graph-container"></div>
-        </div>
+        {{#if acuityName}}
+            <div data-item-instanceid="acuity_{{id}}" role="gridcell" class="table-cell text-center border-vertical">
+                {{acuityName}}
+            </div>
+        {{/if}}
+    <div data-cell-instanceid="time_since_{{id}}" role="gridcell" class="table-cell border-vertical">{{timeSince}}</div>
+    <div data-cell-instanceid="encounter_count_{{id}}" role="gridcell" class="table-cell flex-width-0_5">{{encounterCount}}</div>
+    <div role="gridcell" class="table-cell all-padding-no flex-width-3">
+        <div data-cell-instanceid="graph_{{id}}" class="graph-container"></div>
     </div>
 </div>

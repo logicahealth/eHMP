@@ -50,9 +50,9 @@ public class TaskUtils {
 			
 			return response;
 		} catch (TaskServiceException e) {
-			//Error was already logged
+			LOGGER.error(String.format("TaskUtils.transformToTasksResponse: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("TaskUtils.transformToTasksResponse: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("TaskUtils.transformToTasksResponse: An unexpected condition has happened: %s", e.getMessage()));
 		}
 		return null;
 	}
@@ -94,9 +94,9 @@ public class TaskUtils {
 			
 			return newVariablesList;
 		} catch (TaskServiceException e) {
-			//Error was already logged
+			LOGGER.error(String.format("TaskUtils.filterVariablesForRecency: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("TaskUtils.filterVariablesForRecency: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("TaskUtils.filterVariablesForRecency: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 		
 		return newVariablesList;

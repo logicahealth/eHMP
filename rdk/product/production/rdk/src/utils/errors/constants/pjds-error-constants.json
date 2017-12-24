@@ -62,7 +62,9 @@
         "1001": "Error retrieving User Data.",
         "1002": "Error retrieving Permission Sets List.",
         "1003": "There was an error getting Osync User data.",
-        "1004": "There was an error setting Osync User data."
+        "1004": "There was an error setting Osync User data.",
+        "1005": "There was an error retrieving prefetch patients.",
+        "1006": "There was an error retrieving feature permissions list."
     },
     "502": {
         "1000": "Bad Gateway"

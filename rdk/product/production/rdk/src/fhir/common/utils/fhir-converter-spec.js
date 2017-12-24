@@ -7,8 +7,8 @@ var moment = require('moment');
 
 describe('Fhir Utils', function() {
 
-    //These times were assumed to be input at site 9E7A, which is UTC-5 (UTC-4 during DST)
-    var inputSiteHash = '9E7A';
+    //These times were assumed to be input at site SITE, which is UTC-5 (UTC-4 during DST)
+    var inputSiteHash = 'SITE';
     var inputValue = {
         '19940617': '1994-06-17',                       //-4 (DST)
         '199406171612': '1994-06-17T20:12:00Z',         //-4 (DST)
@@ -113,12 +113,12 @@ describe('Fhir Utils', function() {
         noDST = fhirUtils.getTimezoneOffset(noDstDate, '48B0');
         expect(noDST).to.eql(480);
     });
-    it('gets the correct timezone offset for site hash - 9E7A', function() {
+    it('gets the correct timezone offset for site hash - SITE', function() {
         if(moment(yesDstDate).isDST()){
-            yesDST = fhirUtils.getTimezoneOffset(yesDstDate, '9E7A');
+            yesDST = fhirUtils.getTimezoneOffset(yesDstDate, 'SITE');
             expect(yesDST).to.eql(240);
         }
-        noDST = fhirUtils.getTimezoneOffset(noDstDate, '9E7A');
+        noDST = fhirUtils.getTimezoneOffset(noDstDate, 'SITE');
         expect(noDST).to.eql(300);
     });
 });

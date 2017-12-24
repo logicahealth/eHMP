@@ -1,12 +1,12 @@
 @meds_rest_outpatient @debug
 Scenario: Client can request outpatient meds
   Given a patient with "outpatient medications" in multiple VistAs and in DoD
-  When the client requests Meds for the patient "9E7A;71"
+  When the client requests Meds for the patient "SITE;71"
   Then eHMP returns "44" result(s)
   And the results contain data group
     | field       | value                                             |
     | summary     | ATENOLOL 100MG TAB (EXPIRED)\n TAKE ONE EVERY DAY |
-    | uid         | urn:va:med:9E7A:71:12007                          |
+    | uid         | urn:va:med:SITE:71:12007                          |
     | vaStatus    | EXPIRED                                           |
     | overallStop | 20010211                                          |
     | vaType      | O                                                 |
@@ -14,7 +14,7 @@ Scenario: Client can request outpatient meds
   And the results contain data group
     | field       | value                                          |
     | summary     | ASPIRIN 600MG SUPP,RTL (EXPIRED)\n AS DIRECTED |
-    | uid         | urn:va:med:9E7A:71:10976                       |
+    | uid         | urn:va:med:SITE:71:10976                       |
     | vaStatus    | EXPIRED                                        |
     | overallStop | 19991127                                       |
     | vaType      | O                                              |
@@ -22,7 +22,7 @@ Scenario: Client can request outpatient meds
   And the results contain data group
     | field                   | value                                                            |
     | summary                 | ASPIRIN 325MG BUFFERED TAB (UNRELEASED)\n THREE TIMES A DAY      |
-    | uid                     | urn:va:med:9E7A:71:8224                                          |
+    | uid                     | urn:va:med:SITE:71:8224                                          |
     | vaStatus                | UNRELEASED                                                       |
     | overallStop             | 19980726                                                         |
     | vaType                  | O                                                                |
@@ -31,7 +31,7 @@ Scenario: Client can request outpatient meds
 @meds_rest_inpatient @debug
   Scenario: Client can request inpatient meds
     Given a patient with "inpatient medications" in multiple VistAs and in DoD
-    When the client requests Meds for the patient "9E7A;71"
+    When the client requests Meds for the patient "SITE;71"
     Then eHMP returns "44" result(s)
     And the results contain data group
       | field       | value                                                                                     |

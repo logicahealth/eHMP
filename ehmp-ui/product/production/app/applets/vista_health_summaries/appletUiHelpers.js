@@ -7,7 +7,7 @@ define([
     'use strict';
 
     var appletUiHelpers = {
-        getDetailView: function(model, dataCollection) {
+        getDetailView: function(model, dataCollection, triggerElement) {
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             model.set({
                 'fullName': currentPatient.get('fullName'),
@@ -23,6 +23,7 @@ define([
             var modalOptions = {
                 'title': model.get('facilityMoniker') + ' - ' + model.get('hsReport'),
                 'size': 'large',
+                triggerElement: triggerElement,
                 nextPreviousCollection: dataCollection
             };
 

@@ -9,10 +9,16 @@ require('../../env-setup');
 var express = require('express');
 var bodyParser = require('body-parser');
 var config = require(global.VX_ROOT + 'worker-config');
+require('http').globalAgent.maxSockets = config.endpointMaxSockets || 5;
 var logUtil = require(global.VX_UTILS + 'log');
 
 logUtil.initialize(config);
 var log = logUtil.get('writeback-endpoint', 'host');
+if (config.appDynamicsProfile) {
+    log.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+    var appDynamicsProfile = JSON.parse(JSON.stringify(config.appDynamicsProfile));
+    require('appdynamics').profile(appDynamicsProfile); // tier and node names are read from environment variables
+}
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 
 var processWriteback = require('./writeback-endpoint-middleware');

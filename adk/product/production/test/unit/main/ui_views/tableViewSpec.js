@@ -4,7 +4,23 @@
 define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'main/collections/collections'],
     function(_, $, Handlebars, Backbone, Marionette, UILibrary, ADKCollections) {
         'use strict';
-        var TableView = UILibrary.Table;
+
+        var TableView = UILibrary.Table.extend({
+            behaviors: {},
+            constructor: function() {
+                if (this._behaviors) {
+                    delete this._behaviors;
+                }
+                UILibrary.Table.prototype.constructor.apply(this, arguments);
+            },
+            getChildView: function() {
+                var childView = UILibrary.Table.prototype.getChildView.apply(this, arguments);
+                childView.prototype.behaviors = {};
+                childView.prototype._behaviors = null;
+                return childView;
+            }
+        });
+
         describe('A table view', function() {
             var tableView;
             afterEach(function() {
@@ -13,6 +29,7 @@ define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UI
             describe('with a flat body', function() {
                 beforeEach(function() {
                     var TestTableView = TableView.extend({
+                        behaviors: {},
                         helpers: function() {
                             return {
                                 test1: function(model) {
@@ -107,14 +124,6 @@ define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UI
                             expect(tableView.$('tbody tr:first td:nth-child(2)')).toContainText('test2-row1');
                             expect(tableView.$('tbody tr:first td:last')).toHaveText('test3-row1');
                         });
-                        it('that scopes tbody cells to column header', function() {
-                            var header1Id = tableView.$('thead tr th:first').attr('id');
-                            var header2Id = tableView.$('thead tr th:nth-child(2)').attr('id');
-                            var header3Id = tableView.$('thead tr th:last').attr('id');
-                            expect(tableView.$('tbody tr td:first')).toHaveAttr('headers', header1Id);
-                            expect(tableView.$('tbody tr td:nth-child(2)')).toHaveAttr('headers', header2Id);
-                            expect(tableView.$('tbody tr td:last')).toHaveAttr('headers', header3Id);
-                        });
                     });
                 });
             });
@@ -122,6 +131,7 @@ define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UI
                 beforeEach(function() {
                     var GroupedCollection = ADKCollections.GroupingCollection.extend({});
                     var TestTableView = TableView.extend({
+                        behaviors: {},
                         helpers: function() {
                             return {
                                 'group_groupHeader': function(groupModel) {
@@ -207,7 +217,7 @@ define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UI
                                 it('sortable columns only th\'s with clickable button', function() {
                                     expect(tableView.$('thead tr th button')).toHaveLength(1);
                                     expect(tableView.$('thead tr th:last button')).toHaveLength(1);
-                                    expect(tableView.$('thead tr th:last button')).toHaveText('Group');
+                                    expect(tableView.$('thead tr th:last button')).toHaveHtml('\nGroup\n<span class="sr-only">Sortable Column</span>');
                                 });
                             });
                             it('body correctly', function() {
@@ -349,9 +359,9 @@ define(['underscore', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UI
                                     tableView.collection.trigger('sync');
                                     expect(tableView.$('tfoot tr td')).toHaveText("Finished loading.");
                                 });
-                            })
+                            });
                         });
-                    })
+                    });
                 });
             });
         });

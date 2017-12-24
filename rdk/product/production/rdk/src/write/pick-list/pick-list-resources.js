@@ -2,10 +2,12 @@
 
 var _ = require('lodash');
 var path = require('path');
+var EventEmitter = require('events').EventEmitter;
 var nullUtil = require('../core/null-utils');
 var pickListDirectRpcCall = require('./pick-list-direct-rpc-call');
 var pickListInMemoryRpcCall = require('./pick-list-in-memory-rpc-call');
 var pickListGroups = require('./pick-list-groups');
+var pickListUtil = require('./pick-list-utils');
 
 
 var interceptors = {
@@ -13,11 +15,11 @@ var interceptors = {
     synchronize: false
 };
 
-module.exports.getResourceConfig = function( /*app*/ ) {
+module.exports.getResourceConfig = function(app) {
     var resourceConfig = [];
-    registerPickLists(pickListDirectRpcCall.config, resourceConfig);
-    registerPickLists(pickListInMemoryRpcCall.config, resourceConfig);
-    registerPickLists(pickListGroups.config, resourceConfig);
+    registerPickLists(pickListUtil.inMemoryConfig(app), resourceConfig);
+    registerPickLists(pickListUtil.directConfig(app), resourceConfig);
+    registerPickLists(pickListUtil.groupsConfig(app), resourceConfig);
 
     return resourceConfig;
 };
@@ -57,7 +59,7 @@ function fetchWritePickList(req, res) {
         if (error) {
             if (!nullUtil.isNullish(statusCode)) {
                 if (!nullUtil.isNullish(headers)) {
-                    _.each(headers, function(value, key) {
+                    _.each(headers, function (value, key) {
                         res.setHeader(key, value);
                     });
                 }
@@ -66,7 +68,17 @@ function fetchWritePickList(req, res) {
                 res.status(500).rdkSend(error);
             }
         } else {
-            res.status(200).rdkSend(json);
+            res.status(200);
+
+            if (json instanceof EventEmitter && _.isFunction(json.pipe)) {
+                res.write('{"data":');
+                json.on('end', function () {
+                    res.write(',"status":200}');
+                });
+                json.pipe(res);
+            } else {
+                res.rdkSend(json);
+            }
         }
     };
 

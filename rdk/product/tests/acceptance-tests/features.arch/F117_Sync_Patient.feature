@@ -3,32 +3,32 @@ Feature: create a web application to be used as point-of-care healthcare applica
 
 @US1121_sync
 Scenario: Client requests to sync a patient through the RDK API
-	Given a patient with pid "9E7A;100716" has not been synced through the RDK API
-	When the client requests that the patient with pid "9E7A;100716" be synced through RDK API
+	Given a patient with pid "SITE;100716" has not been synced through the RDK API
+	When the client requests that the patient with pid "SITE;100716" be synced through RDK API
 	Then a created response is returned
-	And the patient with pid "9E7A;100716" is synced through the RDK API within 30 seconds
+	And the patient with pid "SITE;100716" is synced through the RDK API within 30 seconds
 	
 @US1121_sync_badpid 
 Scenario: Client requests to sync a patient with a bad pid through the RDK API
-	When the client requests that the patient with pid "9E7A;BADPID" be synced through RDK API
+	When the client requests that the patient with pid "SITE;BADPID" be synced through RDK API
 	Then a non-found response is returned
 
 @US1121_clear 
 Scenario: Client requests to clear a patient through the RDK API
-	Given a patient with pid "9E7A;100716" has been synced through the RDK API
-	When the client requests that the patient with pid "9E7A;100716" be cleared through the RDK API
+	Given a patient with pid "SITE;100716" has been synced through the RDK API
+	When the client requests that the patient with pid "SITE;100716" be cleared through the RDK API
 	Then a successful response is returned
-	And the patient with pid "9E7A;100716" is cleared throught the RDK API within 30 seconds
+	And the patient with pid "SITE;100716" is cleared throught the RDK API within 30 seconds
 	
 @US1121_clear_badpid 
 Scenario: Client requests to clear a patient with a bad pid through the RDK API
-	When the client requests that the patient with pid "9E7A;BADPID" be cleared through the RDK API
+	When the client requests that the patient with pid "SITE;BADPID" be cleared through the RDK API
 	Then a non-found response is returned
 
 @US1121_request_synced_data 
 Scenario: Client requests domain data for a synced patient
-	Given a patient with pid "9E7A;100716" has been synced through the RDK API
-	When the client requests allergies for the patient "9E7A;100716" in RDK format 
+	Given a patient with pid "SITE;100716" has been synced through the RDK API
+	When the client requests allergies for the patient "SITE;100716" in RDK format 
 	Then a successful response is returned
 	And the VPR results contain                                                       
       | field             | panorama_value                 |
@@ -37,8 +37,8 @@ Scenario: Client requests domain data for a synced patient
 
 @US1121_request_unsynced_data 
 Scenario: Client requests domain data for an unsynced patient
-	Given a patient with pid "9E7A;100716" has not been synced through the RDK API
-	When the client requests allergies for the patient "9E7A;100716" in RDK format 
+	Given a patient with pid "SITE;100716" has not been synced through the RDK API
+	When the client requests allergies for the patient "SITE;100716" in RDK format 
 	Then a successful response is returned
 	And the VPR results contain                                                       
       | field             | panorama_value                 |
@@ -47,25 +47,25 @@ Scenario: Client requests domain data for an unsynced patient
       
 @US1121_inpatient_meds 
 Scenario: Client requests inpatient meds in VPR format from RDK API
-    Given a patient with pid "9E7A;8" has been synced through the RDK API
-	When the client requests medications for the patient "9E7A;8" in RDK format 
+    Given a patient with pid "SITE;8" has been synced through the RDK API
+	When the client requests medications for the patient "SITE;8" in RDK format 
 	Then a successful response is returned
 	#And the client receives 294 VPR VistA result(s)
 	And the VPR results contain
     | field                           | panorama_value     |
     # I could find the following values in FileMan
-      | uid                 | CONTAINS urn:va:med:9E7A:8   |
+      | uid                 | CONTAINS urn:va:med:SITE:8   |
       | summary             | CONTAINS TAB,EC (PENDING)    |
-      | pid                 | 9E7A;8                       |
+      | pid                 | SITE;8                       |
       | productFormName     | TAB,EC                       |
       | overallStart        | 199607091400                 |
       | overallStop         | 199607150000                 |
       | stopped             | 199607150000                 |
       | vaType              | I                            |
       | vaStatus            | PENDING                      |
-      | orders.orderUid     | urn:va:order:9E7A:8:8145     |
+      | orders.orderUid     | urn:va:order:SITE:8:8145     |
       | orders.ordered      | 199607091428                 |
-      | orders.providerUid  | urn:va:user:9E7A:923         |
+      | orders.providerUid  | urn:va:user:SITE:923         |
       | orders.providerName | PROGRAMMER,TWENTYEIGHT       |
       | kind                | Medication, Inpatient        |
       | name                | BISACODYL/TANNIC ACID TAB,EC |
@@ -83,15 +83,15 @@ Scenario: Client requests inpatient meds in VPR format from RDK API
 
 @US1121_clinical_doc 
 Scenario: Client requests clinical notes in VPR format from RDK
-	Given a patient with pid "9E7A;100125" has been synced through the RDK API
-	When the client requests clinical notes for the patient "9E7A;100125" in RDK format 
+	Given a patient with pid "SITE;100125" has been synced through the RDK API
+	When the client requests clinical notes for the patient "SITE;100125" in RDK format 
 	Then a successful response is returned
 	#And the client receives 2 VPR VistA result(s)
     And the VPR results contain                                          
       | field                | panorama_value                         |
-      | uid                  | CONTAINS urn:va:document:9E7A:100125   |
+      | uid                  | CONTAINS urn:va:document:SITE:100125   |
       | summary              | ADMISSION REVIEW - NURSING             |
-      | pid                  | 9E7A;100125                            |
+      | pid                  | SITE;100125                            |
       | signer               | PROVIDER,ONE                           |
       | signedDateTime       | 20030428000604                         |
       | kind                 | Progress Note                          |
@@ -103,15 +103,15 @@ Scenario: Client requests clinical notes in VPR format from RDK
       
 @US1121_ap 
 Scenario: Client requests anatomic pathology in VPR format from RDK
-	Given a patient with pid "9E7A;230" has been synced through the RDK API
-	When the client requests anatomic pathology for the patient "9E7A;230" in RDK format 
+	Given a patient with pid "SITE;230" has been synced through the RDK API
+	When the client requests anatomic pathology for the patient "SITE;230" in RDK format 
 	Then a successful response is returned
 	#And the client receives 4 VPR VistA result(s)
     And the VPR results contain                                          
       | field         | panorama_value                   |
-      | uid           | CONTAINS urn:va:lab:9E7A:230:CY; |
+      | uid           | CONTAINS urn:va:lab:SITE:230:CY; |
       | summary       | SPUTUM                           |
-      | pid           | 9E7A;230                         |
+      | pid           | SITE;230                         |
       | localId       | CONTAINS CY;                     |
       | facilityCode  | 500                              |
       | facilityName  | CAMP MASTER                      |
@@ -128,9 +128,9 @@ Scenario: Client requests anatomic pathology in VPR format from RDK
       | organizerType | accession                        |
     And the VPR results contain                                          
       | field         | panorama_value                  |
-      | uid           | CONTAINS urn:va:lab:9E7A:230:SP |
+      | uid           | CONTAINS urn:va:lab:SITE:230:SP |
       | summary       | PROSTATE CHIPS                  |
-      | pid           | 9E7A;230                        |
+      | pid           | SITE;230                        |
       | localId       | CONTAINS SP;                    |
       | facilityCode  | 500                             |
       | facilityName  | CAMP MASTER                     |
@@ -148,24 +148,24 @@ Scenario: Client requests anatomic pathology in VPR format from RDK
 
 @US1121_radiology 
 Scenario: Client requests radiology in VPR format from RDK
-	Given a patient with pid "9E7A;230" has been synced through the RDK API
-	When the client requests radiology for the patient "9E7A;230" in RDK format 
+	Given a patient with pid "SITE;230" has been synced through the RDK API
+	When the client requests radiology for the patient "SITE;230" in RDK format 
 	Then a successful response is returned
 	#And the client receives 5 VPR VistA result(s)
     And the VPR results contain                                          
       | field             | panorama_value                              |
      # VERIFIED BY LOOKING AT CPRS ( COULDN'T FIND IN FILEMAN )
-      | uid                  | CONTAINS urn:va:image:9E7A:230           |
+      | uid                  | CONTAINS urn:va:image:SITE:230           |
       | summary              | RADIOLOGIC EXAMINATION, WRIST; 2 VIEWS   |
-      | pid                  | 9E7A;230                                 |
+      | pid                  | SITE;230                                 |
       | kind                 | Imaging                                  |
 	|diagnosis.code        |MINOR ABNORMALITY                         |
 	|diagnosis.primary     | true                                     |
           
 @US1121_allergies @broken_remote
 Scenario: Client requests allergies in VPR format from RDK
-	Given a patient with pid "9E7A;100716" has been synced through the RDK API
-	When the client requests allergies for the patient "9E7A;100716" in RDK format 
+	Given a patient with pid "SITE;100716" has been synced through the RDK API
+	When the client requests allergies for the patient "SITE;100716" in RDK format 
 	Then a successful response is returned
 	#And the client receives 3 VPR VistA result(s)
     And the VPR results contain                                                       
@@ -178,8 +178,8 @@ Scenario: Client requests allergies in VPR format from RDK
       | reactions.vuid    | urn:va:vuid:4637050            |
       | severity		  | IS_NOT_SET			     |
       # UNSURE WHAT VALUES SHOULD BE
-      | uid               | CONTAINS urn:va:allergy:9E7A:100716: |
-      | pid               | 9E7A;100716                         |
+      | uid               | CONTAINS urn:va:allergy:SITE:100716: |
+      | pid               | SITE;100716                         |
       | facilityCode      | 500                            |
       | facilityName      | CAMP MASTER                    |
       | localId           | IS_SET                         |
@@ -200,8 +200,8 @@ Scenario: Client requests allergies in VPR format from RDK
 
        
 Scenario: Client requests vitals in VPR format from RDK
-	Given a patient with pid "9E7A;100022" has been synced through the RDK API
-	When the client requests vitals for the patient "9E7A;100022" in RDK format 
+	Given a patient with pid "SITE;100022" has been synced through the RDK API
+	When the client requests vitals for the patient "SITE;100022" in RDK format 
 	Then a successful response is returned
 	#And the client receives 8 VPR VistA result(s)
     And the VPR results contain    
@@ -216,7 +216,7 @@ Scenario: Client requests vitals in VPR format from RDK
       | high          | 102                            |
       | result        | 98.6                           |
        # UNSURE WHAT VALUES SHOULD BE
-      | uid           | CONTAINS urn:va:vital:9E7A:100022: |
+      | uid           | CONTAINS urn:va:vital:SITE:100022: |
       | summary       | TEMPERATURE 98.6 F             |
       | localId       | IS_SET                         |
       | locationName  | PRIMARY CARE                   |
@@ -226,12 +226,12 @@ Scenario: Client requests vitals in VPR format from RDK
       | metricResult  | 37.0                           |
       | metricUnits   | C                              |
       | qualifiedName | TEMPERATURE                    |
-      | locationUid   | urn:va:location:9E7A:32        | 
+      | locationUid   | urn:va:location:SITE:32        | 
 
 @US1121_demographics 
 Scenario: Client requests demographics in VPR format from RDK API
-    Given a patient with pid "9E7A;100716" has been synced through the RDK API
-	When the client requests demographics for the patient "9E7A;100716" in RDK format 
+    Given a patient with pid "SITE;100716" has been synced through the RDK API
+	When the client requests demographics for the patient "SITE;100716" in RDK format 
 	Then a successful response is returned
 	And the VPR results contain
       | field                           | panorama_value      |
@@ -268,7 +268,7 @@ Scenario: Client requests demographics in VPR format from RDK API
       | exposure.uid                    | urn:va:sw-asia:N    |
       #| facility.localPatientId         | IS_SET              |
       | fullName                        | EIGHT,INPATIENT     |
-      | pid                             | 9E7A;100716         |
+      | pid                             | SITE;100716         |
       | syncErrorCount                  | IS_SET              |
       | uid                             | IS_SET              |
       # remove following 2 lines, there are instances when it is acceptable for these fields to not be set
@@ -280,19 +280,19 @@ Scenario: Client requests demographics in VPR format from RDK API
       | facility.code                   | 500                 |
       | facility.homeSite               | false               |
       | facility.name                   | CAMP MASTER         |
-      | facility.systemId               | 9E7A                |
+      | facility.systemId               | SITE                |
 
 @US1121_consults
 Scenario: Client requests consults in VPR format from RDK API
-    Given a patient with pid "9E7A;253" has been synced through the RDK API
-	When the client requests consults for the patient "9E7A;253" in RDK format 
+    Given a patient with pid "SITE;253" has been synced through the RDK API
+	When the client requests consults for the patient "SITE;253" in RDK format 
 	Then a successful response is returned
 	#And the client receives 6 VPR VistA result(s)
 	And the VPR results contain
       | field            | panorama_value                   |
       | uid              | IS_SET                           |
       | summary          | AUDIOLOGY OUTPATIENT Cons        |
-      | pid              | 9E7A;253                         |
+      | pid              | SITE;253                         |
       | kind             | Consult                          |
       | localId          | IS_SET                           |
       | facilityCode     | 500                              |   
@@ -311,17 +311,17 @@ Scenario: Client requests consults in VPR format from RDK API
 
 @US1121_outpatient_meds 
 Scenario: Client requests outpatient meds in VPR format from RDK API
-    Given a patient with pid "9E7A;71" has been synced through the RDK API
-	When the client requests medications for the patient "9E7A;71" in RDK format 
+    Given a patient with pid "SITE;71" has been synced through the RDK API
+	When the client requests medications for the patient "SITE;71" in RDK format 
 	Then a successful response is returned
 	# FILEMAN HAS 59, where are the missing 19
 	#And the client receives 40 VPR VistA result(s)
 	And the VPR results contain
     | field                           | panorama_value                                      |
     # I could find the following values in FileMan
-      | uid                         | CONTAINS urn:va:med:9E7A:71                           |
+      | uid                         | CONTAINS urn:va:med:SITE:71                           |
       | summary                     | CONTAINS DIGOXIN (LANOXIN) 0.125MG TAB (DISCONTINUED) |
-      | pid                         | 9E7A;71                                               |
+      | pid                         | SITE;71                                               |
       | productFormName             | TAB                                                   |
       | overallStart                | 19990701                                              |
       | overallStop                 | 19990706                                              |
@@ -333,18 +333,18 @@ Scenario: Client requests outpatient meds in VPR format from RDK API
       | products.drugClassCode      | urn:vadc:CV050                                        |
       | products.suppliedName       | DIGOXIN (LANOXIN) 0.125MG TAB                         |
       | products.strength           | 0.125 MG                                              |
-      | orders.orderUid             | urn:va:order:9E7A:71:10259                            |
+      | orders.orderUid             | urn:va:order:SITE:71:10259                            |
       | orders.prescriptionId       | 300409                                                |
       | orders.ordered              | 19990701                                              |
-      | orders.providerUid          | urn:va:user:9E7A:10958                                |
+      | orders.providerUid          | urn:va:user:SITE:10958                                |
       | orders.providerName         | WARDCLERK,FIFTYTHREE                                  |
-      | orders.pharmacistUid        | urn:va:user:9E7A:923                                  |
+      | orders.pharmacistUid        | urn:va:user:SITE:923                                  |
       | orders.pharmacistName       | PROGRAMMER,TWENTYEIGHT                                |
       | orders.quantityOrdered      | 3                                                     |
       | orders.daysSupply           | 3                                                     |
       | orders.fillsAllowed         | 0                                                     |
       | orders.fillsRemaining       | 0                                                     |
-      | orders.successor            | urn:va:med:9E7A:71:10375                              |
+      | orders.successor            | urn:va:med:SITE:71:10375                              |
       | fills.dispenseDate          | 19990701                                              |
       | lastFilled                  | 19990701                                              |
       | qualifiedName               | DIGOXIN TAB                                           |
@@ -378,21 +378,21 @@ Scenario: Client requests outpatient meds in VPR format from RDK API
 
 @US1121_labs 
 Scenario: Client requests labs in VPR format from RDK API
-    Given a patient with pid "9E7A;229" has been synced through the RDK API
-	When the client requests labs for the patient "9E7A;229" in RDK format 
+    Given a patient with pid "SITE;229" has been synced through the RDK API
+	When the client requests labs for the patient "SITE;229" in RDK format 
 	Then a successful response is returned
 	#And the client receives 370 VPR VistA result(s)
 	And the VPR results contain
 	# chem labs
       | field        | panorama_value                      |
-      | uid          | CONTAINS urn:va:lab:9E7A:229:CH;    |
+      | uid          | CONTAINS urn:va:lab:SITE:229:CH;    |
       | summary      | HDL (SERUM) 58 MG/DL                |
-      | pid          | 9E7A;229                            |
+      | pid          | SITE;229                            |
       | localId      | IS_SET                              |
       | facilityCode | 500                                 |
       | facilityName | CAMP MASTER                         |
       | groupName    | CH 0323 2440                        |
-      | groupUid     | CONTAINS urn:va:accession:9E7A:229: |
+      | groupUid     | CONTAINS urn:va:accession:SITE:229: |
       | categoryCode | urn:va:lab-category:CH              |
       | categoryName | Laboratory                          |
       | observed     | 201003051200                        |
@@ -408,16 +408,16 @@ Scenario: Client requests labs in VPR format from RDK API
       | abnormal     | false                               |
 @US1121_orders 
 Scenario: Client requests orders in VPR format from RDK API
-    Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests orders for the patient "9E7A;3" in RDK format 
+    Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests orders for the patient "SITE;3" in RDK format 
 	Then a successful response is returned
 	#And the client receives 392 VPR VistA result(s)
 	And the VPR results contain
       | field               | panorama_value                          |
       # I could find the following values in FileMan
-      | uid                 | CONTAINS urn:va:order:9E7A:3            |
+      | uid                 | CONTAINS urn:va:order:SITE:3            |
       | summary             | CONTAINS HDL BLOOD   SERUM WC LB #17433 |
-      | pid                 | 9E7A;3                                  |
+      | pid                 | SITE;3                                  |
       | localId             | IS_SET                                  |
       | name                | HDL                                     |
       | oiCode              | urn:va:oi:357                           |
@@ -430,13 +430,13 @@ Scenario: Client requests orders in VPR format from RDK API
       | statusCode          | urn:va:order-status:comp                |
       | statusName          | COMPLETE                                |
       | statusVuid          | urn:va:vuid:4501088                     |
-      | providerUid         | urn:va:user:9E7A:20364                  |
+      | providerUid         | urn:va:user:SITE:20364                  |
       | providerName        | LABTECH,SEVENTEEN                       |
       | providerDisplayName | Labtech,Seventeen                       |
       | service             | LR                                      |
       | kind                | Laboratory                              |
-      | locationUid         | urn:va:location:9E7A:23                 |
-      | results.uid         | CONTAINS urn:va:lab:9E7A:3:CH;          |
+      | locationUid         | urn:va:location:SITE:23                 |
+      | results.uid         | CONTAINS urn:va:lab:SITE:3:CH;          |
       # I'm not sure where these values came from 
       | oiPackageRef        | 244;99LRT                               |
       | facilityCode        | 500                                     |
@@ -446,15 +446,15 @@ Scenario: Client requests orders in VPR format from RDK API
 
 @US1121_immunizations 
 Scenario: Client requests the immunizations in VPR format from RDK API
-    Given a patient with pid "9E7A;8" has been synced through the RDK API
-	When the client requests immunizations for the patient "9E7A;8" in RDK format 
+    Given a patient with pid "SITE;8" has been synced through the RDK API
+	When the client requests immunizations for the patient "SITE;8" in RDK format 
 	Then a successful response is returned
 	#And the client receives 4 VPR VistA result(s)
 	And the VPR results contain
       | field                | value                         |
-      | uid                  | CONTAINS urn:va:immunization:9E7A:8 |
+      | uid                  | CONTAINS urn:va:immunization:SITE:8 |
       #| summary              | MEASLES,MUMPS,RUBELLA (MMR)  |
-      | pid                  | 9E7A;8                        |
+      | pid                  | SITE;8                        |
       | name                 | MEASLES,MUMPS,RUBELLA (MMR)   |
       | localId              | IS_SET                        |
       | administeredDateTime | 19950718091835                |
@@ -462,14 +462,14 @@ Scenario: Client requests the immunizations in VPR format from RDK API
       | seriesName           | BOOSTER                       |
       | reactionName         | NONE                          |
       | cptName              | MMR VACCINE SC                |
-      | encounterUid         | urn:va:visit:9E7A:8:1797      |
+      | encounterUid         | urn:va:visit:SITE:8:1797      |
       | kind                 | Immunization                  |
-      | seriesCode           | urn:va:series:9E7A:8:BOOSTER  |
+      | seriesCode           | urn:va:series:SITE:8:BOOSTER  |
 	#NOT SURE WHERE THESE VALUES ARE COMING FROM
       | facilityCode         | 500                           |
       | facilityName         | CAMP MASTER                   |
       | cptCode              | urn:cpt:90707                 |
-      | reactionCode         | urn:va:reaction:9E7A:8:0      |
+      | reactionCode         | urn:va:reaction:SITE:8:0      |
       | locationUid          | IS_NOT_SET                    |
       | locationName         | IS_NOT_SET                    |
       | encounterName        | 00                            |
@@ -479,16 +479,16 @@ Scenario: Client requests the immunizations in VPR format from RDK API
 
 @US1121_problemlist 
 Scenario: Client requests the problem list in VPR format from RDK API
-    Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests problem list for the patient "9E7A;3" in RDK format 
+    Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests problem list for the patient "SITE;3" in RDK format 
 	Then a successful response is returned
 	#FILEMAN LISTS 6, WHY AM I MISSING ONE
 	#And the client receives 10 VPR VistA result(s)
 	And the VPR results contain
 	|field| value|
-      | uid                 | CONTAINS urn:va:problem:9E7A:3                             |
+      | uid                 | CONTAINS urn:va:problem:SITE:3                             |
       | summary             | Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00) |
-      | pid                 | 9E7A;3                                                     |
+      | pid                 | SITE;3                                                     |
       | facilityCode        | 500                                                        |
       | facilityName        | CAMP MASTER                                                |
       | locationName        | PRIMARY CARE                                               |
@@ -513,26 +513,26 @@ Scenario: Client requests the problem list in VPR format from RDK API
       | statusCode          | urn:sct:55561003                                           |
       | unverified          | false                                                      |
       | removed             | false                                                      |
-      | providerUid         | urn:va:user:9E7A:20010                                     |
-      | locationUid         | urn:va:location:9E7A:32                                    |
+      | providerUid         | urn:va:user:SITE:20010                                     |
+      | locationUid         | urn:va:location:SITE:32                                    |
 
 @US1121_dischargesummary 
 Scenario: Client requests discharge summary in VPR format from RDK
-    Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests discharge summary for the patient "9E7A;3" in RDK format 
+    Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests discharge summary for the patient "SITE;3" in RDK format 
 	Then a successful response is returned
 	And the VPR results contain
 	| field                | value                           |
-      | uid                  | CONTAINS urn:va:document:9E7A:3 |
+      | uid                  | CONTAINS urn:va:document:SITE:3 |
       | summary              | Discharge Summary               |
-      | pid                  | 9E7A;3                          |
+      | pid                  | SITE;3                          |
       | signer               | VEHU,EIGHT                      |
       | signedDateTime       | 20040331090512                  |
       | urgency              | routine                         |
       | entered              | 20040331090458                  |
       | kind                 | Discharge Summary               |
-      | text.uid             | CONTAINS urn:va:document:9E7A:3 |
-      | text.clinicians.uid  | urn:va:user:9E7A:20010          |
+      | text.uid             | CONTAINS urn:va:document:SITE:3 |
+      | text.clinicians.uid  | urn:va:user:SITE:20010          |
       | text.clinicians.role | EC                              |
       | text.content         | CONTAINS ADMISSION              |
 

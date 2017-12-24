@@ -50,7 +50,7 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       
  	And the results contain lab "(Chem/Hem)" results     
       | field                                          | values                                          				 |
-      | content.text.div                               | CONTAINS Accession: urn:va:accession:9E7A:227:CH;6949681.966383 |
+      | content.text.div                               | CONTAINS Accession: urn:va:accession:SITE:227:CH;6949681.966383 |
       | content.contained._id                          | IS_SET                                                          |
       | content.contained.text.status                  | generated                                                       |
       | content.contained.identifier.label             | facility-code                               					 |
@@ -82,7 +82,7 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
 	  | content.performer.display                      | ALBANY VA MEDICAL CENTER                                        |
       | content.performer.reference                    | IS_SET                                                          |
       | content.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                                 |
-      | content.identifier.value                       | urn:va:lab:9E7A:227:CH;6949681.966383;5						 |
+      | content.identifier.value                       | urn:va:lab:SITE:227:CH;6949681.966383;5						 |
       | content.serviceCategory.coding.code            | CH                                                              |
       | content.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                     |
       | content.serviceCategory.coding.display         | Chemistry                                                       |
@@ -100,13 +100,13 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#groupName  |
       | content.extension.valueString | COAG 0317 119                                      |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#groupUid   |
-      | content.extension.valueString | urn:va:accession:9E7A:227:CH;6949681.966382        |
+      | content.extension.valueString | urn:va:accession:SITE:227:CH;6949681.966382        |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#labOrderId |
       | content.extension.valueString | 2790                                               |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#localId    |
       | content.extension.valueString | CH;6949681.966382;430                              |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#orderUid   |
-      | content.extension.valueString | urn:va:order:9E7A:227:16688                        |
+      | content.extension.valueString | urn:va:order:SITE:227:16688                        |
       
     And the lab field(s) just contain "Patient/11016V630869"
       | field                         		|
@@ -202,7 +202,7 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       
  	And the results contain lab "(Chem/Hem)" results     
       | field                                          | values                                          				 |
-      | content.text.div                               | CONTAINS Accession: urn:va:accession:C877:227:CH;6949681.966383 |
+      | content.text.div                               | CONTAINS Accession: urn:va:accession:SITE:227:CH;6949681.966383 |
       | content.contained._id                          | IS_SET                                                          |
       | content.contained.text.status                  | generated                                                       |
       | content.contained.identifier.label             | facility-code                               					 |
@@ -234,7 +234,7 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
 	  | content.performer.display                      | ALBANY VA MEDICAL CENTER                                        |
       | content.performer.reference                    | IS_SET                                                          |
       | content.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                                 |
-      | content.identifier.value                       | urn:va:lab:C877:227:CH;6949681.966383;5						 |
+      | content.identifier.value                       | urn:va:lab:SITE:227:CH;6949681.966383;5						 |
       | content.serviceCategory.coding.code            | CH                                                              |
       | content.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                     |
       | content.serviceCategory.coding.display         | Chemistry                                                       |
@@ -252,13 +252,13 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#groupName  |
       | content.extension.valueString | COAG 0317 119                                      |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#groupUid   |
-      | content.extension.valueString | urn:va:accession:C877:227:CH;6949681.966382        |
+      | content.extension.valueString | urn:va:accession:SITE:227:CH;6949681.966382        |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#labOrderId |
       | content.extension.valueString | 2790                                               |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#localId    |
       | content.extension.valueString | CH;6949681.966382;430                              |
       | content.extension.url         | http://vistacore.us/fhir/extensions/lab#orderUid   |
-      | content.extension.valueString | urn:va:order:C877:227:16688                        |
+      | content.extension.valueString | urn:va:order:SITE:227:16688                        |
       
     And the lab field(s) just contain "Patient/11016V630869"
       | field                         		|
@@ -268,14 +268,14 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
 @f93_4_labs_ch_fhir @fhir
 Scenario: Client can request lab (Chem/Hem) results in FHIR format
 	Given a patient with "lab (Chem/Hem) results" in multiple VistAs
-      Given a patient with pid "9E7A;100184" has been synced through Admin API
-	When the client requests lab "(Chem/Hem)" results for that patient "9E7A;100184"
+      Given a patient with pid "SITE;100184" has been synced through Admin API
+	When the client requests lab "(Chem/Hem)" results for that patient "SITE;100184"
 	Then a successful response is returned
 	Then the client receives 7 FHIR "VistA" result(s)
 	And the client receives 7 FHIR "panorama" result(s)
 	And the results contain lab "(Chem/Hem)" results                                                      
      	| field                                 		| value         									|
-     	| content.contained.subject.reference           | Patient/9E7A;100184	                        	|
+     	| content.contained.subject.reference           | Patient/SITE;100184	                        	|
      	| content.extension.url							| http://vistacore.us/fhir/extensions/lab#groupName	|
      	| content.extension.valueString					| CH 0429 152										|
        	| content.contained.identifier.label            | facility-code                               		|
@@ -288,7 +288,7 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       	| content.contained.referenceRange.high.units   | mg/dL                                            	|
       	| content.contained.referenceRange.low.value    | 60                                              	|
       	| content.contained.referenceRange.low.units    | mg/dL                                            	|
-		| content.text.div                              | CONTAINS urn:va:accession:9E7A:100184:CH;6969569.838468 	|
+		| content.text.div                              | CONTAINS urn:va:accession:SITE:100184:CH;6969569.838468 	|
 		
 # following 2 scenarios are checking for another patient for return of labs results.
 # only few fields are checked to validate data integrity.
@@ -306,14 +306,14 @@ Then corresponding matching FHIR records totaling "0" are displayed
 @f93_5_labs_ch_fhir @fhir
 Scenario: Client can request lab (Chem/Hem) results in FHIR format
 	Given a patient with "lab (Chem/Hem) results" in multiple VistAs
-      Given a patient with pid "C877;737" has been synced through Admin API
-	When the client requests lab "(Chem/Hem)" results for that patient "C877;737"
+      Given a patient with pid "SITE;737" has been synced through Admin API
+	When the client requests lab "(Chem/Hem)" results for that patient "SITE;737"
 	Then a successful response is returned
 	Then the client receives 40 FHIR "VistA" result(s)
 	And the client receives 40 FHIR "kodak" result(s)
 	And the results contain lab "(Chem/Hem)" results                                                      
      	| field                                 		| value         									|
-     	| content.contained.subject.reference           | Patient/C877;737		                        	|
+     	| content.contained.subject.reference           | Patient/SITE;737		                        	|
      	| content.extension.url							| http://vistacore.us/fhir/extensions/lab#groupName	|
      	| content.extension.valueString					| COAG 0131 7											|
        	| content.contained.identifier.label            | facility-code                               		|
@@ -326,6 +326,6 @@ Scenario: Client can request lab (Chem/Hem) results in FHIR format
       	| content.contained.referenceRange.high.units   | SEC.                                            	|
       	| content.contained.referenceRange.low.value    | 10                                              	|
       	| content.contained.referenceRange.low.units    | SEC.                                            	|
-		| content.text.div                              | CONTAINS urn:va:accession:C877:737                |
+		| content.text.div                              | CONTAINS urn:va:accession:SITE:737                |
 
        

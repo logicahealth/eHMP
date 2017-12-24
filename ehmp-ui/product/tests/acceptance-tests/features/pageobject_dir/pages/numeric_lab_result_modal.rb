@@ -7,6 +7,7 @@ class NumericLabResultsModal < SitePrism::Page
 
   element :tbl_dta, '#data-grid-lab_results_grid-modalView'
   row_css = '#data-grid-lab_results_grid-modalView tbody tr[data-row-instanceid]'
+  elements :tbl_headers, "#data-grid-lab_results_grid-modalView thead th"
   elements :tbl_data_rows, row_css
   elements :tbl_date_columns, "#{row_css} td:nth-of-type(1)"
   elements :tbl_flag_columns, "#{row_css} td:nth-of-type(2)"
@@ -15,6 +16,7 @@ class NumericLabResultsModal < SitePrism::Page
   element :fld_total_tests_label, '[id=lrDataTableView] [id=totalTests]'
   element :fld_total_tests, '[id=lrDataTableView] [id=totalTests] span'
 
+  element :graph_container, '#modal-body #chartContainer'
   elements :graph_points, "#modal-body .highcharts-markers path"
   elements :graph_date_labels, "#modal-body #chartContainer .highcharts-axis-labels text[text-anchor=end] tspan"
 

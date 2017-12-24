@@ -1,10 +1,12 @@
 'use strict';
 
 var _ = require('lodash');
+var bunyan = require('bunyan');
 var cdsAgenda = require('../../subsystems/cds/cds-subsystem-agenda');
 var cds = require('../../subsystems/cds/cds-subsystem');
 
 sinon.stub(cdsAgenda, 'init');
+
 
 cds.getAgenda = function() {
     return {
@@ -20,21 +22,25 @@ cds.getAgenda = function() {
         }
     };
 };
+
+
 cds.getAgendaJobProcessorName = function() {
     return 'agendaJobProcessorName';
 };
 
-var logger = {
-    trace: function() {},
-    debug: function() {},
-    info: function() {},
-    warn: function() {},
-    error: function() {},
-    fatal: function() {}
-};
+
+var logger = bunyan.createLogger({
+    name: 'dummy',
+    level: 'debug',
+    streams: [{
+        path: '/dev/null',
+    }]
+});
+
+// uncomment this to see logger output
+// logger = require('bunyan').createLogger({name: 'test', level: 'debug'});
 
 module.exports.mockReqResUtil = function() {
-
     var res = {
         status: function() {
             return this;
@@ -70,20 +76,34 @@ module.exports.mockReqResUtil = function() {
                 config: {
                     rpcConfig: {
                         context: 'HMP UI CONTEXT',
-                        siteHash: '9E7A'
+                        siteHash: 'SITE'
                     },
-                    vistaSites: {}
+                    vistaSites: {},
+                    cdsMongoServer: {
+                        host: 'foo',
+                        port: '42'
+                    },
+                    cdsInvocationServer: {
+                        host: 'bar',
+                        port: '47'
+                    }
+                },
+                logger: logger,
+                subsystems: {
+                    cds: cds
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             }
         };
         if (body) {
             req.body = body;
         }
+
+        cds.getSubsystemConfig(req.app, req.app.logger);
         return req;
     }
 
@@ -93,6 +113,7 @@ module.exports.mockReqResUtil = function() {
     };
 
 }();
+
 
 //Creates a mock appReference that is needed when initializing some of our resources...
 module.exports.createAppReference = function() {
@@ -116,9 +137,9 @@ module.exports.createAppReference = function() {
     return appReference;
 };
 
+
 //Creates a mock MongoDB with the collection functions provided.
 module.exports.createMockDb = function(collectionFunctions) {
-
     collectionFunctions = collectionFunctions || {};
     var db = {
         collection: function(callback) {
@@ -126,7 +147,9 @@ module.exports.createMockDb = function(collectionFunctions) {
         },
         open: function(callback) {
             callback();
-        }
+        },
+        once: function() {},
+        on: function() {}
     };
 
     return db;

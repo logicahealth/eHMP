@@ -13,7 +13,7 @@ define([
         });
 
         var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
+            template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
             events: {
                 'click .btn-primary': function() {
                     ADK.UI.Alert.hide();
@@ -61,16 +61,14 @@ define([
                             id: 'form-cancel-btn',
                             extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                             type: 'button',
-                            label: 'Cancel',
-                            title: 'Press enter to cancel'
+                            label: 'Cancel'
                         }, {
                             control: 'button',
                             disabled: true,
                             extraClasses: ['btn-primary', 'btn-sm'],
                             label: 'Accept',
                             name: 'submit-accept',
-                            id: 'submit-accept',
-                            title: 'Press enter to submit form'
+                            id: 'submit-accept'
                         }]
                     }]
                 }]
@@ -111,7 +109,11 @@ define([
                                     ADK.Messaging.getChannel('tray-tasks').trigger('action:refresh');
                                     // refresh the tasks and activities applets
                                     ADK.Messaging.getChannel('activities').trigger('create:success');
-                                    ADK.Messaging.getChannel('task_forms').request('activity_detail', {processId: self.model.get('processInstanceId')});
+                                    ADK.Messaging.getChannel('task_forms').request('activity_detail', {
+                                        processId: self.model.get('processInstanceId'),
+                                        showHighlights: self.model.get('showHighlights'),
+                                        highlights: self.model.get('detailsHighlights')
+                                    });
                                 },
                                 error: function(){
                                     var errorAlertView = new ADK.UI.Alert({

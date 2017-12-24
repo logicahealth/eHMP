@@ -98,4 +98,4 @@ function filterAsuDocuments(req, res, statusCode,details) {
 //used for unit testing
 module.exports._getPatientUid = getPatientUid;
 module.exports._isCheckASU = isCheckASU;
-module.exports._filterAsuDocuments = isCheckASU;
+module.exports._filterAsuDocuments = filterAsuDocuments;

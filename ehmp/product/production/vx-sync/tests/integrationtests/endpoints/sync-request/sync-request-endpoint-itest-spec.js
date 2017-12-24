@@ -8,7 +8,7 @@
 
 require('../../../../env-setup');
 var _ = require('underscore');
-
+var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 //--------------------------------------------------------------
 // Uncomment the following to see the logging out on the screen.
@@ -26,12 +26,15 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 var request = require('request');
 var async = require('async');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var hostPort = testConfig.vxsyncPort;
+
 var config = {
 	syncRequestApi: {
 		protocol: 'http',
 		host: host,
-		port: 8080,
+		port: hostPort,
 		patientSyncDemoPath: '/sync/demographicSync',
 		patientUnsyncPath: '/sync/clearPatient',
 		patientStatusPath: '/sync/status',
@@ -96,7 +99,7 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 				request.get(options, function(error, response, body) {
 					log.debug('sync-request-endpoint-itest-spec.checkSyncComplete: Retrieving status - Call back called: error: %j, response: %j, body: %j', error, response, body);
 					expect(response).toBeTruthy();
-					expect(response.statusCode).toBe(200);
+					expect(val(response,'statusCode')).toBe(200);
 					expect(body).toBeTruthy();
 
 		            var syncStatusData;
@@ -191,7 +194,7 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 
 		runs(function() {
 			var options = {
-				url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?das=DAS;9E7A',
+				url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?das=DAS;SITE',
 				method: 'GET'
 			};
 
@@ -227,7 +230,7 @@ describe('sync-request-endpoint-itest-spec.js', function() {
 
         runs(function() {
             var options = {
-                url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=9E7A;99999999999999999',
+                url: config.syncRequestApi.protocol + '://' + config.syncRequestApi.host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=SITE;99999999999999999',
                 method: 'GET'
             };
 

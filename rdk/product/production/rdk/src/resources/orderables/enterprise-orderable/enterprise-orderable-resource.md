@@ -68,7 +68,7 @@ Create EnterpriseOrderable
                   },
                   "active":true,
                   "timestamp":"2016-03-03T07:19:20.004Z",
-                  "createdBy":"urn:va:user:9E7A:10000000270",
+                  "createdBy":"urn:va:user:SITE:10000000270",
                   "uid":"urn:va:entordrbls:10"
                },
                "status":201
@@ -132,7 +132,7 @@ Update EnterpriseOrderable - NOTE: the uid on the path must match the uid in the
                   }
                },
                "timestamp":"2016-02-29T18:50:42.318Z",
-               "createdBy":"urn:va:user:9E7A:10000000270"
+               "createdBy":"urn:va:user:SITE:10000000270"
             }
 
 	+ Schema
@@ -176,7 +176,7 @@ Update EnterpriseOrderable - NOTE: the uid on the path must match the uid in the
                      }
                   },
                   "timestamp":"2016-03-02T22:19:34.496Z",
-                  "createdBy":"urn:va:user:9E7A:10000000270"
+                  "createdBy":"urn:va:user:SITE:10000000270"
                },
                "status":200
             }
@@ -285,7 +285,7 @@ Get EnterpriseOrderable
             {
                "data":{
                   "active":true,
-                  "createdBy":"urn:va:user:9E7A:10000000270",
+                  "createdBy":"urn:va:user:SITE:10000000270",
                   "data":{
                      "activity":{
                         "deploymentId":"VistaCore:Order",

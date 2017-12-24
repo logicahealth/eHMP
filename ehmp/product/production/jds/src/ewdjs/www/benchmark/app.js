@@ -16,7 +16,7 @@ var sendMessage = function() {
  EWD.sockets.sendMessage({
    type: 'EWD.benchmark',
    noOfMessages: 10000,
-   password: 'REDACTED' 
+   password: 'PW' 
  });
 };
 EWD.sockets.log = true;

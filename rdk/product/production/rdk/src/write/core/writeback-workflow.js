@@ -16,7 +16,7 @@ function getVistaConfig(logger, appConfig, user) {
     }
     var siteConfiguration = _.get(appConfig, ['vistaSites', site]);
     if (!siteConfiguration) {
-        logger.error('getVistaConfig: site configuration not found');
+        logger.error({site: site, user: user}, 'getVistaConfig: site configuration not found');
     }
     var context = _.get(appConfig, ['rpcConfig', 'context']);
     if (!context) {
@@ -71,11 +71,13 @@ module.exports = function writebackWorkflow(req, res, tasks) {
     //check interceptorResults.patientIdentifiers.site against req.session.user.site
     if (_.isEmpty(_.get(writebackContext, 'interceptorResults.patientIdentifiers.site', ''))) {
         return res.status(rdk.httpstatus.precondition_failed).rdkSend('The request can not determine the site for the record requested');
-    } else if (writebackContext.interceptorResults.patientIdentifiers.site !== writebackContext.siteHash) {
+    } else if ((writebackContext.interceptorResults.patientIdentifiers.site !== writebackContext.siteHash) && (_.get(req, 'session.user.consumerType', '') !== 'system')) {
         return res.status(rdk.httpstatus.precondition_failed)
-            .rdkSend('This requested record belongs to a site other than the site currently logged into.');
+            .rdkSend('This requested record belongs to a site other than the site currently logged into. ' +
+                'writebackContext.interceptorResults.patientIdentifiers.site: ' +
+                _.get(writebackContext, 'interceptorResults.patientIdentifiers.site', '') +
+                ', writebackContext.siteHash: ' + _.get(writebackContext, 'siteHash', ''));
     }
-
     var elevatedTaskResponse = {};
     var elevatedTasks = [jdsDirectWriter, pjdsWriter];
     tasks = _.map(tasks, function(task) {

@@ -8,8 +8,8 @@ Feature: F100 Return of Allergies Results in VPR format
 @f100_1_allergies_vpr_freetext 
 Scenario: Client can request free text allergies in VPR format
     Given a patient with "allergies" in multiple VistAs
-    And a patient with pid "9E7A;1" has been synced through Admin API   
-    When the client requests allergies for the patient "9E7A;1" in VPR format
+    And a patient with pid "SITE;1" has been synced through Admin API   
+    When the client requests allergies for the patient "SITE;1" in VPR format
 	Then the client receives 8 VPR "VistA" result(s)
 	Then the client receives 8 VPR "panorama" result(s)
     And the VPR results contain:
@@ -22,8 +22,8 @@ Scenario: Client can request free text allergies in VPR format
       | reactions.vuid        | urn:va:vuid:                |
       | observations.severity | MILD                        |
       # UNSURE WHAT VALUES SHOULD BE
-      | uid                   | CONTAINS urn:va:allergy:9E7A:1:   |
-      | pid                   | 9E7A;1                      |
+      | uid                   | CONTAINS urn:va:allergy:SITE:1:   |
+      | pid                   | SITE;1                      |
       | facilityCode          | 500                         |
       | facilityName          | CAMP MASTER                 |
       | localId               | IS_SET                         |
@@ -60,8 +60,8 @@ Scenario: Client can request observed allergies in VPR format
       | reactions.vuid        | urn:va:vuid:                   |
       | observations.severity | MODERATE                       |
       # UNSURE WHAT VALUES SHOULD BE
-      | uid                   | CONTAINS urn:va:allergy:9E7A:100022: |
-      | pid                   | 9E7A;100022                    |
+      | uid                   | CONTAINS urn:va:allergy:SITE:100022: |
+      | pid                   | SITE;100022                    |
       | facilityCode          | 500                            |
       | facilityName          | CAMP MASTER                    |
       | localId               | IS_SET                            |
@@ -93,7 +93,7 @@ Scenario: Client can request historical allergies in VPR format
       | reactions.vuid    | urn:va:vuid:4637050            |
       | severity		  | IS_NOT_SET					   |
       # UNSURE WHAT VALUES SHOULD BE
-      | uid               | CONTAINS urn:va:allergy:9E7A:100716: |
+      | uid               | CONTAINS urn:va:allergy:SITE:100716: |
 #      | pid               | CONTAINS ;100716                    |
       | pid               | CONTAINS ;100                  |
       | facilityCode      | 500                            |
@@ -113,13 +113,13 @@ Scenario: Client can request historical allergies in VPR format
 @f100_4_allergies_vpr_freetext 
 Scenario: Client can request free text allergies in VPR format
     Given a patient with "allergies" in multiple VistAs
-    And a patient with pid "C877;1" has been synced through Admin API   
-    When the client requests allergies for the patient "C877;1" in VPR format
+    And a patient with pid "SITE;1" has been synced through Admin API   
+    When the client requests allergies for the patient "SITE;1" in VPR format
 	Then the client receives 8 VPR "VistA" result(s)
 	Then the client receives 8 VPR "kodak" result(s)
     And the VPR results contain:
       | field                 | kodak_value                 |
-      | uid                   | CONTAINS urn:va:allergy:C877:1:   |
+      | uid                   | CONTAINS urn:va:allergy:SITE:1:   |
       | summary               | DOG HAIR ( FREE TEXT )      |
       | entered               | 199402071026                |
       | products.vuid         | urn:va:vuid:                |
@@ -128,7 +128,7 @@ Scenario: Client can request free text allergies in VPR format
       | reactions.vuid        | urn:va:vuid:                |
       | observations.severity | MILD                        |
       # UNSURE WHAT VALUES SHOULD BE
-      | pid                   | C877;1                      |
+      | pid                   | SITE;1                      |
       | facilityCode          | 500                         |
       | facilityName          | CAMP BEE	                 |
       | localId               | IS_SET                         |
@@ -151,7 +151,7 @@ Scenario: Client can request observed allergies in VPR format
 	Then the client receives 5 VPR "kodak" result(s)
     And the VPR results contain:
       | field                 | kodak_value                    |           
-      | uid                   | CONTAINS urn:va:allergy:C877:100022: |
+      | uid                   | CONTAINS urn:va:allergy:SITE:100022: |
       | summary               | PENICILLIN                     |
       | entered               | 201312051608                   |
       | products.vuid         | urn:va:vuid:		           |
@@ -162,7 +162,7 @@ Scenario: Client can request observed allergies in VPR format
       | reactions.vuid        | urn:va:vuid:4538597            |
       | observations.severity | MODERATE                       |
       # UNSURE WHAT VALUES SHOULD BE
-      | pid                   | C877;100022                    |
+      | pid                   | SITE;100022                    |
       | facilityCode          | 500                            |
       | facilityName          | CAMP BEE                       |
       | localId               | IS_SET                         |
@@ -185,7 +185,7 @@ Scenario: Client can request historical allergies in VPR format
 	Then the client receives 2 VPR "kodak" result(s)
     And the VPR results contain:
       | field             | kodak_value                    |
-      | uid               | CONTAINS urn:va:allergy:C877:100716: |
+      | uid               | CONTAINS urn:va:allergy:SITE:100716: |
       | entered           | 201401071718                   |
       | summary           | CHOCOLATE                      |
       | products.vuid     | urn:va:vuid:4636681            |

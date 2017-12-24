@@ -10,8 +10,8 @@ var configuration = {
     context: 'HMP UI CONTEXT',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost',
     vxSyncServer: {
@@ -26,7 +26,7 @@ describe('progress-notes-titles resource integration test', function() {
             expect(err).to.be.null();
             expect(result).to.be.truthy();
             done();
-        }, {class: '3', userClassUid: 'urn:va:asu-class:9E7A:561', roleNames: 'AUTHOR/DICTATOR,EXPECTED SIGNER,EXPECTED COSIGNER,ATTENDING PHYSICIAN', docStatus: 'COMPLETED', actionNames: 'VIEW,EDIT RECORD,PRINT RECORD', site: '9E7A'});
+        }, {class: '3', userClassUid: 'urn:va:asu-class:SITE:561', roleNames: 'AUTHOR/DICTATOR,EXPECTED SIGNER,EXPECTED COSIGNER,ATTENDING PHYSICIAN', docStatus: 'COMPLETED', actionNames: 'VIEW,EDIT RECORD,PRINT RECORD', site: 'SITE'});
     });
 
     it('fetch RPC works', function(done) {

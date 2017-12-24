@@ -23,8 +23,7 @@ define([
         }),
         sortValue: function(model, sortKey) {
             return model.get("administeredDateTime");
-        },
-        hoverTip: 'immuninizations_date'
+        }
     };
 
     var summaryColumns = [{
@@ -33,8 +32,7 @@ define([
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2'
-        }),
-        hoverTip: 'immunizations_vaccinename'
+        })
     }, {
         name: 'reactionName',
         label: 'Reaction',
@@ -44,8 +42,7 @@ define([
     }, summaryAdminDateCol, {
         name: 'facilityName',
         label: 'Facility',
-        cell: 'string',
-        hoverTip: 'immuninizations_facility'
+        cell: 'string'
     }];
 
     var fullScreenColumns =
@@ -72,8 +69,7 @@ define([
         flexWidth: 'flex-width-4',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
-        }),
-        hoverTip: 'immuninizations_standardizedname'
+        })
     });
 
     fullScreenColumns.splice(3, 0, {
@@ -106,7 +102,7 @@ define([
 
     function setupAddHandler(options) {
         channel.off('addItem');
-        if (ADK.UserService.hasPermission('add-immunization') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+        if (ADK.UserService.hasPermission('add-immunization') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
             // handles applet add (+)
             options.onClickAdd = function(e) {
                 e.preventDefault();
@@ -122,6 +118,32 @@ define([
     }
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+        tileOptions: {
+            primaryAction: {
+                enabled: true,
+                onClick: function(params, event) {
+                    var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                    getDetailsModal(this.model, this.model.collection, targetElement);
+                }
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton',
+                }, {
+                    type: 'additembutton',
+                    shouldShow: function() {
+                        return ADK.UserService.hasPermission('add-immunization') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
+                    }
+                }, {
+                    type: 'detailsviewbutton',
+                    onClick: function(params, event) {
+                        var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                        getDetailsModal(this.model, this.model.collection, targetElement);
+                    }
+                }]
+            }
+        },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {};
@@ -139,18 +161,6 @@ define([
             setupAddHandler(dataGridOptions);
 
             dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
-
-            var buttonTypes = ['infobutton', 'detailsviewbutton'];
-
-            if (ADK.UserService.hasPermissions('add-immunization')) {
-                buttonTypes.push('additembutton');
-            }
-
-            dataGridOptions.toolbarOptions = {
-                buttonTypes: buttonTypes,
-                triggerSelector: '[data-infobutton]',
-                position: 'top'
-            };
 
             this.dataGridOptions = dataGridOptions;
             this.dataGridOptions.collection = new ADK.UIResources.Fetch.Immunizations.Collection([], {
@@ -179,7 +189,7 @@ define([
         })
     });
 
-    var getDetailsModal = function(model, collection) {
+    var getDetailsModal = function(model, collection, target) {
         var view = new ModalView({
             model: model,
             navHeader: true,
@@ -191,7 +201,8 @@ define([
         var modalOptions = {
             'title': Util.createModalTitle(model),
             'size': 'xlarge',
-            'nextPreviousCollection': collection || model.collection
+            'nextPreviousCollection': collection || model.collection,
+            triggerElement: target
         };
 
         var modal = new ADK.UI.Modal({
@@ -235,11 +246,6 @@ define([
         className: 'app-size',
         initialize: function(options) {
             this._super = ADK.AppletViews.PillsGistView.prototype;
-            var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
-
-            if (ADK.UserService.hasPermissions('add-immunization')) {
-                buttonTypes.push('additembutton');
-            }
 
             var CollectionDef = ADK.UIResources.Fetch.Immunizations.Collection.extend({
                 model: Backbone.Model.extend({
@@ -260,6 +266,35 @@ define([
             this.collection.fetchCollection();
 
             this.appletOptions = {
+                tileOptions: {
+                    quickLooks: {
+                        enabled: true
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: function(params, event) {
+                            var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                            getDetailsModal(this.model, this.model.collection, targetElement);
+                        }
+                    },
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'infobutton',
+                        }, {
+                            type: 'additembutton',
+                            shouldShow: function() {
+                                return ADK.UserService.hasPermission('add-immunization') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
+                            }
+                        }, {
+                            type: 'detailsviewbutton',
+                            onClick: function(params, event) {
+                                var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                                getDetailsModal(this.model, this.model.collection, targetElement);
+                            }
+                        }]
+                    }
+                },
                 filterFields: _.pluck(fullScreenColumns, 'name'),
                 collectionParser: function(collection) {
                     var set = collection.groupBy('name');
@@ -287,11 +322,7 @@ define([
                     id: 'age',
                     field: 'timeSinceDate'
                 }],
-                collection: this.collection,
-                toolbarOptions: {
-                    buttonTypes: buttonTypes,
-                    triggerSelector: '[data-infobutton]'
-                },
+                collection: this.collection
             };
 
             setupAddHandler(this.appletOptions);
@@ -301,7 +332,7 @@ define([
             var OriginalPillGist = this.appletOptions.AppletView;
             var PillGist = OriginalPillGist.extend({
                 childView: OriginalPillGist.prototype.childView.extend({
-                    serializeModel: function() {
+                    serializeData: function() {
                         var modelJSON = this.model.toJSON();
                         modelJSON.tooltip = tooltip(modelJSON);
                         return modelJSON;
@@ -372,7 +403,7 @@ define([
         label: 'Immunization',
         onClick: triggerAddImmunization,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-immunization');
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-immunization');
         }
     });
 

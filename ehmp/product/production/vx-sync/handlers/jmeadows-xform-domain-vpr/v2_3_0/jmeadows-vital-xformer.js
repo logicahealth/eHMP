@@ -1,11 +1,10 @@
 'use strict';
 
-var _ = require('underscore');
 var moment = require('moment');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
 
-function dodVitalToVPR(record, edipi){
+function dodVitalToVPR(logger, record, edipi){
     var systemId = 'DOD';
 
     if (!record){

@@ -311,7 +311,7 @@
 							</procedureEvent>
 						</relatedClinicalStatement>
 						<relatedClinicalStatement>
-							<targetRelationshipToSource code="C877" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
+							<targetRelationshipToSource code="SITE" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
 							<procedureEvent>
 								<templateId root="2.16.840.1.113883.3.1829.11.8.1.1"/>
 								<id root="1180ba61-25e9-4f88-a60a-ea249f2c585f"/>
@@ -321,7 +321,7 @@
 							</procedureEvent>
 						</relatedClinicalStatement>
 						<relatedClinicalStatement>
-							<targetRelationshipToSource code="C877" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
+							<targetRelationshipToSource code="SITE" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
 							<procedureEvent>
 								<templateId root="2.16.840.1.113883.3.1829.11.8.1.1"/>
 								<id root="a18b5368-82fe-4c8a-ac67-8acefee0ba5a"/>
@@ -331,7 +331,7 @@
 							</procedureEvent>
 						</relatedClinicalStatement>
 						<relatedClinicalStatement>
-							<targetRelationshipToSource code="C877" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
+							<targetRelationshipToSource code="SITE" codeSystem="2.16.840.1.113883.3.795.12.1.1" displayName="Associated with"/>
 							<procedureEvent>
 								<templateId root="2.16.840.1.113883.3.1829.11.8.1.1"/>
 								<id root="cab24c26-7f95-42cc-97ef-703e609ed569"/>

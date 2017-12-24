@@ -1,17 +1,17 @@
 define([
     'jasminejquery',
     'backbone',
-    'app/applets/medication_review/medicationFilter/medicationDateFilter',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection'
-], function(JasmineJquery, Backbone, MedicationDateFilter, MedicationsUngroupedModel, MedicationsUngroupedCollection) {
+    'app/applets/medication_review/medicationFilter/medicationDateFilter'
+], function(JasmineJquery, Backbone, MedicationDateFilter) {
     'use strict';
 
     describe('Medications date filter', function() {
         var ungroupedMeds;
         var dateFilter;
+        var MedicationsUngroupedCollection;
+        var MedicationsUngroupedModel;
 
-        beforeEach(function() {
+        var setupTest = function() {
             var med1 = new MedicationsUngroupedModel({
                 uid: 'med1:uid'
             });
@@ -30,6 +30,23 @@ define([
                 dateModel: datePickerModel
             });
             spyOn(dateFilter, 'filterByDate');
+        };
+
+        beforeEach(function(done) {
+            if (_.isUndefined(MedicationsUngroupedCollection) || _.isUndefined(MedicationsUngroupedModel)) {
+                require([
+                    'app/resources/fetch/medication_review/medicationOrderCollection',
+                    'app/resources/fetch/medication_review/medicationOrderModel'
+                ], function(collection, model) {
+                    MedicationsUngroupedCollection = collection;
+                    MedicationsUngroupedModel = model;
+                    setupTest();
+                    done();
+                });
+            } else {
+                setupTest();
+                done();
+            }
         });
 
 

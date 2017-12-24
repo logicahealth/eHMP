@@ -4,15 +4,61 @@ sourceCompatibility = property('javaVersion')
 targetCompatibility = property('targetJavaVersion')
 
 dependencies {
-    compile group: 'joda-time', name: 'joda-time', version: property('joda-version')
     compile group: 'com.google.code.gson', name: 'gson', version: property('gson-version')
     compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
+    compile group: 'org.drools', name: 'drools-core', version: property('kie-version')
 	compile group: 'org.json', name: 'json', version: property('json-version')
-	compile project(':production:jbpm:JbpmUtils')
-}
+    compile group: 'org.jboss.logging', name: 'jboss-logging', version: property('jboss-logging')
+    compile group: 'joda-time', name: 'joda-time', version: property('joda-version')
+	testCompile group: 'org.jbpm', name: 'jbpm-test', version: property('kie-version')
+    testCompile group: 'org.jbpm', name: 'jbpm-test-coverage', version: property('kie-version')
+    testCompile project(':production:jbpm:event-listeners')
+    testCompile project(':production:jbpm:EhmpServices')
+    
+ }
 
 repositories {
     maven {url "https://store.vistacore.us/nexus/content/groups/public"}
+}
+
+// To run with tests do something like gradle build -PjbpmProcessTests
+// -PjbpmProcessTests - will output test fail/pass and summary
+// -PjbpmProcessTestsDebug - will output complete test information and summary
+test {
+
+    onlyIf {
+        project.hasProperty("jbpmProcessTests") || project.hasProperty("jbpmProcessTestsDebug")
+    }
+
+    testLogging {
+        events "passed", "skipped", "failed" 
+        if(project.hasProperty("jbpmProcessTestsDebug")) {
+            events "passed", "skipped", "failed", "standardOut"
+            showExceptions true
+            exceptionFormat "full"
+            showCauses true
+            showStackTraces true
+
+            // set options for log level DEBUG and INFO
+            debug {
+                events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+                exceptionFormat "full"
+            }
+            info.events = debug.events
+            info.exceptionFormat = debug.exceptionFormat
+        }
+        // Rerun tests w/o having to clean
+        outputs.upToDateWhen {false}
+    }
+ 
+    afterSuite { desc, result ->
+        if (!desc.parent) { // will match the outermost suite
+            def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+            def startItem = '|  ', endItem = '  |'
+            def repeatLength = startItem.length() + output.length() + endItem.length()
+            println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength) + '\n')
+        }
+    }
 }
 
 jar {

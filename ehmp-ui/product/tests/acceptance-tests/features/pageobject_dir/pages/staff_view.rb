@@ -1,35 +1,54 @@
+class PatientSearchTray < SitePrism::Section
+  element :fld_my_site_input, '.patientSelectionMySiteSearchText input'
+  element :btn_my_site_search, ".patient-selection--my-site-search--input button[type='submit']"
+
+  element :btn_open_cprslist, "li.sidebar.open button[aria-label^='My Cprs List']"
+  element :btn_closed_cprslist, "li.sidebar:not(.open) button[aria-label^='My Cprs List']"
+  element :btn_current_patient, "button[aria-label^='Current Patient']"
+
+  element :open_ward, "li.sidebar:nth-of-type(6).open"
+  element :closed_ward, "li.sidebar:nth-of-type(6):not(.open)"
+  element :btn_open_ward, "li.sidebar:nth-of-type(6) button[id^='tray']"
+
+  element :open_nationwide, "li.sidebar:nth-of-type(7).open"
+  element :closed_nationwide, "li.sidebar:nth-of-type(7):not(.open)"
+  element :btn_open_nationwide, "li.sidebar:nth-of-type(7) button[id^='tray']"
+
+  element :open_recentpatients, "li.sidebar:nth-of-type(4).open"
+  element :closed_recentpatients, "li.sidebar:nth-of-type(4):not(.open)"
+  element :btn_open_recentpatients, "li.sidebar:nth-of-type(4) button[id^='tray']"
+  element :icon_instructions, ".patientSelectionMySiteSearchText .instructions i"
+end
+
 class PobStaffView < SitePrism::Page
   set_url '#/staff/provider-centric-view'
+  set_url_matcher(/#\/staff\/provider-centric-view/)
 
-  section :global_header, GlobalHeaderSection, ".navbar"
+  section :workspace_nav, MenuSection, "#header-region"
+  section :patient_search_tray, PatientSearchTray, ".patient-search-tray-list"
 
   element :fld_staff_view, "#current-staff-nav-header-tab"
   element :fld_active_staff_view, "#current-staff-nav-header-tab.active"
-  elements :fld_recent_patient_list, "ul.recent-patients-items"
 
-  element :btn_search_tray_close, "li.sidebar.open .panel-heading button"
+  element :fld_tray_title, "li.sidebar.open .panel-title"
+  element :btn_search_tray_close, "li.sidebar.open .panel-heading button.close-tray"
   element :btn_search_tray_help, "li.sidebar.open .panel-heading button.help-icon-link"
   element :fld_search_no_results, "li.sidebar.open tr[data-message-type='no-results']"
 
-  element :open_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2).open"
-  element :closed_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2):not(.open)"
-  element :btn_open_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2) button[id^='tray']"
-  element :btn_close_my_site, ".patient-search-tray-list li.sidebar:nth-of-type(2) button.close-tray"
-  element :fld_my_site_input, '.patientSelectionMySiteSearchText input'
-  element :fld_my_site_instructions, ".sidebar-tray.left p:not(.sr-only)"
+  elements :fld_search_result_headers, "li.sidebar.open .table-view--patient-selection th"
+
+  # ************************ my site elements ********************** #
+  
+  element :fld_my_site_instructions, "li.sidebar.open div.filter p:not(.sr-only)"
   element :fld_my_site_search_help, ".patientSelectionMySiteSearchText span.help-block"
-  element :btn_my_site_search, ".patient-selection--my-site-search--input button[type='submit']"
-  elements :my_site_search_results_headers, "li.open .search-results thead th"
   elements :my_site_search_results_name, "li.open .search-results tbody td:nth-of-type(1)"
   elements :results_name_screenreader, "li.open .search-results tbody td:nth-of-type(1) span.sr-only"
   elements :my_site_search_results_dob, "li.open .search-results tbody td:nth-of-type(2)"
   elements :results_dob_screenreader, "li.open .search-results tbody td:nth-of-type(2) span.sr-only"
   elements :my_site_search_results_gender, "li.open .search-results tbody td:nth-of-type(3)"
 
-  element :open_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5).open"
-  element :closed_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5):not(.open)"
-  element :btn_open_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5) button[id^='tray']"
-  element :btn_close_ward, ".patient-search-tray-list li.sidebar:nth-of-type(5) button.close-tray"
+   # ************************ ward elements ********************** #
+
   element :fld_ward_label, "label[for^='wardLocation']"
   element :fld_ward_select, ".wardLocation select"
   element :ddl_ward_location, ".wardLocation [x-is-labelledby^='select2-wardLocation']"
@@ -37,7 +56,6 @@ class PobStaffView < SitePrism::Page
   element :fld_ward_filter_no_results, "li.select2-results__option.select2-results__message"
   elements :fld_ward_location_options, ".select2-results__option:not(.empty-option)"
   element :fld_ward_no_patients, "li.sidebar.open tr[data-message-type='no-results']"
-  elements :fld_ward_result_headers, "li.sidebar.open .table-view--patient-selection th"
   elements :fld_ward_name_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1)" 
   elements :fld_ward_name_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1) span.sr-only"
   elements :fld_ward_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
@@ -45,15 +63,13 @@ class PobStaffView < SitePrism::Page
   elements :fld_ward_room_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(4)"
   elements :fld_ward_room_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(4) span.sr-only"
   elements :fld_ward_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
+  
+  # ************************ nationwide elements ********************** #
   element :fld_nationwide_lastname_label, "label[for^='lastName']"
   element :fld_nationwide_firstname_label, "label[for^='firstName']"
   element :fld_nationwide_dob_label, "label[for^='dob']"
   element :fld_nationwide_SSN_label, "label[for^='ssn']"
 
-  element :open_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6).open"
-  element :closed_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6):not(.open)"
-  element :btn_open_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6) button[id^='tray']"
-  element :btn_close_nationwide, ".patient-search-tray-list li.sidebar:nth-of-type(6) button.close-tray"
   element :fld_nationwide_lastname, '.input-control.lastName input'
   element :fld_nationwide_firstname, '.input-control.firstName input'
   element :fld_nationwide_dob, '.datepicker-control.dob input'
@@ -65,13 +81,8 @@ class PobStaffView < SitePrism::Page
   elements :fld_nw_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
   elements :fld_nw_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
   elements :fld_nw_dob_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2) span.sr-only"
-  elements :fld_nw_result_headers, "li.sidebar.open .table-view--patient-selection th"
 
-  element :open_recentpatients, ".patient-search-tray-list li.sidebar:nth-of-type(3).open"
-  element :closed_recentpatients, ".patient-search-tray-list li.sidebar:nth-of-type(3):not(.open)"
-  element :btn_open_recentpatients, ".patient-search-tray-list li.sidebar:nth-of-type(3) button[id^='tray']"
-  element :btn_close_recentpatients, ".patient-search-tray-list li.sidebar:nth-of-type(3) button.close-tray"
-  elements :fld_rp_result_headers, "li.sidebar.open .table-view--patient-selection th"
+  # ************************ recent patients elements ********************** #
   elements :fld_rp_name_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1)" 
   elements :fld_rp_name_results_screenreader, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(1) span.sr-only"
   elements :fld_rp_dob_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(2)"
@@ -79,10 +90,8 @@ class PobStaffView < SitePrism::Page
   element :fld_rp_no_patients, "li.sidebar.open tr[data-message-type='no-results']"
   elements :fld_rp_gender_results, "li.sidebar.open .table-view--patient-selection tbody td:nth-of-type(3)"
 
-  element :open_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1).open"
-  element :closed_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1):not(.open)"
-  element :btn_open_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1) button[id^='tray']"
-  element :btn_close_cprslist, ".patient-search-tray-list li.sidebar:nth-of-type(1) button.close-tray"
+  # ************************ cprs elements ********************** #
+
   elements :fld_cprs_result_headers, "li.sidebar.open .table-view--patient-selection th"
 
   elements :fld_all_applets, "[data-appletid]"
@@ -110,19 +119,27 @@ class PobStaffView < SitePrism::Page
   end
 
   def fld_ward_result_headers_text
-    strip_sr_only_text fld_ward_result_headers
+    strip_sr_only_text fld_search_result_headers
   end
 
   def fld_nw_result_headers_text
-    strip_sr_only_text fld_nw_result_headers
+    strip_sr_only_text fld_search_result_headers
   end
 
   def fld_rp_result_headers_text
-    strip_sr_only_text fld_rp_result_headers
+    strip_sr_only_text fld_search_result_headers
   end
 
   def fld_cprs_result_headers_text
-    strip_sr_only_text fld_cprs_result_headers
+    max_attempt = 2
+    begin
+      strip_sr_only_text fld_cprs_result_headers
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale
+      max_attempt -= 1
+      raise stale if max_attempt < 0
+      p "stale element, retry"
+      retry
+    end
   end
 
   def fld_ward_result_name_text

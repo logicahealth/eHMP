@@ -54,7 +54,7 @@ define([
         onRender: function() {
             this.toggleAddAddendumButton();
         },
-        template: Handlebars.compile('{{#if shouldShowAdd}}<button type="button" id="btn-doc-add-addendum" title="Press enter to add an addendum" class="btn btn-sm btn-primary">Add Addendum</button>{{/if}} <button type="button" title="Press enter to close" class="btn btn-default" data-dismiss="modal">Close</button> '),
+        template: Handlebars.compile('{{#if shouldShowAdd}}<button type="button" id="btn-doc-add-addendum" class="btn btn-sm btn-primary">Add Addendum</button>{{/if}} <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> '),
         templateHelpers: function() {
             return {
                 shouldShowAdd: DocUtils.canAddAddendum(this.model)

@@ -55,7 +55,7 @@ Publisher.prototype.connect = function(callback) {
 
     self.publishStrategy.connect.call(self, function(error) {
         if (error) {
-            self.logger.debug('Publisher.connect() : failed to connect client %j', error);
+            self.logger.error('Publisher.connect() : failed to connect client %j', error);
             self.client = undefined;
             self.isConnecting = false;
             if (callback) {
@@ -65,7 +65,7 @@ Publisher.prototype.connect = function(callback) {
         }
 
         self.client.on('error', function(err) {
-            self.logger.warn('Publisher.connect() : beanstalk client error (%s) %j', self.jobType, err);
+            self.logger.error('Publisher.connect() : beanstalk client error (%s) %j', self.jobType, err);
         });
 
         self.client.on('close', function() {

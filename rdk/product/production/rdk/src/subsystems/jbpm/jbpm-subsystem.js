@@ -57,12 +57,6 @@ function getHealthcheck(app, logger) {
         interval: 100000,
         check: function(callback) {
             var httpConfig = getJBPMHttpConfig(app.config, logger);
-
-            // [GET] /history/instances
-            // Gets a list of ProcessInstanceLog instances
-            // Returns a JaxbHistoryLogList instance that contains a list of JaxbProcessInstanceLog instances
-            // This operation responds to pagination parameters
-
             httpConfig.url += app.config.jbpm.healthcheckEndpoint;
 
             //Add BASIC auth header to rest call
@@ -72,14 +66,14 @@ function getHealthcheck(app, logger) {
             httpConfig.json = true;
 
             http.get(httpConfig, function(err, response, data) {
-                if (!data || !data.historyLogList) {
+                if (!data || !data.deploymentUnitList) {
                     err = true;
                 }
 
                 if (err) {
-                    return callback(false);
+                    return setImmediate(callback, false);
                 }
-                callback(true);
+                return setImmediate(callback, true);
             });
         }
     };

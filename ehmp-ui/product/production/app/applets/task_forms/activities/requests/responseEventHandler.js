@@ -3,10 +3,9 @@ define([
     'moment',
     'app/applets/task_forms/common/utils/eventHandler',
     'app/applets/task_forms/common/utils/taskFetchHelper',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/task_forms/common/utils/requestCommonUtils',
     'app/applets/task_forms/common/utils/utils'
-], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, RequestUtils, Utils) {
+], function(Async, moment, EventHandler, TaskFetchHelper, RequestUtils, Utils) {
     'use strict';
 
     var REQUEST_CLARIFICATION = 'clarification';
@@ -159,30 +158,19 @@ define([
      * The following functions are to support reassign
      */
     var parseAssignment = function(assignment) {
-        if (assignment === 'opt_me') {
-            return "Me";
-        } else if (assignment === 'opt_person') {
-            return 'Person';
-        } else if (assignment === 'opt_myteams') {
-            return 'My Teams';
-        } else if (assignment === 'opt_anyteam') {
-            return 'Any Team';
-        } else if (assignment === 'opt_patientteams') {
-            return 'Patient\'s Teams';
-        } else {
-            return null;
-        }
+        return _.get(assignment, '_labelsForSelectedValues.type', null);
     };
     var routingCodeAll = function(formModel) {
-        var assignTo = parseAssignment(formModel.get('assignment'));
+        var assignment = formModel.get('assignment');
+        var assignTo = parseAssignment(assignment);
         var userSession = ADK.UserService.getUserSession().attributes;
         if (assignTo === 'Me') {
             return userSession.site + ";" + userSession.duz[userSession.site];
         } else if (assignTo === 'Person') {
-            return formModel.get('person');
+            return _.get(assignment, 'person');
         } else {
-            var roles = formModel.get('roles');
-            var team = formModel.get('team');
+            var roles = _.get(assignment, 'roles');
+            var team = _.get(assignment, 'team');
             var codes = [];
             _.each(roles, function(role) {
                 codes.push('[TM:(' + team + ')/TR:(' + role + ')]');
@@ -191,74 +179,44 @@ define([
         }
     };
     var setRouteToResponse = function(formModel, response) {
-        if (formModel.get('assignment') !== 'opt_me') {
+        var assignment = formModel.get('assignment');
+        var assignTo = parseAssignment(assignment);
+        if (!_.isEqual(assignTo, 'Me')) {
             response.route = {};
-            if (formModel.get('assignment') === 'opt_person') {
-                response.route.facility = formModel.get('facility');
-                response.route.person = formModel.get('person');
+            if (_.isEqual(assignTo, 'Person')) {
+                _.extend(response.route, _.pick(assignment, ['facility', 'person']));
             } else {
                 response.route.routingCode = routingCodeAll(formModel);
-                var team = formModel.get('team');
-                if (!_.isEmpty(team) && formModel.has('storedTeamsList')) {
+                var team = _.get(assignment, 'team');
+                if (!_.isEmpty(team)) {
                     response.route.team = {
                         code: team,
-                        name: lookupTeamName(formModel.get('storedTeamsList'), team)
+                        name: _.get(assignment, '_labelsForSelectedValues.team')
                     };
                 }
 
-                var roles = formModel.get('roles');
-                if (_.isArray(roles) && formModel.has('storedRolesList')) {
+                var roles = _.get(assignment, 'roles');
+                if (_.isArray(roles)) {
                     var processedRoles = [];
-                    _.each(roles, function(role) {
-                        if (!_.isEmpty(role)) {
+                    var roleNames = _.get(assignment, '_labelsForSelectedValues.roles', '').split(', ');
+                    _.each(roles, function(role, index) {
+                        if (!_.isEmpty(role) && !!roleNames[index]) {
                             processedRoles.push({
                                 code: role,
-                                name: lookupRoleName(formModel.get('storedRolesList'), role)
+                                name: roleNames[index]
                             });
                         }
                     });
                     response.route.assignedRoles = processedRoles;
                 }
 
-                if (formModel.get('assignment') === 'opt_anyteam') {
-                    response.route.facility = formModel.get('facility');
+                if (_.isEqual(assignTo, 'Any Team')) {
+                    response.route.facility = _.get(assignment, 'facility');
                 }
             }
         }
         return response;
     };
-    function lookupTeamName(teamList, teamID) {
-        if (!teamList) {
-            return null;
-        }
-
-        var foundTeam = _.find(teamList, function(team) {
-            if (!team) {
-                return false;
-            }
-
-            return ((teamID === team.teamID) || (parseInt(teamID, 10) === team.teamID));
-        });
-
-        return foundTeam ? foundTeam.teamName : null;
-    }
-
-    function lookupRoleName(roleList, roleID) {
-        if (!roleList) {
-            return null;
-        }
-
-        var foundRole = _.find(roleList, function(role) {
-            if (!role) {
-                return false;
-            }
-
-            return ((roleID === role.roleID) || (parseInt(roleID, 10) === role.roleID));
-        });
-
-        return foundRole ? foundRole.name : null;
-    }
-
 
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e) {

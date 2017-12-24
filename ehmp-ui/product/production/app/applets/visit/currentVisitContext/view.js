@@ -7,8 +7,13 @@ define([
     "use strict";
 
     var VisitContextView = Backbone.Marionette.ItemView.extend({
+        behaviors: {
+            Tooltip: {
+                trigger: 'hover focus'
+            }
+        },
         template: Template,
-        className: "btn-group encounter-info left-margin-sm",
+        className: "btn-group encounter-info left-margin-xs percent-height-100",
         events: {
             'click button': 'setVisitContext'
         },
@@ -38,13 +43,13 @@ define([
     });
 
     ADK.Messaging.trigger('register:component', {
-        type: "contextNavigationItem",
+        type: "contextHeaderItem",
         group: ["patient", "patient-right"],
         key: "currentVisitContext",
         view: VisitContextView,
         orderIndex: 10,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista();
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
         }
     });
 

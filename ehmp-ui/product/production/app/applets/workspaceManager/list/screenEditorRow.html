@@ -1,79 +1,46 @@
+<div class="pixel-width-22 border-right table-cell default-workspace-btn-region" role="gridcell"></div>
+<div class="border-right table-cell workspace-title-region" role="gridcell"></div>
 {{#if predefined}}
-<div class="pixel-width-22 border-right table-cell" role="gridcell">
-    <button type="button" class="default-workspace-btn btn btn-icon btn-block color-primary btn-sm" title="Press enter to set the {{title}} workspace as the default screen">
-        <i class="fa fa-star-o"></i>
-    </button>
-</div>
-<div class="editor-title border-right table-cell bold-font" role="gridcell">
-    <div>
-        <i class="fa fa-lock right-padding-xs"></i>
-        <span class="predefined-title">{{title}}</span>
-    </div>
-</div>
 <div class="pixel-width-58 border-right table-cell all-padding-no" role="gridcell">
-    <button type="button" class="show-associations btn btn-block btn-icon" id="association-trigger-{{ id }}" data-toggle="popover" aria-haspopup="true" aria-expanded="false" aria-hidden="true" disabled>
+    <button type="button" class="show-associations btn btn-block btn-icon" id="association-trigger-{{ id }}" data-toggle="popover" aria-haspopup="true" aria-expanded="false" aria-hidden="true" disabled aria-label="Associated Conditions">
         <div tooltip-data-key="Associated Conditions">
-            <i class="fa fa-tags pull-left left-margin-sm">
-                <span class="sr-only">Press enter to activate association conditions manager. Number of association for {{title}} is</span>
-            </i>
+            <i class="fa fa-tags pull-left left-margin-sm"></i>
             <span class="associations-counter associations-counter-region"></span>
         </div>
     </button>
 </div>
-<div class="border-right table-cell" role="gridcell">{{description}}</div>
 {{else}}
-<div class="pixel-width-22 border-right table-cell" role="gridcell">
-    <button type="button" class="default-workspace-btn btn btn-icon color-primary" title="Press enter to set the {{title}} workspace as the default screen">
-        <i class="fa fa-star-o"></i>
-    </button>
-</div>
-<div class="form-group has-feedback border-right table-cell" role="gridcell">
-    <form action="#" method="post" class="workspace-editor editor-title bold-font">
-        <label class="control-label sr-only" for="title-{{id}}">Workspace Title</label>
-        <input required id="title-{{id}}" name="title-{{id}}" type="text" class="editor-title-element editor-input-element form-control all-padding-no pixel-height-25" value="{{title}}" origValue="{{title}}" maxlength="30" title="Enter in title and then press enter to save" />
-        <i class="form-control-feedback fa" aria-hidden="true"></i>
-    </form>
-</div>
 <div class="pixel-width-58 border-right table-cell all-padding-no" role="gridcell">
-    <button type="button" class="show-associations btn btn-block btn-icon" id="association-trigger-{{ id }}" data-toggle="popover" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="show-associations btn btn-block btn-icon" id="association-trigger-{{ id }}" data-toggle="popover" aria-haspopup="true" aria-expanded="false" aria-label="Associated Conditions">
         <div tooltip-data-key="Associated Conditions">
-            <i class="fa fa-tags pull-left left-margin-sm">
-                <span class="sr-only">Press enter to activate association conditions manager. Number of association for {{title}} is</span>
-            </i>
+            <i class="fa fa-tags pull-left left-margin-sm"></i>
             <span class="associations-counter associations-counter-region"></span>
         </div>
     </button>
-</div>
-<div class="form-group border-right has-feedback table-cell" role="gridcell">
-    <form action="#" method="post" class="workspace-editor editor-description">
-        <label class="control-label sr-only" for="description-{{id}}">Workspace Description.</label>
-        <input type="text" class="editor-input-element form-control all-padding-no pixel-height-25" id="description-{{id}}" value="{{description}}" origValue="{{description}}" placeholder="Add description" maxlength='144' title="Add or change description of this workspace. Press enter to save changes." />
-        <i class="form-control-feedback fa" aria-hidden="true"></i>
-    </form>
 </div>
 {{/if}}
+<div class="border-right table-cell workspace-description-region" role="gridcell"></div>
 <div class="border-right table-cell" role="gridcell">{{author}}</div>
 <div class="pixel-width-30 border-right table-cell" role="gridcell">
-    {{ui-button "Copy Workspace." srOnlyLabel=true classes="btn-icon btn-block duplicate-worksheet" title="Press enter to copy this workspace." icon="fa-files-o" size="sm"}}
+    <button type="button" class="btn btn-icon btn-sm btn-block duplicate-worksheet" title="Copy Workspace" aria-label="Copy Workspace">
+        <i class="fa fa-files-o"></i>
+    </button>
 </div>
 <div class="pixel-width-30 border-right table-cell" role="gridcell">
     {{ui-button "Rearrange Workspace." srOnlyLabel=true classes="btn-icon btn-block rearrange-worksheet" title="To activate press spacebar. Use the up or down arrow keys to move the workspace then press enter to set the workspace." icon="fa-arrows-v" size="sm" attributes='role="application"'}}
 </div>
 <div class="pixel-width-30 border-right table-cell" role="gridcell">
-    {{#if predefined}} {{ui-button "Predefined workspace cannot be deleted." srOnlyLabel=true classes="btn-icon btn-block" title="Press enter to open the dialog to delete this workspace." icon="fa-lock" size="sm" disabled=true}} {{else}} {{ui-button "Delete Workspace." srOnlyLabel=true classes="btn-icon btn-block delete-worksheet" title="Press enter to delete workspace." icon="fa-trash-o" size="sm"}} {{/if}}
-</div>
-<div class="border-right pixel-width-65 table-cell" role="gridcell">
-    {{#if hasApplets}}
-    <button type="button" class="previewWorkspace btn btn-sm btn-icon" title="Press enter to preview">Preview</button>
-</div>
-{{#if hasCustomize}}
-<div class="pixel-width-70 table-cell" role="gridcell">
-    <button type="button" class="customize-screen btn btn-sm btn-icon" title="Press enter to customize">Launch</button>
+    {{#if predefined}}
+    <button type="button" class="btn btn-icon btn-sm btn-block" title="Predefined workspaces cannot be deleted" disabled aria-label="Predefined workspaces cannot be deleted">
+        <i class="fa fa-lock"></i>
+    </button>
     {{else}}
-    <div class="pixel-width-70 table-cell" role="gridcell">
-        <button type="button" class="launch-screen btn btn-sm btn-icon" title="Press enter to launch the {{title}} workspace">Launch</button>
-        {{/if}} {{else}} {{ui-button "Preview" classes="btn-icon btn-block" title="Unable to preview an empty workspace" aria-hidden="true" size="sm" disabled=true}}
-    </div>
-    <div class="pixel-width-70 table-cell" role="gridcell">
-        <a href="#" class="customize-screen btn btn-sm btn-icon btn-block" title="Press enter to customize the {{title}} workspace." onclick="return false;">Customize</a> {{/if}}
-    </div>
+    <button type="button" class="btn btn-icon btn-sm btn-block delete-worksheet" title="Delete Workspace" aria-label="Delete Workspace">
+        <i class="fa fa-trash-o"></i>
+    </button>
+    {{/if}}
+</div>
+<div class="border-right pixel-width-65 table-cell preview-workspace-container" role="gridcell"></div>
+
+<div class="customize-screen-container pixel-width-70 table-cell border-right text-center" role="gridcell"></div>
+<div class="launch-screen-container pixel-width-70 table-cell text-center" role="gridcell"></div>

@@ -385,6 +385,9 @@ function registerSyncAPI(log, config, environment, app) {
         }
 
         var pollerJobs = _.filter(syncStateJSON.jobStatus, function(jobState) {
+            if(!jobState.type){
+                return false;
+            }
             return jobState.type.indexOf('poller') && (Date.now()-jobState.timestamp)>120000;
         });
         if (_.isEmpty(pollerJobs) || (!req.param('vistaStatus'))) {
@@ -435,7 +438,7 @@ function registerSyncAPI(log, config, environment, app) {
         childLog.debug('sync-request-endpoint.getHealthStatus()');
         if(!config.healthcheck || !config.healthcheck.heartbeatEnabled){
             childLog.debug('sync-request-endpoint.getHealthStatus(): healthcheck is disabled in configiuration. Skipping getHealthStatus...');
-            next();
+            return next();
         }
 
         var currentTime = moment();

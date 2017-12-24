@@ -11,8 +11,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -24,7 +24,7 @@ describe('lab-times-available resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {date: '20150903092400',locationUid: 'urn:va:location:9E7A:11'}); //3150828
+        }, {date: '20150903092400',locationUid: 'urn:va:location:SITE:11'}); //3150828
     });
     it('will return an error if locationIEN is missing', function (done) {
         this.timeout(8000);

@@ -15,9 +15,9 @@ define([
     'app/applets/orders/tray/labs/trayUtils',
     'app/applets/orders/tray/labs/trayView',
     'app/applets/ordersearch/tray/trayView'
-], function (ADK, _, Backbone, Marionette, moment, Handlebars, ModalViewUtils,
-             ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
-             DisplayGroupManifest, LabOrderTrayUtils, trayView, OrderSearchTrayView) {
+], function(ADK, _, Backbone, Marionette, moment, Handlebars, ModalViewUtils,
+    ToolBarView, ordersFilterTemplate, DetailCommunicator, orderUtil,
+    DisplayGroupManifest, LabOrderTrayUtils, trayView, OrderSearchTrayView) {
 
     'use strict';
     var summaryColumns, flagColumn, shortSummaryColumn, fullScreenColumns, resourceTitle, _super, GridApplet,
@@ -40,8 +40,7 @@ define([
         }),
         type: 'date',
         sortType: 'cycle',
-        template: Handlebars.compile('{{formatDate entered "MM/DD/YYYY"}}'),
-        hoverTip: 'orders_orderdate'
+        template: Handlebars.compile('{{formatDate entered "MM/DD/YYYY"}}')
     };
     flagColumn = {
         name: 'isFlagged',
@@ -59,14 +58,12 @@ define([
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
             className: 'StringCell flex-width-2'
-        }),
-        hoverTip: 'orders_status'
+        })
     };
     shortSummaryColumn = {
         name: 'summary',
         label: 'Order',
-        template: Handlebars.compile('{{#if longSummary}}<span data-toggle="tooltip" title="{{summary}}">{{shortSummary}}...</span>{{else}}{{shortSummary}}{{/if}}'),
-        hoverTip: 'orders_order'
+        template: Handlebars.compile('{{#if longSummary}}<span data-toggle="tooltip" title="{{summary}}">{{shortSummary}}...</span>{{else}}{{shortSummary}}{{/if}}')
     };
     orderType = {
         name: 'kind',
@@ -74,8 +71,7 @@ define([
         flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend({
             className: 'StringCell flex-width-1_5'
-        }),
-        hoverTip: 'orders_type'
+        })
     };
     summaryOrderType = {
         name: 'kind',
@@ -83,8 +79,7 @@ define([
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2'
-        }),
-        hoverTip: 'orders_type'
+        })
     };
     facilityCodeColumn = {
         name: 'facilityMoniker',
@@ -93,8 +88,7 @@ define([
         cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-1_5'
         }),
-        template: Handlebars.compile('{{facilityMoniker}}'),
-        hoverTip: 'orders_facility'
+        template: Handlebars.compile('{{facilityMoniker}}')
     };
     summaryColumn = {
         name: 'summary',
@@ -102,8 +96,7 @@ define([
         flexWidth: 'flex-width-4',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
-        }),
-        hoverTip: 'orders_order'
+        })
     };
     providerNameColumn = {
         name: 'providerDisplayName',
@@ -111,8 +104,7 @@ define([
         flexWidth: 'flex-width-3',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-3'
-        }),
-        hoverTip: 'orders_providername'
+        })
     };
     startColumn = {
         name: 'start',
@@ -123,8 +115,7 @@ define([
         }),
         type: 'date',
         sortType: 'cycle',
-        template: Handlebars.compile('{{formatDate start "MM/DD/YYYY"}}'),
-        hoverTip: 'orders_startdate'
+        template: Handlebars.compile('{{formatDate start "MM/DD/YYYY"}}')
     };
     stopColumn = {
         name: 'stop',
@@ -135,8 +126,7 @@ define([
         }),
         type: 'date',
         sortType: 'cycle',
-        template: Handlebars.compile('{{formatDate stop "MM/DD/YYYY"}}'),
-        hoverTip: 'orders_stopdate'
+        template: Handlebars.compile('{{formatDate stop "MM/DD/YYYY"}}')
     };
 
     //Data Grid Columns - summary for coversheet, fullscreen for single page
@@ -242,7 +232,7 @@ define([
     });
     AppletLayoutView = GridApplet.extend({
         className: 'app-size-2',
-        fetchDisplayGroups: function (parent, node) {
+        fetchDisplayGroups: function(parent, node) {
             if (node.shortName === parent) {
                 return this.getDisplayGroupChildren(node, []);
             }
@@ -256,7 +246,7 @@ define([
                 }
             }
         },
-        getDisplayGroupChildren: function (parent, children) {
+        getDisplayGroupChildren: function(parent, children) {
             var obj = parent.members,
                 idx = 0;
             children.push(parent.shortName);
@@ -266,8 +256,7 @@ define([
             }
             return children;
         },
-
-        initialize: function (options) {
+        initialize: function(options) {
             var toolBarView, onClickRow, sharedModelChanged, filterCollection;
             var collection, fetchOptions;
             var exclude, displayGroup, displayGroupList;
@@ -294,10 +283,10 @@ define([
                     displayGroup: displayGroup
                 });
             }
-            sharedModelChanged = function (model) {
+            sharedModelChanged = function(model) {
                 displayGroup = model.get('displayGroup');
                 displayGroupList = this.fetchDisplayGroups(displayGroup, DisplayGroupManifest);
-                this.listenTo(ADK.Messaging, 'globalDate:selected', function () {
+                this.listenTo(ADK.Messaging, 'globalDate:selected', function() {
                     this.dateRangeRefresh(ENTERED);
                 });
 
@@ -326,11 +315,11 @@ define([
             } else {
                 exclude = ADK.SessionStorage.getAppletStorageModel(this.options.appletConfig.instanceId, 'excludeMenuItems', true, this.parentWorkspace);
             }
-            this.listenTo(ADK.Messaging, 'globalDate:selected', function () {
+            this.listenTo(ADK.Messaging, 'globalDate:selected', function() {
                 self.dateRangeRefresh(ENTERED);
             });
-            filterCollection = function (collection) {
-                return collection.filter(function (model) {
+            filterCollection = function(collection) {
+                return collection.filter(function(model) {
                     if (model.get('childrenOrderUids')) { //filter parent orders (US14416)
                         return false;
                     }
@@ -351,7 +340,7 @@ define([
             };
             //set comparator based on view type 'summary' or 'expanded'
 
-            var _dateSort = function (order) {
+            var _dateSort = function(order) {
                 var _entered = order.get(ENTERED);
                 // Pad the end of the string with zeros
                 if (_entered !== DATE_LENGTH) {
@@ -369,7 +358,7 @@ define([
             } else if (this.columnsViewType === 'expanded') {
                 fetchOptions.collectionConfig = {
                     //sort the collection by order type ascending, and entered date descending
-                    comparator: function (order) {
+                    comparator: function(order) {
                         var kind = order.attributes.kind;
                         var uid = order.attributes.uid;
                         var dateEntered = moment(order.attributes.entered, 'YYYYMMDDHHmmssSSS');
@@ -380,7 +369,7 @@ define([
                 };
             }
 
-            fetchOptions.onSuccess = function (collection) {
+            fetchOptions.onSuccess = function(collection) {
                 if (displayGroup !== 'ALL') {
                     ADK.utils.filterCollectionByMultipleValues(collection, 'displayGroup', displayGroupList);
                 }
@@ -397,19 +386,21 @@ define([
             });
 
             //Row click event handler - display the Modal window
-            onClickRow = function (model, event, context) {
+            onClickRow = function(model, event, targetElement) {
                 event.preventDefault();
-                _.defaults(context.options, {
+                _.defaults(options, {
                     hideNavigation: false
                 });
-                ModalViewUtils.showOrderDetails(model, context.options);
+
+                options.collection = _.get(model, 'collection');
+                options.triggerElement = targetElement;
+                ModalViewUtils.showOrderDetails(model, options);
             };
 
             dataGridOptions = {
                 enableModal: true,
                 toolbarView: toolBarView,
                 collection: collection,
-                onClickRow: onClickRow,
                 filterFields: ['statusName', 'summary', 'enteredFormatted', 'kind', 'providerDisplayName', 'facilityMoniker'],
                 filterDateRangeEnabled: true,
                 filterDateRangeField: {
@@ -418,15 +409,34 @@ define([
                     format: "YYYYMMDD"
                 },
                 formattedFilterFields: {
-                    'entered': function (model, key) {
+                    'entered': function(model, key) {
                         var val = model.get(key);
                         val = val.replace(/(\d{4})(\d{2})(\d{2})/, '$2/$3/$1');
                         return val;
                     }
+                },
+                tileOptions: {
+                    primaryAction: {
+                        enabled: true,
+                        onClick: function(params, event) {
+                            var targetElement = _.get(params, '$el');
+                            onClickRow(params.model, event, targetElement);
+                        }
+                    },
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: function(params, event) {
+                                var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                                onClickRow(params.model, event, targetElement);
+                            }
+                        }]
+                    }
                 }
             };
 
-            if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-lab-order')) {
                 dataGridOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
             }
 
@@ -442,15 +452,12 @@ define([
             this.appletOptions = dataGridOptions;
 
             //add refreshGridView to messaging
-            this.listenTo(ADK.Messaging.getChannel('orders'), 'refreshGridView', function () {
+            this.listenTo(ADK.Messaging.getChannel('orders'), 'refreshGridView', function() {
                 this.refresh({});
             });
             _super.initialize.apply(this, arguments);
         },
-        onRender: function () {
-            _super.onRender.apply(this, arguments);
-        },
-        registerEventListeners: function () {
+        registerEventListeners: function() {
             this.listenTo(ADK.Messaging.getChannel('orders'), 'applet:refresh', this.refresh);
         }
     });

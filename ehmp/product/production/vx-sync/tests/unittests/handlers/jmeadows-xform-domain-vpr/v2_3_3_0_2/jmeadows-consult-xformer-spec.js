@@ -1,10 +1,13 @@
 'use strict';
 
 require('../../../../../env-setup');
-//var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_3_0_2/jmeadows-consult-xformer');
-
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '00001';
 
@@ -26,7 +29,7 @@ var sampleDodConsult = {
         'status': null
     },
     'sourceProtocol': 'DODADAPTER',
-    'complexDataUrl': 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157584289',
+    'complexDataUrl': 'http://127.0.0.1:8080/MockDoDAdaptor/async/complex/note/2157584289',
     'consultType': null,
     'id': null,
     'patientNextAppointment': null,
@@ -48,7 +51,7 @@ var sampleVprConsult = {
     referenceDateTime: '20140110121524',
     documentTypeName: 'Consultation Note (Provider) Document',
     sensitive: false,
-    dodComplexNoteUri: 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157584289',
+    dodComplexNoteUri: 'http://127.0.0.1:8080/MockDoDAdaptor/async/complex/note/2157584289',
     uid: 'urn:va:document:DOD:00001:1000000649',
     pid: 'DOD;00001',
     author: 'Borne, Jason',
@@ -61,7 +64,7 @@ describe('jmeadows-consult-xformer', function(){
     var vprResult = {};
     it('transforms sample dod consult note to vpr (not sensitive)', function(){
 
-        vprResult = xformer(sampleDodConsult, mockEdipi);
+        vprResult = xformer(log, sampleDodConsult, mockEdipi);
 
         expect(vprResult.codes).toEqual(sampleVprConsult.codes);
         expect(vprResult.facilityCode).toEqual(sampleVprConsult.facilityCode);
@@ -80,7 +83,7 @@ describe('jmeadows-consult-xformer', function(){
     });
     it('sets vpr sensitive flag to \'true\' when dod consult service field begins with *\'s', function(){
         sampleDodConsult.service = '*****Consultation Note (Provider) Document';
-        vprResult = xformer(sampleDodConsult, mockEdipi);
+        vprResult = xformer(log, sampleDodConsult, mockEdipi);
 
         expect(vprResult.sensitive).toBe(true);
     });
@@ -95,7 +98,7 @@ describe('jmeadows-consult-xformer', function(){
             uid: 'urn:va:document:DOD:00001:1000000649'
         }];
 
-        vprResult = xformer(sampleDodConsult, mockEdipi);
+        vprResult = xformer(log, sampleDodConsult, mockEdipi);
         //console.log(JSON.stringify(vprResult));
         expect(vprResult.text[0]).toBeTruthy();
         expect(vprResult.text[0].content).toEqual(sampleVprConsultText[0].content);

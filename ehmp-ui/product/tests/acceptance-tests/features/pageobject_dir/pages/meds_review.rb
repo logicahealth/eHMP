@@ -2,27 +2,33 @@ require_relative 'parent_applet.rb'
 
 class PobMedsReview < PobParentApplet
   
-  set_url '/#medication-review'
-  set_url_matcher(/\/#medication-review/)
+  set_url '#/patient/medication-review'
+  set_url_matcher(/#\/patient\/medication-review/)
        
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
   element :fld_med_review_header, "#medsReviewMainGroup_OUTPATIENT b"
   element :fld_med_review_header_name, "#medication-review .col-sm-12.selectable.header"
-  element :fld_inpatient_meds_group, "[id^='accordion'] [data-type-row='inpatient']"
-  element :fld_outpatient_meds_group, "[id^='accordion'] [data-type-row='outpatient']"
+  element :fld_inpatient_meds_group, "[id^='accordion'] [data-type-row='inpatient']:not(.fa-chevron-right)"
+  element :fld_outpatient_meds_group, "[id^='accordion'] [data-type-row='outpatient']:not(.fa-chevron-right)"
+  element :fld_clinic_order_meds_group, "[id^='accordion'] [data-type-row='clinical']:not(.fa-chevron-right)"
   element :fld_med_item, :xpath, "//div[contains(@class, 'col-xs-3') and contains(string(), 'methocarbamol')]"
   elements :fld_med_items, ".medication-layout-view .meds-item .col-xs-3"
+  element :fld_med_review_banner, ".alert-info"
 
   elements :fld_med_review_applet_rows, "[data-appletid='medication_review'] [class='panel-heading meds-item']"
-  elements :fld_inpatient_meds_rows, "#inpatient-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)"
-  elements :fld_outpatient_med_rows, "#outpatient-accordion-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)"
-  # #outpatient-accordion-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)
-  elements :fld_panel_all_level_headers, "[class='panel-collapse collapse in'] strong"
+  elements :fld_inpatient_meds_rows, "[id^='inpatient-accordion-applet-'] [data-medication-container='medication-list'] div.col-xs-3:not(.meds-item-innerlist)"
+  elements :fld_outpatient_med_rows, "[id^='outpatient-accordion-applet-'] [data-medication-container='medication-list'] div.col-xs-3:not(.meds-item-innerlist)"
+  elements :fld_outpatient_sig_rows, "[id^='outpatient-accordion-applet-'] .col-xs-3.meds-item-innerlist span"
+  elements :fld_outpatient_facility_rows, "[id^='outpatient-accordion-applet-'] .col-xs-2.meds-item-innerlist div.cell"
+  elements :fld_panel_all_level_headers, "[data-appletid='medication_review'] .col-xs-12 strong"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_toolbar_popover, "[style*='block'] .toolbarPopover [tooltip-data-key='toolbar_detailview']"
+  element :btn_name_header, "[id^='outpatient-applet-'] [sortkey='medicationName']"
+  element :btn_sig_header, "[id^='outpatient-applet-'] [sortkey='sig']"
+  element :btn_facility_header, "[id^='outpatient-applet-'] [sortkey='facilityMoniker']"
 
   # *****************  All_Drop_down_Elements  ******************* #
   element :ddl_outpatient_meds, "#ui-collapse-124>b"
@@ -37,7 +43,8 @@ class PobMedsReview < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
+    add_text_filter_elements appletid_css
   end
   
   def meds_review_applet_loaded?
@@ -50,5 +57,17 @@ class PobMedsReview < PobParentApplet
   
   def wait_until_meds_review_applet_loaded
     wait_until { meds_review_applet_loaded? }
+  end
+
+  def first_facility_grouped(med_section)
+    full_xpath = "//div[starts-with(@id, '#{med_section}')]/descendant::div[contains(@class, 'repeated-sigdiv')]/descendant::div[contains(@class, 'meds-item-innerlist')][2]"
+    # p full_xpath
+    self.class.elements :first_facility, :xpath, full_xpath
+
+    first_facility
+  end
+
+  def section_header_elements(id)
+    self.class.elements :section_headers, ".meds-review-main-region [id^=#{id}] .header-bar button"
   end
 end

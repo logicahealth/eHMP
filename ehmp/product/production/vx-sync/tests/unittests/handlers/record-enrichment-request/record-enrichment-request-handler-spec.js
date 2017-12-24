@@ -15,12 +15,12 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 
 var config = {
     // 'vistaSites': {
-    //     '9E7A': {
+    //     'SITE': {
     //         panorama: 'panorama',
     //         host: '127.0.0.1',
     //         port: 10001
     //     },
-    //     'C877': {
+    //     'SITE': {
     //         name: 'kodak',
     //         host: '127.0.0.1',
     //         port: 10002
@@ -65,7 +65,7 @@ var rootJob = {
 
 var patientIdentifier = {
     type: 'pid',
-    value: '9E7A;3'
+    value: 'SITE;3'
 };
 
 var allergyRecord = {
@@ -82,7 +82,7 @@ var allergyRecord = {
     'localId': 751,
     'mechanism': 'PHARMACOLOGIC',
     'originatorName': 'VEHU,EIGHT',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'products': [{
         'name': 'PENICILLIN',
         'vuid': 'urn:va:vuid:'
@@ -95,15 +95,15 @@ var allergyRecord = {
     'stampTime': 20050317200936,
     'summary': 'PENICILLIN',
     'typeName': 'DRUG',
-    'uid': 'urn:va:allergy:9E7A:3:751',
+    'uid': 'urn:va:allergy:SITE:3:751',
     'verified': 20050317200936,
     'verifierName': '<auto-verified>'
 };
 var allergyJob = jobUtil.createRecordEnrichment(patientIdentifier, 'allergy', allergyRecord, rootJob);
 
 var unknownDomainRecord = {
-    'uid': 'urn:va:allergy:9E7A:3:751',
-    'pid': '9E7A;3'
+    'uid': 'urn:va:allergy:SITE:3:751',
+    'pid': 'SITE;3'
 };
 var unknownDomainJob = jobUtil.createRecordEnrichment(patientIdentifier, 'unknownDomain', unknownDomainRecord, rootJob);
 var CODE_SYSTEMS = {

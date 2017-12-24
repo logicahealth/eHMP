@@ -1,4 +1,3 @@
-
 require File.dirname(__FILE__) + '/PatientSynchronizer.rb'
 require File.dirname(__FILE__) + '/knife-helper.rb'
 require 'rubygems'
@@ -12,24 +11,34 @@ task :environment_setup, :env do |task, args|
   get_rdk_config_files(env)
 end
 
+fetch_server_ip = knife_search_for_ip("fetch_server")
+pick_list_ip = knife_search_for_ip("pick_list")
+write_back_ip = knife_search_for_ip("write_back")
+
 def environment_endpoints(env)
   case env
   when "virtualbox"
-    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
-    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
-    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+    ENV["RDK_FETCH_HOST"] = fetch_server_ip
+    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("fetch_server", ["fetch_server", "service_config", "port"], "default")
+    ENV["RDK_WRITEBACK_HOST"] = write_back_ip
+    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("write_back", ["write_back", "service_config", "port"], "default")
+    ENV["RDK_PICKLIST_HOST"] = pick_list_ip
+    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("pick_list", ["pick_list", "service_config", "port"], "default")
     ENV['JDS_IP'] = knife_search_for_ip('jds')
+    ENV["NPM_CONFIG_REGISTRY"] = ENV["NPM_CONFIG_REGISTRY"] || "https://sandstore.vistacore.us/nexus/content/repositories/npm-all/"
   when "aws"
-    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
-    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
-    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
-    ENV['JDS_IP'] = knife_search_for_ip('jds')
+    ENV["RDK_FETCH_HOST"] = fetch_server_ip
+    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("fetch_server", ["fetch_server", "service_config", "port"], "default")
+    ENV["RDK_WRITEBACK_HOST"] = write_back_ip
+    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("write_back", ["write_back", "service_config", "port"], "default")
+    ENV["RDK_PICKLIST_HOST"] = pick_list_ip
+    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("pick_list", ["pick_list", "service_config", "port"], "default")
+    ENV["NPM_CONFIG_REGISTRY"] = ENV["NPM_CONFIG_REGISTRY"] || "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+    begin
+      ENV["JDS_IP"] = knife_search_for_ip("jds")
+    rescue
+      ENV["JDS_IP"] = knife_search_for_ip("jds_app_server")
+    end
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end
@@ -37,13 +46,13 @@ end
 
 def get_rdk_config_files(driver)
   configDir = "./rdk_config_files"
-  configs = ["rdk-fetch-server-config.json", "rdk-pick-list-server-config.json", "rdk-write-server-config.json"]
+  configs = ["rdk-fetch-server-config.json" => fetch_server_ip, "rdk-pick-list-server-config.json" => pick_list_ip, "rdk-write-server-config.json" => write_back_ip]
   key = knife_search_for_key_name("rdk", driver)
-  user = driver == "aws" ? "REDACTED" : "vagrant"
-  ip = knife_search_for_ip("resource_server")
+  user = driver == "aws" ? "USER    " : "vagrant"
+  #ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{configDir}") unless File.exists?("#{configDir}")
   puts "copy rdk configs from rdk machine to #{configDir}"
-  configs.each do |configname|
+  configs.each do |configname,ip|
     sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/opt/rdk/config/#{configname}", "#{configDir}")
   end
 end
@@ -53,7 +62,7 @@ task :inttest do |t, args|
   Dir.chdir("#{File.dirname(__FILE__)}/../production/rdk"){
     # initial npm install to ensure the node_modules are there
     puts "start npm install"
-    sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+    sh "npm install --registry #{ENV['NPM_CONFIG_REGISTRY']}"
     puts "completed npm install"
     # fetch server integration tests using the copied fetch-server-config file
     puts "start fetch integration tests using --config #{File.dirname(__FILE__)}/rdk_config_files/rdk-fetch-server-config.json"
@@ -73,39 +82,43 @@ end
 desc "Presync the cache with the patient_sync_list prior to int/acc test runs"
 task :syncCache do
   patient_sync_list = [
-    "9E7A;227",
-    "9E7A;71",
-    "9E7A;253",
-    "9E7A;239",
-    "9E7A;100001",
-    "9E7A;231",
-    "9E7A;3",
-    "9E7A;9",
-    "9E7A;18",
-    "9E7A;722",
-    "9E7A;100716",
-    "9E7A;100840",
-    "9E7A;100731",
-    "9E7A;8",
-    "9E7A;230",
-    "9E7A;100125",
-    "9E7A;229",
-    "9E7A;100022",
-    "9E7A;271",
-    "C877;1",
-    "9E7A;428",
-    "9E7A;1",
-    "9E7A;100184",
-    "9E7A;167",
-    "9E7A;100615",
-    "9E7A;301",
-    "9E7A;100033",
-    "9E7A;100817",
-    "9E7A;149",
-    "9E7A;204"
+    "SITE;227",
+    "SITE;71",
+    "SITE;253",
+    "SITE;239",
+    "SITE;100001",
+    "SITE;231",
+    "SITE;3",
+    "SITE;9",
+    "SITE;18",
+    "SITE;722",
+    "SITE;100716",
+    "SITE;100840",
+    "SITE;100731",
+    "SITE;8",
+    "SITE;230",
+    "SITE;100125",
+    "SITE;229",
+    "SITE;100022",
+    "SITE;271",
+    "SITE;1",
+    "SITE;428",
+    "SITE;1",
+    "SITE;100184",
+    "SITE;167",
+    "SITE;100615",
+    "SITE;301",
+    "SITE;100033",
+    "SITE;100817",
+    "SITE;149",
+    "SITE;204"
   ]
-  ENV["JDS_IP"] = knife_search_for_ip("jds")
+  begin
+    ENV["JDS_IP"] = knife_search_for_ip("jds")
+  rescue
+    ENV["JDS_IP"] = knife_search_for_ip("jds_app_server")
+  end
   ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
-  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:PORT", 600, ["SITE", "SITE"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
 end

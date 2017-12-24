@@ -57,17 +57,16 @@ class PatientSearch < AccessBrowserV2
 
     @@applet_count = AccessHtmlElement.new(:xpath, "//*[@data-appletid]")
     add_verify(CucumberLabel.new("Number of Applets"), VerifyXpathCount.new(@@applet_count), @@applet_count)
-    # add_verify(CucumberLabel.new("error message padding"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patient-search-main .list-group > div"))
     add_verify(CucumberLabel.new("error message padding"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//div[@id='wards-location-list-results']/descendant::div[contains(@class, 'list-group')]/descendant::p[contains(@class, 'error-message padding')]"))
     add_verify(CucumberLabel.new("unAuthorized"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".unAuthorized"))
 
     location_list_result_count = AccessHtmlElement.new(:css, "#patient-search-main .list-result-container a")
     add_verify(CucumberLabel.new("Number of Location List Results"), VerifyXpathCount.new(location_list_result_count), location_list_result_count)
     #CONFIRM SECTION
-    add_verify(CucumberLabel.new("patient identifying name"), VerifyText.new, AccessHtmlElement.new(:css, "#confirmSection div.patientName"))
-    add_verify(CucumberLabel.new("no patient error message"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//div[@id='confirmSection']/p"))
+    add_verify(CucumberLabel.new("patient identifying name"), VerifyText.new, AccessHtmlElement.new(:css, ".patient-confirmation-modal div.patientName"))
+    add_verify(CucumberLabel.new("no patient error message"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//div[contains(@class, 'patient-confirmation-modal')]/p"))
 
-    confirm_section = AccessHtmlElement.new(:css, "#confirmSection div.patientInfo")
+    confirm_section = AccessHtmlElement.new(:css, "div.patient-confirmation-modal div.patientInfo")
     add_verify(CucumberLabel.new("patient identifying traits"), VerifyText.new, confirm_section)
     add_verify(CucumberLabel.new("dob"), VerifyContainsText.new, confirm_section)
     age_format = Regexp.new("\\d+\\y")
@@ -91,38 +90,6 @@ class PatientSearch < AccessBrowserV2
     patientlist[index.to_i].click
     TestSupport.wait_for_page_loaded
   end
-
-  def select_default_patient_name_in_list(name)
-    full_xpath = "//div[@id='my-cprs-search-results']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]"
-    p full_xpath
-    add_action(CucumberLabel.new("My Patient Name"), ClickAction.new, AccessHtmlElement.new(:xpath, full_xpath))
-
-    # deliberate use of wait time other then the DefaultLogin.wait_time
-    return false unless wait_until_element_present("My Patient Name", 60)
-    return perform_action("My Patient Name")
-  end
-
-  def select_global_patient_name_in_list(name)
-    full_xpath = "//div[@id='globalSearchResults']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]"
-    p full_xpath
-    add_action(CucumberLabel.new("My Patient Name"), ClickAction.new, AccessHtmlElement.new(:xpath, full_xpath))
-
-    # deliberate use of wait time other then the DefaultLogin.wait_time
-    return false unless wait_until_element_present("My Patient Name", 60)
-    return perform_action("My Patient Name")
-  end
-
-  def select_patient_name_in_list(name)
-    aa = 'ancestor::a'
-    #full_xpath = "//div[@class='patient-search-results']/descendant::div[contains(@class, 'list-group-item-text')]/descendant::div[contains(string(), '#{name}')]/#{aa}"
-    full_xpath = "//*[@class='patient-search-results']/descendant::div[contains(@class, 'patientDisplayName') and contains(string(), '#{name}')]"
-    p full_xpath
-    add_action(CucumberLabel.new("My Patient Name"), ClickAction.new, AccessHtmlElement.new(:xpath, full_xpath))
-
-    # deliberate use of wait time other then the DefaultLogin.wait_time
-    return false unless wait_until_element_present("My Patient Name", 60)
-    return perform_action("My Patient Name")
-  end
 end
 
 class PatientSearch2 < PatientSearch
@@ -131,7 +98,6 @@ class PatientSearch2 < PatientSearch
     super
     add_action(CucumberLabel.new("Confirm Flag"), ClickAction.new, AccessHtmlElement.new(:id, "confirmFlaggedPatinetButton"))
     add_action(CucumberLabel.new("Active MyCPRSList"), ClickAction.new, AccessHtmlElement.new(:css, "#myCprsList.active"))
-    #add_action(CucumberLabel.new('searchClose'), ClickAction.new, AccessHtmlElement.new(:id, 'searchCloseBtn'))
     add_action(CucumberLabel.new('Patient Search Overview Navigation'), ClickAction.new, AccessHtmlElement.new(:id, 'current-patient-nav-header-tab'))
     add_verify(CucumberLabel.new('Patient Image'), VerifyText.new, AccessHtmlElement.new(:id, 'patient-image-container'))
   end
@@ -178,17 +144,6 @@ Then(/^the all patient "(.*?)" is displayed on confirm section$/) do |arg1, tabl
   end
 end
 
-Then(/^the all patient "(.*?)" is displayed on acknowledgement confirm section$/) do |arg1, table|
-  con = PatientSearch.instance
-  con.wait_until_element_present(arg1)
-  expect(con.static_dom_element_exists? arg1).to be_true
-  
-  table.rows.each do |field_name, value|
-    con.wait_until_element_present(field_name)
-    expect(con.perform_verification(field_name, value)).to be_true, "Verification failed on #{field_name}"
-  end
-end
-
 Then(/^the user click on Confirm Selection$/) do
   patient_search = PobPatientSearch.new
   expect(patient_search.wait_for_btn_confirmation).to eq(true)
@@ -202,120 +157,25 @@ Then(/^the user click on Confirm Selection$/) do
   expect(patient_search).to_not have_btn_confirmation
 end
 
-Then(/^the user looks for "(.*?)"$/) do  |name|
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-  expect(con.static_dom_element_exists? name).to be_true
-end
-
-Given(/^user attempt to click on Patient search$/) do
-  con= PatientSearch.instance
-  if con.static_dom_element_exists?("patientSearch")
-    TestSupport.wait_for_page_loaded
-    con.perform_action('patientSearch')
-  else
-    login_screen = Login.instance
-  end
-end
-
-Given(/^the confirmation box displays info for "(.*?)"$/) do |patient, table|
-  error_messages=[]
-  patient_details = TransPatientBarHTMLElements.instance
-  ps = PatientSearch.instance
-  #  TestSupport.wait_for_jquery_completed
-  header_xpath = patient_details.build_header_xpath(patient)
-  p header_xpath
-  expect(ps.wait_until_action_element_visible("patient identifying name", DefaultLogin.wait_time)).to be_true
-  element_found = (patient_details.dynamic_dom_element_exists?("xpath", header_xpath))
-  expect(element_found).to eq(true)
-  table.rows.each do | label, value |
-    expect(patient_details.perform_verification(label, value)).to eq(true)
-  end
-end
-
-# this feature does not work the same anymore
-
-Given(/^user enters patient "(.*?)" in the patient filter$/) do |patient|
-  patient_search = PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search, "patientFilterInput", patient)
-end
-
-Then(/^the user verifies patient "(.*?)"$/) do  |error|
-  con = PatientSearch.instance
-  expect(con.perform_verification("Error Message patient", error)).to be_true
-end
-
 def wait_until_present_and_perform_action(access_browser_instance, cucumber_label, action_extra = nil)
-  #expect(access_browser_instance.wait_until_element_present(cucumber_label)).to be_true, "#{cucumber_label} did not display"
   expect(access_browser_instance.perform_action(cucumber_label, action_extra)).to be_true, "Error performing action on #{cucumber_label}"
 end
 
-Then(/^the user click on acknowledge restricted record$/) do
+Then(/^the user clicks on acknowledge restricted record$/) do
   patient_search = PobPatientSearch.new
   expect(patient_search.wait_for_btn_ack).to eq(true)
   patient_search.btn_ack.click
+  max_attempt = 2
 
   begin
     patient_search.wait_until_btn_ack_invisible(30)
-  rescue Exception => e
-    p "Error waiting for invisibility: #{e}"
+    wait_until { !patient_search.has_btn_ack? }
+    expect(patient_search).to_not have_btn_ack
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale
+    raise stale if max_attempt < 0
+    p "stale element, retry"
+    retry
   end
-  expect(patient_search).to_not have_btn_ack
-end
-
-def verify_table_headers_parient(access_browser_instance, table)
-  driver = TestSupport.driver
-  headers = driver.find_elements(:css, '.patient-search-results .columnHeader .columnName')
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-  elements = access_browser_instance
-  table.rows.each do |header_text|
-    does_exist = elements.dynamic_dom_element_exists?("xpath", "//div[@class='columnHeader']/descendant::div[contains(string(), '#{header_text[0]}')]")
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #verify_table_headers
-
-class ColumnHeader < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("columnName"), VerifyText.new, AccessHtmlElement.new(:css, ".columnName.no-padding-right.col-md-2"))
-  end
-end 
-
-When(/^the user clears though the Confirm Flag$/) do
-  patient_search = PatientSearch2.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { patient_search.static_dom_element_exists?("Confirm Flag") == true }
-  expect(patient_search.perform_action("Confirm Flag")).to be_true
-
-  wait.until { patient_search.static_dom_element_exists?("patient demographic") == true }
-end
-
-Then(/^the user confirms nationwide search patient selection$/) do
-  patient_search= PatientSearch.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  expect(patient_search.wait_until_action_element_visible("Confirm", DefaultLogin.wait_time)).to be_true
-  expect(patient_search.perform_action("Confirm")).to be_true
-  wait.until { patient_search.static_dom_element_exists?("patient demographic") == true }
-end
-
-Then(/^the user confirms patient "(.*?)"$/) do |arg1|
-  patient_search = PatientSearch2.instance
-  
-  patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
-  expect(patient_search.static_dom_element_exists? "Confirm").to be_true
-  results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
-  @ehmp = PobPatientSearch.new
-  begin
-    @ehmp.wait_until_img_patient_visible
-    p "patient image was visible"
-  rescue
-    p "DE3576: img doesn't appear, try to continue anyway"
-  end
-  expect(patient_search.perform_action("Confirm")).to be_true
-  expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
 end
 
 Then(/^a patient image is displayed$/) do
@@ -323,20 +183,17 @@ Then(/^a patient image is displayed$/) do
   expect(patient_search.wait_until_element_present('Patient Image')).to eq(true)
 end
 
-Then(/^the patient ssn is masked$/) do
-  search_screen = PatientSearch.instance
-  expect(search_screen.wait_until_element_present('ssn')).to eq(true), "SSN element was not displayed"
-  ssn_element = search_screen.get_element('ssn')
-  ssn_text = ssn_element.text
-  masked_format = Regexp.new("[*]{3}-[*]{2}-\\d{4}")
-  expect(masked_format.match(ssn_text)).to_not be_nil, "Expected ssn (#{ssn_text}) to be in format #{masked_format}"
-end
-
 Then(/^the patient ssn is unmasked$/) do
   search_screen = PatientSearch.instance
   expect(search_screen.wait_until_element_present('ssn')).to eq(true), "SSN element was not displayed"
-  ssn_element = search_screen.get_element('ssn')
-  ssn_text = ssn_element.text
-  unmasked_format = Regexp.new("\\d{3}-\\d{2}-\\d{4}")
-  expect(unmasked_format.match(ssn_text)).to_not be_nil, "Expected ssn (#{ssn_text}) to be in format #{unmasked_format}"
+  start_time = Time.now
+  begin
+    ssn_element = search_screen.get_element('ssn')
+    ssn_text = ssn_element.text
+    unmasked_format = Regexp.new("\\d{3}-\\d{2}-\\d{4}")
+    expect(unmasked_format.match(ssn_text)).to_not be_nil, "Expected ssn (#{ssn_text}) to be in format #{unmasked_format}"
+  rescue Exception => e
+    retry if Time.now < start_time + 15
+    raise e
+  end
 end

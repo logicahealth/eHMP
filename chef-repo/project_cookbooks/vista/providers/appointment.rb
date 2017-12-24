@@ -66,6 +66,14 @@ action :create do
         console.write("\n")
       end
 
+      console.on(:output, /Select LANGUAGE DATE\/TIME:/i) do |process, match_data|
+        console.write("N\n")
+      end
+
+      console.on(:output, /PREFERRED LANGUAGE:.*/i) do |process, match_data|
+        console.write("\n")
+      end
+
       console.on(:output, /ARE YOU SURE THAT YOU WANT TO PROCEED/i) do |process, match_data|
         console.write("YES\n")
       end

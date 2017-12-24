@@ -2,7 +2,7 @@
 
 var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
-var authUtils = require('../../subsystems/authentication/utils');
+var authUtils = rdk.utils.authentication;
 
 function destroySession(req, res) {
     var errorObj;

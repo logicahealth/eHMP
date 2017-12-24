@@ -33,13 +33,13 @@
     <rss version="2.0">
        <channel>
 	 <title>Example Solr RSS 2.0 Feed</title>
-         <link>http://localhost:8983/solr</link>
+         <link>http://localhost:PORT/solr</link>
          <description>
           This has been formatted by the sample "example_rss.xsl" transform -
           use your own XSLT to get a nicer RSS feed.
          </description>
          <language>en-us</language>
-         <docs>http://localhost:8983/solr</docs>
+         <docs>http://localhost:PORT/solr</docs>
          <xsl:apply-templates select="response/result/doc"/>
        </channel>
     </rss>
@@ -52,14 +52,14 @@
     <item>
       <title><xsl:value-of select="str[@name='name']"/></title>
       <link>
-        http://localhost:8983/solr/select?q=id:<xsl:value-of select="$id"/>
+        http://localhost:PORT/solr/select?q=id:<xsl:value-of select="$id"/>
       </link>
       <description>
         <xsl:value-of select="arr[@name='features']"/>
       </description>
       <pubDate><xsl:value-of select="$timestamp"/></pubDate>
       <guid>
-        http://localhost:8983/solr/select?q=id:<xsl:value-of select="$id"/>
+        http://localhost:PORT/solr/select?q=id:<xsl:value-of select="$id"/>
       </guid>
     </item>
   </xsl:template>

@@ -46,7 +46,7 @@ define([
          * @private
          */
         _hasScrolling: function(element) {
-            return element[0].clientHeight !== element[0].scrollHeight;
+            return _.has(element, '[0]') && (element[0].clientHeight + 1) < element[0].scrollHeight;
         },
         /**
          * DOM scroll event callback that determines if the bottom
@@ -56,7 +56,7 @@ define([
         _onScroll: function(event) {
             this._scrollElement = this._scrollElement || this.$(this.containerSelector);
             var e = this._scrollElement[0];
-            if ((e.scrollTop + e.clientHeight >= e.scrollHeight)) {
+            if ((e.scrollTop + e.clientHeight >= e.scrollHeight - 16)) {
                 this._scrollElement.off('scroll.viewed-all');
                 this._scrollElement.trigger('viewed-all');
             }

@@ -1,0 +1,32 @@
+{
+	"vpr": {
+		"replicationFactor": "1",
+		"shards": {
+			"shard1": {
+				"range": "80000000-7fffffff",
+				"state": "active",
+				"replicas": {
+					"core_node1": {
+						"core": "vpr_shard1_replica1",
+						"base_url": "http://IP             /solr",
+						"node_name": "IP             _solr",
+						"state": "active",
+						"leader": "true"
+					},
+					"core_node2": {
+						"core": "vpr_shard1_replica2",
+						"base_url": "http://IP             /solr",
+						"node_name": "IP             _solr",
+						"state": "active",
+						"leader": "true"
+					}
+				}
+			}
+		},
+		"router": {
+			"name": "compositeId"
+		},
+		"maxShardsPerNode": "2",
+		"autoAddReplicas": "false"
+	}
+}

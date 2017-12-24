@@ -7,22 +7,22 @@ var uidUtil = require(global.VX_UTILS + 'uid-utils');
 describe('uid-utils', function() {
     describe('extractPiecesFromUID', function() {
         it('vista event uid', function() {
-            var result = uidUtil.extractPiecesFromUID('urn:va:allergy:9E7A:8:753');
+            var result = uidUtil.extractPiecesFromUID('urn:va:allergy:SITE:8:753');
             expect(result).toBeDefined();
             expect(result.prefix).toBe('urn');
             expect(result.organization).toBe('va');
             expect(result.domain).toBe('allergy');
-            expect(result.site).toBe('9E7A');
+            expect(result.site).toBe('SITE');
             expect(result.patient).toBe('8');
             expect(result.localId).toBe('753');
         });
         it('vista patient uid', function() {
-            var result = uidUtil.extractPiecesFromUID('urn:va:patient:9E7A:8:8');
+            var result = uidUtil.extractPiecesFromUID('urn:va:patient:SITE:8:8');
             expect(result).toBeDefined();
             expect(result.prefix).toBe('urn');
             expect(result.organization).toBe('va');
             expect(result.domain).toBe('patient');
-            expect(result.site).toBe('9E7A');
+            expect(result.site).toBe('SITE');
             expect(result.patient).toBe('8');
             expect(result.localId).toBe('8');
         });
@@ -68,12 +68,12 @@ describe('uid-utils', function() {
 
     describe('extractPidFromUID', function() {
         it('Valid UID', function() {
-            var result = uidUtil.extractPidFromUID('urn:va:allergy:9E7A:8:753');
+            var result = uidUtil.extractPidFromUID('urn:va:allergy:SITE:8:753');
             expect(result).toBeDefined();
-            expect(result).toBe('9E7A;8');
+            expect(result).toBe('SITE;8');
         });
         it('Invalid UID', function() {
-            var result = uidUtil.extractPidFromUID('urn:va:allergy:9E7A');
+            var result = uidUtil.extractPidFromUID('urn:va:allergy:SITE');
             expect(result).toBeNull();
         });
     });

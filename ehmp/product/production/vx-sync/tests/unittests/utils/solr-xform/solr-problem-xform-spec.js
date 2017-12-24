@@ -27,7 +27,7 @@ describe('solr-problem-xform.js', function() {
                     {
                         'comment': 'will need cardiology consult',
                         'entered': 20131025,
-                        'enteredByCode': 'urn:va:user:9E7A:1',
+                        'enteredByCode': 'urn:va:user:SITE:1',
                         'enteredByName': 'PROGRAMMER,ONE',
                         'summary': 'ProblemComment{uid=\'\'}'
                     }
@@ -38,7 +38,7 @@ describe('solr-problem-xform.js', function() {
                     'facilityName': 'CAMP MASTER',
                     'stopCodeName': 'PRIMARY CARE/MEDICINE',
                     'stopCodeUid': 'urn:va:stop-code:323',
-                    'visitUid': 'urn:va:visit:9E7A:8:10063'
+                    'visitUid': 'urn:va:visit:SITE:8:10063'
                 }],
                 'entered': '20000508',
                 'facilityCode': '500',
@@ -51,13 +51,13 @@ describe('solr-problem-xform.js', function() {
                 'localId': '185',
                 'locationDisplayName': 'Primary Care',
                 'locationName': 'PRIMARY CARE',
-                'locationUid': 'urn:va:location:9E7A:32',
+                'locationUid': 'urn:va:location:SITE:32',
                 'onset': '20000221',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'problemText': 'Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)',
                 'providerDisplayName': 'Vehu,Ten',
                 'providerName': 'VEHU,TEN',
-                'providerUid': 'urn:va:user:9E7A:20012',
+                'providerUid': 'urn:va:user:SITE:20012',
                 'removed': false,
                 'serviceConnected': false,
                 'service': 'MEDICAL',
@@ -66,7 +66,7 @@ describe('solr-problem-xform.js', function() {
                 'statusDisplayName': 'Active',
                 'statusName': 'ACTIVE',
                 'summary': 'Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)',
-                'uid': 'urn:va:problem:9E7A:8:185',
+                'uid': 'urn:va:problem:SITE:8:185',
                 'unverified': false,
                 'updated': '20040331'
             };

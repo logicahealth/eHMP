@@ -1,0 +1,10 @@
+@mixin appletHeadersColorTheme($color-primary-dark) {
+    .applet-chrome-header.panel-heading {
+        .panel-title-label {
+            color: $color-primary-dark;
+        }
+        &.panel-heading-filtered {
+        	background-color: $color-primary-dark;
+        }
+    }
+}

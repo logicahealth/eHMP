@@ -11,6 +11,7 @@ class PobImmunizationsApplet < PobParentApplet
 
   # *****************  All_Field_Elements  ******************* #
   element :fld_immunization_gist_item, "[data-infobutton='Tdap']"
+  element :fld_immunization_gist_item_pneumonocal, "[data-infobutton='Tdap']"
   element :fld_immunization_type_select, "li:contains('PNEUMOCOCCAL CONJUGATE')"
   element :fld_ordering_provider, "#orderedBy"
   element :fld_dosage_input, "#dosage"
@@ -18,10 +19,9 @@ class PobImmunizationsApplet < PobParentApplet
   element :fld_comments, "[name='comments']"
   element :fld_administered_date_input, "[name='administrationDateHistorical'].form-control.flexible-input"
   elements :fld_immunization_results, "[class^='select2-results']"
+  element :fld_facility_header, "[data-header-instanceid='immunizations-facilityName'] a"
  
   elements :fld_immunization_gist, "[data-appletid=immunizations] .grid-container [data-infobutton-class=info-button-pill]"
-  
-  
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_addBtn , ".addBtn [type='submit']"
@@ -42,14 +42,14 @@ class PobImmunizationsApplet < PobParentApplet
   element :chk_information_stmt1, "#informationStatement-61"
   element :chk_information_stmt2, "#informationStatement-62"
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_immunization_grid, "table[id='data-grid-immunizations'] tr.selectable"    
-  elements :tbl_immunization_first_row_columns, "table[id='data-grid-immunizations'] tr.selectable:nth-child(1) td"
-  elements :tbl_immunization_first_row_columns, "table[id='data-grid-immunizations'] td"
+  elements :tbl_immunization_grid, "[data-appletid=immunizations] tr.selectable"    
+  elements :tbl_immunization_first_row_columns, "[data-appletid=immunizations] tr.selectable:nth-child(1) td.sortable.renderable"
+  elements :tbl_immunization_first_row_columns, "[data-appletid=immunizations] td"
   element :tbl_modal_body_immunization_table, "#data-grid-immunizations-modalView tr"
-  elements :tbl_summary_imm_names, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type"
-  elements :tbl_summary_imm_screenreader_text, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type span"
-  elements :tbl_immunization_headers, "table[id='data-grid-immunizations'] th a"
-  elements :tbl_immunization_headers_screenreadertext, "table[id='data-grid-immunizations'] th span"
+  elements :tbl_summary_imm_names, "[data-appletid='immunizations'] table tbody tr.selectable td:nth-child(2)"
+  elements :tbl_summary_imm_screenreader_text, "[data-appletid='immunizations'] table tbody tr.selectable td:nth-child(2) span"
+  elements :tbl_immunization_headers, "[data-appletid=immunizations] th a"
+  elements :tbl_immunization_headers_screenreadertext, "[data-appletid=immunizations] th span"
 
   # **************** Gist Elements ************************** #
   elements :fld_pills, '[data-appletid=immunizations] [data-infobutton-class=info-button-pill]'
@@ -64,7 +64,8 @@ class PobImmunizationsApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
   end
   
   def applet_loaded?
@@ -92,17 +93,20 @@ class PobImmunizationsApplet < PobParentApplet
   end
   
   def add_immunization_data_info_btn(immunization_type)
-    self.class.element(:btn_new_immunization_pill, "[data-infobutton^='#{immunization_type}']")    
+    p "[data-infobutton='#{immunization_type}']"
+    p "[data-infobutton='#{immunization_type}'] span.age"
+    self.class.element(:btn_new_immunization_pill, "[data-infobutton='#{immunization_type}']")   
+    self.class.element(:btn_new_immunization_pill_age, "[data-infobutton='#{immunization_type}'] span.age") 
   end
   
   def summary_immunization_names(num_names = 100)
     names_screenreader_text = tbl_summary_imm_names
-    screenreader_text = tbl_summary_imm_screenreader_text
+    #screenreader_text = tbl_summary_imm_screenreader_text
     names_only = []
     names_screenreader_text.each_with_index do | td_element, index |
       break if index > num_names
       name = td_element.text
-      name = name.sub(screenreader_text[index].text, '')
+      #name = name.sub(screenreader_text[index].text, '')
       names_only.push(name.strip)
     end
     names_only
@@ -124,4 +128,8 @@ class PobImmunizationsApplet < PobParentApplet
     return 0 if has_fld_empty_row?
     tbl_immunization_grid.length
   end  
+  
+  def appletid
+    'immunizations'
+  end
 end

@@ -23,27 +23,27 @@ ORQPT WARDS
                     {
                       "displayName": "2-Intermed",
                       "name": "2-INTERMED",
-                      "uid": "urn:va:location:9E7A:w12"
+                      "uid": "urn:va:location:SITE:w12"
                     },
                     {
                       "displayName": "3 North Gastro",
                       "name": "3 NORTH GASTRO",
-                      "uid": "urn:va:location:9E7A:w7"
+                      "uid": "urn:va:location:SITE:w7"
                     },
                     {
                       "displayName": "3 North Gu",
                       "name": "3 NORTH GU",
-                      "uid": "urn:va:location:9E7A:w6"
+                      "uid": "urn:va:location:SITE:w6"
                     },
                     {
                       "displayName": "3 North Surg",
                       "name": "3 NORTH SURG",
-                      "uid": "urn:va:location:9E7A:w5"
+                      "uid": "urn:va:location:SITE:w5"
                     },
                     {
                       "displayName": "3E North",
                       "name": "3E NORTH",
-                      "uid": "urn:va:location:9E7A:w33"
+                      "uid": "urn:va:location:SITE:w33"
                     }
                 ],
                 "status": 200

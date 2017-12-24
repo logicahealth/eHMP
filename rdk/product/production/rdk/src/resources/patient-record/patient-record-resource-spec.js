@@ -405,7 +405,7 @@ describe('fetchDomainData', function() {
         req.audit = {};
         req.params = {};
         req.params.callType = 'modal';
-        req.params.vler_uid = 'urn:va:order:9E7A:227:16682';
+        req.params.vler_uid = 'urn:va:order:SITE:227:16682';
         req.param = function(name, defaultValue) {
             return _.get(this, ['params', name]) || defaultValue;
         };
@@ -444,8 +444,8 @@ describe('fetchDomainData', function() {
         patientrecordResource._fetchDomainData('allergies', 'document-view', req, res);
     });
     it('returns a 400 if the query pid does not match the body pid', function(done) {
-        req.query.pid = '9E7A;3';
-        req.body.pid = 'C877;3';
+        req.query.pid = 'SITE;3';
+        req.body.pid = 'SITE;3';
         req.method = 'POST';
 
         function tester(response) {

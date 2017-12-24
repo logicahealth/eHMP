@@ -1,59 +1,53 @@
 <div gistviewtype="observations" role="presentation" class="faux-table">
 	<div class="header table-row" role="row">
-		<div class="flex-width-1" role="presentation">
-	        <div aria-sort="none" role="gridcell" class="table-cell">
-	        	<div>
-				    <a href="#" data-header-instanceid="name-header"
-				    	 role="button"
-				    	 sortable="{{gistHeaders.header1.sortable}}"
-				    	 sortType="{{gistHeaders.header1.sortType}}"
-				    	 sortDirection="none"
-				    	 sortKey="{{gistHeaders.header1.key}}"
-				    	 class="{{#if gistHeaders.header1.sortable}}selectable{{/if}}"
-				    	 tooltip-data-key="{{gistHeaders.header1.hoverTip}}">
-				    	{{gistHeaders.header1.title}}
-				    	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-				    	<span class="sr-only toolbar-508">{{gistHeaders.header1.hoverTip}}</span>
-				    	<span class="sr-only sort-span">Press enter to sort</span>
-				    </a>
-			    </div>
-			</div>
+        <div aria-sort="none" role="columnheader" class="table-cell">
+		    <a href="#" data-header-instanceid="name-header"
+		    	 role="button"
+		    	 sortable="{{gistHeaders.header1.sortable}}"
+		    	 sortType="{{gistHeaders.header1.sortType}}"
+		    	 sortDirection="none"
+		    	 sortKey="{{gistHeaders.header1.key}}"
+		    	 class="{{#if gistHeaders.header1.sortable}}selectable{{/if}}"
+		    	 tooltip-data-key="{{gistHeaders.header1.hoverTip}}">
+		    	{{gistHeaders.header1.title}}
+		    	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
+		    	<span class="sr-only toolbar-508">{{gistHeaders.header1.hoverTip}}</span>
+		    	<span class="sr-only sort-span">Sortable column.</span>
+		    </a>
 		</div>
-		<div class="flex-width-2">
-			<div aria-sort="none" role="gridcell" class="table-cell left-padding-no">
-			    <a href="#" data-header-instanceid="results-header"
-		    	 	 role="button"
-		    	 	 sortable="{{gistHeaders.header2.sortable}}"
-		    	 	 sortType="{{gistHeaders.header2.sortType}}"
-		    	 	 sortDirection="none"
-		    	 	 sortKey="{{gistHeaders.header2.key}}"
-		    	 	 class="{{#if gistHeaders.header2.sortable}}selectable{{/if}}"
-		    	 	 tooltip-data-key="{{gistHeaders.header2.hoverTip}}">
-		    	 	{{gistHeaders.header2.title}}
-		    	 	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-		    	 	<span class="sr-only toolbar-508">{{gistHeaders.header2.hoverTip}}</span>
-		    	 	<span class="sr-only sort-span">Press enter to sort</span>
-			 	</a>
-			</div>
-			<div aria-sort="none" role="gridcell" class="table-cell flex-width-0_5 left-padding-no">
-			   	<a href="#" data-header-instanceid="age-header"
-		   		 	 role="button"
-		   		 	 sortable="{{gistHeaders.header4.sortable}}"
-		   		 	 sortType="{{gistHeaders.header4.sortType}}"
-		   		 	 sortDirection="none"
-		   		 	 sortKey="{{gistHeaders.header4.key}}"
-		   		 	 class="{{#if gistHeaders.header4.sortable}}selectable{{/if}}"
-		   		 	 tooltip-data-key="{{gistHeaders.header4.hoverTip}}">
-		   		 	{{gistHeaders.header4.title}}
-		   		 	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-		   		 	<span class="sr-only toolbar-508">{{gistHeaders.header4.hoverTip}}</span>
-		   		 	<span class="sr-only sort-span">Press enter to sort</span>
-			 	</a>
-			</div>
-			<div data-header-instanceid="graph-header" role="gridcell" class="table-cell">
-				{{gistHeaders.header3.title}}
-                <span class="sr-only">This is a graph and is not sortable</span>
-			</div>
+		<div aria-sort="none" role="columnheader" class="table-cell left-padding-no">
+		    <a href="#" data-header-instanceid="results-header"
+	    	 	 role="button"
+	    	 	 sortable="{{gistHeaders.header2.sortable}}"
+	    	 	 sortType="{{gistHeaders.header2.sortType}}"
+	    	 	 sortDirection="none"
+	    	 	 sortKey="{{gistHeaders.header2.key}}"
+	    	 	 class="{{#if gistHeaders.header2.sortable}}selectable{{/if}}"
+	    	 	 tooltip-data-key="{{gistHeaders.header2.hoverTip}}">
+	    	 	{{gistHeaders.header2.title}}
+	    	 	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
+	    	 	<span class="sr-only toolbar-508">{{gistHeaders.header2.hoverTip}}</span>
+	    	 	<span class="sr-only sort-span">Sortable column.</span>
+		 	</a>
+		</div>
+		<div aria-sort="none" role="columnheader" class="table-cell flex-width-0_5 left-padding-no">
+		   	<a href="#" data-header-instanceid="age-header"
+	   		 	 role="button"
+	   		 	 sortable="{{gistHeaders.header4.sortable}}"
+	   		 	 sortType="{{gistHeaders.header4.sortType}}"
+	   		 	 sortDirection="none"
+	   		 	 sortKey="{{gistHeaders.header4.key}}"
+	   		 	 class="{{#if gistHeaders.header4.sortable}}selectable{{/if}}"
+	   		 	 tooltip-data-key="{{gistHeaders.header4.hoverTip}}">
+	   		 	{{gistHeaders.header4.title}}
+	   		 	<i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
+	   		 	<span class="sr-only toolbar-508">{{gistHeaders.header4.hoverTip}}</span>
+	   		 	<span class="sr-only sort-span">Sortable column.</span>
+		 	</a>
+		</div>
+		<div data-header-instanceid="graph-header" role="columnheader" class="table-cell">
+			{{gistHeaders.header3.title}}
+            <span class="sr-only">Graph</span>
 		</div>
 	</div>
     <div class="gist-item-list body auto-overflow-y"></div>

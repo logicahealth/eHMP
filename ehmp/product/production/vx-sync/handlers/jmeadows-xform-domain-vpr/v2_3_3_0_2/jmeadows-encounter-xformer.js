@@ -4,7 +4,7 @@ var uidUtils = require(global.VX_UTILS + 'uid-utils');
 //var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 
-function dodEncounterToVPR(dodEncounter, edipi){
+function dodEncounterToVPR(logger, dodEncounter, edipi){
     var vprEncounter = {
         dateTime: moment(dodEncounter.apptDate, 'x').format('YYYYMMDDHHmmss'),
         categoryName: 'DoD Encounter',

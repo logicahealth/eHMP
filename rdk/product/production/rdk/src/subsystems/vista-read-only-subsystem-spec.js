@@ -12,10 +12,10 @@ var req = {
         config: {
             rpcConfig: {
                 context: 'ORQOR DETAIL',
-                siteHash: '9E7A'
+                siteHash: 'SITE'
             },
             vistaSites: {
-                '9E7A': {
+                'SITE': {
                     division: [{
                         id: '500',
                         name: 'PANORAMA'
@@ -23,12 +23,12 @@ var req = {
                     host: 'IP        ',
                     port: PORT,
                     production: false,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED',
+                    accessCode: 'USER  ',
+                    verifyCode: 'PW      ',
                     localIP: 'IP      ',
                     localAddress: 'localhost'
                 },
-                'C877': {
+                'SITE': {
                     division: [{
                         id: '500',
                         name: 'KODAK'
@@ -36,8 +36,8 @@ var req = {
                     host: 'IP        ',
                     port: PORT,
                     production: false,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED'
+                    accessCode: 'USER  ',
+                    verifyCode: 'PW      '
                 }
             }
         }
@@ -54,7 +54,7 @@ describe('vista-read-only-subsystem', function() {
             callback();
         });
 
-        vistaReadOnlySubsystem.getRpcSystemClient(req, '9E7A', function(err, client) {
+        vistaReadOnlySubsystem.getRpcSystemClient(req, 'SITE', function(err, client) {
             expect(err).to.be.null();
             expect(client).not.to.be.null();
             done();
@@ -63,7 +63,7 @@ describe('vista-read-only-subsystem', function() {
     });
 
     it('Tests that close all RPC system clients close the clients', function(done) {
-        req._rpcSystemClients['9E7A'] = RpcClient.create(logger, vistaConfig);
+        req._rpcSystemClients['SITE'] = RpcClient.create(logger, vistaConfig);
         vistaReadOnlySubsystem.closeAllRpcSystemClients(req);
         expect(req._rpcSystemClients).eql({});
         done();
@@ -78,7 +78,7 @@ describe('vista-read-only-subsystem', function() {
     });
 
     it('Tests that get readonly vista config returns correct config', function(done) {
-        var config = vistaReadOnlySubsystem._getReadOnlyVistaConfig(req, '9E7A');
+        var config = vistaReadOnlySubsystem._getReadOnlyVistaConfig(req, 'SITE');
         expect(config).not.to.be.null();
 
         //division is simple value

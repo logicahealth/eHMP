@@ -1,13 +1,11 @@
 HMPDJFSQ ;ASMR/CPC -- Extract Queue manager ;Jan 25, 2017 11:08:07
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q  ; no entry from top
  ; DE6644 - code cleanup, 7 September 2016
  ;
- ; 2016-05-05 asmr-cpc HMP*2.0*1: create routine HMPDJFSQ from
- ; subroutines in HMPDJFSP to bring it down under the SAC size limit;
- ; includes NEWQMGR,NEWTASK,QMGR,SAVETASK,QUINIT.
+ ; 2016-05-05 asmr-cpc HMP*2.0*1: create routine HMPDJFSQ
  ;
  ; 2016-06-30/07-01 toad:
  ; move subroutines over from HMPDJFSP for SAC size limit: DQINIT,DOMOPD,$$TOTAL,MVFRUPD.
@@ -15,7 +13,6 @@ HMPDJFSQ ;ASMR/CPC -- Extract Queue manager ;Jan 25, 2017 11:08:07
 QUINIT(HMPBATCH,HMPFDFN,HMPFDOM) ; Queue the initial extracts for a patient
  ; called by:
  ;   PUTSUB-QREJOIN^HMPDJFSP
- ;   QUINIT^HMPDJFSP
  ; input:
  ;   HMPBATCH="HMPFX~hmpsrvid~dfn"  example: HMPFX~hmpXYZ~229
  ;   HMPFDOM(n)="domainName"
@@ -45,9 +42,6 @@ QUINIT(HMPBATCH,HMPFDFN,HMPFDOM) ; Queue the initial extracts for a patient
 DQINIT ; task Dequeue initial extracts
  ; called by:
  ;   QUINIT: ZTRTN="DQINIT^HMPDJFSQ"
- ;   QUINIT^HMPDJFSP: ZTRTN="DQINIT^HMPDJFSQ"
- ;   DQINIT^HMPDJFSP
- ;   QUINIT^HMPMETA
  ; expects:
  ;   HMPBATCH, HMPFDFN, HMPFDOM, ZTSK
  ;
@@ -86,7 +80,7 @@ DQINIT ; task Dequeue initial extracts
  I '$D(^XTMP(HMPBATCH,0,"task",HMPFZTSK)) K ^XTMP(HMPBATCH,HMPFZTSK) Q
  ; don't assume initialized, since we may split domains to other tasks
  I $G(HMPQREF)'="" S @HMPQREF=$P($H,",",2) ;US13442 update heartbeat
- I $$INITDONE^HMPDJFSP(HMPBATCH) D  ; if all domains extracted
+ I $$INITDONE(HMPBATCH) D  ; if all domains extracted
  . S COUNT=$O(^TMP("HMPERR",$J,"")) I COUNT>0 D POSTERR^HMPDJFSP(COUNT,HMPFDFN)
  . D SETMARK^HMPDJFSP("Done",HMPFDFN,HMPBATCH) ; - add updated syncStatus
  . D MVFRUPD(HMPBATCH,HMPFDFN)        ; - move freshness updates over
@@ -98,7 +92,6 @@ DQINIT ; task Dequeue initial extracts
 DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
  ; called by:
  ;   DQINIT
- ;   DOMOPD^HMPDJFSP
  ; calls:
  ;   $$TOTAL
  ;   GET^HMPEF
@@ -121,7 +114,7 @@ DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
  . D GET^HMPEF(.RSLT,.FILTER)
  . I $G(HMPMETA)=1 S DONE=1 Q  ;US6734 - do not update stream if compiling metastamp
  . I '$D(^XTMP(HMPBATCH,0,"task",HMPFZTSK)) S DONE=1 QUIT  ; superceded
- . I $G(^XTMP(HMPBATCH,HMPFZTSK,HMPFADOM,"total"),0)=0,(HMPFSEC>0) S DONE=1 QUIT
+ . I $G(^XTMP(HMPBATCH,HMPFZTSK,HMPFADOM,"total"),0)=0,(HMPFSEC>0) S DONE=1 ;CPC DE7827 removed QUIT so that empty domain gets put into stream and therefore gets properly tidied
  . I $G(^XTMP(HMPBATCH,HMPFZTSK,HMPFADOM,"finished")) S DONE=1
  . D MOD4STRM^HMPDJFSP(HMPFADOM)
  . I DONE S HMPFEST=^XTMP(HMPBATCH,0,"count",$P(HMPFADOM,"#")) S:'HMPFEST HMPFEST=1
@@ -134,9 +127,7 @@ DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
  Q
  ;
 TOTAL(DOMAIN) ; function, return size total
- ; called by:
- ;   DOMOPD
- ;   $$TOTAL^HMPDJFSP
+ ; called by: DOMOPD
  ;
  N I,X,ROOT,SIZE
  S SIZE=0
@@ -145,14 +136,10 @@ TOTAL(DOMAIN) ; function, return size total
  . S ROOT=$P(X,";",4)
  . I ROOT="^HMP(800000.11)" S SIZE=$G(^HMP(800000.11,"ACNT",DOMAIN)) Q
  . I $L(ROOT) S SIZE=$P($G(@ROOT@(0)),U,4)
- ;
  Q $S(SIZE:SIZE,1:9999)
  ;
- ;
 MVFRUPD(HMPBATCH,HMPFDFN) ; Move freshness updates over active stream
- ; called by:
- ;   DQINIT
- ;   MVFRUPD^HMPDJFSP
+ ; called by:  DQINIT
  ;
  N ACT,DFN,FROM,HMPSRV,I,ID,TYPE,X
  S HMPSRV=$P(HMPBATCH,"~",2)
@@ -163,6 +150,13 @@ MVFRUPD(HMPBATCH,HMPFDFN) ; Move freshness updates over active stream
  . S DFN=$P(X,U),TYPE=$P(X,U,2),ID=$P(X,U,3),ACT=$P(X,U,4)
  . D POST^HMPDJFS(DFN,TYPE,ID,ACT,HMPSRV)
  K ^XTMP(FROM) Q
+ ;
+INITDONE(HMPBATCH) ; Return 1 if all domains are done
+ ; called by: DQINIT
+ N X,DONE
+ S X="",DONE=1
+ F  S X=$O(^XTMP(HMPBATCH,0,"status",X)) Q:'$L(X)  I '^(X) S DONE=0
+ Q DONE
  ;
 SAVETASK ; save task request on job queue
  ; called by:
@@ -191,7 +185,6 @@ NEWQMGR ; queuer Start new background queue manager
  D ^%ZTLOAD
  I '$G(ZTSK) D SETERR^HMPDJFS("sync queue manager failed to start")
  Q
- ;
  ;
 QMGR ; task Manager patient queues
  ; called by:
@@ -237,8 +230,7 @@ QMGR ; task Manager patient queues
  Q
  ;
 NEWTASK ; Start patient specific extract
- ; called by:
- ;   QMGR
+ ; called by: QMGR
  ;
  N ZTDESC,ZTDTH,ZTIO,ZTRTN,ZTSAVE,ZTSK
  S ZTRTN="QREJOIN^HMPDJFSP",ZTIO="",ZTDTH=$H

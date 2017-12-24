@@ -21,12 +21,13 @@ define([
         });
     }
 
-    function workflowSetup(title, showProgress, steps, trayId, headerOptions) {
+    function workflowSetup(title, showProgress, steps, trayId, headerOptions, triggerElement) {
         var workflowOptions = {
             title: title || '',
             showProgress: showProgress || false,
             steps: steps,
-            headerOptions: headerOptions
+            headerOptions: headerOptions,
+            triggerElement: triggerElement
         };
         var workflowController = new ADK.UI.Workflow(workflowOptions);
 
@@ -57,8 +58,8 @@ define([
             });
 
             channel.on('Order.Consult.EDIT', function(params) {
-                var screen = ADK.Messaging.request('get:current:screen').id;
-                if (screen === 'provider-centric-view') {
+                var context = ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('context');
+                if (context === 'staff') {
                     ADK.Navigation.navigate('overview');
                 }
 
@@ -66,8 +67,8 @@ define([
             });
 
             channel.on(PROCESSID + 'Accept', function(params) {
-                var screen = ADK.Messaging.request('get:current:screen').id;
-                if (screen === 'provider-centric-view') {
+                var context = ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('context');
+                if (screen === 'staff') {
                     ADK.Navigation.navigate('overview');
                 }
 
@@ -165,7 +166,9 @@ define([
                         viewModel: new Backbone.Model(formModel),
                         helpMapping: 'consult_esig_form'
                     }],
-                    ''
+                    '',
+                    undefined,
+                    params.triggerElement
                 );
             });
 

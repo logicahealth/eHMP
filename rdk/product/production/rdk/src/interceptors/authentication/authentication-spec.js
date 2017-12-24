@@ -7,12 +7,12 @@ var auth = require('./authentication');
 var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
 
-var VALID_ACCESS = 'REDACTED';
-var VALID_PASS = 'REDACTED';
+var VALID_ACCESS = 'PW    ';
+var VALID_PASS = 'PW    ';
 var INVALID_ACCESS = 'zzz';
 var INVALID_PASS = 'xxx';
 var VALID_SYSTEM = 'CDS';
-var SITE = 'C877';
+var SITE = 'SITE';
 
 describe('Authentication interceptor', function() {
     var req;

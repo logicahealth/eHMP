@@ -8,7 +8,6 @@ var request = require('request');
 var format = require('util').format;
 var inspect = require(global.VX_UTILS + 'inspect');
 var uuid = require('node-uuid');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 var defaultAssigningAuthority = 'USVHA';
 
 
@@ -110,9 +109,10 @@ function getDomainConfiguration(log, config, job) {
     log.debug('domainConfig: %j', domainConfig);
     var url = format('%s://%s:%s%s', domainConfig.protocol || 'http', domainConfig.host, domainConfig.port, domainConfig.path);
     log.debug('URL: %s with query: %j', url, query);
-    domainConfig.url = url ; //+ '&' + querystring.stringify(query);
+    domainConfig.url = url ;
     log.warn('domainConfig: %j', domainConfig);
-    domainConfig.agentClass = VxSyncForeverAgent;
+    domainConfig.forever = true;
+    domainConfig.agentOptions = {maxSockets: config.handlerMaxSockets || 5};
 
     return domainConfig;
 }

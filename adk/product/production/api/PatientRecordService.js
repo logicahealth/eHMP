@@ -26,50 +26,29 @@ define([
             this.listenTo(WorkspaceContextRepository.currentWorkspaceAndContext, 'change:context', function(model) {
                 if (model.get('context') === 'patient') {
                     this.listenTo(WorkspaceContextRepository.currentWorkspaceAndContext, 'change:workspace', function(model) {
-                        if (model.get('workspace') !== 'patient-search-screen') {
-                            this.setRecentPatients(model.get('context'), model.get('workspace'));
-                        }
+                        this.setRecentPatients(model.get('context'), model.get('workspace'));
+                    });
+                    this.listenTo(this.getCurrentPatient(), 'change:pid', function() {
+                        var model = WorkspaceContextRepository.currentWorkspaceAndContext;
+                        this.setRecentPatients(model.get('context'), model.get('workspace'));
                     });
                 } else {
                     this.stopListening(WorkspaceContextRepository.currentWorkspaceAndContext, 'change:workspace');
+                    this.stopListening(this.getCurrentPatient(), 'change:pid');
                 }
             });
         },
-        setPatientFetchParams: function(inPatient, opts) {
-            var options = _.extend({}, opts);
-            var patient = (options.patient || inPatient);
-            if (!_.isUndefined(patient)) {
-                if (_.isUndefined(options.criteria)) {
-                    options.criteria = {};
-                }
-                //Pid will be used if exists unless patientIdentifierType specified to ICN
-                if (options.patientIdentifierType && patient.get(options.patientIdentifierType)) {
-                    options.criteria.pid = patient.get(options.patientIdentifierType);
-                } else if (patient.get("pid")) {
-                    options.criteria.pid = patient.get("pid");
-                } else if (patient.get("icn")) {
-                    options.criteria.pid = patient.get("icn");
-                } else {
-                    options.criteria.pid = patient.get("id");
-                }
-
-                if (patient.has("acknowledged")) {
-                    options.criteria._ack = 'true';
-                }
-            }
-            return options;
-        },
         createEmptyCollection: function(options) {
-            return resourceService.createEmptyCollection(this.setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.createEmptyCollection(this.getCurrentPatient().setFetchParams(options));
         },
         fetchCollection: function(options, existingCollection) {
-            return resourceService.fetchCollection(this.setPatientFetchParams(this.getCurrentPatient(), options), existingCollection);
+            return resourceService.fetchCollection(this.getCurrentPatient().setFetchParams(options), existingCollection);
         },
         fetchModel: function(options) {
-            return resourceService.fetchModel(this.setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.fetchModel(this.getCurrentPatient().setFetchParams(options));
         },
         fetchResponseStatus: function(options) {
-            return resourceService.fetchResponseStatus(this.setPatientFetchParams(this.getCurrentPatient(), options));
+            return resourceService.fetchResponseStatus(this.getCurrentPatient().setFetchParams(options));
         },
         getCurrentPatient: function() {
             return SessionStorage.get.sessionModel('patient');
@@ -102,17 +81,12 @@ define([
         fetchDateFilteredCollection: function(collection, filterOptions) {
             return resourceService.fetchDateFilteredCollection(collection, filterOptions);
         },
-        isPatientInPrimaryVista: function() {
-            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-            var user = ADK.UserService.getUserSession();
-            return currentPatient.get('pid').indexOf(user.get('site') + ';') === 0;
-        },
         buildUrl: function(resourceTitle, criteria) {
             var options = {
                 criteria: criteria
             };
 
-            return resourceService.buildUrl(resourceTitle, this.setPatientFetchParams(this.getCurrentPatient(), options).criteria);
+            return resourceService.buildUrl(resourceTitle, this.getCurrentPatient().setFetchParams(options).criteria);
         },
         setCurrentPatient: function(patient, options) {
             Messaging.trigger("context:patient:change", patient, options);
@@ -151,33 +125,27 @@ define([
 
             if (_.isString(sourcePatient)) {
                 pid = sourcePatient;
+                icn = pid;
             } else {
                 pid = sourcePatient.get('pid');
-                icn = sourcePatient.get('icn');
+                icn = sourcePatient.get('icn') || pid;
             }
 
+            var currentPatient = this.getCurrentPatient();
             if (_.isEmpty(targetPatient)) {
-                targetPatient = this.getCurrentPatient();
+                targetPatient = currentPatient;
+            }
+            var patientFound;
+            if (targetPatient === currentPatient) {
+                var patientIdentifiers = [];
+                var patients = ADK.SessionStorage.get.sessionModel('patient-domain', 'session').get('data');
+                if (_.isArray(patients)) {
+                    patientIdentifiers = _.uniq(_.union(_.pluck(patients, "pid"), _.pluck(patients, "icn")));
+                }
+                patientFound = (_.includes(patientIdentifiers, pid) || _.includes(patientIdentifiers, icn));
             }
 
-            return targetPatient.get('pid') === pid || targetPatient.get('icn') === icn || targetPatient.get('icn') === pid;
-        },
-        getLastWorkspace: function(patientModel) {
-            var getPatientWorkspaceContextOptions = {
-                cache: false,
-                fetchType: 'GET',
-                resourceTitle: 'patient-last-workspace',
-                patient: patientModel,
-                onSuccess: function(collection) {
-                    if (collection.length === 0) {
-                        patientModel.trigger('last-workspace-synced');
-                    } else {
-                        patientModel.set('workspaceContext', collection.models[0].get('workspaceContext'));
-                        patientModel.trigger('last-workspace-synced');
-                    }
-                }
-            };
-            this.fetchCollection(getPatientWorkspaceContextOptions);
+            return targetPatient.get('pid') === pid || targetPatient.get('icn') === icn || targetPatient.get('icn') === pid || patientFound;
         },
         getRecentPatients: function(collection) {
             if (!(collection instanceof Backbone.Collection)) {

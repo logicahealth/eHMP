@@ -14,7 +14,7 @@ class OrdersContainer < AllApplets
 
     add_applet_buttons appletid_css
     add_applet_add_button appletid_css
-    add_verify(CucumberLabel.new("Table - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-orders tbody tr"))
+    add_verify(CucumberLabel.new("Table - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=orders] tbody tr"))
 
     add_verify(CucumberLabel.new("Complete Table"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=orders] table"))
 
@@ -34,13 +34,13 @@ class OrdersContainer < AllApplets
     add_action(CucumberLabel.new("Control - applet - To Date"), SendKeysAction.new, AccessHtmlElement.new(:css, "[data-appletid=orders] #filter-to-date-orders"))
     add_verify(CucumberLabel.new("applet - Date Filter"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=orders] .grid-filter-daterange"))
 
-    add_verify(CucumberLabel.new("Selected Order Type"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'orders-type-options'))
-    add_verify(CucumberLabel.new("Tooltip"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, '//*[@data-row-instanceid="urn-va-order-9E7A-3-12978"]/td[3]/a'))
+    add_verify(CucumberLabel.new("Selected Order Type"), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid=orders] .grid-toolbar select'))
+    add_verify(CucumberLabel.new("Tooltip"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, '//*[@data-row-instanceid="urn-va-order-SITE-3-12978"]/td[3]/a'))
     order_table_rows = AccessHtmlElement.new(:xpath, "//*[@data-appletid='orders']/descendant::tbody/descendant::tr")
     add_verify(CucumberLabel.new("applet - Table - xpath"), VerifyXpathCount.new(order_table_rows), order_table_rows)
-    add_action(CucumberLabel.new("01AUDIOLOGY OUTPATIENT Cons Consultant's Choice"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-15479']"))
-    add_action(CucumberLabel.new('CULTURE & SUSCEPTIBILITY UNKNOWN WC LB #18424'), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-9E7A-3-38312']"))
-    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-orders tr.empty'))
+    add_action(CucumberLabel.new("01AUDIOLOGY OUTPATIENT Cons Consultant's Choice"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-SITE-3-15479']"))
+    add_action(CucumberLabel.new('CULTURE & SUSCEPTIBILITY UNKNOWN WC LB #18424'), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='urn-va-order-SITE-3-38312']"))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=orders] tr.empty'))
   end # initialize
 
   def applet_loaded
@@ -52,7 +52,7 @@ class OrdersContainer < AllApplets
   end
 
   def row_count
-    return TestSupport.driver.find_elements(:css, "#data-grid-orders tbody tr.selectable").length
+    return TestSupport.driver.find_elements(:css, "[data-appletid=orders] tbody tr.selectable").length
   end
 end # OrdersContainer
 
@@ -94,59 +94,10 @@ end
 # ######################## When ########################
 
 When(/^the user minimizes the expanded Orders Applet$/) do
-  expect(@oc.perform_action('Control - applet - Minimize View')).to eq(true)
-end
-
-When(/^the user clicks the "(.*?)" button in the Orders applet$/) do |control_name|
-  @oc.wait_until_element_present("Table - Orders Applet", 15)
-  wait_and_perform(@oc, control_name)
-end
-
-When(/^the user selects "(.*?)" in the Orders applet "(.*?)" dropdown$/) do |selection, _control_name|
-  @oc.wait_until_element_present("Table - Orders Applet", 15)
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-
-  wait.until {
-    wait_and_perform(@oc, "applet - Order Type dropdown")
-    @oc.get_elements("applet - Order Type dropdowns")[0].displayed?
-  }
-
-  wait.until {
-    (@oc.get_elements("applet - Order Type dropdowns").size > 1) &&
-      (@oc.get_elements("applet - Order Type dropdowns")[0].text.empty? == false)
-  }
-
-  dropdown_elements = @oc.get_elements("applet - Order Type dropdowns")
-
-  desired_element = nil
-
-  dropdown_elements.each do |element|
-    if element.text.include?(selection)
-      desired_element = element
-      break
-    end
-  end
-
-  if desired_element == nil
-    fail "The desired element was not found in the dropdown."
-  else
-    desired_element.click
-  end
-end
-
-# ######################## Then ########################
-
-Then(/^under the "(.*?)" headers there are the following fields$/) do |_section_name, expected_fields|
-  # removed the check for rows under specific headers
-  # after a code change the test was throwing "Element is no longer attached to the DOM"
-  # I could add ids to the modals or just check for presence.  Since Orders modal is made up of many html templates I went this route
-  expected_fields.rows.each do |row|
-    xpath = "//div[contains(@class, 'orderAppletHeader') and contains(string(), '#{row[0]}')]"
-    p xpath
-    @oc.add_verify(CucumberLabel.new('Order Row'), VerifyText.new, AccessHtmlElement.new(:xpath, xpath))
-    expect(@oc.perform_verification('Order Row', row[0])).to eq(true), "Could not find header #{row[0]}"
-  end
+  order_applet = PobOrdersApplet.new
+  expect(order_applet.wait_for_btn_applet_minimize).to eq(true), "Expected applet to have a minimize button"
+  order_applet.btn_applet_minimize.click
+  expect(order_applet.wait_for_btn_applet_expand_view).to eq(true), "Expected applet to have a maximize button"
 end
 
 Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sort_argument, _second_sort_argument|
@@ -161,8 +112,8 @@ Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sor
   column_values_array = []
   column_values.each do |row|
     each_value = row.text.downcase
-    value = each_value.split("details.").last.strip
-    order_date = Date.strptime(value, "%m/%d/%Y")
+    #value = each_value.split("details.").last.strip
+    order_date = Date.strptime(row.text.downcase, "%m/%d/%Y")
     column_values_array << order_date
   end
   expect(column_values_array == column_values_array.sort).to be(true), "column_values_array: #{print_all_value_from_list_elements(column_values)}"
@@ -194,7 +145,7 @@ end
 
 When(/^the user scrolls to the bottom of the Orders Applet$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
-  wait.until { infiniate_scroll('#data-grid-orders tbody') }
+  wait.until { infiniate_scroll('[data-appletid=orders] tbody') }
 end
 
 When(/^the user scrolls to the bottom of the expanded Orders Applet$/) do
@@ -213,22 +164,11 @@ When(/^the applet displays orders$/) do
   wait.until { there_is_at_least_one_nonempty_order_row }
 end
 
-When(/^the user selects order "(.*?)"$/) do |arg1|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-
-  # make sure there is at least 1, non-empty row in the orders applet
-  wait.until { there_is_at_least_one_nonempty_order_row }
-  # scroll the applet until all the rows are loaded
-  wait.until { infiniate_scroll('#data-grid-orders tbody') }
-
-  expect(@oc.perform_action(arg1)).to be_true
-end
-
 def case_insensive_path(input_text)
   upper = input_text.upcase
   lower = input_text.downcase
 
-  path =  "//table[@id='data-grid-orders']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
+  path =  "//div[@data-appletid='orders']//table/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
 end
 
 When(/^the user filters the Orders Applet by text "([^"]*)"$/) do |input_text|
@@ -248,6 +188,13 @@ When(/^the user filters the Orders Applet by text "([^"]*)"$/) do |input_text|
   p "Row count is now: #{TableContainer.instance.get_elements('Rows - Orders Applet').size}"
 end
 
+When(/^the user filters the Orders by text "([^"]*)"$/) do |input_text|
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  row_count = TableContainer.instance.get_elements("Rows - Orders Applet").size
+  expect(@oc.perform_action('Control - applet - Text Filter', input_text)).to eq(true)
+  wait.until { row_count != TableContainer.instance.get_elements("Rows - Orders Applet").size }
+end
+
 Then(/^the Orders Applet is not filtered by text "([^"]*)"$/) do |input_text|
   path = case_insensive_path input_text
   
@@ -260,7 +207,7 @@ end
 def order_date_between_dates(start_string, end_string)
   date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
   range = Date.strptime(start_string, "%m/%d/%Y")..Date.strptime(end_string, "%m/%d/%Y")
-  order_dates_tds = TestSupport.driver.find_elements(:css, '#data-grid-orders tbody tr.selectable td:nth-child(1)')
+  order_dates_tds = TestSupport.driver.find_elements(:css, '[data-appletid=orders] tbody tr.selectable td:nth-child(2)')
   order_dates_tds.each do |td_element|
     td_element.location_once_scrolled_into_view
     td_date = td_element.text
@@ -285,7 +232,7 @@ Then(/^the Orders should be sorted by Order Date$/) do
 end
 
 Then(/^the Orders Applet contains data rows$/) do
-  compare_item_counts("#data-grid-orders tr")
+  compare_item_counts("[data-appletid=orders] tr")
 end
 
 When(/^user refreshes Orders Applet$/) do
@@ -296,18 +243,11 @@ Then(/^the message on the Orders Applet does not say "(.*?)"$/) do |message_text
   compare_applet_refresh_action_response("orders", message_text)
 end
 
-When(/^the user filters the Orders by text "([^"]*)"$/) do |input_text|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  row_count = TableContainer.instance.get_elements("Rows - Orders Applet").size
-  expect(@oc.perform_action('Control - applet - Text Filter', input_text)).to eq(true)
-  wait.until { row_count != TableContainer.instance.get_elements("Rows - Orders Applet").size }
-end
-
 Then(/^the Orders table only diplays rows including text "([^"]*)"$/) do |input_text|
   upper = input_text.upcase
   lower = input_text.downcase
 
-  path =  "//table[@id='data-grid-orders']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
+  path =  "//div[@data-appletid='orders']//table/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
 
   row_count = TableContainer.instance.get_elements("Rows - Orders Applet").size 
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
@@ -316,19 +256,19 @@ end
 
 Then(/^the Orders Applet table only contains rows with the Type "(.*?)"$/) do |type|
   #"//table[@id='data-grid-orders']/descendant::td[contains(string(), 'Consult')]"
-  infiniate_scroll('#data-grid-orders tbody')
+  infiniate_scroll('[data-appletid=orders] tbody')
 
   # headers = TestSupport.driver.find_elements(:css, "#data-grid-orders tr th")
   # desired_column_index = headers.index { |h| h.text == 'Type' }
   row_count = TableContainer.instance.get_elements("Rows - Orders Applet").length 
-  type_row_count = AccessHtmlElement.new(:xpath, "//td[position() = 5 and contains(string(), '#{type}')]")
+  type_row_count = AccessHtmlElement.new(:xpath, "//td[position() = 6 and contains(string(), '#{type}')]")
   OrdersApplet.instance.add_verify(CucumberLabel.new("Orders Type grid row count"), VerifyXpathCount.new(type_row_count), type_row_count)
   p "#{row_count} to #{type_row_count}"
   expect(OrdersApplet.instance.perform_verification("Orders Type grid row count", row_count)).to be_true
 end
 
 Given(/^the user notes the first (\d+) orders$/) do |num_rows|
-  order_columns = TestSupport.driver.find_elements(:css, '#data-grid-orders tr.selectable td:nth-child(4)')
+  order_columns = TestSupport.driver.find_elements(:css, '[data-appletid=orders] tr.selectable td:nth-child(4)')
   p order_columns.size
   expect(order_columns.size).to be > num_rows.to_i
   @titles = []
@@ -340,29 +280,37 @@ Given(/^the user notes the first (\d+) orders$/) do |num_rows|
 end
 
 Then(/^the user can step through the orders using the next button$/) do
+  modal = OrderDetailModal.new
   @titles.each do |modal_title|
     expect(@uc.perform_verification("Modal Title", modal_title)).to eq(true), "Expected title to be #{modal_title}"
-    expect(@oc.perform_action('Control - modal - Next Button')).to eq(true)
+    # expect(@oc.perform_action('Control - modal - Next Button')).to eq(true)
+
+    expect(modal.wait_for_btn_order_next).to eq(true)
+    modal.btn_order_next.click
   end
 end
 
 Then(/^the user can step through the orders using the previous button$/) do
-  expect(@oc.perform_action('Control - modal - Previous Button')).to eq(true)
+  modal = OrderDetailModal.new
+  expect(modal.wait_for_btn_order_previous).to eq(true)
+  modal.btn_order_previous.click
+  # expect(@oc.perform_action('Control - modal - Previous Button')).to eq(true)
   @titles.reverse.each { |val| 
     p val
     expect(@uc.perform_verification("Modal Title", val)).to eq(true), "Expected title to be #{val}"
-    expect(@oc.perform_action('Control - modal - Previous Button')).to eq(true)
+    #expect(@oc.perform_action('Control - modal - Previous Button')).to eq(true)
+    modal.btn_order_previous.click
   }
 end
 
 Then(/^the Orders Applet table contains less then (\d+) rows$/) do |arg1|
-  row_count = @oc.row_count 
-  expect(row_count).to be < arg1.to_i
+  applet = PobOrdersApplet.new
+  expect(applet.tbl_rows.length).to be < arg1.to_i
 end
 
 Then(/^the Orders Applet table contains more then (\d+) rows$/) do |arg1|
-  row_count = @oc.row_count 
-  expect(row_count).to be > arg1.to_i
+  applet = PobOrdersApplet.new
+  expect(applet.tbl_rows.length).to be > arg1.to_i
 end
 
 Given(/^the Orders Applet contains buttons$/) do |table|
@@ -376,7 +324,7 @@ def verify_orders_between(start_time, end_time)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { @oc.applet_loaded }
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
-  wait.until { infiniate_scroll('#data-grid-orders tbody', 3) }
+  wait.until { infiniate_scroll('[data-appletid=orders] tbody', 3) }
 
   format = "%m/%d/%Y"
   order_date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
@@ -424,12 +372,12 @@ Then(/^the Orders applet displays orders between "([^"]*)" and "([^"]*)"$/) do |
 end
 
 When(/^the user opens the details for an order "([^"]*)" row$/) do |order_type|
-  @ehmp = PobOrdersApplet.new
-  rows = @ehmp.rows_of_type(order_type)
+  ehmp = PobOrdersApplet.new
+  rows = ehmp.rows_of_type(order_type)
   expect(rows.length).to be > 0
   rows[0].click
-  @ehmp = OrderDetailModal.new
-  @ehmp.wait_until_fld_modal_title_visible
+  ehmp = OrderDetailModal.new
+  ehmp.wait_until_fld_modal_title_visible
 end
 
 Then(/^an Order Details modal is displayed$/) do
@@ -483,6 +431,27 @@ Then(/^the Expanded Order applet is displayed$/) do
 end
 
 When(/^the user navigates to the expanded Orders applet$/) do
-  navigate_in_ehmp "#orders-full"
+  navigate_in_ehmp "#/patient/orders-full"
   step 'the Expanded Order applet is displayed'
 end
+
+Then(/^the Orders Applet table has headers$/) do |table|
+  applet = PobOrdersApplet.new
+  applet.wait_for_expanded_tbl_headers
+  expect(applet.expanded_tbl_headers.length).to be > 0
+  #  \(.*\).*
+  header_text = applet.expanded_tbl_headers.map { |header| header.text.sub(/ \(.*\).*/, '').sub('Sortable Column', '').strip.upcase }
+  p header_text
+  p table.headers
+  table.headers.each do | expected_header |
+    expect(header_text).to include expected_header.upcase
+  end
+end
+
+Given(/^clicks the first result in the Orders Applet$/) do
+  applet = PobOrdersApplet.new
+  applet.wait_for_tbl_orders_first_row
+  expect(applet).to have_tbl_orders_first_row
+  applet.tbl_orders_first_row.click
+end
+

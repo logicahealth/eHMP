@@ -4,6 +4,12 @@ require('../../../../../env-setup');
 var _ = require('underscore');
 var moment = require('moment');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-problem-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '0000000001';
 
@@ -107,7 +113,7 @@ var expectedResult = {
 describe('jmeadows-problem-xformer', function() {
     var vprResult = {};
     it('transforms sample dod problem to vpr ', function() {
-        vprResult = xformer(sampleDodProblem, mockEdipi);
+        vprResult = xformer(log, sampleDodProblem, mockEdipi);
         assertFieldExpectations(vprResult, expectedResult, sampleDodProblem);
 
         expect(vprResult.comments.length).toEqual(
@@ -241,7 +247,7 @@ describe('jmeadows-problem-xformer-nullish-input', function() {
     var vprResult = {};
     it('transforms nullish dod problem to vpr ', function() {
 
-        vprResult = xformer(dodWithNullsForConditions, mockEdipi);
+        vprResult = xformer(log, dodWithNullsForConditions, mockEdipi);
 
         assertFieldExpectations(vprResult, expectedResultWithNulls, dodWithNullsForConditions);
 

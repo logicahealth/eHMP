@@ -20,7 +20,7 @@ describe('solr-ptf-xform.js', function() {
     describe('Transformer', function() {
         it('Happy Path', function() {
             var vprRecord = {
-                'admissionUid': 'urn:va:visit:9E7A:8:H493',
+                'admissionUid': 'urn:va:visit:SITE:8:H493',
                 'arrivalDateTime': '19910904094159',
                 'dischargeDateTime': '19920128160000',
                 'drg': '999',
@@ -30,10 +30,10 @@ describe('solr-ptf-xform.js', function() {
                 'icdName': 'ALCOHOL ABUSE-EPISODIC',
                 'lastUpdateTime': '19920128160000',
                 'localId': '130;70;DXLS',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'principalDx': 'true',
                 'stampTime': '19920128160000',
-                'uid': 'urn:va:ptf:9E7A:8:130;70;DXLS'
+                'uid': 'urn:va:ptf:SITE:8:130;70;DXLS'
             };
             var solrRecord = xformer(vprRecord, log);
 

@@ -2,21 +2,21 @@ Feature: Tests that use the undefined test step -the client requests picklist wi
 
  @F144_SearchWard_1 @vxsync @enrich
   Scenario: User ward searches for wards
-    When the client requests picklist with the parameters for "wards-fetch-list" with the user "9E7A;REDACTED"
+    When the client requests picklist with the parameters for "wards-fetch-list" with the user "SITE;USER  "
     | paramter name | value                 |
     Then a successful response is returned
     And the client receives at least 1 location
 
   @F144_SearchClinics_1 @vxsync @enrich
   Scenario: User searches for clinics
-    When the client requests picklist with the parameters for "clinics-fetch-list" with the user "9E7A;REDACTED"
+    When the client requests picklist with the parameters for "clinics-fetch-list" with the user "SITE;USER  "
     | paramter name | value                 |
     Then a successful response is returned
     And the client receives at least 1 location
 
  @F899_1_Orderables_Search @US11561 @DE4192
   Scenario: The returned orderables data contains searching strings
-  Given the client requests picklist with the parameters for "orderables" with the user "9E7A;REDACTED"
+  Given the client requests picklist with the parameters for "orderables" with the user "SITE;USER  "
   | paramter name | value                 |
   | subtype       | All                   |
   | searchString  | URINE                 |
@@ -27,11 +27,11 @@ Feature: Tests that use the undefined test step -the client requests picklist wi
   And the field of domain in the orderable data contains a string "ehmp-order"
   And the field of subDomain in the orderable data contains a string "laboratory"
   And the field of state in the orderable data contains a string "active"
-  And the field of facility-enterprise in the orderable data contains a string "9E7A"
+  And the field of facility-enterprise in the orderable data contains a string "SITE"
 
 @F899_1_Orderables_alltypes @US12254
   Scenario: Create Endpoint for 'All' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;REDACTED"
+  When the client requests picklist with the parameters for "orderables" with the user "SITE;USER  "
   | paramter name | value                 |
   | subtype       | All                   |
   | searchString  | URINE                 |
@@ -44,7 +44,7 @@ Feature: Tests that use the undefined test step -the client requests picklist wi
   | synonym         | PROV URINE          |
   | typeOfOrderable | lab                 |
 
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;REDACTED"
+  When the client requests picklist with the parameters for "orderables" with the user "SITE;USER  "
   | paramter name | value                 |
   | searchString  | URINE                 |
   Then a successful response is returned
@@ -59,7 +59,7 @@ Feature: Tests that use the undefined test step -the client requests picklist wi
 
 @F899_2_Orderables_alltypes @US12254
   Scenario: searching for orderables without searchString
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;REDACTED"
+  When the client requests picklist with the parameters for "orderables" with the user "SITE;USER  "
   | paramter name | value      |
   | subtype       | all        |
   Then a successful response is returned
@@ -67,7 +67,7 @@ Feature: Tests that use the undefined test step -the client requests picklist wi
 
 @F899_3_Orderables_labs @US12254
   Scenario: Create Endpoint for 'Lab' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "C877;REDACTED"
+  When the client requests picklist with the parameters for "orderables" with the user "SITE;USER  "
   | paramter name | value                                   |
   | subtype       | Lab   |
   | searchString  | Blood |

@@ -45,7 +45,7 @@ define([
             this._base.initialize.apply(this, arguments);
         },
         events: {
-            'click tr.selectable': 'onClickRow'
+            'click tr.selectable > td:not([data-toggle])': 'onClickRow'
         },
         onClickRow: function(event) {
             var row = $(event.target).closest("tr");

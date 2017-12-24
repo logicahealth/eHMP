@@ -19,9 +19,7 @@
 		<property name="locations">
 			<list>
 				<!-- Load defaults from the normal classpath... -->
-				<value>classpath:/cds-engine-agent.properties</value>
-				<!-- Override any settings from a predetermined location here. -->
-				<value>file:${catalina.home}/shared/classes/cds-engine-agent.properties</value>
+				<value>classpath:cds-engine-agent.properties</value>
 			</list>
 		</property>
 	</bean>

@@ -1,7 +1,7 @@
 # Edmund Hillary user is used for patient sync load and clear based on having required permissions to access resource/sync/load and resource/sync/clear endpoints by default
 
-sync_user = '9E7A;edm1234'
-sync_pass = 'edm1234!!'
+sync_user = 'SITE;USER'
+sync_pass = 'PW'
 
 Then(/^the patient with pid "(.*?)" is synced through the RDK API(?: within ?(\d+) seconds)?$/) do |pid, seconds|
   seconds = seconds.to_i

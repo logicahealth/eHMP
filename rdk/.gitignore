@@ -41,11 +41,13 @@ Thumbs.db
 /product/production/rdk/config/activity_handler*.json
 /product/production/rdk/config/*config*.json
 /product/production/rdk/write/pick-list/logs
+/product/production/rdk/src/write/pick-list/file-db-cache
 /product/production/build
 /product/production/jbpm/build
+/product/production/oracle/build
 /infrastructure/build
 
-/product/production/jbpm/*/build
+**/build
 
 node_modules/
 npm-debug.log
@@ -55,6 +57,9 @@ npm-debug.log
 .project
 .settings/
 .externalToolBuilders/
+**/btm*.tlog
+**/global
+**/project.repositories
 
 #idea
 .idea/
@@ -77,6 +82,7 @@ product/production/rdk/logs
 /product/tests/rdk_config_files/
 product/production/rdk/config/activity_handler-1.json
 product/production/rdk/config/activity_handler.json
+product/production/rdk/config/ehmp-versions.json
 
 *-preparsed.json
 **/cdsdbConfig.js

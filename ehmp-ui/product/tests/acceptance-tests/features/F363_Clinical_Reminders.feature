@@ -1,4 +1,4 @@
-@F363_Clinical_Reminders  @US5046 @US5146 @US5147 @reg2
+@F363_Clinical_Reminders @Clinical_Reminders_applet @US5046 @US5146 @US5147 @reg2
 Feature: F363 - CDS Work Product Management
 
 Background:

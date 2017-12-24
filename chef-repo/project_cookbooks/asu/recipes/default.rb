@@ -10,4 +10,3 @@
 # recipe to the runlist for reset_sync will allow asu default
 # attributes to get loaded onto the node. This is helpful when
 # rdk does a find_node for asu attributes
-

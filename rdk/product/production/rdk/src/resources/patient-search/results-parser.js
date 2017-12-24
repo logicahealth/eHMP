@@ -16,6 +16,7 @@ module.exports.transformPatient = function(patient, fromJDS) {
     //looking for local, non-local, vista, or dod as values
     if (patient.id) {
         var idParts = patient.id.split('^');
+        patient.idClass = determineIDType(patient.id);
         switch (idParts.length) {
             case 5:
             case 4:
@@ -23,15 +24,20 @@ module.exports.transformPatient = function(patient, fromJDS) {
                 patient.dataSource = idParts[3]; //patient identifier authority = DOD or USVHA
                 /* falls through */
             case 2:
-                patient.pid = idParts[0]; //id value
+                // set the id value
+                if (patient.idClass === 'ICN' && pidValidator.isIcn(idParts[0])) {
+                    patient.pid = idParts[0];
+                } else if (patient.idClass === 'DFN' && pidValidator.isSiteDfn(patient.facility + ';' + idParts[0])) {
+                    patient.pid = patient.facility + ';' + idParts[0];
+                } else if (patient.idClass === 'EDIPI' && pidValidator.isEdipi(idParts[0])) {
+                    patient.pid = 'DOD;' + idParts[0];
+                } else {
+                    patient.pid = idParts[0];
+                }
                 patient.idType = idParts[1]; //PI = Patient, EI = Employee, NI = National, PN = PersonNumber
                 break;
             default:
                 patient.pid = patient.id;
-        }
-        patient.idClass = determineIDType(patient.id);
-        if (patient.idClass === 'DFN') {
-            patient.pid = patient.facility + ';' + patient.pid;
         }
     }
 
@@ -59,13 +65,6 @@ module.exports.transformPatient = function(patient, fromJDS) {
     }
     if (!_.isUndefined(fromJDS) && fromJDS === true && patient.pid) {
         patient.summary = patient.displayName;
-        if (!pidValidator.isIcn(patient.pid) &&
-            !pidValidator.isPidEdipi(patient.pid)) {
-            var pidParts = patient.pid.split(';');
-            if (pidValidator.isIcn(pidParts[1])) {
-                patient.pid = pidParts[1];
-            }
-        }
     }
     if (patient.genderCode) {
         if (patient.genderCode.length > 2) {
@@ -108,7 +107,6 @@ module.exports.transformPatient = function(patient, fromJDS) {
             }
         });
     }
-
     return patient;
 };
 

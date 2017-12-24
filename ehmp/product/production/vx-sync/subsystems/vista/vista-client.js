@@ -6,9 +6,11 @@ var objUtil = require(global.VX_UTILS + 'object-utils');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var logUtil = require(global.VX_UTILS + 'log');
 var uuid = require('node-uuid');
+var vistaSyncUtil = require(global.VX_UTILS + 'vista-sync-util');
 //var async = require('async');
 
 var rpcClients = [];
+
 
 //-------------------------------------------------------------------------------------
 // Constructor for VistaClient.
@@ -20,8 +22,18 @@ var rpcClients = [];
 function VistaClient(log, metrics, config, rpcClient) {
     var self = this;
     if (!(this instanceof VistaClient)) {
-        return new VistaClient(log, config);
+        return new VistaClient(log, metrics, config, rpcClient);
     }
+
+    // Set up our error constants
+    //----------------------------
+    this.ERROR_LIST = {
+        INVALID_JSON_ERROR: 'Invalid JSON with hmpBatchSize = 1',
+        RPC_ERROR: 'RPC Error',
+        INVALID_CONFIGURATION_ERROR: 'Invalid Configuration',
+        VISTA_LOCK_DOWN_MODE: 'VistA Allocations Locked',
+        INVALID_BATCH_SIZE: 'Invalid batch size'
+    };
 
     this.log = log;
     // this.log = require('bunyan').createLogger({
@@ -78,11 +90,11 @@ VistaClient.prototype._getRpcClient = function (vistaId) {
 VistaClient.prototype.status = function (patientIdentifier, statusCallback) {
     var vistaId = patientIdentifier.split(';')[0];
     var dfn = patientIdentifier.split(';')[1];
-    var rpcClient = this._getRpcClient(vistaId);
     var self = this;
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params = {
-        '"server"': this.hmpServerId,
+        '"server"': self.hmpServerId,
         '"localId"': dfn
     };
 
@@ -135,7 +147,7 @@ VistaClient.prototype.subscribe = function (vistaId, patientIdentifier, rootJobI
     var dfn = idUtil.extractDfnFromPid(pid);
 
     self.log.debug('vista-client.subscribe: rpcConfig for pid: %s', pid);
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params;
 
@@ -235,12 +247,10 @@ VistaClient.prototype.fetchNextBatch = function (vistaId, lastUpdateTime, hmpBat
     };
     self.metrics.debug('Vista Fetch Next', metricsObj);
     metricsObj.timer = 'stop';
-    self.log.debug('vista-client.fetchNextBranch: Entering VistaClient.fetchNextBatch vistaId: %s.  lastUpdateTime: %s', vistaId, lastUpdateTime);
+    self.log.debug('vista-client.fetchNextBatch: Entering VistaClient.fetchNextBatch vistaId: %s.  lastUpdateTime: %s', vistaId, lastUpdateTime);
 
-    self.log.debug('vista-client.fetchNextBranch: rpcConfig for fetchNextBranch: %s', vistaId);
-    var rpcClient = this._getRpcClient(vistaId);
-
-    // var localHmpBatchSize = hmpBatchSize;
+    self.log.debug('vista-client.fetchNextBatch: rpcConfig for fetchNextBranch: %s', vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params;
 
@@ -255,43 +265,57 @@ VistaClient.prototype.fetchNextBatch = function (vistaId, lastUpdateTime, hmpBat
             '"server"': self.hmpServerId
         };
         rpcClient.execute('HMPDJFS API', params, function (error, response) {
-            self.log.info('vista-client.fetchNextBranch: Completed calling RPC: getPtUpdates: for vistaId: %s; error: %s', vistaId, error);
-            self.log.trace('vista-client.fetchNextBranch: Completed calling RPC: getPtUpdates: for vistaId: %s; response (String): %s', vistaId, response);
+            self.log.info('vista-client.fetchNextBatch: Completed calling RPC: getPtUpdates: for vistaId: %s; error: %s', vistaId, error);
+            self.log.trace('vista-client.fetchNextBatch: Completed calling RPC: getPtUpdates: for vistaId: %s; response (String): %s', vistaId, response);
             if ((!error) && (response)) {
-                // TODO:  Need to change RpcClient to return JSON and not a string...
-                //--------------------------------------------------------------------
                 var jsonResponse;
                 try {
                     jsonResponse = JSON.parse(response);
-                    self.log.debug('vista-client.fetchNextBranch: Completed calling RPC: getPtUpdates: for vistaId: %s', vistaId);
-                    self.log.trace('vista-client.fetchNextBranch: Completed calling RPC: getPtUpdates: for vistaId: %s; jsonResponse: %j', vistaId, jsonResponse);
+                    self.log.debug('vista-client.fetchNextBatch: Completed calling RPC: getPtUpdates: for vistaId: %s', vistaId);
+                    self.log.trace('vista-client.fetchNextBatch: Completed calling RPC: getPtUpdates: for vistaId: %s; jsonResponse: %j', vistaId, jsonResponse);
                 } catch (e) {
                     if ((hmpBatchSize === 1) || (hmpBatchSize === '1')) {
-                        return handleFailedRequestWithRawResponse(util.format('Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s; exception: %j', vistaId, hmpBatchSize, e), hmpBatchSize, response);
+                        return handleFailedRequestWithRawResponse(util.format('Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s; exception: %j', vistaId, hmpBatchSize, e),
+                            hmpBatchSize, response, {message: self.ERROR_LIST.INVALID_JSON_ERROR});
                     } else {
-                        self.log.error('vista-client.fetchNextBranch: Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s.  Attempting retry with smaller batch size of %s. response: %s', vistaId, hmpBatchSize, hmpBatchSize / 2, response);
+                        self.log.error('vista-client.fetchNextBatch: Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s.  Attempting retry with smaller batch size of %s. response: %s', vistaId, hmpBatchSize, hmpBatchSize / 2, response);
                         return self.fetchNextBatch(vistaId, lastUpdateTime, String(Math.ceil(hmpBatchSize / 2)), batchCallback);
                     }
                 }
-                if ((jsonResponse) && (jsonResponse.data)) {
-                    return handleSuccessfulResponse(jsonResponse, hmpBatchSize);
+                // This condition is generally a server error condition.  Setup is not right.
+                //----------------------------------------------------------------------------
+                if ((jsonResponse) && (jsonResponse.error)) {
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatch: Vista returned an error condition.', hmpBatchSize, jsonResponse, jsonResponse.error);
+
+                    // Batch level error message - most likely server lock down mode.
+                    //---------------------------------------------------------------
+                } else if ((jsonResponse) && (jsonResponse.data) && (jsonResponse.data.error)) {
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatch: Vista returned a batch level error condition. ', hmpBatchSize, jsonResponse, jsonResponse.data.error);
+
                     // In some cases we may get no data - but it is not an error.  One case is if staging is not complete yet.   So look for this special case.
                     // If it occurs - it is not an error situation.  We just want to ignore it.
                     //------------------------------------------------------------------------------------------------------------------------------------------
                 } else if ((jsonResponse) && (jsonResponse.warning) && (jsonResponse.warning === 'Staging is not complete yet!')) {
                     self.log.debug('vista-client.fetchNextBatch.handleFailedRequestResponse: Staging is not yet complete');
                     return handleSuccessfulResponse(jsonResponse, hmpBatchSize);
-                    // A true error condition...
-                    //--------------------------
+
+                    // Valid response
+                    //---------------
+                } else if ((jsonResponse) && (jsonResponse.data)) {
+                    return handleSuccessfulResponse(jsonResponse, hmpBatchSize);
+
+                    // Any other error conditions...
+                    //-------------------------------
                 } else {
-                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBranch: jsonResponse did not contain any data attribute.', hmpBatchSize, jsonResponse);
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatch: jsonResponse did not contain any data attribute.', hmpBatchSize, jsonResponse, null);
                 }
             } else {
-                return handleFailedRequestWithRawResponse(util.format('vista-client.fetchNextBranch: Error received from RPC call.  Error: %s', error), hmpBatchSize, response);
+                return handleFailedRequestWithRawResponse(util.format('vista-client.fetchNextBatch: Error received from RPC call.  Error: %s', error), hmpBatchSize, response, {message: self.ERROR_LIST.RPC_ERROR});
             }
         });
     } else {
-        return handleFailedRequestWithRawResponse('vista-client.fetchNextBranch: Failed to call RPC getPtUpdates for vistaId: ' + vistaId + ', invalid configuration information.', hmpBatchSize, null);
+        return handleFailedRequestWithRawResponse('vista-client.fetchNextBatch: Failed to call RPC getPtUpdates for vistaId: ' + vistaId + ', invalid configuration information.',
+            hmpBatchSize, null, {message: self.ERROR_LIST.INVALID_CONFIGURATION_ERROR});
     }
 
     //-------------------------------------------------------------------------------------
@@ -306,7 +330,8 @@ VistaClient.prototype.fetchNextBatch = function (vistaId, lastUpdateTime, hmpBat
         var wrappedResponse = {
             data: jsonResponse.data,
             hmpBatchSize: hmpBatchSize,
-            rawResponse: null
+            rawResponse: null,
+            errorData: null
         };
         return batchCallback(null, wrappedResponse);
     }
@@ -319,16 +344,18 @@ VistaClient.prototype.fetchNextBatch = function (vistaId, lastUpdateTime, hmpBat
     // error - The error message to be sent - because of the failed rPC call.
     // hmpBatchSize - The batch size that was used when calling the RPC.
     // rawVistaResponse - The result returned from VistA through the RPC in its original form.
+    // errorData:  An object containing more information regarding the error that occurred.
     //----------------------------------------------------------------------------------------
-    function handleFailedRequestWithRawResponse(error, hmpBatchSize, rawVistaResponse) {
-        self.log.error('%s rawVistaResponse: %s', error, rawVistaResponse);
+    function handleFailedRequestWithRawResponse(error, hmpBatchSize, rawVistaResponse, errorData) {
+        var localError = util.format('%s rawVistaResponse: %s', error, rawVistaResponse);
         self.metrics.debug('Vista Fetch Next (raw response) in Error', metricsObj);
         var wrappedResponse = {
             data: null,
             hmpBatchSize: hmpBatchSize,
-            rawResponse: rawVistaResponse
+            rawResponse: rawVistaResponse,
+            errorData: errorData
         };
-        return batchCallback(error, wrappedResponse);
+        return batchCallback(localError, wrappedResponse);
     }
 
     //-------------------------------------------------------------------------------------
@@ -337,20 +364,266 @@ VistaClient.prototype.fetchNextBatch = function (vistaId, lastUpdateTime, hmpBat
     // error - The error message to be sent - because of the failed rPC call.
     // hmpBatchSize - The batch size that was used when calling the RPC.
     // vistaResponse - The result returned from VistA through the RPC
+    // vistaError - The error that Vista returned.
     //-------------------------------------------------------------------------------------
-    function handleFailedRequestWithParsedResponse(error, hmpBatchSize, vistaResponse) {
-        self.log.error('%s vistaResponse: %j', error, vistaResponse);
+    function handleFailedRequestWithParsedResponse(error, hmpBatchSize, vistaResponse, vistaError) {
+        var localError = util.format('%s vistaResponse: %j', error, vistaResponse);
         self.metrics.debug('Vista Fetch Next (parsed response) in Error', metricsObj);
         var wrappedResponse = {
             data: null,
             hmpBatchSize: hmpBatchSize,
-            rawResponse: null
+            rawResponse: null,
+            errorData: vistaError
         };
-        return batchCallback(error, wrappedResponse);
+        return batchCallback(localError, wrappedResponse);
     }
 
 };
 
+
+//-----------------------------------------------------------------------------------------------
+// This method fetches the next batch of messages from a VistA site.
+//
+// vistaId: The vista site to fetch from.
+// allocationToken: The last time a fetch was done to this site.
+// hmpBatchSize:  This is the setting for hmpBatchSize.
+// allocationStatus: The status to pass in as the allocationStatus value.  Valid values are:
+//                   'complete', 'reduce', 'reject'.
+// batchCallBack: The callback function to call when the fetch completes.
+//-----------------------------------------------------------------------------------------------
+VistaClient.prototype.fetchNextBatchMultipleMode = function (vistaId, allocationToken, allocationStatus, hmpBatchSize, batchCallback) {
+    var self = this;
+    var metricsObj = {
+        'subsystem': 'Vista',
+        'action': 'fetchNextBatchMultipleMode',
+        'site': vistaId,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    self.metrics.debug('Vista Fetch Next', metricsObj);
+    metricsObj.timer = 'stop';
+    self.log.debug('vista-client.fetchNextBatchMultipleMode: Entering VistaClient.fetchNextBatchMultipleMode vistaId: %s.  allocationToken: %s', vistaId, allocationToken);
+
+    self.log.debug('vista-client.fetchNextBatchMultipleMode: rpcConfig for fetchNextBatchMultipleMode: %s', vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
+
+    // If hmpBatchSize is not a numeric value - we have a serious issue...
+    //---------------------------------------------------------------------
+    if (isNaN(hmpBatchSize)) {
+        return handleFailedRequestWithRawResponse('vista-client.fetchNextBatchMultipleMode: Failed to call RPC getPtUpdates for vistaId: ' + vistaId + ', hmpBatchSize was not numeric.  hmpBatchSize: \'' + hmpBatchSize + '\'',
+            hmpBatchSize, null, {message: self.ERROR_LIST.INVALID_BATCH_SIZE});
+    }
+
+    if (_.isString(hmpBatchSize)) {
+        hmpBatchSize = parseInt(hmpBatchSize);
+    }
+
+    var params;
+
+    if (rpcClient) {
+        params = {
+            '"command"': 'getPtUpdates',
+            '"getStatus"': true,
+            '"allocationSize"': String(hmpBatchSize),
+            '"hmpVersion"': self.hmpVersion,
+            '"extractSchema"': self.extractSchema,
+            '"server"': self.hmpServerId
+        };
+
+        if (allocationToken) {
+            params['"allocationToken"'] = allocationToken;
+
+            if (allocationStatus) {
+                params['"allocationStatus"'] = allocationStatus;
+            }
+        }
+
+        rpcClient.execute('HMPDJFS API', params, function (error, response) {
+            self.log.info('vista-client.fetchNextBatchMultipleMode: Completed calling RPC: getPtUpdates: for vistaId: %s; error: %s', vistaId, error);
+            self.log.trace('vista-client.fetchNextBatchMultipleMode: Completed calling RPC: getPtUpdates: for vistaId: %s; response (String): %s', vistaId, response);
+            if ((!error) && (response)) {
+                var jsonResponse;
+                try {
+                    jsonResponse = JSON.parse(response);
+                    self.log.debug('vista-client.fetchNextBatchMultipleMode: Completed calling RPC: getPtUpdates: for vistaId: %s', vistaId);
+                    self.log.trace('vista-client.fetchNextBatchMultipleMode: Completed calling RPC: getPtUpdates: for vistaId: %s; jsonResponse: %j', vistaId, jsonResponse);
+                } catch (e) {
+                    if ((hmpBatchSize === 1) || (hmpBatchSize === '1')) {
+                        return handleFailedRequestWithRawResponse(util.format('Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s; exception: %j', vistaId, hmpBatchSize, e),
+                            hmpBatchSize, response, {message: self.ERROR_LIST.INVALID_JSON_ERROR});
+                    } else {
+                        // If we have a bad JSON - we want to reduce fast...  So if we asked for 500, but only got back 20 and they were bad.  No need to reduce to 250,
+                        // lets reduce to 1/2 the size we actually got back.  If we cannot figure out how many is in there - we will just do simple reduction of what we
+                        // asked for.
+                        //-----------------------------------------------------------------------------------------------------------------------------------------------
+                        var totalItems = self._extractTotalItemsFromRawResponse(response);
+                        if (totalItems === 1) {
+                            return handleFailedRequestWithRawResponse(util.format('Failed to parse the vista response into JSON for vistaId: %s; totalItems: %s; exception: %j', vistaId, totalItems, e),
+                                1, response, {message: self.ERROR_LIST.INVALID_JSON_ERROR});
+                        }
+
+                        var newBatchSize;
+                        if ((totalItems) && (totalItems <= hmpBatchSize)) {
+                            newBatchSize = String(Math.ceil(totalItems / 2));
+                        } else {
+                            newBatchSize = String(Math.ceil(hmpBatchSize / 2));
+                        }
+
+                        // Retreive allocationToken from the message.
+                        //-------------------------------------------
+                        var allocationTokenFromResponse = vistaSyncUtil.extractAllocationTokenFromRawResponse(self.log, response);
+
+                        // Without an allocationToken in the response - we cannot correctly tell VistA what to do with it.  The error response here will end up skipping this message.
+                        // On the VistA side, that will result in this allocation being "timed out".  That will cause the 'reduction" algorithm to be handled by VistA and if that does
+                        // not resolve it, it will end up in Vista-Sync going into "Lock Down" mode.
+                        //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+                        if (!allocationTokenFromResponse) {
+                            return handleFailedRequestWithRawResponse(util.format('Failed to parse the vista response into JSON for vistaId: %s.  There is no allocationToken.  totalItems: %s; exception: %j', vistaId, totalItems, e),
+                                hmpBatchSize, response, {message: self.ERROR_LIST.INVALID_JSON_ERROR});
+                        }
+
+                        self.log.error('vista-client.fetchNextBatchMultipleMode: Failed to parse the vista response into JSON for vistaId: %s; hmpBatchSize: %s; allocationTokenFromResponse: %s.  Attempting retry with smaller batch size of %s. response: %s', vistaId, hmpBatchSize, allocationTokenFromResponse, newBatchSize, response);
+
+                        return self.fetchNextBatchMultipleMode(vistaId, allocationTokenFromResponse, 'reduce', newBatchSize, batchCallback);
+                    }
+                }
+
+                // This condition is generally a server error condition.  Setup is not right.
+                //----------------------------------------------------------------------------
+                if ((jsonResponse) && (jsonResponse.error)) {
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatchMultipleMode: Vista returned an error condition.', hmpBatchSize, jsonResponse, jsonResponse.error);
+
+                    // Batch level error message - most likely server lock down mode.
+                    //---------------------------------------------------------------
+                } else if ((jsonResponse) && (jsonResponse.data) && (jsonResponse.data.error)) {
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatchMultipleMode: Vista returned a batch level error condition. ', hmpBatchSize, jsonResponse, jsonResponse.data.error);
+
+                    // In some cases we may get no data - but it is not an error.  One case is if staging is not complete yet.   So look for this special case.
+                    // If it occurs - it is not an error situation.  We just want to ignore it.
+                    //------------------------------------------------------------------------------------------------------------------------------------------
+                } else if ((jsonResponse) && (jsonResponse.warning) && (jsonResponse.warning === 'Staging is not complete yet!')) {
+                    self.log.debug('vista-client.fetchNextBatchMultipleMode.handleFailedRequestResponse: Staging is not yet complete');
+                    return handleSuccessfulResponse(jsonResponse, hmpBatchSize);
+
+                    // Valid response
+                    //---------------
+                } else if ((jsonResponse) && (jsonResponse.data)) {
+                    return handleSuccessfulResponse(jsonResponse, hmpBatchSize);
+
+                    // Any other error conditions...
+                    //-------------------------------
+                } else {
+                    return handleFailedRequestWithParsedResponse('vista-client.fetchNextBatchMultipleMode: jsonResponse did not contain any data attribute.', hmpBatchSize, jsonResponse, null);
+                }
+            } else {
+                return handleFailedRequestWithRawResponse(util.format('vista-client.fetchNextBatchMultipleMode: Error received from RPC call.  Error: %s', error),
+                    hmpBatchSize, response, {message: self.ERROR_LIST.RPC_ERROR});
+            }
+        });
+    } else {
+        return handleFailedRequestWithRawResponse('vista-client.fetchNextBatchMultipleMode: Failed to call RPC getPtUpdates for vistaId: ' + vistaId + ', invalid configuration information.',
+            hmpBatchSize, null, {message: self.ERROR_LIST.INVALID_CONFIGURATION_ERROR});
+    }
+
+    //-------------------------------------------------------------------------------------
+    // This function handles calling the callback for a sucessful response from the RPC.
+    //
+    // jsonResponse - the result returned from VistA through the RPC in JSON format.
+    // hmpBatchSize - The batch size that was used when calling the RPC.
+    //-------------------------------------------------------------------------------------
+    function handleSuccessfulResponse(jsonResponse, hmpBatchSize) {
+        self.log.debug('vista-client.fetchNextBatchMultipleMode: Successfully called RPC for getPtUpdates.');
+        self.metrics.debug('Vista Fetch Next', metricsObj);
+        var wrappedResponse = {
+            data: jsonResponse.data,
+            hmpBatchSize: hmpBatchSize,
+            rawResponse: null,
+            errorData: null
+        };
+        return batchCallback(null, wrappedResponse);
+    }
+
+    //-------------------------------------------------------------------------------------
+    // This function handles calling the callback for a failed response from the RPC.  When
+    // we have to log an error where we have not or cannot parse the response - so we need
+    // to deal with it as a raw response.
+    //
+    // error - The error message to be sent - because of the failed rPC call.
+    // hmpBatchSize - The batch size that was used when calling the RPC.
+    // rawVistaResponse - The result returned from VistA through the RPC in its original form.
+    // errorData:  An object containing more information regarding the error that occurred.
+    //----------------------------------------------------------------------------------------
+    function handleFailedRequestWithRawResponse(error, hmpBatchSize, rawVistaResponse, errorData) {
+        var localError = util.format('%s rawVistaResponse: %s', error, rawVistaResponse);
+        self.metrics.debug('Vista Fetch Next (raw response) in Error', metricsObj);
+        var wrappedResponse = {
+            data: null,
+            hmpBatchSize: hmpBatchSize,
+            rawResponse: rawVistaResponse,
+            errorData: errorData
+        };
+        return batchCallback(localError, wrappedResponse);
+    }
+
+    //-------------------------------------------------------------------------------------
+    // This function handles calling the callback for a failed response from the RPC.
+    //
+    // error - The error message to be sent - because of the failed rPC call.
+    // hmpBatchSize - The batch size that was used when calling the RPC.
+    // vistaResponse - The result returned from VistA through the RPC
+    // vistaError - The error that Vista returned.
+    //-------------------------------------------------------------------------------------
+    function handleFailedRequestWithParsedResponse(error, hmpBatchSize, vistaResponse, vistaError) {
+        var localError = util.format('%s vistaResponse: %j', error, vistaResponse);
+        self.metrics.debug('Vista Fetch Next (parsed response) in Error', metricsObj);
+        var wrappedResponse = {
+            data: null,
+            hmpBatchSize: hmpBatchSize,
+            rawResponse: null,
+            errorData: vistaError
+        };
+        return batchCallback(localError, wrappedResponse);
+    }
+
+};
+
+//-------------------------------------------------------------------------------------------
+// If VistA sends back a response that cannot be parsed as JSON, we need to see if we can
+// find the totalItems value in this - by simply locating it through a string search.  If we
+// find it, then extract it and return it.  Otherwise return -1.
+//
+// rawResponse: The string form of the response from VistA.
+// returns: The 'totalItems' in the batch returned as a numeric value or null if it coud not
+//          be extracted.
+//-------------------------------------------------------------------------------------------
+VistaClient.prototype._extractTotalItemsFromRawResponse = function (rawResponse) {
+    var self = this;
+
+    var totalItems = null;
+    if ((_.isString(rawResponse)) && (!_.isEmpty(rawResponse))) {
+        // Quickest way to get this, is to extract just the allocationToken fields.  Ours should always be first.  So get them,
+        // if we get an array of them throw away all but the first.  Wrap it in {} and parse it as JSON.
+        //----------------------------------------------------------------------------------------------------------------
+        var totalItemsFields = rawResponse.match(/\"totalItems\"\s*\:\s*\"*\d+\"*/g);
+        if (_.isArray(totalItemsFields)) {
+            totalItemsFields = totalItemsFields[0];
+        }
+        if ((_.isString(totalItemsFields)) && (!_.isEmpty(totalItemsFields))) {
+            var totalItemsObj = null;
+            try {
+                totalItemsObj = JSON.parse('{' + totalItemsFields + '}');
+                if (!isNaN(totalItemsObj.totalItems)) {
+                    totalItems = parseInt(totalItemsObj.totalItems);
+                }
+            }
+            catch (e) {
+                self.log.error('viata-client._extractTotalItemsFromRawResponse: Failed to extract the totalItems value from the raw response.  rawResponse: %s', rawResponse);
+            }
+        }
+    }
+
+    return totalItems;
+};
 
 //-----------------------------------------------------------------------------------------
 // This function retrieves the patient demographics for the given site and dfn from VistA
@@ -377,7 +650,7 @@ VistaClient.prototype.getDemographics = function (vistaId, dfn, callback) {
     var pid = vistaId + ';' + dfn;
 
     self.log.debug('vista-client.getDemographics: rpcConfig for pid: %s;', pid);
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params;
 
@@ -469,7 +742,7 @@ VistaClient.prototype.getPatientDataByDomain = function (vistaId, dfn, domain, c
     var pid = vistaId + ';' + dfn;
 
     self.log.debug('vista-client.getPatientDataByDomain: rpcConfig for pid: %s;', pid);
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params;
 
@@ -548,7 +821,7 @@ VistaClient.prototype.fetchAppointment = function (vistaId, batchCallback) {
     };
     self.metrics.debug('Vista Fetch Appointment', metricsObj);
     metricsObj.timer = 'stop';
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     self.log.debug('vista-client.fetchAppointment: rpcConfig for fetchAppointment');
     if (rpcClient) {
@@ -633,7 +906,7 @@ VistaClient.prototype.unsubscribe = function (pid, unsubscribeCallback) {
     var vistaId = idUtil.extractSiteFromPid(pid);
 
     self.log.debug('vista-client.unsubscribe: rpcConfig for pid: %s', pid);
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params;
 
@@ -706,10 +979,10 @@ function _createRpcConfigVprContext(config, vistaId) {
 // callback: The handler to call when the data is received.  It will pass the information
 // in the response parameter of the callback.
 // Response is a string such as:
-//      10108V420871^NI^200M^USVHA^A\r\n3^PI^9E7A^USVHA^A\r\n0000000003^NI^200DOD^USDOD^A\r\n
+//      10108V420871^NI^200M^USVHA^A\r\n3^PI^SITE^USVHA^A\r\n0000000003^NI^200DOD^USDOD^A\r\n
 //        Where this represents the following:
 //          icn 10108V420871
-//          pid 9E7A;3
+//          pid SITE;3
 //          edipi 0000000003
 //-----------------------------------------------------------------------------------------
 VistaClient.prototype.getIds = function (vistaId, dfn, stationNumber, callback) {
@@ -730,7 +1003,7 @@ VistaClient.prototype.getIds = function (vistaId, dfn, stationNumber, callback) 
         self.log.error('vista-client.getIds: called with missing parameters...');
         return callback('Failed to getIds');
     }
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     var params = dfn + '^PI^USVHA^' + stationNumber;
 
@@ -784,7 +1057,7 @@ VistaClient.prototype.fetchAdmissionsForSite = function (vistaId, callback) {
         self.log.error('vista-client.fetchAdmissionsForSite: called with missing parameters...');
         return callback('Failed to fetchAdmissionsForSite');
     }
-    var rpcClient = this._getRpcClient(vistaId);
+    var rpcClient = self._getRpcClient(vistaId);
 
     if (rpcClient) {
         // RPC Parameters:
@@ -809,5 +1082,108 @@ VistaClient.prototype.fetchAdmissionsForSite = function (vistaId, callback) {
     }
 };
 
+//----------------------------------------------------------------------------------------------------------------
+// This method can be used to make API calls to a site that is configured to run in multiple poller mode.  It
+// is primarily used by command line tools that can be used to inspect and manage allocations within Vista.
+//
+// vistaId: The Site hash for the VistA site.
+// allocationSize: The value to place in the allocationSize.  If this is not passed, then it will default to 1000.
+// allocationToken: The value to send for the allocationToken.  If this is not passed, then no allocationToken will
+//                  be sent to VistA.
+// allocationStatus: The value to send for allocaationStatus.  If this is is not passed, then no allocationStatus
+//                   will be sent to VistA.
+// max: The value to send for max.  If this is not passed, then no max will be sent to VistA.
+// maxSize: The value to send for maxSize.  if this is not passed, then no maxSize will be sent to VistA.
+// callback:  The function called when the RPC call is complete.  Its signature is:
+//            function(error, response) where both are string values.   Although response is a string, unless
+//                  there is a functional issue it is in the from of a JSON string that can be parsed.
+//-----------------------------------------------------------------------------------------------------------------
+VistaClient.prototype.multiplePollerModeApi = function (vistaId, allocationSize, allocationToken, allocationStatus, max, maxSize, callback) {
+    var self = this;
+    self.log.debug('vista-client.multiplePollerModeApi: Entered method.   vistaId: %s, allocationSize: %s, ' +
+        'allocationToken: %s, allocationStatus: %s; max: %s; maxSize: %s', vistaId, allocationSize, allocationToken, allocationStatus, max, maxSize);
+
+    if (!vistaId) {
+        self.log.error('vista-client.multiplePollerModeApi: Called with missing vistaId parameter...');
+        return callback('Called with missing vistaId parameter');
+    }
+    var rpcClient = self._getRpcClient(vistaId);
+
+    var params;
+    if (rpcClient) {
+        params = {
+            '"command"': 'getPtUpdates',
+            '"server"': self.config['hmp.server.id'] || 'hmp-development-box',
+            '"extractSchema"': self.config['hmp.extract.schema'] || '3.001',
+            '"hmpVersion"': self.config['hmp.version'] || '0.7-S65'
+        };
+
+        if ((_.isString(allocationSize)) || (_.isFinite(allocationSize))) {
+            params['"allocationSize"'] = String(allocationSize);
+        }
+
+        if ((_.isString(allocationToken)) || (_.isFinite(allocationToken))) {
+            params['"allocationToken"'] = String(allocationToken);
+        }
+
+        if (_.isString(allocationStatus))  {
+            params['"allocationStatus"'] = allocationStatus;
+        }
+
+        if ((_.isString(max)) || (_.isFinite(max))) {
+            params['"max"'] = String(max);
+        }
+
+        if ((_.isString(maxSize)) || (_.isFinite(maxSize))) {
+            params['"maxSize"'] = String(maxSize);
+        }
+
+        rpcClient.execute('HMPDJFS API', params, function (error, response) {
+            self.log.info('vista-client.multiplePollerModeApi: Completed calling RPC: getPtUpdates: for vistaId: %s; error: %s', vistaId, error);
+            self.log.trace('vista-client.multiplePollerModeApi: Completed calling RPC: getPtUpdates: for vistaId: %s; response (String): %s', vistaId, response);
+
+            return callback(error, response);
+        });
+    }
+};
+
+//----------------------------------------------------------------------------------------------------------------
+// This method retrieves the API version that the Vista site is running.
+//
+// vistaId: The Site hash for the VistA site.
+// callback:  The function called when the RPC call is complete.  Its signature is:
+//            function(error, response) where both are string values.   Although response is a string, unless
+//                  there is a functional issue it is in the from of a JSON string that can be parsed.
+//-----------------------------------------------------------------------------------------------------------------
+VistaClient.prototype.retrieveApiVersion = function (vistaId, callback) {
+    var self = this;
+    self.log.debug('vista-client.retrieveApiVersion: Entered method.   vistaId: %s', vistaId);
+
+    if (!vistaId) {
+        self.log.error('vista-client.retrieveApiVersion: Called with missing vistaId parameter...');
+        return setTimeout(callback, 0, 'Called with missing vistaId parameter');
+    }
+    var rpcClient = self._getRpcClient(vistaId);
+
+    var params;
+    if (rpcClient) {
+        params = {
+            '"command"': 'checkHealth',
+            '"server"': self.config['hmp.server.id'] || 'hmp-development-box',
+            '"extractSchema"': self.config['hmp.extract.schema'] || '3.001',
+            '"hmpVersion"': self.config['hmp.version'] || '0.7-S65'
+        };
+
+        rpcClient.execute('HMPDJFS API', params, function (error, response) {
+            self.log.info('vista-client.multiplePollerModeApi: Completed calling RPC: getPtUpdates: for vistaId: %s; error: %s', vistaId, error);
+            self.log.trace('vista-client.multiplePollerModeApi: Completed calling RPC: getPtUpdates: for vistaId: %s; response (String): %s', vistaId, response);
+
+            return callback(error, response);
+        });
+    }
+};
+
+
 module.exports = VistaClient;
-VistaClient._createRpcConfigVprContext = _createRpcConfigVprContext;
+module.exports._createRpcConfigVprContext = _createRpcConfigVprContext;
+

@@ -1,5 +1,4 @@
 VPRJGDSQA ;SLC/KCM/CJE -- Query using attribute indexes for JSON objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ;defined at the QINDEX level:
  ;   INDEX:  Name of the index
@@ -18,6 +17,8 @@ QATTR ; return items where attribute value is in range
  S GLOBAL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))
  ; Index
  S GLOBALX="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"X"
+ ; Lock table
+ S GLOBALL="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"L"
  ;
  D PARSERNG^VPRJCR
  I $G(IDXLAST)=1 D  ; handle finding last or latest items
@@ -33,25 +34,25 @@ QATTR ; return items where attribute value is in range
  . I INDEX("levels")=3  D A3 Q
  Q
 A0 ; unsorted list
- S KEY="" F  S KEY=$O(@GLOBALX@(METHOD,INDEX,KEY)) Q:KEY=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,0)
+ S KEY="" F  S KEY=$O(@GLOBALX@(METHOD,INDEX,KEY)) Q:KEY=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,0,,SKIPLOCK)
  Q
 A1 ; sorted list / attribute only
  S SUB(1)=START(1) F  S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S KEY="" F  S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),KEY)) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
 A2 ; two attributes / attribute with sort
  S SUB(1)=START(1) F  S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S SUB(2)=START(2) F  S SUB(2)=$$NXT2 Q:SUB(2)=""  Q:SUB(2)]]STOP(2)  Q:VPRDATA'<BAIL  D
  . . S KEY="" F  S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),KEY)) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
 A3 ; three attributes
  S SUB(1)=START(1) F  S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S SUB(2)=START(2) F  S SUB(2)=$$NXT2 Q:SUB(2)=""  Q:SUB(2)]]STOP(2)  Q:VPRDATA'<BAIL  D
  . . S SUB(3)=START(3) F  S SUB(3)=$$NXT3 Q:SUB(3)=""  Q:SUB(3)]]STOP(3)  Q:VPRDATA'<BAIL  D
  . . . S KEY="" F  S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),KEY)) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . . . S INST="" F  S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),KEY,INST)) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
 NXT1() ;
  I START(1,"collate")="L" S SUB(1)=$O(START(1,"list",SUB(1))) Q SUB(1)
@@ -66,29 +67,39 @@ NXT3() ;
  Q $O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3)),DIR(3))
  ;
 L0 ; unsorted list
- S KEY="" S KEY=$O(@GLOBALX@(METHOD,INDEX,KEY),-1) Q:KEY=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,0)
+ S KEY="" S KEY=$O(@GLOBALX@(METHOD,INDEX,KEY),-1) Q:KEY=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,0,,SKIPLOCK)
  Q
 L1 ; sorted list / attribute only
  S SUB(1)="" S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),"")) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
 L2 ; two attributes / attribute with sort
  S SUB(1)=START(1) F  S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S SUB(2)="" S SUB(2)=$$NXT2 Q:SUB(2)=""  Q:SUB(2)]]STOP(2)  Q:VPRDATA'<BAIL  D
  . . S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),"")) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
 L3 ; three attributes
  S SUB(1)=START(1) F  S SUB(1)=$$NXT1 Q:SUB(1)=""  Q:SUB(1)]]STOP(1)  Q:VPRDATA'<BAIL  D
  . S SUB(2)=START(2) F  S SUB(2)=$$NXT2 Q:SUB(2)=""  Q:SUB(2)]]STOP(2)  Q:VPRDATA'<BAIL  D
  . . S SUB(3)="" S SUB(3)=$$NXT3 Q:SUB(3)=""  Q:SUB(3)]]STOP(3)  Q:VPRDATA'<BAIL  D
  . . . S KEY=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),"")) Q:KEY=""  Q:VPRDATA'<BAIL  D
- . . . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB)
+ . . . . S INST=$O(@GLOBALX@(METHOD,INDEX,SUB(1),SUB(2),SUB(3),KEY,"")) Q:INST=""  Q:VPRDATA'<BAIL  D ADDONE(KEY,INST,.SUB,SKIPLOCK)
  Q
-ADDONE(KEY,INST,SUB) ; add uid, calculating new sort key if necessary
+ADDONE(KEY,INST,SUB,SKIPLOCK) ; add uid, calculating new sort key if necessary
  ; Expects: .ORDER,.CLAUSES
- I $D(CLAUSES) Q:'$$EVALAND^VPRJCF(.CLAUSES,KEY)  ;apply filter, quit if not true
+ I $D(CLAUSES) QUIT:'$$EVALAND^VPRJCF(.CLAUSES,KEY)  ;apply filter, quit if not true
+ ; Caclulate if the lock is timedout
+ N FMNOW,FMLOCK,TIMEOUT,FMTIMEOUT
+ S FMNOW=$$HL7TFM^XLFDT($$CURRTIME^VPRJRUT)
+ S FMLOCK=$$HL7TFM^XLFDT($G(@GLOBALL@(KEY)))
+ S TIMEOUT=$G(^VPRCONFIG("store",HTTPREQ("store"),"lockTimeout"))
+ S FMTIMEOUT=$$FMADD^XLFDT(FMLOCK,,,,TIMEOUT)
+ ; Record is locked, don't return it
+ I (FMLOCK'="")&(($$FMDIFF^XLFDT(FMTIMEOUT,FMNOW,2)'>TIMEOUT)&(($$FMDIFF^XLFDT(FMTIMEOUT,FMNOW,2)>0))&($G(SKIPLOCK))) QUIT
+ ; Remove the entry from the lock table and return the data
+ I ('$D(@GLOBALL@(KEY)))!($$FMDIFF^XLFDT(FMTIMEOUT,FMNOW,2)>TIMEOUT) K:$D(@GLOBALL@(KEY)) @GLOBALL@(KEY)
  N I,SORT,KINST
  S I=0 F  S I=$O(ORDER(I)) Q:'I  S SORT(I)=$S(+ORDER(I):SUB(+ORDER(I)),1:$$SORTVAL(I)) S:ORDER(I,"nocase") SORT(I)=$$LOW^XLFSTR(SORT(I))
  S VPRDATA=VPRDATA+1
@@ -102,7 +113,7 @@ ADDONE(KEY,INST,SUB) ; add uid, calculating new sort key if necessary
  I ORDER(0)=6 S:'$D(^||TMP("VPRDATA",$J,SORT(1),SORT(2),SORT(3),SORT(4),SORT(5),SORT(6),KEY)) ^||TMP("VPRDATA",$J,SORT(1),SORT(2),SORT(3),SORT(4),SORT(5),SORT(6),KEY,INST)="" G X1
  I ORDER(0)=7 S:'$D(^||TMP("VPRDATA",$J,SORT(1),SORT(2),SORT(3),SORT(4),SORT(5),SORT(6),SORT(7),KEY)) ^||TMP("VPRDATA",$J,SORT(1),SORT(2),SORT(3),SORT(4),SORT(5),SORT(6),SORT(7),KEY,INST)="" G X1
 X1 ; end case
- Q
+ QUIT
  ;
 SORTVAL(LEVEL) ; return a value or 0 from data gbl for sorting
  ; Expects: KEY,INST,.ORDER   derived from GETVALS^VPRJCV

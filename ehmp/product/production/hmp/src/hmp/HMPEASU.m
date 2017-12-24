@@ -1,7 +1,12 @@
-HMPEASU ;SLC/GRR,ASMR/RRB - Serve VistA reference data as JSON via RPC;10/18/12 6:26pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPEASU ;SLC/GRR,ASMR/RRB,AFS/PB -- Serve VistA reference data as JSON via RPC ; May 18, 2016 09:26pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Sep 01, 2011;Build 49
  ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ; External References          DBIA#
+ ; -------------------          -----
+ ; TIU(8925.1                    2700
+ ; USR(8930                      6088
+ ; USR(8930.2                    6089
  Q
  ;
 CLASS ; -- USR Class file #8930
@@ -26,10 +31,9 @@ CLS1(IEN) ;
  S INREC("abbreviation")=$G(@Y@(.02,"E")),INREC("active")=$S($G(@Y@(.03,"I"))=1:"true",1:"false")
  S INREC("displayName")=$G(@Y@(.04,"E"))
  I $D(HMPV("8930.01")) D
- . N IEN2,ID,CNT
- . S IEN2="",CNT=0
- . F  S IEN2=$O(HMPV(8930.01,IEN2)) Q:IEN2=""  D
- . . S CNT=CNT+1,INREC("subClass",CNT,"name")=HMPV("8930.01",IEN2,".01","E")
+ . N IEN2,ID,CNT,X S IEN2="",CNT=0
+ . F  S IEN2=$O(HMPV(8930.01,IEN2)) Q:IEN2=""  S X=$G(HMPV("8930.01",IEN2,".01","E")) D:$L(X)  ;DE4777 only process entries with .01 field
+ . . S CNT=CNT+1,INREC("subClass",CNT,"name")=X
  . . S ID=HMPV(8930.01,IEN2,.01,"I"),INREC("subClass",CNT,"uid")=$$SETUID^HMPUTILS("asu-class",,ID)
  D ADD^HMPEF("INREC") S HMPLAST=IEN
  Q

@@ -11,8 +11,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -25,6 +25,6 @@ describe('medication-orders-default-days resource integration test', function() 
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', unitStr: '2^', schedStr: 'Q6H PRN^', pid: '9E7A;100615', drug: '213', oi: 1348 });
+        }, { site: 'SITE', unitStr: '2^', schedStr: 'Q6H PRN^', pid: 'SITE;100615', drug: '213', oi: 1348 });
     });
 });

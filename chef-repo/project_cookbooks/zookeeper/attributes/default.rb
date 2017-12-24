@@ -22,8 +22,8 @@ default[:zookeeper][:base_data_dir] = "#{node[:zookeeper][:home_dir]}/data/zk"
 default[:zookeeper][:base_log_dir] = "#{node[:zookeeper][:home_dir]}/log/zk"
 default[:zookeeper][:properties] = {
   :tickTime => 2000,
-  :initLimit => 10,
-  :syncLimit => 5,
+  :initLimit => 15,
+  :syncLimit => 10,
   :maxClientCnxns => 500
 }
 

@@ -12,8 +12,9 @@ define([
     'app/applets/action/tray/tasks/trayUtils',
     'app/applets/orders/taskNavigation',
     'app/applets/action/tray/actionItemTemplate',
-    'hbs!app/applets/action/tray/emptyViewTemplate'
-], function(_, Handlebars, Backbone, Marionette, moment, OrderSearchView, DraftCollection, LabOrderTrayUtils, OrderEntryUtils, RequestTrayUtils, TaskTrayUtils, OrdersTaskNavigation, ActionItemTemplate, EmptyViewTemplate) {
+    'hbs!app/applets/action/tray/emptyViewTemplate',
+    'app/applets/task_forms/common/utils/utils'
+], function(_, Handlebars, Backbone, Marionette, moment, OrderSearchView, DraftCollection, LabOrderTrayUtils, OrderEntryUtils, RequestTrayUtils, TaskTrayUtils, OrdersTaskNavigation, ActionItemTemplate, EmptyViewTemplate, TaskUtils) {
 
     'use strict';
 
@@ -234,7 +235,9 @@ define([
             onClick: function(model) {
                 if (model.get('isTask')) {
                     var navigation = model.get('navigation');
+
                     if (_.isObject(navigation)) {
+                        navigation.parameters.workspaceId = TaskUtils.getWorkspaceId(navigation);
                         ADK.Messaging.getChannel(navigation.channel).trigger(navigation.event, navigation.parameters);
                     } else {
                         //Temporary fallback until all tasks have a navigation node

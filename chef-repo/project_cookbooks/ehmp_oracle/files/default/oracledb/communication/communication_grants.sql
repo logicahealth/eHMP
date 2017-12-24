@@ -1,0 +1,13 @@
+BEGIN
+    FOR t IN (SELECT TABLE_NAME FROM user_tables)
+    LOOP
+        EXECUTE IMMEDIATE 'GRANT SELECT, INSERT, UPDATE ON COMMUNICATION.' || t.TABLE_NAME || ' TO ehmp_rw_role';
+    END LOOP;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+        	DBMS_OUTPUT.put_line ('ERROR - COMMUNICATION_GRANTS');
+            DBMS_OUTPUT.put_line (SQLERRM);
+            RAISE;
+END;
+/

@@ -15,7 +15,8 @@ define([
         defaults: {
             items: [],
             extraClasses: [],
-            legend: undefined
+            legend: undefined,
+            srOnlyLegend: false
         },
         behaviors: _.defaults({
             NestableContainer: {
@@ -24,14 +25,12 @@ define([
         }, _.omit(ControlService.CompositeViewControl.prototype.behaviors, ['DefaultClasses', 'ErrorMessages'])),
         requiredFields: ['legend', 'items'],
         tagName: "fieldset",
-        template: Handlebars.compile('{{#if legend}}<legend>{{legend}}</legend>{{/if}}'),
+        template: Handlebars.compile('{{#if legend}}<legend{{#if srOnlyLegend}} class="sr-only"{{/if}}>{{legend}}</legend>{{/if}}'),
         initialize: function(options) {
             this.initOptions(options);
-            this.legend = this.field.get("legend") || this.defaults.legend;
-            this.template = Handlebars.compile((_.isString(this.legend) ? "<legend>" + this.legend + "</legend>" : ""));
             var items = this.field.get("items") || this.defaults.items;
             if (!(items instanceof Backbone.Collection))
-                items = new ControlService.Fields(items);
+                items = new ControlService.Fields(items, { formView: _.get(this, 'field.formView') });
             this.items = items;
             this.collection = this.items;
 

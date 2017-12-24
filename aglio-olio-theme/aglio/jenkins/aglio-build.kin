@@ -1,0 +1,8 @@
+"aglio-build-%branch%" {
+  template = 'templates/aglio-build.tpl'
+  description = "aglio build for the branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/aglio.git'
+  gitBranch = '%branch%'
+
+}

@@ -23,7 +23,7 @@ function JdsClient(setLog, setConfig) {
     this.responseIndex = 0;
 }
 
-JdsClient.prototype.childInstance = function(log){
+JdsClient.prototype.childInstance = function(log) {
     return this;
 };
 
@@ -61,11 +61,11 @@ JdsClient.prototype._setResponseData = function(error, response, result) {
 // JdsClient.prototype.clearJdsData = function(callback) {
 //     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
 //         this.responseIndex++;
-//         callback(this.error[this.responseIndex-1], this.response[this.responseIndex-1]);
+//         setTimeout(callback, 0, this.error[this.responseIndex-1], this.response[this.responseIndex-1]);
 //     }
 //     else {
 //         this.responseIndex++;
-//         callback(this.error[0], this.response[0]);
+//         setTimeout(callback, 0, this.error[0], this.response[0]);
 //     }
 // };
 
@@ -73,12 +73,11 @@ JdsClient.prototype.saveSyncStatus = function(metastamp, patientIdentifier, call
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
         this.log.debug('jds-client-dummy.saveSyncStatus: (from array) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        this.log.debug('jds-client-dummy.saveSyncStatus: (from [0]) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[0], this.response[0]);
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    this.log.debug('jds-client-dummy.saveSyncStatus: (from [0]) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[0], this.response[0]);
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
@@ -87,11 +86,10 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
 
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getSimpleSyncStatus = function(patientIdentifier, callback) {
@@ -100,31 +98,28 @@ JdsClient.prototype.getSimpleSyncStatus = function(patientIdentifier, callback) 
 
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.clearSyncStatus = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.saveJobState = function(jobState, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getJobStatus = function(job, callback) {
@@ -133,71 +128,64 @@ JdsClient.prototype.getJobStatus = function(job, callback) {
 
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.clearJobStatesByPatientIdentifier = function(patientIdentifier, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getPatientIdentifier = function(job, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getPatientIdentifierByPid = function(pid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getPatientIdentifierByIcn = function(pid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.storePatientIdentifier = function(jdsPatientIdentificationRequest, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.clearPatientIdentifiers = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 //-----------------------------------------------------------------------------------------
@@ -210,11 +198,10 @@ JdsClient.prototype.clearPatientIdentifiers = function(callback) {
 JdsClient.prototype.storeOperationalData = function(operationalData, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 //------------------------------------------------------------------------------------------
@@ -226,11 +213,10 @@ JdsClient.prototype.storeOperationalData = function(operationalData, callback) {
 JdsClient.prototype.getOperationalDataPtSelectByPid = function(pid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //------------------------------------------------------------------------------------------
@@ -242,11 +228,10 @@ JdsClient.prototype.getOperationalDataPtSelectByPid = function(pid, callback) {
 JdsClient.prototype.getOperationalDataPtSelectByIcn = function(icn, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //-----------------------------------------------------------------------------------------
@@ -260,11 +245,10 @@ JdsClient.prototype.getOperationalDataPtSelectByIcn = function(icn, callback) {
 JdsClient.prototype.getOperationalDataByUid = function(uid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //-----------------------------------------------------------------------------------------
@@ -279,12 +263,10 @@ JdsClient.prototype.getOperationalDataByUid = function(uid, callback) {
 JdsClient.prototype.getOperationalDataBySiteAndClinic = function(site, clinic, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex-1], this.response[this.responseIndex-1], this.result[this.responseIndex-1]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
-    else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
-    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //-----------------------------------------------------------------------------------------
@@ -297,117 +279,105 @@ JdsClient.prototype.getOperationalDataBySiteAndClinic = function(site, clinic, c
 JdsClient.prototype.deleteOperationalDataByUid = function(uid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.storeOperationalDataMutable = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getOperationalDataMutable = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getOperationalDataMutableByFilter = function(filter, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getOperationalDataMutableCount = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.deleteOperationalDataMutable = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.saveOperationalSyncStatus = function(metastamp, siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 JdsClient.prototype.getOperationalSyncStatus = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 JdsClient.prototype.getOperationalSyncStatusWithParams = function(siteId, params, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 JdsClient.prototype.deleteOperationalSyncStatus = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 JdsClient.prototype.clearAllOperationalSyncStatus = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.clearOperationalDataMutableStorage = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 //------------------------------------------------------------------------------------------
@@ -420,11 +390,10 @@ JdsClient.prototype.clearOperationalDataMutableStorage = function(callback) {
 JdsClient.prototype.getPtDemographicsByPid = function(pid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //------------------------------------------------------------------------------------------
@@ -437,21 +406,19 @@ JdsClient.prototype.getPtDemographicsByPid = function(pid, callback) {
 JdsClient.prototype.getPtDemographicsByIcn = function(icn, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.storePatientDataFromJob = function(job, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 //----------------------------------------------------------------------------------
@@ -466,11 +433,10 @@ JdsClient.prototype.storePatientDataFromJob = function(job, callback) {
 JdsClient.prototype.storePatientData = function(patientDataEvent, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 
@@ -484,11 +450,10 @@ JdsClient.prototype.storePatientData = function(patientDataEvent, callback) {
 JdsClient.prototype.deletePatientDataByUid = function(uid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 //-----------------------------------------------------------------------------------------
@@ -501,51 +466,46 @@ JdsClient.prototype.deletePatientDataByUid = function(uid, callback) {
 JdsClient.prototype.deletePatientByPid = function(pid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.removePatientIdentifier = function(jpid, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.createJobStatus = function(job, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getPatientList = function(lastAccessTime, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getPatientListBySite = function(siteId, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getPatientDomainData = function(siteId, callback) {
@@ -554,41 +514,82 @@ JdsClient.prototype.getPatientDomainData = function(siteId, callback) {
 
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
+};
+
+JdsClient.prototype.findErrorRecords = function(query, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
+        this.responseIndex++;
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.findErrorRecordsByFilter = function(filter, callback) {
-    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
-JdsClient.prototype.deleteErrorRecordById = function(id, callback) {
+JdsClient.prototype.findErrorRecordsByRange = function(index, filter, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
+        this.responseIndex++;
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
+};
+
+JdsClient.prototype.findErrorRecordByUid = function(filter, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
+        this.responseIndex++;
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
+};
+
+JdsClient.prototype.deleteErrorRecordByUid = function(id, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
+};
+
+JdsClient.prototype.lockErrorRecord = function(id, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
+        this.responseIndex++;
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
+};
+
+JdsClient.prototype.unlockErrorRecord = function(id, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
+        this.responseIndex++;
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.getJpidFromQuery = function(patientIdentifier, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 //----------------------------------------------------------------------------------
@@ -598,7 +599,7 @@ JdsClient.prototype.getJpidFromQuery = function(patientIdentifier, callback) {
 // storeEventInfo: The required event identification to correctly notify JDS
 //                 of the event status.  The event should look as follows:
 //                 {
-//                   "uid": "urn:va:vital:9E7A:3:23",
+//                   "uid": "urn:va:vital:SITE:3:23",
 //                   "eventStamp": 20040330215452,
 //                   "type": "solr"
 //                 }
@@ -610,12 +611,10 @@ JdsClient.prototype.getJpidFromQuery = function(patientIdentifier, callback) {
 JdsClient.prototype.setEventStoreStatus = function(pid, storeEventInfo, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex-1], this.response[this.responseIndex-1]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
-    else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0]);
-    }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
 
 JdsClient.prototype.getActiveUsers = function(callback) {
@@ -624,24 +623,34 @@ JdsClient.prototype.getActiveUsers = function(callback) {
 
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
         this.responseIndex++;
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        callback(this.error[0], this.response[0], this.result[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1], this.result[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    setTimeout(callback, 0, this.error[0], this.response[0], this.result[0]);
 };
 
 JdsClient.prototype.saveActiveUsers = function(activeUsers, callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;
         this.log.debug('jds-client-dummy.saveSyncStatus: (from array) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-        callback(this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
-    } else {
-        this.responseIndex++;
-        this.log.debug('jds-client-dummy.saveSyncStatus: (from [0]) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[0], this.response[0]);
-        callback(this.error[0], this.response[0]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
     }
+    this.responseIndex++;
+    this.log.debug('jds-client-dummy.saveSyncStatus: (from [0]) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[0], this.response[0]);
+    setTimeout(callback, 0, this.error[0], this.response[0]);
 };
+
+JdsClient.prototype.addErrorRecord = function(errorRecord, callback) {
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
+        this.responseIndex++;
+        this.log.debug('jds-client-dummy.addErrorRecord: (from array) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
+        return setTimeout(callback, 0, this.error[this.responseIndex - 1], this.response[this.responseIndex - 1]);
+    }
+    this.responseIndex++;
+    this.log.debug('jds-client-dummy.addErrorRecord: (from [0]) responseIndex: %s; error: %s, response: %j', this.responseIndex - 1, this.error[0], this.response[0]);
+    setTimeout(callback, 0, this.error[0], this.response[0]);
+};
+
 
 module.exports = JdsClient;
 // JdsClient._tests = {

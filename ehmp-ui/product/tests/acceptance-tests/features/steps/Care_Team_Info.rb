@@ -61,10 +61,8 @@ end
 
 When(/^"([^"]*)" is displayed as "([^"]*)"$/) do |current_patient_label, patient_name|
   ehmp = PobCoverSheet.new
-  expect(ehmp.global_header.wait_for_current_patient_label).to eq(true)
-  expect(ehmp.global_header.current_patient_label.text.upcase).to have_text(current_patient_label.upcase)
-  expect(ehmp.global_header.wait_for_fld_patient_name).to eq(true)
-  expect(ehmp.global_header.fld_patient_name.text.upcase).to have_text(patient_name.upcase)
+  expect(ehmp.patient_view.wait_for_fld_patient_name).to eq(true)
+  expect(ehmp.patient_view.fld_patient_name.text.upcase).to have_text(patient_name.upcase)
 end
 
 And(/^the patientInformationProvider displays label "(.*?)"$/) do |text|

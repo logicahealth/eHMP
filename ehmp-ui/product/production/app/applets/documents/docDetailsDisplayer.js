@@ -75,6 +75,7 @@ define([
 
     function doGetView(model, docType, resultDocCollection, childDocCollection, callback) {
         if (DEBUG) console.log("Doc Details Displayer -----> doGetView");
+        docType = docType || '';
         var dt = docType.toLowerCase();
         var isStub = model.attributes.stub && model.attributes.stub === 'true';
 
@@ -200,7 +201,7 @@ define([
         },
 
         getTitle: function(model, docType) {
-            switch (docType.toLowerCase()) {
+            switch ((docType || '').toLowerCase()) {
 
                 // external detail view
                 case 'clinical procedure':

@@ -17,8 +17,6 @@ export GRADLE_OPTS="-Xmx1G -Xms256m -XX:MaxPermSize=512m -XX:PermSize=256m -Dorg
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
 
-jdk_version="jdk1.8.0_121"
-
 INSTALL_FOR_USER=$USER
 if [ ! -z "$SUDO_USER" ]; then
   INSTALL_FOR_USER=$SUDO_USER
@@ -39,12 +37,17 @@ export BERKSHELF_PATH=$WORKSPACE/.berkshelf
 export VAGRANT_HOME=$WORKSPACE/.vagrant.d
 export GEM_HOME=$WORKSPACE/.aidk_gems
 
-# keep $JAVA_HOME out front to circumvent any previously installed jdks/jres
-if uname -a | grep -q "Darwin"; then
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
-  export PATH=/usr/local/git/bin:$PATH
+if [ -f $WORKSPACE/common_set_env.sh ]; then 
+  source $WORKSPACE/common_set_env.sh
 else
-  export JAVA_HOME=/usr/lib/jvm/$jdk_version
+  printf "\n"
+  echo "ERROR: Cannot locate file: $WORKSPACE/common_set_env.sh. Please run configure_workspace.sh to continue."
+  printf "\n"
+  return
+fi
+
+if uname -a | grep -q "Darwin"; then
+  export PATH=/usr/local/git/bin:$PATH
 fi
 
 export PATH=$GEM_HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH

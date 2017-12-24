@@ -1,4 +1,4 @@
-@F236_OnLineHelp  @reg2
+@F236_OnLineHelp  @reg4
 
 Feature: F236 - OnLineHelp
 #"As an an eHMP user, I need to be able to click on help icons in strategic areas in he eHMP UI in order to display contextual help information and create PDF documents;  so that I can access and print PDF documents of help content."
@@ -38,7 +38,7 @@ Scenario: Verify if OnLineHelp icons are present on timeline applet
 Scenario: Verify if OnLineHelp icons are present on Meds Review applet
   When user searches for and selects "Eight,Patient"   
   And user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   And the On-line Help icon is present on Meds Review page
 
 @F236_7_OnLineHelp @US4520

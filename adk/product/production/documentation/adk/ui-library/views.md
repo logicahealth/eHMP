@@ -75,6 +75,7 @@ Returns a LayoutView complete with a [ADK.UI.Form](#Form) view for entering text
 |<i class="fa fa-check-circle"></i> | **collection**            | Backbone Collection | must be an instance of **ADK.UI.TextFilter.prototype.Collection** otherwise it will throw an error and disregard the collection passed in through the options object and replace it with a new empty _ADK.UI.TextFilter.prototype.Collection_ |
 |                                   | **showFilterTitle**       | Boolean             | determines whether the form view should show an input field for users to enter a string value that is associated as the **applet's filter title**. When enabled the text filter view will also handle the behavior of saving the string to the user's workspace preferences which will allow it to persist until deleted or changed.  <br/>**Default:** `false`|
 |                                   | **multipleFilters**       | Boolean             | determines whether a list of applied filters should be shown to the user. When enabled, submitting a new filter string will generate a new list item associated with the text entered and clear the filter input field. Users will also be able to remove filter items individually by clicking on a single list item to remove it from the collection. If disabled, submitting a new filter string will not clear the filter input field and user will be required to use the input field to clear any unwanted filter strings. In both cases the collection is updated and appropriate events are fired.<br/>**Default:** `false` |
+|                                   | **predefinedFilter**      | Boolean             | Set to true to make the filter title uneditable, the predifined filter items display, and prevent user defined filters from being added to the list view. User defined filters will be kept in the input box.<br/>**Default:** `false` |
 |<i class="fa fa-check-circle"></i> | **instanceId**            | String              | unique applet identifier used for naming |
 |                                   | **filterTitle**           | String              | string used as the initial value for the filter title input field<br/>**Default:** `''` _(empty string)_|
 
@@ -514,6 +515,10 @@ ExampleFormView = ADK.UI.Form.extend({
 **Please refer to each component's documentation individually to ensure which events are supported for each.** (Not all controls will support the events used above example)
 :::
 
+::: side-note
+**Important Note:** In order to keep the form view's ui hash functionality in tack, the form re-binds it's UI elements as necessary when nested controls prompt it to. After the re-binding, the form view fires off the following `form:view:updated:bound:ui:elements` DOM event on it's element (this.$el) to indicate to views above, that ui hash selectors targeting elements inside of the form may have become stale.
+:::
+
 ## Sub Tray Button ##
 (_Built to be consumed by a registered sub-tray component in a ADK.UI.Workflow_)
 
@@ -551,10 +556,23 @@ The basic goal of the tray action summary list view is to abstract out the layou
 |                                   | **listView**      | Backbone View Definition | a Backbone / Marionette View Definition that will be shown below the list of actionable items |
 |                         | **helpMapping**| string   | String that corresponds to help mappings found in helpMappings.js -- is used to generate a url. <br />**Note:** defining either this or `helpUrl`, a help button will be shown in the header, though it must be found in helpMappings.js. |
 |                         | **helpUrl**| string   | String to be used as target on click of help button in header. <br />**Note:** defining either this or `helpMapping`, a help button will be shown in the header. |
+|                         | **nextSuggestion**| object   | Object of configuration options used by the view to suggest something to the user. <br />**Note:** more details along with a list of configurable options is outlined in the [Next Suggestion Options](#Tray-Action-Summary-List-Options-Next-Suggestion-Options) section below. |
 
 The diagram below helps depict where the options are being used inside the view's ui.
 
 ![TrayActionSummaryListDiagram](assets/TrayActionSummaryList.png "Tray Action Summary List View description of where the view options are used.")
+
+#### Next Suggestion Options ####
+| Required                          | Option              | Type      | Description |
+|:---------------------------------:|---------------------|-----------|-------------|
+|                                   | **header**          | string    | text value to display as the header of the next suggestion section |
+|                                   | **suggestionLabel** | string    | descriptive text to display in conjunction with the suggestion  |
+|<i class="fa fa-check-circle"></i> | **suggestion**      | string    | text highlighting the suggestion |
+|                                   | **buttonLabel**     | string    | button text that describes the action of the callback |
+|                                   | **callback**        | function  | method to invoke on click of the button |
+
+The diagram below helps depict where the options are being used inside the view's next suggestion section.
+![TrayActionSummaryListNextSuggestionDiagram](assets/TrayActionSummaryListNextSuggestion.png "Tray Action Summary List Next Suggestion View description of where the view's nextSuggestion options are used.")
 
 ### Basic Usage ###
 ```JavaScript
@@ -564,7 +582,16 @@ ADK.UI.TrayActionSummaryList.extend({
     headerLabel: "TRAY_HEADER_LABEL",
     dropdownLabel: "DROPDOWN_MENU_LABEL"
     listView: ADK.UI.TraySummaryList.extend(...), // see Tray Summary List View documentation
-    helpMapping: 'EXAMPLE_TRAY'
+    helpMapping: 'EXAMPLE_TRAY',
+    nextSuggestion: {
+      header: 'Header',
+      suggestionLabel: 'Suggestion Label',
+      suggestion: 'Suggestion',
+      buttonLabel: 'Button Label',
+      callback: function() {
+        // Do something here
+      }
+    }
   }
 })
 ```

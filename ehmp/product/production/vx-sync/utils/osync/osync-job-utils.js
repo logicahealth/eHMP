@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('underscore');
-var uuid = require('node-uuid');
 
 var osync = {};
 
@@ -56,8 +55,6 @@ osync.create = function(type, meta, logger) {
 
     if (!_.isUndefined(meta.jpid)) {
         job.jpid = meta.jpid;
-    } else {
-        job.jpid = uuid.v4();
     }
 
     if (!_.isUndefined(meta.rootJobId)) {

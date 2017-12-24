@@ -18,12 +18,12 @@ var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var jdsClient = new JdsClient(logger, logger, config);
 
-var identifiers = ['9E7A;33333'];
+var identifiers = ['SITE;33333'];
 var identifiers2 = ['888V123887', 'ASDF;123'];
 var extraIdentifiers = ['12108V420871', 'DOD;00001'];
 var patientIdentifier = {
     'type': 'pid',
-    'value': '9E7A;33333'
+    'value': 'SITE;33333'
 };
 var async = require('async');
 var jpid;
@@ -109,31 +109,31 @@ var getMetaStamps = function() {
     var inProgressMetaStamp = mockSyncStatus('21EC2020-3AEA-4069-A2DD-08002B30309D', 33333);
     inProgressMetaStamp = inProgressMetaStamp.data.items[0].inProgress;
 
-    var initial9E7AStatus = JSON.parse(JSON.stringify(inProgressMetaStamp));
+    var initialSITEStatus = JSON.parse(JSON.stringify(inProgressMetaStamp));
 
-    initial9E7AStatus.icn = extraIdentifiers[0];
-    delete initial9E7AStatus.syncCompleted;
+    initialSITEStatus.icn = extraIdentifiers[0];
+    delete initialSITEStatus.syncCompleted;
 
-    var initialDODLabStatus = JSON.parse(JSON.stringify(initial9E7AStatus));
+    var initialDODLabStatus = JSON.parse(JSON.stringify(initialSITEStatus));
 
-    delete initial9E7AStatus.sourceMetaStamp.DOD;
-    delete initialDODLabStatus.sourceMetaStamp['9E7A'];
+    delete initialSITEStatus.sourceMetaStamp.DOD;
+    delete initialDODLabStatus.sourceMetaStamp['SITE'];
 
     delete initialDODLabStatus.sourceMetaStamp.DOD.syncCompleted;
 
     var initialDODVitalStatus = JSON.parse(JSON.stringify(initialDODLabStatus));
 
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].syncCompleted;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.syncCompleted;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.syncCompleted;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.eventMetaStamp['urn:va:allergy:9E7A:3:1001'].stored;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.eventMetaStamp['urn:va:allergy:9E7A:3:1002'].stored;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.eventMetaStamp['urn:va:vital:9E7A:3:1001'].stored;
-    delete initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.eventMetaStamp['urn:va:vital:9E7A:3:1002'].stored;
-    initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.storedCount=0;
-    initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.storedCount=0;
-    initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.syncCompleted=false;
-    initial9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.syncCompleted=false;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].syncCompleted;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.syncCompleted;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.syncCompleted;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.eventMetaStamp['urn:va:allergy:SITE:3:1001'].stored;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.eventMetaStamp['urn:va:allergy:SITE:3:1002'].stored;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.eventMetaStamp['urn:va:vital:SITE:3:1001'].stored;
+    delete initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.eventMetaStamp['urn:va:vital:SITE:3:1002'].stored;
+    initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.storedCount=0;
+    initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.storedCount=0;
+    initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.syncCompleted=false;
+    initialSITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.syncCompleted=false;
 
     delete initialDODLabStatus.sourceMetaStamp.DOD.domainMetaStamp.vital;
     delete initialDODLabStatus.sourceMetaStamp.DOD.domainMetaStamp.lab.syncCompleted;
@@ -147,18 +147,18 @@ var getMetaStamps = function() {
     delete initialDODVitalStatus.sourceMetaStamp.DOD.domainMetaStamp.vital.eventMetaStamp['urn:va:vital:DOD:00001:1003000'].stored;
     initialDODVitalStatus.sourceMetaStamp.DOD.domainMetaStamp.vital.syncCompleted=false;
 
-    var reassembledMetastamp = JSON.parse(JSON.stringify(initial9E7AStatus));
+    var reassembledMetastamp = JSON.parse(JSON.stringify(initialSITEStatus));
     reassembledMetastamp.sourceMetaStamp.DOD = JSON.parse(JSON.stringify(initialDODLabStatus.sourceMetaStamp.DOD));
     reassembledMetastamp.sourceMetaStamp.DOD.domainMetaStamp.vital = JSON.parse(JSON.stringify(initialDODVitalStatus.sourceMetaStamp.DOD.domainMetaStamp.vital));
 
-    var summary9E7AStatus = JSON.parse(JSON.stringify(initial9E7AStatus));
-    delete summary9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.eventMetaStamp;
-    delete summary9E7AStatus.sourceMetaStamp['9E7A'].domainMetaStamp.vital.eventMetaStamp;
+    var summarySITEStatus = JSON.parse(JSON.stringify(initialSITEStatus));
+    delete summarySITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.allergy.eventMetaStamp;
+    delete summarySITEStatus.sourceMetaStamp['SITE'].domainMetaStamp.vital.eventMetaStamp;
 
     var summaryCompleteMetaStamp = JSON.parse(JSON.stringify(reassembledMetastamp));
-    // Delete eventMetaStamp for 9E7A
-    delete summaryCompleteMetaStamp.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.eventMetaStamp;
-    delete summaryCompleteMetaStamp.sourceMetaStamp['9E7A'].domainMetaStamp.vital.eventMetaStamp;
+    // Delete eventMetaStamp for SITE
+    delete summaryCompleteMetaStamp.sourceMetaStamp['SITE'].domainMetaStamp.allergy.eventMetaStamp;
+    delete summaryCompleteMetaStamp.sourceMetaStamp['SITE'].domainMetaStamp.vital.eventMetaStamp;
     // Delete eventMetaStamp for DOD
     delete summaryCompleteMetaStamp.sourceMetaStamp.DOD.domainMetaStamp.vital.eventMetaStamp;
     delete summaryCompleteMetaStamp.sourceMetaStamp.DOD.domainMetaStamp.lab.eventMetaStamp;
@@ -166,8 +166,8 @@ var getMetaStamps = function() {
     return {
         'completeMetaStamp': reassembledMetastamp,
         'summaryCompleteMetaStamp': summaryCompleteMetaStamp,
-        'initial9E7AStatus': initial9E7AStatus,
-        'summary9E7AStatus': summary9E7AStatus,
+        'initialSITEStatus': initialSITEStatus,
+        'summarySITEStatus': summarySITEStatus,
         'initialDODLabStatus': initialDODLabStatus,
         'initialDODVitalStatus': initialDODVitalStatus
     };
@@ -490,7 +490,7 @@ describe('jds-client.js', function() {
                     jdsClient.getJobStatus({
                         'patientIdentifier': {
                             'type': 'pid',
-                            'value': '9E7A;33333'
+                            'value': 'SITE;33333'
                         }
                     }, function(error, response, results) {
                         expect(error).toBeNull();
@@ -538,9 +538,9 @@ describe('jds-client.js', function() {
         });
 
         describe('Correctly displays the job status under a multi-job scenario', function() {
-            var vista9E7AsubscribeRequestCreateState,
-                vista9E7AsubscribeRequestStartState,
-                vista9E7AsubscribeRequestCompleteState;
+            var vistaSITEsubscribeRequestCreateState,
+                vistaSITEsubscribeRequestStartState,
+                vistaSITEsubscribeRequestCompleteState;
 
             beforeEach(resetJobState);
             beforeEach(function() {
@@ -558,20 +558,20 @@ describe('jds-client.js', function() {
                     });
                     var completeTime = parseInt(jobs[1].timestamp);
 
-                    vista9E7AsubscribeRequestCompleteState = jobs[1];
+                    vistaSITEsubscribeRequestCompleteState = jobs[1];
 
-                    vista9E7AsubscribeRequestCreateState = _.clone(vista9E7AsubscribeRequestCompleteState);
-                    vista9E7AsubscribeRequestCreateState.status = 'created';
-                    vista9E7AsubscribeRequestCreateState.timestamp = (completeTime - 2).toString();
+                    vistaSITEsubscribeRequestCreateState = _.clone(vistaSITEsubscribeRequestCompleteState);
+                    vistaSITEsubscribeRequestCreateState.status = 'created';
+                    vistaSITEsubscribeRequestCreateState.timestamp = (completeTime - 2).toString();
 
-                    vista9E7AsubscribeRequestStartState = _.clone(vista9E7AsubscribeRequestCompleteState);
-                    vista9E7AsubscribeRequestStartState.status = 'started';
-                    vista9E7AsubscribeRequestStartState.timestamp = (completeTime - 1).toString();
+                    vistaSITEsubscribeRequestStartState = _.clone(vistaSITEsubscribeRequestCompleteState);
+                    vistaSITEsubscribeRequestStartState.status = 'started';
+                    vistaSITEsubscribeRequestStartState.timestamp = (completeTime - 1).toString();
 
                     jdsClient.saveJobState(startedEnterpriseSyncRequestState, validateSaveResponse);
-                    jdsClient.saveJobState(vista9E7AsubscribeRequestCreateState, validateSaveResponse);
-                    jdsClient.saveJobState(vista9E7AsubscribeRequestStartState, validateSaveResponse);
-                    jdsClient.saveJobState(vista9E7AsubscribeRequestCompleteState, validateSaveResponse);
+                    jdsClient.saveJobState(vistaSITEsubscribeRequestCreateState, validateSaveResponse);
+                    jdsClient.saveJobState(vistaSITEsubscribeRequestStartState, validateSaveResponse);
+                    jdsClient.saveJobState(vistaSITEsubscribeRequestCompleteState, validateSaveResponse);
                 });
 
                 waitsFor(function() {
@@ -592,7 +592,7 @@ describe('jds-client.js', function() {
                         expect(val(results, 'items', 'length')).not.toBeUndefined();
                         expect(val(results, 'items', 'length')).toBe(2);
                         expect(val(results, 'items')).toContain(startedEnterpriseSyncRequestState);
-                        expect(val(results, 'items')).toContain(vista9E7AsubscribeRequestCompleteState);
+                        expect(val(results, 'items')).toContain(vistaSITEsubscribeRequestCompleteState);
                     });
                 });
 
@@ -626,7 +626,7 @@ describe('jds-client.js', function() {
 
             runs(function() {
                 finished = false;
-                jdsClient.saveSyncStatus(metastamps.initial9E7AStatus, patientIdentifier, function(error, response) {
+                jdsClient.saveSyncStatus(metastamps.initialSITEStatus, patientIdentifier, function(error, response) {
                     expect(error).toBeFalsy();
                     expect(val(response, 'statusCode')).toBe(200);
                     finished = true;
@@ -729,7 +729,7 @@ describe('jds-client.js', function() {
                         expect(val(results.inProgress, 'lastAccessTime')).toMatch(/\d{14}/);
                         delete results.inProgress.lastAccessTime;
 
-                        expect(val(results, 'inProgress')).toEqual(metastamps.summary9E7AStatus);
+                        expect(val(results, 'inProgress')).toEqual(metastamps.summarySITEStatus);
 
                         finished = true;
                     });
@@ -741,7 +741,7 @@ describe('jds-client.js', function() {
             });
         });
 
-        describe('End to end test saving metastamps for 9E7A and two DOD domains', function() {
+        describe('End to end test saving metastamps for SITE and two DOD domains', function() {
             beforeEach(function() {
                 var finished = 0;
                 var handleSyncSaveResponse = function(error, response) {
@@ -787,12 +787,12 @@ describe('jds-client.js', function() {
 
         describe('Verify Solr Sync Status Tracking', function() {
             it('Verify we successfully stored SOLR sync status for one event.', function() {
-                var allergyEventStamps = val(metastamps.initial9E7AStatus, 'sourceMetaStamp', '9E7A', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
+                var allergyEventStamps = val(metastamps.initialSITEStatus, 'sourceMetaStamp', 'SITE', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
                 expect(allergyEventStamps).toBeTruthy();
                 var uidList = _.keys(allergyEventStamps);
                 expect(_.isArray(uidList)).toBe(true);
                 expect(uidList.length).toBeGreaterThan(0);
-                var pid = val(metastamps.initial9E7AStatus, 'sourceMetaStamp', '9E7A', 'pid');
+                var pid = val(metastamps.initialSITEStatus, 'sourceMetaStamp', 'SITE', 'pid');
                 var uid = uidList[0];
                 var stampTime = allergyEventStamps[uid].stampTime;
 
@@ -831,7 +831,7 @@ describe('jds-client.js', function() {
 
                         expect(results).not.toBeUndefined();
 
-                        var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', '9E7A', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
+                        var eventMetaStamp = val(results, 'inProgress', 'sourceMetaStamp', 'SITE', 'domainMetaStamp', 'allergy', 'eventMetaStamp');
                         expect(eventMetaStamp).toBeTruthy();
                         expect(eventMetaStamp[uid].solrStored).toBe(true);
 
@@ -845,7 +845,7 @@ describe('jds-client.js', function() {
             });
 
             it('Verify that error correctly occurs when null is passed to setEventStoreStatus.', function() {
-                var pid = val(metastamps.initial9E7AStatus, 'sourceMetaStamp', '9E7A', 'pid');
+                var pid = val(metastamps.initialSITEStatus, 'sourceMetaStamp', 'SITE', 'pid');
 
                 // Store the SOLR event Status - for the first allergy event.
                 //-----------------------------------------------------------
@@ -1144,7 +1144,7 @@ describe('jds-client.js', function() {
 
     describe('PtSelect Data', function() {
         var testPatient1 = {
-            'pid': '9E7A;3000000000',
+            'pid': 'SITE;3000000000',
             'birthDate': '19350407',
             'last4': '0008',
             'last5': 'E0008',
@@ -1156,14 +1156,14 @@ describe('jds-client.js', function() {
             'genderCode': 'urn:va:pat-gender:M',
             'genderName': 'Male',
             'sensitive': false,
-            'uid': 'urn:va:pt-select:9E7A:3000000000:3000000000',
+            'uid': 'urn:va:pt-select:SITE:3000000000:3000000000',
             'summary': 'Test,Patient',
             'ssn': '666000008',
             'stampTime': '1234',
             'localId': 3000000000
         };
         var testPatient2 = {
-            'pid': 'C877;3000000000',
+            'pid': 'SITE;3000000000',
             'birthDate': '19350407',
             'last4': '0008',
             'last5': 'E0008',
@@ -1175,7 +1175,7 @@ describe('jds-client.js', function() {
             'genderCode': 'urn:va:pat-gender:M',
             'genderName': 'Male',
             'sensitive': false,
-            'uid': 'urn:va:pt-select:C877:3000000000:3000000000',
+            'uid': 'urn:va:pt-select:SITE:3000000000:3000000000',
             'summary': 'Test,Patient',
             'ssn': '666000008',
             'stampTime': '1234',
@@ -1282,7 +1282,7 @@ describe('jds-client.js', function() {
 
     describe('PtDemographics Data', function() {
         var testPatient1 = {
-            'pid': '9E7A;3000000000',
+            'pid': 'SITE;3000000000',
             'birthDate': '19350407',
             'last4': '0008',
             'last5': 'E0008',
@@ -1294,14 +1294,14 @@ describe('jds-client.js', function() {
             'genderCode': 'urn:va:pat-gender:M',
             'genderName': 'Male',
             'sensitive': false,
-            'uid': 'urn:va:patient:9E7A:3000000000:3000000000',
+            'uid': 'urn:va:patient:SITE:3000000000:3000000000',
             'summary': 'Test,Patient',
             'ssn': '666000008',
             'localId': 3000000000,
             'stampTime': '20150212010000'
         };
         var testPatient2 = {
-            'pid': 'C877;3000000000',
+            'pid': 'SITE;3000000000',
             'birthDate': '19350407',
             'last4': '0008',
             'last5': 'E0008',
@@ -1313,7 +1313,7 @@ describe('jds-client.js', function() {
             'genderCode': 'urn:va:pat-gender:M',
             'genderName': 'Male',
             'sensitive': false,
-            'uid': 'urn:va:patient:C877:3000000000:3000000000',
+            'uid': 'urn:va:patient:SITE:3000000000:3000000000',
             'summary': 'Test,Patient',
             'ssn': '666000008',
             'localId': 3000000000,
@@ -1415,14 +1415,14 @@ describe('jds-client.js', function() {
     describe('Site specific operational data storage', function() {
         var testSiteId = 'HHHH';
         var testUid1 = 'urn:va:vprupdate-test:HHHH';
-        // var testUid2 = 'urn:va:vprupdate-test:9E7A';
+        // var testUid2 = 'urn:va:vprupdate-test:SITE';
         var operationalData1 = {
             _id: testSiteId,
             lastUpdate: '3141231-14011',
             uid: testUid1
         };
         // var operationalData2 = {
-        //     _id: '9E7A',
+        //     _id: 'SITE',
         //     lastUpdate: '3141231-14011',
         //     uid: testUid2
         // };
@@ -1921,7 +1921,7 @@ describe('jds-client.js', function() {
     describe('Active User', function() {
         var user1 = {
             'duz': {
-                '9E7A': 'user1'
+                'SITE': 'user1'
             },
             'lastlogin': moment().format(),
             'patientList': [{
@@ -1936,7 +1936,7 @@ describe('jds-client.js', function() {
         };
         var user2 = {
             'duz': {
-                'C877': 'user2'
+                'SITE': 'user2'
             },
             'lastlogin': '2014-01-11',
             'patientList': [{
@@ -1994,10 +1994,10 @@ describe('jds-client.js', function() {
 
             runs(function () {
                 expect(users).toContain(jasmine.objectContaining({
-                    duz: {'9E7A': 'user1'}
+                    duz: {'SITE': 'user1'}
                 }));
                 expect(users).toContain(jasmine.objectContaining({
-                    duz: {'C877': 'user2'}
+                    duz: {'SITE': 'user2'}
                 }));
             });
         });

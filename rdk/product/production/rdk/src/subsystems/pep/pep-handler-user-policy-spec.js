@@ -25,12 +25,12 @@ describe('When pdp policy handler is executed', function() {
         req.logger = logger;
         req.session = {
             user: {
-                pid: '9E7A;18',
-                site: '9E7A'
+                pid: 'SITE;18',
+                site: 'SITE'
             }
         };
         req.params = {
-            pid: '9E7A;18'
+            pid: 'SITE;18'
         };
         req.app = {
             config: {

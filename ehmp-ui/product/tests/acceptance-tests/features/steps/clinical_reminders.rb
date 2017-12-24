@@ -14,13 +14,10 @@ class ClinicalReminders < AccessBrowserV2
 
   def applet_loaded?
     return true if am_i_visible? 'Empty Row'
-    return TestSupport.driver.find_elements(:css, '#data-grid-cds_advice tbody tr.selectable').length > 0
+    return TestSupport.driver.find_elements(:css, '[data-appletid=cds_advice] tbody tr.selectable').length > 0
   rescue => e 
     # p e
     false
   end
 end
 
-Before do
-  @clinical_reminders_applet = ClinicalReminders.instance
-end

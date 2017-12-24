@@ -32,7 +32,7 @@ Then(/^the Orders Results are sorted in reverse chronological order$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
   wait.until { @ehmp.tbl_order_date_header[:class].include? 'descending' }
   expect(@ehmp.tbl_order_date_header[:class]).to include 'descending'
-  expect(VerifyTableValue.verify_date_only_sort_selectable('data-grid-orders', 1, true)).to be_true
+  expect(VerifyTableValue.verify_date_only_sort_selectable('data-grid-orders', 2, true)).to be_true
 end
 
 Then(/^the Orders Results are sorted in the chronological order$/) do
@@ -40,5 +40,5 @@ Then(/^the Orders Results are sorted in the chronological order$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
   wait.until { @ehmp.tbl_order_date_header[:class].include? 'ascending' }
   expect(@ehmp.tbl_order_date_header[:class]).to include 'ascending'
-  expect(VerifyTableValue.verify_date_only_sort_selectable('data-grid-orders', 1, false)).to be_true
+  expect(VerifyTableValue.verify_date_only_sort_selectable('data-grid-orders', 2, false)).to be_true
 end

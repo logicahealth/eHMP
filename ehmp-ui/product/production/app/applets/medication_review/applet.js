@@ -2,12 +2,11 @@ define([
     'underscore',
     'backbone',
     'handlebars',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
     'app/applets/medication_review/medicationFilter/medicationDateFilter',
     'app/applets/medication_review/medicationFilter/medicationTextFilter',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionList/medTypeListView',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionList/medTypeListCollection'
-], function(_, Backbone, Handlebars, MedicationOrderCollection, MedicationDateFilter, MedicationTextFilter, MedTypeListView, MedTypeListCollection) {
+], function(_, Backbone, Handlebars, MedicationDateFilter, MedicationTextFilter, MedTypeListView, MedTypeListCollection) {
     'use strict';
 
     var HelpButtonView = Backbone.Marionette.ItemView.extend({
@@ -21,7 +20,7 @@ define([
     });
 
     var medsReviewRootView = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile('<div id="grid-filter-{{instanceId}}" class="panel-body all-padding-no collapse"><div class="grid-filter"></div></div><div class="meds-review-main-region hidden"></div><div class="loading-region"></div>'),
+        template: Handlebars.compile('<div id="grid-filter-{{instanceId}}" class="panel-body all-padding-no collapse auto-height"><div class="grid-filter"></div></div><div class="meds-review-main-region hidden"></div><div class="loading-region"></div>'),
         className: 'grid-applet-panel',
         destroyImmediate: true,
         regions: {
@@ -61,7 +60,7 @@ define([
             }
         },
         initializeUngroupedMedsCollection: function() {
-            this.ungroupedMeds = new MedicationOrderCollection();
+            this.ungroupedMeds = new ADK.UIResources.Fetch.MedicationReview.Collection();
             this.bindEntityEvents(this.ungroupedMeds, this.ungroupedMedsEvents);
         },
         initializeDateFilter: function() {
@@ -157,6 +156,8 @@ define([
                 parse: true,
                 listOrder: this.listOrder()
             });
+
+            this.medTypeListView.$el.find('.accordion-toggle:first-of-type > .collapse').collapse('show'); // necessary on gdp selection to expand first accordion
         },
         performInitialUngroupedFetch: function() {
             this.textFilteredCollection.once('reset', this.onInitialUngroupedFetch, this);
@@ -175,6 +176,8 @@ define([
                 this.main.show(this.medTypeListView);
                 this.hideLoading();
             }
+
+            this.medTypeListView.$el.find('.accordion-toggle:first-of-type > .collapse').collapse('show'); // necessary on initial display to get the correct width for the graph header
         },
         showLoading: function() {
             this.main.$el.addClass('hidden');
@@ -202,14 +205,14 @@ define([
             var order = {
                 type: [patientStatusClass, 'clinical', 'supply', finalValue],
                 required: [{
-                    requiredType: 'inpatient',
-                    displayType: "INPATIENT MEDS"
+                    requiredType: 'outpatient',
+                    displayType: 'Outpatient and Non-VA'
                 }, {
                     requiredType: 'clinical',
-                    displayType: "CLINIC ORDER MEDS"
+                    displayType: 'Clinic Order'
                 }, {
-                    requiredType: 'outpatient',
-                    displayType: "OUTPATIENT MEDS"
+                    requiredType: 'inpatient',
+                    displayType: 'Inpatient'
                 }]
             };
             return order;

@@ -1,0 +1,993 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>152. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>152. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:27:52 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>152.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\cds\cds\product\tests\acceptance-tests</td> 
+     <td>Rakefile</td> 
+     <td>Mon Aug 28 20:30:12 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\cds\cds\product\tests\acceptance-tests</td> 
+     <td>Rakefile</td> 
+     <td>Wed Oct 11 13:28:46 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>152.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">8</td> 
+     <td style="text-align: right;">306</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">7</td> 
+     <td style="text-align: right;">14</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>152.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>152.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>152.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'r</span> <span class="U2">ubygems'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'c</span> <span class="U2">ucumber'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'c</span> <span class="U2">ucumber/ra</span> <span class="U2">ke/task'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'r</span> <span class="U2">ubocop/rak</span> <span class="U2">e_task'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">$LOAD_PATH</span> <span class="U2">.push(File</span> <span class="U2">.expand_pa</span> <span class="U2">th(File.di</span> <span class="U2">rname(__FI</span> <span class="U2">LE__)&nbsp;+&nbsp;'/</span> <span class="U2">features/l</span> <span class="U2">ib'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;Check&nbsp;en</span> <span class="U2">vironment&nbsp;</span> <span class="U2">sanity&nbsp;and</span> <span class="U2">&nbsp;fail&nbsp;fast</span> <span class="U2">&nbsp;if&nbsp;not&nbsp;co</span> <span class="U2">rrect</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">fail&nbsp;'WORK</span> <span class="U2">SPACE&nbsp;envi</span> <span class="U2">ronment&nbsp;va</span> <span class="U2">riable&nbsp;not</span> <span class="U2">&nbsp;set.&nbsp;Did&nbsp;</span> <span class="U2">you&nbsp;"sourc</span> <span class="U2">e&nbsp;infrastr</span> <span class="U2">ucture/set</span> <span class="U2">.env.sh"?'</span> <span class="U2">&nbsp;unless&nbsp;EN</span> <span class="U2">V.keys.inc</span> <span class="U2">lude?('WOR</span> <span class="U2">KSPACE')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">fail&nbsp;'GEM_</span> <span class="U2">HOME&nbsp;envir</span> <span class="U2">onment&nbsp;var</span> <span class="U2">iable&nbsp;not&nbsp;</span> <span class="U2">set.&nbsp;Did&nbsp;y</span> <span class="U2">ou&nbsp;"source</span> <span class="U2">&nbsp;infrastru</span> <span class="U2">cture/set.</span> <span class="U2">env.sh"?'&nbsp;</span> <span class="U2">unless&nbsp;ENV</span> <span class="U2">.keys.incl</span> <span class="U2">ude?('GEM_</span> <span class="U2">HOME')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:defa</span> <span class="U2">ult&nbsp;=&gt;&nbsp;[:e</span> <span class="U2">ndToEndTes</span> <span class="U2">ts]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;endTo</span> <span class="U2">EndTests:&nbsp;</span> <span class="U2">[:codequal</span> <span class="U2">ity]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;endTo</span> <span class="U2">EndTestsCD</span> <span class="U2">S:&nbsp;[:codeq</span> <span class="U2">uality]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;endTo</span> <span class="U2">EndStableT</span> <span class="U2">ests:&nbsp;[:co</span> <span class="U2">dequality]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;endTo</span> <span class="U2">EndUnstabl</span> <span class="U2">eTests:&nbsp;[:</span> <span class="U2">codequalit</span> <span class="U2">y]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;codeq</span> <span class="U2">uality:&nbsp;[</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;:info,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;:rubocop</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:endT</span> <span class="U2">oEndTests,</span> <span class="U2">&nbsp;[:env]&nbsp;=&gt;</span> <span class="U2">&nbsp;[:environ</span> <span class="U2">ment_setup</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:endT</span> <span class="U2">oEndTestsC</span> <span class="U2">DS,&nbsp;[:env]</span> <span class="U2">&nbsp;=&gt;&nbsp;[:envi</span> <span class="U2">ronment_se</span> <span class="U2">tup]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:endT</span> <span class="U2">oEndStable</span> <span class="U2">Tests,&nbsp;[:e</span> <span class="U2">nv]&nbsp;=&gt;&nbsp;[:e</span> <span class="U2">nvironment</span> <span class="U2">_setup]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:endT</span> <span class="U2">oEndUnstab</span> <span class="U2">leTests,&nbsp;[</span> <span class="U2">:env]&nbsp;=&gt;&nbsp;[</span> <span class="U2">:environme</span> <span class="U2">nt_setup]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:endT</span> <span class="U2">oEndOncTes</span> <span class="U2">ts,&nbsp;[:env]</span> <span class="U2">&nbsp;=&gt;&nbsp;[:envi</span> <span class="U2">ronment_se</span> <span class="U2">tup]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">###&nbsp;This&nbsp;b</span> <span class="U2">lock&nbsp;defin</span> <span class="U2">es&nbsp;the&nbsp;def</span> <span class="U2">ault&nbsp;test&nbsp;</span> <span class="U2">selection</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Cucumber::</span> <span class="U2">Rake::Task</span> <span class="U2">.new(:endT</span> <span class="U2">oEndTests)</span> <span class="U2">&nbsp;do&nbsp;|t|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;t.cucumb</span> <span class="U2">er_opts&nbsp;=&nbsp;</span> <span class="U2">"features&nbsp;</span> <span class="U2">--verbose&nbsp;</span> <span class="U2">--color&nbsp;--</span> <span class="U2">format&nbsp;pre</span> <span class="U2">tty&nbsp;--tags</span> <span class="U2">&nbsp;~@full_st</span> <span class="U2">ack&nbsp;--tags</span> <span class="U2">&nbsp;~@future&nbsp;</span> <span class="U2">--tags&nbsp;~@U</span> <span class="U2">I&nbsp;--tags&nbsp;~</span> <span class="U2">@debug&nbsp;--t</span> <span class="U2">ags&nbsp;~@manu</span> <span class="U2">al&nbsp;-f&nbsp;json</span> <span class="U2">_pretty&nbsp;-o</span> <span class="U2">&nbsp;cucumber.</span> <span class="U2">json&nbsp;-f&nbsp;ht</span> <span class="U2">ml&nbsp;-o&nbsp;cucu</span> <span class="U2">mber.html"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">##&nbsp;This&nbsp;bl</span> <span class="U2">ock&nbsp;captur</span> <span class="U2">es&nbsp;thoses&nbsp;</span> <span class="U2">tests&nbsp;tagg</span> <span class="U2">ed&nbsp;as&nbsp;CDS</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Cucumber::</span> <span class="U2">Rake::Task</span> <span class="U2">.new(:endT</span> <span class="U2">oEndTestsC</span> <span class="U2">DS)&nbsp;do&nbsp;|t|</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;t.cucumb</span> <span class="U2">er_opts&nbsp;=&nbsp;</span> <span class="U2">"features&nbsp;</span> <span class="U2">--verbose&nbsp;</span> <span class="U2">--color&nbsp;--</span> <span class="U2">format&nbsp;pre</span> <span class="U2">tty&nbsp;--tags</span> <span class="U2">&nbsp;@cds&nbsp;--ta</span> <span class="U2">gs&nbsp;~@futur</span> <span class="U2">e&nbsp;--tags&nbsp;~</span> <span class="U2">@UI&nbsp;--tags</span> <span class="U2">&nbsp;~@debug&nbsp;-</span> <span class="U2">-tags&nbsp;~@ma</span> <span class="U2">nual&nbsp;-f&nbsp;js</span> <span class="U2">on_pretty&nbsp;</span> <span class="U2">-o&nbsp;cucumbe</span> <span class="U2">r.json&nbsp;-f&nbsp;</span> <span class="U2">html&nbsp;-o&nbsp;cu</span> <span class="U2">cumber.htm</span> <span class="U2">l"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Cucumber::</span> <span class="U2">Rake::Task</span> <span class="U2">.new(:endT</span> <span class="U2">oEndStable</span> <span class="U2">Tests)&nbsp;do&nbsp;</span> <span class="U2">|t|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;t.cucumb</span> <span class="U2">er_opts&nbsp;=&nbsp;</span> <span class="U2">"features&nbsp;</span> <span class="U2">--verbose&nbsp;</span> <span class="U2">--color&nbsp;--</span> <span class="U2">format&nbsp;pre</span> <span class="U2">tty&nbsp;--tags</span> <span class="U2">&nbsp;~@unstabl</span> <span class="U2">e&nbsp;--tags&nbsp;~</span> <span class="U2">@onc&nbsp;--tag</span> <span class="U2">s&nbsp;~@future</span> <span class="U2">&nbsp;--tags&nbsp;~@</span> <span class="U2">UI&nbsp;--tags&nbsp;</span> <span class="U2">~@debug&nbsp;--</span> <span class="U2">tags&nbsp;~@man</span> <span class="U2">ual&nbsp;-f&nbsp;jso</span> <span class="U2">n_pretty&nbsp;-</span> <span class="U2">o&nbsp;cucumber</span> <span class="U2">.json&nbsp;-f&nbsp;h</span> <span class="U2">tml&nbsp;-o&nbsp;cuc</span> <span class="U2">umber.html</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Cucumber::</span> <span class="U2">Rake::Task</span> <span class="U2">.new(:endT</span> <span class="U2">oEndUnstab</span> <span class="U2">leTests)&nbsp;d</span> <span class="U2">o&nbsp;|t|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;t.cucumb</span> <span class="U2">er_opts&nbsp;=&nbsp;</span> <span class="U2">"features&nbsp;</span> <span class="U2">--verbose&nbsp;</span> <span class="U2">--color&nbsp;--</span> <span class="U2">format&nbsp;pre</span> <span class="U2">tty&nbsp;--tags</span> <span class="U2">&nbsp;@unstable</span> <span class="U2">&nbsp;-f&nbsp;json_p</span> <span class="U2">retty&nbsp;-o&nbsp;c</span> <span class="U2">ucumber.js</span> <span class="U2">on&nbsp;-f&nbsp;html</span> <span class="U2">&nbsp;-o&nbsp;cucumb</span> <span class="U2">er.html"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">##&nbsp;Placeho</span> <span class="U2">lder&nbsp;task&nbsp;</span> <span class="U2">for&nbsp;execut</span> <span class="U2">ing&nbsp;all&nbsp;Ac</span> <span class="U2">ceptance&nbsp;T</span> <span class="U2">ests&nbsp;for&nbsp;a</span> <span class="U2">ll&nbsp;Mobile&nbsp;</span> <span class="U2">Applicatio</span> <span class="U2">ns</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Cucumber::</span> <span class="U2">Rake::Task</span> <span class="U2">.new(:allA</span> <span class="U2">cceptanceT</span> <span class="U2">ests)&nbsp;do&nbsp;|</span> <span class="U2">t|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;t.cucumb</span> <span class="U2">er_opts&nbsp;=&nbsp;</span> <span class="U2">"features&nbsp;</span> <span class="U2">--verbose&nbsp;</span> <span class="U2">--color&nbsp;--</span> <span class="U2">format&nbsp;pre</span> <span class="U2">tty&nbsp;--tags</span> <span class="U2">&nbsp;~@future"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:info</span> <span class="U2">&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;'==</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">=='</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;'#&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Runnin</span> <span class="U2">g&nbsp;codequal</span> <span class="U2">ity&nbsp;checks</span> <span class="U2">.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;#'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">56</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">puts&nbsp;'#&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">For&nbsp;detail</span> <span class="U2">s,&nbsp;see&nbsp;htt</span> <span class="U2">ps://wiki.</span> <span class="U2">vistacore.</span> <span class="U2">us/display</span> <span class="U2">/</span> <span class="C2">DNS&nbsp;</span> <span class="U2">RE/Ruby&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">#'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;'==</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">=='</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;Rubocop&nbsp;</span> <span class="U2">files&nbsp;not&nbsp;</span> <span class="U2">created&nbsp;ye</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">desc&nbsp;'Rubo</span> <span class="U2">cop&nbsp;code&nbsp;q</span> <span class="U2">uality&nbsp;che</span> <span class="U2">cks&nbsp;config</span> <span class="U2">ured&nbsp;in&nbsp;.r</span> <span class="U2">ubocop.yml</span> <span class="U2">&nbsp;file'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Rubocop::R</span> <span class="U2">akeTask.ne</span> <span class="U2">w(:rubocop</span> <span class="U2">)&nbsp;do&nbsp;|rubo</span> <span class="U2">cop|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;Specif</span> <span class="U2">y&nbsp;config&nbsp;f</span> <span class="U2">ile&nbsp;in&nbsp;non</span> <span class="U2">-standard&nbsp;</span> <span class="U2">location.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rubocop.</span> <span class="U2">options&nbsp;=&nbsp;</span> <span class="U2">['-c.ruboc</span> <span class="U2">op.yml']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;Specif</span> <span class="U2">y&nbsp;Ruby&nbsp;fil</span> <span class="U2">e&nbsp;location</span> <span class="U2">s</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rubocop.</span> <span class="U2">patterns&nbsp;=</span> <span class="U2">&nbsp;['**/*.rb</span> <span class="U2">',&nbsp;'Rakefi</span> <span class="U2">le']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;Show&nbsp;e</span> <span class="U2">macs&nbsp;style</span> <span class="U2">&nbsp;output,&nbsp;a</span> <span class="U2">nd&nbsp;offense</span> <span class="U2">&nbsp;counts</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;See&nbsp;ht</span> <span class="U2">tps://gith</span> <span class="U2">ub.com/bba</span> <span class="U2">tsov/ruboc</span> <span class="U2">op#formatt</span> <span class="U2">ers&nbsp;for&nbsp;ot</span> <span class="U2">her&nbsp;output</span> <span class="U2">&nbsp;options</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rubocop.</span> <span class="U2">formatters</span> <span class="U2">&nbsp;=&nbsp;['emacs</span> <span class="U2">',&nbsp;'o']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;Abort&nbsp;</span> <span class="U2">rake&nbsp;on&nbsp;fa</span> <span class="U2">ilure</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rubocop.</span> <span class="U2">fail_on_er</span> <span class="U2">ror&nbsp;=&nbsp;true</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">task&nbsp;:envi</span> <span class="U2">ronment_se</span> <span class="U2">tup,&nbsp;:env&nbsp;</span> <span class="U2">do&nbsp;|_task,</span> <span class="U2">&nbsp;args|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;env&nbsp;=&nbsp;ar</span> <span class="U2">gs[:env]&nbsp;|</span> <span class="U2">|&nbsp;'virtual</span> <span class="U2">box'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;environm</span> <span class="U2">ent_endpoi</span> <span class="U2">nts(env)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;enviro</span> <span class="U2">nment_endp</span> <span class="U2">oints(env)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;case&nbsp;env</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;when&nbsp;"vi</span> <span class="U2">rtualbox"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_IP"]&nbsp;=&nbsp;</span> <span class="U2">knife_sear</span> <span class="U2">ch_for_ip(</span> <span class="U2">"fetch_ser</span> <span class="U2">ver")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PORT"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_a</span> <span class="U2">ttribute("</span> <span class="U2">fetch_serv</span> <span class="U2">er",&nbsp;%w(fe</span> <span class="U2">tch_server</span> <span class="U2">&nbsp;service_c</span> <span class="U2">onfig&nbsp;port</span> <span class="U2">),&nbsp;"defaul</span> <span class="U2">t")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_WRITEBA</span> <span class="U2">CK_HOST"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_i</span> <span class="U2">p("write_b</span> <span class="U2">ack")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_WRITEBA</span> <span class="U2">CK_PORT"]=</span> <span class="U2">&nbsp;knife_sea</span> <span class="U2">rch_for_at</span> <span class="U2">tribute("w</span> <span class="U2">rite_back"</span> <span class="U2">,&nbsp;%w(write</span> <span class="U2">_back&nbsp;serv</span> <span class="U2">ice_config</span> <span class="U2">&nbsp;port),&nbsp;"d</span> <span class="U2">efault")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PICKLIS</span> <span class="U2">T_HOST"]&nbsp;=</span> <span class="U2">&nbsp;knife_sea</span> <span class="U2">rch_for_ip</span> <span class="U2">("pick_lis</span> <span class="U2">t")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PICKLIS</span> <span class="U2">T_PORT"]=&nbsp;</span> <span class="U2">knife_sear</span> <span class="U2">ch_for_att</span> <span class="U2">ribute("pi</span> <span class="U2">ck_list",&nbsp;</span> <span class="U2">%w(pick_li</span> <span class="U2">st&nbsp;service</span> <span class="U2">_config&nbsp;po</span> <span class="U2">rt),&nbsp;"defa</span> <span class="U2">ult")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;begin</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENV[</span> <span class="U2">"CDSINVOCA</span> <span class="U2">TION_IP"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_i</span> <span class="U2">p("cdsinvo</span> <span class="U2">cation")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">93</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["CDSIN</span> <span class="U2">VOCATION_P</span> <span class="U2">ORT"]&nbsp;=&nbsp;"</span> <span class="C2">PORT</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENV[</span> <span class="U2">"OPENCDS_I</span> <span class="U2">P"]&nbsp;=&nbsp;knif</span> <span class="U2">e_search_f</span> <span class="U2">or_ip("ope</span> <span class="U2">ncds")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">95</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["OPENC</span> <span class="U2">DS_PORT"]&nbsp;</span> <span class="U2">=&nbsp;"</span> <span class="C2">PORT</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENV[</span> <span class="U2">"CDSDB_IP"</span> <span class="U2">]&nbsp;=&nbsp;knife_</span> <span class="U2">search_for</span> <span class="U2">_ip("cdsdb</span> <span class="U2">")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENV[</span> <span class="U2">"CDSDB_POR</span> <span class="U2">T"]&nbsp;=&nbsp;knif</span> <span class="U2">e_search_f</span> <span class="U2">or_attribu</span> <span class="U2">te("cdsdb"</span> <span class="U2">,&nbsp;%w(mongo</span> <span class="U2">db&nbsp;config&nbsp;</span> <span class="U2">port),&nbsp;"de</span> <span class="U2">fault")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip&nbsp;=</span> <span class="U2">&nbsp;knife_sea</span> <span class="U2">rch_for_ip</span> <span class="U2">("cdsdashb</span> <span class="U2">oard")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">99</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["CDSDA</span> <span class="U2">SHBOARD_IP</span> <span class="U2">"]&nbsp;=&nbsp;'http</span> <span class="U2">://'&nbsp;+&nbsp;"#{</span> <span class="U2">ip}:</span> <span class="C2">PORT</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;rescue</span> <span class="U2">&nbsp;=&gt;&nbsp;error</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rais</span> <span class="U2">e&nbsp;error</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#rai</span> <span class="U2">se&nbsp;error&nbsp;i</span> <span class="U2">f&nbsp;Rake.app</span> <span class="U2">lication.t</span> <span class="U2">op_level_t</span> <span class="U2">asks.inclu</span> <span class="U2">de?&nbsp;"cdsTe</span> <span class="U2">sts"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;when&nbsp;"aw</span> <span class="U2">s"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_IP"]&nbsp;=&nbsp;</span> <span class="U2">knife_sear</span> <span class="U2">ch_for_ip(</span> <span class="U2">"fetch_ser</span> <span class="U2">ver")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PORT"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_a</span> <span class="U2">ttribute("</span> <span class="U2">fetch_serv</span> <span class="U2">er",&nbsp;%w(fe</span> <span class="U2">tch_server</span> <span class="U2">&nbsp;service_c</span> <span class="U2">onfig&nbsp;port</span> <span class="U2">),&nbsp;"defaul</span> <span class="U2">t")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_WRITEBA</span> <span class="U2">CK_HOST"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_i</span> <span class="U2">p("write_b</span> <span class="U2">ack")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_WRITEBA</span> <span class="U2">CK_PORT"]=</span> <span class="U2">&nbsp;knife_sea</span> <span class="U2">rch_for_at</span> <span class="U2">tribute("w</span> <span class="U2">rite_back"</span> <span class="U2">,&nbsp;%w(write</span> <span class="U2">_back&nbsp;serv</span> <span class="U2">ice_config</span> <span class="U2">&nbsp;port),&nbsp;"d</span> <span class="U2">efault")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PICKLIS</span> <span class="U2">T_HOST"]&nbsp;=</span> <span class="U2">&nbsp;knife_sea</span> <span class="U2">rch_for_ip</span> <span class="U2">("pick_lis</span> <span class="U2">t")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["R</span> <span class="U2">DK_PICKLIS</span> <span class="U2">T_PORT"]=&nbsp;</span> <span class="U2">knife_sear</span> <span class="U2">ch_for_att</span> <span class="U2">ribute("pi</span> <span class="U2">ck_list",&nbsp;</span> <span class="U2">%w(pick_li</span> <span class="U2">st&nbsp;service</span> <span class="U2">_config&nbsp;po</span> <span class="U2">rt),&nbsp;"defa</span> <span class="U2">ult")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">111</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["Perf_</span> <span class="U2">Monitor_IP</span> <span class="U2">"]&nbsp;=&nbsp;'</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["C</span> <span class="U2">DSINVOCATI</span> <span class="U2">ON_IP"]&nbsp;=&nbsp;</span> <span class="U2">knife_sear</span> <span class="U2">ch_for_ip(</span> <span class="U2">"cdsinvoca</span> <span class="U2">tion")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">113</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["CDSIN</span> <span class="U2">VOCATION_P</span> <span class="U2">ORT"]&nbsp;=&nbsp;"</span> <span class="C2">PORT</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["O</span> <span class="U2">PENCDS_IP"</span> <span class="U2">]&nbsp;=&nbsp;knife_</span> <span class="U2">search_for</span> <span class="U2">_ip("openc</span> <span class="U2">ds")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">115</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">ENV["OPENC</span> <span class="U2">DS_PORT"]&nbsp;</span> <span class="U2">=&nbsp;"</span> <span class="C2">PORT</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["C</span> <span class="U2">DSDB_IP"]&nbsp;</span> <span class="U2">=&nbsp;knife_se</span> <span class="U2">arch_for_i</span> <span class="U2">p("cdsdb")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["C</span> <span class="U2">DSDB_PORT"</span> <span class="U2">]&nbsp;=&nbsp;knife_</span> <span class="U2">search_for</span> <span class="U2">_attribute</span> <span class="U2">("cdsdb",&nbsp;</span> <span class="U2">%w(mongodb</span> <span class="U2">&nbsp;config&nbsp;po</span> <span class="U2">rt),&nbsp;"defa</span> <span class="U2">ult")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ip&nbsp;=&nbsp;k</span> <span class="U2">nife_searc</span> <span class="U2">h_for_ip("</span> <span class="U2">cdsdashboa</span> <span class="U2">rd")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;ENV["C</span> <span class="U2">DSDASHBOAR</span> <span class="U2">D_IP"]&nbsp;=&nbsp;'</span> <span class="U2">https://'&nbsp;</span> <span class="U2">+&nbsp;"#{ip}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;fail&nbsp;"</span> <span class="U2">Unrecogniz</span> <span class="U2">ed&nbsp;environ</span> <span class="U2">ment&nbsp;type:</span> <span class="U2">&nbsp;#{env}.&nbsp;A</span> <span class="U2">llowable&nbsp;t</span> <span class="U2">ypes&nbsp;are:&nbsp;</span> <span class="U2">'virtualbo</span> <span class="U2">x'&nbsp;and&nbsp;'aw</span> <span class="U2">s'"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;knife_</span> <span class="U2">search_for</span> <span class="U2">_ip(machin</span> <span class="U2">e_name)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;release&nbsp;</span> <span class="U2">=&nbsp;File.rea</span> <span class="U2">d(File.dir</span> <span class="U2">name(__FIL</span> <span class="U2">E__)&nbsp;+&nbsp;"/.</span> <span class="U2">./../../in</span> <span class="U2">frastructu</span> <span class="U2">re/propert</span> <span class="U2">ies/releas</span> <span class="U2">eVersion")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;stack&nbsp;=&nbsp;</span> <span class="U2">ENV['JOB_N</span> <span class="U2">AME']&nbsp;||&nbsp;"</span> <span class="U2">#{ENV['USE</span> <span class="U2">R']}-#{rel</span> <span class="U2">ease}"&nbsp;||&nbsp;</span> <span class="U2">ENV['USER'</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;ENV.k</span> <span class="U2">ey?('BUNDL</span> <span class="U2">E_BIN_PATH</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;raw_se</span> <span class="U2">arch&nbsp;=&nbsp;Bun</span> <span class="U2">dler.with_</span> <span class="U2">clean_env&nbsp;</span> <span class="U2">{&nbsp;`/opt/ch</span> <span class="U2">efdk/bin/k</span> <span class="U2">nife&nbsp;searc</span> <span class="U2">h&nbsp;node&nbsp;\'r</span> <span class="U2">ole:#{mach</span> <span class="U2">ine_name}&nbsp;</span> <span class="U2">AND&nbsp;stack:</span> <span class="U2">#{stack}\'</span> <span class="U2">&nbsp;-Fj&nbsp;--con</span> <span class="U2">fig&nbsp;~/Proj</span> <span class="U2">ects/vista</span> <span class="U2">core/.chef</span> <span class="U2">/knife.rb`</span> <span class="U2">&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;raw_se</span> <span class="U2">arch&nbsp;=&nbsp;`/o</span> <span class="U2">pt/chefdk/</span> <span class="U2">bin/knife&nbsp;</span> <span class="U2">search&nbsp;nod</span> <span class="U2">e&nbsp;\'role:#</span> <span class="U2">{machine_n</span> <span class="U2">ame}&nbsp;AND&nbsp;s</span> <span class="U2">tack:#{sta</span> <span class="U2">ck}\'&nbsp;-Fj&nbsp;</span> <span class="U2">--config&nbsp;~</span> <span class="U2">/Projects/</span> <span class="U2">vistacore/</span> <span class="U2">.chef/knif</span> <span class="U2">e.rb`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;parsed_s</span> <span class="U2">earch&nbsp;=&nbsp;JS</span> <span class="U2">ON.parse(r</span> <span class="U2">aw_search)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;'==</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">=='</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;par</span> <span class="U2">sed_search</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;puts&nbsp;'==</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">==========</span> <span class="U2">=='</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;fail&nbsp;"Mo</span> <span class="U2">re&nbsp;than&nbsp;on</span> <span class="U2">e&nbsp;node&nbsp;wit</span> <span class="U2">h&nbsp;that&nbsp;nam</span> <span class="U2">e&nbsp;found"&nbsp;i</span> <span class="U2">f&nbsp;parsed_s</span> <span class="U2">earch["res</span> <span class="U2">ults"]&nbsp;&gt;&nbsp;1</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;fail&nbsp;"No</span> <span class="U2">&nbsp;node&nbsp;with</span> <span class="U2">&nbsp;that&nbsp;name</span> <span class="U2">&nbsp;found"&nbsp;if</span> <span class="U2">&nbsp;parsed_se</span> <span class="U2">arch["resu</span> <span class="U2">lts"]&nbsp;==&nbsp;0</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;ip&nbsp;=&nbsp;par</span> <span class="U2">sed_search</span> <span class="U2">["rows"][0</span> <span class="U2">]['automat</span> <span class="U2">ic']['ipad</span> <span class="U2">dress']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">141</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">142</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;knife_</span> <span class="U2">search_for</span> <span class="U2">_attribute</span> <span class="U2">(machine_n</span> <span class="U2">ame,&nbsp;attri</span> <span class="U2">bute,&nbsp;attr</span> <span class="U2">ibute_type</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">143</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;release&nbsp;</span> <span class="U2">=&nbsp;File.rea</span> <span class="U2">d(File.dir</span> <span class="U2">name(__FIL</span> <span class="U2">E__)&nbsp;+&nbsp;"/.</span> <span class="U2">./../../in</span> <span class="U2">frastructu</span> <span class="U2">re/propert</span> <span class="U2">ies/releas</span> <span class="U2">eVersion")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">144</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;stack&nbsp;=&nbsp;</span> <span class="U2">ENV['JOB_N</span> <span class="U2">AME']&nbsp;||&nbsp;"</span> <span class="U2">#{ENV['USE</span> <span class="U2">R']}-#{rel</span> <span class="U2">ease}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">145</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;ENV.k</span> <span class="U2">ey?('BUNDL</span> <span class="U2">E_BIN_PATH</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">146</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;raw_se</span> <span class="U2">arch&nbsp;=&nbsp;Bun</span> <span class="U2">dler.with_</span> <span class="U2">clean_env&nbsp;</span> <span class="U2">{&nbsp;`/opt/ch</span> <span class="U2">efdk/bin/k</span> <span class="U2">nife&nbsp;searc</span> <span class="U2">h&nbsp;node&nbsp;\'r</span> <span class="U2">ole:#{mach</span> <span class="U2">ine_name}&nbsp;</span> <span class="U2">AND&nbsp;stack:</span> <span class="U2">#{stack}\'</span> <span class="U2">&nbsp;-Fj&nbsp;--con</span> <span class="U2">fig&nbsp;~/Proj</span> <span class="U2">ects/vista</span> <span class="U2">core/.chef</span> <span class="U2">/knife.rb`</span> <span class="U2">&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">147</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">148</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;raw_se</span> <span class="U2">arch&nbsp;=&nbsp;`/o</span> <span class="U2">pt/chefdk/</span> <span class="U2">bin/knife&nbsp;</span> <span class="U2">search&nbsp;nod</span> <span class="U2">e&nbsp;\'role:#</span> <span class="U2">{machine_n</span> <span class="U2">ame}&nbsp;AND&nbsp;s</span> <span class="U2">tack:#{sta</span> <span class="U2">ck}\'&nbsp;-Fj&nbsp;</span> <span class="U2">--config&nbsp;~</span> <span class="U2">/Projects/</span> <span class="U2">vistacore/</span> <span class="U2">.chef/knif</span> <span class="U2">e.rb`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">149</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">150</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;parsed_s</span> <span class="U2">earch&nbsp;=&nbsp;JS</span> <span class="U2">ON.parse(r</span> <span class="U2">aw_search)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">151</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;fail&nbsp;"Mo</span> <span class="U2">re&nbsp;than&nbsp;on</span> <span class="U2">e&nbsp;node&nbsp;wit</span> <span class="U2">h&nbsp;that&nbsp;nam</span> <span class="U2">e&nbsp;found"&nbsp;i</span> <span class="U2">f&nbsp;parsed_s</span> <span class="U2">earch["res</span> <span class="U2">ults"]&nbsp;&gt;&nbsp;1</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">152</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;fail&nbsp;"No</span> <span class="U2">&nbsp;node&nbsp;with</span> <span class="U2">&nbsp;that&nbsp;name</span> <span class="U2">&nbsp;found"&nbsp;if</span> <span class="U2">&nbsp;parsed_se</span> <span class="U2">arch["resu</span> <span class="U2">lts"]&nbsp;==&nbsp;0</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">153</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;node_att</span> <span class="U2">ributes&nbsp;=&nbsp;</span> <span class="U2">parsed_sea</span> <span class="U2">rch["rows"</span> <span class="U2">][0][attri</span> <span class="U2">bute_type]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">154</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;depth&nbsp;=&nbsp;</span> <span class="U2">0</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">155</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;while&nbsp;no</span> <span class="U2">de_attribu</span> <span class="U2">tes.is_a?(</span> <span class="U2">Hash)&nbsp;&amp;&amp;&nbsp;n</span> <span class="U2">ode_attrib</span> <span class="U2">utes.keys.</span> <span class="U2">size&nbsp;&gt;&nbsp;0</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">156</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;node_a</span> <span class="U2">ttributes&nbsp;</span> <span class="U2">=&nbsp;node_att</span> <span class="U2">ributes["#</span> <span class="U2">{attribute</span> <span class="U2">[depth]}"]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">157</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;depth&nbsp;</span> <span class="U2">=&nbsp;depth&nbsp;+&nbsp;</span> <span class="U2">1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">158</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">159</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;return&nbsp;n</span> <span class="U2">ode_attrib</span> <span class="U2">utes.inspe</span> <span class="U2">ct</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">160</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

@@ -26,9 +26,9 @@ describe 'f664_patient_global_timeline.rb', acceptance: true do
 
     rdk_sync('10107V395912')
     rdk_sync('10108V420871')
-    rdk_sync('C877;253')
-    rdk_sync('9E7A;164')
-    rdk_sync('9E7A;100022')
+    rdk_sync('SITE;253')
+    rdk_sync('SITE;164')
+    rdk_sync('SITE;100022')
 
     @expected_body = {
       'data' => {
@@ -108,7 +108,7 @@ describe 'f664_patient_global_timeline.rb', acceptance: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;100022')
+                           'pid' => 'SITE;100022')
 
       expect(response.code).to eq(200)
       expect(key_value(response.body, 'inpatientCount')).to be >= (11)
@@ -133,7 +133,7 @@ describe 'f664_patient_global_timeline.rb', acceptance: true do
 
     it '. site/dfn2' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;253')
+                           'pid' => 'SITE;253')
 
       expect(response.code).to eq(200)
 
@@ -143,7 +143,7 @@ describe 'f664_patient_global_timeline.rb', acceptance: true do
 
     it '. site/dfn3' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;164')
+                           'pid' => 'SITE;164')
       expect(response.code).to eq(200)
       expect(compare_json(JSON.parse(response.body),
                           @expected_body, [])).to eq(true)
@@ -157,7 +157,7 @@ describe 'f664_patient_global_timeline.rb', acceptance: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;848484')
+                           'pid' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 

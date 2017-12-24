@@ -69,7 +69,7 @@ define([
             }
         },
         // Included For All Controls
-        _initialize: function(options){
+        _initialize: function(options) {
             this.initOptions(options);
             this.setFormatter();
             this.setAttributeMapping();
@@ -86,6 +86,12 @@ define([
         initialize: function(options) {
             this.listenToFieldName();
             this.listenToFieldOptions();
+        },
+        onRender: function() {
+            var model = this.model,
+                attrArr = this.field.get("name").split('.'),
+                name = attrArr.shift();
+            this.updateLabelsForSelectedValues(name);
         },
         clearErrorModelValue: function(name, path) {
             if (this.model.errorModel instanceof Backbone.Model) {
@@ -108,6 +114,7 @@ define([
             this.clearErrorModelValue(name, path);
             var callback = this.modelChangeListener || this.render;
             callback.apply(this, arguments);
+            this.updateLabelsForSelectedValues(name);
         },
         listenToFieldName: function() {
             this.modelName = this.getComponentInstanceName();
@@ -168,12 +175,15 @@ define([
             changes[name] = _.isEmpty(path) ? value : _.clone(model.get(name)) || {};
             if (!_.isEmpty(path)) this.keyPathSetter(changes[name], path, value);
             this.stopListening(this.model, "change:" + name, this.onModelChange);
-            if (_.isFunction(this.getSelectedLabelFromDOM)) {
-                this.model.trigger('labelsForSelectedValues:update', name, this.getSelectedLabelFromDOM());
-            }
+            this.updateLabelsForSelectedValues(name);
             model.set(changes);
             this.listenTo(this.model, "change:" + name, this.onModelChange);
             return model.changedAttributes();
+        },
+        updateLabelsForSelectedValues: function(name) {
+            if (_.isFunction(this.getSelectedLabelFromDOM)) {
+                this.model.trigger('labelsForSelectedValues:update', name, this.getSelectedLabelFromDOM());
+            }
         },
 
 
@@ -260,7 +270,7 @@ define([
         },
         setStringFieldOption: function(attribute, stringValue, e, options) {
             if (_.isString(stringValue)) {
-                this.field.set(attribute, stringValue);
+                this.field.set(attribute, stringValue, options);
             }
             e.stopPropagation();
         },

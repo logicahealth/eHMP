@@ -1,0 +1,15 @@
+allprojects {
+  ext.set('groupId', 'us.vistacore.cdsinvocation')
+  ext.set('repoVersion', getRepoVersion())
+  ext.set('commitCountDir', projectDir)
+  apply plugin: 'java'
+
+  ext.set('javaVersion', '1.8')
+  ext.set('targetJavaVersion', '1.8')
+  ext.set('log4jVersion', '2.4.1')
+  ext.set('junitVersion', '4.12')
+  ext.set('servlet-api', '3.1.0')
+  ext.set('jacksonVersion', '2.7.9')
+  ext.set('commons-lang3','3.4')
+  ext.set('cxfVersion', '3.1.6')
+}

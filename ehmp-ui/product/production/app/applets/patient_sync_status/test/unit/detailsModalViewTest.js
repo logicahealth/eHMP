@@ -11,7 +11,7 @@ define([
       "allVa": {
         "sites": [
           {
-            "sourceName": "9E7A",
+            "sourceName": "SITE",
             "status": {
               "syncCompleted": true
             }
@@ -22,7 +22,7 @@ define([
 
     var jobStatuses = [
         {
-            "site":"C877",
+            "site":"SITE",
             "siteDisplayName":"KODAK",
             "status":"inProgress",
             "type":"jobStatus",

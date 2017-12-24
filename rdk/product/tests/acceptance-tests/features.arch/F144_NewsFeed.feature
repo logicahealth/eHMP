@@ -5,21 +5,21 @@ Feature: F144 eHMP Viewer GUI-News Feed: Summary View - Add News Feed Collection
 @f144_1_newsfeed @VPR 
 
 Scenario: A user can request newfeed information in VPR format through RDK API.
-Given a patient with pid "9E7A;164" has been synced through the RDK API
-When the client requests newsfeed for the patient "9E7A;164" in RDK format
+Given a patient with pid "SITE;164" has been synced through the RDK API
+When the client requests newsfeed for the patient "SITE;164" in RDK format
 Then a successful response is returned
 #And the client receives 9 result(s)
 And the VPR results contain
 
       | field                               | value                         |
-      | uid                                 | urn:va:visit:9E7A:164:H918    |
+      | uid                                 | urn:va:visit:SITE:164:H918    |
       | current                             | false                         |
       | facilityCode                        | 500                           |
       | facilityName                        | CAMP MASTER                   |
       | patientClassName                    | Inpatient                     |
       | dateTime                            | 199305201000                  |
       | service                             | MEDICINE                      |
-      | locationUid                         | urn:va:location:9E7A:3        |
+      | locationUid                         | urn:va:location:SITE:3        |
       | locationName                        | DRUGSTER                      |
       | shortLocationName                   | DRUGS                         |
       | locationDisplayName                 | Drugster                      |
@@ -28,7 +28,7 @@ And the VPR results contain
       | movements.movementType              | DISCHARGE                     |
       | movements.summary                   | CONTAINS EncounterMovement    |
       | kind                                | Admission                     |
-      | pid                                 | 9E7A;164                      |
+      | pid                                 | SITE;164                      |
       | localId                             | H918                          |
       | typeName                            | HOSPITALIZATION               |
       | typeDisplayName                     | Hospitalization               |
@@ -37,7 +37,7 @@ And the VPR results contain
       | categoryName                        | Admission                     |
       | specialty                           | GENERAL MEDICINE              |
       | providers.role                      | A                             |
-      | providers.providerUid               | urn:va:user:9E7A:1039         |
+      | providers.providerUid               | urn:va:user:SITE:1039         |
       | providers.providerName              | PROVIDER,TWENTYNINE           |
       | providers.providerDisplayName       | Provider,Twentynine           |
       | providers.summary                   | EncounterProvider{uid='null'} |
@@ -45,7 +45,7 @@ And the VPR results contain
       | stay.dischargeDateTime              | 199305201300                  |
       | primaryProvider.primary             | true                          |
       | primaryProvider.role                | P                             |
-      | primaryProvider.providerUid         | urn:va:user:9E7A:1039         |
+      | primaryProvider.providerUid         | urn:va:user:SITE:1039         |
       | primaryProvider.providerName        | PROVIDER,TWENTYNINE           |
       | primaryProvider.providerDisplayName | Provider,Twentynine           |
       | primaryProvider.summary             | EncounterProvider{uid='null'} |

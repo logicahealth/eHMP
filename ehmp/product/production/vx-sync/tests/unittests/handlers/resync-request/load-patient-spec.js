@@ -35,7 +35,7 @@ var config = {
 var job = {
     'patientIdentifier': {
         'type': 'pid',
-        'value': '9E7A;3'
+        'value': 'SITE;3'
     }
 };
 
@@ -64,7 +64,7 @@ describe('load-patient', function(){
     });
 
 	it('successfully calls the doLoad endpoint', function(done){
-		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=9E7A%3B3').reply(200, function(){
+		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=SITE%3B3').reply(200, function(){
 			var headers = val(this, ['req','headers']);
 			expect(headers['x-request-id']).toBeFalsy();
 			expect(headers['x-session-id']).toBeFalsy();
@@ -79,7 +79,7 @@ describe('load-patient', function(){
 		var jobWithRequestInfo = _.clone(job);
         jobWithRequestInfo.referenceInfo = referenceInfo;
 
-		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=9E7A%3B3').reply(200, function(){
+		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=SITE%3B3').reply(200, function(){
 			var headers = val(this, ['req','headers']);
 			expect(headers).toEqual(jasmine.objectContaining({
 				host: jasmine.any(String),
@@ -97,7 +97,7 @@ describe('load-patient', function(){
 		});
 	});
 	it('Error path: request.get returns error', function(done){
-  		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=9E7A%3B3').replyWithError('Error');
+  		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=SITE%3B3').replyWithError('Error');
 
         loadPatient(log, config.syncRequestApi, job, function(error){
         	expect(error).toBeTruthy();
@@ -105,7 +105,7 @@ describe('load-patient', function(){
         });
 	});
 	it('Error path: request.get returns 500 response', function(done){
-		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=9E7A%3B3').reply(500);
+		nock('http://127.0.0.1:8080').get('/sync/doLoad?pid=SITE%3B3').reply(500);
 
         loadPatient(log, config.syncRequestApi, job, function(error){
         	expect(error).toBeTruthy();

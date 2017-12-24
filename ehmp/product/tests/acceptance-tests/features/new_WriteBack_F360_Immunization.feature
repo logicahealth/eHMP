@@ -3,8 +3,8 @@ Feature: F360 - Enter and Store Immunizations
 
 @writeback_immunization 
 Scenario: Client can write to the VistA and add Immunizations records
-  Given a patient with pid "9E7A;419" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
-  And the client requests "Immunizations" for the patient "9E7A;419" in VPR format
+  Given a patient with pid "SITE;419" has been synced through VX-Sync API for "SITE;SITE;2939;FFC7;VLER" site(s)
+  And the client requests "Immunizations" for the patient "SITE;419" in VPR format
   And save the totalItems
   And a client connect to VistA using "Panorama"
   When new the client add new Immunization record for patient with DFN "419" enter
@@ -37,7 +37,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     | remarks                   |                                         | OneRemark                                       |
     
   Then the client receive the VistA write-back response
-  And the new "Immunization" record added for the patient "9E7A;419" in VPR format
+  And the new "Immunization" record added for the patient "SITE;419" in VPR format
   And save the local id from VistA write-back response
   And VistA write-back generate a new localId with values record dispaly in VPR format
     | field           | value                                               |
@@ -75,8 +75,8 @@ Scenario: Client can write to the VistA and add Immunizations records
 
 @writeback_immunization @future
 Scenario: Client can write to the VistA and add Immunizations records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "Immunizations" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "Immunizations" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When new the client add new Immunization record for patient with DFN "66" enter
@@ -109,7 +109,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     | remarks                   |                             | OneRemark_test                                  |
     
   Then the client receive the VistA write-back response
-  And the new "Immunization" record added for the patient "C877;66" in VPR format
+  And the new "Immunization" record added for the patient "SITE;66" in VPR format
   And VistA write-back generate a new localId with values record dispaly in VPR format
     | field           | value                                 |
     | cptName         | ANTHRAX VACCINE SC OR IM              |
@@ -149,8 +149,8 @@ Scenario: Client can write to the VistA and add Immunizations records
 # 
 # @writeback_immunization @debug
 # Scenario: Client can write to the VistA and add Immunizations records
-  # Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
-  # And the client requests "Immunizations" for the patient "C877;253" in VPR format
+  # Given a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE;SITE;HDR;VLER" site(s)
+  # And the client requests "Immunizations" for the patient "SITE;253" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Kodak"
   # When the client add new Immunization record using Encounter Form for patient with DFN "253" enter
@@ -162,7 +162,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     # | comment         |                           | Test: this patient got ANTHRAX |
 #     
   # Then the client receive the VistA write-back response
-  # And the new "Immunization" record added for the patient "C877;253" in VPR format
+  # And the new "Immunization" record added for the patient "SITE;253" in VPR format
   # And the new write back record dispaly in VPR format with value of
     # | field             | value                    |
     # | cptName           | ANTHRAX VACCINE SC OR IM |
@@ -176,8 +176,8 @@ Scenario: Client can write to the VistA and add Immunizations records
 #   
 # @writeback_immunization 
 # Scenario: Client can write to the VistA and add Immunizations records
-  # Given a patient with pid "9E7A;66" has been synced through VX-Sync API for "9E7A" site(s)
-  # And the client requests "Immunizations" for the patient "9E7A;66" in VPR format
+  # Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  # And the client requests "Immunizations" for the patient "SITE;66" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Panorama"
   # When the client add new Immunization record using Encounter Form for patient with DFN "66" enter
@@ -189,7 +189,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     # | comment         |                  | Test: this patient got MUMPS VIRUS VACCINE |
 #     
   # Then the client receive the VistA write-back response
-  # And the new "Immunization" record added for the patient "9E7A;66" in VPR format
+  # And the new "Immunization" record added for the patient "SITE;66" in VPR format
   # And the new write back record dispaly in VPR format with value of
     # | field           | value             |
     # | cptName         | MUMPS VACCINE SC  |
@@ -211,7 +211,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     # | comment         |                           | Test: this patient got ANTHRAX |
 #     
   # Then the client receive the VistA write-back response
-  # And the new "Immunization" record added for the patient "9E7A;66" in VPR format
+  # And the new "Immunization" record added for the patient "SITE;66" in VPR format
   # And the new write back record dispaly in VPR format with value of
     # | field           | value                     |
     # | cptName         | ANTHRAX VACCINE SC OR IM  |
@@ -225,8 +225,8 @@ Scenario: Client can write to the VistA and add Immunizations records
 # 
 # @writeback_immunization 
 # Scenario: Client can not duplicate the same Immunizations to the same patient in VistA
-  # Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  # And the client requests "Immunizations" for the patient "C877;66" in VPR format
+  # Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  # And the client requests "Immunizations" for the patient "SITE;66" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Kodak"
   # When the client add new Immunization record using Encounter Form for patient with DFN "66" enter
@@ -238,7 +238,7 @@ Scenario: Client can write to the VistA and add Immunizations records
     # | comment         |                  | Test: this patient got MUMPS VIRUS VACCINE |
 #     
   # Then the client receive the VistA write-back response
-  # And the new "Immunization" record added for the patient "C877;66" in VPR format
+  # And the new "Immunization" record added for the patient "SITE;66" in VPR format
   # And the new write back record dispaly in VPR format with value of
     # | field           | value             |
     # | cptName         | MUMPS VACCINE SC  |
@@ -249,7 +249,7 @@ Scenario: Client can write to the VistA and add Immunizations records
   # When the client use the vx-sync write-back to save the record
   # Then the responce is successful
 #   
-  # Given the client requests "Immunizations" for the patient "C877;66" in VPR format
+  # Given the client requests "Immunizations" for the patient "SITE;66" in VPR format
   # When the client add same Immunization record using Encounter Form for patient with DFN "66" enter
     # | field           | desc             | value    |
     # | contra          | MUMPS VACCINE SC | 15       |

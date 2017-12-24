@@ -17,6 +17,18 @@ module.exports._findStartDateString = findStartDateString;
 module.exports._setTimeSinceItem = setTimeSinceItem;
 
 
+const BMI_NOT_REQUIRED = 0;
+const BMI_DATA_PRESENT = 1;
+const BMI_MISSING_HEIGHT = 2;
+const BMI_MISSING_WEIGHT = 3;
+
+module.exports.BMI_NOT_REQUIRED = BMI_NOT_REQUIRED;
+module.exports.BMI_DATA_PRESENT = BMI_DATA_PRESENT;
+module.exports.BMI_MISSING_HEIGHT = BMI_MISSING_HEIGHT;
+module.exports.BMI_MISSING_WEIGHT = BMI_MISSING_WEIGHT;
+module.exports.getBodyMassStatusCode = getBodyMassStatusCode;
+
+
 function addNormalizedName(jdsData) {
     _.each(jdsData.data.items, function(item) {
         var normalizedName = null;
@@ -84,16 +96,13 @@ function setExpirationLabel(jdsData) {
         }
         switch (item.vaStatus.toUpperCase()) {
             case 'PENDING':
-                item.calculatedStatus = 'PENDING'; //is this what we should put here? FYI, 9E7A;164 has Pending meds.
+                item.calculatedStatus = 'PENDING'; //is this what we should put here? FYI, SITE;164 has Pending meds.
                 break;
             case 'ACTIVE':
-                if (item.vaType === 'N') {
-                    item.calculatedStatus = 'Start';
-                }
-                if (overallStop < currentDate) {
+                if (item.vaType !== 'N' && overallStop < currentDate) {
                     item.calculatedStatus = 'Expired';
                 } else {
-                    item.calculatedStatus = 'Expires';
+                    item.calculatedStatus = 'Active';
                 }
                 break;
             case 'SUSPEND':
@@ -104,7 +113,7 @@ function setExpirationLabel(jdsData) {
                 break;
             case 'EXPIRED':
                 if (item.vaType === 'N') {
-                    item.calculatedStatus = 'Start';
+                    item.calculatedStatus = 'Active';
                 } else {
                     item.calculatedStatus = 'Expired';
                 }
@@ -288,13 +297,48 @@ function decompress(fullHtml, callback) {
     });
 }
 
+
+function getBodyMassStatusCode(jdsData) {
+    var data = _.get(jdsData, 'data.items', []);
+    var hasHeight = false;
+    var hasWeight = false;
+
+    _.each(data, function(item) {
+        var type = _.get(item, 'typeName', '').toLowerCase();
+        if (type === 'weight') {
+            hasWeight = true;
+            if (hasHeight) {
+                return false;
+            }
+        } else if (type === 'height') {
+            hasHeight = true;
+            if (hasWeight) {
+                return false;
+            }
+        }
+    });
+
+    if (hasHeight && hasWeight) {
+        return BMI_DATA_PRESENT;
+    }
+
+    if (hasWeight) {
+        return BMI_MISSING_HEIGHT;
+    }
+
+    if (hasHeight) {
+        return BMI_MISSING_WEIGHT;
+    }
+
+    return BMI_NOT_REQUIRED;
+}
+
+
 /*
     Add calculated BMI to the domain data
     Each facility data is used to calculate BMI.  No crossover between different facilities.
     For each facility, use last height of all days and last measured weight on a day are used to calculate BMI
  */
-
-
 function addCalculatedBMI(jdsData) {
     var domainData = jdsData;
 

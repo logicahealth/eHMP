@@ -29,6 +29,7 @@ fieldset[disabled] .btn {
     &:active,
     &:active:focus {
         outline: 1px dotted;
+        box-shadow: none;
     }
 }
 // sizing
@@ -166,19 +167,22 @@ fieldset[disabled] .btn {
 // background colors to determine custom button styles
 .bgc-primary-dark {
     color: $pure-white;
-    &:hover {
+    &:hover,
+    &:focus {
         color: $primary-light;
     }
 }
 .bgc-primary-light {
     color: $primary;
-    &:hover {
+    &:hover,
+    &:focus {
         color: $primary-dark;
     }
 }
 .bgc-pure-white {
     color: $primary;
-    &:hover {
+    &:hover,
+    &:focus {
         color: $primary-dark;
     }
 }
@@ -242,9 +246,6 @@ fieldset[disabled] .btn {
             border-right: none;
         }
         &.dropdown-toggle {
-            background-color: $primary;
-            color: $pure-white;
-            font-weight: 600;
             &:focus {
                 outline: 1px dotted;
             }
@@ -301,4 +302,10 @@ fieldset[disabled] .btn {
             }
         }
     }
+}
+
+// ADK Action Behavior button
+.btn-action-arrow {
+    box-shadow: none;
+    padding: 3px 7px 0;
 }

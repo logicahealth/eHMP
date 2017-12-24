@@ -9,7 +9,7 @@ var nullchecker = require('../../../core/rdk').utils.nullchecker;
 /**
  * Returns VPR order object by calling HMP GET PATIENT DATA JSON
  * @param writebackContext The writeback context
- * @param orderUid The order uid (ex: 'urn:va:order:9E7A:3:15822')
+ * @param orderUid The order uid (ex: 'urn:va:order:SITE:3:15822')
  * @param callback The callback
  */
 var getVprOrder = function(writebackContext, orderUid, callback) {

@@ -48,7 +48,7 @@ define([
                 if (this.title === 'Next') {
                   elem.className = 'btn btn-icon nextPaginator';
                   if(this.collection.state.currentPage !== this.collection.state.totalPages) {
-                    elem.title = 'Press enter to load the next page, page ' + (this.collection.state.currentPage + 1) + ', and then press ALT + R to view the table';
+                    elem.title = 'Load the next page, page ' + (this.collection.state.currentPage + 1) + ', and then press ALT + R to view the table';
                   } else {
                     elem.title = 'This is the last page.';
                   }
@@ -56,7 +56,7 @@ define([
                 } else if (this.title === 'Previous') {
                   elem.className = 'btn btn-icon previousPaginator left-margin-xs';
                   if((this.collection.state.currentPage - 1) !== 0) {
-                    elem.title = 'Press enter to load the previous page, page' + (this.collection.state.currentPage - 1) + ', and then press ALT + R to view the table';
+                    elem.title = 'Load the previous page, page' + (this.collection.state.currentPage - 1) + ', and then press ALT + R to view the table';
                   } else {
                     elem.title = 'This is the first page.';
                   }

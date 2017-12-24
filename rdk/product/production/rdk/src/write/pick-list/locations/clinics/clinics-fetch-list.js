@@ -4,7 +4,6 @@ var _ = require('lodash');
 var async = require('async');
 var rdk = require('./../../../../core/rdk');
 var rpcClientFactory = require('../../utils/rpc-client-factory');
-var validate = require('./../../utils/validation-util');
 var http = rdk.utils.http;
 var locationUtil = rdk.utils.locationUtil;
 
@@ -68,10 +67,7 @@ function callRpcRecursively(logger, rpcClient, jdsOptions, retValue, searchStrin
                 callback(err);
             }
 
-            var localStartName = clinics.length > 0 ? _.last(clinics).name : null;
-            if (!validate.isStringNullish(localStartName)) {
-                localStartName = localStartName.toUpperCase();
-            }
+            var localStartName = clinicsCollection.length > 0 ? (_.last(clinicsCollection)).split(RPC_FIELD_DELIMITER)[1] : null;
 
             var callAgain = false;
 

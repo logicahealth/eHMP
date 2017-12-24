@@ -1,7 +1,11 @@
-HMPDERRH ;SLC/AGP,ASMR/RRB - HMP Error Handler;3/21/12 5:44pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPDERRH ;SLC/AGP,ASMR/RRB,AFS/PB - HMP Error Handler;3/21/12 5:44pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;*4*;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ; External References          DBIA#
+ ; -------------------          ----- 
+ ; %ZTER,UNWIND^%ZTER           1621
+ ; EC^%ZOSV                     10097
  Q
  ;
 ERRHDLR ; -- save errors to return in JSON [Expects ERRPAT, ERRMSG]
@@ -21,9 +25,10 @@ ERRHDLR ; -- save errors to return in JSON [Expects ERRPAT, ERRMSG]
  N CNT,MSGCNT
  S CNT=+$G(^TMP($J,"HMP ERROR","# of Errors"))
  S CNT=CNT+1,^TMP($J,"HMP ERROR","# of Errors")=CNT
- S MSGCNT=+$O(^TMP($J,"HMP ERROR","ERROR MESSAGE",""))
+ S MSGCNT=+$O(^TMP($J,"HMP ERROR","ERROR MESSAGE",""),-1)
  I $G(ERRPAT)>0,MSGCNT=0 S MSGCNT=MSGCNT+1,^TMP($J,"HMP ERROR","ERROR MESSAGE",MSGCNT)="An error occurred on patient: "_$G(ERRPAT)
- I $L($G(ERRMSG))>0 S MSGCNT=MSGCNT+1,^TMP($J,"HMP ERROR","ERROR MESSAGE",MSGCNT)=ERRMSG
+ I $G(ERRMSG)'="" S MSGCNT=MSGCNT+1,^TMP($J,"HMP ERROR","ERROR MESSAGE",MSGCNT)=ERRMSG
+ S:$G(ERROR)'="" MSGCNT=$G(MSGCNT)+1,^TMP($J,"HMP ERROR","ERROR MESSAGE",MSGCNT)="The error is: "_$G(ERROR) ;Log the error message into TMP
  ;I $D(ERRARRY) D
  ;.S DOMCNT=$O(^TMP($J,"HMP ERROR",ERRPAT,ERRDOM,"DATA",""))+1
  ;.I $D(ERRARRY)>0 M ^TMP($J,"HMP ERROR",ERRPAT,ERRDOM,"DATA",DOMCNT)=ERRARRY

@@ -13,10 +13,10 @@ describe('Educations FHIR Resource', function() {
 
 describe('Educations FHIR conversion methods', function() {
     var req = {
-        '_pid': '9E7A;253',
+        '_pid': 'SITE;253',
         originalUrl: '/fhir/educations?subject.identifier=11016V630869',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -29,7 +29,7 @@ describe('Educations FHIR conversion methods', function() {
         expect(fhirBundle.link).not.to.be.undefined();
         expect(fhirBundle.link.length).to.eql(1);
         expect(fhirBundle.link[0].relation).to.eql('self');
-        expect(fhirBundle.link[0].url).to.eql('http://localhost:8888/fhir/educations?subject.identifier=11016V630869');
+        expect(fhirBundle.link[0].url).to.eql('http://localhost:PORT/fhir/educations?subject.identifier=11016V630869');
         expect(fhirBundle.total).to.eql(99);
         expect(fhirBundle.entry).not.to.be.undefined();
         expect(fhirBundle.entry.length).to.eql(2);

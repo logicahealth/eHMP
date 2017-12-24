@@ -16,7 +16,7 @@ Given(/^select patient\(s\) from above pid that have not been synced$/) do
   @pid_site_list.each do |pid, site_name_list|
     p "-" * 80
     p pid + "----" + site_name_list
-    if (pid.include? "9E7A") || (pid.include? "C877")
+    if (pid.include? "SITE") || (pid.include? "SITE")
       sync_path = "#{base_url}/sync/doLoad?pid=#{pid}"
       status_path = "#{base_url}/sync/status?pid=#{pid}"
     else
@@ -52,7 +52,7 @@ When(/^the client requests sync for a patient with above pid every (\d+) second$
     p "-" * 80
     p "Sending sync request for: " + pid
     
-    if (pid.include? "9E7A") || (pid.include? "C877")
+    if (pid.include? "SITE") || (pid.include? "SITE")
       p sync_path = "#{base_url}/sync/doLoad?pid=#{pid}"
     else
       p sync_path = "#{base_url}/sync/doLoad?icn=#{pid}"
@@ -84,7 +84,7 @@ Then(/^the patient\(s\) with above pid should sync$/) do
   
     pid_list_to_check_sync_status.each do |pid, site_name_list|
       
-      if (pid.include? "9E7A") || (pid.include? "C877")
+      if (pid.include? "SITE") || (pid.include? "SITE")
         status_path = "#{base_url}/sync/status?pid=#{pid}"
       else
         status_path = "#{base_url}/sync/status?icn=#{pid}"

@@ -1,5 +1,5 @@
-HMPDJ05 ;SLC/MKB,ASMR/RRB,CPC - Medications by order;Jul 18, 2016 15:12:10
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 63
+HMPDJ05 ;SLC/MKB,ASMR/RRB,CPC,AFS/BL,hrubovcak,CPC - Medications by order;Jul 18, 2016 15:12:10
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References: see HMPDJ05V for DBIA list
@@ -20,6 +20,7 @@ PS1(ID) ; -- med order
  S X=$S(ORPK:$E(ORPK,$L(ORPK)),1:"Z") S:X=+X X="R" ;last char = PS file
  S CLS=$S("RSN"[X:"O","UV"[X:"I",1:$$GET1^DIQ(100,ID_",",10,"I"))
  S MED("uid")=$$SETUID^HMPUTILS("med",DFN,ID)
+ S MED("originatingPackage")=$$GET1^DIQ(100,ID_",",12,"E") ;DE5718
  S MED("orders",1,"orderUid")=$$SETUID^HMPUTILS("order",DFN,ID)
  D KIN(ID) ;DE5462 add parent/child structure
  S X=$$GET1^DIQ(100,ID_",",9,"I") S:X MED("orders",1,"predecessor")=$$SETUID^HMPUTILS("med",DFN,+X)
@@ -127,9 +128,15 @@ C ; - Get OP data
  . S X=$$GET1^PSODI(52,+ORPK_",",26,"I") S:X MED("overallStop")=$$JSONDT^HMPUTILS($P(X,U,2)) ;1^expirationDate
  . S X=$$GET1^PSODI(52,+ORPK_",",38.3,"I") S:X MED("prescriptionFinished")=$$JSONDT^HMPUTILS($P(X,U,2)) ;DE5723 1^date prescription finished
  I CLS="I" D
+ . N MEDLOC
  . S X=$$GET1^DIQ(55.06,+ORPK_","_DFN_",",25,"I")
  . S:X MED("overallStop")=$$JSONDT^HMPUTILS(X)
- . D BCMA^HMPDJ05V(.MED,DFN,ORPK)
+ . ;DE8371;BL remove the RET array to alleviate the <STORE> error. MEDLOC is returned as ^TMP value
+ . S MEDLOC=""
+ . D:$$PROD^XUPROD BCMA^HMPDJ05V(.MEDLOC,DFN,ORPK)  ;DE7678, get BCMA data only in production
+ . Q:MEDLOC=""
+ . M MED=@MEDLOC  ;DE8371;BL convert to med array.
+ . K @MEDLOC,MEDLOC
  ;
 PSQ ; finish
  D:DRUG NDF(+DRUG)

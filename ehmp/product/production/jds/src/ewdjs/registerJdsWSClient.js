@@ -21,7 +21,7 @@ var zewd = new ewd.mumps.GlobalNode('%zewd', []);
 zewd._setDocument({
   "EWDLiteServiceAccessId": {
     "JdsClient": {
-      "secretKey": "$keepSecret!",
+      "secretKey": "PW",
       "apps": {
         "JdsPatient": true,
         "JdsRestServer": true

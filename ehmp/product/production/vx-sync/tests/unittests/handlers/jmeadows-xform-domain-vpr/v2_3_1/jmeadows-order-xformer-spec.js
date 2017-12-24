@@ -4,6 +4,12 @@ require('../../../../../env-setup');
 var moment = require('moment');
 
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-order-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '0000000001';
 
@@ -69,7 +75,7 @@ describe('jmeadows-order-xformer', function() {
     };
     var vprResult = {};
     it('transforms first sampel dod order to vpr ', function() {
-        vprResult = xformer(dodOrder1, mockEdipi);
+        vprResult = xformer(log, dodOrder1, mockEdipi);
         assertFieldExpectations(vprResult, vprResult1, dodOrder1);
     });
 });
@@ -160,7 +166,7 @@ describe('jmeadows-order-xformer', function() {
 
     var vprResult = {};
     it('transforms second sample dod order to vpr ', function() {
-        vprResult = xformer(dodOrder2, mockEdipi);
+        vprResult = xformer(log, dodOrder2, mockEdipi);
         assertFieldExpectations(vprResult, vprResult2, dodOrder2);
     });
 });

@@ -74,6 +74,7 @@ SETERROR(ERRCODE,MESSAGE) ; set error info into ^||TMP("HTTPERR",$J)
  ; Generic Data Store Error codes
  I ERRCODE=270 S HTTPERR=400,ERRNAME="Error generating index metadata"
  I ERRCODE=271 S HTTPERR=400,ERRNAME="Duplicate index found"
+ I ERRCODE=272 S HTTPERR=500,ERRNAME="Record already locked"
  ; HTTP errors
  I ERRCODE=400 S ERRNAME="Bad Request"
  I ERRCODE=404 S ERRNAME="Not Found"

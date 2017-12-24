@@ -12,11 +12,15 @@ var services = {
     203: 'vxsync',
     204: 'cds',
     205: 'jbpm',
+    206: 'oracledb',
     //300's dod related systems
     300: 'dod',
     301: 'jmeadows',
     302: 'solr',
-    303: 'mvi'
+    303: 'mvi',
+    //400's third party systems
+    400: 'vvs',
+    401: 'pps'
 };
 
 _.each(services, function mapDescriptionToServicesCode(value, key, object) {

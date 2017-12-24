@@ -4,10 +4,10 @@ Feature: F138 - Return of immunization in FHIR format
 #This feature item returns Immunization in FHIR format from all VistA instances in which a patient record exists. It includes breaking the glass for a sensitive patient.
 #Patients used: 5000000116V912836, 5000000217V519385, 10107V395912, 5123456789V027402, 10117V810068, 10108V420871
 
-  @F138_1_fhir_immunzation @fhir @9E7A253
+  @F138_1_fhir_immunzation @fhir @SITE253
   Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
-      When the client requests immunization for the patient "9E7A;253" in FHIR format
+      When the client requests immunization for the patient "SITE;253" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "immunization"
       | name                          | value                |
@@ -19,12 +19,12 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.contained.name             | FT. LOGAN            |
       #Practitioner
       | resource.contained.resourceType    | Practitioner         |
-      | resource.contained.identifier.value | urn:va:user:9E7A:11623   |
+      | resource.contained.identifier.value | urn:va:user:SITE:11623   |
       | resource.contained.name             | STUDENT,SEVEN            |
       | resource.contained.text.status      | generated                |
       #Location
       | resource.contained.resourceType     | Location                 |
-      | resource.contained.identifier.value | urn:va:location:9E7A:32  |
+      | resource.contained.identifier.value | urn:va:location:SITE:32  |
       | resource.contained.name             | PRIMARY CARE             |
       | resource.contained.text.status       | generated                |
       #Extensions
@@ -56,11 +56,11 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.reported                   | false                    |
    And FHIR date and time conver to Zulu format for Immunization
    
-  @F138_2_fhir_immunzation @fhir @9E7A100615
+  @F138_2_fhir_immunzation @fhir @SITE100615
   Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
-      And a patient with pid "9E7A;100615" has been synced through the RDK API
-      When the client requests immunization for the patient "9E7A;100615" in FHIR format
+      And a patient with pid "SITE;100615" has been synced through the RDK API
+      When the client requests immunization for the patient "SITE;100615" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "immunization"
       | name                                | value                         |
@@ -127,11 +127,11 @@ Feature: F138 - Return of immunization in FHIR format
       | resource.vaccineType.coding.display | poliovirus vaccine, inactivated |
       | resource.reported                   | false                           |
 
-@F138_3_fhir_immunzation @fhir @9E7A100716
+@F138_3_fhir_immunzation @fhir @SITE100716
 Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
-      And a patient with pid "9E7A;100716" has been synced through the RDK API
-      When the client requests immunization for the patient "9E7A;100716" in FHIR format
+      And a patient with pid "SITE;100716" has been synced through the RDK API
+      When the client requests immunization for the patient "SITE;100716" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "immunization"
       #Vaccin no1
@@ -232,11 +232,11 @@ Scenario: Client can request immunization results in FHIR format
       | resource.reported                   | false                                |
      
 
-@F138_4_fhir_immunzation @fhir @enrich @9E7A3
+@F138_4_fhir_immunzation @fhir @enrich @SITE3
 Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
-      And a patient with pid "9E7A;3" has been synced through the RDK API
-      When the client requests immunization for the patient "9E7A;3" in FHIR format
+      And a patient with pid "SITE;3" has been synced through the RDK API
+      When the client requests immunization for the patient "SITE;3" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "immunization"
       #Vaccin no1
@@ -274,10 +274,10 @@ Scenario: Client can request immunization results in FHIR format
 @F138_5_fhir_immunzation @fhir @5123456789V027402
 Scenario: Client can break the glass when requesting immunization in FHIR format for a sensitive patient
       Given a patient with "immunization" in multiple VistAs
-      And a patient with pid "9E7A;18" has been synced through the RDK API
-      When the client requests immunization for that sensitive patient "9E7A;18"
+      And a patient with pid "SITE;18" has been synced through the RDK API
+      When the client requests immunization for that sensitive patient "SITE;18"
       Then a permanent redirect response is returned
-      When the client breaks glass and repeats a request for immunization for that patient "9E7A;18"
+      When the client breaks glass and repeats a request for immunization for that patient "SITE;18"
       Then a successful response is returned
       And the results contain
       | name | value |
@@ -294,7 +294,7 @@ Scenario: Client can break the glass when requesting immunization in FHIR format
 @F138_6_fhir_immunzation @fhir @10117V810068
 Scenario: Negativ scenario. Client can request immunization results in FHIR format
       Given a patient with "no immunization" in multiple VistAs
-      When the client requests immunization for the patient "9E7A;428" in FHIR format
+      When the client requests immunization for the patient "SITE;428" in FHIR format
       Then a successful response is returned
       And the results contain
       | name | value |
@@ -311,8 +311,8 @@ Scenario: Negativ scenario. Client can request immunization results in FHIR form
 @F138_7_fhir_immunzation @fhir @5000000116V912836 @DE974
 Scenario: Client can request immunization results in FHIR format
       Given a patient with "immunization" in multiple VistAs
-      And a patient with pid "9E7A;100615" has been synced through the RDK API
-      When the client requests "10" immunization for the patient "9E7A;100615" in FHIR format
+      And a patient with pid "SITE;100615" has been synced through the RDK API
+      When the client requests "10" immunization for the patient "SITE;100615" in FHIR format
       Then a successful response is returned
       And total returned resources are "10"
       And the results contain

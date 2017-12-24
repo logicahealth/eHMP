@@ -10,34 +10,30 @@ define([
     'api/UserDefinedScreens',
     'api/Checks',
     'api/PatientRecordService',
-    'api/WorkspaceContextRepository'
+    'api/WorkspaceContextRepository',
+    'main/adk_utils/patientUtils'
 ], function (Backbone, $, UIAlert, ResourceService, SessionStorage, UserService,
-    Messaging, Navigation, UserDefinedScreens, Checks, PatientRecordService, WorkspaceContextRepository) {
+    Messaging, Navigation, UserDefinedScreens, Checks, PatientRecordService, WorkspaceContextRepository, PatientUtils) {
     'use strict';
 
     var pendingChangeCheck = function (contextItems) {
-        var failingChecks = Checks._checkCollection;
-        if (failingChecks.length > 0) {
+        var labels = Checks.getAllLabels('navigation', {screenName: WorkspaceContextRepository.userDefaultScreen});
+        if (labels.length > 0) {
             var checkMessage = '';
-            var gatherLabels = _.uniq(failingChecks.models, function(item){
-                return item.get('label');
+            _.each(labels, function (label) {
+                checkMessage += 'Warning! Changes to in progress eHMP ' + label + ' will be lost!\n';
             });
-
-            _.each(gatherLabels, function (f) {
-                gatherLabels.push(f.get('label'));
-                checkMessage += "Warning! Changes to in progress eHMP " + f.get('label') + " will be lost!";
-            });
-            CCOWService.contextorControl.SetSurveyResponse("decision=conditional_accept&reason=" + checkMessage);
+            CCOWService.contextorControl.SetSurveyResponse('decision=conditional_accept&reason=' + checkMessage);
         }
         return;
-    }
+    };
 
     var commitChange = function (contextItems) {
         if (CCOWService.getCcowStatus() !== 'Connected') {
             return;
         }
         CCOWService.updatePatientInfo();
-    }
+    };
 
     var CCOWService = {
         contextorControl: null,
@@ -97,6 +93,9 @@ define([
                     }
 
                     this.persistCcowSession(ccowSession);
+
+                    Messaging.trigger('ccow:statusUpdated', ccowSession.get('status'));
+
                     return callback && callback();
                 }
             }
@@ -129,6 +128,26 @@ define([
                 }
             }
             return dfn;
+        },
+        getIcnFromContextItems: function () {
+            var contextItems = _.get(this.contextorControl, 'CurrentContext');
+            var icn;
+            var coll = new Enumerator(contextItems);
+            if (!coll.atEnd()) {
+                for (; !coll.atEnd(); coll.moveNext()) {
+                    var itemName = coll.item().name;
+                    var itemValue = coll.item().value;
+                    if (itemName.indexOf("nationalidnumber") > -1) {
+                        icn = itemValue;
+                        break;
+                    }
+                }
+            }
+
+            if(icn){
+                icn = icn+'V'+PatientUtils.generateIcnChecksum(icn);
+            }
+            return icn
         },
         getDivisionFromContextItems: function () {
             var contextItems = _.get(this.contextorControl, 'CurrentContext');
@@ -166,7 +185,7 @@ define([
             contextItemDivision = contextItemDivision || UserService.getUserSession().get('division');
 
             var searchOptions = {
-                resourceTitle: 'authentication-list',
+                resourceTitle: 'facility-list',
                 cache: true,
                 onError: function (coll, resp) {
                     callback({
@@ -226,8 +245,8 @@ define([
                         }
                         this.contextorControl.StartContextChange();
 
-                        //dfn
-                        localIdItem.name = 'Patient.id.MRN.DFN_' + (response.stationNumber || response.division);
+                        //dfn - use the logged in division from eHMP
+                        localIdItem.name = 'Patient.id.MRN.DFN_' + ADK.UserService.getUserSession().get('division');
                         //Sometimes production key in json seems to have string value. This will ensure we are reading it right.
                         if (response.production.toString() === "false") {
                             localIdItem.name = localIdItem.name + '_TEST';
@@ -277,23 +296,22 @@ define([
         },
         updatePatientInfo: function () {
             var dfn = this.getDfnFromContextItems();
+            var icn = this.getIcnFromContextItems();
             var parsePID = this.getPid(PatientRecordService.getCurrentPatient());
             if (!_.isUndefined(dfn) && (dfn !== parsePID)) {
-                var failingChecks = Checks._checkCollection.models;
+                var failingChecks = Checks.getFailingChecks('navigation', {screenName: WorkspaceContextRepository.userDefaultScreen});
                 Checks.unregister(failingChecks);
                 ADK.UI.Workflow.hide();
                 ADK.UI.Modal.hide();
                 this.getSiteInfo(function (site) {
-                    ADK.PatientRecordService.setCurrentPatient(site.siteCode + ';' + dfn, {
-                        reconfirm: true,
-                        navigation: true,
-                        modalOptions: {
-                            backdrop: 'static'
+                    var newPatientId = icn ? icn : site.siteCode + ';' + dfn;
+                    ADK.PatientRecordService.setCurrentPatient(newPatientId, {
+                        confirmationOptions: {
+                            ccowWorkflow: true,
+                            visitHomeLink: true,
+                            reconfirm: true,
+                            sensitivity: false
                         },
-                        hideCloseX: true,
-                        skipAckPatientConfirmation: true,
-                        displayBreakClinicalLink: true,
-                        displayVisitHomePageBtnOnSync: true,
                         suspendContextOnError: true,
                         callback: function (e) {
                             var currentWorkspaceAndContextModel = WorkspaceContextRepository.currentWorkspaceAndContext;
@@ -378,7 +396,7 @@ define([
                 var dfn = this.getDfnFromContextItems();
                 var parsePID = this.getPid(PatientRecordService.getCurrentPatient());
                 if (!_.isUndefined(dfn) && (dfn !== parsePID)) {
-                    var failingChecks = Checks._checkCollection.models;
+                    var failingChecks = Checks.getFailingChecks('navigation', {screenName: WorkspaceContextRepository.userDefaultScreen});
                     if (failingChecks.length > 0) {
                         clinicalText = failingChecks[0].get('failureMessage') + ' Do you wish to turn Clinical link on?';
                     }
@@ -395,8 +413,8 @@ define([
                 }),
                 footerView: Backbone.Marionette.ItemView.extend({
                     template: Handlebars.compile([
-                        '{{ui-button "No" classes="btn-default btn-sm alert-cancel" title="Press enter to cancel"}}',
-                        '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Press enter to break clinical link"}}',
+                        '{{ui-button "No" classes="btn-default btn-sm alert-cancel"}}',
+                        '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Break clinical link"}}',
                     ].join('\n')),
                     events: {
                         'click .alert-cancel': function () {
@@ -432,7 +450,7 @@ define([
             }
             UIAlert.hide();
             Messaging.trigger('ccow:updatedPatientPhotoCcowStatus', ccowAction);
-            Messaging.trigger('ccow:updateHeaderStatus', ccowAction);
+            Messaging.trigger('ccow:statusUpdated', ccowAction);
         },
         quit: function () {
             if (this.contextorControl && this.contextorControl.State === 2) {

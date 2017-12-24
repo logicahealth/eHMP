@@ -1,31 +1,75 @@
 VPRJ2D ;SLC/KCM -- Management utilities for JSON objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
-RIDXALL ; Reindex data
- N OK,KEY
- K ^XTMP("VPRJVUP","odc")
+RIDX ; Re-index all operational data, giving an option to re-index all indexes, or a list of possible indexes
+ D SETUP^VPRJPMD ; Rebuild the meta data to pick up new indexes from VPRJDMX
+ N YESNO
+ R !,"Would you like to re-index every index? (Y/N - defaults to N): ",YESNO
+ S YESNO=$TR(YESNO,"yesno","YESNO")
+ W !!
+ I YESNO'="","YES"[YESNO W !,"Re-indexing operational data for all indexes...",! D RIDXALL QUIT
+ E  D
+ . N CNT,KEY,COLL,IDX,IDXLIST,INDEX,INDEXES,LABEL,I,LINE,DESC,LN
+ . S INDEX=""
+ . W !
+ . F LABEL="IDXTALLY","IDXATTR" D
+ . . F I=1:1 S LINE=$P($T(@LABEL+I^VPRJDMX),";;",2,99) Q:LINE["zzzzz"  I $E(LINE)'=" " S INDEXES(LINE)=""
+ . . S CNT=0,(IDX,LN)="",DESC=$P($T(@LABEL^VPRJDMX),";",2,99)
+ . . W DESC,! S $P(LN,"-",$L(DESC))="" W LN_"--",!
+ . . F  S IDX=$O(INDEXES(IDX)) Q:IDX=""  W $J(IDX,25) S CNT=CNT+1 W:CNT#3=0 !
+ . . W:CNT#3'=0 !
+ . . W !
+ . . K INDEXES
+ . W !,"Select the names of the indexes that you want to re-index, then hit <enter>",!
+ . W "Hit <enter> again when you are finished, or Q <enter> if you want to quit without running",!
+ . F  R !,"Enter index name: ",IDXLIST Q:(IDXLIST="")!($TR(IDXLIST,"q","Q")="Q")  D
+ . . S INDEX=INDEX_","_IDXLIST
+ . I $TR(IDXLIST,"q","Q")="Q" W ! Q
+ . S $E(INDEX)=""
+ . I INDEX="" W !,"Nothing to re-index, quitting...",! Q
+ . E  W !,"Re-indexing operational data for the chosen index(es): "_$TR(INDEX,","," "),!
+ . D RIDXALL(INDEX)
+ QUIT
+ ;
+RIDXALL(INDEX) ; Re-index all operational data
+ ; @param {string} [INDEX=""] - A list of one or more comma-delimited index names to re-index, or if omitted or empty, re-index all
+ N OK,KEY,NUM,FLG
+ K:$D(^XTMP("VPRJVUP","odc")) ^XTMP("VPRJVUP","odc")
  S ^XTMP("VPRJVUP","odc","total")=$$TOTCTNI()
  D LOGMSG^VPRJ("odc","Re-indexing all non-patient data")
- L +^VPRJD:$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to lock all operational data") Q
+ ; Disabling global lock (cf. WRC 880083)
+ ; L +^VPRJD:$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to lock all operational data") QUIT
  D SUSPEND^VPRJ
- D CLRINDEX(.OK) Q:'OK
+ S NUM=0,FLG=0
+ F  S NUM=$O(^VPRHTTP(NUM)) Q:(NUM'=+NUM)!FLG  D
+ . I (($D(^VPRHTTP(NUM,"listener"))#2)&(^VPRHTTP(NUM,"listener")'="stopped"))!($D(^VPRHTTP(0,"child"))'=0) D
+ . . W "Unable to re-index operational data at this time.."
+ . . D RESUME^VPRJ
+ . . ; Disabling global lock (cf. WRC 880083)
+ . . ; L -^VPRJD
+ . . S FLG=1
+ I FLG QUIT
+ D CLRINDEX(.OK,$G(INDEX)) QUIT:'OK
+ ;
  S KEY="" F  S KEY=$O(^VPRJD(KEY)) Q:KEY=""  D
- . D RIDXOBJ(KEY)
+ . D RIDXOBJ(KEY,$G(INDEX))
  . D LOGCNT^VPRJ("odc")
  D RESUME^VPRJ
- L -^VPRJD
+ ; Disabling global lock (cf. WRC 880083)
+ ; L -^VPRJD
  S ^XTMP("VPRJVUP","odc","complete")=1
- Q
-RIDXCTN(CTN) ; Reindex a collection
+ QUIT
+ ;
+RIDXCTN(CTN) ; Re-index a collection
  ; Can't re-index an object at a time without corrupting the tallys
  ; We don't know which tallies to kill.
  Q
 RBLDALL ; Rebuild all objects (includes templates)
  N OK,KEY
- K ^XTMP("VPRJVUP","odc")
+ K:$D(^XTMP("VPRJVUP","odc")) ^XTMP("VPRJVUP","odc")
  S ^XTMP("VPRJVUP","odc","total")=$$TOTCTNI()
  D LOGMSG^VPRJ("odc","Rebuild ALL non-patient data (including templates)")
- L +^VPRJD:$G(^VPRCONFIG("timeout","odbuild"),5) E  D LOGMSG^VPRJ("odc","Unable to lock ALL operational data")
+ ; Disabling global lock (cf. WRC 880083)
+ ; L +^VPRJD:$G(^VPRCONFIG("timeout","odbuild"),5) E  D LOGMSG^VPRJ("odc","Unable to lock ALL operational data")
  D SUSPEND^VPRJ
  D CLRINDEX(.OK) Q:'OK  ; clears VPRJDX,VPRTMP
  D CLRDATA(.OK) Q:'OK   ; clears VPRJD,VPRJDJ except VPRJDJ("JSON")
@@ -33,7 +77,8 @@ RBLDALL ; Rebuild all objects (includes templates)
  . D RBLDOBJ(KEY)
  . D LOGCNT^VPRJ("odc")
  D RESUME^VPRJ
- L -^VPRJD
+ ; Disabling global lock (cf. WRC 880083)
+ ; L -^VPRJD
  D LOGMSG^VPRJ("odc","ODC rebuild complete")
  S ^XTMP("VPRJVUP","odc","complete")=1
  Q
@@ -41,16 +86,23 @@ RBLDCTN(CTN) ; Rebuild single collection (includes templates)
  ; Can't re-buld an object at a time without corrupting the tallys
  ; We don't know which tallies to kill.
  Q
-RIDXOBJ(KEY) ; Re-index a single object
- L +^VPRJD(KEY):$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to obtain lock for "_KEY) QUIT
- N OBJECT,STAMP
+RIDXOBJ(KEY,INDEX) ; Re-index a single object
+ ; @param {string} KEY - The identifier (UID) of the operational data item
+ ; @param {string} [INDEX=""] - A list of one or more comma-delimited index names to re-index, or if omitted or empty, re-index all
+ N OBJECT,STAMP,LTP
+ ; Using ECP with a lot of data, locking and using transactions around the re-indexing code might have a performance penalty
+ ; Check to see if we should wrap this with a lock and a transaction in this environment
+ S LTP=$G(^VPRCONFIG("reindexLockTransactions"),0)
+ I LTP L +^VPRJD(KEY):$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to obtain lock for "_KEY) QUIT
  S STAMP=$O(^VPRJD(KEY,""),-1)
+ I STAMP="" W "KEY: "_KEY_" HAS NO EVENTSTAMP",! L:LTP -^VPRJD(KEY) QUIT
  M OBJECT=^VPRJD(KEY,STAMP)
- TSTART
- D INDEX^VPRJDX(KEY,"",.OBJECT)
- TCOMMIT
- L -^VPRJD(KEY)
- Q
+ I LTP TSTART
+ D INDEX^VPRJDX(KEY,"",.OBJECT,$G(INDEX))
+ I LTP TCOMMIT
+ I LTP L -^VPRJD(KEY)
+ QUIT
+ ;
 RBLDOBJ(KEY) ; Re-build a single object
  L +^VPRJD(KEY):$G(^VPRCONFIG("timeout","odbuild"),5) E  D LOGMSG^VPRJ("odc","Unable to obtain lock for "_KEY) QUIT
  N LINE,JSON,STAMP
@@ -58,24 +110,38 @@ RBLDOBJ(KEY) ; Re-build a single object
  ; get the original JSON object without the templates
  S LINE=0 F  S LINE=$O(^VPRJDJ("JSON",KEY,STAMP,LINE)) Q:'LINE  S JSON(LINE)=^VPRJDJ("JSON",KEY,STAMP,LINE)
  ; indexes have been killed for whole patient, so remove the original object
- K ^VPRJD(KEY)
- K ^VPRJDJ("JSON",KEY)
- K ^VPRJDJ("TEMPLATE",KEY)
+ K:$D(^VPRJD(KEY)) ^VPRJD(KEY)
+ K:$D(^VPRJDJ("JSON",KEY)) ^VPRJDJ("JSON",KEY)
+ K:$D(^VPRJDJ("TEMPLATE",KEY)) ^VPRJDJ("TEMPLATE",KEY)
  ; call save the replace the object & reset indexes
  D SAVE^VPRJDS(.JSON)
  L -^VPRJD(KEY)
  Q
-CLRINDEX(OK) ; Clear all the indexes
- L +^VPRJD:$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to get lock for indexes.") S OK=0 Q
- K ^VPRJDX,^VPRTMP
- L -^VPRJD
+ ;
+CLRINDEX(OK,INDEX) ; Clear all the indexes
+ ; @param {string} {required} OK (passed by reference) - A return flag that signals whether indexes were cleared of data
+ ; @param {string} {optional} INDEX - A list of one or more comma-delimited index names to clear from the indexes
+ ;        If not passed, or the empty string, all indexes defined in VPRJPDX will be cleared
+ ; Disabling global lock (cf. WRC 880083)
+ ; L +^VPRJD:$G(^VPRCONFIG("timeout","odindex"),5) E  D LOGMSG^VPRJ("odc","Unable to get lock for indexes.") S OK=0 QUIT
+ I $G(INDEX)'="" D
+ . N IDX
+ . S IDX="" F  S IDX=$O(^VPRJDX("attr",IDX)) Q:IDX=""  I (","_INDEX_",")[IDX D
+ . . K:$D(^VPRJDX("attr",IDX)) ^VPRJDX("attr",IDX)
+ . K:$D(^VPRJDX("count","collection")) ^VPRJDX("count","collection") K:$D(^VPRJDX("tally","collection")) ^VPRJDX("tally","collection") K:$D(^VPRTMP) ^VPRTMP
+ E  K:$D(^VPRJDX) ^VPRJDX K:$D(^VPRTMP) ^VPRTMP
+ ; Disabling global lock (cf. WRC 880083)
+ ; L -^VPRJD
  D SETUP^VPRJPMD
  S OK=1
- Q
+ QUIT
+ ;
 CLRDATA(OK) ; Clear data except for original JSON
- L +^VPRJD:$G(^VPRCONFIG("timeout","odclear"),5) E  D LOGMSG^VPRJ("odc","Unable to get lock for data.") S OK=0 Q
- K ^VPRJD,^VPRJDJ("TEMPLATE")
- L -^VPRJD
+ ; Disabling global lock (cf. WRC 880083)
+ ; L +^VPRJD:$G(^VPRCONFIG("timeout","odclear"),5) E  D LOGMSG^VPRJ("odc","Unable to get lock for data.") S OK=0 Q
+ K:$D(^VPRJD) ^VPRJD K:$D(^VPRJDJ("TEMPLATE")) ^VPRJDJ("TEMPLATE")
+ ; Disabling global lock (cf. WRC 880083)
+ ; L -^VPRJD
  S OK=1
  Q
 LSTCTN ; List collections
@@ -135,9 +201,12 @@ RESET ; Reset the non-patient data store (kill the data and re-initialize)
  D RESUME^VPRJ
  Q
 KILLDB ; -- Delete and reset the globals for the database
- K ^VPRJD
- K ^VPRJDJ
- K ^VPRJDX
- K ^VPRTMP
+ K:$D(^VPRJD) ^VPRJD
+ K:$D(^VPRJDJ) ^VPRJDJ
+ K:$D(^VPRJDX) ^VPRJDX
+ K:$D(^VPRTMP) ^VPRTMP
+ K:$D(^VPRSTATUSOD) ^VPRSTATUSOD
+ K:$D(^VPRJSES) ^VPRJSES
+ K:$D(^VPRJODM) ^VPRJODM
  D SETUP^VPRJPMD
  Q

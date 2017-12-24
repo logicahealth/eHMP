@@ -8,7 +8,7 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Clinics)
 
   @F144_SearchClinics_2 @vxsync @enrich
   Scenario: searches for clinics for patient using locationUid ,filter and startDate
-    When the client requests for patients in clinic location uid "urn:va:location:9E7A:23" with start date of "20010725" filtered by 'eq(familyName,"EIGHT")'
+    When the client requests for patients in clinic location uid "urn:va:location:SITE:23" with start date of "20010725" filtered by 'eq(familyName,"EIGHT")'
     Then a successful response is returned
     # And the client receives 4 VPR VistA result(s)
     And the client receives 1 VPR VistA result(s)
@@ -27,11 +27,11 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Clinics)
 
   @F144_SearchClinics_3
   Scenario: searches for clinics for patient using locationUid ,filter
-    When the client requests for patients in clinic location uid "urn:va:location:9E7A:23" filtered by 'eq(familyName,"EIGHT")'
+    When the client requests for patients in clinic location uid "urn:va:location:SITE:23" filtered by 'eq(familyName,"EIGHT")'
     Then a successful response is returned
 
   @F144_SearchClinics_4
   Scenario: searches for clinics for patient using locationUid ,filter , startDate and stopDate
-    When the client requests for patients in clinic location uid "urn:va:location:9E7A:23" with start date of "20010725" and end date of "20100725" filtered by 'eq(familyName,"EIGHT")'
+    When the client requests for patients in clinic location uid "urn:va:location:SITE:23" with start date of "20010725" and end date of "20100725" filtered by 'eq(familyName,"EIGHT")'
     Then a successful response is returned
     And the client receives 1 VPR VistA result(s)

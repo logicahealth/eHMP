@@ -12,7 +12,6 @@ IDXVALS(OBJECT,VALUES,IDXSPEC) ; return values for indexing
  ;
  ; VALUES(combined instance string, subscript position)=VALUE
  D COMBINE(.IDXVALS,.VALUES,.IDXSPEC)
- ;W ! ZW VALUES
  Q
  ;
  ;

@@ -36,7 +36,7 @@ When(/^user adds a patient in the patient list$/) do
   puts "In the add patient"
   puts "this is id= #{list_id}"
   temp = QueryRDKCDS.new
-  path = temp.path + "/patient/list/patients?id=#{list_id}&pid=9E7A;100184"
+  path = temp.path + "/patient/list/patients?id=#{list_id}&pid=SITE;100184"
   p path
   payload = ""
   type = { "Content-Type" => "application/json" }

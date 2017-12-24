@@ -24,7 +24,7 @@ Search Orderables
 			      "type": "vista-orderable",
 			      "domain": "ehmp-order",
 			      "subDomain": "labratory",
-			      "facility-enterprise": "9E7A",
+			      "facility-enterprise": "SITE",
 			      "state": "active",
 			      "name": "BB CBC-TEST"
 			    },
@@ -33,13 +33,13 @@ Search Orderables
 			      "type": "vista-orderable",
 			      "domain": "ehmp-order",
 			      "subDomain": "labratory",
-			      "facility-enterprise": "9E7A",
+			      "facility-enterprise": "SITE",
 			      "state": "active",
 			      "name": "CBC"
 			    },
 			    {
 			      "active": true,
-			      "createdBy": "urn:va:user:9E7A:10000000270",
+			      "createdBy": "urn:va:user:SITE:10000000270",
 			      "data": {
 			        "activity": {
 			          "deploymentId": "VistaCore:Order",

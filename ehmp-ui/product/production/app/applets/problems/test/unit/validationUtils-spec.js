@@ -64,15 +64,30 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
         });
 
         describe('Test overall form validation function', function(){
-            it('Should test invalid form entry', function(){
+            it('Should test invalid Date form entry', function(){
                 var nextYearDate = moment().add(1, 'year').format('MM/DD/YYYY');
-                var model = new Backbone.Model({'onset-date': nextYearDate});
+                var model = new Backbone.Model({'onset-date': nextYearDate, 'problemTerm': 'test'});
                 model.errorModel = new Backbone.Model();
                 expect(ValidationUtil.validateModel(model)).toEqual('Validation errors. Please fix.');
+                expect(model.errorModel.get('onset-date')).toEqual('Onset date must be in the past');
+            });
+
+            it('Should test invalid problemTerm form entry', function(){
+                var model = new Backbone.Model({'onset-date': moment().format('MM/DD/YYYY'), 'problemTerm': 'in', 'validateSearchTerm': true});
+                model.errorModel = new Backbone.Model();
+                expect(ValidationUtil.validateModel(model)).toEqual('Validation errors. Please fix.');
+                expect(model.errorModel.get('problemTerm')).toEqual('Search string must contain at least 3 characters');
+            });
+
+            it('Should test valid on ignored problemTerm form entry', function(){
+                var model = new Backbone.Model({'onset-date': moment().format('MM/DD/YYYY'), 'problemTerm': 'in', 'validateSearchTerm': false});
+                model.errorModel = new Backbone.Model();
+                ValidationUtil.validateModel(model);
+                expect(model.errorModel.toJSON()).toEqual({});
             });
 
             it('Should test valid form entry', function(){
-                var model = new Backbone.Model({'onset-date': moment().format('MM/DD/YYYY')});
+                var model = new Backbone.Model({'onset-date': moment().format('MM/DD/YYYY'), 'problemTerm': 'test'});
                 model.errorModel = new Backbone.Model();
                 ValidationUtil.validateModel(model);
                 expect(model.errorModel.toJSON()).toEqual({});

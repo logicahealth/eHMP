@@ -36,10 +36,10 @@ describe('Immunization Conformance Statement', function() {
 describe('Immunization FHIR Resource', function() {
 
     var req = {
-        '_pid': '9E7A;253',
-        query: '/fhir/diagnosticreport?subject.identifier=9E7A;253&domain=rad',
+        '_pid': 'SITE;253',
+        query: '/fhir/diagnosticreport?subject.identifier=SITE;253&domain=rad',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };

@@ -180,7 +180,7 @@ describe('Search Util', function() {
         describe('id transformations', function(){
             var ssnId = '666000608^PI^200SSA^USSSA^A';
             var icn = '5000000116V912836^NI^200M^USVHA^P';
-            var dfnPid1 = '100615^PI^C877^USVHA';
+            var dfnPid1 = '100615^PI^SITE^USVHA';
             var id1 = '0005000000116V912836^PI^200ESR^USVHA^H';
             var edipi = '4325678^NI^200DOD^USDOD^P';
             it('SSN ID', function(){
@@ -193,7 +193,7 @@ describe('Search Util', function() {
             });
             it('DFN ID', function(){
                 var patient = {id: dfnPid1};
-                expect(search.transformPatient(patient)).to.eql({idClass: 'DFN',facility: 'C877', dataSource: 'USVHA', pid: 'C877;100615', idType: 'PI', id: patient.id});
+                expect(search.transformPatient(patient)).to.eql({idClass: 'DFN',facility: 'SITE', dataSource: 'USVHA', pid: 'SITE;100615', idType: 'PI', id: patient.id});
             });
             it('Other ID', function(){
                 var patient = {id: id1};
@@ -201,7 +201,7 @@ describe('Search Util', function() {
             });
             it('EDIPI ID', function(){
                 var patient = {id: edipi};
-                expect(search.transformPatient(patient)).to.eql({idClass: 'EDIPI',facility: '200DOD', dataSource: 'USDOD', pid: '4325678', idType: 'NI', id: patient.id});
+                expect(search.transformPatient(patient)).to.eql({idClass: 'EDIPI',facility: '200DOD', dataSource: 'USDOD', pid: 'DOD;4325678', idType: 'NI', id: patient.id});
             });
             it('Bad ID', function(){
                 var patient = {id: '39sld9320d82'};

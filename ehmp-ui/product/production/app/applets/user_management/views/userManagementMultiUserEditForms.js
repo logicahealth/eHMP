@@ -1,8 +1,12 @@
 define([
     'underscore',
     'handlebars',
-    'app/applets/user_management/appletUtil'
-], function(_, Handlebars, appletUtil) {
+    'app/applets/user_management/appletUtil',
+    'hbs!app/applets/user_management/templates/beforeRemoveTemplate',
+    'hbs!app/applets/user_management/templates/beforeCloneTemplate',
+    'hbs!app/applets/user_management/templates/detailsTableTemplate',
+    'hbs!app/applets/user_management/templates/multiSelectDetailTemplates/users'
+], function(_, Handlebars, appletUtil, beforeRemoveTemplate, beforeCloneTemplate, detailsTableTemplate, usersDetailsTemplate) {
     "use strict";
     var columns = [{
         id: 'formattedName',
@@ -51,30 +55,30 @@ define([
                     }, {
                         control: "container",
                         items: [{
-                                control: "input",
-                                name: "lastNameValueBulkEdit",
-                                label: "Last name",
-                                extraClasses: ["col-xs-3", "left-padding-no"],
-                                srOnlyLabel: false,
-                                title: "Enter at least three letters of the user's Last Name"
-                            }, {
-                                control: "input",
-                                name: "firstNameValueBulkEdit",
-                                label: "First name",
-                                extraClasses: ["col-xs-3"],
-                                srOnlyLabel: false,
-                                title: "Enter at least three letters of the user's First Name"
-                            }, {
-                                control: "container",
-                                extraClasses: ["col-xs-3", "permission-sets-for-search-picklist"],
-                                items: []
-                            }, {
-                                control: "input",
-                                name: "duzValueBulkEdit",
-                                label: "DUZ",
-                                extraClasses: ["col-xs-3", "right-padding-no"],
-                                srOnlyLabel: false,
-                                title: "Enter the D U Z of the user"
+                            control: "input",
+                            name: "lastNameValueBulkEdit",
+                            label: "Last name",
+                            extraClasses: ["col-xs-3", "left-padding-no"],
+                            srOnlyLabel: false,
+                            title: "Enter at least three letters of the user's Last Name"
+                        }, {
+                            control: "input",
+                            name: "firstNameValueBulkEdit",
+                            label: "First name",
+                            extraClasses: ["col-xs-3"],
+                            srOnlyLabel: false,
+                            title: "Enter at least three letters of the user's First Name"
+                        }, {
+                            control: "container",
+                            extraClasses: ["col-xs-3", "permission-sets-for-search-picklist"],
+                            items: []
+                        }, {
+                            control: "input",
+                            name: "duzValueBulkEdit",
+                            label: "DUZ",
+                            extraClasses: ["col-xs-3", "right-padding-no"],
+                            srOnlyLabel: false,
+                            title: "Enter the D U Z of the user"
                         }]
                     }, {
                         name: "checkboxForm",
@@ -108,7 +112,6 @@ define([
                                 label: "Search",
                                 size: "sm",
                                 disabled: true,
-                                title: "Press enter to search",
                                 id: "search-button",
                                 type: "button"
                             }]
@@ -140,22 +143,7 @@ define([
                                 },
                                 items: [{
                                     control: 'container',
-                                    template: appletUtil.getDetailsTemplate([{
-                                        id: 'vistaStatus',
-                                        label: 'VistA status'
-                                    }, {
-                                        id: 'ehmpStatus',
-                                        label: 'eHMP Status',
-                                    }, {
-                                        id: 'formattedPermissionSetsString',
-                                        label: 'Permission Sets',
-                                    }, {
-                                        id: 'additionalPermissionsLabelsFormatted',
-                                        label: 'Additional Individual Permissions',
-                                    }, {
-                                        id: 'duz',
-                                        label: 'DUZ'
-                                    }])
+                                    template: usersDetailsTemplate
                                 }]
                             }
                         }]
@@ -173,7 +161,6 @@ define([
                                 srOnlyLabel: true,
                                 icon: "fa-chevron-left fa-lg",
                                 disabled: false,
-                                title: "Press enter to access previous data.",
                                 id: "previous-page-button-bulk-edit",
                                 type: "button"
                             }, {
@@ -184,7 +171,6 @@ define([
                                 srOnlyLabel: true,
                                 icon: "fa-chevron-right fa-lg",
                                 disabled: false,
-                                title: "Press enter to access next data.",
                                 id: "next-page-button-bulk-edit",
                                 type: "button"
                             }]
@@ -199,16 +185,13 @@ define([
                             extraClasses: ['col-xs-12'],
                             options: [{
                                 label: "Add permissions",
-                                value: "add-permissions",
-                                title: "Press enter to select add permissions."
+                                value: "add-permissions"
                             }, {
                                 label: "Remove permissions",
-                                value: "remove-permissions",
-                                title: "Press enter to select remove permissions."
+                                value: "remove-permissions"
                             }, {
                                 label: "Clone permissions",
-                                value: "clone-permissions",
-                                title: "Press enter to select clone permissions."
+                                value: "clone-permissions"
                             }]
                         }]
                     }]
@@ -229,7 +212,6 @@ define([
                             pickList: 'selectedUsersListResults',
                             srOnlyLabel: false,
                             label: "Select user to clone from",
-                            title: "Use up and down arrows to view options and then press enter to select",
                             attributeMapping: {
                                 label: 'labelForSideBySide',
                                 value: 'duz'
@@ -279,22 +261,20 @@ define([
                                 control: "select",
                                 name: "editUsersPermissionSets",
                                 extraClasses: ["permission-sets-picklist", "remove-from-clone", "disable-on-warning"],
-                                pickList: 'permissionSetsForPicklist',
+                                pickList: [],
                                 srOnlyLabel: false,
                                 multiple: true,
                                 showFilter: true,
                                 options: {
                                     minimumInputLength: 0
                                 },
-                                label: "Select permission set",
-                                title: "Use up and down arrows to view options and then press enter to select",
+                                label: "Select permission set"
                             }, {
                                 control: "button",
                                 type: "button",
                                 label: "Clear All",
                                 id: 'clear-permission-sets-button',
                                 extraClasses: ['btn-default', 'btn-sm', "bottom-margin-sm", "remove-from-clone", "disable-on-warning"],
-                                title: 'Press enter to clear all filters.',
                                 disabled: true
                             }]
                         }, {
@@ -323,7 +303,7 @@ define([
             label: "Back",
             id: 'back-button',
             extraClasses: ['btn-default', 'btn-sm'],
-            title: 'Press enter to return to user bulk edit search.',
+            title: 'Return to user bulk edit search.',
             hidden: true
         }, {
             control: "button",
@@ -331,14 +311,12 @@ define([
             label: "Cancel",
             id: 'cancel-button',
             extraClasses: ['btn-default', 'btn-sm'],
-            title: 'Press enter to cancel.'
         }, {
             control: "button",
             type: "button",
             label: "Edit Selected Users",
             id: 'edit-users-button',
             extraClasses: ['btn-default', 'btn-sm'],
-            title: 'Press enter to edit selected users.',
             disabled: true
         }, {
             control: "button",
@@ -346,7 +324,6 @@ define([
             label: "Add User Permissions",
             id: 'add-permissions-button',
             extraClasses: ['btn-default', 'btn-sm', 'bulk-edit-btn'],
-            title: 'Press enter to add user permissions.',
             hidden: true
         }, {
             control: "button",
@@ -354,7 +331,6 @@ define([
             label: "Remove User Permissions",
             id: 'remove-permissions-button',
             extraClasses: ['btn-default', 'btn-sm', 'bulk-edit-btn'],
-            title: 'Press enter to remove user permissions.',
             hidden: true
         }, {
             control: "button",
@@ -362,38 +338,12 @@ define([
             label: "Clone User Permissions",
             id: 'clone-permissions-button',
             extraClasses: ['btn-default', 'btn-sm', 'bulk-edit-btn'],
-            title: 'Press enter to clone user permissions.',
             hidden: true,
             disabled: true
         }]
     }];
 
     var getSelectableTable = function(collection, editMode, customLegend) {
-        var columns = [{
-            id: 'formattedName',
-            title: 'Name'
-        }, {
-            id: 'formattedPermissionSetsString',
-            title: 'Current Permission Sets',
-        }, {
-            id: 'additionalPermissionsLabelsFormatted',
-            title: 'Current Additional Individual Permissions',
-        }, {
-            id: 'duz',
-            title: 'DUZ'
-        }];
-        var headers = '';
-        _.each(columns, function(column) {
-            headers = headers + '<th scope="col">' + column.title + '</th>';
-        });
-        var dataRows = '';
-        _.each(collection.models, function(model) {
-            var row = '';
-            _.each(columns, function(column) {
-                row = row + '<td>' + model.get(column.id) + '</td>';
-            });
-            dataRows = dataRows + '<tr>' + row + '</tr>';
-        });
         var legendMap = {
             'add-permissions': 'Adding permissions to the following users.',
             'remove-permissions': 'Removing permissions from the following users.',
@@ -403,24 +353,15 @@ define([
         if (customLegend) {
             legend = customLegend;
         }
-        var template = Handlebars.compile([
-            '<table class="table">',
-            '<caption><h5>' + legend + '</h5></caption>',
-            '<thead>',
-            '<tr>',
-            headers,
-            '</tr>',
-            '</thead>',
-            '<tbody>',
-            dataRows,
-            '</tbody>',
-            '<table>'
-        ].join('\n'));
         return {
             control: "container",
             name: "selectableUsersTableSelectedUser",
             id: "selectableUsersTable",
-            template: template,
+            template: detailsTableTemplate({
+                legend: legend,
+                data: collection.toJSON(),
+                headers: ['Name', 'Current Permission Sets', 'Current Additional Individual Permissions', 'DUZ']
+            }),
             extraClasses: ['table-responsive']
         };
     };
@@ -436,8 +377,7 @@ define([
             options: {
                 minimumInputLength: 0
             },
-            label: "Select Additional Individual Permissions",
-            title: "Use up and down arrows to view options and then press enter to select"
+            label: "Select Additional Individual Permissions"
         };
     };
     var getPermissionSetsSearchSelect = function(pickList) {
@@ -446,8 +386,7 @@ define([
             name: "permissionSetValueBulkEdit",
             pickList: pickList,
             srOnlyLabel: false,
-            label: "Select permission set",
-            title: "Use up and down arrows to view options and then press enter to select",
+            label: "Select permission set"
         };
     };
     var getBeforeCloneAlert = function(users) {
@@ -457,34 +396,20 @@ define([
                 name: "editActionAlertMessage"
             };
         }
-        var usersString = '';
+        var usersForTemplate = [];
         _.each(users, function(user) {
-            var lostPermissionsString = '';
-            _.each(user.get('lostPermissions'), function(lostPermission) {
-                lostPermissionsString = lostPermissionsString + lostPermission + ', ';
+            usersForTemplate.push({
+                formattedName: user.get('formattedName'),
+                lostPermissionsCountText: user.get('lostPermissionsCountText'),
+                lostPermissions: user.get('lostPermissions').sort().join(', ')
             });
-            lostPermissionsString = lostPermissionsString.substring(0, lostPermissionsString.lastIndexOf(', ')) + '';
-            usersString = usersString + '<p><strong>' + user.get('formattedName') + ' ' + user.get('lostPermissionsCountText') + ':</strong>  ' + lostPermissionsString + '</p>';
         });
         return {
             control: "container",
             name: "editActionAlertMessage",
-            template: '<div class="control form-group editActionAlertMessage-control alertMessage" aria-live="assertive">' +
-                '<div class="alert alert-warning alert-user">' +
-                '<div class="alert-content">' +
-                '<p><strong><i class="fa fa-exclamation-triangle"></i> Cloning User Warning</strong></p>' +
-                '<p><strong>The following users currently have more permissions than what will be assigned by taking this action.</strong></p>' +
-                usersString +
-                '<p><strong>Do you want to proceed?</strong></p>' +
-                '<button type="button" id="cancelActionReturnButton" class="btn btn-default" title="Press enter to cancel action and return to user search.">' +
-                '<span aria-hidden="true">No</span>' +
-                '</button>' +
-                '<button type="button" id="confirmActionButton" class="btn btn-default left-margin-xs" title="Press enter to continue.">' +
-                '<span aria-hidden="true">Yes</span>' +
-                '</button>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
+            template: beforeCloneTemplate({
+                users: usersForTemplate
+            })
         };
     };
     var getBeforeRemoveAlert = function(users) {
@@ -494,34 +419,20 @@ define([
                 name: "editActionAlertMessage"
             };
         }
-        var usersString = '';
+        var usersForTemplate = [];
         _.each(users, function(user) {
-            var retainedPermissionsString = '';
-            _.each(user.get('retainedPermissions'), function(retainedPermission) {
-                retainedPermissionsString = retainedPermissionsString + retainedPermission + ', ';
+            usersForTemplate.push({
+                formattedName: user.get('formattedName'),
+                retainedPermissionsCountText: user.get('retainedPermissionsCountText'),
+                retainedPermissions: user.get('retainedPermissions').sort().join(', ')
             });
-            retainedPermissionsString = retainedPermissionsString.substring(0, retainedPermissionsString.lastIndexOf(', ')) + '';
-            usersString = usersString + '<p><strong>' + user.get('formattedName') + ' ' + user.get('retainedPermissionsCountText') + ':</strong>  ' + retainedPermissionsString + '</p>';
         });
         return {
             control: "container",
             name: "editActionAlertMessage",
-            template: '<div class="control form-group editActionAlertMessage-control alertMessage" aria-live="assertive">' +
-                '<div class="alert alert-warning alert-user">' +
-                '<div class="alert-content">' +
-                '<p><strong><i class="fa fa-exclamation-triangle"></i> Retained User Permissions Info</strong></p>' +
-                '<p><strong>The following users will retain the listed permissions based on the combination of Permission Sets and Additional Individual Permissions that were chosen to be removed.</strong></p>' +
-                usersString +
-                '<p><strong>Do you want to proceed?</strong></p>' +
-                '<button type="button" id="cancelActionReturnButton" class="btn btn-default" title="To cancel action and return to user search, press enter">' +
-                '<span aria-hidden="true">No</span>' +
-                '</button>' +
-                '<button type="button" id="confirmActionButton" class="btn btn-default left-margin-xs" title="To continue with action, press enter">' +
-                '<span aria-hidden="true">Yes</span>' +
-                '</button>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
+            template: beforeRemoveTemplate({
+                users: usersForTemplate
+            })
         };
     };
     return {

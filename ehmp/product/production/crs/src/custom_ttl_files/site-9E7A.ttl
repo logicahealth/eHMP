@@ -3,7 +3,7 @@
 @prefix oi:     <urn:va:oi:>
 @prefix ien:    <urn:va:ien:>
 
-# site 9E7A - Panorama
+# site SITE - Panorama
 
 # VA enterprise rheumatoid factor orderable concept mapped to local order code
 # RF

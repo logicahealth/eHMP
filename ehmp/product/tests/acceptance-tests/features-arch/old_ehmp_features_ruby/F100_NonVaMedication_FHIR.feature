@@ -21,7 +21,7 @@ And the FHIR results contain "medication statement results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.extension.valueString								| Medication, Non-VA									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.extension.valueString								| urn:va:order:9E7A:149:18028							|
+	| content.extension.valueString								| urn:va:order:SITE:149:18028							|
 	#| content.extension.url									| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
 	#| content.extension.valueString							| no data												|
 	#| content.extension.url									| http://vistacore.us/fhir/extensions/med#pharmacistName|
@@ -31,12 +31,12 @@ And the FHIR results contain "medication statement results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.extension.valueString								| false													|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#providerUid	|
-	| content.extension.valueString								| urn:va:user:9E7A:10000000031							|
+	| content.extension.valueString								| urn:va:user:SITE:10000000031							|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#providerName	|
 	| content.extension.valueString								| VEHU,ONEHUNDRED										|
-	| content.patient.display									| 9E7A;149													|
+	| content.patient.display									| SITE;149													|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#locationUid	|
-	| content.extension.valueString								| urn:va:location:9E7A:23								|
+	| content.extension.valueString								| urn:va:location:SITE:23								|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#vaStatus		|
 	| content.extension.valueString								| ACTIVE												|
 	# when given start and end no data
@@ -103,7 +103,7 @@ And the FHIR results contain "medication statement results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.extension.valueString								| Medication, Non-VA									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.extension.valueString								| urn:va:order:C877:149:18028							|
+	| content.extension.valueString								| urn:va:order:SITE:149:18028							|
 	#| content.extension.url									| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
 	#| content.extension.valueString							| no data												|
 	#| content.extension.url									| http://vistacore.us/fhir/extensions/med#pharmacistName|
@@ -113,12 +113,12 @@ And the FHIR results contain "medication statement results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.extension.valueString								| false													|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#providerUid	|
-	| content.extension.valueString								| urn:va:user:C877:10000000031							|
+	| content.extension.valueString								| urn:va:user:SITE:10000000031							|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#providerName	|
 	| content.extension.valueString								| VEHU,ONEHUNDRED										|
-	| content.patient.display									| C877;149       										|
+	| content.patient.display									| SITE;149       										|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#locationUid	|
-	| content.extension.valueString								| urn:va:location:C877:23								|
+	| content.extension.valueString								| urn:va:location:SITE:23								|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#vaStatus		|
 	| content.extension.valueString								| ACTIVE												|
 	# when given start and end no data
@@ -184,8 +184,8 @@ And the client receives 1 FHIR "panorama" result(s)
 And the FHIR results contain "medication statement results"
 	| field														| value									|
 # Note that when merging from PSI4 - this section was a conflict.  The following section was from NEXT - Keeping it for now.
-#	| content.contained.identifier.value						| urn:va:med:9E7A:301:17916				|
-#	| content.contained.identifier.value						| CONTAINS urn:va:med:9E7A:301			|	
+#	| content.contained.identifier.value						| urn:va:med:SITE:301:17916				|
+#	| content.contained.identifier.value						| CONTAINS urn:va:med:SITE:301			|	
 #	| content.contained.type.text								| N										|
 #	| content.contained.status									| in progress							|	
 #	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus|
@@ -197,7 +197,7 @@ And the FHIR results contain "medication statement results"
 #	| content.dosage.quantity.value								| 81									|
 #	| content.dosage.timing.extension.url						| http://vistacore.us/fhir/extensions/med#scheduleName	|
 # Note that when merging from PSI4 - this section was a conflict.  The following section was from PSI4 - commenting it out for now.
-	| content.identifier.value									| urn:va:med:9E7A:301:17916				|
+	| content.identifier.value									| urn:va:med:SITE:301:17916				|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind		|
 	| content.extension.valueString								| Medication, Non-VA								|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#vaStatus	|
@@ -221,8 +221,8 @@ And the client receives 1 FHIR "kodak" result(s)
 And the FHIR results contain "medication statement results"
 	| field														| value									|
 # Note that when merging from PSI4 - this section was a conflict.  The following section was from NEXT - Keeping it for now.
-#	| content.contained.identifier.value						| urn:va:med:C877:301:10779				|
-#	| content.contained.identifier.value						| CONTAINS urn:va:med:9E7A:301			|	
+#	| content.contained.identifier.value						| urn:va:med:SITE:301:10779				|
+#	| content.contained.identifier.value						| CONTAINS urn:va:med:SITE:301			|	
 #	| content.contained.type.text								| N										|
 #	| content.contained.status									| in progress							|	
 #	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus|
@@ -234,7 +234,7 @@ And the FHIR results contain "medication statement results"
 #	| content.dosage.quantity.value								| 81									|
 #	| content.dosage.timing.extension.url						| http://vistacore.us/fhir/extensions/med#scheduleName	|
 # Note that when merging from PSI4 - this section was a conflict.  The following section was from PSI4 - commenting it out for now.
-	| content.identifier.value									| urn:va:med:C877:301:17916				|
+	| content.identifier.value									| urn:va:med:SITE:301:17916				|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind	|
 	| content.extension.valueString								| Medication, Non-VA							|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#vaStatus	|
@@ -250,8 +250,8 @@ And the FHIR results contain "medication statement results"
 @f100_5_nonvapatient_medication_neg_fhir	
 Scenario: Negative scenario.  Client can request medication results in FHIR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests non-va medication results for the patient "9E7A;100184" in FHIR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests non-va medication results for the patient "SITE;100184" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed
 	

@@ -1,8 +1,7 @@
 define([
     "app/applets/activeMeds/appletLayout",
-    "app/applets/activeMeds/gistView",
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel'
-], function(AppletLayoutView, GistView, MedicationOrderModel) {
+    "app/applets/activeMeds/gistView"
+], function(AppletLayoutView, GistView) {
     "use strict";
     var applet = {
         id: "activeMeds",
@@ -20,7 +19,7 @@ define([
         defaultViewType: 'summary'
     };
 
-    var getDetailsModal = function(newModel, newCollection) {
+    var getDetailsModal = function(newModel, newCollection, triggerElement) {
         var uid = newModel.get('uid');
         var currentPatient = ADK.PatientRecordService.getCurrentPatient();
         ADK.Messaging.getChannel("activeMeds").trigger('detailView', {
@@ -30,13 +29,14 @@ define([
                 pid: currentPatient.attributes.pid
             },
             model: newModel,
-            collection: newCollection
+            collection: newCollection,
+            triggerElement: triggerElement
         });
     };
 
     (function initMessaging() {
         ADK.Messaging.getChannel('activeMeds').on('detailView', function(clickedResult) {
-            var medModel = new MedicationOrderModel(clickedResult.model.attributes);
+            var medModel = new ADK.UIResources.Fetch.MedicationReview.Model(clickedResult.model.attributes);
 
             var channel = ADK.Messaging.getChannel('medication_review');
             var response = channel.request('detailView', clickedResult);
@@ -46,6 +46,7 @@ define([
                     model: medModel
                 }),
                 options: {
+                    triggerElement: clickedResult.$el || clickedResult.triggerElement,
                     size: "large",
                     title: response.title,
                     'nextPreviousCollection': clickedResult.collection,

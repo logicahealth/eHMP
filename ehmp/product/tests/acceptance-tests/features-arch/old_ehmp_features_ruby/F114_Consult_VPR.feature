@@ -16,7 +16,7 @@ Then the client receives 3 VPR "panorama" result(s)
 And the VPR results contain "consult results"                                                      
   
 		| field										| panorama_value										| 
-		| uid										| urn:va:consult:9E7A:253:379							|
+		| uid										| urn:va:consult:SITE:253:379							|
 		| summary									| AUDIOLOGY OUTPATIENT Cons								|
 		| pid										| CONTAINS ;253												|
 		| kind										| Consult												|
@@ -29,12 +29,12 @@ And the VPR results contain "consult results"
 		| consultProcedure							| Consult												|
 		| service									| AUDIOLOGY OUTPATIENT									|
 		| statusName								| COMPLETE												|
-		| orderUid									| urn:va:order:9E7A:253:15477							|
+		| orderUid									| urn:va:order:SITE:253:15477							|
 		| orderName									| AUDIOLOGY OUTPATIENT									|		
-		| providerUid								| urn:va:user:9E7A:11748								|
+		| providerUid								| urn:va:user:SITE:11748								|
 		| providerName								| PATHOLOGY,ONE											|
-		| results.uid								| urn:va:document:9E7A:253:3111							|
-		| results.summary							| ProcedureResult{uid='urn:va:document:9E7A:253:3111'}	|	
+		| results.uid								| urn:va:document:SITE:253:3111							|
+		| results.summary							| ProcedureResult{uid='urn:va:document:SITE:253:3111'}	|	
 		| results.localTitle						| AUDIOLOGY - HEARING LOSS CONSULT						|
 
 		# no data : | interpretation
@@ -51,7 +51,7 @@ Then the client receives 3 VPR "kodak" result(s)
 And the VPR results contain "consult results"                                                      
   
 		| field										| kodak_value											| 
-		| uid										| urn:va:consult:C877:253:379							|
+		| uid										| urn:va:consult:SITE:253:379							|
 		| summary									| AUDIOLOGY OUTPATIENT Cons								|
 		| pid										| CONTAINS ;253    										|
 		| kind										| Consult												|
@@ -64,12 +64,12 @@ And the VPR results contain "consult results"
 		| consultProcedure							| Consult												|
 		| service									| AUDIOLOGY OUTPATIENT									|
 		| statusName								| COMPLETE												|
-		| orderUid									| urn:va:order:C877:253:15477							|
+		| orderUid									| urn:va:order:SITE:253:15477							|
 		| orderName									| AUDIOLOGY OUTPATIENT									|		
-		| providerUid								| urn:va:user:C877:11748								|
+		| providerUid								| urn:va:user:SITE:11748								|
 		| providerName								| PATHOLOGY,ONE											|
-		| results.uid								| urn:va:document:C877:253:3111							|
-		| results.summary							| ProcedureResult{uid='urn:va:document:C877:253:3111'}	|	
+		| results.uid								| urn:va:document:SITE:253:3111							|
+		| results.summary							| ProcedureResult{uid='urn:va:document:SITE:253:3111'}	|	
 		| results.localTitle						| AUDIOLOGY - HEARING LOSS CONSULT						|
 
 		# no data : | interpretation
@@ -89,8 +89,8 @@ Then the client receives 2 VPR "panorama" result(s)
 And the VPR results contain "consult results"                                                      
   
 		| field										| value													| 
-#		| uid										| urn:va:consult:9E7A:100012:564						|
-		| uid										| CONTAINS urn:va:consult:9E7A:100012					|
+#		| uid										| urn:va:consult:SITE:100012:564						|
+		| uid										| CONTAINS urn:va:consult:SITE:100012					|
 		| summary									| HEMATOLOGY CONSULT Cons								|
 		| pid										| CONTAINS ;100012											|
 		| kind										| Consult												|
@@ -102,9 +102,9 @@ And the VPR results contain "consult results"
 		| consultProcedure							| Consult												|
 		| service									| HEMATOLOGY CONSULT									|
 		| statusName								| DISCONTINUED											|
-		| orderUid									| urn:va:order:9E7A:100012:15662						|
+		| orderUid									| urn:va:order:SITE:100012:15662						|
 		| orderName									| HEMATOLOGY CONSULT									|		
-		| providerUid								| urn:va:user:9E7A:11748								|
+		| providerUid								| urn:va:user:SITE:11748								|
 		| providerName								| PATHOLOGY,ONE											|
 
 @f114_4_consult @vpr
@@ -118,8 +118,8 @@ Then the client receives 2 VPR "kodak" result(s)
 And the VPR results contain "consult results"                                                      
   
 		| field										| value													| 
-#		| uid										| urn:va:consult:C877:100012:564						|
-		| uid										| CONTAINS urn:va:consult:C877:100012					|
+#		| uid										| urn:va:consult:SITE:100012:564						|
+		| uid										| CONTAINS urn:va:consult:SITE:100012					|
 		| summary									| HEMATOLOGY CONSULT Cons								|
 		| pid										| CONTAINS ;100012										|
 		| kind										| Consult												|
@@ -131,9 +131,9 @@ And the VPR results contain "consult results"
 		| consultProcedure							| Consult												|
 		| service									| HEMATOLOGY CONSULT									|
 		| statusName								| DISCONTINUED											|
-		| orderUid									| urn:va:order:C877:100012:15662						|
+		| orderUid									| urn:va:order:SITE:100012:15662						|
 		| orderName									| HEMATOLOGY CONSULT									|		
-		| providerUid								| urn:va:user:C877:11748								|
+		| providerUid								| urn:va:user:SITE:11748								|
 		| providerName								| PATHOLOGY,ONE											|
 
    

@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------------
 
 var _ = require('underscore');
+var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 
 //------------------------------------------------------------------------------------
 // This function creates a node containing the vistA sites set up so they are keyed
@@ -48,4 +49,34 @@ function createVistaSitesByStationCombined(config) {
     return config;
 }
 
+//-----------------------------------------------------------------------------------
+// Populates beanstalk section for main config node and each "vxsyncEnvironments" nodes
+//
+// Parameters:
+// config: The worker config file.
+//-----------------------------------------------------------------------------------
+function populateBeanstalkConfigs(config) {
+    if(!_.isObject(config)){
+        return;
+    }
+
+    if(config.beanstalk){
+        config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
+    }
+    if(config.osync && config.osync.beanstalk) {
+        config.osync.beanstalk = queueConfig.createFullBeanstalkConfig(config.osync.beanstalk);
+    }
+
+    _.each(config.vxsyncEnvironments, function(environment) {
+        if (environment.vxsync && environment.vxsync.beanstalk){
+            environment.vxsync.beanstalk = queueConfig.createFullBeanstalkConfig(environment.vxsync.beanstalk);
+        }
+
+        if (environment.osync && environment.osync.beanstalk) {
+            environment.osync.beanstalk = queueConfig.createFullBeanstalkConfig(environment.osync.beanstalk);
+        }
+    });
+}
+
 module.exports.createVistaSitesByStationCombined = createVistaSitesByStationCombined;
+module.exports.populateBeanstalkConfigs = populateBeanstalkConfigs;

@@ -11,23 +11,23 @@ describe('The patient-notes-resource', function() {
     beforeEach(function() {
         req = {
             query: {
-                localPid: '9E7A;3'
+                localPid: 'SITE;3'
             },
             session: {
                 user: {
-                    site: '9E7A',
+                    site: 'SITE',
                     duz: {
-                        '9E7A': '10000000270',
-                        'C77A': 'duz2'
+                        'SITE': '10000000270',
+                        'SITE': 'duz2'
                     },
                     division: '500'
                 }
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    site: '9E7A',
+                    site: 'SITE',
                     dfn: '3',
-                    uids: ['urn:va:patient:9E7A:3:3', 'urn:va:patient:icn:321V123:321V123']
+                    uids: ['urn:va:patient:SITE:3:3', 'urn:va:patient:icn:321V123:321V123']
                 }
             },
             app: {
@@ -43,7 +43,7 @@ describe('The patient-notes-resource', function() {
         };
 
         sampleNote = {
-            'authorUid': 'urn:va:user:9E7A:10000000270',
+            'authorUid': 'urn:va:user:SITE:10000000270',
             'data': {
                 '_labelsForSelectedValues': {
                     'documentDefUidUnique': 'FALL  <FALL RISK>'
@@ -51,12 +51,12 @@ describe('The patient-notes-resource', function() {
                 'app': 'ehmp',
                 'author': 'PROVIDER,EIGHT',
                 'authorDisplayName': 'Provider,Eight',
-                'authorUid': 'urn:va:user:9E7A:10000000270',
+                'authorUid': 'urn:va:user:SITE:10000000270',
                 'derivReferenceDate': '02/02/2016',
                 'derivReferenceTime': '18:47',
                 'documentClass': 'PROGRESS NOTES',
-                'documentDefUid': 'urn:va:doc-def:9E7A:832',
-                'documentDefUidUnique': 'urn:va:doc-def:9E7A:832---FALL__<FALL_RISK>---last',
+                'documentDefUid': 'urn:va:doc-def:SITE:832',
+                'documentDefUidUnique': 'urn:va:doc-def:SITE:832---FALL__<FALL_RISK>---last',
                 'documentTypeName': 'Progress Note',
                 'encounterDateTime': '',
                 'encounterDisplayName': '7A GEN MED',
@@ -77,20 +77,20 @@ describe('The patient-notes-resource', function() {
                 'patientIcn': '10108V420871',
                 'patientName': 'Eight,Patient',
                 'patientStatus': 'INPATIENT',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'referenceDateTime': '201602021847',
                 'signedDateTime': null,
                 'signer': null,
                 'signerDisplayName': null,
                 'signerUid': null,
-                'siteHash': '9E7A',
+                'siteHash': 'SITE',
                 'status': 'UNSIGNED',
                 'statusDisplayName': 'Unsigned',
                 'summary': '',
                 'text': [{
                     'author': 'PROVIDER,EIGHT',
                     'authorDisplayName': 'PROVIDER,EIGHT',
-                    'authorUid': 'urn:va:user:9E7A:991',
+                    'authorUid': 'urn:va:user:SITE:991',
                     'content': 'test',
                     'dateTime': '2016-02-02T18:47:36-05:00',
                     'signer': null,
@@ -101,27 +101,27 @@ describe('The patient-notes-resource', function() {
                 'value': true
             },
             'domain': 'ehmp-note',
-            'patientUid': '9E7A;3',
+            'patientUid': 'SITE;3',
             'referenceId': null,
             'subDomain': 'tiu',
-            'uid': 'urn:va:ehmp-note:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512',
+            'uid': 'urn:va:ehmp-note:SITE;3:98a309a4-1b97-4b35-b66a-0d631cac6512',
             'visit': {
                 'dateTime': '20160101080000',
-                'location': 'urn:va:location:9E7A:64',
+                'location': 'urn:va:location:SITE:64',
                 'serviceCategory': 'A'
             }
         };
 
         sampleNoteWithAddendum = {
-          'author':'KHAN,VIHAAN',
-          'authorDisplayName':'Khan,Vihaan',
-          'authorUid':'urn:va:user:9E7A:10000000272',
+          'author':'LAST,FIRST',
+          'authorDisplayName':'LAST,FIRST',
+          'authorUid':'urn:va:user:SITE:10000000272',
           'documentClass':'PROGRESS NOTES',
-          'documentDefUid':'urn:va:doc-def:9E7A:20',
+          'documentDefUid':'urn:va:doc-def:SITE:20',
           'documentTypeCode':'C',
           'documentTypeName':'Crisis Note',
           'encounterName':'7A GEN MED Aug 14, 2014',
-          'encounterUid':'urn:va:visit:9E7A:3:11420',
+          'encounterUid':'urn:va:visit:SITE:3:11420',
           'entered':'20160224133357',
           'facilityCode':'998',
           'facilityName':'ABILENE (CAA)',
@@ -130,103 +130,103 @@ describe('The patient-notes-resource', function() {
           'lastUpdateTime':'20160224133357',
           'localId':'11685',
           'localTitle':'CRISIS NOTE',
-          'pid':'9E7A;3',
+          'pid':'SITE;3',
           'referenceDateTime':'201602241333',
           'signedDateTime':'20160224133357',
-          'signer':'KHAN,VIHAAN',
-          'signerDisplayName':'Khan,Vihaan',
-          'signerUid':'urn:va:user:9E7A:10000000272',
+          'signer':'LAST,FIRST',
+          'signerDisplayName':'LAST,FIRST',
+          'signerUid':'urn:va:user:SITE:10000000272',
           'stampTime':'20160224133357',
           'status':'COMPLETED',
           'statusDisplayName':'Completed',
           'summary':'CRISIS NOTE',
-          'uid':'urn:va:ehmp-note:9E7A;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
+          'uid':'urn:va:ehmp-note:SITE;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
           'clinicalObject':{
              'addendum':{
-                'author':'KHAN,VIHAAN',
-                'authorDisplayName':'Khan,Vihaan',
-                'authorUid':'urn:va:user:9E7A:10000000272',
+                'author':'LAST,FIRST',
+                'authorDisplayName':'LAST,FIRST',
+                'authorUid':'urn:va:user:SITE:10000000272',
                 'encounterDateTime':'',
                 'encounterName':'7A GEN MED Aug 14, 2014',
                 'encounterServiceCategory':'D',
-                'encounterUid':'urn:va:visit:9E7A:3:11420',
+                'encounterUid':'urn:va:visit:SITE:3:11420',
                 'entered':'20150223131640',
                 'isInterdisciplinary':'false',
                 'lastUpdateTime':'20150223131640',
                 'localTitle':'Addendum to: CRISIS NOTE',
-                'locationUid':'urn:va:location:9E7A:38',
+                'locationUid':'urn:va:location:SITE:38',
                 'noteType':'ADDENDUM',
-                'parentUid':'urn:va:document:9E7A:3:11685',
-                'pid':'9E7A;3',
+                'parentUid':'urn:va:document:SITE:3:11685',
+                'pid':'SITE;3',
                 'referenceDateTime':'20160222121938',
                 'status':'UNSIGNED',
                 'statusDisplayName':'Unsigned',
                 'text':[
                    {
-                      'author':'KHAN,VIHAAN',
-                      'authorDisplayName':'Khan,Vihaan',
-                      'authorUid':'urn:va:user:9E7A:10000000272',
+                      'author':'LAST,FIRST',
+                      'authorDisplayName':'LAST,FIRST',
+                      'authorUid':'urn:va:user:SITE:10000000272',
                       'content':'This is my unsigned addendum\r\n',
                       'dateTime':'2016-02-02T18:47:36-05:00',
                       'status':'UNSIGNED'
                    }
                 ]
              },
-             'authorUid':'urn:va:user:9E7A:10000000272',
+             'authorUid':'urn:va:user:SITE:10000000272',
              'creationDateTime':'20160224191442+0000',
              'domain':'note',
              'ehmpState':'draft',
-             'patientUid':'9E7A;3',
-             'referenceId':'urn:va:document:9E7A:3:11685',
+             'patientUid':'SITE;3',
+             'referenceId':'urn:va:document:SITE:3:11685',
              'subDomain':'addendum',
-             'uid':'urn:va:ehmp-note:9E7A;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
+             'uid':'urn:va:ehmp-note:SITE;3:66dda7d5-a67b-4f83-9436-c7315a83e035',
              'visit':{
                 'dateTime':'20140814130730',
-                'location':'urn:va:location:9E7A:38',
+                'location':'urn:va:location:SITE:38',
                 'serviceCategory':'D'
              }
           }
        };
 
         sampleCPRSAddendum = {
-          'author': 'KHAN,VIHAAN',
-          'authorDisplayName': 'Khan,Vihaan',
-          'authorUid': 'urn:va:user:9E7A:10000000272',
+          'author': 'LAST,FIRST',
+          'authorDisplayName': 'LAST,FIRST',
+          'authorUid': 'urn:va:user:SITE:10000000272',
           'clinicians': [
             {
               'displayName': 'Vk',
               'name': 'VK',
               'role': 'E',
-              'uid': 'urn:va:user:9E7A:10000000272'
+              'uid': 'urn:va:user:SITE:10000000272'
             },
             {
-              'displayName': 'Khan,Vihaan',
-              'name': 'KHAN,VIHAAN',
+              'displayName': 'LAST,FIRST',
+              'name': 'LAST,FIRST',
               'role': 'AU',
-              'uid': 'urn:va:user:9E7A:10000000272'
+              'uid': 'urn:va:user:SITE:10000000272'
             },
             {
-              'displayName': 'Khan,Vihaan',
-              'name': 'KHAN,VIHAAN',
+              'displayName': 'LAST,FIRST',
+              'name': 'LAST,FIRST',
               'role': 'S',
-              'signature': 'KHAN,VIHAAN',
+              'signature': 'LAST,FIRST',
               'signedDateTime': '20160228144041',
-              'uid': 'urn:va:user:9E7A:10000000272'
+              'uid': 'urn:va:user:SITE:10000000272'
             },
             {
-              'displayName': 'Khan,Vihaan',
-              'name': 'KHAN,VIHAAN',
+              'displayName': 'LAST,FIRST',
+              'name': 'LAST,FIRST',
               'role': 'ES',
-              'uid': 'urn:va:user:9E7A:10000000272'
+              'uid': 'urn:va:user:SITE:10000000272'
             }
           ],
           'content': 'This is VKs signed addendum from CPRS.\r\n',
           'dateTime': '20160228144019',
-          'signer': 'KHAN,VIHAAN',
-          'signerDisplayName': 'Khan,Vihaan',
-          'signerUid': 'urn:va:user:9E7A:10000000272',
+          'signer': 'LAST,FIRST',
+          'signerDisplayName': 'LAST,FIRST',
+          'signerUid': 'urn:va:user:SITE:10000000272',
           'status': 'COMPLETED',
-          'uid': 'urn:va:document:9E7A:204:11686'
+          'uid': 'urn:va:document:SITE:204:11686'
         };
     });
     describe('Verify custom date sort', function() {
@@ -273,14 +273,14 @@ describe('The patient-notes-resource', function() {
             var mockReq = {
                 session: {
                     user: {
-                        site: '9E7A',
+                        site: 'SITE',
                         duz: {
-                            '9E7A': '123'
+                            'SITE': '123'
                         }
                     }
                 }
             };
-            expect(patientNotesResource._getCurrentUserId(mockReq)).to.eql('urn:va:user:9E7A:123');
+            expect(patientNotesResource._getCurrentUserId(mockReq)).to.eql('urn:va:user:SITE:123');
         });
     });
 
@@ -299,16 +299,16 @@ describe('The patient-notes-resource', function() {
         it('basic test', function() {
             var note = {
                 localTitle: 'ADDICTION',
-                documentDefUid: 'urn:va:doc-def:9E7A:40'
+                documentDefUid: 'urn:va:doc-def:SITE:40'
             };
-            expect(patientNotesResource._getDocumentDefUidUnique(note, 'all')).to.eql('urn:va:doc-def:9E7A:40---ADDICTION---all');
+            expect(patientNotesResource._getDocumentDefUidUnique(note, 'all')).to.eql('urn:va:doc-def:SITE:40---ADDICTION---all');
         });
         it('test with spaces in the title', function() {
             var note = {
                 localTitle: 'ADDICTION  <ASI-ADDICTION SEVERITY INDEX>',
-                documentDefUid: 'urn:va:doc-def:9E7A:40'
+                documentDefUid: 'urn:va:doc-def:SITE:40'
             };
-            expect(patientNotesResource._getDocumentDefUidUnique(note, 'all')).to.eql('urn:va:doc-def:9E7A:40---ADDICTION__<ASI-ADDICTION_SEVERITY_INDEX>---all');
+            expect(patientNotesResource._getDocumentDefUidUnique(note, 'all')).to.eql('urn:va:doc-def:SITE:40---ADDICTION__<ASI-ADDICTION_SEVERITY_INDEX>---all');
         });
     });
 
@@ -325,7 +325,7 @@ describe('The patient-notes-resource', function() {
                 return callback(err, fakeResponse, fakeBody);
             });
             patientNotesResource._getDocumentsFromPjds(req, function(error, results) {
-                expect(results.notes[0].uid).to.equal('urn:va:ehmp-note:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512');
+                expect(results.notes[0].uid).to.equal('urn:va:ehmp-note:SITE;3:98a309a4-1b97-4b35-b66a-0d631cac6512');
             });
         });
 
@@ -346,7 +346,7 @@ describe('The patient-notes-resource', function() {
         });
 
         it('with no notes', function() {
-            req.query.localPid = '9E7A;8';
+            req.query.localPid = 'SITE;8';
             sinon.stub(httpUtil, 'get', function(options, callback) {
                 var err = null;
                 var fakeResponse = {

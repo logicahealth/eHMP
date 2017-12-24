@@ -29,18 +29,14 @@ Then(/^add order modal detail title says "([^"]*)"$/) do |modal_title|
 end
 
 Then(/^the user orders "([^"]*)" lab test$/) do |test_name|
-  aa = LabOrderWriteBack.instance
-  
-  #  expect(aa.perform_action("available lab tests input box", test_name)).to eq(true)
-  #  inputting one character at a time, whole string doesn't work for certain test names.
-  #  p "**************"
-  aa.add_action(CucumberLabel.new('a1'), ClickAction.new, AccessHtmlElement.new(:css, 'div.availableLabTests [aria-labelledby=select2-availableLabTests-container]'))
-  expect(aa.perform_action('a1')).to eq(true)
 
-  aa.add_action(CucumberLabel.new('a2'), SendKeysAction.new, AccessHtmlElement.new(:css, 'input.select2-search__field'))
-  expect(aa.perform_action('a2', test_name)).to eq(true)
-  aa.add_action(CucumberLabel.new("select a lab test"), ClickAction.new, AccessHtmlElement.new(:xpath, "//li[contains(@class, 'select2-results__option') and contains(string(), '#{test_name}')]"))
-  expect(aa.perform_action("select a lab test")).to eq(true)
+  @ehmp = PobOrdersApplet.new
+  @ehmp.wait_until_fld_available_lab_test_drop_down_visible
+  expect(@ehmp).to have_fld_available_lab_test_drop_down
+  @ehmp.fld_available_lab_test_drop_down.click
+  @ehmp.order_lab_tray.wait_until_fld_available_lab_test_input_box_visible
+  @ehmp.order_lab_tray.fld_available_lab_test_input_box.set test_name
+  @ehmp.order_lab_tray.fld_available_lab_test_input_box.native.send_keys(:enter)
 end
 
 When(/^the user navigates to Orders Expanded$/) do
@@ -50,9 +46,22 @@ When(/^the user navigates to Orders Expanded$/) do
 end
 
 Then(/^the Collection Sample is set "([^"]*)"$/) do |arg1|
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
-  wait.until { displayed_but_not_enabled?(:css, '#collectionSample', arg1) }
+  applet = PobOrdersApplet.new
+  expect(applet).to have_order_lab_tray
+  applet.order_lab_tray.wait_for_select_collection_sample
+  
+  
+  start_time = Time.now
+  begin
+    expect(applet.order_lab_tray).to have_select_collection_sample
+    selected_sample = applet.order_lab_tray.select_collection_sample.native.find_element(:css, '[selected]')
+  rescue => e
+    retry if Time.now < (start_time + 15)
+    raise e
+  end
+  p selected_sample.text
+
+  expect(selected_sample.text.upcase).to eq(arg1.upcase)
 end
 
 def displayed_but_not_enabled?(how, path, text)
@@ -68,20 +77,38 @@ rescue Exception => e
 end #method
 
 Then(/^the Specimen is set "([^"]*)"$/) do |arg1|
-  aa = LabOrderWriteBack.instance
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
-  wait.until { displayed_but_not_enabled?(:css, '#specimen', arg1) }
+  applet = PobOrdersApplet.new
+  expect(applet).to have_order_lab_tray
+  applet.order_lab_tray.wait_for_select_specimen
+  
+
+  start_time = Time.now
+  begin
+    expect(applet.order_lab_tray).to have_select_specimen
+    selected_specimen = applet.order_lab_tray.select_specimen.native.find_element(:css, '[selected]')
+  rescue => e
+    retry if Time.now < (start_time + 15)
+    raise e
+  end
+  p selected_specimen.text
+
+  expect(selected_specimen.text.upcase).to eq(arg1.upcase)
 end
 
 Then(/^the Collection Type is "([^"]*)"$/) do |arg1|
-  aa = LabOrderWriteBack.instance
-  aa.add_verify(CucumberLabel.new('Collection Type Value'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#collectionType'))
-  expect(aa.perform_verification('Collection Type Value', arg1)).to eq(true)
-end
+  applet = PobOrdersApplet.new
+  expect(applet).to have_order_lab_tray
+  applet.order_lab_tray.wait_for_select_collection_type
 
-Then(/^the Preview Order is "([^"]*)"$/) do |arg1|
-  aa = LabOrderWriteBack.instance
-  aa.add_verify(CucumberLabel.new('Preview Order Value'), VerifyContainsText.new, AccessHtmlElement.new(:css, 'div.order-preview div'))
-  expect(aa.perform_verification('Preview Order Value', arg1)).to eq(true)
+  start_time = Time.now
+  begin
+    expect(applet.order_lab_tray).to have_select_collection_type
+    selected_type = applet.order_lab_tray.select_collection_type.native.find_element(:css, '[selected]')
+  rescue => e
+    retry if Time.now < (start_time + 15)
+    raise e
+  end
+  p selected_type.text
+
+  expect(selected_type.text.upcase).to eq(arg1.upcase)
 end

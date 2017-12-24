@@ -26,7 +26,7 @@ define([
             var fetchOptions = options || _.result(this, 'fetchOptions', {});
             var patientFetchOptions = {};
             if (fetchOptions.patientData === true) {
-                _.extend(patientFetchOptions, PatientRecordService.setPatientFetchParams(PatientRecordService.getCurrentPatient(), this.options));
+                _.extend(patientFetchOptions, PatientRecordService.getCurrentPatient().setFetchParams(this.options));
             }
             fetchOptions = _.defaultsDeep({}, fetchOptions, patientFetchOptions, {
                 resourceTitle: this.resourceTitle

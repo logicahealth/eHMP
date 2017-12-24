@@ -3,14 +3,14 @@ Feature: F119 As a consumer of the search service, I need to see suggestions aft
 
 Background:
       #Given a patient with pid "10110V004877" has been synced through the RDK API
-      Given a patient with pid "9E7A;3" has been synced through the RDK API
+      Given a patient with pid "SITE;3" has been synced through the RDK API
       
 
 
 @F119_1_searchsuggestion @VPR 
 Scenario Outline: When a user searches patient's medication by text search total number of records are returned.
 #Given a patient with "this medication exists" in multiple VistAs
-When the user types three letters of "<text>" for the patient "9E7A;3" in VPR format
+When the user types three letters of "<text>" for the patient "SITE;3" in VPR format
 Then the corresponding total suggested items are "<total_items>"
 
 

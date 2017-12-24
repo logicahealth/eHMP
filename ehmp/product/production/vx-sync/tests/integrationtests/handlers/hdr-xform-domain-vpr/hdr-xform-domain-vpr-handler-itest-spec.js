@@ -24,11 +24,12 @@ var config = {
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
         host: 'IP        ',
-        port: 9080
+        port: PORT
     })
 };
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var host = vx_sync_ip;
 var port = PORT;

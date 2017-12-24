@@ -48,6 +48,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import org.junit.After;
 import org.junit.Assert;
@@ -90,8 +92,8 @@ public class CustomDeserializerTest {
         
         InvokeServiceReq req = new InvokeServiceReq();
         
-        Properties p = new Properties();
-        Object key;
+        Map<String, Object> p = new HashMap<>();
+        String key;
         Object value;
         
         //GET IRESOURCE
@@ -273,7 +275,7 @@ public class InvokeServiceReq {
 
     private InvocationTarget target;
     private Context context;
-    private Properties parameters;
+    private Map<String, Object> parameters;
     private Object dataModel;
 
     public InvocationTarget getTarget() {
@@ -292,15 +294,17 @@ public class InvokeServiceReq {
         this.context = context;
     }
 
-    public Properties getParameters() {
-        return parameters;
-    }
+    
 
-    public void setParameters(Properties parameters) {
-        this.parameters = parameters;
-    }
+    public Map<String, Object> getParameters() {
+		return parameters;
+	}
 
-    public Object getDataModel() {
+	public void setParameters(Map<String, Object> parameters) {
+		this.parameters = parameters;
+	}
+
+	public Object getDataModel() {
         return dataModel;
     }
 

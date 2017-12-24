@@ -16,6 +16,10 @@ file "/etc/bluepill/#{node[:asu][:service]}.pill" do
   action :delete
 end
 
+file "#{node[:nerve][:nerve_conf_dir]}/asu.json" do
+  action :delete
+end
+
 directory node[:asu][:home_dir] do
   recursive true
   action :delete

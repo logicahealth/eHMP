@@ -17,7 +17,7 @@ Then the client receives 88 VPR "VistA" result(s)
 Then the client receives 44 VPR "panorama" result(s)
 And the VPR results contain "radiology report results"                                                      
       | field                     | panorama_value                         |
-      | uid                       | urn:va:image:9E7A:253:7059382.8387-1   |
+      | uid                       | urn:va:image:SITE:253:7059382.8387-1   |
       | summary                   | RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS |
       | pid                       | CONTAINS ;253                                  |
       | kind                      | Imaging                                |
@@ -28,7 +28,7 @@ And the VPR results contain "radiology report results"
       | dateTime                  | 199406171612                           |
       | category                  | RA                                     |
       | imagingTypeUid            | urn:va:imaging-Type:GENERAL RADIOLOGY  |
-      | locationUid               | urn:va:location:9E7A:40                |
+      | locationUid               | urn:va:location:SITE:40                |
       | hasImages                 | false                                  |
       | imageLocation             | RADIOLOGY MAIN FLOOR                   |
       | statusName                | COMPLETE                               |
@@ -38,9 +38,9 @@ And the VPR results contain "radiology report results"
       | providers.summary         | ProcedureProvider{uid='null'}          |
       | providers.providerName    | PROVIDER,FIFTY                         |
       | providers.providerDisplayName | Provider,Fifty                     |
-      | providers.providerUid     | urn:va:user:9E7A:1595                  |
-      | results.uid               | urn:va:document:9E7A:253:7059382.8387-1|
-      | results.summary           | ProcedureResult{uid='urn:va:document:9E7A:253:7059382.8387-1'}|
+      | providers.providerUid     | urn:va:user:SITE:1595                  |
+      | results.uid               | urn:va:document:SITE:253:7059382.8387-1|
+      | results.summary           | ProcedureResult{uid='urn:va:document:SITE:253:7059382.8387-1'}|
       | results.localTitle        | ANKLE 2 VIEWS                          |
       | verified                  | true                                   |
       | diagnosis.code            | NORMAL                                 |
@@ -61,12 +61,12 @@ Then the client receives 26 VPR "VistA" result(s)
 Then the client receives 13 VPR "panorama" result(s)
 And the VPR results contain "radiology report results"
       | field                     | panorama_value                         |
-      | orderUid                  | urn:va:order:9E7A:301:9717             |
+      | orderUid                  | urn:va:order:SITE:301:9717             |
       | orderName                 | ARTHROGRAM ELBOW S&I                   |      
 And the VPR results contain "radiology report results"
       | field                     | panorama_value                         |
       | interpretation            | ABNORMAL                               |
-      | encounterUid              | urn:va:visit:9E7A:301:395              |
+      | encounterUid              | urn:va:visit:SITE:301:395              |
       | encounterName             | RADIOLOGY MAIN FLOOR Apr 08, 1997      |
       
 @f100_3_radiologyreport_vpr @vpr
@@ -82,7 +82,7 @@ Then the client receives 88 VPR "VistA" result(s)
 Then the client receives 44 VPR "kodak" result(s)
 And the VPR results contain "radiology report results"                                                      
       | field                     | kodak_value                            |
-      | uid                       | urn:va:image:C877:253:7059382.8387-1   |
+      | uid                       | urn:va:image:SITE:253:7059382.8387-1   |
       | summary                   | RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS |
       | pid                       | CONTAINS ;253                          |
       | kind                      | Imaging                                |
@@ -93,7 +93,7 @@ And the VPR results contain "radiology report results"
       | dateTime                  | 199406171612                           |
       | category                  | RA                                     |
       | imagingTypeUid            | urn:va:imaging-Type:GENERAL RADIOLOGY  |
-      | locationUid               | urn:va:location:C877:40                |
+      | locationUid               | urn:va:location:SITE:40                |
       | hasImages                 | false                                  |
       | imageLocation             | RADIOLOGY MAIN FLOOR                   |
       | statusName                | COMPLETE                               |
@@ -103,9 +103,9 @@ And the VPR results contain "radiology report results"
       | providers.summary         | ProcedureProvider{uid='null'}          |
       | providers.providerName    | PROVIDER,FIFTY                         |
       | providers.providerDisplayName | Provider,Fifty                     |
-      | providers.providerUid     | urn:va:user:C877:1595                  |
-      | results.uid               | urn:va:document:C877:253:7059382.8387-1|
-      | results.summary           | ProcedureResult{uid='urn:va:document:C877:253:7059382.8387-1'}|
+      | providers.providerUid     | urn:va:user:SITE:1595                  |
+      | results.uid               | urn:va:document:SITE:253:7059382.8387-1|
+      | results.summary           | ProcedureResult{uid='urn:va:document:SITE:253:7059382.8387-1'}|
       | results.localTitle        | ANKLE 2 VIEWS                          |
       | verified                  | true                                   |
       | diagnosis.code            | NORMAL                                 |
@@ -126,12 +126,12 @@ Then the client receives 26 VPR "VistA" result(s)
 Then the client receives 13 VPR "kodak" result(s)
 And the VPR results contain "radiology report results"
       | field                     | kodak_value                            |
-      | orderUid                  | urn:va:order:C877:301:9717             |
+      | orderUid                  | urn:va:order:SITE:301:9717             |
       | orderName                 | ARTHROGRAM ELBOW S&I                   |      
 And the VPR results contain "radiology report results"
       | field                     | panorama_value                         |
       | interpretation            | ABNORMAL                               |
-      | encounterUid              | urn:va:visit:C877:301:395              |
+      | encounterUid              | urn:va:visit:SITE:301:395              |
       | encounterName             | RADIOLOGY MAIN FLOOR Apr 08, 1997      |
 
 # following 2 scenarios are checking for another patient for return of radiology results.
@@ -140,15 +140,15 @@ And the VPR results contain "radiology report results"
 @f100_5_radiologyreport_vpr @vpr
 Scenario: Client can request radiology report results in VPR format
 Given a patient with "radiology report results" in multiple VistAs
-Given a patient with pid "9E7A;1" has been synced through Admin API
-When the client requests radiology report results for the patient "9E7A;1" in VPR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;1" in VPR format
 Then a successful response is returned
 Then the client receives 70 VPR "VistA" result(s)
 Then the client receives 70 VPR "panorama" result(s)
 And the VPR results contain "radiology report results"
 
 	| field							| value									|
-	| pid							| 9E7A;1								|
+	| pid							| SITE;1								|
 	| summary						| RADIOLOGIC EXAMINATION, WRIST; 2 VIEWS|
 	| name							| WRIST 2 VIEWS							|
 	| statusName					| COMPLETE								|
@@ -158,7 +158,7 @@ And the VPR results contain "radiology report results"
 	| dateTime						| 199605081123							|
 	| category						| RA									|
 	| imageLocation					| RADIOLOGY MAIN FLOOR					|
-	| locationUid					| urn:va:location:9E7A:40				|
+	| locationUid					| urn:va:location:SITE:40				|
 	| hasImages						| false									|
 	| providers.providerName		| PROVIDER,FIFTY						|
 	| diagnosis.code				| NORMAL								|
@@ -167,15 +167,15 @@ And the VPR results contain "radiology report results"
 @f100_6_radiologyreport_vpr @vpr
 Scenario: Client can request radiology report results in VPR format
 Given a patient with "radiology report results" in multiple VistAs
-Given a patient with pid "C877;1" has been synced through Admin API
-When the client requests radiology report results for the patient "C877;1" in VPR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;1" in VPR format
 Then a successful response is returned
 Then the client receives 70 VPR "VistA" result(s)
 Then the client receives 70 VPR "kodak" result(s)
 And the VPR results contain "radiology report results"
 
 	| field							| value									|
-	| pid							| C877;1								|
+	| pid							| SITE;1								|
 	| summary						| RADIOLOGIC EXAMINATION, WRIST; 2 VIEWS|
 	| name							| WRIST 2 VIEWS							|
 	| statusName					| COMPLETE								|
@@ -185,7 +185,7 @@ And the VPR results contain "radiology report results"
 	| dateTime						| 199605081123							|
 	| category						| RA									|
 	| imageLocation					| RADIOLOGY MAIN FLOOR					|
-	| locationUid					| urn:va:location:C877:40				|
+	| locationUid					| urn:va:location:SITE:40				|
 	| hasImages						| false									|
 	| providers.providerName		| PROVIDER,FIFTY						|
 	| diagnosis.code				| NORMAL								|
@@ -196,8 +196,8 @@ And the VPR results contain "radiology report results"
 @f100_7_radiologyreport_neg_vpr
 Scenario: Negative scenario.  Client can request radiology results in VPR format
 Given a patient with "No radiology report results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests radiology report results for the patient "9E7A;100184" in VPR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;100184" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed
 
@@ -211,9 +211,9 @@ When the client requests radiology report results for the patient "10146V393772"
 Then a successful response is returned
 And the VPR results contain "radiology report results"                                                      
       | field        | kodak_value                                                                            |
-      | uid          | urn:va:image:C877:301:7019787.9197-1                                                   |
+      | uid          | urn:va:image:SITE:301:7019787.9197-1                                                   |
       | summary      | RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS |
-      | pid          | C877;301                                                                               |
+      | pid          | SITE;301                                                                               |
       | kind         | Imaging                                                                                |
       | localId      | 7019787.9197-1                                                                         |
       | facilityCode | 500                                                                                    |
@@ -233,9 +233,9 @@ When the client requests radiology report results for the patient "10110V004877"
 Then a successful response is returned
 And the VPR results contain "radiology report results"                                                      
       | field        | kodak_value                                |
-      | uid          | urn:va:image:9E7A:8:7008783.8579-1         |
+      | uid          | urn:va:image:SITE:8:7008783.8579-1         |
       | summary      | RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS |
-      | pid          | 9E7A;8                                     |
+      | pid          | SITE;8                                     |
       | kind         | Imaging                                    |
       | localId      | 7008783.8579-1                             |
       | facilityCode | 500                                        |
@@ -250,14 +250,14 @@ And the VPR results contain "radiology report results"
 @f100_10_radiologyreport_vpr @vpr @teststatusexamined
 Scenario: Client can request Radiology Reports in VPR format
 Given a patient with "radiology report results" in multiple VistAs
-Given a patient with pid "9E7A;91" has been synced through Admin API
-When the client requests radiology report results for the patient "9E7A;91" in VPR format
+Given a patient with pid "SITE;91" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;91" in VPR format
 Then a successful response is returned
 And the VPR results contain "radiology report results"                                                      
       | field        | kodak_value                                                    |
-      | uid          | urn:va:image:9E7A:91:7018790.8865-1                            |
+      | uid          | urn:va:image:SITE:91:7018790.8865-1                            |
       | summary      | DUPLEX SCAN OF EXTRACRANIAL ARTERIES; COMPLETE BILATERAL STUDY |
-      | pid          | 9E7A;91                                                        |
+      | pid          | SITE;91                                                        |
       | kind         | Imaging                                                        |
       | localId      | 7018790.8865-1                                                 |
       | facilityCode | 998                                                            |

@@ -18,7 +18,11 @@ define([
             message: undefined,
             extraClasses: []
         },
-        behaviors:_.omit(ControlService.Control.prototype.behaviors, ['ExtraClasses','ErrorMessages']),
+        behaviors: _.extend({
+            UpdateUiElements: {
+                behaviorClass: ControlService.Behaviors.UpdateUiElements
+            }
+        }, _.omit(ControlService.Control.prototype.behaviors, ['ExtraClasses', 'ErrorMessages'])),
         // TODO: REMOVE CLASSNAME
         className: function() {
             return "control inline-display";

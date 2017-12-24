@@ -1,1 +1,10 @@
-VXSYNC_LOG_SUFFIX=<%= @name %> node pollerHost.js --site <%= @options[:site] %> > <%= @process_log %>
+#!/bin/bash
+export VXSYNC_LOG_SUFFIX=<%= @name %> 
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_<%= @name %>"
+node_modules/ca-apm-probe/bin/ca-apm-run.js pollerHost.js --site <%= @options[:site] %> <% if @options[:multiplemode]==true %>--multiplemode<% end %> > <%= @process_log %>
+<% else %>
+node pollerHost.js --site <%= @options[:site] %> <% if @options[:multiplemode]==true %>--multiplemode<% end %> > <%= @process_log %>
+<% end %>

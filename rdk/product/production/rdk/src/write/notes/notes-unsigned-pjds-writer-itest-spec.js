@@ -4,28 +4,28 @@ var pJdsWriter = require('./notes-unsigned-pjds-writer');
 
 var writebackContext = {
     duz: {
-        '9E7A': '10000000255'
+        'SITE': '10000000255'
     },
-    siteHash: '9E7A',
-    pid: '9E7A;8',
+    siteHash: 'SITE',
+    pid: 'SITE;8',
     vistaConfig: {
         host: 'IP        ',
         port: PORT,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost',
         context: 'HMP UI CONTEXT'
     },
     model: {
         'authorUid': '10000000255',
-        'documentDefUid': 'urn:va:doc-def:9E7A:40',
+        'documentDefUid': 'urn:va:doc-def:SITE:40',
         'encounterUid': 'H2931013',
         'encounterDateTime': '199310131400',
         'referenceDateTime': '201507101410',
-        'locationUid': 'urn:va:location:9E7A:32',
+        'locationUid': 'urn:va:location:SITE:32',
         'patientIcn': '10110V004877',
-        'pid': '9E7A;8',
+        'pid': 'SITE;8',
         'status': 'UNSIGNED'
     },
     appConfig: {

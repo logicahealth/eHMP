@@ -13,6 +13,7 @@ var methodOverride = require('method-override');
 
 var rdk = require('../rdk');
 var rdkJwt = require('./rdk-jwt');
+var RdkRequestTimers = require('./rdk-request-timers');
 var JDSStore = require('../../utils/connect-jds')(session);
 
 var httpUtil = rdk.utils.http;
@@ -40,15 +41,15 @@ function setupAppMiddleware(app) {
     addRequestedSessionId(app);
     enableMethodOverride(app);
     addLoggerToRequest(app);
+    enableRequestTimers(app);
     setAppTimeout(app);
     enableMorgan(app);
     enableSession(app);
+    enableResponseTimeHeader(app);
     enableBodyParser(app);
     initializeHttpWrapper(app);
     ensureQueryMatchesBody(app);
     rdkJwt.enableJwt(app);
-    enableResponseTimeHeader(app);
-    recordRequestsForContractTests(app);
 }
 
 function setupTrustProxy(app) {
@@ -104,6 +105,7 @@ function addAppToRequest(app) {
 function addRdkSendToResponse(app) {
     app.use(function(req, res, next) {
         res.rdkSend = function(body) {
+            logRdkRequestTimers(req);
             var error = getRdkErrorFromBody(body, req.logger);
 
             if (!_.isEmpty(error)) {
@@ -147,7 +149,6 @@ function addRdkSendToResponse(app) {
             req._rdkSendUsed = true;
             if (body) {
                 res.data = body.data;
-                res.status = body.status;
             }
             return this.send(body);
         };
@@ -383,7 +384,8 @@ function ensureQueryMatchesBody(app) {
         var queryIsValid = doesQueryMatchBody(req);
         if (!queryIsValid) {
             var rdkError = new RdkError({
-                code: 'rdk.400.1008'
+                code: 'rdk.400.1008',
+                logger: req.logger
             });
             return res.status(400).rdkSend(rdkError);
         }
@@ -434,6 +436,20 @@ function enableResponseTimeHeader(app) {
     app.use(responseTime());
 }
 
-function recordRequestsForContractTests(app) {
-    require('../../../versioning-tests/spy-for-versioning')(app);
+function enableRequestTimers(app) {
+    app.use(function(req, res, next) {
+        _.set(req, 'timers', new RdkRequestTimers(req.logger));
+        return next();
+    });
+}
+
+function logRdkRequestTimers(req) {
+    var timers = _.get(req, 'timers.list');
+    if (_.size(timers) > 0) {
+        _.forEach(timers.reverse(), function(timer) {
+            if (!timer.logged) {
+                timer.log(req.logger);
+            }
+        });
+    }
 }

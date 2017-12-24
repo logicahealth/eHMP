@@ -26,7 +26,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
 
     response = rdk_fetch(@command,
                          'pid' => '10110V004877',
-                         'uid' => 'urn:va:med:9E7A:8:8145')
+                         'uid' => 'urn:va:med:SITE:8:8145')
 
     items = hash_to_array(get_hash_items(response.body))
     @all_match_count = items.size
@@ -50,7 +50,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
     it '. icn' do
       response = rdk_fetch(@command,
                            'pid' => '10110V004877',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(200)
 
@@ -61,16 +61,16 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
 
     it '. site' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;3',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'pid' => 'SITE;3',
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end
 
     it '. with site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;100816',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'pid' => 'SITE;100816',
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end
@@ -78,15 +78,15 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
     it '. not found site' do
       response = rdk_fetch(@command,
                            'pid' => 'EEEE;3',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;848484',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'pid' => 'SITE;848484',
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end
@@ -94,7 +94,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
     it '. not found icn' do
       response = rdk_fetch(@command,
                            'pid' => '848V484',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end
@@ -124,7 +124,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
   context 'uid' do
     it 'nominal document' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;100125',
+                           'pid' => 'SITE;100125',
                            'uid' => 'urn:va:med:2939:135:5587940')
 
       expect(response.code).to eq(200)
@@ -249,7 +249,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
     it 'uid of lab' do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
-                           'uid' => 'urn:va:lab:9E7A:3:CH;6999478.96;2')
+                           'uid' => 'urn:va:lab:SITE:3:CH;6999478.96;2')
 
       expect(response.code).to eq(500)
     end
@@ -257,7 +257,7 @@ describe 'f117_patient_record_search_detail_trend_spec.rb', acceptance: true do
     it 'uid of different pid' do
       response = rdk_fetch(@command,
                            'pid' => '5000000009V082878',
-                           'uid' => 'urn:va:med:9E7A:8:8145')
+                           'uid' => 'urn:va:med:SITE:8:8145')
 
       expect(response.code).to eq(404)
     end

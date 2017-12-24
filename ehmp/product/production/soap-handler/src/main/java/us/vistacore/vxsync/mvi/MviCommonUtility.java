@@ -153,7 +153,7 @@ public final class MviCommonUtility {
 		if(date == null) {
 			date = new Date();
 		}
-		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssZ");
 		TS timestamp = new TS();
 		timestamp.setValue(df.format(date));
 		return timestamp;

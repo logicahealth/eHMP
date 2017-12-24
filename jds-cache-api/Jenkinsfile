@@ -1,0 +1,141 @@
+node('ehmpdocker') {
+    currentBuild.result = "SUCCESS"
+    try {
+        // assume displayName is like "v-2.x.0.8851"
+        env.APP_VERSION = jenkins.model.Jenkins.instance.getItem('ehmp-ui-acceptance-test-build-master')?.getLastStableBuild()?.displayName?.replace('v-', '')
+        // Jenkins multibranch pipeline likes slashes but ehmp_provision does not like slashes
+        env.DASHED_STACK_NAME = env.JOB_NAME.replace('/', '-').replace('%2F', '-')
+
+        ansiColor('xterm') {
+            properties([
+                disableConcurrentBuilds()
+            ])
+
+            // org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException: Scripts not permitted to use method hudson.util.VariableResolver resolve java.lang.String
+            // app.APP_VERSION = jenkins.model.Jenkins.instance.getItem('ehmp-ui-acceptance-test-build-master')?.lastStableBuild?.buildVariableResolver?.resolve('APP_VERSION')
+
+            // org.jenkinsci.plugins.scriptsecurity.sandbox.RejectedAccessException: Scripts not permitted to use staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods drop java.lang.CharSequence int
+            // app.APP_VERSION = jenkins.model.Jenkins.instance.getItem('ehmp-ui-acceptance-test-build-master')?.getLastStableBuild()?.displayName?.drop(2)
+
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'build user', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'], file(credentialsId: 'jenkins', variable: 'HOST_KEY_PATH'), file(credentialsId: 'jenkins', variable: 'VISTACORE_KEY_PATH'), string(credentialsId: 'NEXUS_AUTH', variable: 'NEXUSAUTH')]) {
+
+                stage('Checkout') {
+                    checkout scm
+                }
+
+                if (!env.BRANCH_NAME) {
+                    // support non-multibranch pipelines
+                    env.BRANCH_NAME = sh(script: 'git rev-parse --symbolic-full-name --abbrev-ref HEAD', returnStdout: true).trim()
+                }
+
+                // runIntegrationTest = env.BRANCH_NAME ==~ /master|features\/.+/
+                runIntegrationTest = env.BRANCH_NAME ==~ /master/
+
+                stage('Unit Test') {
+                    withEnv(['NPM_CONFIG_REGISTRY=https://store.vistacore.us/nexus/content/repositories/npm-all/']) {
+                        sh 'node -v'
+                        sh 'npm -v'
+                        sh 'npm prune'
+                        sh 'npm install'
+                        sh 'npm test'
+                    }
+                }
+
+
+                if (runIntegrationTest) {
+                    stage('Deploy') {
+                        withEnv(['DRIVER=aws', 'NEXUS_URL=https://store.vistacore.us', 'ACTION=converge', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
+                            sh '''
+                                set -e
+                                curl "$NEXUS_URL/nexus/service/local/repositories/releases/content/us/vistacore/artifact-versions-shell/$APP_VERSION/artifact-versions-shell-$APP_VERSION.sh" -o artifact_versions.sh
+                                source ./artifact_versions.sh
+                                STACK_NAME="$DASHED_STACK_NAME" MACHINE_NAME=jds chef-client -o ehmp_provision@$EHMP_PROVISION --environment _default --force-formatter --config ~/Projects/vistacore/.chef/knife.rb --log_level warn
+                                '''
+                        }
+                    }
+
+                    stage('Integration Test') {
+                        withEnv([]) {
+
+                            // JDS_IP_ADDRESS
+                            // JDS_TCP_PORT    SuperServer port
+                            // JDS_HTTP_PORT   http listener
+                            // JDS_USERNAME    base64-encoded username
+                            // JDS_PASSWORD    base64-encoded password
+                            // JDS_NAMESPACE
+
+                            sh '''
+                                set -e
+                                export JDS_IP_ADDRESS="$(knife exec -E "nodes.find('role:jds AND stack:$DASHED_STACK_NAME') { |n| puts n.to_hash.dig('cloud', 'local_ipv4') }" --config ~/Projects/vistacore/.chef/knife.rb)"
+                                export JDS_HTTP_PORT="$(knife exec -E "nodes.find('role:jds AND stack:$DASHED_STACK_NAME') { |n| puts n.to_hash.dig('jds', 'cache_listener_ports', 'general') }" --config ~/Projects/vistacore/.chef/knife.rb)"
+                                export PJDS_IP_ADDRESS="$JDS_IP_ADDRESS"
+                                echo
+                                echo
+                                echo
+                                npm run test:int
+                                '''
+
+                        }
+                    }
+
+                    stage('Shutdown') {
+                        withEnv(['DRIVER=aws', 'NEXUS_URL=https://store.vistacore.us', 'ACTION=stop', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
+                            if (env.BRANCH_NAME ==~ /master|features\/.+/) {
+                                // master and feature branches get stopped
+                                sh '''
+                                    set -e
+                                    source ./artifact_versions.sh
+                                    MACHINE_NAME=jds STACK_NAME="$DASHED_STACK_NAME" chef-client -o ehmp_provision@$EHMP_PROVISION --environment _default --force-formatter --config ~/Projects/vistacore/.chef/knife.rb --log_level warn
+                                    '''
+                            } else {
+                                // other branches get destroyed
+                                sh '''
+                                    set -e
+                                    source ./artifact_versions.sh
+                                    export ACTION=destroy
+                                    MACHINE_NAME=jds STACK_NAME="$DASHED_STACK_NAME" chef-client -o ehmp_provision@$EHMP_PROVISION --environment _default --force-formatter --config ~/Projects/vistacore/.chef/knife.rb --log_level warn
+                                    '''
+                            }
+                        }
+
+                    }
+                }
+
+                if (env.BRANCH_NAME ==~ /master/) {
+                    // master publish
+                    stage('Publish to store') {
+                        withEnv(['NPM_CONFIG_REGISTRY=https://store.vistacore.us/nexus/content/repositories/npm-internal/']) {
+                            sh 'npm publish'
+                        }
+                    }
+                }
+
+                if (!(env.BRANCH_NAME ==~ /master/)) {
+                    // non-master publish
+                    env.DASHED_BRANCH_NAME = env.BRANCH_NAME.replace('/', '-').replace('%2F', '-')
+                    stage('Publish to sandstore') {
+                        withEnv(['NPM_CONFIG_REGISTRY=https://sandstore.vistacore.us/nexus/content/repositories/npm-internal-dev/']) {
+                            sh '''
+                                set -e
+                                package_preversion="$(./node_modules/.bin/semver --increment prepatch "$(node -p "require('./package.json').version")")"
+                                branch_hash="$(git rev-parse --verify --short HEAD)"
+                                next_version="$( ( echo $package_preversion | sed 's/-.*/-snap/'; echo $branch_hash ) | paste -d- - - )"
+                                git config user.name Jenkins
+                                git config user.email jenkins@vistacore.us
+                                npm version "$next_version" # creates a git commit with a package.json version bump
+                                git reset HEAD^ # removes the commit, but keeps the change
+                                npm publish --tag "$DASHED_BRANCH_NAME"
+                                echo "Published as version: $next_version"
+                                echo "Published with tag: $DASHED_BRANCH_NAME"
+                                '''
+                        }
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        currentBuild.result = "FAILURE"
+        println err
+        println 'Caught build failure'
+    }
+}

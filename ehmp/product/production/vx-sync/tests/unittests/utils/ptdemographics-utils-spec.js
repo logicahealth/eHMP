@@ -1,4 +1,4 @@
-'use strict';
+	'use strict';
 
 //------------------------------------------------------------------------------------
 // This file contains unit tests for ptdemographics-utils.js.
@@ -37,27 +37,27 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'REDACTED    ',
+		host: 'IP        ',
 		port: PORT
 	},
 	'vistaSites': {
-		'9E7A': {
+		'SITE': {
 			'name': 'panorama',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
 			'sendTimeout': 10000
 		},
-		'C877': {
+		'SITE': {
 			'name': 'kodak',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -76,27 +76,27 @@ var config = {
 var vistaHdrConfig = {
 	jds: {
 		protocol: 'http',
-		host: 'REDACTED    ',
+		host: 'IP        ',
 		port: PORT
 	},
 	'vistaSites': {
-		'9E7A': {
+		'SITE': {
 			'name': 'panorama',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
 			'sendTimeout': 10000
 		},
-		'C877': {
+		'SITE': {
 			'name': 'kodak',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -130,7 +130,7 @@ var vistaHdrConfig = {
 };
 
 var demographicsFromVista = {
-	'pid': '9E7A;3',
+	'pid': 'SITE;3',
 	'birthDate': '19350407',
 	'last4': '0008',
 	'last5': 'E0008',
@@ -142,7 +142,7 @@ var demographicsFromVista = {
 	'genderCode': 'urn:va:pat-gender:M',
 	'genderName': 'Male',
 	'sensitive': false,
-	'uid': 'urn:va:patient:9E7A:3:3',
+	'uid': 'urn:va:patient:SITE:3:3',
 	'summary': 'Eight,Patient',
 	'ssn': '666000008',
 	'localId': '3'
@@ -213,7 +213,7 @@ describe('ptdemographics-utils.js', function() {
 			var originalSyncJob = {
 				patientIdentifier: {
 					type: 'pid',
-					value: '9E7A;3'
+					value: 'SITE;3'
 				}
 			};
 			var syncJobsToPublish = [];
@@ -250,7 +250,7 @@ describe('ptdemographics-utils.js', function() {
 			var expectedJdsResult = [{
 				data: {
 					items: [{
-						pid: '9E7A;3'
+						pid: 'SITE;3'
 					}]
 				}
 			},
@@ -470,19 +470,19 @@ describe('ptdemographics-utils.js', function() {
 			var expectedJdsResult = {
 				data: {
 					items: [{
-						pid: '9E7A;3'
+						pid: 'SITE;3'
 					}]
 				}
 			};
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 			var icn = '100';
-            var syncJobsToPublish = [ { type: 'vista-9E7A-subscribe-request',
-                patientIdentifier: { type: 'pid', value: '9E7A;3' },
+            var syncJobsToPublish = [ { type: 'vista-SITE-subscribe-request',
+                patientIdentifier: { type: 'pid', value: 'SITE;3' },
                 jpid: '21EC2020-3AEA-4069-A2DD-CCCCCCCCCCCC',
                 rootJobId: '5',
                 jobId: '8d38053f-cfae-44c0-8d02-d450b118a31a' },
-              { type: 'vista-C877-subscribe-request',
-                patientIdentifier: { type: 'pid', value: 'C877;12' },
+              { type: 'vista-SITE-subscribe-request',
+                patientIdentifier: { type: 'pid', value: 'SITE;12' },
                 jpid: '21EC2020-3AEA-4069-A2DD-CCCCCCCCCCCC',
                 rootJobId: '5',
                 jobId: '48d6527b-75b1-4df8-9dd1-5f70a5e3a6bc' },
@@ -506,7 +506,7 @@ describe('ptdemographics-utils.js', function() {
             runs(function() {
                 ptDemographicsUtil.retrievePrimaryPidFromSyncJobs(syncJobsToPublish, function(error, response) {
 					expect(error).toBeFalsy();
-					expect(response).toEqual('9E7A;3');
+					expect(response).toEqual('SITE;3');
 					finished = true;
 				});
 			});
@@ -711,7 +711,7 @@ describe('ptdemographics-utils.js', function() {
 
 			var ptDemographicsUtil = new PtDemographicsUtil(log, config, environment);
 			runs(function() {
-				ptDemographicsUtil.retrieveDemographicsFromVistAandStoreInJds('9E7A', function(error, ptDemographics) {
+				ptDemographicsUtil.retrieveDemographicsFromVistAandStoreInJds('SITE', function(error, ptDemographics) {
 					expect(error).toEqual('FailedPidInvalid');
 					expect(ptDemographics).toBeNull();
 					expect(environment.jds.storePatientData.calls.length).toEqual(0);
@@ -1221,16 +1221,16 @@ describe('ptdemographics-utils.js', function() {
 			// JDS will have to give its responses.
 			//-----------------------------------------------------------------------------------------------------------
 			// var syncJobsToPublish = [{
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
 			// 		value: demographicsFromVista.pid
 			// 	}
 			// }, {
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
-			// 		value: 'C877;3'
+			// 		value: 'SITE;3'
 			// 	}
 			// }, {
 			// 	type: 'jmeadows-sync-request',
@@ -1377,7 +1377,7 @@ describe('ptdemographics-utils.js', function() {
 			}];
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 			var syncJobsToPublish = [{
-				type: 'vista-9E7A-subscribe-request',
+				type: 'vista-SITE-subscribe-request',
 				patientIdentifier: {
 					type: 'pid',
 					value: demographicsFromVista.pid
@@ -1388,16 +1388,16 @@ describe('ptdemographics-utils.js', function() {
 			// JDS will have to give its responses.
 			//-----------------------------------------------------------------------------------------------------------
 			// var syncJobsToPublish = [{
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
 			// 		value: demographicsFromVista.pid
 			// 	}
 			// }, {
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
-			// 		value: 'C877;3'
+			// 		value: 'SITE;3'
 			// 	}
 			// }, {
 			// 	type: 'jmeadows-sync-request',
@@ -1447,10 +1447,10 @@ describe('ptdemographics-utils.js', function() {
 			}];
 			environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 			var syncJobsToPublish = [{
-				type: 'vista-9E7A-subscribe-request',
+				type: 'vista-SITE-subscribe-request',
 				patientIdentifier: {
 					type: 'pid',
-					value: 'C877;3'
+					value: 'SITE;3'
 				}
 			}];
 
@@ -1458,16 +1458,16 @@ describe('ptdemographics-utils.js', function() {
 			// JDS will have to give its responses.
 			//-----------------------------------------------------------------------------------------------------------
 			// var syncJobsToPublish = [{
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
 			// 		value: demographicsFromVista.pid
 			// 	}
 			// }, {
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
-			// 		value: 'C877;3'
+			// 		value: 'SITE;3'
 			// 	}
 			// }, {
 			// 	type: 'jmeadows-sync-request',
@@ -1484,7 +1484,7 @@ describe('ptdemographics-utils.js', function() {
 					expect(filteredSyncJobsToPublish).toEqual(syncJobsToPublish);
 					expect(environment.jds.getPtDemographicsByPid.calls.length).toEqual(2);
 					expect(environment.jds.getPtDemographicsByPid).toHaveBeenCalledWith(demographicsFromVista.pid, jasmine.any(Function));
-					expect(environment.jds.getPtDemographicsByPid).toHaveBeenCalledWith('9E7A;3', jasmine.any(Function));
+					expect(environment.jds.getPtDemographicsByPid).toHaveBeenCalledWith('SITE;3', jasmine.any(Function));
 					finished = true;
 				});
 			});
@@ -1527,16 +1527,16 @@ describe('ptdemographics-utils.js', function() {
 			// JDS will have to give its responses.
 			//-----------------------------------------------------------------------------------------------------------
 			// var syncJobsToPublish = [{
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
 			// 		value: demographicsFromVista.pid
 			// 	}
 			// }, {
-			// 	type: 'vista-9E7A-subscribe-request',
+			// 	type: 'vista-SITE-subscribe-request',
 			// 	patientIdentifier: {
 			// 		type: 'pid',
-			// 		value: 'C877;3'
+			// 		value: 'SITE;3'
 			// 	}
 			// }, {
 			// 	type: 'jmeadows-sync-request',
@@ -1752,7 +1752,7 @@ describe('ptdemographics-utils.js', function() {
 
 			var ptDemographicsUtil = new PtDemographicsUtil(log, config, environment);
 			runs(function() {
-				ptDemographicsUtil.storeDemographicsInJdsUsingBasisDemographics('9E7A;3', demographicsFromVista, function(error, ptDemographics) {
+				ptDemographicsUtil.storeDemographicsInJdsUsingBasisDemographics('SITE;3', demographicsFromVista, function(error, ptDemographics) {
 					expect(error).toEqual('FailedPidNotSecondarySite');
 					expect(ptDemographics).toBeNull();
                     expect(environment.jds.saveSyncStatus.calls.length).toEqual(0);
@@ -2285,7 +2285,7 @@ describe('ptdemographics-utils.js', function() {
 
 			var ptDemographicsUtil = new PtDemographicsUtil(log, config, environment);
 			runs(function() {
-				ptDemographicsUtil.retrieveOrCreateDemographicsForSecondaryOrVistaHdrPid('9E7A;111', demographicsFromVista, function(error, ptDemographics) {
+				ptDemographicsUtil.retrieveOrCreateDemographicsForSecondaryOrVistaHdrPid('SITE;111', demographicsFromVista, function(error, ptDemographics) {
 					expect(error).toEqual('FailedPidNotSecondarySite');
 					expect(ptDemographics).toBeNull();
 					expect(environment.jds.getPtDemographicsByPid.calls.length).toEqual(0);
@@ -2303,7 +2303,7 @@ describe('ptdemographics-utils.js', function() {
 	describe('_morphToSecondaryDemographics()', function() {
 		it('Happy Path', function() {
 			var primaryDemographics = {
-				'pid': '9E7A;3',
+				'pid': 'SITE;3',
 				'birthDate': '19350407',
 				'last4': '0008',
 				'last5': 'E0008',
@@ -2315,7 +2315,7 @@ describe('ptdemographics-utils.js', function() {
 				'genderCode': 'urn:va:pat-gender:M',
 				'genderName': 'Male',
 				'sensitive': false,
-				'uid': 'urn:va:patient:9E7A:3:3',
+				'uid': 'urn:va:patient:SITE:3:3',
 				'summary': 'Eight,Patient',
 				'ssn': '666000008',
 				'localId': '3',
@@ -2323,7 +2323,22 @@ describe('ptdemographics-utils.js', function() {
 				'roomBed': 'roomBed',
 				'inpatientLocation': 'inpatientLocation',
 				'admissionUid': 'admissionUid',
-				'cwadf': 'cwadf'
+				'cwadf': 'cwadf',
+                'patientRecordFlag': [
+                    {
+                        'approved': 'PROGRAMMER,EIGHT',
+                        'assignTS': '20141223160037',
+                        'assignmentStatus': 'Active',
+                        'category': 'II (LOCAL)',
+                        'name': 'WANDERER',
+                        'nextReviewDT': '20150221',
+                        'originatingSite': 'CAMP MASTER  ',
+                        'ownerSite': 'CAMP MASTER  ',
+                        'summary': 'PatientRecordFlag{uid=\'\'}',
+                        'text': 'This patient likes to wander around the hospital.  Please notify the\r\nsecurity office',
+                        'type': 'OTHER'
+                    }
+                ]				
 			};
 
 			var secondaryDemographics = PtDemographicsUtil._morphToSecondaryDemographics(primaryDemographics);
@@ -2332,6 +2347,7 @@ describe('ptdemographics-utils.js', function() {
 			expect(secondaryDemographics.inpatientLocation).toBeUndefined();
 			expect(secondaryDemographics.admissionUid).toBeUndefined();
 			expect(secondaryDemographics.cwadf).toBeUndefined();
+            expect(secondaryDemographics.patientRecordFlag).toBeUndefined();
 		});
 	});
 

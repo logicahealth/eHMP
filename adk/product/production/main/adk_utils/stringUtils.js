@@ -1,4 +1,4 @@
-define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
+define(['jquery', 'moment', 'underscore', 'libphonenumber'], function($, Moment, _, Libphone) {
     "use strict";
 
     var StringUtils = {};
@@ -69,17 +69,30 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
     };
 
     StringUtils.addSearchResultElementHighlighting = function(textToHighlight, keywords) {
-        var escapedText = _.escape(textToHighlight);
-        var markStart = '<mark class="cpe-search-term-match">';
-        var markEnd = '</mark>';
+        var applyHighlighing = _.isString(textToHighlight) && _.isArray(keywords) && !_.isEmpty(keywords);
+        if (!applyHighlighing) {
+            return textToHighlight;
+        }
+        var markStart = '{{addTag \"';
+        var markEnd = '\" \"mark\" \"cpe-search-term-match\"}}';
+        var escapedKeywords = [];
         _.each(keywords, function(key) {
-            var regex = new RegExp('\\b' + key.replace(/[-[\]{}()*+?.,\\^$|#\key]/g, "\\$&") + '\\b' + '(?=[^<>]*(<|$))', "gi");
-            escapedText = escapedText.replace(regex, markStart + '$&' + markEnd);
+            /* escapes special characters in keywords */
+            escapedKeywords.push(key.replace(/[-[\]{}()*+?.,\\^$|#\key]/g, "\\$&"));
         });
-        return escapedText;
+        var escapedSortedKeywords = _.sortBy(escapedKeywords, function(key) {
+            return -key.length;
+        });
+        /* takes escaped keywords and marks each match found with the start & end tags */
+        var regex = new RegExp('\\b(' + escapedSortedKeywords.join('|') + ')\\b', "gi");
+        return textToHighlight.replace(regex, markStart + '$&' + markEnd);
     };
 
     StringUtils.toTitleCase = function(string) {
+        if (!_.isString(string)) {
+            return '';
+        }
+
         var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|is|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
         return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
@@ -96,6 +109,20 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
 
             return match.charAt(0).toUpperCase() + match.substr(1);
         });
+    };
+
+    StringUtils.formatPhoneNumber = function(number) {
+        var phoneUtil = Libphone.PhoneNumberUtil.getInstance(),
+        retval = number,
+        libNumber;
+
+        try {
+            libNumber = phoneUtil.parseAndKeepRawInput(number, 'US');
+            retval = phoneUtil.formatInOriginalFormat(libNumber, 'US');
+        } catch(e) {
+            // Couldn't format, return the input.
+        }
+        return retval;
     };
     return StringUtils;
 });

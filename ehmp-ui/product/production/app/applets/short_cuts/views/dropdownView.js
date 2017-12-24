@@ -17,7 +17,7 @@ define([
             tagName: 'li',
             className: 'list-group-item',
             template: Handlebars.compile([
-                '<a href="{{url}}" target="_blank" title="External link. Press enter to access {{title}} and leave the application.">',
+                '<a href="{{url}}" target="_blank" aria-label="{{title}}. External link">',
                 '<i class="fa fa-external-link fa-fw"></i>',
                 '{{label}}</a>'
             ].join('\n'))
@@ -30,7 +30,7 @@ define([
 
     ADK.Messaging.trigger('register:component', {
         type: 'applicationHeaderItem',
-        title: 'Short cuts. Press enter to access and then use the up and down arrows to view options.',
+        title: 'Short cuts',
         orderIndex: 1,
         key: 'short-cuts',
         group: 'user-nav-alerts',

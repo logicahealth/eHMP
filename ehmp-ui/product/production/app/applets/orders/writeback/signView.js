@@ -85,21 +85,18 @@ define([
                     extraClasses: ["btn-danger", "btn-sm", "alert-discontinue"],
                     label: "Cancel",
                     type: "button",
-                    title: "Press enter to cancel the order.",
                     name: "cancel"
                 }, {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "alert-cancel"],
                     label: "Close",
                     type: "button",
-                    title: "Press enter to close the form.",
                     name: "closeModal"
                 }, {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "alert-continue"],
                     type: "submit",
                     label: "Sign",
-                    title: "Press enter to sign order.",
                     name: "sign"
                 }]
             }]

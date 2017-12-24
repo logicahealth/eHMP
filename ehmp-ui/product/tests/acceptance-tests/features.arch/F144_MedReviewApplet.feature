@@ -4,13 +4,13 @@ Feature: F144 - eHMP Viewer GUI -  Med Review applet display
 
 #POC:Team Jupiter
 
-@f144_medReviewApplet_navigation_thro_dropdown @US1153 @MM
+@f144_medReviewApplet_navigation_thro_dropdown @US1153 
 Scenario: Display of the patients medication types & count
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   Then Overview is active
   When user selects Meds Review from Coversheet dropdown
-  Then "Meds Review" is active
+  Then "Medcation Review" is active
   Then the search results say "No Records" in Med Review Applet
   	
 @f144_1_medicationSummaryDisplay @US1153 @MM @base
@@ -18,7 +18,7 @@ Scenario: Display of the patients medication types & count
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   #And the user clicks the control "Date Filter" in the "Med Review Applet"
   #When the user clicks the date control "All" in the "Med Review Applet"
@@ -32,7 +32,7 @@ Scenario: Display of the in-patients medication(IV) types & count
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient"
@@ -43,7 +43,7 @@ Scenario: Display of medication grouping by medication type
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -54,7 +54,7 @@ Scenario: Display of the patients medication summary information for inpatient
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -86,7 +86,7 @@ Scenario: Display of all the headings in the detail display
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -103,7 +103,7 @@ Scenario: Display of the links
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -131,7 +131,7 @@ Scenario: Display of the following detail information about the medication
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -150,7 +150,7 @@ Scenario: Display of the following detail information about the medication for i
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "inpatient" 
@@ -170,7 +170,7 @@ Scenario: Display of the patients medication summary information for outpatient
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "outpatient" 
@@ -191,7 +191,7 @@ Scenario: Display of the following detail information about the medication for o
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "outpatient" 
@@ -214,7 +214,7 @@ Scenario: Verify med review applet displays the following detail information abo
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then the user clicks on link "outpatient" 
@@ -230,7 +230,7 @@ Scenario: Display of the site correctly.
   Given user is logged into eHMP-UI
   And user searches for and selects "Graphingpatient,Two"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   Then user sees "10" "outpatient" search results
   And the user has selected All within the global date picker
   Then user sees "44" "outpatient" search results
@@ -257,7 +257,7 @@ Scenario: Display of the order history for medication grouping correctly.
   Given user is logged into eHMP-UI
   And user searches for and selects "Graphingpatient,Two"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   #Then user sees "10" "outpatient" search results
   And the user has selected All within the global date picker
   #Then user sees "44" "outpatient" search results
@@ -288,7 +288,7 @@ Scenario: Filter data based on date filter search(integration of global date pic
   Given user is logged into eHMP-UI
   And user searches for and selects "Zzzretiredonenineteen,Patient"
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   And the user clicks the control "Date Filter" in the "Med Review Applet"
   And the following choices should be displayed for the "Med Review Applet" Date Filter
     | All | 2yr | 1yr | 3mo | 1mo | 7d | 72hr | 24hr |
@@ -356,7 +356,7 @@ Scenario: Display of the patients medication types clinic orders and Non-Va medi
   And user searches for and selects "Bcma,Eight"
   And Overview is active
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   And the user has selected All within the global date picker
   Then user sees "11" "outpatient" search results
   Then user sees "3" "Non Va" search results
@@ -369,7 +369,7 @@ Scenario: Display of medication grouping by medication type for clinical order a
   And user searches for and selects "Bcma,Eight"
   And Overview is active
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   And the user has selected All within the global date picker
   Then the user clicks on link "clinic order" 
   Then the user clicks on link "Non Va" 
@@ -380,11 +380,11 @@ Scenario: Display of the patients medication types supplies
   And the User selects mysite and All
   And user enters full last name "ZZZRETFIVEFIFTYONE,PATIENT"
   And the user select patient name "ZZZRETFIVEFIFTYONE,PATIENT"
-  And the user click on acknowledge restricted record
+  And the user clicks on acknowledge restricted record
   Then the user click on Confirm Selection
   Then Default Screen is active
   When user navigates to Meds Review Applet
-  Then "Meds Review" is active
+  Then "Medication Review" is active
   Then the search results say "No Records" in Med Review Applet
   And the user has selected All within the global date picker
   Then user sees "2" "supplies" search results

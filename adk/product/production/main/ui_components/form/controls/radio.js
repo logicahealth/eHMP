@@ -61,7 +61,10 @@ define([
                 behaviorClass: ControlService.Behaviors.ErrorMessages,
                 fieldSelector: 'input[type="radio"]'
             }
-        }, BaseInputControl.prototype.behaviors)
+        }, BaseInputControl.prototype.behaviors),
+        getSelectedLabelFromDOM: function() {
+            return this.$("label:has(input:checked)").text().trim();
+        }
     });
 
     return RadioControl;

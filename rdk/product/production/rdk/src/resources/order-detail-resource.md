@@ -2,13 +2,13 @@
 
 ## Order detail [{{{path}}}]
 
-### Get [GET {{{path}}}/detail{?pid}{&id}]
+### Get [GET {{{path}}}/detail/{uid}{?pid}]
 
 + Parameters
 
     :[pid]({{{common}}}/parameters/pid.md)
 
-    + id (string, required) - order id
+    + uid (string, required) - The UID of the order to retrieve details for. If the site of the UID is a connected site, then a direct RPC is used to fetch the details.
 
 
 + Response 200 (application/json)

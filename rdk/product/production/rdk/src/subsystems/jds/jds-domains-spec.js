@@ -34,7 +34,8 @@ var domainMap = {
     'newsfeed': 'news-feed',
     'document-view': 'ehmp-documents',
     'vlerdocument': 'vlerdocument',
-    'parent-documents': 'parent-documents'
+    'parent-documents': 'parent-documents',
+    'demographics': 'patient-demographics'
 };
 
 

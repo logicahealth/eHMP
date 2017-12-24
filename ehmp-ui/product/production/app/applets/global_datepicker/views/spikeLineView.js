@@ -24,7 +24,7 @@ define([
         template: spikeLineTemplate,
         initialize: function(options) {
 
-            this.spikeLineChartOptions = $.extend(true, {}, ChartHelper.chartConfig, ChartStyling.spikeLineChartStyles, {tooltip: {enabled: false}});
+            this.spikeLineChartOptions = $.extend(true, {}, ChartHelper.chartConfig, ChartStyling.spikeLineChartStyles, { tooltip: { enabled: false } });
 
             this.collection = options.sharedCollection;
             if (this.collection.length > 0) {
@@ -36,17 +36,19 @@ define([
             this.chart = undefined;
         },
         onSyncCollection: function(collection) {
-                this.spikeLineChartOptions.series[1].data = this.buildOutpatientArray(collection);
-                this.spikeLineChartOptions.series[0].data = this.buildInpatientArray(collection);
+            this.spikeLineChartOptions.series[1].data = this.buildOutpatientArray(collection);
+            this.spikeLineChartOptions.series[0].data = this.buildInpatientArray(collection);
 
-                this.spikeLineChartOptions.chart.renderTo = this.$('.global-date-picker-open-popover--graph')[0];
-                this.chart = new Highcharts.Chart(this.spikeLineChartOptions, this.spikelineEventsChartCallback);
-                this.drawAndZoom();
-                this.$el.find('.global-date-picker-open-popover--graph').tooltip();
-                this.$el.find('svg').attr('focusable', false);
-                this.$el.find('svg').attr('aria-hidden', true);
-                
-                this.listenTo(ADK.Messaging, 'globalDate:selected', this.onDateSelected);
+            this.spikeLineChartOptions.chart.renderTo = this.$('.global-date-picker-open-popover--graph')[0];
+            this.chart = new Highcharts.Chart(this.spikeLineChartOptions, this.spikelineEventsChartCallback);
+            this.drawAndZoom();
+            this.$('.global-date-picker-open-popover--graph').tooltip();
+            this.$('svg').attr({
+                'focusable': false,
+                'aria-hidden': true
+            });
+
+            this.listenTo(ADK.Messaging, 'globalDate:selected', this.onDateSelected);
         },
         onDateSelected: function(dateModel) {
             var from, to;
@@ -108,17 +110,16 @@ define([
                     // 22-31: (month+1) 1
 
                     if (day < 8) day = 7;
-                    else if(day < 15) day = 14;
+                    else if (day < 15) day = 14;
                     else if (day < 22) day = 21;
                     else {
                         day = 1;
                         month = month + 1;
                     }
                     return new Date(year, month, day).valueOf();
-                }
-                else{
+                } else {
                     var quarterlyBinning = (Math.floor((month + 2) / 3) * 3) - 2;
-                    return new Date(year, quarterlyBinning -1).valueOf();
+                    return new Date(year, quarterlyBinning - 1).valueOf();
                 }
             });
         },
@@ -151,7 +152,7 @@ define([
         drawAndZoom: function(isAllRange) {
             var globalDate = ADK.SessionStorage.getModel('globalDate');
             var fromDate, toDate;
-            
+
             if (globalDate.get('selectedId') !== undefined && globalDate.get('selectedId') !== null) {
                 fromDate = globalDate.get('customFromDate');
                 toDate = globalDate.get('customToDate');
@@ -173,13 +174,15 @@ define([
 
             $.each(this.spikeLineChartOptions.series[0].data, function(i, point) {
                 if (!(point instanceof Array)) {
-                    point = $.map(point, function(value, index) { return [value]; });
+                    point = $.map(point, function(value, index) {
+                        return [value];
+                    });
                 }
 
                 if (_fromDateValue < point[0] && point[0] < _toDateValue) {
                     In.push([point[0], point[1]]);
 
-                    if(firstCheck) {
+                    if (firstCheck) {
                         firstEncounterDate = point[0];
                         firstCheck = false;
                     }
@@ -194,13 +197,15 @@ define([
 
             $.each(this.spikeLineChartOptions.series[1].data, function(i, point) {
                 if (!(point instanceof Array)) {
-                    point = $.map(point, function(value, index) { return [value]; });
+                    point = $.map(point, function(value, index) {
+                        return [value];
+                    });
                 }
 
                 if (_fromDateValue < point[0] && point[0] < _toDateValue) {
                     Out.push([point[0], point[1]]);
 
-                    if(firstCheck) {
+                    if (firstCheck) {
                         firstEncounterDate = point[0];
                         firstCheck = false;
                     }

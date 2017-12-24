@@ -34,10 +34,10 @@ function getPatientSites(req) {
                 });
                 //TODO: This is to work around Panorama and Kodak as their facility Codes are same. This should not impact beyond Development Environment
                 // Hard Coding facility Code for PANORAMA
-                if (site === '9E7A') {
+                if (site === 'SITE') {
                     sitesInfo.facilityCode = 'TST1';
                     //Hard Coding facility Code for KODAK
-                } else if (site === 'C877') {
+                } else if (site === 'SITE') {
                     sitesInfo.facilityCode = 'TST2';
                 }
             });

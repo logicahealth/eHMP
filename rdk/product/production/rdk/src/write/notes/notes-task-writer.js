@@ -3,11 +3,14 @@
 var async = require('async');
 var activitiesResource = require('../../resources/activitymanagement/activities/activities-operations-resource'); // For signal processing to Consults
 var getGenericJbpmConfig = require('../../resources/activitymanagement/activity-utils').getGenericJbpmConfig; // For signal processing to Consults
+var getDatabaseConfigFromRequest = require('../../resources/activitymanagement/activity-utils').getDatabaseConfigFromRequest;
 var consultTaskOperations = require('../../resources/activitymanagement/tasks/consult-tasks-resource');
-var httpUtil = require('../../core/rdk').utils.http;
+var rdk = require('../../core/rdk');
+var httpUtil = rdk.utils.http;
+var RdkError = rdk.utils.RdkError;
 var paramUtil = require('../../utils/param-converter');
 var writeNoteToPjds = require('./notes-unsigned-pjds-writer');
-var versionCompare = require('../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource').versionCompare;
+var versionCompare = require('./../../utils/version-compare').versionCompare;
 var _ = require('lodash');
 
 module.exports.getDefinitions = function(writebackContext, callback) {
@@ -287,7 +290,13 @@ module.exports.getOpenConsultsForNoteUid = function(req, writebackContext, callb
     }
 
     var jbpmConfig = getGenericJbpmConfig(req);
-    var dbConfig = req.app.config.jbpm.activityDatabase;
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
     consultTaskOperations.doGetOpenConsultTasks(pid, writebackContext.logger, jbpmConfig, dbConfig, function(err, results) {
         if (err) {
             writebackContext.logger.error(err);

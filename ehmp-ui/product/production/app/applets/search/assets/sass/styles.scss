@@ -1,10 +1,13 @@
+$blue-highlight-color: #66afe9;
 //Search record input in the workspace navigation
 .cancelTextSearchButtonBorder {
-    border: 25px solid #E6E6E6 !important;   
+    border: 25px solid #E6E6E6 !important;
 }
+
 .form-control-placeholder-icon {
     font-family: Source Sans Pro, 'FontAwesome', sans-serif !important;
 }
+
 .text-search-input-container {
     flex: 1 3 30%;
     max-width: 270px;
@@ -17,8 +20,9 @@
     .suggest-list-container {
         display: none;
         max-height: 300px;
-        min-width: 469px;
         z-index: 4;
+        right: 0;
+        left: 28px;
         .suggest-list {
             margin: 0px;
             li {
@@ -35,17 +39,33 @@
     .form-group {
         margin-bottom: 0px;
         .fa-search {
+            margin-left: -25px;
+        }
+        input:not(:disabled) ~ .fa-search {
+            color: $primary;
+        }
+        .input-icon {
+            background: $primary;
+            color: $pure-white;
+            border-radius: 50%;
             position: absolute;
-            top: 4px;
-            right: 8px;
+            top: 0px;
+            left: 0px;
+            width: 37px;
         }
         .form-control {
-            border-radius: 20px;
-            height: 25px;
+            border-radius: 0px;
             min-width: 80px;
+            padding-left: 16px;
+            padding-right: 26px;
+            text-indent: 4px;
+            &:not(:disabled) {
+                border-color: $blue-highlight-color;
+            }
         }
     }
 }
+
 //Search record applet
 .search-applet-main {
     background-color: $pure-white;
@@ -107,5 +127,9 @@
                 padding-left: 50px;
             }
         }
+    }
+    .datepicker-input {
+        max-width: 75px;
+        height: 25px;
     }
 }

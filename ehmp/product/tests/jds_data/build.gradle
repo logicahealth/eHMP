@@ -13,6 +13,7 @@ task zipData(type: Zip) {
   from "${projectDir}/permissions/src"
   from "${projectDir}/teams/src"
   from "${projectDir}/trustsys/src"
+  from "${projectDir}/featperms/src"
   exclude 'build'
 }
 

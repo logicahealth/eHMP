@@ -82,7 +82,7 @@ describe 'f664_patient_health_summaries_sites.rb', acceptance: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;253')
+                           'pid' => 'SITE;253')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -94,7 +94,7 @@ describe 'f664_patient_health_summaries_sites.rb', acceptance: true do
 
     it '. site/dfn2 - has disabilities' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;164')
+                           'pid' => 'SITE;164')
 
       expect(response.code).to eq(200)
 
@@ -105,7 +105,7 @@ describe 'f664_patient_health_summaries_sites.rb', acceptance: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;3')
+                           'pid' => 'SITE;3')
 
       expect(response.code).to eq(200)
 
@@ -122,7 +122,7 @@ describe 'f664_patient_health_summaries_sites.rb', acceptance: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;848484')
+                           'pid' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 

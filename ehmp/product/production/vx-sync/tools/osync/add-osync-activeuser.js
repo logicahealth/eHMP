@@ -7,7 +7,7 @@ var async = require('async');
 var moment = require('moment');
 
 var config = require(global.VX_ROOT + 'worker-config');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 
 var argv = require('yargs')
     .usage('Usage: $0 --site <site> --id <id> --last-login <lastSuccessfulLogin> --no-header --log-level <log-level>')
@@ -41,7 +41,7 @@ if (!noHeader) {
 
 var user = {uid: 'urn:va:user:' + site + ':' + id, site: site, id: id, lastSuccessfulLogin: lastSuccessfulLogin};
 
-var pjdsClient = new PjdsClient(log, log, config);
+var pjdsClient = new PjdsClient(log, log, config.pjds);
 
 pjdsClient.addActiveUser(user, function(error, response) {
     if (error) {

@@ -8,12 +8,12 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //Tests sign orders routine - Uncomment to test locally
 //describe("Checks sign order functionality", function() {
 //    var writebackContext = {
-//        pid: '9E7A;100615',
+//        pid: 'SITE;100615',
 //        vistaConfig: {
 //            host: 'IP        ',
 //            port: PORT,
-//            accessCode: 'REDACTED',
-//            verifyCode: 'REDACTED',
+//            accessCode: 'USER  ',
+//            verifyCode: 'PW      ',
 //            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },
@@ -21,7 +21,7 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //            'dfn': '100615',
 //            'provider': '10000000271',
 //            'location': '285',
-//            'eSig':'REDACTED',
+//            'eSig':'PW      ',
 //            'orderList': [{
 //                'orderId': '38999;1'
 //            }],
@@ -65,15 +65,15 @@ describe('Checks the sign order send functionality', function() {
         interceptorResults: {
             patientIdentifiers: {
                 'dfn': '100615',
-                'siteDfn': '9E7A;100615',
-                'site': '9E7A'
+                'siteDfn': 'SITE;100615',
+                'site': 'SITE'
             }
         },
         vistaConfig: {
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
@@ -81,7 +81,7 @@ describe('Checks the sign order send functionality', function() {
         model: {
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'REDACTED',
+            'eSig': 'PW      ',
             'orderDialog': 'LR OTHER LAB TESTS',
             'displayGroup': '5',
             'quickOrderDialog': '2',
@@ -152,12 +152,12 @@ describe('Checks the sign order send functionality', function() {
 describe('Checks the validate signature functionality', function() {
 
     var writebackContext = {
-        pid: '9E7A;100615',
+        pid: 'SITE;100615',
         vistaConfig: {
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost'
         },
@@ -165,7 +165,7 @@ describe('Checks the validate signature functionality', function() {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'REDACTED'
+            'eSig': 'PW      '
 
         },
         logger: sinon.stub(require('bunyan').createLogger({
@@ -174,12 +174,12 @@ describe('Checks the validate signature functionality', function() {
     };
 
     var writebackContext2 = {
-        pid: '9E7A;100615',
+        pid: 'SITE;100615',
         vistaConfig: {
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost'
         },
@@ -187,7 +187,7 @@ describe('Checks the validate signature functionality', function() {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'REDACTED'
+            'eSig': 'shouldfail!!'
 
         },
         logger: sinon.stub(require('bunyan').createLogger({
@@ -220,12 +220,12 @@ describe('Checks the validate signature functionality', function() {
 describe('Checks the order detail comparison functionality', function() {
 
     var detailWritebackContext = {
-        pid: '9E7A;100615',
+        pid: 'SITE;100615',
         vistaConfig: {
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
@@ -277,12 +277,12 @@ describe('Checks the order detail comparison functionality', function() {
 //describe('Checks the save order check functionality', function() {
 //    //Tests save order check to session routine - Uncomment to test locally
 //    var writebackContext = {
-//        pid: '9E7A;100615',
+//        pid: 'SITE;100615',
 //        vistaConfig: {
 //            host: 'IP        ',
 //            port: PORT,
-//            accessCode: 'REDACTED',
-//            verifyCode: 'REDACTED',
+//            accessCode: 'USER  ',
+//            verifyCode: 'PW      ',
 //            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },

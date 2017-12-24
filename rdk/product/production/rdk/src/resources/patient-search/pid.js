@@ -156,7 +156,7 @@ function performPatientSearch(req, res, otherPid, internalCallback, maskSSN) {
                 searchType: jdsResource,
                 searchString: pid
             };
-            if (pidValidator.isPidEdipi(pid)) {
+            if (pidValidator.isPidEdipi(pid) || pidValidator.isIcn(pid)) {
                 /* Patient was not found in JDS or VXSync/VistA, check MVI to get demographics */
                 globalSearch._getPatientDemographicWithICN(req, res, pid, processPatientGlobalSearch);
             } else {

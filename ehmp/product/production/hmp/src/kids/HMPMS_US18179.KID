@@ -1,0 +1,1008 @@
+KIDS Distribution saved on Feb 27, 2017@14:17:19
+Adding timeout field to HMP SUBSCRIPTION (#800000) file
+**KIDS**:HMPMS*2.0*1^
+
+**INSTALL NAME**
+HMPMS*2.0*1
+"BLD",9702,0)
+HMPMS*2.0*1^^0^3170227^y
+"BLD",9702,4,0)
+^9.64PA^800000^1
+"BLD",9702,4,800000,0)
+800000
+"BLD",9702,4,800000,222)
+y^y^f^^^^n^^n
+"BLD",9702,4,800000,224)
+
+"BLD",9702,4,"B",800000,800000)
+
+"BLD",9702,6.3)
+3
+"BLD",9702,"INIT")
+POST^HMPPTIMO
+"BLD",9702,"KRN",0)
+^9.67PA^779.2^20
+"BLD",9702,"KRN",.4,0)
+.4
+"BLD",9702,"KRN",.401,0)
+.401
+"BLD",9702,"KRN",.402,0)
+.402
+"BLD",9702,"KRN",.403,0)
+.403
+"BLD",9702,"KRN",.5,0)
+.5
+"BLD",9702,"KRN",.84,0)
+.84
+"BLD",9702,"KRN",3.6,0)
+3.6
+"BLD",9702,"KRN",3.8,0)
+3.8
+"BLD",9702,"KRN",9.2,0)
+9.2
+"BLD",9702,"KRN",9.8,0)
+9.8
+"BLD",9702,"KRN",9.8,"NM",0)
+^9.68A^1^1
+"BLD",9702,"KRN",9.8,"NM",1,0)
+HMPPTIMO^^0^B2182688
+"BLD",9702,"KRN",9.8,"NM","B","HMPPTIMO",1)
+
+"BLD",9702,"KRN",19,0)
+19
+"BLD",9702,"KRN",19.1,0)
+19.1
+"BLD",9702,"KRN",101,0)
+101
+"BLD",9702,"KRN",409.61,0)
+409.61
+"BLD",9702,"KRN",771,0)
+771
+"BLD",9702,"KRN",779.2,0)
+779.2
+"BLD",9702,"KRN",870,0)
+870
+"BLD",9702,"KRN",8989.51,0)
+8989.51
+"BLD",9702,"KRN",8989.52,0)
+8989.52
+"BLD",9702,"KRN",8994,0)
+8994
+"BLD",9702,"KRN","B",.4,.4)
+
+"BLD",9702,"KRN","B",.401,.401)
+
+"BLD",9702,"KRN","B",.402,.402)
+
+"BLD",9702,"KRN","B",.403,.403)
+
+"BLD",9702,"KRN","B",.5,.5)
+
+"BLD",9702,"KRN","B",.84,.84)
+
+"BLD",9702,"KRN","B",3.6,3.6)
+
+"BLD",9702,"KRN","B",3.8,3.8)
+
+"BLD",9702,"KRN","B",9.2,9.2)
+
+"BLD",9702,"KRN","B",9.8,9.8)
+
+"BLD",9702,"KRN","B",19,19)
+
+"BLD",9702,"KRN","B",19.1,19.1)
+
+"BLD",9702,"KRN","B",101,101)
+
+"BLD",9702,"KRN","B",409.61,409.61)
+
+"BLD",9702,"KRN","B",771,771)
+
+"BLD",9702,"KRN","B",779.2,779.2)
+
+"BLD",9702,"KRN","B",870,870)
+
+"BLD",9702,"KRN","B",8989.51,8989.51)
+
+"BLD",9702,"KRN","B",8989.52,8989.52)
+
+"BLD",9702,"KRN","B",8994,8994)
+
+"FIA",800000)
+HMP SUBSCRIPTION
+"FIA",800000,0)
+^HMP(800000,
+"FIA",800000,0,0)
+800000
+"FIA",800000,0,1)
+y^y^f^^^^n^^n
+"FIA",800000,0,10)
+
+"FIA",800000,0,11)
+
+"FIA",800000,0,"RLRO")
+
+"FIA",800000,800000)
+0
+"FIA",800000,800000.01)
+0
+"FIA",800000,800000.02)
+0
+"FIA",800000,800000.14)
+0
+"FIA",800000,800000.142)
+0
+"INIT")
+POST^HMPPTIMO
+"IX",800000,800000,"AD",0)
+800000^AD^Index of operational data by server.^R^^F^IR^I^800000^^^^^S
+"IX",800000,800000,"AD",.1,0)
+^^1^1^3160720^
+"IX",800000,800000,"AD",.1,1,0)
+This index is used to find operational data for each eHMP server.
+"IX",800000,800000,"AD",1)
+S ^HMP(800000,"AD",X,DA)=""
+"IX",800000,800000,"AD",1.4)
+S X=X(1)
+"IX",800000,800000,"AD",2)
+K ^HMP(800000,"AD",X,DA)
+"IX",800000,800000,"AD",2.4)
+S X=X(1)
+"IX",800000,800000,"AD",2.5)
+K ^HMP(800000,"AD")
+"IX",800000,800000,"AD",11.1,0)
+^.114IA^1^1
+"IX",800000,800000,"AD",11.1,1,0)
+1^F^800000^.07^^1^F
+"IX",800000,800000,"ADFN",0)
+800000^ADFN^Patients to track in the Data Monitor^MU^^R^IR^W^800000.01^^^^^S
+"IX",800000,800000,"ADFN",.1,0)
+^^1^1^3160720^
+"IX",800000,800000,"ADFN",.1,1,0)
+This index will place the entry in the data monitor for this patient.
+"IX",800000,800000,"ADFN",1)
+D HMPSET^HMPDJFS(.DA,.X)
+"IX",800000,800000,"ADFN",1.4)
+S X=0 I +X(1)>0 S X=1
+"IX",800000,800000,"ADFN",2)
+D HMPKILL^HMPDJFS(.DA,.X)
+"IX",800000,800000,"ADFN",2.4)
+S X=0 I X(1)'="" S X=1
+"IX",800000,800000,"ADFN",2.5)
+K ^HMP(800000,"AITEM")
+"IX",800000,800000,"ADFN",11.1,0)
+^.114IA^2^2
+"IX",800000,800000,"ADFN",11.1,1,0)
+1^F^800000.01^.01^^1^F
+"IX",800000,800000,"ADFN",11.1,2,0)
+2^F^800000.01^2^^^F
+"IX",800000,800000,"AITEM",0)
+800000^AITEM^AITEM TEST^MU^^F^IR^I^800000^^^^^A
+"IX",800000,800000,"AITEM",.1,0)
+^^1^1^3160726^
+"IX",800000,800000,"AITEM",.1,1,0)
+This index will place the entry in the data monitor for this patient.
+"IX",800000,800000,"AITEM",1)
+D HMPOSET^HMPDJFS(DA,X)
+"IX",800000,800000,"AITEM",1.4)
+I X(1)'=""
+"IX",800000,800000,"AITEM",2)
+D HMPOKILL^HMPDJFS(DA)
+"IX",800000,800000,"AITEM",2.4)
+I X(1)'=""
+"IX",800000,800000,"AITEM",2.5)
+K ^HMP(800000,"AITEM")
+"IX",800000,800000,"AITEM",11.1,0)
+^.114IA^1^1
+"IX",800000,800000,"AITEM",11.1,1,0)
+1^F^800000^.03^^^F
+"IX",800000,800000,"AROS",0)
+800000^AROS^Rosters to track in the Data Monitor^MU^^R^IR^W^800000.02^^^^^S
+"IX",800000,800000,"AROS",.1,0)
+^^1^1^3160720^
+"IX",800000,800000,"AROS",.1,1,0)
+A cross-reference of rosters for groups of patients on wards.
+"IX",800000,800000,"AROS",1)
+S:X2(2) ^HMP(800000,"AROS",X,DA(1))=""
+"IX",800000,800000,"AROS",2)
+K:X1(2) ^HMP(800000,"AROS",X,DA(1))
+"IX",800000,800000,"AROS",2.5)
+K ^HMP(800000,"AROS")
+"IX",800000,800000,"AROS",11.1,0)
+^.114IA^2^2
+"IX",800000,800000,"AROS",11.1,1,0)
+1^F^800000.02^.01^^1^F
+"IX",800000,800000,"AROS",11.1,2,0)
+2^F^800000.02^2^^2^
+"IX",800000,800000.01,"AP",0)
+800000.01^AP^Subscribed patients by server not yet initialized.^R^^R^IR^I^800000.01^^^^^S
+"IX",800000,800000.01,"AP",.1,0)
+^^6^6^3140521^
+"IX",800000,800000.01,"AP",.1,1,0)
+This index lists the patients who are not yet initialized:
+"IX",800000,800000.01,"AP",.1,2,0)
+ 
+"IX",800000,800000.01,"AP",.1,3,0)
+  SERVER_IEN, "AP", STATUS, STATUS TIME, DFN
+"IX",800000,800000.01,"AP",.1,4,0)
+ 
+"IX",800000,800000.01,"AP",.1,5,0)
+Patients with an initialized status (STATUS = 2) do not appear in this 
+"IX",800000,800000.01,"AP",.1,6,0)
+index.
+"IX",800000,800000.01,"AP",1)
+S ^HMP(800000,DA(1),1,"AP",X(1),X(2),DA)=""
+"IX",800000,800000.01,"AP",1.4)
+S X=(+X2(1)<2)
+"IX",800000,800000.01,"AP",2)
+K ^HMP(800000,DA(1),1,"AP",X(1),X(2),DA)
+"IX",800000,800000.01,"AP",2.5)
+K ^HMP(800000,DA(1),1,"AP")
+"IX",800000,800000.01,"AP",11.1,0)
+^.114IA^2^2
+"IX",800000,800000.01,"AP",11.1,1,0)
+1^F^800000.01^2^^1^F
+"IX",800000,800000.01,"AP",11.1,2,0)
+2^F^800000.01^3^^2^F
+"MBREQ")
+0
+"QUES","XPF1",0)
+Y
+"QUES","XPF1","??")
+^D REP^XPDH
+"QUES","XPF1","A")
+Shall I write over your |FLAG| File
+"QUES","XPF1","B")
+YES
+"QUES","XPF1","M")
+D XPF1^XPDIQ
+"QUES","XPF2",0)
+Y
+"QUES","XPF2","??")
+^D DTA^XPDH
+"QUES","XPF2","A")
+Want my data |FLAG| yours
+"QUES","XPF2","B")
+YES
+"QUES","XPF2","M")
+D XPF2^XPDIQ
+"QUES","XPI1",0)
+YO
+"QUES","XPI1","??")
+^D INHIBIT^XPDH
+"QUES","XPI1","A")
+Want KIDS to INHIBIT LOGONs during the install
+"QUES","XPI1","B")
+NO
+"QUES","XPI1","M")
+D XPI1^XPDIQ
+"QUES","XPM1",0)
+PO^VA(200,:EM
+"QUES","XPM1","??")
+^D MG^XPDH
+"QUES","XPM1","A")
+Enter the Coordinator for Mail Group '|FLAG|'
+"QUES","XPM1","B")
+
+"QUES","XPM1","M")
+D XPM1^XPDIQ
+"QUES","XPO1",0)
+Y
+"QUES","XPO1","??")
+^D MENU^XPDH
+"QUES","XPO1","A")
+Want KIDS to Rebuild Menu Trees Upon Completion of Install
+"QUES","XPO1","B")
+NO
+"QUES","XPO1","M")
+D XPO1^XPDIQ
+"QUES","XPZ1",0)
+Y
+"QUES","XPZ1","??")
+^D OPT^XPDH
+"QUES","XPZ1","A")
+Want to DISABLE Scheduled Options, Menu Options, and Protocols
+"QUES","XPZ1","B")
+NO
+"QUES","XPZ1","M")
+D XPZ1^XPDIQ
+"QUES","XPZ2",0)
+Y
+"QUES","XPZ2","??")
+^D RTN^XPDH
+"QUES","XPZ2","A")
+Want to MOVE routines to other CPUs
+"QUES","XPZ2","B")
+NO
+"QUES","XPZ2","M")
+D XPZ2^XPDIQ
+"RTN")
+1
+"RTN","HMPPTIMO")
+0^1^B2182688
+"RTN","HMPPTIMO",1,0)
+HMPPTIMO ;;AFS/MBS - HMP timeout post-install setup; ; 2/27/17 2:16pm
+"RTN","HMPPTIMO",2,0)
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Feb 15, 2017;Build 3
+"RTN","HMPPTIMO",3,0)
+ ;Per VA Directive 6402, this routine should not be modified
+"RTN","HMPPTIMO",4,0)
+ ; External References    DBIA#
+"RTN","HMPPTIMO",5,0)
+ ; -------------------    -----
+"RTN","HMPPTIMO",6,0)
+ ; $$FIND1^DIC            2051
+"RTN","HMPPTIMO",7,0)
+ ; MSG^DIALOG             2050
+"RTN","HMPPTIMO",8,0)
+ ; FILE^DIE               2053
+"RTN","HMPPTIMO",9,0)
+ ; GETS^DIQ               2056
+"RTN","HMPPTIMO",10,0)
+ ; MES^XPDUTL            10141
+"RTN","HMPPTIMO",11,0)
+ Q
+"RTN","HMPPTIMO",12,0)
+POST ;Add initial values to timeout and retry count fields of #800000 file
+"RTN","HMPPTIMO",13,0)
+ N IENS,HMPFDA,FDA,DIERR,HMPGETS,MSG,I
+"RTN","HMPPTIMO",14,0)
+ D MES^XPDUTL("RUNNING POST^HMPPTIMO")
+"RTN","HMPPTIMO",15,0)
+ S IENS=$$FIND1^DIC(800000,,"X","hmp-development-box")_","
+"RTN","HMPPTIMO",16,0)
+ I 'IENS D  Q
+"RTN","HMPPTIMO",17,0)
+ . D MES^XPDUTL("Error: could not find hmp-development-box entry in HMP SUBSCRIPTON (#800000) FILE.")
+"RTN","HMPPTIMO",18,0)
+ D GETS^DIQ(800000,IENS,".08;.09",,"HMPGETS")
+"RTN","HMPPTIMO",19,0)
+ ; Default value for timeout: 300
+"RTN","HMPPTIMO",20,0)
+ ; Default value for retry count: 5
+"RTN","HMPPTIMO",21,0)
+ S:'$G(HMPGETS(800000,IENS,.08)) FDA(800000,IENS,.08)=300
+"RTN","HMPPTIMO",22,0)
+ S:'$G(HMPGETS(800000,IENS,.09)) FDA(800000,IENS,.09)=5
+"RTN","HMPPTIMO",23,0)
+ I $D(FDA) D FILE^DIE(,"FDA")
+"RTN","HMPPTIMO",24,0)
+ I $G(DIERR) D
+"RTN","HMPPTIMO",25,0)
+ . D MES^XPDUTL("Error adding initial values to hmp-development-box:")
+"RTN","HMPPTIMO",26,0)
+ . D MSG^DIALOG("AT",.MSG)
+"RTN","HMPPTIMO",27,0)
+ . F I=1:1:+$G(MSG) D MES^XPDUTL($G(MSG(I)))
+"RTN","HMPPTIMO",28,0)
+ Q
+"SEC","^DIC",800000,800000,0,"AUDIT")
+@
+"SEC","^DIC",800000,800000,0,"DD")
+@
+"SEC","^DIC",800000,800000,0,"DEL")
+@
+"SEC","^DIC",800000,800000,0,"LAYGO")
+@
+"SEC","^DIC",800000,800000,0,"RD")
+@
+"SEC","^DIC",800000,800000,0,"WR")
+@
+"VER")
+8.0^22.0
+"^DD",800000,800000,0)
+FIELD^^.09^13
+"^DD",800000,800000,0,"DDA")
+N
+"^DD",800000,800000,0,"DT")
+3170215
+"^DD",800000,800000,0,"IX","B",800000,.01)
+
+"^DD",800000,800000,0,"NM","HMP SUBSCRIPTION")
+
+"^DD",800000,800000,0,"VRPK")
+HMP
+"^DD",800000,800000,.01,0)
+SERVER^RF^^0;1^K:$L(X)>64!($L(X)<1)!'(X'?1P.E) X
+"^DD",800000,800000,.01,1,0)
+^.1^^-1
+"^DD",800000,800000,.01,1,1,0)
+800000^B
+"^DD",800000,800000,.01,1,1,1)
+S ^HMP(800000,"B",$E(X,1,64),DA)=""
+"^DD",800000,800000,.01,1,1,2)
+K ^HMP(800000,"B",$E(X,1,64),DA)
+"^DD",800000,800000,.01,3)
+Answer must be 1-64 characters in length.
+"^DD",800000,800000,.01,21,0)
+^.001^1^1^3140212^^^^
+"^DD",800000,800000,.01,21,1,0)
+This is the name of the client system that is subscribing to data updates.
+"^DD",800000,800000,.01,"DT")
+3141028
+"^DD",800000,800000,.02,0)
+LASTUPDATE^F^^0;2^K:$L(X)>100!($L(X)<3) X
+"^DD",800000,800000,.02,3)
+Answer must be 3-100 characters in length. (Do not modify.)
+"^DD",800000,800000,.02,21,0)
+^^3^3^3110908^
+"^DD",800000,800000,.02,21,1,0)
+This field holds a flag, indicating if this URL should be notified via the
+"^DD",800000,800000,.02,21,2,0)
+nightly scheduled option HMP APPOINTMENTS of the list of patients expected
+"^DD",800000,800000,.02,21,3,0)
+to be seen tomorrow.
+"^DD",800000,800000,.02,"DT")
+3160719
+"^DD",800000,800000,.03,0)
+OPERATION DATA^S^0:UNSUBCRIBED;1:SUBSCRIBED;2:INITIALIZED;^0;3^Q
+"^DD",800000,800000,.03,3)
+Select the type of notification for this URL. (Do Not Modify)
+"^DD",800000,800000,.03,21,0)
+^^2^2^3160720^
+"^DD",800000,800000,.03,21,1,0)
+This field holds a flag, indicating if this URL should be notified via http
+"^DD",800000,800000,.03,21,2,0)
+when a patient is admitted.
+"^DD",800000,800000,.03,"DT")
+3160720
+"^DD",800000,800000,.04,0)
+REPEAT POLLS^NJ8,0^^0;4^K:+X'=X!(X>99999999)!(X<0)!(X?.E1"."1N.N) X
+"^DD",800000,800000,.04,3)
+Type a number between 0 and 99999999, 0 decimal digits.
+"^DD",800000,800000,.04,21,0)
+^^2^2^3140404^
+"^DD",800000,800000,.04,21,1,0)
+This tracks the number of times the same "last update" value has been
+"^DD",800000,800000,.04,21,2,0)
+repeated.  A high repeat may be normal if data are not changing.
+"^DD",800000,800000,.04,"DT")
+3141028
+"^DD",800000,800000,.05,0)
+DISK USAGE STATUS^S^0:WITHIN LIMIT;1:EXCEEDED LIMIT;^0;5^Q
+"^DD",800000,800000,.05,3)
+Enter current status of eHMP disk usage
+"^DD",800000,800000,.05,21,0)
+^^5^5^3150624^
+"^DD",800000,800000,.05,21,1,0)
+The DISK USAGE STATUS flag is an indicator set automatically in the eHMP 
+"^DD",800000,800000,.05,21,2,0)
+subscription process. If the disk space usage in global ^XTMP by eHMP 
+"^DD",800000,800000,.05,21,3,0)
+subscriptions is above the threshold in the HMP EXTRACT DISK SIZE LIMIT 
+"^DD",800000,800000,.05,21,4,0)
+is exceeded this flag will be set. Similarly the flag is reset if usage 
+"^DD",800000,800000,.05,21,5,0)
+later falls below the threshold.
+"^DD",800000,800000,.05,23,0)
+^^4^4^3150624^
+"^DD",800000,800000,.05,23,1,0)
+The field is updated from subscription process by the STATUS^HMPMETA
+"^DD",800000,800000,.05,23,2,0)
+routine.
+"^DD",800000,800000,.05,23,3,0)
+ 
+"^DD",800000,800000,.05,23,4,0)
+The field is referenced by the fetch process using CHECK^HMPMETA routine.
+"^DD",800000,800000,.05,"DT")
+3150624
+"^DD",800000,800000,.06,0)
+DISK USAGE STATUS TIME^D^^0;6^S %DT="ESTXR" D ^%DT S X=Y K:X<1 X
+"^DD",800000,800000,.06,3)
+Enter the time the DISK USAGE STATUS field was updated.
+"^DD",800000,800000,.06,21,0)
+^^6^6^3150624^
+"^DD",800000,800000,.06,21,1,0)
+The DISK USAGE STATUS TIME is a field set automatically in the eHMP 
+"^DD",800000,800000,.06,21,2,0)
+subscription process. If the disk space usage in global ^XTMP by eHMP 
+"^DD",800000,800000,.06,21,3,0)
+subscriptions is above the threshold in the HMP EXTRACT DISK SIZE LIMIT is
+"^DD",800000,800000,.06,21,4,0)
+exceeded the DISK USAGE STATUS field will be set and the time of the 
+"^DD",800000,800000,.06,21,5,0)
+change recorded in this field . Similarly the flag and time fields will be
+"^DD",800000,800000,.06,21,6,0)
+reset if usage later falls below the threshold.
+"^DD",800000,800000,.06,23,0)
+^^4^4^3150624^
+"^DD",800000,800000,.06,23,1,0)
+The field is updated from subscription process by the STATUS^HMPMETA
+"^DD",800000,800000,.06,23,2,0)
+routine.
+"^DD",800000,800000,.06,23,3,0)
+ 
+"^DD",800000,800000,.06,23,4,0)
+The field is referenced by the fetch process using CHECK^HMPMETA routine.
+"^DD",800000,800000,.06,"DT")
+3150624
+"^DD",800000,800000,.07,0)
+DEFAULT?^S^1:YES;0:NO;^0;7^Q
+"^DD",800000,800000,.07,3)
+Enter 1 for the default eHMP primary subscription.
+"^DD",800000,800000,.07,21,0)
+^^5^5^3160720^
+"^DD",800000,800000,.07,21,1,0)
+This field identifies the primary eHMP subscription for this server. It 
+"^DD",800000,800000,.07,21,2,0)
+identifies this server as the default for operations such as selecting a 
+"^DD",800000,800000,.07,21,3,0)
+subscription to monitor in the option eHMP Dashboard [HMPMON DASHBOARD].
+"^DD",800000,800000,.07,21,4,0)
+Only one server at a time can be set as the default. If this file contains
+"^DD",800000,800000,.07,21,5,0)
+only one record, then it will be used automatically as the default.
+"^DD",800000,800000,.07,23,0)
+^^2^2^3160719^
+"^DD",800000,800000,.07,23,1,0)
+Used in $$GETSRVR^HMPMOND to identify the default subscription if this 
+"^DD",800000,800000,.07,23,2,0)
+file contains more than one.
+"^DD",800000,800000,.07,"DT")
+3160720
+"^DD",800000,800000,.08,0)
+TIMEOUT^RNJ4,0^^0;8^K:+X'=X!(X>9999)!(X<1)!(X?.E1"."1N.N) X
+"^DD",800000,800000,.08,3)
+Type a number between 1 and 9999, 0 decimal digits.
+"^DD",800000,800000,.08,21,0)
+^^1^1^3170215^
+"^DD",800000,800000,.08,21,1,0)
+The number of seconds allowed for a batch to be returned from VxSync with a status update
+"^DD",800000,800000,.08,"DT")
+3170215
+"^DD",800000,800000,.09,0)
+TIMEOUT RETRY COUNT^RNJ4,0^^0;9^K:+X'=X!(X>9999)!(X<1)!(X?.E1"."1N.N) X
+"^DD",800000,800000,.09,3)
+Type a number between 1 and 9999, 0 decimal digits.
+"^DD",800000,800000,.09,21,0)
+^^1^1^3170215^
+"^DD",800000,800000,.09,21,1,0)
+The number of times a batch can be allocated to a poller before lockdown occurs
+"^DD",800000,800000,.09,"DT")
+3170215
+"^DD",800000,800000,.1,0)
+URL^F^^.1;1^K:$L(X)>250!($L(X)<1) X
+"^DD",800000,800000,.1,3)
+Answer must be 1-250 characters in length.
+"^DD",800000,800000,.1,21,0)
+^^1^1^3160719^
+"^DD",800000,800000,.1,21,1,0)
+This is the fully qualified URL to call when updates are available.
+"^DD",800000,800000,.1,"DT")
+3160719
+"^DD",800000,800000,1,0)
+PATIENT^800000.01P^^1;0
+"^DD",800000,800000,1,21,0)
+^.001^1^1^3160718^^^^
+"^DD",800000,800000,1,21,1,0)
+This is a patient that will be monitored for new data and updates.
+"^DD",800000,800000,2,0)
+ROSTER^800000.02P^^2;0
+"^DD",800000,800000,2,21,0)
+^.001^1^1^3130417^^^^
+"^DD",800000,800000,2,21,1,0)
+This is a roster that will be monitored for new patients and updates.
+"^DD",800000,800000,2,"DT")
+3130417
+"^DD",800000,800000,91,0)
+CONCURRENT UPDATE CALLS^NJ3,0^^91;1^K:+X'=X!(X>999)!(X<0)!(X?.E1"."1N.N) X
+"^DD",800000,800000,91,3)
+Type a number between 0 and 999, 0 decimal digits.
+"^DD",800000,800000,91,21,0)
+^^3^3^3150218^
+"^DD",800000,800000,91,21,1,0)
+This field is used to track the number of simultaneous calls to 
+"^DD",800000,800000,91,21,2,0)
+getPtUpdates in API^HMPDJFS. This allows checkHealth to report if a 
+"^DD",800000,800000,91,21,3,0)
+getPtUpdates RPC is in progress.
+"^DD",800000,800000,91,"DT")
+3150218
+"^DD",800000,800000.01,0)
+PATIENT SUB-FIELD^^3^4
+"^DD",800000,800000.01,0,"DT")
+3160720
+"^DD",800000,800000.01,0,"NM","PATIENT")
+
+"^DD",800000,800000.01,0,"UP")
+800000
+"^DD",800000,800000.01,.01,0)
+PATIENT NAME^MP2'X^DPT(^0;1^S DINUM=X
+"^DD",800000,800000.01,.01,1,0)
+^.1^^0
+"^DD",800000,800000.01,.01,3)
+Enter the name of a patient to be tracked.
+"^DD",800000,800000.01,.01,21,0)
+^.001^1^1^3140212^^
+"^DD",800000,800000.01,.01,21,1,0)
+This is the name of the patient being monitored for new data.
+"^DD",800000,800000.01,.01,"DT")
+3140226
+"^DD",800000,800000.01,2,0)
+STATUS^S^0:UNINITIALIZED;1:INITIALIZING;2:INITIALIZED;^0;2^Q
+"^DD",800000,800000.01,2,3)
+Select the status for a patient sync. (Do Not Modify)
+"^DD",800000,800000.01,2,21,0)
+^^4^4^3160719^
+"^DD",800000,800000.01,2,21,1,0)
+This field tracks the initialization progress of the patient.  When a 
+"^DD",800000,800000.01,2,21,2,0)
+patient is initially subscribed, they are added to this multiple.  The 
+"^DD",800000,800000.01,2,21,3,0)
+status is "1" when the extracts start and "2" when they finish.  At that 
+"^DD",800000,800000.01,2,21,4,0)
+point, freshness updates are moved into the stream.
+"^DD",800000,800000.01,2,"DT")
+3160720
+"^DD",800000,800000.01,3,0)
+STATUS DATE/TIME^D^^0;3^S %DT="ESTXR" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.01,3,.1)
+
+"^DD",800000,800000.01,3,3)
+Enter the date/time the status changed.
+"^DD",800000,800000.01,3,21,0)
+^^1^1^3160722^
+"^DD",800000,800000.01,3,21,1,0)
+This is the date/time of the last change in extract status.
+"^DD",800000,800000.01,3,"DT")
+3160722
+"^DD",800000,800000.01,4,0)
+ORDERS^800000.14PA^^1;0
+"^DD",800000,800000.01,4,21,0)
+^^7^7^3160719^
+"^DD",800000,800000.01,4,21,1,0)
+This multiple contains order data needed by eHMP data storage. 
+"^DD",800000,800000.01,4,21,2,0)
+The data in the sub-file
+"^DD",800000,800000.01,4,21,3,0)
+are stored based on the date and time, including seconds,
+"^DD",800000,800000.01,4,21,4,0)
+for an action with the order. 
+"^DD",800000,800000.01,4,21,5,0)
+ 
+"^DD",800000,800000.01,4,21,6,0)
+All data in this sub-file are to be manipulated by software only.
+"^DD",800000,800000.01,4,21,7,0)
+Users should NOT edit any data without consulting with the developers.
+"^DD",800000,800000.02,0)
+ROSTER SUB-FIELD^^2^2
+"^DD",800000,800000.02,0,"NM","ROSTER")
+
+"^DD",800000,800000.02,0,"UP")
+800000
+"^DD",800000,800000.02,.01,0)
+NAME^MP800001.2'X^HMPROSTR(800001.2,^0;1^S DINUM=X
+"^DD",800000,800000.02,.01,1,0)
+^.1^^0
+"^DD",800000,800000.02,.01,3)
+Enter the name of a roster to be tracked.
+"^DD",800000,800000.02,.01,21,0)
+^.001^1^1^3130417^^
+"^DD",800000,800000.02,.01,21,1,0)
+This is the name of the roster being monitored for new patients.
+"^DD",800000,800000.02,.01,"DT")
+3130417
+"^DD",800000,800000.02,2,0)
+ON^S^1:YES;0:NO;^0;2^Q
+"^DD",800000,800000.02,2,3)
+Enter YES to turn on data tracking for this roster.
+"^DD",800000,800000.02,2,21,0)
+^.001^3^3^3130417^^
+"^DD",800000,800000.02,2,21,1,0)
+This field turns on the Data Monitor for this roster and client system.
+"^DD",800000,800000.02,2,21,2,0)
+If ON=true, a new snapshot of this roster will be sent to the client
+"^DD",800000,800000.02,2,21,3,0)
+when new data updates are requested.
+"^DD",800000,800000.02,2,"DT")
+3130417
+"^DD",800000,800000.14,0)
+ORDERS SUB-FIELD^^1.01^17
+"^DD",800000,800000.14,0,"DT")
+3160720
+"^DD",800000,800000.14,0,"IX","B",800000.14,.01)
+
+"^DD",800000,800000.14,0,"NM","ORDERS")
+
+"^DD",800000,800000.14,0,"UP")
+800000.01
+"^DD",800000,800000.14,.01,0)
+ORDER NUMBER^P100'X^OR(100,^0;1^S DINUM=X
+"^DD",800000,800000.14,.01,1,0)
+^.1
+"^DD",800000,800000.14,.01,1,1,0)
+800000.14^B
+"^DD",800000,800000.14,.01,1,1,1)
+S ^HMP(800000,DA(2),1,DA(1),1,"B",$E(X,1,30),DA)=""
+"^DD",800000,800000.14,.01,1,1,2)
+K ^HMP(800000,DA(2),1,DA(1),1,"B",$E(X,1,30),DA)
+"^DD",800000,800000.14,.01,3)
+Enter the Order number.
+"^DD",800000,800000.14,.01,21,0)
+^^5^5^3160719^
+"^DD",800000,800000.14,.01,21,1,0)
+All the data in this sub-file are entered programmatically.
+"^DD",800000,800000.14,.01,21,2,0)
+ 
+"^DD",800000,800000.14,.01,21,3,0)
+The data are used to create timestamps with seconds in order to correctly 
+"^DD",800000,800000.14,.01,21,4,0)
+sequence orders activities in the eHMP system. Two activities on an order 
+"^DD",800000,800000.14,.01,21,5,0)
+may occur within the same minute.
+"^DD",800000,800000.14,.01,"DT")
+3160719
+"^DD",800000,800000.14,.02,0)
+CREATE DATE/TIME^D^^0;2^S %DT="ESTX" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,.02,3)
+Enter the date and time the order was created.
+"^DD",800000,800000.14,.02,21,0)
+^.001^2^2^3151217^^^
+"^DD",800000,800000.14,.02,21,1,0)
+The date/time to include seconds that the order was created.
+"^DD",800000,800000.14,.02,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.02,"DT")
+3151216
+"^DD",800000,800000.14,.03,0)
+SIGNED BY^P200'^VA(200,^0;3^Q
+"^DD",800000,800000.14,.03,3)
+Enter the User who signed the order.
+"^DD",800000,800000.14,.03,21,0)
+^.001^2^2^3151217^^
+"^DD",800000,800000.14,.03,21,1,0)
+The person signing the order.
+"^DD",800000,800000.14,.03,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.03,"DT")
+3151216
+"^DD",800000,800000.14,.04,0)
+SIGNED DATE/TIME^D^^0;4^S %DT="ESTX" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,.04,3)
+Enter the date and time the order was signed.
+"^DD",800000,800000.14,.04,21,0)
+^^2^2^3160719^
+"^DD",800000,800000.14,.04,21,1,0)
+The date/time with seconds the order was signed. This field is entered
+"^DD",800000,800000.14,.04,21,2,0)
+programmatically.
+"^DD",800000,800000.14,.04,"DT")
+3160719
+"^DD",800000,800000.14,.05,0)
+VERIFYING NURSE^P200'^VA(200,^0;5^Q
+"^DD",800000,800000.14,.05,3)
+Enter the nurse who verified the order.
+"^DD",800000,800000.14,.05,21,0)
+^^2^2^3160719^
+"^DD",800000,800000.14,.05,21,1,0)
+The nurse verifying the order.
+"^DD",800000,800000.14,.05,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.05,"DT")
+3160719
+"^DD",800000,800000.14,.06,0)
+NURSE VERIFY DATE/TIME^D^^0;6^S %DT="ESTX" D ^%DT S X=Y K:X<1 X
+"^DD",800000,800000.14,.06,3)
+Enter the date and time the nurse verified the order.
+"^DD",800000,800000.14,.06,21,0)
+^^2^2^3160726^
+"^DD",800000,800000.14,.06,21,1,0)
+The date/time, including seconds, when the nurse verified the order. This
+"^DD",800000,800000.14,.06,21,2,0)
+field is entered programmatically.
+"^DD",800000,800000.14,.06,"DT")
+3160726
+"^DD",800000,800000.14,.07,0)
+VERIFYING CLERK^P200'^VA(200,^0;7^Q
+"^DD",800000,800000.14,.07,3)
+Enter the clerk who verified the order.
+"^DD",800000,800000.14,.07,21,0)
+^.001^2^2^3151217^^^
+"^DD",800000,800000.14,.07,21,1,0)
+The clerk who verified the order.
+"^DD",800000,800000.14,.07,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.07,"DT")
+3151216
+"^DD",800000,800000.14,.08,0)
+CLERK VERIFY DATE/TIME^D^^0;8^S %DT="ESTX" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,.08,3)
+Enter the date and time the clerk verified the order.
+"^DD",800000,800000.14,.08,21,0)
+^.001^2^2^3151217^^
+"^DD",800000,800000.14,.08,21,1,0)
+The date/time, including seconds, the clerk verified the order.
+"^DD",800000,800000.14,.08,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.08,"DT")
+3151217
+"^DD",800000,800000.14,.09,0)
+REVIEWED BY^P200'^VA(200,^0;9^Q
+"^DD",800000,800000.14,.09,3)
+Enter the user who reviewed the order.
+"^DD",800000,800000.14,.09,21,0)
+^.001^2^2^3151217^^^
+"^DD",800000,800000.14,.09,21,1,0)
+The user who reviewed the order.
+"^DD",800000,800000.14,.09,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.09,"DT")
+3151216
+"^DD",800000,800000.14,.1,0)
+REVIEWED DATE/TIME^D^^0;10^S %DT="ESTR" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,.1,3)
+Enter the date and time the order was reviewed.
+"^DD",800000,800000.14,.1,21,0)
+^^2^2^3160719^
+"^DD",800000,800000.14,.1,21,1,0)
+The date/time, including seconds, that the order was reviewed. This field
+"^DD",800000,800000.14,.1,21,2,0)
+is entered programmatically.
+"^DD",800000,800000.14,.1,"DT")
+3160719
+"^DD",800000,800000.14,.11,0)
+RELEASED BY^P200'^VA(200,^0;11^Q
+"^DD",800000,800000.14,.11,3)
+Enter the user who released the order.
+"^DD",800000,800000.14,.11,21,0)
+^.001^2^2^3151217^^
+"^DD",800000,800000.14,.11,21,1,0)
+The user who released the order.
+"^DD",800000,800000.14,.11,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.11,"DT")
+3151216
+"^DD",800000,800000.14,.12,0)
+RELEASED DATE/TIME^D^^0;12^S %DT="ESTX" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,.12,3)
+Enter the date and time the order was released.
+"^DD",800000,800000.14,.12,21,0)
+^^2^2^3160719^
+"^DD",800000,800000.14,.12,21,1,0)
+The date/time, including seconds, when the order was released. This field
+"^DD",800000,800000.14,.12,21,2,0)
+is entered programmatically.
+"^DD",800000,800000.14,.12,"DT")
+3160719
+"^DD",800000,800000.14,.13,0)
+PURGE DATE/TIME^D^^0;13^S %DT="ESTR" D ^%DT S X=Y K:X<1 X
+"^DD",800000,800000.14,.13,3)
+The date this order can be purged from the file.
+"^DD",800000,800000.14,.13,21,0)
+^.001^2^2^3151217^^
+"^DD",800000,800000.14,.13,21,1,0)
+The earliest date/time the order data can be purged.
+"^DD",800000,800000.14,.13,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.13,"DT")
+3160720
+"^DD",800000,800000.14,.14,0)
+ORDER ACTION^S^NW:NEW;DC:DISCONTINUED;HD:HOLD;RL:RELEASE HOLD;XX:CHANGE;VA:VALIDATE;IP:TRANSFERRED TO IP;OP:TRANSFERRED TO OP;^0;14^Q
+"^DD",800000,800000.14,.14,3)
+Enter the action performed on this order.
+"^DD",800000,800000.14,.14,21,0)
+^.001^2^2^3151217^^^
+"^DD",800000,800000.14,.14,21,1,0)
+The action taken on the order.
+"^DD",800000,800000.14,.14,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.14,.14,"DT")
+3151216
+"^DD",800000,800000.14,.15,0)
+ACTION DATE/TIME^D^^0;15^S %DT="ESTR" D ^%DT S X=Y K:X<1 X
+"^DD",800000,800000.14,.15,3)
+(No range limit on date)
+"^DD",800000,800000.14,.15,21,0)
+^^1^1^3160719^
+"^DD",800000,800000.14,.15,21,1,0)
+The date/time of the order action. This field is entered programmatically.
+"^DD",800000,800000.14,.15,"DT")
+3160720
+"^DD",800000,800000.14,1.01,0)
+TRACKING START^DI^^1;1^S %DT="ESTX" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.14,1.01,3)
+Enter the date and time that eHMP started tracking this Order.
+"^DD",800000,800000.14,1.01,21,0)
+^^2^2^3160126^
+"^DD",800000,800000.14,1.01,21,1,0)
+This field is set to NOW when the Order is first added to this sub-file.
+"^DD",800000,800000.14,1.01,21,2,0)
+It is uneditable.
+"^DD",800000,800000.14,1.01,"DT")
+3160126
+"^DD",800000,800000.14,2,0)
+ORDER FLAG/UNFLAG DATE/TIME^800000.142DA^^2;0
+"^DD",800000,800000.14,2,21,0)
+^^1^1^3160719^
+"^DD",800000,800000.14,2,21,1,0)
+This sub-file contains flagging/unflagging actions on orders.
+"^DD",800000,800000.14,2,"DT")
+3151216
+"^DD",800000,800000.142,0)
+ORDER FLAG/UNFLAG DATE/TIME SUB-FIELD^^.04^4
+"^DD",800000,800000.142,0,"DT")
+3151216
+"^DD",800000,800000.142,0,"IX","B",800000.142,.01)
+
+"^DD",800000,800000.142,0,"NM","ORDER FLAG/UNFLAG DATE/TIME")
+
+"^DD",800000,800000.142,0,"UP")
+800000.14
+"^DD",800000,800000.142,.01,0)
+ORDER FLAG/UNFLAG DATE/TIME^D^^0;1^S %DT="ESTR" D ^%DT S X=Y K:Y<1 X
+"^DD",800000,800000.142,.01,1,0)
+^.1
+"^DD",800000,800000.142,.01,1,1,0)
+800000.142^B
+"^DD",800000,800000.142,.01,1,1,1)
+S ^HMP(800000,DA(3),1,DA(2),1,DA(1),2,"B",$E(X,1,30),DA)=""
+"^DD",800000,800000.142,.01,1,1,2)
+K ^HMP(800000,DA(3),1,DA(2),1,DA(1),2,"B",$E(X,1,30),DA)
+"^DD",800000,800000.142,.01,3)
+Enter the date and time the order was flagged or unflagged.
+"^DD",800000,800000.142,.01,21,0)
+^^3^3^3160719^
+"^DD",800000,800000.142,.01,21,1,0)
+This is the date/time with seconds that an order was flagged /unflagged.
+"^DD",800000,800000.142,.01,21,2,0)
+This field is entered programmatically. An order can be flagged or
+"^DD",800000,800000.142,.01,21,3,0)
+unflagged multiple times.
+"^DD",800000,800000.142,.01,"DT")
+3160719
+"^DD",800000,800000.142,.02,0)
+FLAG ACTION^S^F:FLAGGED;U:UNFLAGGED;^0;2^Q
+"^DD",800000,800000.142,.02,3)
+Select the flagged action for this order.
+"^DD",800000,800000.142,.02,21,0)
+^^2^2^3160718^
+"^DD",800000,800000.142,.02,21,1,0)
+The flagging action, FLAGGED or UNFLAGGED.
+"^DD",800000,800000.142,.02,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.142,.02,"DT")
+3160720
+"^DD",800000,800000.142,.03,0)
+FLAG/UNFLAG USER^P200'^VA(200,^0;3^Q
+"^DD",800000,800000.142,.03,3)
+Enter the user who flagged or unflagged the order.
+"^DD",800000,800000.142,.03,21,0)
+^.001^2^2^3151217^^
+"^DD",800000,800000.142,.03,21,1,0)
+The user who flagged /unflagged the order.
+"^DD",800000,800000.142,.03,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.142,.03,"DT")
+3151216
+"^DD",800000,800000.142,.04,0)
+FLAG/UNFLAG REASON^F^^0;4^K:$L(X)>80!($L(X)<1) X
+"^DD",800000,800000.142,.04,.1)
+REASON FOR FLAGGING /UNFLAGGING
+"^DD",800000,800000.142,.04,3)
+Answer must be 1-80 characters.
+"^DD",800000,800000.142,.04,21,0)
+^.001^2^2^3151217^^^
+"^DD",800000,800000.142,.04,21,1,0)
+This is why the order was flagged /unflagged.
+"^DD",800000,800000.142,.04,21,2,0)
+This field is entered programmatically.
+"^DD",800000,800000.142,.04,"DT")
+3151216
+"^DIC",800000,800000,0)
+HMP SUBSCRIPTION^800000
+"^DIC",800000,800000,0,"GL")
+^HMP(800000,
+"^DIC",800000,800000,"%",0)
+^1.005^^0
+"^DIC",800000,800000,"%D",0)
+^^3^3^3160720^
+"^DIC",800000,800000,"%D",1,0)
+This file contains the data needed for eHMP data retrieval. The top level 
+"^DIC",800000,800000,"%D",2,0)
+fields store information about servers know to eHMP. Each patient's 
+"^DIC",800000,800000,"%D",3,0)
+subscription is stored in #800000.01 sub-file for a server.
+"^DIC",800000,"B","HMP SUBSCRIPTION",800000)
+
+**END**
+**END**

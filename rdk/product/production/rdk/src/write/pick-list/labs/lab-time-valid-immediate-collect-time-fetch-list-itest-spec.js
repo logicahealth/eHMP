@@ -16,8 +16,8 @@ describe('lab-time-valid-immediate-collect-time resource integration test', func
             context: 'OR CPRS GUI CHART',
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost'
         };
@@ -38,8 +38,8 @@ describe('lab-time-valid-immediate-collect-time resource integration test', func
             context: 'OR CPRS GUI CHART',
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: 'IP      ',
             localAddress: 'localhost'
         };

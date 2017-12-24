@@ -8,9 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import javax.persistence.Column;
 
 @Entity
-@Table(name = "ACTIVITYDB.AM_TASKINSTANCE")
+@Table(name = "AM_TASKINSTANCE", schema = "ACTIVITYDB")
 public class TaskInstanceImpl {
 	@Id
 	private long id;
@@ -35,6 +36,13 @@ public class TaskInstanceImpl {
 	private String history;
 	private String historyAction;
 	private String assignedTo;
+	/**
+	 * boolean indicating whether a user can act on a task before the earliestDate value
+	 *  true indicates that the user can start the task before earliestDate
+	 *  false indicates that the user can only start the task on or after its earliestDate
+	 */
+	@Column(name = "BEFORE_EARLIEST_DATE")
+	private boolean beforeEarliestDate;
 
 	@Transient
 	private List<TaskRouteImpl> routes;
@@ -50,7 +58,7 @@ public class TaskInstanceImpl {
 	public TaskInstanceImpl(long id, long processInstanceId, String icn, String taskName, String description,
 			int priority, boolean skippable, Date createdOn, int statusId, Date statusTimeStamp, String actualOwner,
 			Date dueDate, Date earliestDate, List<TaskRouteImpl> routes, String definitionId, String navigation, 
-			String permission, String assignedTo) {
+			String permission, String assignedTo, boolean beforeEarliestDate) {
 		this.id = id;
 		this.processInstanceId = processInstanceId;
 		this.icn = icn;
@@ -69,6 +77,7 @@ public class TaskInstanceImpl {
 		this.navigation = navigation;
 		this.permission = permission;
 		this.assignedTo = assignedTo;
+		this.beforeEarliestDate = beforeEarliestDate;
 	}
 
 //-----------------------------------------------------------------------------
@@ -282,18 +291,33 @@ public class TaskInstanceImpl {
 		this.assignedTo = assignedTo;
 	}
 	
+	/**
+	 * @return the beforeEarliestDate boolean value
+	 */
+	public boolean getBeforeEarliestDate() {
+		return beforeEarliestDate;
+	}
+
+	/**
+	 * @param the value to set for beforeEarliestDate
+	 */
+	public void setbeforeEarliestDate(boolean beforeEarliestDate) {
+		this.beforeEarliestDate = beforeEarliestDate;
+	}
+
 //-----------------------------------------------------------------------------
 //-----------------------toString----------------------------------------------
+// description field purposefully removed as it may contain patient-sensitive information
 //-----------------------------------------------------------------------------
 
 	@Override
 	public String toString() {
 		return "TaskInstanceImpl [id=" + id + ", processInstanceId=" + processInstanceId + ", icn=" + icn
-				+ ", taskName=" + taskName + ", description=" + description + ", priority=" + priority + ", skippable="
+				+ ", taskName=" + taskName + ", priority=" + priority + ", skippable="
 				+ skippable + ", createdOn=" + createdOn + ", statusId=" + statusId + ", statusTimeStamp="
 				+ statusTimeStamp + ", actualOwner=" + actualOwner + ", dueDate=" + dueDate + ", earliestDate="
 				+ earliestDate + ", definitionId=" + definitionId + ", navigation=" + navigation + ", permission="
 				+ permission + ", history=" + history + ", historyAction=" + historyAction + ", assignedTo="
-				+ assignedTo + ", routes=" + routes + "]";
+				+ assignedTo + ", beforeEarliestDate=" + beforeEarliestDate + ", routes=" + routes + "]";
 	}
 }

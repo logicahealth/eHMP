@@ -6,10 +6,10 @@ var _ = require('lodash');
 var fakeRequest = {
     app: {
         config: {
-            jbpm: {
+            oracledb: {
                 activityDatabase: {
-                    'user': 'REDACTED',
-                    'password': 'REDACTED',
+                    'user': 'USER',
+                    'password': 'PW',
                     'connectString': 'IP             /xe'
                 }
             },
@@ -20,11 +20,11 @@ var fakeRequest = {
         }
     },
     session: {
-        user: { //IP    
+        user: { //USER  
             duz: {
-                '9E7A': '10000000270'
+                'SITE': '10000000270'
             },
-            site: '9E7A'
+            site: 'SITE'
         }
     },
     logger: {
@@ -70,7 +70,7 @@ describe('tasks resource integration test', function() {
             done(err);
         };
 
-        var pid = '9E7A;3';
+        var pid = 'SITE;3';
 
         tasksResource.callJpid(fakeRequest, pid, cb);
     });
@@ -88,7 +88,7 @@ describe('tasks resource integration test', function() {
     it('checks for icn', function(done) {
         var spy = sinon.spy(tasksResource, 'callJpid');
 
-        var testPid = '9E7A;3';
+        var testPid = 'SITE;3';
 
         var cb2 = function(err, result) {
             expect(err).to.be(null);
@@ -103,8 +103,8 @@ describe('tasks resource integration test', function() {
     it('uses cached patient identifiers when passed', function(done) {
         var spy = sinon.spy(tasksResource, 'callJpid');
         var testIdentifiers = [
-            '9E7A;3',
-            'C877;3',
+            'SITE;3',
+            'SITE;3',
             'DOD;0000000003',
             'HDR;10108V420871',
             'JPID;07201c12-a760-41e7-b07b-99cbc2cb4132',
@@ -113,7 +113,7 @@ describe('tasks resource integration test', function() {
         var testIcn = '10108V420871';
         testIdentifiers.push(testIcn);
 
-        var testPid = '9E7A;3';
+        var testPid = 'SITE;3';
 
         var cb3 = function(err, result) {
             expect(err).to.be(null);
@@ -145,7 +145,7 @@ describe('tasks resource integration test', function() {
 
     //     tasksResource.buildTasksResponse([], [], fakeRequest, {
     //         subContext: 'teamroles',
-    //         facility: '9E7A',
+    //         facility: 'SITE',
     //         status: 'Created,Ready,Reserved,InProgress',
     //         startDate: '201406230000',
     //         endDate: '201612232359'
@@ -178,7 +178,7 @@ describe('tasks resource integration test', function() {
 
         var parameters = {
             subContext: 'teamroles',
-            facility: '9E7A',
+            facility: 'SITE',
             status: 'Created,Ready,Reserved,InProgress'
         };
 

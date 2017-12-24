@@ -7,90 +7,42 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 
 require 'AccessBrowserV2.rb'
 
-class ActiveMedications < AllApplets
-  include Singleton
-  attr_reader :appletid
-  def initialize
-    super
-    @appletid = 'activeMeds'
-    appletid_css = "[data-appletid=#{@appletid}]"
-    add_action(CucumberLabel.new("Amoxapine Tablet Detail View Icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[data-appletid=activeMeds]/descendant::a[@id='info-button-sidekick-detailView']"))
-    add_verify(CucumberLabel.new("Empty Record"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#{appletid_css} tr.empty"))
-    rows = AccessHtmlElement.new(:css, '#data-grid-activeMeds tbody tr.selectable')
-    add_verify(CucumberLabel.new('row count'), VerifyXpathCount.new(rows), rows)
-
-    add_action(CucumberLabel.new('first row'), ClickAction.new, AccessHtmlElement.new(:css, '#data-grid-activeMeds tbody tr.selectable:nth-child(1)'))
-
-    add_action(CucumberLabel.new('Applet Toolbar'), ClickAction.new, AccessHtmlElement.new(:id, 'info-button-template'))
-    add_action(CucumberLabel.new('Applet Toolbar Info'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button'))
-    add_action(CucumberLabel.new('Applet Toolbar Detail'), ClickAction.new, AccessHtmlElement.new(:css, '#info-button-template #info-button-sidekick-detailView'))
-    
-    # Modal elements
-    add_verify(CucumberLabel.new('Modal Title'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'mainModalLabel'))
-    add_verify(CucumberLabel.new('Order Hx'), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@class='order-historylist']/preceding-sibling::*"))
-    add_verify(CucumberLabel.new('Order Detail Panel'), VerifyText.new, AccessHtmlElement.new(:css, 'div.medication-detail'))
-
-    add_applet_buttons appletid_css  
-    add_applet_title appletid_css
-    add_toolbar_buttons
-
-    add_verify(CucumberLabel.new("Header - Medication"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-normalizedName] a"))
-    add_verify(CucumberLabel.new("Header - Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-vaStatus] a"))
-    add_verify(CucumberLabel.new("Header - Facility"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds [data-header-instanceid=activeMeds-facilityMoniker] a"))
-  end
-
-  def rows
-    TestSupport.driver.find_elements(:css, '#data-grid-activeMeds tbody tr.selectable')
-  end
-
-  def applet_loaded?
-    return true if am_i_visible? 'Empty Record'
-    return TestSupport.driver.find_elements(:css, '#data-grid-activeMeds tbody tr.selectable').length > 0
-  rescue => e 
-    # p e
-    false
-  end
-end
-
 Then(/^the Active & Recent Medications Applet table finishes loading$/) do
-  active_medications = ActiveMedications.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { active_medications.applet_loaded? }
-end
-
-Given(/^the Active & Recent Medications Applet displays at least (\d+) row$/) do |num_result|
-  active_medications = ActiveMedications.instance
-  expect(active_medications.wait_until_xpath_count_greater_than('row count', num_result.to_i)).to eq(true), "Test requires at least one result to verify functionality"
-end
-
-When(/^the user views the details for the first Active & Recent Medications$/) do
-  active_medications = ActiveMedications.instance
-  expect(active_medications.perform_action('first row')).to eq(true)
-  #expect(active_medications.perform_action('Applet Toolbar Detail')).to eq(true)
-  expect(active_medications.perform_action('Detail View Button')).to eq(true)
+  applet = PobActiveRecentMedApplet.new
+  wait.until { applet.summary_applet_loaded? }
 end
 
 Then(/^the modal title starts with "([^"]*)"$/) do |arg1|
-  active_medications = ActiveMedications.instance
-  expect(active_medications.perform_verification('Modal Title', arg1)).to eq(true)
+  modal = ModalElements.new
+  expect(modal.wait_for_fld_modal_title).to eq(true)
+  expect(modal.fld_modal_title.text.upcase).to start_with arg1.upcase
 end
 
 Then(/^the modal displays Order Hx$/) do
-  active_medications = ActiveMedications.instance
-  expect(active_medications.perform_verification('Order Hx', 'Order History')).to eq(true)
+  modal = ActiveRecentMedModal.new
+  expect(modal.wait_for_fld_order_history_label).to eq(true), "Expected a label for Order History"
+  expect(modal.fld_order_history_label.text.upcase).to eq('Order History'.upcase)
+  expect(modal.order_history_dates.length).to be > 0
 end
 
 Then(/^the modal displays Order Detail Panel$/) do
-  active_medications = ActiveMedications.instance
-  expect(active_medications.am_i_visible? 'Order Detail Panel').to eq(true)
+  modal = ActiveRecentMedModal.new
+  expect(modal.wait_for_fld_med_detail).to eq(true), "Expected modal to display a detail panel"
 end
 
 When(/^the Active Medications Applet table contains data rows$/) do
-  compare_item_counts("#data-grid-activeMeds tr")
+  applet = PobActiveRecentMedApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { applet.summary_applet_loaded? }
+  expect(applet.tbl_active_meds_grid.length).to be > 0
 end
 
 When(/^the Active Medications Gist Applet table contains data rows$/) do
-  compare_item_counts("[data-appletid=activeMeds] div.gist-item-list div.gist-item", 0)
+  applet = PobActiveRecentMedApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { applet.applet_gist_loaded? }
+  expect(applet.fld_active_meds_gist.length).to be > 0
 end
 
 When(/^user refreshes Active Medications Applet$/) do
@@ -102,21 +54,21 @@ Then(/^the message on the Active Medications Applet does not say "(.*?)"$/) do |
 end
 
 Then(/^the Active and Recent Medications applet is titled "([^"]*)"$/) do |title|
-  active_medications = ActiveMedications.instance
-  expect(active_medications.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(active_medications.perform_verification("Title", title)).to be_true
+  applet = PobActiveRecentMedApplet.new
+  expect(applet.wait_for_fld_applet_title).to eq(true), "Expected applet to display title"
+  expect(applet.fld_applet_title.text.upcase).to eq(title.upcase)
 end
 
 Then(/^the Active & Recent Medications Applet table contains headers$/) do |table|
-  active_medications = ActiveMedications.instance
-  table.headers.each do | row |
-    header = row
-    expect(active_medications.perform_verification("Header - #{header}", header)).to eq(true)
+  applet = PobActiveRecentMedApplet.new
+  applet_headers = applet.summary_headers_text
+  table.headers.each do | header |
+    expect(applet_headers).to include header
   end
 end
 
 When(/^the user navigates to the expanded Active Medications Applet$/) do
-  navigate_in_ehmp "#medication-review"
+  navigate_in_ehmp "#/patient/medication-review"
 end
 
 When(/^the user expands the Active & Recent Medications applet$/) do

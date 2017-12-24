@@ -1,16 +1,16 @@
 
 {{#if isReady}}
-	<button type="button" id="modal-start-button" title="Press enter to start task." class="btn btn-success doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
+	<button type="button" id="modal-start-button" class="btn btn-success doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
 		Start
 	</button>
 {{/if}}
 
 {{#if inProgress}}
-	<button type="button" id="modal-release-button" title="Press enter to release task." class="btn btn-info doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
+	<button type="button" id="modal-release-button" class="btn btn-info doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
 		Release
 	</button>
 
-	<button type="button" id="modal-complete-button" title="Press enter to complete." class="btn btn-success doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
+	<button type="button" id="modal-complete-button" class="btn btn-success doSomething" data-saving-text="<i class='fa fa-spinner fa-spin'></i> <span> Saving...</span>" data-started-text="Process Started">
 	{{#if isFollowUp}}
 		Follow Up
 	{{else}}
@@ -20,7 +20,7 @@
 {{/if}}
 
 
-<button type="button" data-dismiss="modal" id="modal-cancel-button" title="Press enter to close." class="btn btn-default">
+<button type="button" data-dismiss="modal" id="modal-cancel-button" class="btn btn-default">
 	{{#if isComplete}}
 		Close
 	{{else}}

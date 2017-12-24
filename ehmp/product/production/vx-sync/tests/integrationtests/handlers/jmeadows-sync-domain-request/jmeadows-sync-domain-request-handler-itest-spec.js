@@ -8,8 +8,8 @@ var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
 var jobStatusUpdaterDummy = require(global.VX_DUMMIES + '/JobStatusUpdaterDummy');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
-
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 // dummyLogger = require('bunyan').createLogger({
 //     name: 'test',
 //     level: 'debug'
@@ -24,7 +24,7 @@ var config = {
             path: '/dod/allergy',
             method: 'GET'
         }
-    },
+    }
 };
 
 var job = {

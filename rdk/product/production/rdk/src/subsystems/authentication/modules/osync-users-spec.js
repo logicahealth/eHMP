@@ -8,7 +8,7 @@ var logger = sinon.stub(require('bunyan').createLogger({
 var osyncUserData = require('./osync-users');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
-var SITE = '9E7A';
+var SITE = 'SITE';
 
 describe('Osync Users module', function() {
     var req;
@@ -50,7 +50,7 @@ describe('Osync Users module', function() {
                 site: SITE,
                 expires: expires,
                 duz: {
-                    '9E7A': 'new-osync-user'
+                    'SITE': 'new-osync-user'
                 }
             }
         };
@@ -70,7 +70,7 @@ describe('Osync Users module', function() {
                 site: SITE,
                 expires: expires,
                 duz: {
-                    '9E7A': 'new-osync-user'
+                    'SITE': 'new-osync-user'
                 }
             }
         };

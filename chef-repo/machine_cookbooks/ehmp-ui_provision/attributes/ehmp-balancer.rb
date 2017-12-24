@@ -8,9 +8,9 @@ default[:'ehmp-ui_provision'][:'ehmp-balancer'][:copy_files] = {}
 #######################################################################################################################
 # ehmp-balancer specific aws configuration options
 default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:instance_type] = "m3.medium"
-default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:subnet] = "subnet-213b2256"
-default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_username] = "REDACTED"
-default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_keyname] = "REDACTED"
+default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:subnet] = "DNS"
+default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_username] = "USER    "
+default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:'ehmp-ui_provision'][:'ehmp-balancer'][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

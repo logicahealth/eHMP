@@ -41,16 +41,20 @@ PATIDS ; Setup patient identifiers
  S ^VPRPTJ("JPID","2345V5432")="52833885-af7c-4899-90be-b3a6630b2370"
  Q
  ;
-JOBSTAT(JOB,ROOT,JPID,TYPE,STAMP,STATUS) ; Setup Job status JSON
- Q "{""jobId"": """_JOB_""",""rootJobId"": """_ROOT_""",""jpid"": """_JPID_""",""type"": """_TYPE_""",""timestamp"": """_STAMP_""",""payload"": { ""test"": ""true"" },""status"": """_STATUS_"""}"
-JOBSTATG(JOB,ROOT,JPID,TYPE,STAMP,STATUS) ; Setup Job status Global
- N VPRCNT
+JOBSTAT(JOB,ROOT,PIDTYPE,PID,TYPE,STAMP,STATUS) ; Setup Job status JSON
+ Q "{""jobId"": """_JOB_""",""rootJobId"": """_ROOT_""",""jpid"":"""_$$JPID4PID^VPRJPR(PID)_""",""patientIdentifier"":{""type"": """_PIDTYPE_""",""value"": """_PID_"""},""type"": """_TYPE_""",""timestamp"": """_STAMP_""",""payload"": { ""test"": ""true"" },""status"": """_STATUS_"""}"
+ ;
+JOBSTATG(JOB,ROOT,PIDTYPE,PID,TYPE,STAMP,STATUS) ; Setup Job status Global
+ N VPRCNT,JPID
  S ^VPRJOB(0)=$G(^VPRJOB(0))+1
  S VPRCNT=^VPRJOB(0)
+ S JPID=$$JPID4PID^VPRJPR(PID)
  S ^VPRJOB(VPRCNT,"jobId")=JOB
  S ^VPRJOB(VPRCNT,"jobId","\s")=""
  S ^VPRJOB(VPRCNT,"type")=TYPE
  S ^VPRJOB(VPRCNT,"jpid")=JPID
+ S ^VPRJOB(VPRCNT,"patientIdentifier","type")=PIDTYPE
+ S ^VPRJOB(VPRCNT,"patientIdentifier","value")=PID
  S ^VPRJOB(VPRCNT,"payload","test")="true"
  S ^VPRJOB(VPRCNT,"payload","test","\s")=""
  S ^VPRJOB(VPRCNT,"rootJobId")=ROOT
@@ -61,16 +65,18 @@ JOBSTATG(JOB,ROOT,JPID,TYPE,STAMP,STATUS) ; Setup Job status Global
  S ^VPRJOB("A",JPID,TYPE,ROOT,JOB,STAMP,STATUS)=VPRCNT
  S ^VPRJOB("B",VPRCNT)=JPID_"^"_TYPE_"^"_ROOT_"^"_JOB_"^"_STAMP_"^"_STATUS
  S ^VPRJOB("C",JOB,ROOT)=""
- S ^VPRJOB("D",JPID,TYPE,STAMP)=""
+ S ^VPRJOB("D",JPID,TYPE,STAMP,VPRCNT)=""
  Q
+ ;
+ ;
 JSONERR ;; @TEST Error code is set if JSON is mangled
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"created")
  S BODY(1)=BODY(1)_":"
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
@@ -78,14 +84,14 @@ JSONERR ;; @TEST Error code is set if JSON is mangled
  D ASSERT(202,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 202 reason code should have occurred")
  K ^||TMP
  Q
-JPIDERR ;; @TEST Error code is set if no JPID
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+JPIDERR ;; @TEST Error code is set if no JPID is resolved
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID=""
+ S PID=""
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
@@ -93,27 +99,27 @@ JPIDERR ;; @TEST Error code is set if no JPID
  K ^||TMP
  Q
 UNKJPIDERR ;; @TEST Error code is set if JPID is unknown
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2371"
+ S PID="ZZUT;5"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
- D ASSERT(224,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 224 reason code should have occurred")
+ D ASSERT(231,$G(^||TMP("HTTPERR",$J,1,"error","errors",1,"reason")),"An 231 reason code should have occurred")
  K ^||TMP
  Q
 ROOTERR ;; @TEST Error code is set if no rootJobId
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,"",JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,"","pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
@@ -121,13 +127,13 @@ ROOTERR ;; @TEST Error code is set if no rootJobId
  K ^||TMP
  Q
 JOBERR ;; @TEST Error code is set if no jobId
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT("",1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT("",1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
@@ -135,13 +141,13 @@ JOBERR ;; @TEST Error code is set if no jobId
  K ^||TMP
  Q
 STATUSERR ;; @TEST Error code is set if no status
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
@@ -149,13 +155,13 @@ STATUSERR ;; @TEST Error code is set if no status
  K ^||TMP
  Q
 STAMPERR ;; @TEST Error code is set if no timestamp
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=""
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(0,$D(^VPRJOB),"A Job Status exists and it should not")
  D ASSERT(404,$G(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP 404 error should have occured")
@@ -163,13 +169,13 @@ STAMPERR ;; @TEST Error code is set if no timestamp
  K ^||TMP
  Q
 VALIDERR ;; @TEST Error code is set if no the jobId and rootJobId pair doesn't match
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
- S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,2,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,2,"pid",PID,TYPE,STAMP,"created")
  ; Create a collision
  S ^VPRJOB("C",2,1)=""
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
@@ -181,13 +187,14 @@ VALIDERR ;; @TEST Error code is set if no the jobId and rootJobId pair doesn't m
  K ^||TMP
  Q
 SET1 ;; @TEST Storing one Job Status
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(10,$D(^VPRJOB),"A Job Status does not exist and it should")
  D ASSERT(10,$D(^VPRJOB(1)),"rootJobId does not exist")
@@ -222,13 +229,14 @@ SETPID ;; @TEST Storing one Job Status (with PID as identifier)
  D ASSERT(1,$D(^VPRJOB("C",2,1)),"C index does not exist correctly")
  Q
 SET2 ;; @TEST Storing two Job Status
- N RETURN,BODY,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N RETURN,BODY,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- S BODY(1)=$$JOBSTAT(2,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(2,1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(10,$D(^VPRJOB),"A Job Status does not exist and it should")
  D ASSERT(10,$D(^VPRJOB(1)),"rootJobId does not exist")
@@ -243,7 +251,7 @@ SET2 ;; @TEST Storing two Job Status
  D ASSERT(1,$D(^VPRJOB("C",2,1)),"C index does not exist correctly")
  S TYPE="jmeadows-vitals-sync-request"
  S STAMP=201412180711201
- S BODY(1)=$$JOBSTAT(3,1,JPID,TYPE,STAMP,"created")
+ S BODY(1)=$$JOBSTAT(3,1,"pid",PID,TYPE,STAMP,"created")
  S RETURN=$$SET^VPRJOB(.ARG,.BODY)
  D ASSERT(10,$D(^VPRJOB),"A Job Status does not exist and it should")
  D ASSERT(10,$D(^VPRJOB(2)),"rootJobId does not exist")
@@ -258,13 +266,14 @@ SET2 ;; @TEST Storing two Job Status
  D ASSERT(1,$D(^VPRJOB("C",3,1)),"C index does not exist correctly")
  Q
 GETJPID ;; @TEST retrieve one job status by JPID
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")=JPID
  D GET^VPRJOB(.DATA,.ARG)
  D DECODE^VPRJSON("DATA","OBJECT","ERR")
@@ -280,13 +289,14 @@ GETJPID ;; @TEST retrieve one job status by JPID
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETICN ;; @TEST retrieve one job status by ICN
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")="1234V4321"
  D GET^VPRJOB(.DATA,.ARG)
  D DECODE^VPRJSON("DATA","OBJECT","ERR")
@@ -302,13 +312,14 @@ GETICN ;; @TEST retrieve one job status by ICN
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETPID ;; @TEST retrieve one job status by PID
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")="ZZUT;3"
  D GET^VPRJOB(.DATA,.ARG)
  D DECODE^VPRJSON("DATA","OBJECT","ERR")
@@ -324,13 +335,14 @@ GETPID ;; @TEST retrieve one job status by PID
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETPIDA ;; @TEST retrieve one job status by PID (1ZZUT)
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="1ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")="1ZZUT;3"
  D GET^VPRJOB(.DATA,.ARG)
  D DECODE^VPRJSON("DATA","OBJECT","ERR")
@@ -346,13 +358,14 @@ GETPIDA ;; @TEST retrieve one job status by PID (1ZZUT)
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETJPIDROOT ;; @TEST retrieve one job status by JPID and rootJobId
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,PID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -369,13 +382,14 @@ GETJPIDROOT ;; @TEST retrieve one job status by JPID and rootJobId
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETICNROOT ;; @TEST retrieve one job status by ICN and rootJobId
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,JPID,ICN,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S ICN="1234V4321"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"icn",ICN,TYPE,STAMP,"created")
  S ARG("jpid")="1234V4321"
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -392,13 +406,14 @@ GETICNROOT ;; @TEST retrieve one job status by ICN and rootJobId
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETPIDROOT ;; @TEST retrieve one job status by PID and rootJobId
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")="ZZUT;3"
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -415,13 +430,14 @@ GETPIDROOT ;; @TEST retrieve one job status by PID and rootJobId
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETPIDAROOT ;; @TEST retrieve one job status by PID and rootJobId (1ZZUT)
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="1ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  S ARG("jpid")="1ZZUT;3"
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -438,15 +454,16 @@ GETPIDAROOT ;; @TEST retrieve one job status by PID and rootJobId (1ZZUT)
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETJPIDROOT2 ;; @TEST retrieve one job status by JPID and rootJobId with two on file
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  ; we should see the inprogress one
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"inprogress")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"inprogress")
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -463,15 +480,16 @@ GETJPIDROOT2 ;; @TEST retrieve one job status by JPID and rootJobId with two on 
  D ASSERT(STAMP+1,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETJPIDROOT2D ;; @TEST retrieve one job status by JPID and rootJobId with two different jobs on file
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,TYPE2,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,TYPE2,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vitals-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(3,1,JPID,TYPE2,STAMP+1,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(3,1,"pid",PID,TYPE2,STAMP+1,"created")
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -496,15 +514,16 @@ GETJPIDROOT2D ;; @TEST retrieve one job status by JPID and rootJobId with two di
  D ASSERT(STAMP+1,$G(OBJECT("items",2,"timestamp")),"timestamp is not correct")
  Q
 GETJPIDROOTC ;; @TEST retrieve one job status by JPID and rootJobId with job in completed state
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
  ; we should see the completed one
- D JOBSTATG(2,1,JPID,TYPE,STAMP+5,"completed")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+5,"completed")
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
  D GET^VPRJOB(.DATA,.ARG)
@@ -521,15 +540,16 @@ GETJPIDROOTC ;; @TEST retrieve one job status by JPID and rootJobId with job in 
  D ASSERT(STAMP+5,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETJPIDROOTJOB ;; @TEST retrieve one job status by JPID and rootJobId and JobId
- N OBJECT,DATA,ARG,U,TYPE,JPID,STAMP,TYPE2,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,STAMP,TYPE2,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vitals-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(3,1,JPID,TYPE2,STAMP+1,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(3,1,"pid",PID,TYPE2,STAMP+1,"created")
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
  S ARG("jobId")=3
@@ -560,7 +580,7 @@ SG1UUID ;; @TEST Store/Get one realistic Job Status with a jobId with a UUID
  ; Blows up decoding
  ;S BODY(1)="{ type: ""vista-ZZUT-data-poller"",patientIdentifier: { type: ""pid"", value: ""ZZUT;3"" },jpid: ""52833885-af7c-4899-90be-b3a6630b2369"",rootJobId: ""1"",jobId: ""520f4e0c-84e8-4d92-9793-23277ea357a6"",status: ""completed"",timestamp: ""1422485662841"" }"
  ; Quoted attributes
- ; ERR from deoding
+ ; ERR from decoding
  ;S BODY(1)="{ ""type"": 'vista-ZZUT-data-poller',""patientIdentifier"": { ""type"": 'pid', ""value"": 'ZZUT;3' },""jpid"": '52833885-af7c-4899-90be-b3a6630b2369',""rootJobId"": '1',""jobId"": '520f4e0c-84e8-4d92-9793-23277ea357a6',""status"": 'completed',""timestamp"": '1422485662841' }"
  ; Quoted attributes and strings
  S BODY(1)="{ ""type"": ""vista-ZZUT-data-poller"",""patientIdentifier"": { ""type"": ""pid"", ""value"": ""ZZUT;3"" },""jpid"": ""52833885-af7c-4899-90be-b3a6630b2369"",""rootJobId"": ""1"",""jobId"": ""520f4e0c-84e8-4d92-9793-23277ea357a6"",""status"": ""completed"",""timestamp"": ""1422485662841"" }"
@@ -593,19 +613,21 @@ SG1UUID ;; @TEST Store/Get one realistic Job Status with a jobId with a UUID
  D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp is not correct")
  Q
 DELPID ;; @TEST all jobs deleted for a JPID
- N OBJECT,DATA,ARG,U,TYPE,JPID,JPID2,STAMP,TYPE2
+ N OBJECT,DATA,ARG,U,TYPE,PID,JPID,PID2,JPID2,STAMP,TYPE2
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vitals-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(3,1,JPID,TYPE2,STAMP+1,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(3,1,"pid",PID,TYPE2,STAMP+1,"created")
  ; create data for 2nd patient
  S JPID2="52833885-af7c-4899-90be-b3a6630b2370"
- D JOBSTATG(4,2,JPID2,TYPE,STAMP,"created")
- D JOBSTATG(5,2,JPID2,TYPE2,STAMP+1,"created")
+ S PID2="ZZUT;4"
+ D JOBSTATG(4,2,"pid",PID2,TYPE,STAMP,"created")
+ D JOBSTATG(5,2,"pid",PID2,TYPE2,STAMP+1,"created")
  ; Ensure data for the first patient exists
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
@@ -671,12 +693,12 @@ DELPID ;; @TEST all jobs deleted for a JPID
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vitals-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(3,1,JPID,TYPE2,STAMP+1,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(3,1,"pid",PID,TYPE2,STAMP+1,"created")
  ; create data for 2nd patient
  S JPID2="52833885-af7c-4899-90be-b3a6630b2370"
- D JOBSTATG(4,2,JPID2,TYPE,STAMP,"created")
- D JOBSTATG(5,2,JPID2,TYPE2,STAMP+1,"created")
+ D JOBSTATG(4,2,"pid",PID2,TYPE,STAMP,"created")
+ D JOBSTATG(5,2,"pid",PID2,TYPE2,STAMP+1,"created")
  ; Ensure data for the first patient exists
  S ARG("jpid")=JPID
  S ARG("rootJobId")=1
@@ -740,16 +762,18 @@ DELPID ;; @TEST all jobs deleted for a JPID
  Q
  ;
 DELETEJPID ;; @TEST REST endpoint to delete all job statuses by JPID
- N ARG,JPID,JPID2,STAMP,TYPE,RESULT
+ N ARG,PID,JPID,PID2,JPID2,STAMP,TYPE,RESULT
  K ^VPRJOB
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S JPID2="52833885-af7c-4899-90be-b3a6630b2370"
+ S PID2="ZZUT;4"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(1,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"created")
- D JOBSTATG(3,2,JPID2,TYPE,STAMP,"created")
- D JOBSTATG(4,2,JPID2,TYPE,STAMP+1,"created")
+ D JOBSTATG(1,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"created")
+ D JOBSTATG(3,2,"pid",PID2,TYPE,STAMP,"created")
+ D JOBSTATG(4,2,"pid",PID2,TYPE,STAMP+1,"created")
  D ASSERT(10,$D(^VPRJOB("A",JPID)),"No jobs exist to test endpoint")
  S ARG("id")=JPID
  D DELETE^VPRJOB(.RESULT,.ARG)
@@ -759,16 +783,18 @@ DELETEJPID ;; @TEST REST endpoint to delete all job statuses by JPID
  D ASSERT(1,$D(^VPRJOB("A",JPID2,TYPE,2,4,STAMP+1,"created")),"jobId 4 for JPID: "_JPID2_" was deleted, and should not have been")
  Q
 DELETEICN ;; @TEST REST endpoint to delete all job statuses by ICN
- N ARG,JPID,JPID2,STAMP,TYPE,RESULT
+ N ARG,ICN,JPID,ICN2,JPID2,STAMP,TYPE,RESULT
  K ^VPRJOB
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S ICN="1234V4321"
  S JPID2="52833885-af7c-4899-90be-b3a6630b2370"
+ S ICN2="2345V5432"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(1,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"created")
- D JOBSTATG(3,2,JPID2,TYPE,STAMP,"created")
- D JOBSTATG(4,2,JPID2,TYPE,STAMP+1,"created")
+ D JOBSTATG(1,1,"icn",ICN,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"icn",ICN,TYPE,STAMP+1,"created")
+ D JOBSTATG(3,2,"icn",ICN2,TYPE,STAMP,"created")
+ D JOBSTATG(4,2,"icn",ICN2,TYPE,STAMP+1,"created")
  D ASSERT(10,$D(^VPRJOB("A",JPID)),"No jobs exist to test endpoint")
  S ARG("id")="1234V4321"
  D DELETE^VPRJOB(.RESULT,.ARG)
@@ -778,16 +804,18 @@ DELETEICN ;; @TEST REST endpoint to delete all job statuses by ICN
  D ASSERT(1,$D(^VPRJOB("A",JPID2,TYPE,2,4,STAMP+1,"created")),"jobId 4 for JPID: "_JPID2_" was deleted, and should not have been")
  Q
 DELETEPID ;; @TEST REST endpoint to delete all job statuses by PID
- N ARG,JPID,JPID2,STAMP,TYPE,RESULT
+ N ARG,PID,JPID,PID2,JPID2,STAMP,TYPE,RESULT
  K ^VPRJOB
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S JPID2="52833885-af7c-4899-90be-b3a6630b2370"
+ S PID2="ZZUT;4"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(1,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"created")
- D JOBSTATG(3,2,JPID2,TYPE,STAMP,"created")
- D JOBSTATG(4,2,JPID2,TYPE,STAMP+1,"created")
+ D JOBSTATG(1,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"created")
+ D JOBSTATG(3,2,"pid",PID2,TYPE,STAMP,"created")
+ D JOBSTATG(4,2,"pid",PID2,TYPE,STAMP+1,"created")
  D ASSERT(10,$D(^VPRJOB("A",JPID)),"No jobs exist to test endpoint")
  S ARG("id")="ZZUT;3"
  D DELETE^VPRJOB(.RESULT,.ARG)
@@ -798,15 +826,16 @@ DELETEPID ;; @TEST REST endpoint to delete all job statuses by PID
  Q
  ;
 DELJID ;; @TEST REST endpoint to delete a Job by ID
- N ARG,JPID,STAMP,TYPE,RESULT
+ N ARG,PID,JPID,STAMP,TYPE,RESULT
  K ^VPRJOB
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(1,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"completed")
- D JOBSTATG(3,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(4,1,JPID,TYPE,STAMP+1,"completed")
+ D JOBSTATG(1,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"completed")
+ D JOBSTATG(3,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(4,1,"pid",PID,TYPE,STAMP+1,"completed")
  D ASSERT(10,$D(^VPRJOB("A",JPID,TYPE,1)),"No jobs exist to test endpoint")
  D ASSERT(1,$D(^VPRJOB("A",JPID,TYPE,1,1,STAMP,"created")),"jobId 1 does not exist, but it should")
  D ASSERT(1,$D(^VPRJOB("C",1,1)),"jobId 1 does not exist, but it should")
@@ -828,18 +857,92 @@ DELJID ;; @TEST REST endpoint to delete a Job by ID
  D ASSERT(1,$D(^VPRJOB("C",4,1)),"jobId 4 does not exist, but it should")
  Q
  ;
-GETPIDFIL ;; @TEST retrieve non-completed job status by PID (uses filter)
- N OBJECT,DATA,ARG,U,TYPE,TYPE2,JPID,STAMP,HTTPERR
+GETJIDFIL ;; @TEST retrieve deleted enterprise-sync-request job status by PID (uses filter)
+ N OBJECT,DATA,ARG,U,TYPE,TYPE2,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
+ S TYPE="enterprise-sync-request"
+ S TYPE2="jmeadows-lab-sync-request"
+ S STAMP=201412180711200
+ D JOBSTATG(1,1,"pid",PID,TYPE,STAMP,"complete")
+ D JOBSTATG(2,1,"pid",PID,TYPE2,STAMP+1,"complete")
+ S ARG("jpid")="ZZUT;3"
+ S ARG("filter")="ilike(type,enterprise-sync-request)"
+ D GET^VPRJOB(.DATA,.ARG)
+ D DECODE^VPRJSON("DATA","OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ D ASSERT(10,$D(OBJECT),"No return from GET^VPRJOB and there should be")
+ D ASSERT(1,$G(OBJECT("items",1,"jobId")),"jobId does not exist, but it should")
+ D ASSERT(1,$G(OBJECT("items",1,"rootJobId")),"rootJobId does not exist, but it should")
+ D ASSERT(TYPE,$G(OBJECT("items",1,"type")),"jobType does not exist, but it should")
+ D ASSERT(JPID,$G(OBJECT("items",1,"jpid")),"jpid does not exist, but it should")
+ D ASSERT("complete",$G(OBJECT("items",1,"status")),"status does not exist, but it should")
+ D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist, but it should")
+ D ASSERT(0,$D(OBJECT("items",2)),"More items returned than expected")
+ D ASSERT(10,$D(^VPRJOB("D",JPID,"enterprise-sync-request",STAMP)),"enterprise-sync-request job does not exist, but it should")
+ D ASSERT(10,$D(^VPRJOB("D",JPID,"jmeadows-lab-sync-request",STAMP+1)),"jmeadows-lab-sync-request job does not exist, but it should")
+ K ARG,DATA
+ S ARG("jobid")=1
+ D DELJID^VPRJOB(.RESULT,.ARG)
+ S ARG("jpid")="ZZUT;3"
+ S ARG("filter")="ilike(type,enterprise-sync-request)"
+ D GET^VPRJOB(.DATA,.ARG)
+ D ASSERT(0,$D(DATA),"Return from GET^VPRJOB and there shouldn't be")
+ D ASSERT(0,$D(^VPRJOB("D",JPID,"enterprise-sync-request",STAMP)),"enterprise-sync-request job exists, but it shouldn't")
+ D ASSERT(10,$D(^VPRJOB("D",JPID,"jmeadows-lab-sync-request",STAMP+1)),"jmeadows-lab-sync-request job does not exist, but it should")
+ QUIT
+ ;
+GETJIDCFIL ;; @TEST retrieve deleted enterprise-sync-request job status by PID (uses complex filter)
+ N OBJECT,DATA,ARG,U,TYPE,TYPE2,PID,JPID,STAMP,HTTPERR
+ K ^VPRJOB
+ S U="^"
+ S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
+ S TYPE="enterprise-sync-request"
+ S TYPE2="jmeadows-lab-sync-request"
+ S STAMP=201412180711200
+ D JOBSTATG(1,1,"pid",PID,TYPE,STAMP,"complete")
+ D JOBSTATG(2,1,"pid",PID,TYPE2,STAMP+1,"complete")
+ S ARG("jpid")="ZZUT;3"
+ S ARG("filter")="or(eq(type,enterprise-sync-request),eq(type,jmeadows-lab-sync-request))"
+ D GET^VPRJOB(.DATA,.ARG)
+ D DECODE^VPRJSON("DATA","OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ D ASSERT(10,$D(OBJECT),"No return from GET^VPRJOB and there should be")
+ D ASSERT(1,$G(OBJECT("items",1,"jobId")),"jobId does not exist, but it should")
+ D ASSERT(1,$G(OBJECT("items",1,"rootJobId")),"rootJobId does not exist, but it should")
+ D ASSERT(TYPE,$G(OBJECT("items",1,"type")),"jobType does not exist, but it should")
+ D ASSERT(JPID,$G(OBJECT("items",1,"jpid")),"jpid does not exist, but it should")
+ D ASSERT("complete",$G(OBJECT("items",1,"status")),"status does not exist, but it should")
+ D ASSERT(STAMP,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist, but it should")
+ ; second item
+ D ASSERT(2,$G(OBJECT("items",2,"jobId")),"jobId does not exist, but it should")
+ D ASSERT(1,$G(OBJECT("items",2,"rootJobId")),"rootJobId does not exist, but it should")
+ D ASSERT(TYPE2,$G(OBJECT("items",2,"type")),"jobType does not exist, but it should")
+ D ASSERT(JPID,$G(OBJECT("items",2,"jpid")),"jpid does not exist, but it should")
+ D ASSERT("complete",$G(OBJECT("items",2,"status")),"status does not exist, but it should")
+ D ASSERT(STAMP+1,$G(OBJECT("items",2,"timestamp")),"timestamp does not exist, but it should")
+ D ASSERT(10,$D(^VPRJOB("D",JPID,"enterprise-sync-request",STAMP)),"enterprise-sync-request job does not exist, but it should")
+ D ASSERT(10,$D(^VPRJOB("D",JPID,"jmeadows-lab-sync-request",STAMP+1)),"jmeadows-lab-sync-request job does not exist, but it should")
+ QUIT
+ ;
+GETPIDFIL ;; @TEST retrieve non-completed job status by PID (uses filter)
+ N OBJECT,DATA,ARG,U,TYPE,TYPE2,PID,JPID,STAMP,HTTPERR
+ K ^VPRJOB
+ S U="^"
+ S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vital-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"complete")
- D JOBSTATG(3,2,JPID,TYPE2,STAMP,"created")
- D JOBSTATG(3,2,JPID,TYPE2,STAMP+1,"error")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"complete")
+ D JOBSTATG(3,2,"pid",PID,TYPE2,STAMP,"created")
+ D JOBSTATG(3,2,"pid",PID,TYPE2,STAMP+1,"error")
  S ARG("jpid")="ZZUT;3"
  S ARG("filter")="ne(status,complete)"
  D GET^VPRJOB(.DATA,.ARG)
@@ -856,16 +959,17 @@ GETPIDFIL ;; @TEST retrieve non-completed job status by PID (uses filter)
  D ASSERT(STAMP+1,$G(OBJECT("items",1,"timestamp")),"timestamp does not exist")
  Q
 GETPIDFILNEW ;; @TEST retrieve non-completed job status by PID (uses filter) ensure newest object
- N OBJECT,DATA,ARG,U,TYPE,TYPE2,JPID,STAMP,HTTPERR
+ N OBJECT,DATA,ARG,U,TYPE,TYPE2,PID,JPID,STAMP,HTTPERR
  K ^VPRJOB
  S U="^"
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="ZZUT;3"
  S TYPE="jmeadows-lab-sync-request"
  S STAMP=201412180711200
- D JOBSTATG(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG(2,1,JPID,TYPE,STAMP+1,"error")
- D JOBSTATG(3,2,JPID,TYPE,STAMP+4,"created")
- D JOBSTATG(3,2,JPID,TYPE,STAMP+5,"complete")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG(2,1,"pid",PID,TYPE,STAMP+1,"error")
+ D JOBSTATG(3,2,"pid",PID,TYPE,STAMP+4,"created")
+ D JOBSTATG(3,2,"pid",PID,TYPE,STAMP+5,"complete")
  S ARG("jpid")="ZZUT;3"
  S ARG("filter")="ne(status,complete)"
  D GET^VPRJOB(.DATA,.ARG)

@@ -31,10 +31,10 @@ public class Utils
 	{
 		if(str==null)
 			return true;
-		
+
 		if(str.length()==0)
 			return true;
-		
+
 		return false;
 	}
 
@@ -50,7 +50,7 @@ public class Utils
 		if (calendar == null) return null;
 
 		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-		
+
 		DATE_FORMAT.setCalendar(calendar);
 		return DATE_FORMAT.format(calendar.getTime());
 	}
@@ -63,12 +63,12 @@ public class Utils
 		try
 		{
 			LOG.debug("Utils.stringToXMLGregorianCalendar - Input string: " + s);
-			
+
 			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-			
+
 			Date dateWithoutTimeZone = DATE_FORMAT.parse(s);
 			LOG.debug("Utils.stringToXMLGregorianCalendar - Java Date (without setting time zone) : " + dateWithoutTimeZone.toString());
-			
+
 			TimeZone serverTimeZone = TimeZone.getDefault();
 			DATE_FORMAT.setTimeZone(serverTimeZone);
 			Date date = DATE_FORMAT.parse(s);
@@ -126,4 +126,13 @@ public class Utils
 	    }
 	}
 
+	/**
+	 * Avoid log forging by replacing newlines with underscores.
+	 */
+	public static String avoidLogForging(String s) {
+		if (s != null) {
+			s = s.replace('\n', '_').replace('\r', '_');
+		}
+		return s;
+	}
 }

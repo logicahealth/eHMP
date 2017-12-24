@@ -1,31 +1,32 @@
 require_relative 'parent_applet.rb'
 
 class PobTimeline < PobParentApplet
-  set_url '/#news-feed'
-  set_url_matcher(/\/#news-feed/)
+  set_url '#/patient/news-feed'
+  set_url_matcher(/news-feed/)
 
-  # *****************  All_Form_Elements  ******************* #
-  # *****************  All_Logo_Elements  ******************* #
-  # *****************  All_Field_Elements  ******************* #
   element :fld_timeline_heading, "#news-feed .applet-chrome-header"
-  elements :td_date_column, '#data-grid-newsfeed tr.selectable td:nth-of-type(1)'
-  elements :td_date_column_screenreader, '#data-grid-newsfeed tr.selectable td:nth-of-type(1) span' 
-  elements :tbl_timeline_table_data, "#data-grid-newsfeed tr.selectable"
-  # *****************  All_Button_Elements  ******************* #
+  element :fld_date_column_header, "[data-header-instanceid='newsfeed-activityDateTime'] a"
+  elements :td_date_column, '[data-appletid=newsfeed] tbody tr.selectable td:nth-of-type(2)'
+  element :fld_type_column_header, "[data-header-instanceid='newsfeed-displayType'] a"
+  elements :td_type_column, "#content-region [data-appletid=newsfeed] [id^=data-grid-applet-] tr.selectable td:nth-child(4)"
+  element :fld_facility_column_header, "[data-header-instanceid='newsfeed-facilityName'] a"
+  elements :td_facility_column, "#content-region [data-appletid=newsfeed] [id^=data-grid-applet-] tr.selectable td:nth-child(6)" 
+  elements :tbl_timeline_table_data, "[data-appletid=newsfeed] table tr.selectable"
+  elements :group_header_rows, "[data-appletid=newsfeed] tbody tr.group-by-header"
+  elements :group_header_btns, "[data-appletid=newsfeed] tbody tr.group-by-header td.group-by-header button" 
+  elements :groupd_header_badges_nothidden, "[data-appletid=newsfeed] tbody tr.group-by-header .group-by-count-badge:not(.hidden)"
 
-  # *****************  All_Drop_down_Elements  ******************* #
+  elements :discharged_admission_rows, :xpath, "//*[@data-appletid='newsfeed']/descendant::td[2 and starts-with(string(), 'Discharged')]/following-sibling::td[3 and string()='Admission']/parent::tr"
 
-  # *********************  Methods  ***************************#
-  
   def initialize
     super
-    appletid_css = "[data-instanceid='newsfeed']"
+    appletid_css = "[data-appletid='newsfeed']"
     add_applet_buttons appletid_css
     add_title appletid_css
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
   end
 
   def applet_loaded?
@@ -34,16 +35,20 @@ class PobTimeline < PobParentApplet
     false
   end
 
-  def date_column_text_only
-    dates_screenreader_text = td_date_column
-    screenreader_text = td_date_column_screenreader[0]
-    dates_only = []
-    dates_screenreader_text.each_with_index do | td_element, index |
-      date = td_element.text
-      date = date.sub(screenreader_text.text, '')
-      dates_only.push(date.strip)
-    end
-    dates_only
+  def all_types(type_text)
+    self.class.elements :type_tds, :xpath, "//*[@data-appletid='newsfeed']/descendant::td[3 and string()='#{type_text}']"
+    self.class.elements :type_rows, :xpath, "//*[@data-appletid='newsfeed']/descendant::td[3 and string()='#{type_text}']/parent::tr"
+  end
+
+  def all_activity_types(activity, type)
+    td_path = "//*[@data-appletid='newsfeed']/descendant::td[3 and string()='#{type}']/parent::tr/descendant::td[2 and string()='#{activity}']"
+    p td_path
+    self.class.elements :type_tds, :xpath, td_path
+    self.class.elements :type_rows, :xpath, "#{td_path}/parent::tr"
+  end
+
+  def date_column_text_only    
+    td_date_column.map { | element| element.text.strip }
   end
 
   def verify_date_time_sort_selectable(reverse_chronilogical)
@@ -58,7 +63,7 @@ class PobTimeline < PobParentApplet
 
       date_only = date_format.match(columns[i]).to_s
       lower = Date.strptime(date_only, format)
-      p "Comparing #{higher}  with #{lower}"
+      #p "Comparing #{higher}  with #{lower}"
 
       check_alpha = reverse_chronilogical ? ((higher >= lower)) : ((higher <= lower))
       p "#{higher} #{for_error_message} #{lower}" unless check_alpha

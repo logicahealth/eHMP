@@ -18,7 +18,7 @@ define([
                     orderId: orderId
                 }, _.get(params, 'model.attributes', {}));
 
-                var orderDetailModel = new ADK.UIResources.Writeback.Orders.Detail(options);
+                var orderDetailModel = new ADK.UIResources.Fetch.Orders.Detail(options);
                 var view = ModalContentView;
                 var ViewDef = view.extend({
                     model: orderDetailModel,

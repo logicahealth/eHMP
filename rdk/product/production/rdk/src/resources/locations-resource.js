@@ -47,7 +47,7 @@ function searchLocation(locationType, req, res) {
     /*
     locationUid come from /data/index/locations-{clinics,wards}
 
-    location uid example: urn:va:location:C877:158
+    location uid example: urn:va:location:SITE:158
     location uids have a site code and the ien of a 'hospital location' file,
     which is not a clinic or ward.
 
@@ -79,7 +79,7 @@ function searchLocation(locationType, req, res) {
     }
     if (locationType === 'ward') {
         parameters = [locationUtil.getLocationIEN(location)];
-        vistaRpc = 'ORWPT BYWARD';
+        vistaRpc = 'DGWPT BYWARD';
     }
     var hasDGAccess = _.result(req, 'session.user.dgSensitiveAccess', 'false') === 'true';
 

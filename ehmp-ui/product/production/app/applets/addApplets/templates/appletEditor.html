@@ -1,0 +1,34 @@
+<div class='container-fluid workspace-editor-container all-margin-xl' role='application'>
+    <div class='row panel-heading'>
+        <div class='col-xs-11'>
+            <h2>Workspace Editor</h2>
+        </div>
+        <div class='col-xs-1 text-right'>
+            <span class='help-button-container'></span>
+            <button type='button' id='editorFilterBtn' data-toggle='collapse' data-target='#workspace-editor-filter'
+                    class='btn btn-icon collapsed' title='Applet Filter'>
+                <i class='fa fa-filter'></i>
+            </button>
+        </div>
+    </div>
+    <div class='row'>
+        <div id='workspace-editor-filter' class='col-xs-12 grid-filter collapse'></div>
+    </div>
+    <div class='row'>
+        <div class='applet-tray'></div>
+    </div>
+    <div class='row'>
+        <div class='applet-gridster'>
+            <h4 id='screen-title'>{{screenTitle}}</h4>
+            <div class='boundary-indicator'>
+                <div class='wireframe'>
+                </div>
+                <h5>Current Screen View</h5>
+            </div>
+            <div class='gridsterContainer'>
+                <div id='gridster2' class='gridster'></div>
+            </div>
+        </div>
+    </div>
+    <div class='row panel-footer add-applets--footer-region'></div>
+</div>

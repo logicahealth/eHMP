@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_appointment  @reg1
+@F295_encounters_trend_view_appointment @applet_encounters @reg1
 Feature: F295 - Encounters Applet - Appointment 
 
 Background:

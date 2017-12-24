@@ -32,7 +32,14 @@ tasks.each { taskName ->
 		include ':production:jbpm:Activity'
 		include ':production:jbpm:tasksservice'
 		include ':production:jbpm:EhmpServices'
-		include ':production:jbpm:sql_config'
 		include ':production:jbpm:JbpmUtils'
+		include ':production:oracle'
+		include ':production:oracle:sql_config'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("oracledev") || formattedTaskName.contains("destroyoracle"))
+	{
+		//oracle
+		include ':production:oracle'
+		include ':production:oracle:sql_config'
 	}
 }

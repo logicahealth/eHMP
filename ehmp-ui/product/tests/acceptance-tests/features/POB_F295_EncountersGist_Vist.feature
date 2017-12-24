@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_visit  @reg1
+@F295_encounters_trend_view_visit @applet_encounters @reg1
 Feature: F295 - Encounters Applet - Visit 
 
 Background:
@@ -23,9 +23,9 @@ Scenario: Encounters trend view Applet displays encounter type Visit
  
 @pob_f295_encounter_trend_view_visit_arrow 
 Scenario: Encounters trend view Applet displays a dynamic arrow for encounter type Visit
-  And Encounters trend view applet displays a dynamic arrow in "right" position
+  And Encounters trend view applet displays a dynamic arrow in right position
   When the user expands type Visits in Encounters trend view applet
-  Then Encounters trend view applet displays a dynamic arrow in "down" position
+  Then Encounters trend view applet displays a dynamic arrow in down position
   
 @pob_f295_visit_detail_view @DE6882 
 Scenario: Encounters trend view applet Visit type details can be viewed

@@ -912,24 +912,27 @@ any data added to them will be ignored outright.  -->
         <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 
         <!-- Consult Clinical Object -->
-        <field name="consult_name" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_name" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
         <field name="consult_orders_override_reason" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
         <field name="consult_orders_order_result_comment" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
         <field name="consult_orders_conditions" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
         <field name="consult_orders_request" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
         <field name="consult_orders_comment" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
         <field name="consult_orders_accepting_provider_uid" type="string" indexed="false" stored="true" multiValued="false"/>
-        <field name="consult_orders_accepting_provider_display_name" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="consult_orders_accepting_provider_display_name" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
         <field name="consult_orders_order_results_order_name" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
-        <field name="consult_orders_order_results_order_status" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="consult_orders_order_results_order_status" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
         <field name="consult_orders_accepted_date" type="string" indexed="true" stored="true" multiValued="false"/>
         <field name="activity_process_instance_id" type="string" indexed="true" stored="true" multiValued="false"/>
         <field name="activity_source_facility_id" type="string" indexed="true" stored="true" multiValued="false"/>
+        <field name="schedules_comment" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="triages_comment" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="signals_data_comment" type="text_clinical" indexed="true" stored="true" multiValued="false"/>
 
         <!-- Request Clinical Object -->
         <field name="request_title" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
         <field name="request_text" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
-        <field name="request_response" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+        <field name="response_request" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
         <field name="request_accepted_date" type="string" indexed="true" stored="true" multiValued="true"/>
 
         <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
@@ -1160,11 +1163,14 @@ or to add multiple fields to the same field for easier/faster searching.  -->
       <copyField source="consult_orders_accepted_date" dest="all"/>
       <copyField source="activity_process_instance_id" dest="all"/>
       <copyField source="activity_source_facility_id" dest="all"/>
+      <copyField source="schedules_comment" dest="all"/>
+      <copyField source="triages_comment" dest="all"/>
+      <copyField source="signals_data_comment" dest="all"/>
 
       <!-- Request Clinical Object -->
       <copyField source="request_title" dest="all"/>
       <copyField source="request_text" dest="all"/>
-      <copyField source="request_response" dest="all"/>
+      <copyField source="response_request" dest="all"/>
       <copyField source="request_accepted_date" dest="all"/>
 
 

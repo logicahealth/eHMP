@@ -201,7 +201,7 @@ define([
             var people = new ADK.UIResources.Picklist.Team_Management.PeopleAtAFacility();
 
             var AuthencationList = Backbone.Collection.extend({
-                url: ADK.ResourceService.buildUrl('authentication-list')
+                url: ADK.ResourceService.buildUrl('facility-list')
             });
 
             new AuthencationList()
@@ -312,7 +312,7 @@ define([
                         break;
                     case 'contacted':
                         requiredFields = [
-                            $.trim(model.get('contactAttempt'))
+                            $.trim(model.get('attempt'))
                         ];
                         break;
                     case 'clarification':
@@ -369,7 +369,7 @@ define([
                 this.$el.trigger('tray.loaderShow',{
                     loadingString:'Accepting'
                 });
-            } 
+            }
         },
         mapUrgencyCodeToName: function(model) {
             var urgency = model.get('urgency');

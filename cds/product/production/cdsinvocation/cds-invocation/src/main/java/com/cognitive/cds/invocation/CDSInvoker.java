@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
@@ -147,7 +146,7 @@ public class CDSInvoker implements CDSInvocationIFace {
 	 *
 	 */
 	@Override
-	public ResultBundle invoke(InvocationTarget invocationTarget, Context context, Properties parameters, Object inputDataModel) {
+	public ResultBundle invoke(InvocationTarget invocationTarget, Context context, Map<String, Object> parameters, Object inputDataModel) {
 
 		String serializedDataModel = "";
 
@@ -312,7 +311,7 @@ public class CDSInvoker implements CDSInvocationIFace {
 	                        if ( invocationMapping.getCrsResolverRequired() != null && invocationMapping.getCrsResolverRequired() ) {
 	                            // Initialize parameters if none are incoming, else can continue on and add to object as needed.
 	                            if (parameters == null) {
-	                                parameters = new Properties();
+	                                parameters = new HashMap<>();
 	                            }
 	                            // check the availability of CRS service
 	                            if( !checkServiceAvailable(crsResolver.getCRSClient().getCRSServer()) ) {
@@ -442,7 +441,7 @@ public class CDSInvoker implements CDSInvocationIFace {
 		return resultBundle;
 	}
 
-	private void executeSparqlQuery(String siteCode, Properties parameters,
+	private void executeSparqlQuery(String siteCode, Map<String, Object> parameters,
 			HashMap<String, LabOrderableSparqlResult> enterpriseToLocalLabCodeMap, List<Prerequisite> allPrereqs) {
 		allPrereqs.forEach( prereq -> { 
 			LabSparqlResults valueSetResults = null;

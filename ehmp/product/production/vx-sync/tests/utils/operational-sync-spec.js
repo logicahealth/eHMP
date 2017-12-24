@@ -8,7 +8,7 @@ var async = require('async');
 
 var request = require('request');
 
-var siteList = process.env.VXSYNC_SITELIST || ('9E7A,C877');
+var siteList = process.env.VXSYNC_SITELIST || ('SITE,SITE');
 var timeoutSecs = Number(process.env.VXSYNC_OPD_TIMEOUT_SECS) || 900;
 var host = process.env.JDS_IP || 'IP        ';
 var port = Number(process.env.JDS_PORT) || PORT;

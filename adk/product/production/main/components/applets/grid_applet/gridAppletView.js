@@ -213,9 +213,13 @@ define([
                 summaryViewOptions.collection = this.dataGridOptions.collection;
                 summaryViewOptions.appletConfig = this.appletConfig;
 
-                this.dataGridView = new this.dataGridOptions.SummaryView(summaryViewOptions);
+                this.dataGridView = new this.dataGridOptions.SummaryView(_.extend(summaryViewOptions, {
+                    tileOptions: this.getOption('tileOptions')
+                }));
             } else {
-                this.dataGridView = new this.DataGrid(this.dataGridOptions);
+                this.dataGridView = new this.DataGrid(_.extend(this.dataGridOptions, {
+                    tileOptions: this.getOption('tileOptions')
+                }));
             }
         },
         onRender: function() {
@@ -407,7 +411,7 @@ define([
                     var $el = this.$(el);
                     $el.attr({
                         'data-infobutton': $el.find('td:first').text(),
-                    }).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
+                    });
                 }, this);
             }
         },

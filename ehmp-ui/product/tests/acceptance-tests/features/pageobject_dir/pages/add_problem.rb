@@ -5,7 +5,50 @@ class AddProblemsDeleteCommentAlert < PobAlert
   element :btn_okay, '.modal-footer .no-button'
 end
 
-class AddProblemsTrayModal < SitePrism::Page 
+class CommonProblemElements < SitePrism::Page 
+  element :fld_problem_name_label, '.select-problem-container p:nth-of-type(1) strong'
+  element :fld_problem_name, ".select-problem-container p:nth-of-type(2)"
+
+  element :rbn_status_active, '.statusRadioValue [id$=A-ACTIVE]'
+  element :rbn_status_inactive, '.statusRadioValue [id$=I-INACTIVE]'
+  element :fld_status_label, "div.statusRadioValue p.faux-label"
+
+  element :rbn_acuity_acute, '.immediacyRadioValue [id$=A-ACUTE]'
+  element :rbn_acuity_chronic, '.immediacyRadioValue [id$=C-CHRONIC]'
+  element :rbn_acuity_unknown, '.immediacyRadioValue [id$=U-UNKNOWN]'
+  element :fld_acuity_label, "div.immediacyRadioValue p.faux-label"
+  element :fld_onset_date, '#onsetDate'
+  element :fld_onset_date_label, "label[for='onsetDate']"
+  element :fld_clinic, '.select-control.clinic [id^=clinic]'
+  element :fld_clinic_label, ".select-control.clinic label"
+  element :fld_selected_clinic, "[id^='select2-clinic']"
+  element :fld_responsible_provider, '.select-control.resProvider [id^=resProvider]'
+  element :fld_responsible_provider_label, ".select-control.resProvider label"
+  element :fld_responsible_provider_instruction, "ul[id ^='select2-resProvider'] li.select2-results__message"
+  elements :fld_responsible_provider_list, "ul[id^='select2-resProvider'] li:not(.select2-results__message)"
+
+  def all_common_there?
+    return false unless has_fld_problem_name_label?
+    return false unless has_rbn_status_active?
+    return false unless has_rbn_status_inactive?
+    return false unless has_fld_status_label?
+
+    return false unless has_rbn_acuity_acute?
+    return false unless has_rbn_acuity_chronic?
+    return false unless has_rbn_acuity_unknown?
+    return false unless has_fld_acuity_label?
+
+    return false unless has_fld_onset_date?
+    return false unless has_fld_onset_date_label?
+    return false unless has_fld_clinic?
+    return false unless has_fld_clinic_label?
+    return false unless has_fld_responsible_provider?
+    return false unless has_fld_responsible_provider_label?
+    true
+  end
+end
+
+class AddProblemsTrayModal < CommonProblemElements
   # ****************  first modal **************** #
   element :btn_keep_previous, '#keepProblemBtn'
   element :fld_search_problem, "#problemTerm"
@@ -15,36 +58,15 @@ class AddProblemsTrayModal < SitePrism::Page
   element :btn_extend_search, '#extendedSearchBtn'
   element :btn_free_text, '#freeTxtBtn'
   element :fld_result_message, '.problem-results-message-container'
+  elements :fld_search_results_tree_node, '.problem-results-container li.tree-node'
   elements :fld_selectable_problems, '.problem-results-container ul[role=tree] > li.tree-leaf div'
 
   # ****************  second modal *************** #
   element :btn_select_new_problm, '#changeProblemBtn'
-  element :fld_problem_name_label, '.select-problem-container p:nth-of-type(1) strong'
-  element :fld_problem_name, ".select-problem-container p:nth-of-type(2)"
 
   element :fld_freetext_problem_name_label, '.free-text-container p:nth-of-type(1) strong'
   element :fld_freetext_problem_name, '.free-text-container p:nth-of-type(1)'
   
-  element :rbn_status_active, '.statusRadioValue [id$=A-ACTIVE]'
-  element :rbn_status_inactive, '.statusRadioValue [id$=I-INACTIVE]'
-  element :fld_status_label, "div.statusRadioValue p.faux-label"
-
-  element :rbn_acuity_acute, '.immediacyRadioValue [id$=A-ACUTE]'
-  element :rbn_acuity_chronic, '.immediacyRadioValue [id$=C-CHRONIC]'
-  element :rbn_acuity_unknown, '.immediacyRadioValue [id$=U-UNKNOWN]'
-  element :fld_acuity_label, "div.immediacyRadioValue p.faux-label"
-
-  element :fld_onset_date, '#onsetDate'
-  element :fld_onset_date_label, "label[for='onsetDate']"
-
-  element :fld_clinic, '.select-control.clinic [id^=clinic]'
-  element :fld_clinic_label, ".select-control.clinic label"
-  element :fld_selected_clinic, "[id^='select2-clinic']"
-
-  element :fld_responsible_provider, '.select-control.resProvider [id^=resProvider]'
-  element :fld_responsible_provider_label, ".select-control.resProvider label"
-  element :fld_responsible_provider_instruction, "ul[id ^='select2-resProvider'] li.select2-results__message"
-  elements :fld_responsible_provider_list, "ul[id^='select2-resProvider'] li:not(.select2-results__message)"
   element :fld_treatment_factors_label, :xpath, "//div[contains(@class, 'bottom-margin-md')]/descendant::strong[(string() = 'Treatment Factors')]"
   element :rbn_service_contected_yes, '#treatmentFactors-serviceConnected-true-0'
   element :rbn_service_contected_no, '#treatmentFactors-serviceConnected-false-1'
@@ -101,6 +123,17 @@ class AddProblemsTrayModal < SitePrism::Page
     return -1
   end
 
+  def unique_tree_items(index)
+    unique_tree_node = "//*[contains(@class, 'problem-results-container')]/descendant::li[contains(@class, 'tree-node')][#{index}]"
+    self.class.element :unique_tree_node, :xpath, "#{unique_tree_node}/descendant::i"
+    self.class.elements :unique_tree_leaves, :xpath, "#{unique_tree_node}/descendant::li"
+    self.class.element :unique_first_leaf, :xpath, "#{unique_tree_node}/descendant::*[contains(@class, 'tree-leaf')][1]"
+  end
+
+  def define_tree_node(problem_name)
+    self.class.element :fld_search_result_tree_node, :xpath, "//li[contains(@class, 'tree-node')]/descendant::div[(text()='#{problem_name}')]/preceding-sibling::i[contains(@class, 'node-icon')]"
+  end
+
   def problem_search_result(problem_result_text)
     self.class.element :fld_search_result, :xpath, "//div[contains(@class, 'problemResults')]/descendant::li[contains(@class, 'tree-leaf')]/descendant::div[(text()='#{problem_result_text}')]"
   end
@@ -111,23 +144,7 @@ class AddProblemsTrayModal < SitePrism::Page
 
   def all_required_there?
     return false unless has_btn_select_new_problm?
-    return false unless has_fld_problem_name_label?
-    return false unless has_rbn_status_active?
-    return false unless has_rbn_status_inactive?
-    return false unless has_fld_status_label?
-
-    return false unless has_rbn_acuity_acute?
-    return false unless has_rbn_acuity_chronic?
-    return false unless has_rbn_acuity_unknown?
-    return false unless has_fld_acuity_label?
-
-    return false unless has_fld_onset_date?
-    return false unless has_fld_onset_date_label?
-    return false unless has_fld_clinic?
-    return false unless has_fld_clinic_label?
-
-    return false unless has_fld_responsible_provider?
-    return false unless has_fld_responsible_provider_label?
+    return false unless all_common_there?
 
     return false unless has_fld_comment?
     return false unless has_fld_comment_label?

@@ -17,6 +17,7 @@ define([
                     uidUnderscored: medsArrayGroupedByType[0].getUid(),
                     fillableHeader: medsArrayGroupedByType[0].getFillableHeader(),
                     tooltipSig: medsArrayGroupedByType[0].getTooltip().sig,
+                    tooltipFacility: medsArrayGroupedByType[0].getTooltip().facility,
                     tooltipMedicationName: medsArrayGroupedByType[0].getTooltip().medicationName,
                     tooltipFillable: medsArrayGroupedByType[0].getTooltip().fillable,
                     medications: new MedNameListCollection(medsArrayGroupedByType, {

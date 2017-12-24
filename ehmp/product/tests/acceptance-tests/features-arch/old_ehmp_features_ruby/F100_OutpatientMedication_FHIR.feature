@@ -18,7 +18,7 @@ And the FHIR results contain "medication dispense results"
 
 	| field														| panorama_value										|
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:100817						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100817						|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 403827;O												|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -28,22 +28,22 @@ And the FHIR results contain "medication dispense results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:73639000										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:9E7A:20117								|
+	| content.contained.extension.valueString					| urn:va:user:SITE:20117								|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| PHARMACIST,THREE										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.contained.extension.valueString					| urn:va:order:9E7A:100817:27831						|
+	| content.contained.extension.valueString					| urn:va:order:SITE:100817:27831						|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Outpatient								|
-	| content.contained.identifier.value						| urn:va:user:9E7A:20010								|
+	| content.contained.identifier.value						| urn:va:user:SITE:20010								|
 	| content.contained.name.text								| VEHU,EIGHT											|
 	| content.contained.location.period.start					| 2009-08-10T17:38:00									|
 	| content.contained.location.period.end						| 2009-08-10T17:38:00									|
 	| content.contained.type.text								| O														|
 	#uid field
-	#| content.contained.identifier.value						| urn:va:med:9E7A:100817:27831							|
+	#| content.contained.identifier.value						| urn:va:med:SITE:100817:27831							|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 2009-08-10T17:38:00									|
 	| content.contained.patient.reference						| IS_SET												|
@@ -89,7 +89,7 @@ And the FHIR results contain "medication dispense results"
 	| content.extension.valueString								| 20090810												|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#type			|
 	| content.extension.valueString								| Prescription											|
-	| content.identifier.value									| urn:va:med:9E7A:100817:27831							|
+	| content.identifier.value									| urn:va:med:SITE:100817:27831							|
 	| content.status											| completed												|
 	| content.patient.reference									| IS_SET												|
 	| content.dispenser.reference								| IS_SET												|
@@ -157,7 +157,7 @@ And the FHIR results contain "medication dispense results"
 
 	| field														| kodak_value								  		    |
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:C877:100817						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100817						|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 403827;O												|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -167,22 +167,22 @@ And the FHIR results contain "medication dispense results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:73639000										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:C877:20117								|
+	| content.contained.extension.valueString					| urn:va:user:SITE:20117								|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| PHARMACIST,THREE										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.contained.extension.valueString					| urn:va:order:C877:100817:27831						|
+	| content.contained.extension.valueString					| urn:va:order:SITE:100817:27831						|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Outpatient								|
-	| content.contained.identifier.value						| urn:va:user:C877:20010								|
+	| content.contained.identifier.value						| urn:va:user:SITE:20010								|
 	| content.contained.name.text								| VEHU,EIGHT											|
 	| content.contained.location.period.start					| 2009-08-10T17:38:00									|
 	| content.contained.location.period.end						| 2009-08-10T17:38:00									|
 	| content.contained.type.text								| O														|
 	#uid field
-	#| content.contained.identifier.value						| urn:va:med:C877:100817:27831							|
+	#| content.contained.identifier.value						| urn:va:med:SITE:100817:27831							|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 2009-08-10T17:38:00									|
 	| content.contained.patient.reference						| IS_SET												|
@@ -228,7 +228,7 @@ And the FHIR results contain "medication dispense results"
 	| content.extension.valueString								| 20090810												|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#type			|
 	| content.extension.valueString								| Prescription											|
-	| content.identifier.value									| urn:va:med:C877:100817:27831							|
+	| content.identifier.value									| urn:va:med:SITE:100817:27831							|
 	| content.status											| completed												|
 	| content.patient.reference									| IS_SET												|
 	| content.dispenser.reference								| IS_SET												|
@@ -290,16 +290,16 @@ And the FHIR results contain "medication dispense results"
 @f100_3_outpatient_medication_fhir @fhir 
 Scenario: Client can request out-patient medication results in FHIR format
 Given a patient with "out-patient medication results" in multiple VistAs
-Given a patient with pid "9E7A;167" has been synced through Admin API
-When the client requests out-patient medication results for the patient "9E7A;167" in FHIR format
+Given a patient with pid "SITE;167" has been synced through Admin API
+When the client requests out-patient medication results for the patient "SITE;167" in FHIR format
 Then a successful response is returned
 Then the client receives 3 FHIR "VistA" result(s)
 And the client receives 3 FHIR "panorama" result(s)
 And the FHIR results contain "medication dispense results"
 
 	| field														| value												|
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:167						|
-	#| content.contained.identifier.value						| CONTAINS urn:va:order:9E7A:167					|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:167						|
+	#| content.contained.identifier.value						| CONTAINS urn:va:order:SITE:167					|
 	| content.contained.name									| CAMP MASTER										|
 	| content.contained.identifier.value						| 500												|
 	| content.contained.product.form.text						| SUPP,RTL											|
@@ -321,15 +321,15 @@ And the FHIR results contain "medication dispense results"
 @f100_4_outpatient_medication_fhir @fhir 
 Scenario: Client can request out-patient medication results in FHIR format
 Given a patient with "out-patient medication results" in multiple VistAs
-Given a patient with pid "C877;167" has been synced through Admin API
-When the client requests out-patient medication results for the patient "C877;167" in FHIR format
+Given a patient with pid "SITE;167" has been synced through Admin API
+When the client requests out-patient medication results for the patient "SITE;167" in FHIR format
 Then a successful response is returned
 Then the client receives 3 FHIR "VistA" result(s)
 And the client receives 3 FHIR "kodak" result(s)
 And the FHIR results contain "medication dispense results"
 
 	| field														| value												|
-	| content.identifier.value									| CONTAINS urn:va:med:C877:167						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:167						|
 	| content.contained.name									| CAMP BEE											|
 	| content.contained.identifier.value						| 500												|
 	| content.contained.product.form.text						| SUPP,RTL											|
@@ -353,8 +353,8 @@ And the FHIR results contain "medication dispense results"
 @f100_5_outpatient_medication_neg_fhir
 Scenario: Negative scenario.  Client can request Outpatient Medications in FHIR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests out-patient medication results for the patient "9E7A;100184" in FHIR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests out-patient medication results for the patient "SITE;100184" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed
 	

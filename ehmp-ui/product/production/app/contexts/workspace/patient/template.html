@@ -1,19 +1,22 @@
-<div class="row flex-display percent-height-100">
-    <aside aria-label="Patient Information Bar" class="context-sidebar--left additional-content-region-width-calculation flex-width-none patient-info-bar"></aside>
-    <div class="flex-width-1 hidden-overflow percent-height-100">
-        <div class="flex-display flex-direction-column percent-height-100 hidden-overflow">
-            <nav aria-label="Workspace Navigation Bar" id="navigation-region" class="additional-content-region-height-calculation">
-                <div class="context-navigaton-bar-wrapper flex-display flex-wrap-no flex-align-center">
-                    <div class="context-navigation-bar left"></div>
-                    <div class="context-navigation-bar right"></div>
-                </div>
-            </nav>
-            <div class="flex-display flex-width-1">
-                <aside aria-label="Tray Sidebar" class="tray-container flex-width-none order-2 flex-display additional-content-region-width-calculation"></aside>
-                <div class="flex-width-1 order-1 hidden-overflow main-tray-viewport">
-                    <main id="content-region" class="content-region-resize-height content-region-resize-width"></main>
-                </div>
+<div class="flex-display flex-direction-column percent-height-100 patient-record-container">
+    <div class="row flex-display flex-width-none">
+        <header aria-label="Patient Workspace" id="context-header-region" class="additional-content-region-height-calculation percent-width-100 right-padding-no">
+            <div class="context-header-bar-wrapper flex-display flex-wrap-no percent-width-100 percent-height-100">
+                <div class="context-header-bar left flex-shrink-0"></div>
+                <div class="context-header-bar right"></div>
             </div>
+        </header>
+    </div>
+    <div class="row flex-display flex-width-1">
+        <aside aria-label="Patient Information Bar" class="context-sidebar--left additional-content-region-width-calculation flex-width-none patient-info-bar"></aside>
+        <div class="flex-width-1 hidden-overflow percent-height-100">
+            <div class="flex-display flex-direction-column percent-height-100 hidden-overflow">
+                <div class="flex-display flex-width-1">
+                    <aside aria-label="Tray Sidebar" class="tray-container flex-width-none order-2 flex-display additional-content-region-width-calculation"></aside>
+                    <div class="flex-width-1 order-1 hidden-overflow main-tray-viewport">
+                        <main id="content-region" class="content-region-resize-height content-region-resize-width"></main>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

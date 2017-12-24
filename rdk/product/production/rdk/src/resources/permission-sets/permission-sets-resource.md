@@ -25,7 +25,7 @@ Parameters may be provided as query parameters or in the request body.
 
             {
                 "user": {
-                    "uid": "urn:va:user:C877:10000000270"
+                    "uid": "urn:va:user:SITE:10000000270"
                 },
                 "permissionSets": ["student", "surgeon"]
             }
@@ -85,7 +85,7 @@ Parameters may be provided as query parameters or in the request body.
 
             {
                 "data": {
-                    "modifiedBy": "urn:va:user:C877:10000000270",
+                    "modifiedBy": "urn:va:user:SITE:10000000270",
                     "modifiedOn": "2015-08-19T19:31:41Z",
                     "val": [
                         "student",
@@ -109,7 +109,7 @@ Parameters may be provided as query parameters or in the request body.
 
 + Parameters
 
-    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:user:C877:10000000270" required:"required")
+    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:user:SITE:10000000270" required:"required")
 
 
 + Response 200 (application/json)
@@ -118,7 +118,7 @@ Parameters may be provided as query parameters or in the request body.
 
             {
                 "data": {
-                    "modifiedBy": "urn:va:user:C877:10000000270",
+                    "modifiedBy": "urn:va:user:SITE:10000000270",
                     "modifiedOn": "2015-08-19T19:31:41Z",
                     "val": [
                         "read-access",
@@ -240,7 +240,7 @@ Parameters may be provided as query parameters or in the request body.
 
             {
                 "users": [{
-                    "uid": "urn:va:user:C877:10000000270"
+                    "uid": "urn:va:user:SITE:10000000270"
                 }],
                 "permissionSets": ["student", "surgeon"],
                 "additionalPermissions": [],
@@ -328,6 +328,440 @@ Parameters may be provided as query parameters or in the request body.
     + Schema
 
             :[Schema]({{{common}}}/schemas/permissionSets_multi-user-edit-PUT-200.jsonschema)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Features Category List [GET {{{path}}}/features-list]
+
+Used to get the feature category permissions.
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "items": [
+                        {
+                            "uid": "active-medications",
+                            "description": "Active medications feature category",
+                            "label": "Active Medications",
+                            "permissions": [
+                                "add-active-medication",
+                                "discontinue-active-medication",
+                                "edit-active-medication",
+                                "read-active-medication"
+                            ],
+                            "status": "active"
+                        },
+                        {
+                            "uid": "vitals",
+                            "description": "Vitals feature category",
+                            "label": "Vitals",
+                            "permissions": [
+                                "add-vital",
+                                "eie-vital",
+                                "read-vital"
+                            ],
+                            "status": "active"
+                        }
+                    ]
+                },
+                "statusCode": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/permissionSets_features-list-GET-200.jsonschema)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Add [POST {{{path}}}]
+
+Adds a new permission set to the pJDS repository
+
+#### Notes
+
+Parameters are provided in the request body.
+
++ Request JSON Message (application/json)
+
+    + Body
+
+            {
+                "label": "Vitals",
+                "status": "active",
+                "version": "1.7.3",
+                "description": "This is a vitals permission set",
+                "sub-sets": ["Category One"],
+                "permissions": ["read-vitals", "add-vitals"],
+                "note": "Test note here",
+                "example": "Some unnecessary example",
+                "nationalAccess": false
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "additionalProperties": false,
+                "definitions": {},
+                "properties": {
+                    "description": {
+                        "id": "/properties/description",
+                        "type": "string"
+                    },
+                    "example": {
+                        "id": "/properties/example",
+                        "type": "string"
+                    },
+                    "label": {
+                        "id": "/properties/label",
+                        "type": "string"
+                    },
+                    "nationalAccess": {
+                        "id": "/properties/nationalAccess",
+                        "type": "boolean"
+                    },
+                    "note": {
+                        "id": "/properties/note",
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "id": "/properties/permissions",
+                        "items": {
+                            "id": "/properties/permissions/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "status": {
+                        "id": "/properties/status",
+                        "type": "string"
+                    },
+                    "sub-sets": {
+                        "id": "/properties/sub-sets",
+                        "items": {
+                            "id": "/properties/sub-sets/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "version": {
+                        "id": "/properties/version",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status",
+                    "label",
+                    "sub-sets",
+                    "description",
+                    "version",
+                    "permissions"
+                ],
+                "type": "object"
+            }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "uid": "urn:va:permset:1234"
+            }
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Update [PUT {{{path}}}/update]
+
+Updates/edits a permission set
+
+#### Notes
+
+Parameters are provided in the request body.
+
++ Request JSON Message (application/json)
+
+    + Body
+
+            {
+                "uid": "urn:va:permset:1234",
+                "label": "Vitals",
+                "status": "active",
+                "version": "1.7.3",
+                "description": "This is a vitals permission set",
+                "sub-sets": ["Category One"],
+                "removePermissions": ["read-conditions"],
+                "addPermissions": ["add-vital", "read-vital"],
+                "notes": "Test note here",
+                "example": "Some unnecessary example",
+                "nationalAccess": false
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "definitions": {},
+                "properties": {
+                    "addPermissions": {
+                        "id": "/properties/addPermissions",
+                        "items": {
+                            "id": "/properties/addPermissions/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "description": {
+                        "id": "/properties/description",
+                        "type": "string"
+                    },
+                    "example": {
+                        "id": "/properties/example",
+                        "type": "string"
+                    },
+                    "version": {
+                        "id": "/properties/version",
+                        "type": "string"
+                    },
+                    "label": {
+                        "id": "/properties/label",
+                        "type": "string"
+                    },
+                    "nationalAccess": {
+                        "id": "/properties/nationalAccess",
+                        "type": "boolean"
+                    },
+                    "note": {
+                        "id": "/properties/note",
+                        "type": "string"
+                    },
+                    "removePermissions": {
+                        "id": "/properties/removePermissions",
+                        "items": {
+                            "id": "/properties/removePermissions/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "status": {
+                        "id": "/properties/status",
+                        "type": "string"
+                    },
+                    "sub-sets": {
+                        "id": "/properties/sub-sets",
+                        "items": {
+                            "id": "/properties/sub-sets/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "uid": {
+                        "id": "/properties/uid",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "uid",
+                    "label",
+                    "sub-sets",
+                    "status",
+                    "version",
+                    "description"
+                ],
+                "type": "object"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "status": 200
+            }
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Deprecate [PUT {{{path}}}/deprecate]
+
+Deprecates a permission set
+
+#### Notes
+
+Parameters are provided in the request body.
+
++ Request JSON Message (application/json)
+
+    + Body
+
+            {
+                "uid": "urn:va:permset:1234",
+                "deprecate": true,
+                "deprecatedVersion": "1.7.3"
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "definitions": {},
+                "properties": {
+                    "deprecate": {
+                        "id": "/properties/deprecate",
+                        "type": "boolean"
+                    },
+                    "deprecatedVersion": {
+                        "id": "/properties/deprecatedVersion",
+                        "type": "string"
+                    },
+                    "uid": {
+                        "id": "/properties/uid",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "uid",
+                    "deprecate",
+                    "deprecatedVersion"
+                ],
+                "type": "object"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "status": 200
+            }
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Bulk add/remove permission on sets [PUT {{{path}}}/edit-permissions]
+
+Performs a bulk edit to add/remove a single permission from multiple sets
+
+#### Notes
+
+Parameters are provided in the request body.
+
++ Request JSON Message (application/json)
+
+    + Body
+
+            {
+                "permission": "urn:va:permset:1234",
+                "addSets": ["urn:va:permset:1234", "urn:va:permset:4321"],
+                "removeSets": ["urn:va:permset:1111", "urn:va:permset:2222"]
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "definitions": {},
+                "properties": {
+                    "addSets": {
+                        "id": "/properties/addSets",
+                        "items": {
+                            "id": "/properties/addSets/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "permission": {
+                        "id": "/properties/permission",
+                        "type": "string"
+                    },
+                    "removeSets": {
+                        "id": "/properties/removeSets",
+                        "items": {
+                            "id": "/properties/removeSets/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "permission"
+                ],
+                "type": "object"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "status": 200
+            }
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Get permission sets categories [GET {{{path}}}/categories]
+
+Returns the collection of the available permission sets categories
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "items": [
+                        {
+                            "label": "Read",
+                            "value": "Read"
+                        },
+                        {
+                            "label": "Clinician",
+                            "value": "Clinician"
+                        },
+                        {
+                            "label": "Nurse",
+                            "value": "Nurse"
+                        },
+                        {
+                            "label": "Clerk",
+                            "value": "Clerk"
+                        },
+                        {
+                            "label": "Medical Operator",
+                            "value": "Medical Operator"
+                        },
+                        {
+                            "label": "Administrative",
+                            "value": "Administrative"
+                        }
+                    ]
+                },
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/permissionSets_categories-list-GET-200.jsonschema)
 
 :[Response 400]({{{common}}}/responses/400.md)
 

@@ -8,6 +8,10 @@ var request = require('request');
 var format = require('util').format;
 var nullUtil = require(global.VX_UTILS + '/null-utils');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+
+var host = testConfig.vxsyncIP;
+var port = testConfig.vxsyncPort;
 
 var config = {
     'recordRetirement': {
@@ -22,7 +26,7 @@ var config = {
     'syncRequestApi': {
         'protocol': 'http',
         'host': 'IP      ',
-        'port': '8080',
+        'port': 'PORT',
         'timeout': 300000
     }
 };
@@ -36,7 +40,7 @@ describe('large-patient-record-rule-itest', function() {
         var done1 = false,
             done2 = false;
         runs(function() {
-            var syncUrl = format('%s://%s:%s%s', config.syncRequestApi.protocol, config.syncRequestApi.host, config.syncRequestApi.port, '/sync/doLoad?pid=9E7A;3');
+            var syncUrl = format('%s://%s:%s%s', config.syncRequestApi.protocol, host, port, '/sync/doLoad?pid=SITE;3');
             request.get(syncUrl, function(error, response) {
                 if (error || (nullUtil.isNullish(response) === false && (response.statusCode !== 200 && response.statusCode !== 202))) {
                     log.debug('error in sync: ');
@@ -49,7 +53,7 @@ describe('large-patient-record-rule-itest', function() {
 
         //check status
         runs(function() {
-            var syncUrl = format('%s://%s:%s%s', config.syncRequestApi.protocol, config.syncRequestApi.host, config.syncRequestApi.port, '/status?pid=9E7A;3');
+            var syncUrl = format('%s://%s:%s%s', config.syncRequestApi.protocol, host, port, '/status?pid=SITE;3');
             request.get(syncUrl, function(error, response, body) {
                 if (error || (nullUtil.isNullish(response) === false && (response.statusCode !== 200 && response.statusCode !== 202))) {
                     return false;
@@ -64,14 +68,14 @@ describe('large-patient-record-rule-itest', function() {
         waitsFor(function() {
             console.log('done1 and done2 ', done1);
             console.log('done1 and done2 ', done2);
-            return done1 && done2;;
+            return done1 && done2;
         });
     });
 
     //it('unsync patient', function() {
     //    var done = false;
     //    var date = moment().subtract(0, 'days').format('YYYYMMDDHHmmss');
-    //    var items = [{'jpid':'0ff3c0f2-51d8-4bfd-a93a-311b321346ab','lastAccessTime':date,'patientIdentifiers':['10108V420871','9E7A;3']} ];
+    //    var items = [{'jpid':'0ff3c0f2-51d8-4bfd-a93a-311b321346ab','lastAccessTime':date,'patientIdentifiers':['10108V420871','SITE;3']} ];
     //    var engine = new RetirementRulesEngine(log, config, environment);
     //    runs(function() {
     //        engine.processRetirementRules(items, function(err, result) {

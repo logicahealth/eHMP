@@ -21,7 +21,7 @@ define([
     var baseDisplayApplet = BaseDisplayApplet;
 
     var PillsGistView = BaseDisplayApplet.extend({
-        AppletView: PillsView,
+        AppletView: PillsView.getView(),
         initialize: function(options) {
             this._base = baseDisplayApplet.prototype;
             if (!this.options.appletConfig) {
@@ -36,7 +36,7 @@ define([
             this.appletOptions = appletOptions;
             this.appletOptions.appletConfig = this.options.appletConfig;
 
-            this.appletOptions.AppletView = PillsView.getView();
+            this.appletOptions.AppletView = this.AppletView;
             this._base.initialize.apply(this, arguments);
         }
     });

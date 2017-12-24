@@ -23,6 +23,7 @@ Perform a text search on records for a patient
             + `result`
             + `lab`
             + `problem`
+            + `ehmp-activity`
             + `vlerdocument`
 
     :[start]({{{common}}}/parameters/start.md)
@@ -63,7 +64,7 @@ Perform a text search on records for a patient
                 "method": "ssss",
                 "params": {
                     "limit": 10,
-                    "pid": "9E7A;3",
+                    "pid": "SITE;3",
                     "pidJoinedList": "ssss",
                     "query": "ssss",
                     "start": 2,
@@ -110,7 +111,7 @@ Get text search suggestions
                     "startIndex": 2,
                     "totalItems": 2
                 },
-                "id": "9E7A;12345",
+                "id": "SITE;12345",
                 "status": 200,
                 "success": true
             }
@@ -150,7 +151,7 @@ Get text search result detail where the items in a group are data points that sh
 
     :[pid]({{{common}}}/parameters/pid.md)
 
-    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:med:9E7A:8:35739" required:"required")
+    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:med:SITE:8:35739" required:"required")
 
 
 + Response 200 (application/json)

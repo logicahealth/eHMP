@@ -1,5 +1,5 @@
-HMPEFX ;SLC/MKB,ASMR/RRB - Reference data update;7/19/12 2:26pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPEFX ;SLC/MKB,ASMR/RRB,CPC - Reference data update;7/19/12 2:26pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -33,9 +33,9 @@ EN(LAST,MAX) ; -- get data from ^XTMP("HMPEF-<date>",n)
  ;
 ENQ ;
  S Y=$G(^TMP("HMPX",$J,0)) K ^TMP("HMPX",$J)
- I '$G(DOMCNT) S @HMP@(.5)="{""apiVersion"":""1.01"",""data"":{""lastUpdate"":"""_LAST_""",""totalItems"":0,""items"":[]}}" Q
+ I '$G(DOMCNT) S @HMP@(.5)="{"_$$APIVERS^HMPDJFS()_",""data"":{""lastUpdate"":"""_LAST_""",""totalItems"":0,""items"":[]}}" Q
  ;
- S @HMP@(.5)="{""apiVersion"":""1.01"",""data"":{""lastUpdate"":"""_Y_""",""totalItems"":"_DOMCNT_",""items"":["
+ S @HMP@(.5)="{"_$$APIVERS^HMPDJFS()_",""data"":{""lastUpdate"":"""_Y_""",""totalItems"":"_DOMCNT_",""items"":["
  S HMPI=DOMCNT I $D(^TMP($J,"HMP ERROR")) D
  . N ERROR,CNT
  . D BUILDERR^HMPEF(.ERROR)

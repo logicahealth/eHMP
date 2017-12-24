@@ -96,7 +96,7 @@ define([
         var screenConfig = json.userDefinedFilters[screenIndex];
         var appletIndex = findAppletIndex(screenConfig, instanceId);
         if (appletIndex == -1) {
-            console.error('Applet with instanceId: "'+instanceId+'", not found in session for workspaceId: "'+workspaceId+'"');
+            console.error('Applet with instanceId: "' + instanceId + '", not found in session for workspaceId: "' + workspaceId + '"');
             return;
         }
         var appletConfig = screenConfig.applets[appletIndex];
@@ -193,12 +193,14 @@ define([
             toWorkspaceId = screenName;
             var screenModule = ADK.Messaging.request('get:current:screen');
             toAppletId = '';
-            if (!_.isUndefined(screenModule.applets) && !_.isUndefined(screenModule.applets[0])) {
+            if (!_.get(screenModule, 'applets[0].predefinedFilter', false)) {
                 toAppletId = screenModule.applets[0].instanceId || screenModule.applets[0].id;
             }
 
             WorkspaceFilters.removeAllFiltersFromAppletFromSession(toWorkspaceId, toAppletId);
-            WorkspaceFilters.cloneAppletFiltersToSession(fromWorkspaceId, fromAppletId, toWorkspaceId, toAppletId);
+            if (toAppletId !== '') {
+                WorkspaceFilters.cloneAppletFiltersToSession(fromWorkspaceId, fromAppletId, toWorkspaceId, toAppletId);
+            }
         }
 
         var userConfigFromSession = ADK.UserDefinedScreens.getUserConfigFromSession() || {};
@@ -300,12 +302,11 @@ define([
         ADK.UserDefinedScreens.saveUserConfigToSession(json);
     };
 
-    WorkspaceFilters.removeAllFiltersForOneScreenFromSession = function(workspaceId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+    WorkspaceFilters.removeAllFiltersForOneScreenFromJSON = function(workspaceId, json) {
         var screenIndex = findScreenIndex(json, workspaceId);
         if (screenIndex === -1) return;
         json.userDefinedFilters.splice(screenIndex, 1);
-        ADK.UserDefinedScreens.saveUserConfigToSession(json);
+        return json;
     };
 
     // Several places within the app (e.g. the applet title bar) are interested in the existance of filters, this alerts them

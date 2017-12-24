@@ -6,10 +6,10 @@ var nock = require('nock');
 
 var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
     return {
-        pid: '9E7A;3',
+        pid: 'SITE;3',
         model: {
-            patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'REDACTED',
+            patientUid: 'urn:va:patient:SITE:3:3',
+            authorUid: 'USER  ',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,

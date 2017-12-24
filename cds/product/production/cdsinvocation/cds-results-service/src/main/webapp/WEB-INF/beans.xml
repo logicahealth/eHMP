@@ -17,12 +17,23 @@
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 	<!-- doesn't work: debug or delete <import resource="classpath:mongodb-dao-context.xml"/> -->
 
+	<bean id="requestIdInInterceptor" class="com.cognitive.cds.utils.log.RequestIdIncomingInterceptor"/>
+	<bean id="requestIdOutInterceptor" class="com.cognitive.cds.utils.log.RequestIdOutgoingInterceptor"/>
+	<bean id="cxfInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+	<bean id="cxfOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+	
 	<cxf:bus>
-		<cxf:features>
-			<cxf:logging />
-		</cxf:features>
+		<cxf:inInterceptors>
+			<ref bean="requestIdInInterceptor" />
+			<ref bean="cxfInInterceptor" />
+		</cxf:inInterceptors>
+		<cxf:outInterceptors>
+			<ref bean="requestIdOutInterceptor" />
+			<ref bean="cxfOutInterceptor" />
+		</cxf:outInterceptors>
 	</cxf:bus>
-
+	
+	
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 
@@ -522,7 +533,7 @@
 				<bean
 					class="com.cognitive.cds.invocation.metricsplugins.MetricsServicePush">
 					<property name="metricsEndpoint"
-						value="http://localhost:8080/cds-metrics-service/rest/updateMetrics" />
+						value="http://${metrics_host}:${metrics_port}/cds-metrics-service/rest/updateMetrics" />
 					<property name="sl4fjLogger" value="invocationsFW" />
 				</bean>
 				<bean

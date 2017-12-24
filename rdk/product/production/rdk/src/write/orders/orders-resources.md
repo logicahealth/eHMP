@@ -60,7 +60,7 @@ Create a new order in the VistA.  Request JSON body contains all the user inputs
             {
                 "data": {
                     "status": 200,
-                    "data": "{\"content\":\"AMIKACIN BLOOD   SERUM SP\\r\\n~For Test: AMIKACIN ~Dose is expected to be at &UNKNOWN level. additional comment *UNSIGNED*\\r\\n\",\"displayGroup\":\"CH\",\"entered\":201602111850,\"facilityCode\":500,\"facilityName\":\"CAMP MASTER\",\"lastUpdateTime\":20160211185053,\"localId\":39208,\"locationName\":\"DIABETIC\",\"locationUid\":\"urn:va:location:9E7A:285\",\"name\":\"AMIKACIN\",\"oiCode\":\"urn:va:oi:1191\",\"oiName\":\"AMIKACIN\",\"oiPackageRef\":\"1302;99LRT\",\"providerName\":\"EHMP,UATFOUR\",\"providerUid\":\"urn:va:user:9E7A:10000000238\",\"service\":\"LR\",\"stampTime\":20160211185053,\"start\":\"\",\"statusCode\":\"urn:va:order-status:unr\",\"statusName\":\"UNRELEASED\",\"statusVuid\":\"urn:va:vuid:4501124\",\"stop\":\"\",\"uid\":\"urn:va:order:9E7A:100615:39208\"}"
+                    "data": "{\"content\":\"AMIKACIN BLOOD   SERUM SP\\r\\n~For Test: AMIKACIN ~Dose is expected to be at &UNKNOWN level. additional comment *UNSIGNED*\\r\\n\",\"displayGroup\":\"CH\",\"entered\":201602111850,\"facilityCode\":500,\"facilityName\":\"CAMP MASTER\",\"lastUpdateTime\":20160211185053,\"localId\":39208,\"locationName\":\"DIABETIC\",\"locationUid\":\"urn:va:location:SITE:285\",\"name\":\"AMIKACIN\",\"oiCode\":\"urn:va:oi:1191\",\"oiName\":\"AMIKACIN\",\"oiPackageRef\":\"1302;99LRT\",\"providerName\":\"EHMP,UATFOUR\",\"providerUid\":\"urn:va:user:SITE:10000000238\",\"service\":\"LR\",\"stampTime\":20160211185053,\"start\":\"\",\"statusCode\":\"urn:va:order-status:unr\",\"statusName\":\"UNRELEASED\",\"statusVuid\":\"urn:va:vuid:4501124\",\"stop\":\"\",\"uid\":\"urn:va:order:SITE:100615:39208\"}"
                 },
                 "status": 200
             }
@@ -231,7 +231,7 @@ Sing order in the VistA.  First, validate signature.  Second, lock patient.  Thi
             	"provider": "10000000271",
             	"dfn": "100615",
             	"location": "285",
-            	"eSig": "REDACTED",
+            	"eSig": "PW      ",
             	"orderList": [{
             		"orderId": "39209;1",
             		"orderDetailHash": "2443ff804e510680ab1fae863cb01ae9"
@@ -271,7 +271,7 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
     + Body
 
             {
-                "patientUid": "9E7A;100716",
+                "patientUid": "SITE;100716",
                 "authorUid": "Something",
                 "domain": "order",
                 "ehmpState": "draft",
@@ -301,7 +301,7 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                     "statusCode": 201,
                     "headers": {
                         "date": "Fri, 12 Feb 2016 22:28:31 GMT",
-                        "location": "http://IP             /clinicobj/urn:va:ehmp:9E7A;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
+                        "location": "http://IP             /clinicobj/urn:va:ehmp:SITE;100716:54a050c5-86e4-44df-a184-ac9d1fb52f7a",
                         "content-type": "application/json",
                         "content-length": "0"
                     },
@@ -311,7 +311,7 @@ Save Draft order to pJDS.  Use this resource to create/update draft order.
                             "slashes": true,
                             "auth": null,
                             "host": "IP             ",
-                            "port": "9080",
+                            "port": "PORT",
                             "hostname": "IP        ",
                             "hash": null,
                             "search": null,
@@ -347,7 +347,7 @@ Find Draft orders from pJDS.  Use this resource to find a list of draft orders.
     + Body
 
             {
-                "patientUid": "9E7A;100600",
+                "patientUid": "SITE;100600",
                 "authorUid": "Something10"
             }
 
@@ -373,9 +373,9 @@ Find Draft orders from pJDS.  Use this resource to find a list of draft orders.
                         },
                         "domain": "order",
                         "ehmpState": "draft",
-                        "patientUid": "9E7A;100600",
+                        "patientUid": "SITE;100600",
                         "subDomain": "laboratory",
-                        "uid": "urn:va:ehmp-order:9E7A;100600:b3b57db4-0dd4-4aeb-ab8b-9f9b1ae8ea94",
+                        "uid": "urn:va:ehmp-order:SITE;100600:b3b57db4-0dd4-4aeb-ab8b-9f9b1ae8ea94",
                         "visit": {
                             "dateTime": "asdfadsfasdf",
                             "location": "Ren",
@@ -413,7 +413,7 @@ Read a Draft order from pJDS, based on a clinical object UID.
                         },
                         "domain": "order | activity",
                         "ehmpState": "draft",
-                        "patientUid": "9E7A;100600",
+                        "patientUid": "SITE;100600",
                         "subDomain": "laboratory | consult | request",
                         "uid": "<<resourceId parameter value>>",
                         "visit": {

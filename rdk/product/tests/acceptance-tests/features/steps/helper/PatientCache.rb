@@ -18,7 +18,7 @@ class PatientCache
     return @response
   end
 
-  def sync_complete_pid?(pid, system_id = "9E7A")
+  def sync_complete_pid?(pid, system_id = "SITE")
     return false unless contains_patient_pid? pid
     return generic_sync_complete?("pid", pid, system_id)
   end
@@ -27,7 +27,7 @@ class PatientCache
     return contains_patient?("pid", pid)
   end
 
-  def sync_complete_icn?(icn, system_id = "9E7A")
+  def sync_complete_icn?(icn, system_id = "SITE")
     return false unless contains_patient_icn? icn
     return generic_sync_complete?("icn", icn, system_id)
   end
@@ -68,7 +68,7 @@ class PatientCache
     return found
   end # contains_patient?
 
-  def generic_sync_complete?(tag, value, system_id = "9E7A")
+  def generic_sync_complete?(tag, value, system_id = "SITE")
     json_verify = JsonVerifier.new
 
     json_object = JSON.parse(@response.body)
@@ -95,10 +95,10 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   puts "---------------------PatientCache Unit Tests  Start----------------"
-  #test_patients_dfn.push({ pid: "B362;100022", dfn: "100022" }) #Bcma,Eight
+  #test_patients_dfn.push({ pid: "SITE;100022", dfn: "100022" }) #Bcma,Eight
   #test_patients_icn.push({ pid: "5000000217", icn: "5000000217V519385" }) #Eight,Inpatient
   dfn = "100022"
-  dfn_pid = "9E7A;100022"
+  dfn_pid = "SITE;100022"
 
   icn = "5000000217V519385"
 
@@ -129,8 +129,8 @@ if __FILE__ == $PROGRAM_NAME
   fail "sync complete icn failed1" unless p_cache.sync_complete_icn? icn
   fail "sync complete icn failed2" if p_cache.sync_complete_icn? "BAD DFN"
 
-  fail "contains patient dfn1" unless p_cache.contains_patient_dfn? "9E7A", dfn
+  fail "contains patient dfn1" unless p_cache.contains_patient_dfn? "SITE", dfn
   fail "contains patient dfn2" if p_cache.contains_patient_dfn? "BADSITE", dfn
-  fail "contains patient dfn3" if p_cache.contains_patient_dfn? "9E7A", "BAD DFN"
+  fail "contains patient dfn3" if p_cache.contains_patient_dfn? "SITE", "BAD DFN"
 
 end

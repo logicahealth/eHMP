@@ -1,4 +1,4 @@
-@f423_vitals_write_back  @US7939_TC991 @US7939_TC992 @US11272 @DE4560 @DE7008 @reg3
+@f423_vitals_write_back @vitals_applet  @US7939_TC991 @US7939_TC992 @US11272 @DE4560 @DE7008 @reg2
 Feature: F423 : Enter and Store Vitals
 
 # US7939, TC993: cannot automate
@@ -6,7 +6,7 @@ Feature: F423 : Enter and Store Vitals
 Background:
   # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,inpatient"
-  Then Cover Sheet is active
+  Then Summary View is active
   And user navigates to Vitals expanded view 
   #And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then user adds a new vitals
@@ -161,12 +161,15 @@ Scenario: Add a vital record.
       | vital type     | vital field              | value   |
       | Blood Pressure | BP Input Box             | 130/80  |
       | Temperature    | Temp Input Box           | 98.4    |
-      | Temperature    | Temp Location Drop Down  | ORAL    |
       | Pulse          | Pulse Input Box          | 70      |
-      | Pulse          | Pulse Method Drop Down   | AT REST |
-      | Pulse          | Pulse Position Drop Down | SITTING |
       | Respiration    | Respiration Input Box    | 80      |
       | Pulse Oximetry | PO Input Box             | 35      |
+  And user sets dropdown values for the vitals
+      | vital type     | vital field              | value   |
+      | Temperature    | Temp Location Drop Down  | ORAL    |
+      | Pulse          | Pulse Method Drop Down   | AT REST |
+      | Pulse          | Pulse Position Drop Down | SITTING |
+
   And user chooses unavailable for the vitals 
       | vital type          | notation |
       | Height              | Ht       |

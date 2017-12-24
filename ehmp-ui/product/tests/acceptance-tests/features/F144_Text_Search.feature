@@ -74,7 +74,6 @@ Scenario: User is able to view the detail allergy search results
   And the modal's title is "Allergen - CHOCOLATE"
   And the Allergy Detail modal displays
       | symptoms            |
-      | severity            |
       | drug classes        |
       | nature of reaction  |
       | entered by          |

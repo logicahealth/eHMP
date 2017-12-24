@@ -48,14 +48,13 @@ define([
                 groupEnabled: false,
                 extraClasses: [],
                 multiple: false,
-                title: 'Use up and down arrows to view options and then press enter to select',
+                title: null,
                 fetchDelay: 750,
                 options: {
                     width: '100%',
                     minimumInputLength: 3
                 },
                 emptyDefault: true,
-                // id: this.field.get('name') + '_blahblah' + this.cid
             };
         },
         requiredFields: ['name', 'label'],
@@ -94,6 +93,10 @@ define([
                 e.preventDefault();
                 this.setIntegerFieldOption('size', sizeInt, e);
             },
+            "control:helpMessage": function(event, stringValue) {
+                this.setStringFieldOption('helpMessage', stringValue, event, { silent: true });
+                this.$('.select-help-message').text(this.field.get('helpMessage'));
+            },
             "control:picklist:set": function(e, pickList) {
                 e.preventDefault();
                 this.setPickList({
@@ -109,23 +112,24 @@ define([
                 this.showLoading();
             }
         }, ControlService.Control.events),
-        // templateHelpers: function() {
-        //     var self = this;
-        //     return {
-        //         getId: function() {
-        //             return this.name + self.cid;
-        //         }
-        //     };
-        // },
+        templateHelpers: function() {
+            var id = !!this.field.get('multiple') ? this.field.get('id') : '';
+            return {
+                filterEnabled: this.filterEnabled,
+                labelId: _.isEmpty(id) ? '' : id + '-label'
+            };
+        },
         getTemplate: function() {
             var selectTemplate =
-                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}' +
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel) id=labelId}}' +
                 '<select class="{{form-class-name "controlClassName"}}" id="{{clean-for-id id}}" name="{{name}}"' +
-                '{{#if title}} title="{{title}}"{{/if}}' +
+                '{{#if filterEnabled}} title="{{label}} edit. Press enter to activate.{{#if required}} Field required{{/if}}"' +
+                '{{else if title}} title="{{title}}"{{/if}}' +
                 '{{#if disabled}} disabled{{/if}}' +
                 '{{#if required}} required{{/if}}' +
                 '{{#if size}} size={{size}}{{/if}}' +
                 '{{#if multiple}} multiple{{/if}}' +
+                ' aria-describedby="{{clean-for-id id}}-help-message"' +
                 '>';
 
             selectTemplate +=
@@ -156,7 +160,10 @@ define([
                     '{{/each}}';
             }
 
-            selectTemplate += '</select>';
+            var helpMessage = '<span id="{{clean-for-id id}}-help-message" ' +
+                '{{#if (has-form-class "helpMessageClassName")}}class="{{form-class-name "helpMessageClassName"}} ' +
+                'select-help-message"{{/if}} aria-live="polite">{{helpMessage}}</span>';
+            selectTemplate += '</select>' + helpMessage;
 
             return Handlebars.compile(selectTemplate);
         },
@@ -292,7 +299,6 @@ define([
         },
         initSelect2: function() {
             var $select = this.$('select');
-            $select.attr('title', this.field.get('label') + " edit. Press enter to activate");
 
             if ($select.length === 0 || this.field.get('disabled')) {
                 return;
@@ -322,6 +328,10 @@ define([
             }
 
             $select.select2(fieldOptions);
+
+            if (!!this.field.get('multiple')) {
+                this.$('input.select2-search__field').attr('aria-labelledby', this.field.get('id') + '-label');
+            }
 
             $select.on("select2:open", function() {
                 if (self.$el.hasClass('has-error')) {
@@ -358,6 +368,10 @@ define([
 
             this.pickList.bind('reset', function() {
                 self.render();
+            });
+
+            this.listenTo(this.field, 'change:pickList', function(model, value) {
+                this.setPickList({ pickList: value });
             });
         },
         onDomRefresh: function() {

@@ -14,15 +14,14 @@ subprojects {
   ext.set('spring-version', '4.2.4.RELEASE')
   ext.set('gson-version', '2.6.2')
   ext.set('json-version', '20160810')
-  ext.set('joda-version', '2.9')
+  ext.set('joda-version', '1.6.2.redhat-5')
   ext.set('junit-version', '3.8.1')
-
+  ext.set('hibernate-jpa-version', '1.0.1.Final')
+  ext.set('hibernate-core-version', '4.2.18.Final')
 
   def repoCommitCountClosure = {
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    return proc2.text.trim()
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    return proc.text.trim()
   }
 
   def repoCommitCount = "${->repoCommitCountClosure()}"

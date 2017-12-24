@@ -156,6 +156,14 @@ define([
 });
 ```
 
+
+## How to document an Applet ##
+Easy as "1 - 2 - 3":
+
+1) Add README.md at root level of applet directory (sibling to applet.js)
+2) Add `documentation: true` to applet's entry in appletsManifest.js
+3) Add markdown content to README.md!
+
 [adkSourceCode]: https://code.vistacore.us/scm/app/adk.git
 [ehmpuiSourceCode]: https://code.vistacore.us/scm/app/ehmp-ui.git
 [standardizedIdeWikiPage]: https://wiki.vistacore.us/display/VACORE/Team+Standardized+IDE+for+JavaScript+Development

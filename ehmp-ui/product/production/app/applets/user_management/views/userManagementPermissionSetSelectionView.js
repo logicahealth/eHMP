@@ -3,103 +3,78 @@ define([
     'marionette',
     'underscore',
     'app/applets/user_management/appletUtil',
-    'app/applets/user_management/views/userManagementModalView'
-], function(Backbone, Marionette, _, appletUtil, userManagementModalView) {
-    "use strict";
-
-    var SortedCollection = Backbone.Collection.extend({
-        comparator: function(item) {
-            return item.get('label');
-        }
-    });
+    'app/applets/user_management/views/userManagementModalView',
+    'hbs!app/applets/user_management/templates/multiSelectDetailTemplates/permissionSets',
+    'hbs!app/applets/user_management/templates/multiSelectDetailTemplates/permissions'
+], function(
+    Backbone,
+    Marionette,
+    _,
+    appletUtil,
+    userManagementModalView,
+    permissionSetsDetailsTemplate,
+    permissionsDetailsTemplate) {
+    'use strict';
+    var UMA_CHANNEL = ADK.Messaging.getChannel('user-management-applet');
     var userManagementPermissionSetSelectionView = {
-
-        createForm: function(modalView, model) {
+        createForm: function(modalView, model, triggerElement) {
             var self = this;
-            var markSelectedPermissionSets = function() {
-                var allPermissionSets = new SortedCollection(appletUtil.getUnduplicatedPermissionSets());
+            var sharedModel = ADK.UIResources.Fetch.Permission.SharedModel(modalView);
+            var basePermissionSetsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionSetsCollection(sharedModel.get('permissionSets').originalModels, {
+                parse: true
+            });
+            var basePermissionsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionsCollection(sharedModel.get('permissions').originalModels, {
+                parse: true
+            });
 
-                if (model) {
-                    var session = ADK.UserService.getUserSession();
-                    var currentUserDuz = session.get('duz')[session.get('site')];
-                    var editingSelf = false;
-                    if (model.get('duz').toString() === currentUserDuz) {
-                        editingSelf = true;
-                    }
-                    var userPermissionSets = _.get(model.get('permissionSets'), 'val', []);
-                    allPermissionSets.each(function(permissionSet) {
-                        var keepACC = (editingSelf && ADK.UserService.hasPermission('edit-own-permissions') && permissionSet.get('val') === 'acc');
-                        if (keepACC) {
-                            permissionSet.set('keepSelected', true);
-                        }
-                        permissionSet.set('permissionsCollection', appletUtil.createPermissionsCollectionFromList(permissionSet.get('permissions')));
-                        if (_.indexOf(userPermissionSets, permissionSet.get('val')) > -1) {
-                            permissionSet.set('selected', true);
-                        } else {
-                            permissionSet.set('selected', false);
-                        }
-                    });
-                }
-                return allPermissionSets;
-            };
-            var markSelectedPermissions = function() {
-                var allPermissions = appletUtil.getPermissions();
-                var permissionsModels = [];
-                var userPermissions = [];
-                if (model) {
-                    userPermissions = userPermissions.concat(model.get('additionalPermissions'));
-                }
-                var editingSelf = false;
-                var session = ADK.UserService.getUserSession();
-                var currentUserDuz = session.get('duz')[session.get('site')];
-                if (model.get('duz').toString() === currentUserDuz) {
-                    editingSelf = true;
-                }
-                allPermissions.each(function(permission) {
-                    var selected = false;
-                    if (_.indexOf(userPermissions, permission.get('value')) > -1) {
-                        selected = true;
-                    }
-                    var keepSelected = false;
-                    var keepEditOwnPermissionsPermission = (editingSelf && ADK.UserService.hasPermission('edit-own-permissions') && permission.get('value') === 'edit-own-permissions');
-                    if (keepEditOwnPermissionsPermission) {
-                        keepSelected = true;
-                    }
-                    permissionsModels.push(new Backbone.Model({
-                        label: permission.get('label'),
-                        value: permission.get('value'),
-                        description: permission.get('description') || null,
-                        example: permission.get('example') || null,
-                        selected: selected,
-                        keepSelected: keepSelected
-                    }));
+            var userPermissionSets = [];
+            var userPermissions = [];
+            var keepACC = false;
+            var keepACCAndEditOwnPermissionsPermission = false;
+
+            if (model) {
+                userPermissionSets = _.get(model.get('permissionSet'), 'val', []);
+                userPermissions = _.get(model.get('permissionSet'), 'additionalPermissions', []);
+                keepACCAndEditOwnPermissionsPermission = this.editingSelf && ADK.UserService.hasPermission('edit-own-permissions');
+            }
+            var permissionSetsCollection = basePermissionSetsCollection.toPicklist(userPermissionSets, basePermissionsCollection);
+            if (keepACCAndEditOwnPermissionsPermission) {
+                permissionSetsCollection.get('acc').set({
+                    selected: true,
+                    keepSelected: true
                 });
+            }
+            var preselectedPermissionsByPermissionSets = permissionSetsCollection.getSelectedPermissions();
+            var permissionsCollection = basePermissionsCollection.toPicklist(userPermissions, preselectedPermissionsByPermissionSets);
+            if (keepACCAndEditOwnPermissionsPermission) {
+                permissionsCollection.get('edit-own-permissions').set({
+                    selected: true,
+                    keepSelected: true
+                });
+            }
 
-                return new SortedCollection(permissionsModels);
-            };
-
-            var fields =  [{
-                control: "container",
-                extraClasses: ["container-fluid"],
+            var fields = [{
+                control: 'container',
+                extraClasses: ['container-fluid'],
                 items: [{
-                    control: "container",
-                    extraClasses: ["modal-body"],
+                    control: 'container',
+                    extraClasses: ['modal-body'],
                     items: [{
-                        control: "fieldset",
+                        control: 'fieldset',
                         items: [{
-                            control: "alertBanner",
-                            name: "permissionsSetAlertMessage",
+                            control: 'alertBanner',
+                            name: 'permissionsSetAlertMessage',
                             dismissible: true,
-                            extraClasses: ["permissionsSetAlert"]
+                            extraClasses: ['permissionsSetAlert']
                         }, {
-                            control: "container",
-                            extraClasses: ["mainSelect"],
+                            control: 'container',
+                            extraClasses: ['mainSelect'],
                             items: [{
-                                control: "multiselectSideBySide",
-                                name: "permissionSets",
-                                label: "Permission Sets",
+                                control: 'multiselectSideBySide',
+                                name: 'permissionSets',
+                                label: 'Permission Sets',
                                 attributeMapping: {
-                                    value: "selected"
+                                    value: 'selected'
                                 },
                                 detailsPopoverOptions: {
                                     options: {
@@ -107,34 +82,31 @@ define([
                                     },
                                     items: [{
                                         control: 'container',
-                                        template: appletUtil.getDetailsTemplate([{
-                                            id: 'formattedPermissions',
-                                            label: 'Permissions'
-                                        }])
+                                        template: permissionSetsDetailsTemplate
                                     }]
                                 }
                             }]
                         }]
                     }, {
-                        control: "fieldset",
+                        control: 'fieldset',
                         items: [{
-                            control: "container",
-                            tagName: "h4",
-                            template: "Additional Individual Permissions"
+                            control: 'container',
+                            tagName: 'h4',
+                            template: 'Additional Individual Permissions'
                         }, {
-                            control: "alertBanner",
-                            name: "permissionsAlertMessage",
+                            control: 'alertBanner',
+                            name: 'permissionsAlertMessage',
                             dismissible: true,
-                            extraClasses: ["permissionsAlert"]
+                            extraClasses: ['permissionsAlert']
                         }, {
-                            control: "container",
-                            extraClasses: ["permissionsSelect"],
+                            control: 'container',
+                            extraClasses: ['permissionsSelect'],
                             items: [{
-                                control: "multiselectSideBySide",
-                                name: "permissions",
-                                label: "Additional Individual Permissions",
+                                control: 'multiselectSideBySide',
+                                name: 'permissions',
+                                label: 'Additional Individual Permissions',
                                 attributeMapping: {
-                                    value: "selected"
+                                    value: 'selected'
                                 },
                                 detailsPopoverOptions: {
                                     options: {
@@ -142,36 +114,30 @@ define([
                                     },
                                     items: [{
                                         control: 'container',
-                                        template: appletUtil.getDetailsTemplate([{
-                                            id: "description",
-                                            label: "Description"
-                                        }, {
-                                            id: "example",
-                                            label: "Example"
-                                        }])
+                                        template: permissionsDetailsTemplate
                                     }]
                                 }
                             }]
                         }]
                     }]
                 }, {
-                    control: "container",
-                    extraClasses: ["modal-footer", "right-padding-no", "left-padding-no"],
+                    control: 'container',
+                    extraClasses: ['modal-footer', 'right-padding-no', 'left-padding-no'],
                     items: [{
-                        control: "container",
-                        extraClasses: ["text-right"],
+                        control: 'container',
+                        extraClasses: ['text-right'],
                         items: [{
-                            control: "button",
-                            extraClasses: ["btn-default", "btn-sm"],
-                            label: "Cancel",
-                            name: "cancel",
-                            type: "button"
+                            control: 'button',
+                            extraClasses: ['btn-default', 'btn-sm'],
+                            label: 'Cancel',
+                            name: 'cancel',
+                            type: 'button'
                         }, {
-                            control: "button",
-                            extraClasses: ["btn-primary", "btn-sm"],
-                            label: "Save",
-                            name: "save",
-                            type: "submit"
+                            control: 'button',
+                            extraClasses: ['btn-primary', 'btn-sm'],
+                            label: 'Save',
+                            name: 'save',
+                            type: 'submit'
                         }]
                     }]
                 }]
@@ -179,8 +145,8 @@ define([
 
             var FormModel = Backbone.Model.extend({
                 defaults: {
-                    permissionSets: markSelectedPermissionSets(),
-                    permissions: markSelectedPermissions(),
+                    permissionSets: permissionSetsCollection,
+                    permissions: permissionsCollection,
                     users: new Backbone.Collection(),
                     permissionsAlertMessage: '',
                     permissionsSetAlertMessage: '',
@@ -199,183 +165,116 @@ define([
                     'PermissionsAlertControl': '.permissionsAlert',
                     'PermissionsSetAlertControl': '.permissionsSetAlert'
                 },
-                onRender: function() {
-                    var self = this;
-                    self.updatePermissions();
+                onInitialize: function() {
                     var session = ADK.UserService.getUserSession();
                     var currentUserDuz = session.get('duz')[session.get('site')];
                     this.editingSelf = false;
                     if (model.get('duz').toString() === currentUserDuz) {
                         this.editingSelf = true;
                     }
-                    this.model.get('permissions').on('change:selected', function(permissionModel) {
+                },
+                onRender: function() {
+                    this.listenTo(this.model.get('permissions'), 'change:selected', function(permissionModel) {
                         if (!_.isUndefined(permissionModel.get('keepSelected')) && permissionModel.get('keepSelected') === true) {
-                            var changedModel = new Backbone.Model(permissionModel.attributes);
-                            changedModel.set('selected', true);
-                            self.ui.PermissionsAlertControl.trigger('control:icon', 'fa-exclamation-triangle').trigger('control:type', 'warning').trigger('control:title', 'Error Editing Additional Permissions');
-                            self.model.set('permissionsAlertMessage', "You are not allowed to remove '" + permissionModel.get('label') + "' from your Permissions. See another Access Control Coordinator to remove them.");
-                            self.model.get('permissions').remove(permissionModel);
-                            self.model.get('permissions').add(changedModel);
+                            this.ui.PermissionsAlertControl.trigger('control:update:config', {
+                                icon: 'fa-exclamation-triangle',
+                                type: 'warning',
+                                title: 'Error Editing Additional Permissions'
+                            });
+                            this.model.set('permissionsAlertMessage', "You are not allowed to remove '" + permissionModel.get('label') + "' from your Permissions. See another Access Control Coordinator to remove them.");
+                            this.keepModelSelected(permissionModel, 'permissions');
 
                         } else if (permissionModel.get('value') === 'edit-own-permissions') {
-                            var accPermissionSet = self.model.get('permissionSets').where({
-                                val: 'acc'
-                            })[0];
-                            var changedAccModel = new Backbone.Model(accPermissionSet.attributes);
+                            var accPermissionSet = this.model.get('permissionSets').get('acc');
                             if (accPermissionSet.get('selected') === false && permissionModel.get('selected') === true) {
-                                changedAccModel.set('selected', true);
-                                self.ui.PermissionsSetAlertControl.trigger('control:icon', 'fa-info-circle').trigger('control:type', 'info').trigger('control:title', 'Permission Set Auto Update');
-                                self.model.set('permissionsSetAlertMessage', "'" + permissionModel.get('label') + "' automatically grants '" + accPermissionSet.get('label') + "' Permission Set");
-                                self.model.get('permissionSets').remove(accPermissionSet);
-                                self.model.get('permissionSets').add(changedAccModel);
-                                _.each(changedAccModel.get('permissions'), function(permission) {
-                                    var permissionToRemove = self.model.get('permissions').where({
-                                        value: permission
-                                    })[0];
-                                    if (!_.isUndefined(permissionToRemove)) {
-                                        self.model.get('permissions').remove(permissionToRemove);
-                                    }
+                                this.ui.PermissionsSetAlertControl.trigger('control:update:config', {
+                                    icon: 'fa-info-circle',
+                                    type: 'info',
+                                    title: 'Permission Set Auto Update'
                                 });
+                                this.model.set('permissionsSetAlertMessage', "'" + permissionModel.get('label') + "' automatically grants '" + accPermissionSet.get('label') + "' Permission Set");
+                                this.keepModelSelected(accPermissionSet, 'permissionSets');
+                                this.updatePermissions(true);
                             }
                         }
                     });
-                    this.model.get('permissionSets').on('change:selected', function(permissionSetModel) {
-                        var checkEditOwnPermission = self.model.get('permissions').where({
-                            value: 'edit-own-permissions'
-                        })[0].get('selected');
+                    this.listenTo(this.model.get('permissionSets'), 'change:selected', function(permissionSetModel) {
+                        var checkEditOwnPermission = this.model.get('permissions').get('edit-own-permissions').get('selected');
                         var alertMessage = "You are not allowed to remove '" + permissionSetModel.get('label') + "' from the assigned Permission Sets";
-                        if (checkEditOwnPermission && permissionSetModel.get('val') === 'acc') {
+                        if (checkEditOwnPermission && permissionSetModel.get('value') === 'acc') {
                             alertMessage = alertMessage + " until 'Edit Own Permissions' is removed from Additional Permissions.";
                         }
-                        var autoselectACCPermissionSet = (checkEditOwnPermission && permissionSetModel.get('val') === 'acc' && permissionSetModel.get('selected') === false);
-                        var keepPermissionSetSelected = (permissionSetModel.get('keepSelected') && permissionSetModel.get('keepSelected') === true);
+                        var autoselectACCPermissionSet = (checkEditOwnPermission && permissionSetModel.get('value') === 'acc' && permissionSetModel.get('selected') === false);
+                        var keepPermissionSetSelected = (permissionSetModel.get('keepSelected') === true && permissionSetModel.get('selected') === false);
                         if (keepPermissionSetSelected || autoselectACCPermissionSet) {
-                            var changedModel = new Backbone.Model(permissionSetModel.attributes);
-                            changedModel.set('selected', true);
-                            self.ui.PermissionsSetAlertControl.trigger('control:icon', 'fa-exclamation-triangle').trigger('control:type', 'warning').trigger('control:title', 'Error Editing Permission Sets');
-                            self.model.set('permissionsSetAlertMessage', alertMessage);
-                            self.model.get('permissionSets').remove(permissionSetModel);
-                            self.model.get('permissionSets').add(changedModel);
-                        } else {
-                            self.updatePermissions();
+                            this.ui.PermissionsSetAlertControl.trigger('control:update:config', {
+                                icon: 'fa-exclamation-triangle',
+                                type: 'warning',
+                                title: 'Error Editing Permission Sets'
+                            });
+                            this.model.set('permissionsSetAlertMessage', alertMessage);
+                            this.keepModelSelected(permissionSetModel, 'permissionSets');
                         }
+                        return this.updatePermissions();
+
                     });
                 },
-                updatePermissions: function() {
-                    var self = this;
-                    var allPermissions = appletUtil.getPermissions();
-                    var finalPermissionsModels = [];
-                    var userPermissions = [];
-                    var userPermissionSets = this.model.get('permissionSets');
-                    var selectedPermissionSets = userPermissionSets.where({
-                        selected: true
-                    });
+                keepModelSelected: function(model, targetCollectionName) {
+                    /** Downside of the current sideBySide component implementation
+                     * The only listeners it has for rerendering both available & selected views
+                     * after manually setting the selected value is through the add/remove triggers 
+                     **/
+                    var changedModel = model.toJSON();
+                    changedModel.selected = true;
+                    var collection = this.model.get(targetCollectionName);
+                    collection.remove(model);
+                    collection.add(changedModel);
+                },
+                updatePermissions: function(isAutoAddAccEvent) {
                     var currentPermissions = this.model.get('permissions');
-                    var previouslySelectedPermissions = [];
-                    var previouslySelectedPermissionsModles = currentPermissions.where({
-                        selected: true
-                    });
-                    _.each(previouslySelectedPermissionsModles, function(previouslySelectedPermission) {
-                        previouslySelectedPermissions.push(previouslySelectedPermission.get('value'));
-                    });
-                    _.each(selectedPermissionSets, function(permissionSet) {
-                        userPermissions = userPermissions.concat(appletUtil.permissionsMap[permissionSet.get('val')]);
-                    });
-                    var editingSelf = false;
-                    var session = ADK.UserService.getUserSession();
-                    var currentUserDuz = session.get('duz')[session.get('site')];
-                    if (model.get('duz').toString() === currentUserDuz) {
-                        editingSelf = true;
+                    var previouslySelectedPermissions = currentPermissions.getSelected();
+                    if (isAutoAddAccEvent) {
+                        /** Fixes issue where when adding 'edit-own-permissions'
+                         * auto adds 'acc' and a duplicate 'edit-own-permissions'
+                         * renders on the selected side 
+                         **/
+                        this.model.get('permissions').get('edit-own-permissions').set('selected', false, {
+                            silent: true
+                        });
+                        previouslySelectedPermissions.push('edit-own-permissions');
+                        previouslySelectedPermissions = _.uniq(previouslySelectedPermissions);
                     }
-
-                    if (userPermissions !== []) {
-                        userPermissions = _.uniq(userPermissions);
-                        this.model.get('permissions').reset([]);
-                        allPermissions.each(function(permission) {
-                            var selected = false;
-                            if (_.contains(userPermissions, permission.get('value')) === false) {
-                                if (_.contains(previouslySelectedPermissions, permission.get('value'))) {
-                                    selected = true;
-                                }
-                                var keepSelected = false;
-                                var keepEditOwnPermissionsPermission = (editingSelf && ADK.UserService.hasPermission('edit-own-permissions') && permission.get('value') === 'edit-own-permissions');
-                                if (keepEditOwnPermissionsPermission) {
-                                    keepSelected = true;
-                                }
-                                self.model.get('permissions').add(new Backbone.Model({
-                                    label: permission.get('label'),
-                                    value: permission.get('value'),
-                                    description: permission.get('description') || 'none',
-                                    example: permission.get('example') || 'none',
-                                    selected: selected,
-                                    keepSelected: keepSelected
-                                }));
-                            }
+                    var permissionsCollection = basePermissionsCollection.toPicklist(previouslySelectedPermissions, this.model.get('permissionSets').getSelectedPermissions());
+                    if (keepACCAndEditOwnPermissionsPermission) {
+                        permissionsCollection.get('edit-own-permissions').set({
+                            selected: true,
+                            keepSelected: true
                         });
                     }
+                    this.model.get('permissions').set(permissionsCollection.models);
                 },
                 events: {
                     'click @ui.CancelButton': function(e) {
                         ADK.UI.Workflow.hide();
-                        appletUtil.focusPreviousTarget();
                     },
                     'submit': function(e) {
                         e.preventDefault();
                         e.stopPropagation();
 
-                        if (!this.model.isValid())
-                            this.model.set("formStatus", {
-                                status: "error",
+                        if (!this.model.isValid()) {
+                            this.model.set('formStatus', {
+                                status: 'error',
                                 message: self.model.validationError
                             });
-                        else {
-                            this.model.unset("formStatus");
-
-                            var permissionSetsCollection = this.model.get("permissionSets");
-                            var permissionsCollection = this.model.get("permissions");
-                            var selectedPermissionSets = permissionSetsCollection.where({
-                                selected: true
-                            });
-                            var selectedPermissions = permissionsCollection.where({
-                                selected: true
-                            });
-                            var getSelectedPermissionSetsValues = function(selectedPermissionSets) {
-                                var values = [];
-                                _.each(selectedPermissionSets, function(e) {
-                                    var val = e.get('val');
-                                    values.push(val);
-                                });
-                                return values;
-                            };
-                            var getSelectedPermissionsValues = function(selectedPermissions) {
-                                var values = [];
-                                _.each(selectedPermissions, function(e) {
-                                    var val = e.get('value');
-                                    values.push(val);
-                                });
-
-                                return values;
-                            };
-
-                            //update the user permissionSets based on the selection
-                            this.editUserPermissionSets(model, getSelectedPermissionSetsValues(selectedPermissionSets), getSelectedPermissionsValues(selectedPermissions));
+                        } else {
+                            this.model.unset('formStatus');
+                            /* Update the user Permission Sets & Additional Permissions based on the selection */
+                            this.editUserPermissions();
                         }
-                    },
+                    }
                 },
-                //Edit a single user with new selected permissionSets
-                editUserPermissionSets: function(userModel, selectedPermissionSetsValues, selectedPermissionsValues) {
-                    var editingSelf = false;
-                    var session = ADK.UserService.getUserSession();
-                    var currentUserDuz = session.get('duz')[session.get('site')];
-                    if (model.get('duz').toString() === currentUserDuz) {
-                        editingSelf = true;
-                    }
-                    var keepEditOwnPermissionsPermission = (editingSelf && ADK.UserService.hasPermission('edit-own-permissions'));
-                    if (keepEditOwnPermissionsPermission) {
-                        selectedPermissionsValues.push('edit-own-permissions');
-                    }
-
-                    var self = this;
+                /* Edit a single user with new selected Permission Sets & Additional Permissions */
+                editUserPermissions: function() {
                     var editUsersFetchOptions = {
                         resourceTitle: 'permission-sets-edit',
                         fetchType: 'PUT',
@@ -383,46 +282,28 @@ define([
                         pageable: false,
                         criteria: {
                             user: JSON.stringify({
-                                uid: userModel.get('uid'),
-                                fname: userModel.get('fname'),
-                                lname: userModel.get('lname'),
+                                uid: model.get('uid'),
+                                fname: model.get('fname'),
+                                lname: model.get('lname'),
                                 permissions: ADK.UserService.getUserSession().get('permissions')
                             }),
-                            permissionSets: JSON.stringify(selectedPermissionSetsValues),
-                            additionalPermissions: JSON.stringify(selectedPermissionsValues)
+                            permissionSets: JSON.stringify(this.model.get('permissionSets').getSelected()),
+                            additionalPermissions: JSON.stringify(this.model.get('permissions').getSelected())
                         },
-
                         onSuccess: function(permissionSetsCollection, permissionSetsArray) {
                             ADK.UI.Workflow.hide();
-                            var value = '';
                             var alertMessage = '';
                             if (_.get(permissionSetsArray, 'data.val', false)) {
-                                value = permissionSetsArray.data.val.join();
+                                var permissionSetsReturned = _.get(permissionSetsArray, 'data.val', []);
+                                var additionalPermissionsReturned = _.get(permissionSetsArray, 'data.additionalPermissions', []);
+
                                 alertMessage = 'The permissions have been successfully modified with no errors. ';
-                                var ehmpStatus = 'active';
 
-                                if (permissionSetsArray.data.val.length === 0 &&
-                                    _.isEmpty(_.get(permissionSetsArray, 'data.additionalPermissions'))) {
-                                    ehmpStatus = 'inactive';
-                                    alertMessage = alertMessage + 'All Permission Sets and Additional Individual Permissions have been removed. User ' + userModel.get('fname') + ' ' + userModel.get('lname') + ' is now inactive in eHMP';
+                                if (_.isEmpty(permissionSetsReturned) &&
+                                    _.isEmpty(additionalPermissionsReturned)) {
+                                    alertMessage = alertMessage + 'All Permission Sets and Additional Individual Permissions have been removed. User ' + model.get('fname') + ' ' + model.get('lname') + ' is now inactive in eHMP';
                                 }
-                                var additionalPermissionsLabels = [];
-
-                                _.each(permissionSetsArray.data.additionalPermissions, function(additionalPermission) {
-                                    additionalPermissionsLabels.push(appletUtil.formatPermissionName(additionalPermission));
-                                });
-
-                                model.set({
-                                    'permissionSetsListString': value,
-                                    'ehmpStatus': ehmpStatus,
-                                    'ehmpStatusUpperCase': ehmpStatus.toUpperCase(),
-                                    'permissionSets': permissionSetsArray.data,
-                                    'additionalPermissions': permissionSetsArray.data.additionalPermissions,
-                                    'additionalPermissionsLabels': additionalPermissionsLabels,
-                                    'additionalPermissionsLabelsFormatted': appletUtil.getFormattedAdditionalPermissionsString(additionalPermissionsLabels),
-                                    'modalAlertMessage': alertMessage
-                                });
-                                ADK.Messaging.trigger('userPermissionsUpdated', model);
+                                UMA_CHANNEL.trigger('userPermissionsUpdated', model.get('uid'), alertMessage);
 
                             } else {
                                 alertMessage = 'An error occurred while updating user permissions. ' +
@@ -453,12 +334,14 @@ define([
                         workflow.changeHeaderCloseButtonOptions({
                             onClick: function(e) {
                                 ADK.UI.Workflow.hide();
-                                appletUtil.focusPreviousTarget();
                             }
                         });
                     }
                 }]
             };
+            if (!_.isUndefined(triggerElement)) {
+                workflowOptions.triggerElement = triggerElement;
+            }
             var workflow = new ADK.UI.Workflow(workflowOptions);
             workflow.show();
         }

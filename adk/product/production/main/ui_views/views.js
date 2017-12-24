@@ -7,7 +7,8 @@ define([
     'main/ui_views/table/view',
     'main/ui_views/text_filter/layoutView',
     'main/ui_components/tray/views/summary/view',
-    'main/ui_components/tray/views/action_summary_list/view'
+    'main/ui_components/tray/views/action_summary_list/view',
+    'main/ui_views/gridster/view'
 ], function(
     Error,
     Form,
@@ -17,7 +18,8 @@ define([
     Table,
     TextFilter,
     TraySummaryList,
-    TrayActionSummaryList
+    TrayActionSummaryList,
+    Gridster
 ) {
     'use strict';
 
@@ -30,7 +32,8 @@ define([
         Table: Table,
         TextFilter: TextFilter,
         TrayActionSummaryList: TrayActionSummaryList,
-        TraySummaryList: TraySummaryList
+        TraySummaryList: TraySummaryList,
+        Gridster: Gridster
     };
 
     return UI_Views;

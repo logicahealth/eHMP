@@ -1,0 +1,106 @@
+<persistence 
+  version="2.0"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd
+                      http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+  xmlns:orm="http://java.sun.com/xml/ns/persistence/orm"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://java.sun.com/xml/ns/persistence">
+
+<persistence-unit name="gov.va.activitydb" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider> 
+    <!-- <jta-data-source>jdbc/jbpm-ds</jta-data-source> -->
+    <mapping-file>META-INF/Executor-orm.xml</mapping-file>
+    <mapping-file>META-INF/JBPMorm.xml</mapping-file>
+    <mapping-file>META-INF/Taskorm.xml</mapping-file>
+    <mapping-file>META-INF/TaskAuditorm.xml</mapping-file>
+    
+    <class>org.jbpm.persistence.processinstance.ProcessInstanceInfo</class>
+    <class>org.drools.persistence.info.SessionInfo</class>
+    <class>org.drools.persistence.info.WorkItemInfo</class>
+
+    <class>org.jbpm.process.audit.ProcessInstanceLog</class>
+    <class>org.jbpm.process.audit.NodeInstanceLog</class>
+    <class>org.jbpm.process.audit.VariableInstanceLog</class>
+    
+    <class>org.jbpm.persistence.correlation.CorrelationKeyInfo</class>
+    <class>org.jbpm.persistence.correlation.CorrelationPropertyInfo</class>
+    
+    <class>org.jbpm.services.task.impl.model.AttachmentImpl</class>
+    <class>org.jbpm.services.task.impl.model.ContentImpl</class>
+    <class>org.jbpm.services.task.impl.model.BooleanExpressionImpl</class>
+    <class>org.jbpm.services.task.impl.model.CommentImpl</class>
+    <class>org.jbpm.services.task.impl.model.DeadlineImpl</class>
+    <class>org.jbpm.services.task.impl.model.DelegationImpl</class>
+    <class>org.jbpm.services.task.impl.model.EscalationImpl</class>
+    <class>org.jbpm.services.task.impl.model.GroupImpl</class>
+    <class>org.jbpm.services.task.impl.model.I18NTextImpl</class>
+    <class>org.jbpm.services.task.impl.model.NotificationImpl</class>
+    <class>org.jbpm.services.task.impl.model.EmailNotificationImpl</class>
+    <class>org.jbpm.services.task.impl.model.EmailNotificationHeaderImpl</class>
+    <class>org.jbpm.services.task.impl.model.PeopleAssignmentsImpl</class>
+    <class>org.jbpm.services.task.impl.model.ReassignmentImpl</class>
+    
+    <class>org.jbpm.services.task.impl.model.TaskImpl</class>
+    <class>org.jbpm.services.task.impl.model.TaskDataImpl</class>
+    <class>org.jbpm.services.task.impl.model.UserImpl</class>
+    <class>org.jbpm.executor.entities.RequestInfo</class>
+    <class>org.jbpm.executor.entities.ErrorInfo</class>
+    
+    <!--BAM for task service -->
+    <class>org.jbpm.services.task.audit.impl.model.BAMTaskSummaryImpl</class>
+    
+     <!-- Event Classes -->
+    <class>org.jbpm.services.task.audit.impl.model.TaskEventImpl</class>
+    
+    <!-- Task Audit Classes --> 
+    <class>org.jbpm.services.task.audit.impl.model.AuditTaskImpl</class>
+    <class>org.jbpm.services.task.audit.impl.model.TaskVariableImpl</class>
+
+    <!--  ehmp entities -->
+    <class>gov.va.jbpm.entities.impl.BaseRoute</class>
+    <class>gov.va.jbpm.entities.impl.TaskInstanceImpl</class>
+    <class>gov.va.jbpm.entities.impl.ProcessInstanceImpl</class>
+    <class>gov.va.jbpm.entities.impl.TaskRouteImpl</class>
+    <class>gov.va.jbpm.entities.impl.ProcessRouteImpl</class>
+    <class>gov.va.jbpm.entities.impl.DataModelDetailsImpl</class>
+    <class>gov.va.signalregistrationservice.entities.EventListener</class>
+    <class>gov.va.signalregistrationservice.entities.EventMatchAction</class>
+    <class>gov.va.signalregistrationservice.entities.EventMatchCriteria</class>
+    <class>gov.va.signalregistrationservice.entities.SimpleMatch</class>
+    <class>gov.va.activitydb.entities.SignalInstance</class>
+    <class>gov.va.eventstatewriteservice.entities.ProcessedEventState</class>
+    
+    <properties>
+      <property name="hibernate.max_fetch_depth" value="3"/>
+      <property name="hibernate.hbm2ddl.auto" value="create" />
+      <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:ACTIVITYDB;MODE=Oracle;INIT=create schema IF NOT EXISTS ACTIVITYDB;"/>
+      
+      <property name="hibernate.show_sql" value="false" />  
+      <property name="hibernate.dialect" value="vistacore.hibernate.dialect.H2OracleDialect"/>
+      <property name="hibernate.hbm2ddl.import_files" value="META-INF/initialization.sql"/> 
+      
+      <property name="hibernate.id.new_generator_mappings" value="false" />            
+
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.BitronixJtaPlatform" />
+    </properties>
+    
+    <!-- Properties to use local deployment of Oracle instead of H2       
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+
+      <property name="hibernate.max_fetch_depth" value="3" />
+      <property name="hibernate.hbm2ddl.auto" value="update" />
+      <property name="hibernate.show_sql" value="false" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@IP             /XE"/>
+      <property name="hibernate.connection.username" value="ACTIVITYDB" />
+      <property name="hibernate.connection.password" value="activitydb" />
+      
+      <property name="hibernate.id.new_generator_mappings" value="false" />
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.BitronixJtaPlatform" />
+    </properties>-->
+    
+        
+  </persistence-unit>
+    
+</persistence>

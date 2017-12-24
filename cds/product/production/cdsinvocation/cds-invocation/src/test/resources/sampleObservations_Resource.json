@@ -30,7 +30,7 @@
         {
             "use":"official",
             "system":"http://vistacore.us/fhir/id/uid",
-            "value":"urn:va:vital:9E7A:253:12440"
+            "value":"urn:va:vital:SITE:253:12440"
         }
     ],
     "subject":{

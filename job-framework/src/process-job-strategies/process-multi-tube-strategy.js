@@ -60,7 +60,7 @@ function watchTube(tubeName, callback) {
 
     worker.client.watch(tubeName, function(error) {
         if (error) {
-            worker.logger.warn('process-multi-tube-strategy.watchTube() : error trying to watch tube %s', tubeName);
+            worker.logger.error('process-multi-tube-strategy.watchTube() : error trying to watch tube %s', tubeName);
             return callback(error);
         }
 
@@ -78,7 +78,7 @@ function ignoreTube(tubeName, callback) {
 
     worker.client.ignore(tubeName, function(error) {
         if (error) {
-            worker.logger.warn('process-multi-tube-strategy.retrieveJobForRatio(): error trying to ignore %s tube', tubeName);
+            worker.logger.error('process-multi-tube-strategy.retrieveJobForRatio(): error trying to ignore %s tube', tubeName);
             return callback();
         }
 
@@ -126,7 +126,7 @@ function retrieveJob(jobProcessor, tubeName, callback) {
 
     worker.client.reserve_with_timeout(0, function(error, beanstalkJobId, beanstalkJobPayload) {
         if (error && error !== 'TIMED_OUT' && error !== 'DEADLINE_SOON') {
-            worker.logger.warn('process-multi-tube-strategy.retrieveJob(%s): error trying to reserve job with timeout. ERROR: %j', tubeName, error);
+            worker.logger.error('process-multi-tube-strategy.retrieveJob(%s): error trying to reserve job with timeout. ERROR: %j', tubeName, error);
             return callback(error);
         }
 

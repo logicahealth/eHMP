@@ -325,7 +325,7 @@ function processError(worker, logger, job, tubeName, handlerError, callback) {
     worker.errorPublisher.publishHandlerError(job, handlerError, errorType, function() {
         worker.jobStatusUpdater.errorJobStatus(job, handlerError, function(errorJobError) {
             if (errorJobError) {
-                logger.warn('job-processor.processError(%s): Unable to save error job status for job: %J', tubeName, job);
+                logger.error('job-processor.processError(%s): Unable to save error job status for job: %J', tubeName, job);
                 return callback(errorJobError);
             }
             return callback();
@@ -348,7 +348,7 @@ function releaseJob(worker, logger, beanstalkJobId, tubeName, callback) {
 
     worker.client.release(beanstalkJobId, LOWEST_PRIORITY, 30, function(error) {
         if (error) {
-            logger.warn('job-processor.release(): tubeName: %s; Unable to release job: %s', tubeName, beanstalkJobId);
+            logger.error('job-processor.release(): tubeName: %s; Unable to release job: %s', tubeName, beanstalkJobId);
             return callback();
         }
         logger.debug('job-processor.release(): tubeName: %s; Job has been released. job: %s', tubeName, beanstalkJobId);
@@ -371,7 +371,7 @@ function destroyJob(worker, logger, beanstalkJobId, tubeName, job, callback) {
 
     worker.client.destroy(beanstalkJobId, function(error) {
         if (error) {
-            logger.warn('job-processor.destroyJob(): tubeName: %s;  Unable to destroy job: %s', tubeName, beanstalkJobId);
+            logger.error('job-processor.destroyJob(): tubeName: %s;  Unable to destroy job: %s', tubeName, beanstalkJobId);
             return callback();
         }
         logger.debug('job-processor.destroyJob() tubeName: %s; job has been destroyed: %s', tubeName, beanstalkJobId);

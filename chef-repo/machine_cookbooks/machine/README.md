@@ -25,12 +25,12 @@ This cookbook depends only on the common cookbook, but is a dependency of all pr
   {
     "machine-1": {
       "ip_address": "IP      ",
-      "ssh_username": "REDACTED",
+      "ssh_username": "vagrant",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     },
     "machine-2": {
       "ip_address": "IP      ",
-      "ssh_username": "REDACTED",
+      "ssh_username": "vagrant",
       "ssh_keyname": "~/.vagrant.d/insecure_private_key" 
     }
   }
@@ -131,7 +131,7 @@ Standard Attributes
   <tr>
     <td><tt>[:box_name]</tt></td>
     <td>Vagrant box name used when booting into the vagrant environment</td>
-    <td><tt>"opscode-centos-6.5"</tt></td>
+    <td><tt>"opscode-centos-6.5-users"</tt></td>
   </tr>
   <tr>
     <td><tt>[:box_url]</tt></td>

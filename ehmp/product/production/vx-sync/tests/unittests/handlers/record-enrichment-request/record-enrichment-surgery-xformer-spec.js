@@ -26,26 +26,26 @@ var originalVaSurgeryRecord = {
     'kind': 'Surgery',
     'lastUpdateTime': 20061208073000,
     'localId': 10014,
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'providers': [{
         'providerName': 'PROVIDER,ONE',
-        'providerUid': 'urn:va:user:9E7A:983'
+        'providerUid': 'urn:va:user:SITE:983'
     }],
     'results': [{
         'localTitle': 'OPERATION REPORT',
-        'uid': 'urn:va:document:9E7A:3:3561'
+        'uid': 'urn:va:document:SITE:3:3561'
     }, {
         'localTitle': 'NURSE INTRAOPERATIVE REPORT',
-        'uid': 'urn:va:document:9E7A:3:3526'
+        'uid': 'urn:va:document:SITE:3:3526'
     }, {
         'localTitle': 'ANESTHESIA REPORT',
-        'uid': 'urn:va:document:9E7A:3:3525'
+        'uid': 'urn:va:document:SITE:3:3525'
     }],
     'stampTime': 20061208073000,
     'statusName': 'COMPLETED',
     'summary': 'LEFT INGUINAL HERNIA REPAIR',
     'typeName': 'LEFT INGUINAL HERNIA REPAIR',
-    'uid': 'urn:va:surgery:9E7A:3:10014'
+    'uid': 'urn:va:surgery:SITE:3:10014'
 };
 var originalVaSurgeryJob = {
     record: originalVaSurgeryRecord
@@ -55,10 +55,10 @@ var originalVaSurgeryJob = {
 //------------------------------------
 
 var removedRecord = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:surgery:9E7A:3:10014'
+    'uid': 'urn:va:surgery:SITE:3:10014'
 };
 
 var removedJob = {
@@ -87,7 +87,7 @@ describe('record-enrichment-surgery-xformer.js', function() {
 
                     // Root level fields
                     //------------------
-                    expect(record.providerUid).toBe('urn:va:user:9E7A:983');
+                    expect(record.providerUid).toBe('urn:va:user:SITE:983');
                     expect(record.providerName).toBe('PROVIDER,ONE');
                     expect(record.providerDisplayName).toBe('Provider,One');
                     expect(record.kind).toBe('Surgery');
@@ -146,8 +146,8 @@ describe('record-enrichment-surgery-xformer.js', function() {
                 xformer(log, config, environment, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:surgery:9E7A:3:10014');
-                    expect(record.pid).toEqual('9E7A;3');
+                    expect(record.uid).toEqual('urn:va:surgery:SITE:3:10014');
+                    expect(record.pid).toEqual('SITE;3');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

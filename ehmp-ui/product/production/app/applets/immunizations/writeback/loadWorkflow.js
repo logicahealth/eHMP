@@ -14,7 +14,7 @@ define([
     });
 
     var LoadWorkflowFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
         events: {
             'click .btn-primary': function () {
                 ADK.UI.Alert.hide();

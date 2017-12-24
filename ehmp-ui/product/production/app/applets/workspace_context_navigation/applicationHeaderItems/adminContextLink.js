@@ -20,7 +20,7 @@ define([
             return 'admin';
         },
         label: 'Access Control',
-        icon: '<i class="fa fa-user-md"></i>'
+        icon: '<i class="fa fa-id-card-o"></i>'
     });
 
     ADK.Messaging.trigger('register:component', {

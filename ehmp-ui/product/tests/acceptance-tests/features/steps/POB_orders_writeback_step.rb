@@ -25,10 +25,14 @@ Then(/^an order is added to the applet$/) do
   wait.until { ehmp.number_expanded_applet_rows == @number_existing_orders + 1 }
 end
 
-Then(/^POB add order modal detail title says "(.*?)"$/) do |order_modal_title|
-  @ehmp = PobOrdersApplet.new
-  @ehmp.wait_until_fld_order_modal_title_visible
-  expect(@ehmp.fld_order_modal_title).to have_text(order_modal_title.upcase)
+Then(/^the add order modal detail title says "(.*?)"$/) do |order_modal_title|
+  applet = PobOrdersApplet.new
+  applet.wait_for_order_lab_tray
+  expect(applet).to have_order_lab_tray
+  applet.order_lab_tray.wait_for_fld_order_modal_title
+  expect(applet.order_lab_tray).to have_fld_order_modal_title
+
+  expect(applet.order_lab_tray.fld_order_modal_title).to have_text(order_modal_title.upcase)
 end
 
 Then(/^POB add order detail modal displays labels$/) do |table|
@@ -101,9 +105,9 @@ Then(/^POB user orders "(.*?)" lab test$/) do |lab_test|
   @ehmp.wait_until_fld_available_lab_test_drop_down_visible
   expect(@ehmp).to have_fld_available_lab_test_drop_down
   @ehmp.fld_available_lab_test_drop_down.click
-  @ehmp.wait_until_fld_available_lab_test_input_box_visible
-  @ehmp.fld_available_lab_test_input_box.set lab_test
-  @ehmp.fld_available_lab_test_input_box.native.send_keys(:enter)
+  @ehmp.order_lab_tray.wait_until_fld_available_lab_test_input_box_visible
+  @ehmp.order_lab_tray.fld_available_lab_test_input_box.set lab_test
+  @ehmp.order_lab_tray.fld_available_lab_test_input_box.native.send_keys(:enter)
   wait = Selenium::WebDriver::Wait.new(:timeout => 15)
   wait.until { @ehmp.ddl_urgency.disabled? != true }  
   expect(@ehmp.ddl_urgency.text.upcase).to have_text("Routine".upcase)
@@ -138,24 +142,27 @@ Then(/^POB user accepts the order$/) do
 end
 
 Then(/^POB user navigates to orders expanded view$/) do
-  @ehmp = PobOrdersApplet.new
-  begin
-    @ehmp.load_and_wait_for_screenname
-    expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Orders".upcase)
-  rescue Exception => e
-    p "Exception waiting for screenname: #{e}, try to continue"
-  end
-  @ehmp.wait_until_applet_loaded
+  ehmp = PobOrdersApplet.new
+  p "On url: #{TestSupport.driver.current_url}" 
+  navigate_in_ehmp "#/patient/orders-full"  
+  p "On url: #{TestSupport.driver.current_url}"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { ehmp.applet_loaded? }
+
+  expect(ehmp.menu.fld_screen_name.text.upcase).to eq('ORDERS')
 end
 
 Then(/^POB user opens the detail view of the order "([^"]*)" with status "([^"]*)"$/) do |order_name, order_status|
   ehmp = PobOrdersApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { ehmp.applet_loaded? }
   order_rows = ehmp.tbl_orders_grid
   attempt_to_open_detail_view = false
   order_rows.each do |order_row|
-    # p "checking row: #{order_row.text}"
-    if order_row.text.upcase.include?(order_name.upcase && order_status.upcase)
-      # p "row clicked #{order_name.upcase}, #{order_status.upcase}"
+    #p "checking row: #{order_row.text}"
+    if [order_name.upcase, order_status.upcase].all? { |text| order_row.text.upcase.include? text }
+      #p "row clicked #{order_name.upcase}, #{order_status.upcase}"
       attempt_to_open_detail_view = true
       order_row.click
       break
@@ -176,6 +183,7 @@ Then(/^POB user signs the order as "(.*?)"$/) do |signature_code|
   @commom_element.wait_for_fld_modal_body
   @commom_element.wait_until_fld_modal_body_visible
   @ehmp.wait_until_btn_sign_order_visible
+  @ehmp.wait_for_fld_override_reason
   if @ehmp.has_fld_override_reason?
     @ehmp.fld_override_reason.set "Testing"
     @ehmp.fld_override_reason.native.send_keys(:enter)
@@ -249,6 +257,7 @@ end
 
 Then(/^POB user verifies the above "([^"]*)" order is saved in the action tray panel$/) do |order_name|
   @ehmp = PobCommonElements.new
+  wait_for_jquery_to_return
   @ehmp.wait_until_fld_action_tray_panel_visible
   verify_and_close_growl_alert_pop_up("SUCCESS LABORATORY DRAFT ORDER SUCCESFULLY SAVED") 
   expect(@ehmp.fld_action_tray_panel.text.downcase.include? "#{order_name}".downcase.strip).to eq(true), "the value '#{order_name}' is not present"
@@ -262,8 +271,36 @@ Then(/^POB new order "([^"]*)" is added to the note objects$/) do |new_order|
   expect(@ehmp.fld_note_objects.text.downcase.include? "#{new_order}".downcase.strip).to eq(true), "the value '#{new_order}' is not present"
 end
 
+When(/^user hovers over the orders applet row$/) do
+  ehmp = PobOrdersApplet.new
+  ehmp.wait_for_tbl_orders_grid
+  expect(ehmp).to have_tbl_orders_grid
+  rows = ehmp.tbl_orders_grid
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
 
+Given(/^user can view the Quick Menu Icon in orders applet$/) do
+  ehmp = PobOrdersApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
 
+Given(/^Quick Menu Icon is collapsed in orders applet$/) do
+  ehmp = PobOrdersApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
 
+When(/^Quick Menu Icon is selected in orders applet$/) do
+  ehmp = PobOrdersApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
 
+Then(/^user can see the options in the orders applet$/) do |table|
+  ehmp = PobOrdersApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
 
+When(/^user selects the detail view from Quick Menu Icon of orders applet$/) do
+  ehmp = PobOrdersApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end

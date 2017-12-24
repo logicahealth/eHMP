@@ -16,7 +16,6 @@ define([
                 srOnlyLabel: true,
                 icon: "fa-chevron-left fa-lg",
                 disabled: false,
-                title: "Press enter to access previous data.",
                 id: "previous-page-button",
                 type: "button"
             }, {
@@ -27,7 +26,6 @@ define([
                 srOnlyLabel: true,
                 icon: "fa-chevron-right fa-lg",
                 disabled: false,
-                title: "Press enter to access next data.",
                 id: "next-page-button",
                 type: "button"
             }]

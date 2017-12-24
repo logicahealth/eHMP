@@ -953,7 +953,7 @@ function getRxNormForProductSuppliedCodeFromVATerminologyDatabase(record, log, t
 			}
 
 			if (!concept) {
-				log.error('record-enrichment-med-xformer.getRxNormForProductSuppliedCodeFromVATerminologyDatabase: No concept found from calling getVADrugConcept.  vuid: %s; error: %s; concept: %j', vuid, error, concept);
+				log.debug('record-enrichment-med-xformer.getRxNormForProductSuppliedCodeFromVATerminologyDatabase: No concept found from calling getVADrugConcept.  vuid: %s; error: %s; concept: %j', vuid, error, concept);
 				return callback(null, null);
 			}
 

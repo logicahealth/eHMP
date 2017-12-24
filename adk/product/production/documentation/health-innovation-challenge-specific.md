@@ -23,7 +23,7 @@ There instructions cover the installation, download and configuration of the eHM
 
     Line 6 should look like :
      ```
-     "resourceDirectoryPathFetch": "http://54.196.168.222:8888/resourcedirectory",
+     "resourceDirectoryPathFetch": "http://54.196.168.222:PORT/resourcedirectory",
      ```
 
 - Type the following command : `sudo vim /etc/apache2/httpd.conf`
@@ -31,7 +31,7 @@ There instructions cover the installation, download and configuration of the eHM
 - Search for the **"Listen:"** section and add the following line after `Listen 80`:
 
     ```
-    Listen 8888
+    Listen PORT
     ```
 
 - Search for **“vhost”** and make sure both lines are uncommented. They will look similar to the following:
@@ -45,9 +45,9 @@ There instructions cover the installation, download and configuration of the eHM
 
 - Add the following to the end of the file :
     ```
-    NameVirtualHost *:8888
+    NameVirtualHost *:PORT
 
-    <VirtualHost *:8888>
+    <VirtualHost *:PORT>
       DocumentRoot /Users/<USERNAME>/Sites/ehmp-app
       <Directory "/Users/<USERNAME>/Sites/ehmp-app">
           Options Indexes MultiViews
@@ -72,7 +72,7 @@ There instructions cover the installation, download and configuration of the eHM
 - Next, you will start the web server with the following command : `sudo apachectl start`
 
 - Launch Safari, Chrome, or Firefox and navigate to **“http://127.0.0.1″** to verify the server is running, you will see an “**It Works!**” message
-    + You can now visit **http://127.0.0.1:8888** to see the ehmp app.
+    + You can now visit **http://127.0.0.1:PORT** to see the ehmp app.
 
 
 ### Setup for Windows ###
@@ -95,7 +95,7 @@ There instructions cover the installation, download and configuration of the eHM
 
     Line 6 should look like :
      ```
-     "resourceDirectoryPathFetch": "http://54.196.168.222:8888/resourcedirectory",
+     "resourceDirectoryPathFetch": "http://54.196.168.222:PORT/resourcedirectory",
      ```
 
 - Edit the following file : <br />
@@ -104,7 +104,7 @@ There instructions cover the installation, download and configuration of the eHM
 - Search for the **"Listen:"** section and add the following line after `Listen 80`:
 
     ```
-    Listen 8888
+    Listen PORT
     ```
 
 - Search for **“vhost”** and make sure both lines are uncommented. They will look similar to the following : <br />
@@ -119,9 +119,9 @@ There instructions cover the installation, download and configuration of the eHM
 
 - Add the following to the end of the file :
     ```
-    NameVirtualHost *:8888
+    NameVirtualHost *:PORT
 
-    <VirtualHost *:8888>
+    <VirtualHost *:PORT>
       DocumentRoot c:/Users/<USERNAME>/ehmp-app
       <Directory "c:/Users/<USERNAME>/ehmp-app">
           Options Indexes MultiViews
@@ -146,7 +146,7 @@ There instructions cover the installation, download and configuration of the eHM
 - Next start or restart the Apache Service, either from the Apache Monitor application in the taskbar, or using the Windows Services panel.
 
 - Launch Safari, Chrome, or Firefox and navigate to **“http://127.0.0.1″** to verify the server is running, you will see an “**It Works!**” message
-    + You can now visit **http://127.0.0.1:8888** to see the ehmp app.
+    + You can now visit **http://127.0.0.1:PORT** to see the ehmp app.
 
 
 ### Setup for Linux (Redhat/CentOS) ###
@@ -165,14 +165,14 @@ There instructions cover the installation, download and configuration of the eHM
 
     Line 6 should look like :
      ```
-     "resourceDirectoryPathFetch": "http://54.196.168.222:8888/resourcedirectory",
+     "resourceDirectoryPathFetch": "http://54.196.168.222:PORT/resourcedirectory",
      ```
 
 - Type the following command : `sudo vim /etc/httpd/httpd.conf`
 
 - Add the following lines to the end of the file :
     ```
-    Listen 8888
+    Listen PORT
 
     Include /etc/httpd/sites-enabled/
     ```
@@ -181,7 +181,7 @@ There instructions cover the installation, download and configuration of the eHM
 
 - Enter the following for the contents of this new file :
     ```
-    <VirtualHost *:8888>
+    <VirtualHost *:PORT>
       DocumentRoot /var/www/ehmp-app
       <Location />
         Order deny,allow
@@ -206,7 +206,7 @@ There instructions cover the installation, download and configuration of the eHM
 - Next, you will start the web server with the following command : `sudo service httpd start`
 
 - Launch Safari, Chrome, or Firefox and navigate to **“http://127.0.0.1″** to verify the server is running, you will see an “**It Works!**” message
-    + You can now visit http://127.0.0.1:8888 to see the ehmp app.
+    + You can now visit http://127.0.0.1:PORT to see the ehmp app.
 
 
 
@@ -282,7 +282,7 @@ There instructions cover the installation, download and configuration of the eHM
     ```
 > **Congratulations**! You have created your first Screen!
 >
-> Now go view your new screen and applet: [http://127.0.0.1:8888/#hello-world](http://127.0.0.1:8888/#hello-world)
+> Now go view your new screen and applet: [http://127.0.0.1:PORT/#hello-world](http://127.0.0.1:PORT/#hello-world)
 
 <br />
 

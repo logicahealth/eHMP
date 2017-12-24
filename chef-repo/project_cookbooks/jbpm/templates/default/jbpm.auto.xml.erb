@@ -8,13 +8,13 @@
 </com.izforge.izpack.panels.TargetPanel>
 <com.izforge.izpack.panels.UserInputPanel id="security">
 <userInput>
-	<entry key="adminUser" value="<%= node['jbpm']['install']['admin_user'] %>"/>
+	<entry key="adminUser" value="<%= @admin_username %>"/>
 	<entry autoPrompt="false" key="adminPassword" value="<%= @admin_password %>"/>
 </userInput>
 </com.izforge.izpack.panels.UserInputPanel>
 <com.izforge.izpack.panels.UserInputPanel id="bpmsUser">
 <userInput>
-    <entry key="bpms.user" value="<%= node['jbpm']['install']['admin_user'] %>"/>
+    <entry key="bpms.user" value="<%= @admin_username %>"/>
     <entry autoPrompt="false" key="bpms.password" value="<%= @admin_password %>"/>
 <entry key="bpms.user.additional.roles" value=""/>
 </userInput>

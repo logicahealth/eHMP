@@ -62,3 +62,20 @@ def knife_search_for_key_name(machine_name, driver)
   end
 end
 
+def knife_search_for_ips(machine_name)
+  release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "No node with that name found" if parsed_search["results"] == 0
+  ips = Array.new(parsed_search["results"]) 
+  parsed_search["rows"].each_with_index do |node,index|
+    ips[index] = node['automatic']['ipaddress']
+  end
+  ips
+end
+

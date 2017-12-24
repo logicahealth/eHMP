@@ -1,1 +1,14 @@
-VXSYNC_LOG_SUFFIX=<%= @name %> node subscriberHost.js<% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+#!/bin/bash
+export VXSYNC_LOG_SUFFIX=<%= @name %>
+<% if @app_dynamics_deploy %>
+export APPDYNAMICS_AGENT_TIER_NAME="<%= node[:vxsync][:app_dynamics][:agent_tier_name] %>_<%= node[:db_item] %>"
+export APPDYNAMICS_AGENT_NODE_NAME="<%= node[:vxsync][:app_dynamics][:agent_tier_name] %>_<%= node[:db_item] %>_<%= @name %>"
+<% end %>
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_<%= @name %>"
+node_modules/ca-apm-probe/bin/ca-apm-run.js subscriberHost.js<% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+<% else %>
+node subscriberHost.js<% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+<% end %>

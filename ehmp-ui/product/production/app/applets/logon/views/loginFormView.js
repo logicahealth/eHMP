@@ -25,7 +25,7 @@ define([
             'input .control': 'clearErrors'
         },
         searchOptions: {
-            resourceTitle: 'authentication-list',
+            resourceTitle: 'facility-list',
             cache: true,
             onError: function(collection, response) {
                 collection.trigger('read:error', collection, response);
@@ -93,13 +93,13 @@ define([
             });
             this.$('.accessCode input').focus();
         },
-        setSignInButtonAuthenticating: function () {
+        setSignInButtonAuthenticating: function() {
             var $signinButton = this.$('.login');
             $signinButton.trigger('control:icon', 'fa-spinner fa-spin');
             $signinButton.trigger('control:label', 'Authenticating');
             $signinButton.trigger('control:disabled', true);
         },
-        resetSignInButton: function () {
+        resetSignInButton: function() {
             var $signinButton = this.$('.login');
             $signinButton.trigger('control:icon', '');
             $signinButton.trigger('control:label', 'Sign In');
@@ -114,31 +114,33 @@ define([
             this.model.unset('errorMessage');
             this.model.set('screenReaderAuthenticatingClass', 'hidden');
             ADK.ADKApp.initAllRouters();
-            ADK.Navigation.navigate(ADK.WorkspaceContextRepository.userDefaultScreen);
-            ADK.CCOWService.start(function(err) {
-                if (!err) {
-                    var dfn = ADK.CCOWService.getDfnFromContextItems();
-                    if (!_.isUndefined(dfn)) {
-                        console.log('getting site info...');
-                        ADK.CCOWService.getSiteInfo(function(response) {
-                            if (response.error) {
-                                ADK.CCOWService.updateCcowStatus('Disconnected', '');
-                            } else {
-                                ADK.PatientRecordService.setCurrentPatient(response.siteCode + ';' + dfn, {
-                                    reconfirm: true,
-                                    navigation: true,
-                                    modalOptions: {
-                                        backdrop: 'static'
-                                    },
-                                    hideCloseX: true,
-                                    skipAckPatientConfirmation: true,
-                                    displayBreakClinicalLink: true,
-                                    displayVisitHomePageBtnOnSync: true,
-                                    suspendContextOnError: true
-                                });
+            ADK.Navigation.navigate(ADK.WorkspaceContextRepository.userDefaultScreen, {
+                callback: function() {
+                    $.when(ADK.SessionStorage.get.sessionObject('allAppletsLoadedPromise')).then(function() {
+                        ADK.CCOWService.start(function(err) {
+                            if (!err) {
+                                var dfn = ADK.CCOWService.getDfnFromContextItems();
+                                if (_.isString(dfn)) {
+                                    console.log('getting site info...');
+                                    ADK.CCOWService.getSiteInfo(function(response) {
+                                        if (response.error) {
+                                            ADK.CCOWService.updateCcowStatus('Disconnected', '');
+                                        } else {
+                                            ADK.PatientRecordService.setCurrentPatient(_.get(response, 'siteCode') + ';' + dfn, {
+                                                confirmationOptions: {
+                                                    ccowWorkflow: true,
+                                                    visitHomeLink: true,
+                                                    reconfirm: true,
+                                                    sensitivity: false
+                                                },
+                                                suspendContextOnError: true
+                                            });
+                                        }
+                                    });
+                                }
                             }
                         });
-                    }
+                    });
                 }
             });
         },

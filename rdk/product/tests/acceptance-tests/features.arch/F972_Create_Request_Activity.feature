@@ -4,7 +4,7 @@ Feature: F972 - Create Request Activity
 
 @F972_Request_Activity_1 @US13511 @US13514
 Scenario: Save and Delete Request Activity Draft Assigned to Me
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -14,7 +14,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to Me
     |     "me": true                                       |
     |   }                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                  |
@@ -25,9 +25,9 @@ Scenario: Save and Delete Request Activity Draft Assigned to Me
     | data.earliest       | system_start_date(0)   |
     | data.latest         | system_end_date(3)     |
     | data.requestDetails | Just a routine request |
-  When the "activity" Clinical "request" in "draft" state is deleted for patient "9E7A;3"
+  When the "activity" Clinical "request" in "draft" state is deleted for patient "SITE;3"
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                  |
@@ -43,7 +43,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to Me
 # ----------------------------------------------------------------------------
 @F972_Request_Activity_2 @US13511 @US13514
 Scenario: Save and Delete Request Activity Draft Assigned to Person
-  Given a "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                              |
     |   "data": {                                                         |
     |     "urgency": "emergent" ,                                         |
@@ -52,11 +52,11 @@ Scenario: Save and Delete Request Activity Draft Assigned to Person
     |     "requestDetails": "A request PROVIDER,THIRTY at ABILENE (CAA)", |
     |     "person": {                                                     |
     |       "assignedFacility": "998",                                    |
-    |       "assignedPerson" : "urn:va:user:9E7A:1057"                    |
+    |       "assignedPerson" : "urn:va:user:SITE:1057"                    |
     |     }                                                               |
     |   }                                                                 |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                                      |
@@ -66,15 +66,15 @@ Scenario: Save and Delete Request Activity Draft Assigned to Person
     | data.latest                     | system_end_date(3)                         |
     | data.requestDetails             | A request PROVIDER,THIRTY at ABILENE (CAA) |
     | data.person.assignedFacility    | 998                                        |
-    | data.person.assignedPerson      | urn:va:user:9E7A:1057                      |
-  When the "activity" Clinical "request" in "draft" state is deleted for patient "9E7A;3" with:
+    | data.person.assignedPerson      | urn:va:user:SITE:1057                      |
+  When the "activity" Clinical "request" in "draft" state is deleted for patient "SITE;3" with:
     | field               | value                  |
     | urgency             | not-valid              |
     | earliest            | zzzzz                  |
     | latest              | xxxxx                  |
     | requestDetails      | 123456789A123456789B123456789C123456789d123456789e123456789f123456789g123456789h123456789i123456789j123456789k123456789l123456789m123456789n123456789o |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                  |
@@ -87,7 +87,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to Person
 
 @F972_Request_Activity_3 @US13511 @US13514
 Scenario: Save and Delete Request Activity Draft Assigned to My Teams
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                               |
     |   "data": {                                                          |
     |     "urgency": "emergent" ,                                          |
@@ -114,7 +114,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to My Teams
     |     }                                                                |
     |   }                                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                           |
@@ -145,9 +145,9 @@ Scenario: Save and Delete Request Activity Draft Assigned to My Teams
     | data.myTeams.assignedRoles.name | OCCUPATIONAL THERAPIST          |
     | data.myTeams.assignedRoles.id   | 30                              |
     | data.myTeams.assignedRoles.name | TCM TRANSITION PATIENT ADVOCATE |
-  When the "activity" Clinical "request" in "draft" state is deleted for patient "9E7A;3"
+  When the "activity" Clinical "request" in "draft" state is deleted for patient "SITE;3"
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                           |
@@ -183,7 +183,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to My Teams
 
 @F972_Request_Activity_4 @US13511 @US13514
 Scenario: Save and Delete Request Activity Draft Assigned to Any Team
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                               |
     |   "data": {                                                          |
     |     "urgency": "emergent" ,                                          |
@@ -204,7 +204,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to Any Team
     |     }                                                                |
     |   }                                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                           |
@@ -221,9 +221,9 @@ Scenario: Save and Delete Request Activity Draft Assigned to Any Team
     | data.anyTeam.assignedRoles.name | POLYTRAUMA CASE MANAGER         |
     | data.anyTeam.assignedRoles.id   | 30                              |
     | data.anyTeam.assignedRoles.name | TCM TRANSITION PATIENT ADVOCATE |
-  When the "activity" Clinical "request" in "draft" state is deleted for patient "9E7A;3"
+  When the "activity" Clinical "request" in "draft" state is deleted for patient "SITE;3"
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                           |
@@ -247,7 +247,7 @@ Scenario: Save and Delete Request Activity Draft Assigned to Any Team
 
 @F972_Request_Activity_5 @US13514
 Scenario: Try to Save Request Activity Draft - Empty Title
-  Given an "" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -260,7 +260,7 @@ Scenario: Try to Save Request Activity Draft - Empty Title
 
 @F972_Request_Activity_6 @US13514
 Scenario: Try to Save Request Activity Draft - Missing Title
-  Given an "NIL" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "NIL" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -273,7 +273,7 @@ Scenario: Try to Save Request Activity Draft - Missing Title
 
 @F972_Request_Activity_7 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to Me - Me not empty
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with:
     | field          | value                       |
     | urgency        | routine                     |
     | earliest       | system_start_date(-1)       |
@@ -285,7 +285,7 @@ Scenario: Try to Save Request Activity Draft Assigned to Me - Me not empty
 
 @F972_Request_Activity_8 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to Me with Title greater than 140 chars
-  Given a "CHAR*141" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "CHAR*141" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -298,7 +298,7 @@ Scenario: Try to Save Request Activity Draft Assigned to Me with Title greater t
 
 @F972_Request_Activity_9 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to Me with Request Detail greater than 200 chars
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -311,14 +311,14 @@ Scenario: Try to Save Request Activity Draft Assigned to Me with Request Detail 
 
 @F972_Request_Activity_10 @US13514
 Scenario: Save Request Activity Draft with No Information
-  Given a "X" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "X" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
      |   data                                               |
      |   "data": { }                                        |
   Then a internal server error response is returned
 
 @F972_Request_Activity_11 @US13514
 Scenario: Save Request Activity Draft with Minimum Information
-  Given a "X" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "X" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "" ,                                  |
@@ -328,7 +328,7 @@ Scenario: Save Request Activity Draft with Minimum Information
     |     "me": true                                       |
     |   }                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value   |
@@ -341,7 +341,7 @@ Scenario: Save Request Activity Draft with Minimum Information
 
 @F972_Request_Activity_12 @US13514
 Scenario: Save Request Activity Draft with Maximum Information
-  Given a "CHAR*140" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "CHAR*140" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
      |   data                                               |
      |   "data": {                                          |
      |     "urgency": "routine" ,                           |
@@ -388,7 +388,7 @@ Scenario: Save Request Activity Draft with Maximum Information
      |     }                                                |
      |   }                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                              |
@@ -423,7 +423,7 @@ Scenario: Save Request Activity Draft with Maximum Information
 
 @F972_Request_Activity_13 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to My Team with missing data - myTeams: {}
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                               |
     |   "data": {                                                          |
     |     "urgency": "emergent" ,                                          |
@@ -441,7 +441,7 @@ Scenario: Try to Save Request Activity Draft Assigned to My Team with missing da
 
 @F972_Request_Activity_14 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to Any Team with non-existing team
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -451,7 +451,7 @@ Scenario: Try to Save Request Activity Draft Assigned to Any Team with non-exist
     |     "anyTeam": {                                     |
     |       "assignedFacility": "500",                     |
     |       "assignedTeam": {                              |
-    |         "id": "999988889999",                        |
+    |         "id": "PORTPORTPORT",                        |
     |         "name": "NON-EXISTING TEAM ID"               |
     |       },                                             |
     |       "assignedRoles": [{                            |
@@ -465,7 +465,7 @@ Scenario: Try to Save Request Activity Draft Assigned to Any Team with non-exist
 
 @F972_Request_Activity_15 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to person with extra fields
-  Given a "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                              |
     |   "data": {                                                         |
     |     "urgency": "emergent" ,                                         |
@@ -474,7 +474,7 @@ Scenario: Try to Save Request Activity Draft Assigned to person with extra field
     |     "requestDetails": "A request PROVIDER,THIRTY at ABILENE (CAA)", |
     |     "person": {                                                     |
     |       "assignedFacility": "998",                                    |
-    |       "assignedPerson" : "urn:va:user:9E7A:1057",                   |
+    |       "assignedPerson" : "urn:va:user:SITE:1057",                   |
     |       "assignedTeam" : "NOT A GOOD TEAM NAME"                       |
     |     }                                                               |
     |   }                                                                 |
@@ -482,7 +482,7 @@ Scenario: Try to Save Request Activity Draft Assigned to person with extra field
 
 @F972_Request_Activity_16 @US13514
 Scenario: Try to Save Request Activity Draft Assigned to My Team with team id and name not matching
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
     |   data                                                               |
     |   "data": {                                                          |
     |     "urgency": "emergent" ,                                          |
@@ -501,7 +501,7 @@ Scenario: Try to Save Request Activity Draft Assigned to My Team with team id an
 
 @F972_Request_Activity_17 @US13514
 Scenario: Save Request Activity Draft with Dates that are past due
-  Given an "activity" Clinical "request" in "draft" state is added for patient "9E7A;3" with:
+  Given an "activity" Clinical "request" in "draft" state is added for patient "SITE;3" with:
     | field                   | value                                                |
     | urgency                 | urgent                                               |
     | earliest                | system_start_date(-5)                                |
@@ -510,7 +510,7 @@ Scenario: Save Request Activity Draft with Dates that are past due
     | person.assignedFacility | 536                                                  |
     | person.assignedPerson   | urn:va:user:2939:1000                                |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                        | value                                                |
@@ -523,7 +523,7 @@ Scenario: Save Request Activity Draft with Dates that are past due
 
 @F972_Request_Activity_18 @US13514
 Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
-  Given a "CHAR*140" Clinical "request" in "draft" state is added for patient "9E7A;3" with data:
+  Given a "CHAR*140" Clinical "request" in "draft" state is added for patient "SITE;3" with data:
      |   data                                               |
      |   "data": {                                          |
      |     "urgency": "routine" ,                           |
@@ -570,7 +570,7 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
      |     }                                                |
      |   }                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                              |
@@ -602,7 +602,7 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
     | data.anyTeam.assignedRoles.name | OCCUPATIONAL THERAPIST             |
     | data.anyTeam.assignedRoles.id   | 30                                 |
     | data.anyTeam.assignedRoles.name | TCM TRANSITION PATIENT ADVOCATE    |
-  When an "activity" Clinical "request" in "draft" state is updated for patient "9E7A;3" with data:
+  When an "activity" Clinical "request" in "draft" state is updated for patient "SITE;3" with data:
     |   data                                               |
     |   "data": {                                          |
     |     "urgency": "routine" ,                           |
@@ -612,7 +612,7 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
     |     "me": true                                       |
     |   }                                                  |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field               | value                              |
@@ -621,7 +621,7 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
     | data.latest         | system_end_date(3)                 |
     | data.requestDetails | Just a routine request             |
     | data.me             | IS_SET                             |
-  When an "activity" Clinical "request" in "draft" state is updated for patient "9E7A;3" with data:
+  When an "activity" Clinical "request" in "draft" state is updated for patient "SITE;3" with data:
     |   data                                                              |
     |   "data": {                                                         |
     |     "urgency": "emergent" ,                                         |
@@ -630,11 +630,11 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
     |     "requestDetails": "A request PROVIDER,THIRTY at ABILENE (CAA)", |
     |     "person": {                                                     |
     |       "assignedFacility": "998",                                    |
-    |       "assignedPerson" : "urn:va:user:9E7A:1057"                    |
+    |       "assignedPerson" : "urn:va:user:SITE:1057"                    |
     |     }                                                               |
     |   }                                                                 |
   Then a successful response is returned
-  When the client retrieves the activity for patient "9E7A;3"
+  When the client retrieves the activity for patient "SITE;3"
   Then a successful response is returned
   And the activity request contains
     | field                           | value                                      |
@@ -644,4 +644,4 @@ Scenario: Change Request Activity Draft assigned to Any Team to Me to Any Person
     | data.latest                     | system_start_date(3)                       |
     | data.requestDetails             | A request PROVIDER,THIRTY at ABILENE (CAA) |
     | data.person.assignedFacility    | 998                                        |
-    | data.person.assignedPerson      | urn:va:user:9E7A:1057                      |
+    | data.person.assignedPerson      | urn:va:user:SITE:1057                      |

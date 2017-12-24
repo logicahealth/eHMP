@@ -162,10 +162,10 @@ define([
                 '{{#if userIsAllowedEditDelete}}' +
                 '<span>',
                 '{{#if allowEdit}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-edit-button font-size-12 btn btn-icon right-padding-xs left-padding-xs" title="Press enter to edit comment: {{comment}} {{timeStamp}} - {{name}}">' +
+                'class="comment-edit-button font-size-12 btn btn-icon right-padding-xs left-padding-xs" title="Edit comment: {{comment}} {{timeStamp}} - {{name}}">' +
                 '<i class="fa fa-pencil"></i></button>{{/if}}',
                 '{{#if allowDelete}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-delete-button font-size-12 button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to delete comment: {{comment}} {{timeStamp}} - {{name}}">' +
+                'class="comment-delete-button font-size-12 button btn btn-icon right-padding-xs left-padding-xs" title="Delete comment: {{comment}} {{timeStamp}} - {{name}}">' +
                 '<i class="fa fa-trash"></i></button>{{/if}}',
                 '</span>' +
                 '{{/if}}',
@@ -356,18 +356,18 @@ define([
         template: Handlebars.compile([
             '{{#if shouldDisplayEdit}}' +
             '<div class="col-xs-6 left-padding-xs right-padding-no">',
-            '<button type="button" class="cancel-edit-comment-button btn btn-default btn-block btn-sm" title="Press enter to cancel edit of comment">Cancel</button>',
+            '<button type="button" class="cancel-edit-comment-button btn btn-default btn-block btn-sm">Cancel</button>',
             '</div>',
             '<div class="col-xs-6 left-padding-xs right-padding-no">',
-            '<button {{#if shouldDisableSave}} disabled="disabled"{{/if}}type="button" class="edit-comment-button btn btn-primary btn-block btn-sm" title="Press enter to save edit of comment">Save</button>',
+            '<button {{#if shouldDisableSave}} disabled="disabled"{{/if}}type="button" class="edit-comment-button btn btn-primary btn-block btn-sm">Save</button>',
             '</div>',
             '{{else}}' +
             '<div class="col-xs-{{#if additionalAddCommentButton}}6{{else}}12{{/if}} left-padding-xs right-padding-no">',
-            '<button type="button" class="add-comment-button btn btn-primary btn-block btn-sm" title="Press enter to add comment"{{#if shouldDisableSave}} disabled="disabled"{{/if}}>Add</button>',
+            '<button type="button" class="add-comment-button btn btn-primary btn-block btn-sm" {{#if shouldDisableSave}} disabled="disabled"{{/if}}>Add</button>',
             '</div>' +
             '{{#if additionalAddCommentButton}}' +
             '<div class="col-xs-6 left-padding-xs right-padding-no">',
-            '<button type="button" class="additional-comment-button btn btn-default btn-block btn-sm" title="Press enter to {{additionalAddCommentButton.label}} comments">{{additionalAddCommentButton.label}}</button>',
+            '<button type="button" class="additional-comment-button btn btn-default btn-block btn-sm">{{additionalAddCommentButton.label}}</button>',
             '</div>' +
             '{{/if}}',
             '{{/if}}'
@@ -457,7 +457,7 @@ define([
 
     var CommentBoxControl = ControlService.LayoutViewControl.extend({
         defaults: {
-            maxComments: false,
+            maxComments: Infinity,
             commentTemplate: null,
             allowEdit: null,
             allowDelete: null,
@@ -577,8 +577,8 @@ define([
                     }),
                     footerView: Backbone.Marionette.ItemView.extend({
                         template: Handlebars.compile([
-                            '{{ui-button "Restore" type="button" classes="btn-sm btn-default restore-button" title="Press enter to restore."}}',
-                            '{{ui-button "OK" type="button" classes="btn-sm btn-primary no-button" title="Press enter to continue."}}'
+                            '{{ui-button "Restore" type="button" classes="btn-sm btn-default restore-button"}}',
+                            '{{ui-button "OK" type="button" classes="btn-sm btn-primary no-button" title="Continue"}}'
                         ].join('\n')),
                         ui: {
                             'NoButton': '.no-button',

@@ -1,6 +1,6 @@
 # Group Patient
 
-## Patient record cwad [{{{path}}}{?pid}{&start}{&limit}{&filter}{&order}]
+## Patient record cwad [{{{path}}}{?pid}{&start}{&limit}{&range}{&filter}{&order}]
 
 + Parameters
 
@@ -9,6 +9,8 @@
     :[start]({{{common}}}/parameters/start.md)
 
     :[limit]({{{common}}}/parameters/limit.md)
+
+    + range: `Advance Directive` (string, optional) - The JDS range query of the request.
 
     :[filter]({{{common}}}/parameters/filter.md)
 

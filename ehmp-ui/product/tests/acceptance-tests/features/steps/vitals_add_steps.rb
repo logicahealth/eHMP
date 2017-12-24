@@ -76,7 +76,7 @@ class DuplicateAllergyTest < AccessBrowserV2
   def initialize
     super
     add_action(CucumberLabel.new("ClickLocation"), ClickAction.new, AccessHtmlElement.new(:id, "add-vital-visit-btn"))
-    add_action(CucumberLabel.new("ClickActualLocation"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:9E7A:204:A;2931206.11;23"))
+    add_action(CucumberLabel.new("ClickActualLocation"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:SITE:204:A;2931206.11;23"))
     add_action(CucumberLabel.new("ClickConfirm"), ClickAction.new, AccessHtmlElement.new(:id, "setVisitBtn"))
   end
 end
@@ -87,7 +87,7 @@ class ChangeVisitTest < AccessBrowserV2
     super
     add_action(CucumberLabel.new("SelectChangeVisit"), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@id='patientDemographic-providerInfo']/div/div/div[2]/span"))
     add_action(CucumberLabel.new("ClickChangeVisitButton"), ClickAction.new, AccessHtmlElement.new(:id, "setVisitContextBtn"))
-    add_action(CucumberLabel.new("ClickVisit"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:9E7A:228:A;2940907.08;23")) #{}"urn:va:appointment:9E7A:271:A;3000521.09;23"))
+    add_action(CucumberLabel.new("ClickVisit"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:SITE:228:A;2940907.08;23")) #{}"urn:va:appointment:SITE:271:A;3000521.09;23"))
     add_action(CucumberLabel.new("ClickSetVisit"), ClickAction.new, AccessHtmlElement.new(:id, "setVisitBtn"))
   end
 end

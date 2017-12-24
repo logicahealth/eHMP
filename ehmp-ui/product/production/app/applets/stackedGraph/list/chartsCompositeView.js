@@ -9,14 +9,13 @@ define([
     'app/applets/stackedGraph/list/rowItemView',
     'app/applets/medication_review/medicationResourceHandler',
     'app/applets/medication_review/medicationCollectionHandler',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
     'app/applets/medication_review/appletHelper',
     'hbs!app/applets/stackedGraph/list/pickListItemTemplate',
     'app/applets/medication_review/charts/stackedGraph',
     'typeahead',
     'highcharts-more',
     'app/applets/lab_results_grid/applet'
-], function(Backbone, Marionette, _, $, Highcharts, ChartsCompositeViewTemplate, RowItemView, MedsResource, CollectionHandler, MedicationCollection, AppletHelper, PickListItemTemplate) {
+], function(Backbone, Marionette, _, $, Highcharts, ChartsCompositeViewTemplate, RowItemView, MedsResource, CollectionHandler, AppletHelper, PickListItemTemplate) {
     "use strict";
 
     function makeString(object) {
@@ -33,6 +32,45 @@ define([
     }
 
     var ChartsCompositeView = Backbone.Marionette.CompositeView.extend({
+        behaviors: {
+            QuickTile: {
+                childContainerSelector: function() {
+                    return this.$el;
+                },
+                rowTagName: 'div',
+                rowAttributes: function() {
+                    return {
+                        role: 'gridcell'
+                    };
+                }
+            }
+        },
+        tileOptions: {
+            quickLooks: {
+                enabled: true
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'tilesortbutton',
+                    shouldShow: function() {
+                        return !_.get(ADK.Messaging.request('get:current:screen'), 'config.predefined');
+                    }
+                }, {
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton'
+                }, {
+                    type: 'deletestackedgraphbutton',
+                    shouldShow: function() {
+                        return !_.get(ADK.Messaging.request('get:current:screen'), 'config.predefined') && ADK.UserService.hasPermission('access-stack-graph');
+                    }
+                }]
+            },
+            primaryAction: {
+                enabled: true
+            }
+        },
         template: ChartsCompositeViewTemplate,
         childViewContainer: '.collection-container',
         childView: RowItemView,
@@ -45,14 +83,6 @@ define([
                 'click.' + this.cid
             ].join(' ');
         },
-        childEvents: {
-            'toggle:quicklook': function(e) {
-                var el = e.ui.popoverEl;
-                this.setDocHandler();
-                ADK.Messaging.getChannel('gists').trigger('close:quicklooks', el);
-                el.popup('toggle');
-            }
-        },
         setDocHandler: function() {
             $(document).off(this.eventString());
             $(document).on(this.eventString(), {
@@ -64,7 +94,6 @@ define([
             if (view.$(e.target).length || view.options.preventFocusoutClose) {
                 return;
             }
-            ADK.Messaging.getChannel('gists').trigger('close:quicklooks');
             $(document).off(view.eventString());
         },
         initialize: function(options) {
@@ -74,10 +103,6 @@ define([
                 activeCharts: options.activeCharts,
                 timeLineCharts: options.timeLineCharts
             };
-
-            this.listenTo(ADK.Messaging.getChannel('gists'), 'close:quicklooks', function(el) {
-                this.$('[data-toggle=popover]').not(el).popup('hide');
-            });
 
             this.stackedGraphModel = new ADK.UIResources.Writeback.StackedGraph.Model();
             this.bindEntityEvents(this.stackedGraphModel, this.stackedGraphModelEvents);
@@ -138,10 +163,6 @@ define([
                 this.stackedGraphModel.reorderObj = reorderObj;
                 this.stackedGraphModel.save();
             }
-        },
-        hidePopovers: function(e) {
-            this.$('[data-toggle=popover]').popup('hide');
-            ADK.Messaging.getChannel('gists').trigger('close:quicklooks');
         },
         onDestroy: function() {
             this.$el.find('.placeholder-tile-sort').remove();
@@ -252,7 +273,7 @@ define([
                     var MedModel = Backbone.Model.extend({
                         parse: AppletHelper.parseMedResponse
                     });
-                    var GroupedMedCollection = MedicationCollection.extend({
+                    var GroupedMedCollection = ADK.UIResources.Fetch.MedicationReview.Collection.extend({
                         model: MedModel
                     });
                     var medGroups = new GroupedMedCollection();

@@ -3,8 +3,8 @@ Feature:F144-eHMP Viewer GUI - Appointments & Visits
 
 @US1847
 Scenario: Verify Appointment/Visits data call without a date filter
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
-  When the client requests the APPOINTMENTS for the patient "9E7A;3" with parameters
+  Given a patient with pid "SITE;3" has been synced through the RDK API
+  When the client requests the APPOINTMENTS for the patient "SITE;3" with parameters
    | PARAMETER | VALUE |
    | filter    | and(ne(categoryName,"Admission"),ne(locationOos,true))|
    | customFilter | and(ne(categoryName,"Admission"),ne(locationOos,true)) |
@@ -21,8 +21,8 @@ Scenario: Verify Appointment/Visits data call without a date filter
 
  @US1847 @US1847_all
 Scenario: Verify Appointment/Visits data call with a global date filter all set
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
-  When the client requests the APPOINTMENTS for the patient "9E7A;3" with parameters
+  Given a patient with pid "SITE;3" has been synced through the RDK API
+  When the client requests the APPOINTMENTS for the patient "SITE;3" with parameters
    | PARAMETER | VALUE |
    | filter    | and(ne(categoryName,"Admission"),ne(locationOos,true),between(dateTime,"19930716","TODAY"))|
    | customFilter | and(ne(categoryName,"Admission"),ne(locationOos,true)) |

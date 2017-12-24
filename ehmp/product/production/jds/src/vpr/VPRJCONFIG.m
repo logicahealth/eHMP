@@ -34,13 +34,33 @@ SETUP ;
  ; Generic Data Store
  S:'$G(^VPRCONFIG("timeout","gds")) ^VPRCONFIG("timeout","gds")=30
  ;
+ ; Whether or not we want to log socket errors to JDS's internal HTTP log
+ S:'$G(^VPRCONFIG("handleSocketError")) ^VPRCONFIG("handleSocketError")=0
+ ; TCP socket buffer sizes - 1048576 is the default if /IBUFSIZ and /OBUFSIZ are not included in socket open command in VPRJREQ
+ S:'$G(^VPRCONFIG("HTTP","inputBuffer")) ^VPRCONFIG("HTTP","inputBuffer")=1048576
+ S:'$G(^VPRCONFIG("HTTP","outputBuffer")) ^VPRCONFIG("HTTP","outputBuffer")=1048576
+ ; Whether or not we want to wrap the re-index utilities with a lock and a transaction
+ S:'$G(^VPRCONFIG("reindexLockTransactions")) ^VPRCONFIG("reindexLockTransactions")=0
+ ; Set VVMAX Values
+ S:'$G(^VPRCONFIG("vvmax","decoder")) ^VPRCONFIG("vvmax","decoder")=100
+ S:'$G(^VPRCONFIG("vvmax","encoder")) ^VPRCONFIG("vvmax","encoder")=100
  ; Add default generic data stores
  F SEQ=1:1 S STORE=$P($T(DEFAULTSTORE+SEQ),";;",2) Q:STORE="zzzzz"  D
  . D ADDSTORE($P(STORE,";",1),$P(STORE,";",2))
- N SEQ
+ K SEQ
  ; Add default route/url map
  F SEQ=1:1 S URLMAP=$P($T(URLMAP+SEQ),";;",2) Q:URLMAP="zzzzz"  D
  . D ADDURL($P(URLMAP,";",1),$P(URLMAP,";",2),$P(URLMAP,";",3))
+ ;
+ ; Cleanup old store-index urls
+ K SEQ,STORE
+ S STORE=""
+ S SEQ=""
+ F  S STORE=$O(^VPRCONFIG("urlmap","store-index",STORE)) Q:STORE=""  D
+ . F  S SEQ=$O(^VPRCONFIG("urlmap","store-index",STORE,SEQ)) Q:SEQ=""  D
+ . . I '$D(^VPRCONFIG("urlmap",SEQ)) D
+ . . . W "Deleting unused entry: ^VPRCONFIG(""urlmap"",""store-index"","_STORE_","_SEQ_")",!
+ . . . K ^VPRCONFIG("urlmap","store-index",STORE,SEQ)
  Q
 CREATEDB(ARGS,BODY)
  ; Wrapper for ADDSTORE to be a REST endpoint
@@ -57,7 +77,7 @@ CREATEDB(ARGS,BODY)
  ; this should return {"ok":true}
  ; current HTTP responder can't handle this on a POST
  Q "/"_ARGS("store")
-ADDSTORE(DB,GLOBAL,VER)
+ADDSTORE(DB,GLOBAL,VER,ARGS)
  ; Parameters:
  ;
  ; DB = database name
@@ -76,23 +96,29 @@ ADDSTORE(DB,GLOBAL,VER)
  I $L(DB)=0!($L(DB)>10)!(DB'?1.10AN) D SETERROR^VPRJRER(252) Q
  S DB=$$LOW^VPRJRUT(DB)
  S UDB=$$UP^VPRJRUT(DB)
+ I $D(ARGS) D DECODE^VPRJSON("ARGS","OBJECT","ERR")
+ I $D(ERR) D SETERROR^VPRJRER(202) QUIT ""
  S VER=$G(VER,1) ; Default version to 1 unless specified
- ; ensure DB isn't created
- I $D(^VPRCONFIG("store",DB)) D SETERROR^VPRJRER(254) Q
+ ;
  S ^VPRCONFIG("store",DB)=""
  S ^VPRCONFIG("store",DB,"global")=$S($L($G(GLOBAL))>1:GLOBAL,1:"VPRJ"_UDB)
  S ^VPRCONFIG("store",DB,"version")=VER
+ S ^VPRCONFIG("store",DB,"lockTimeout")=$G(OBJECT("lockTimeout"),300)
  ; Add GDS Operations
  ; order from most specific to least specific for routes to apply as expected
  D ADDURL("GET",DB_"/index/{indexName}","INDEX^VPRJGDS",DB) ; Retrieve using index
  D ADDURL("GET",DB_"/index/{indexName}/{template}","INDEX^VPRJGDS",DB) ; Retrieve using index and template
+ D ADDURL("POST",DB_"/index","CINDEX^VPRJGDS",DB) ; Create Index
+ D ADDURL("POST",DB_"/template","CTEMPLATE^VPRJGDS",DB) ; Create Template
+ D ADDURL("GET",DB_"/lock","GETLOCK^VPRJGDS",DB) ; Get lock table
+ D ADDURL("GET",DB_"/lock/{uid}","GETLOCK^VPRJGDS",DB) ; Get lock table for a uid
+ D ADDURL("PUT",DB_"/lock/{uid}","SETLOCK^VPRJGDS",DB) ; Acquire a lock on a uid
+ D ADDURL("DELETE",DB_"/lock/{uid}","DELLOCK^VPRJGDS",DB) ; Remove a lock on a uid
  D ADDURL("GET",DB_"/{uid}","GET^VPRJGDS",DB) ; Return given document
  D ADDURL("GET",DB_"/{uid}/{template}","GET^VPRJGDS",DB) ; Return given document using template
  D ADDURL("PUT",DB_"/{uid}","SET^VPRJGDS",DB) ; Set given document - UID provided
  D ADDURL("PATCH",DB_"/{uid}","SET^VPRJGDS",DB) ; update a given document - UID provided
  D ADDURL("DELETE",DB_"/{uid}","DEL^VPRJGDS",DB) ; Delete given document
- D ADDURL("POST",DB_"/index","CINDEX^VPRJGDS",DB) ; Create Index
- D ADDURL("POST",DB_"/template","CTEMPLATE^VPRJGDS",DB) ; Create Template
  ; DB Operations
  ;
  ; PUT creates new database - not store specific
@@ -109,13 +135,17 @@ ADDURL(METHOD,URL,ROUTINE,STORE)
  ; URL = The URL Pattern to match
  ; ROUTINE = TAG^ROUTINE to execute to handle the URL
  ; STORE = Store name for deletion index
- N SEQ,URLMAPNUM,DONE
+ N SEQ,URLMAPNUM
  ; Ensure url config doesn't exist
  S URLMAPNUM=""
- S DONE=0
- F  S URLMAPNUM=$O(^VPRCONFIG("urlmap","url-index",URL,URLMAPNUM)) Q:URLMAPNUM=""  D  Q:DONE
- . I URL=$G(^VPRCONFIG("urlmap",URLMAPNUM,"url"))&(METHOD=$G(^VPRCONFIG("urlmap",URLMAPNUM,"method"))) S DONE=1
- I DONE Q
+ F  S URLMAPNUM=$O(^VPRCONFIG("urlmap","url-index",URL,URLMAPNUM)) Q:URLMAPNUM=""  D
+ . I URL=$G(^VPRCONFIG("urlmap",URLMAPNUM,"url"))&(METHOD=$G(^VPRCONFIG("urlmap",URLMAPNUM,"method"))) D
+ . . ; Remove the URL from the urlmap
+ . . K:$D(^VPRCONFIG("urlmap",URLMAPNUM)) ^VPRCONFIG("urlmap",URLMAPNUM)
+ . . ; Remove the URL from the url-index
+ . . K:$D(^VPRCONFIG("urlmap","url-index",URL,URLMAPNUM)) ^VPRCONFIG("urlmap","url-index",URL,URLMAPNUM)
+ . . ; Remove the URL in store-index
+ . . I $G(STORE) K:$D(^VPRCONFIG("urlmap","store-index",STORE,URLMAPNUM)) ^VPRCONFIG("urlmap","store-index",STORE,URLMAPNUM)
  S SEQ=$I(^VPRCONFIG("urlmap"))
  S ^VPRCONFIG("urlmap",SEQ,"method")=$G(METHOD)
  S ^VPRCONFIG("urlmap",SEQ,"url")=$G(URL)
@@ -250,15 +280,6 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;GET;tasks/gc/data;DATA^VPRJGC
  ;;GET;tasks/gc/job/{id};JOB^VPRJGC
  ;;GET;tasks/gc/job;JOB^VPRJGC
- ;;POST;error/set/this;SET^VPRJERR
- ;;PUT;error/set/this;SET^VPRJERR
- ;;GET;error/get/{id};GET^VPRJERR
- ;;GET;error/get;GET^VPRJERR
- ;;GET;error/length/this;LEN^VPRJERR
- ;;DELETE;error/destroy/{id};DEL^VPRJERR
- ;;GET;error/destroy/{id};DEL^VPRJERR
- ;;DELETE;error/clear/this;CLR^VPRJERR
- ;;GET;error/clear/this;CLR^VPRJERR
  ;;PUT;{store};CREATEDB^VPRJCONFIG
  ;;GET;documentation;DATA^VPRJDOCS
  ;;GET;documentation/index;INDEX^VPRJDOCS

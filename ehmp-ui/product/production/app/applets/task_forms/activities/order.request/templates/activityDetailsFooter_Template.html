@@ -1,13 +1,13 @@
 <div class="row request-activity-footer">
 	<div class="col-xs-6 text-left">
 	{{#if showDiscontinue}}
-		{{ui-button "Discontinue" id="activityDetailDiscontinue" classes="btn-default btn-sm" title="Press enter to discontinue activity"}}
+		{{ui-button "Discontinue" id="activityDetailDiscontinue" classes="btn-default btn-sm"}}
 	{{/if}}
 	</div>
 	<div class="col-xs-6">
 		<div class="control inline-block-display dropdown-control dropup right-margin-sm">
 			<div class="btn-group">
-				<button type="button" class="btn dropdown-toggle btn-default btn-sm btn-caret" title="Press enter for available actions" data-toggle="dropdown" {{#if actionButtons}}{{else}}disabled="true"{{/if}}>Actions <i class="fa fa-caret-up"></i></button>
+				<button type="button" class="btn dropdown-toggle btn-default btn-sm btn-caret" data-toggle="dropdown" {{#if actionButtons}}{{else}}disabled="true"{{/if}}>Actions <i class="fa fa-caret-up"></i></button>
 				<ul class="dropdown-menu menu-item-width-120">
 					{{#each actionButtons}}
 						<li title="Press enter to select {{label}}" data-signal="{{signal}}">
@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="control inline-block-display">
-			{{ui-button "Close" id="activityDetailClose" classes="btn-default btn-sm" title="Press enter to close" }}
+			{{ui-button "Close" id="activityDetailClose" classes="btn-default btn-sm"}}
 		</div>
 	</div>
 </div>

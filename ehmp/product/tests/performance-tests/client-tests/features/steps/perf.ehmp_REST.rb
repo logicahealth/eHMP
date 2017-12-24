@@ -6,7 +6,7 @@ require 'json'
 class HTTPartyWithAuthorization
   include HTTParty
 
-  # Authorization header is Base64 encoding of "9E7A;500:IP    ;REDACTED"
+  # Authorization header is Base64 encoding of "SITE;500:USER  ;PW      "
   @@header = { 'Authorization' => 'Basic OUU3QTs1MDA6cHUxMjM0O3B1MTIzNCEh' }
   @@time_start = Time.new
   @@time_done = Time.new
@@ -34,9 +34,9 @@ end
 class SETENV
   @@hmp_url = ENV.keys.include?('EHMP_IP') ? 'https://' + ENV['EHMP_IP'] + ":8443": "https://IP           "
   @@fhir_url = ENV.keys.include?('VE_API_IP') ? 'https://' + ENV['VE_API_IP'] : "https://IP      "
-  @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":9080" : "http://IP             "
+  @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":PORT" : "http://IP             "
   @@run_id = ENV.keys.include?('ID') ? 'ENV[ID] = ' + ENV['ID'] : "[INFO] There is no ENV[ID] to print"
-  @@perf_url = ENV.keys.include?('Perf-Monitor_IP') ? 'http://' + ENV['Perf-Monitor_IP'] + ":9080" : "http://IP             /ehmp/transactions"
+  @@perf_url = ENV.keys.include?('Perf-Monitor_IP') ? 'http://' + ENV['Perf-Monitor_IP'] + ":PORT" : "http://IP             /ehmp/transactions"
 
   def self.fhir_url
     return @@fhir_url
@@ -95,7 +95,7 @@ end
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :username => "REDACTED", :password => "REDACTED" }
+  @@auth = { :username => "PW         ", :password => "PW      " }
   @@time_start = Time.new
   @@time_done = Time.new
 
@@ -105,8 +105,8 @@ class HTTPartyWithBasicAuth
   end
   
   def self.check_host(path)
-    if path.include? "C877;"
-      @@auth = { :username => "REDACTED", :password => "REDACTED" }
+    if path.include? "SITE;"
+      @@auth = { :username => "SITE;USER  ", :password => "PW      " }
     end
   end
 
@@ -415,7 +415,7 @@ When(/^a client requests an asynchronous load for patient with icn "(.*?)"$/) do
 end
 
 When(/^user requests allergies in FHIR format for a patient, "(.*?)"$/) do  |pid|
-  #https://IP      /fhir/AdverseReaction?subject.identifier=9E7A;100022&_format=json&_ack=true
+  #https://IP      /fhir/AdverseReaction?subject.identifier=SITE;100022&_format=json&_ack=true
   temp = QueryFhir.new("AdverseReaction")
   temp.add_parameter("subject.identifier", pid)
   temp.add_format("json")
@@ -484,7 +484,7 @@ Then(/^user requests vitals in FHIR format for a patient, "(.*?)"$/) do  |pid|
 end
 
 Then(/^user requests demographics in FHIR format for a patient, "(.*?)"$/) do  |pid|
-  #https://IP      /fhir/patient?identifier=9E7A;100022&_format=json&_ack=true
+  #https://IP      /fhir/patient?identifier=SITE;100022&_format=json&_ack=true
   temp = QueryFhir.new("patient")
   temp.add_parameter("identifier", pid)
   temp.add_format("json")
@@ -507,7 +507,7 @@ Then(/^user requests demographics in FHIR format for a patient, "(.*?)"$/) do  |
 end
 
 When(/^the client requests non-va medication results for that patient "(.*?)" in FHIR format$/) do |pid|  
-  #https://IP      /fhir/MedicationStatement?subject.identifier=9E7A;100033&_format=json&_ack=true
+  #https://IP      /fhir/MedicationStatement?subject.identifier=SITE;100033&_format=json&_ack=true
   temp = QueryFhir.new("MedicationStatement")    
   temp.add_parameter("subject.identifier", pid)
   temp.add_format("json")
@@ -530,7 +530,7 @@ When(/^the client requests non-va medication results for that patient "(.*?)" in
 end
 
 When(/^the client requests in-patient medication results for that patient "(.*?)" in FHIR format$/)  do |pid| 
-  #https://IP      /fhir/MedicationAdministration?subject.identifier=9E7A;100033&_format=json&_ack=true
+  #https://IP      /fhir/MedicationAdministration?subject.identifier=SITE;100033&_format=json&_ack=true
   temp = QueryFhir.new("MedicationAdministration")
   temp.add_parameter("subject.identifier", pid)
   temp.add_format("json")
@@ -602,7 +602,7 @@ end
 ################################## vpr api REST endpoints steps
 
 When(/^the client requests allergies from VPR for the patient, "(.*?)"$/) do |pid|
-  #https://IP      /vpr/9E7A;100022/allergy?_ack=true
+  #https://IP      /vpr/SITE;100022/allergy?_ack=true
   full_path = QueryVPR.new("allergy", pid).path
   p full_path
   @start_time = Time.now.to_f 
@@ -622,7 +622,7 @@ When(/^the client requests allergies from VPR for the patient, "(.*?)"$/) do |pi
 end
 
 When(/^the client requests vital from VPR for the patient, "(.*?)"$/) do |pid|
-  #https://IP      /vpr/9E7A;100022/vital?_ack=true
+  #https://IP      /vpr/SITE;100022/vital?_ack=true
   full_path = QueryVPR.new("vital", pid).path
   p full_path
   @start_time = Time.now.to_f 
@@ -642,7 +642,7 @@ When(/^the client requests vital from VPR for the patient, "(.*?)"$/) do |pid|
 end
 
 When(/^the client requests demographics from VPR for the patient, "(.*?)"$/) do |pid|
-  #https://IP      /vpr/9E7A;100022/patient?_ack=true
+  #https://IP      /vpr/SITE;100022/patient?_ack=true
   full_path = QueryVPR.new("patient", pid).path
   p full_path
   @start_time = Time.now.to_f 
@@ -762,7 +762,7 @@ When(/^the client requests problem lists for the patient "(.*?)" in VPR format$/
 end
 
 When(/^the client requests medications for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/9E7A;100033/med?_ack=true
+  #https://IP      /vpr/SITE;100033/med?_ack=true
   path = QueryVPR.new("med", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -902,7 +902,7 @@ When(/^the client requests consult results for the patient "(.*?)" in VPR format
 end
 
 When(/^the client requests appointments for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/C877;737/appointment?_ack=true
+  #https://IP      /vpr/SITE;737/appointment?_ack=true
   temp = QueryVPR.new("appointment", pid)
   p temp.path
   @start_time = Time.now.to_f    
@@ -922,7 +922,7 @@ When(/^the client requests appointments for the patient "(.*?)" in VPR format$/)
 end
 
 When(/^the client requests consult results for the patient "(.*?)" in VPR format_HDR$/) do |pid|
-  #https://IP      /vpr/C877;737/consult?_ack=true
+  #https://IP      /vpr/SITE;737/consult?_ack=true
   temp = QueryVPR.new("consult", pid)
   p temp.path
   @start_time = Time.now.to_f    
@@ -942,7 +942,7 @@ When(/^the client requests consult results for the patient "(.*?)" in VPR format
 end
 
 When(/^the client requests cpt for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/C877;737/cpt?_ack=true
+  #https://IP      /vpr/SITE;737/cpt?_ack=true
   temp = QueryVPR.new("cpt", pid)
   p temp.path
   @start_time = Time.now.to_f    
@@ -962,7 +962,7 @@ When(/^the client requests cpt for the patient "(.*?)" in VPR format$/) do |pid|
 end
 
 When(/^the client requests documents for the patient "(.*?)" in VPR format_HDR$/) do |pid|
-  #https://IP      /vpr/C877;737/document?_ack=true
+  #https://IP      /vpr/SITE;737/document?_ack=true
   path = QueryVPR.new("document", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -982,7 +982,7 @@ When(/^the client requests documents for the patient "(.*?)" in VPR format_HDR$/
 end
 
 When(/^the client requests educations for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/9E7A;737/education?_ack=true
+  #https://IP      /vpr/SITE;737/education?_ack=true
   path = QueryVPR.new("education", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -1002,7 +1002,7 @@ When(/^the client requests educations for the patient "(.*?)" in VPR format$/) d
 end
 
 When(/^the client requests exams for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/9E7A;737/exam?_ack=true
+  #https://IP      /vpr/SITE;737/exam?_ack=true
   path = QueryVPR.new("exam", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -1022,7 +1022,7 @@ When(/^the client requests exams for the patient "(.*?)" in VPR format$/) do |pi
 end
 
 When(/^the client requests factors for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/9E7A;737/factor?_ack=true
+  #https://IP      /vpr/SITE;737/factor?_ack=true
   path = QueryVPR.new("factor", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -1042,7 +1042,7 @@ When(/^the client requests factors for the patient "(.*?)" in VPR format$/) do |
 end
 
 When(/^the client requests images for the patient "(.*?)" in VPR format$/) do |pid|
-  #https://IP      /vpr/9E7A;737/image?_ack=true
+  #https://IP      /vpr/SITE;737/image?_ack=true
   path = QueryVPR.new("image", pid).path
   p path
   @start_time = Time.now.to_f    
@@ -1243,7 +1243,7 @@ When(/^the client requests visit results for the patient "(.*?)" in VPR format$/
 end
 
 Given(/^the client requests Meds for the patient "(.*?)"$/) do |pid|
-  #https://IP           /vpr/view/gov.va.cpe.vpr.queryeng.MedsViewDef?_dc=1396988436165&pid=9E7A;71&page=1&row.start=0&row.count=1000&range.startHL7=19930416&range.endHL7=20140710
+  #https://IP           /vpr/view/gov.va.cpe.vpr.queryeng.MedsViewDef?_dc=1396988436165&pid=SITE;71&page=1&row.start=0&row.count=1000&range.startHL7=19930416&range.endHL7=20140710
   @start_time = Time.now.to_f    
   query_with_path "/vpr/view/gov.va.cpe.vpr.queryeng.MedsViewDef", pid
   @end_time = Time.now.to_f

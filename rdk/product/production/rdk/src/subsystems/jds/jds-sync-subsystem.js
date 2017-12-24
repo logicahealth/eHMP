@@ -1,14 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
-var util = require('util');
-var rdk = require('../../core/rdk');
-var httpUtil = rdk.utils.http;
-var nullchecker = require('../../utils/nullchecker');
-var checkStatus = require('./jds-sync-check-status');
-var jdsSyncConfig = require('./jds-sync-config');
-var isNullish = nullchecker.isNullish;
-var isNotNullish = nullchecker.isNotNullish;
+let _ = require('lodash');
+let rdk = require('../../core/rdk');
+let httpUtil = rdk.utils.http;
+let nullchecker = require('../../utils/nullchecker');
+let checkStatus = require('./jds-sync-check-status');
+let jdsSyncConfig = require('./jds-sync-config');
+let isNullish = nullchecker.isNullish;
+let isNotNullish = nullchecker.isNotNullish;
+
+let isParsedToPositiveInteger = require('../../utils/integer-checker').isParsedToPositiveInteger;
 
 module.exports.getSubsystemConfig = getSubsystemConfig;
 module.exports.loadPatient = loadPatient;
@@ -30,7 +31,7 @@ module.exports.createStandardResponse = createStandardResponse;
 module.exports.createErrorResponse = createErrorResponse;
 module.exports._syncStatusResultProcessor = syncStatusResultProcessor;
 
-var noSiteMessage = 'This patient\'s record is not yet accessible. Please try again in a few minutes. If it is still not accessible, please contact your HIMS representative and have the patient loaded into your local VistA.';
+const noSiteMessage = 'This patient\'s record is not yet accessible. Please try again in a few minutes. If it is still not accessible, please contact your HIMS representative and have the patient loaded into your local VistA.';
 
 function getSubsystemConfig(app, logger) {
     return {
@@ -39,7 +40,7 @@ function getSubsystemConfig(app, logger) {
             dependencies: ['authorization'],
             interval: 100000,
             check: function(callback) {
-                var jdsConfig = {
+                let jdsConfig = {
                     timeout: 5000,
                     baseUrl: app.config.jdsServer.baseUrl,
                     url: '/ping',
@@ -58,67 +59,69 @@ function getSubsystemConfig(app, logger) {
 }
 
 function loadPatient(pid, immediate, req, callback) {
-    req.logger.debug('jds-sync-subsystem.loadPatient() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
+    req.logger.debug('jds-sync-subsystem.loadPatient() pid: [%s], immediate? [%s]', pid, immediate);
+    let config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
     doLoad(config, pid, immediate, null, req, callback);
 }
 
 function loadPatientPrioritized(pid, prioritySite, req, callback) {
-    req.logger.debug('jds-sync-subsystem.loadPatientPrioritized() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
+    req.logger.debug('jds-sync-subsystem.loadPatientPrioritized() pid: [%s], prioritySite: [%s]', pid, prioritySite);
+    let config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
     doLoad(config, pid, false, prioritySite, req, callback);
 }
 
 function loadPatientForced(pid, forcedSite, immediate, req, callback) {
-    req.logger.debug('jds-sync-subsystem.loadPatientForced() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
+    req.logger.debug('jds-sync-subsystem.loadPatientForced() pid: [%s], forcedSite: [%s], immediate? [%s]', pid, forcedSite, immediate);
+    let config = jdsSyncConfig.configureWithPidParam('loadPatient', pid, req);
     jdsSyncConfig.addForcedParam(config, req, forcedSite);
     doLoad(config, pid, immediate, null, req, callback);
 }
 
 function clearPatient(pid, req, callback) {
-    req.logger.debug('jds-sync-subsystem.clearPatient() pid: %s', pid);
+    req.logger.debug('jds-sync-subsystem.clearPatient() pid: [%s]', pid);
     jdsSyncConfig.setupAudit(pid, req);
 
-    var config = jdsSyncConfig.getSyncConfig('clearPatient', req);
+    let config = jdsSyncConfig.getSyncConfig('clearPatient', req);
     jdsSyncConfig.addPidParam(config, req, pid);
 
     // This call does not invoke the callback until an error
     // occurs or the patient has been completely cleared.
     httpUtil.post(config, function(error, response) {
         if (error) {
-            req.logger.error(error);
+            req.logger.error({
+                error: error
+            }, `jds-sync-subsystem.clearPatient() pid: [${pid}]`);
             return callback(error);
         }
 
         // If clearPatient is called on a patient that does not exist in JDS,
         // JDS will return a response with status 404 and the message "Patient not found"
         if (response && response.statusCode === 404) {
-            return callback(404, createErrorResponse(error, 'pid ' + pid + ' not found.'));
+            return callback(404, createErrorResponse(error, `pid: ${pid} not found.`));
         }
 
         if (response && 200 <= response.statusCode && response.statusCode <= 299) {
-            return callback(null, createStandardResponse(200, 'pid ' + pid + ' unsynced.'));
+            return callback(null, createStandardResponse(200, `pid: ${pid} unsynced.`));
         }
 
-        return callback(500, createErrorResponse(500, util.format('An error has interrupted the patient synchronization process. Please report this error to your local help desk or system administrator: Patient %s was not unsynced after a failed sync.', pid)));
+        return callback(500, createErrorResponse(500, `An error has interrupted the patient synchronization process. Please report this error to your local help desk or system administrator: Patient ${pid} was not unsynced after a failed sync.`));
     });
 }
 
 // Used by patient-sync.js and patient-sync-resource.js
 function getPatientStatus(pid, req, callback) {
-    req.logger.debug('jds-sync-subsystem.getPatientStatus() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidParam('getPatientStatus', pid, req);
+    req.logger.debug('jds-sync-subsystem.getPatientStatus() pid: [%s]', pid);
+    let config = jdsSyncConfig.configureWithPidParam('getPatientStatus', pid, req);
     req.logger.trace({
         config: config
-    }, 'getPatientStatus');
+    }, `jds-sync-subsystem.getPatientStatus() pid: [${pid}]`);
     httpUtil.get(config, syncStatusResultProcessor.bind(null, pid, callback, req));
 }
 
 // This is used by patient-sync-resource.js
 // This function adds fields to the Simple Sync Status for compatibility
 function getPatientDataStatusSimple(pid, req, callback) {
-    req.logger.debug('jds-sync-subsystem.getPatientDataStatusSimple() pid: %s', pid);
+    req.logger.debug('jds-sync-subsystem.getPatientDataStatusSimple() pid: [%s]', pid);
     getPatientStatusSimple(pid, req, function(syncError, syncResult) {
         if (_.get(syncResult, 'error.code') === 404) {
             return callback(syncResult.error.code, syncResult);
@@ -129,8 +132,8 @@ function getPatientDataStatusSimple(pid, req, callback) {
         }
 
         if (isNotNullish(syncError)) {
-            var syncStatus = (syncResult && syncResult.status) || 500;
-            var data = (syncResult && syncResult.data) || syncError;
+            let syncStatus = (syncResult && syncResult.status) || 500;
+            let data = (syncResult && syncResult.data) || syncError;
             return callback(syncStatus, createErrorResponse(syncStatus, data));
         }
 
@@ -138,7 +141,7 @@ function getPatientDataStatusSimple(pid, req, callback) {
             return callback(syncResult.status || 500, createErrorResponse(syncResult.status, syncResult.data));
         }
 
-        var status = createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), syncResult);
+        let status = createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), syncResult);
 
         return callback(undefined, {
             status: 200,
@@ -150,8 +153,8 @@ function getPatientDataStatusSimple(pid, req, callback) {
 function createSimpleStatusResult(logger, vistaSites, syncResult) {
     logger.debug('jds-sync-subsystem.createSimpleStatusResult()');
 
-    var status = {};
-    var sites = [];
+    let status = {};
+    let sites = [];
     if (syncResult.data) {
         if (syncResult.data.sites) {
             sites = _.keys(syncResult.data.sites);
@@ -173,10 +176,10 @@ function createSimpleStatusResult(logger, vistaSites, syncResult) {
             if (_.contains(vistaSites, site)) {
                 status.VISTA = status.VISTA || {};
                 status.VISTA[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
-                logger.debug('getDataStatusSimple: site status converted: %j', status.VISTA[site]);
+                logger.debug('jds-sync-subsystem.createSimpleStatusResult(): getDataStatusSimple(): site status converted: %j', status.VISTA[site]);
             } else {
                 status[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
-                logger.debug('getDataStatusSimple: site status converted: %j', status[site]);
+                logger.debug('jds-sync-subsystem.createSimpleStatusResult(): getDataStatusSimple(): site status converted: %j', status[site]);
             }
         });
     }
@@ -189,8 +192,8 @@ function createSimpleStatusResult(logger, vistaSites, syncResult) {
 // This should only be used by the UI or in very
 // special circumstances as it is an expensive call
 function getPatientStatusDetail(pid, req, callback) {
-    req.logger.debug('jds-sync-subsystem.getPatientStatusDetail() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidInPath('getPatientStatusDetail', pid, req);
+    req.logger.debug('jds-sync-subsystem.getPatientStatusDetail() pid: [%s]', pid);
+    let config = jdsSyncConfig.configureWithPidInPath('getPatientStatusDetail', pid, req);
     jdsSyncConfig.addParam('detailed', 'true', config);
     httpUtil.get(config, syncStatusResultProcessor.bind(null, pid, callback, req));
 }
@@ -216,26 +219,27 @@ function getPatientStatusSimple(pid, siteList, req, callback) {
     }
     /*  END Variadic Function disambiguation code */
 
-    req.logger.debug('jds-sync-subsystem.getPatientStatusSimple() pid: %s, siteList: %s', pid, siteList);
+    req.logger.debug('jds-sync-subsystem.getPatientStatusSimple() pid: [%s], siteList: [%s]', pid, siteList);
 
-    var config = jdsSyncConfig.configureWithPidInPath('getPatientStatusSimple', pid, req);
+    let config = jdsSyncConfig.configureWithPidInPath('getPatientStatusSimple', pid, req);
     jdsSyncConfig.addSitesParam(config, siteList);
 
     req.logger.trace({
         config: config
-    }, 'getPatientStatusSimple()');
+    }, `jds-sync-subsystem.getPatientStatusSimple() pid: [${pid}], siteList: [${siteList}]`);
 
-    httpUtil(config, syncStatusResultProcessor.bind(null, pid, callback, req));
+    httpUtil.get(config, syncStatusResultProcessor.bind(null, pid, callback, req));
 }
 
 function syncPatientDemographics(payload, req, callback) {
-    req.logger.debug({
+    req.logger.trace({
         demographics: payload
     }, 'jds-sync-subsystem.syncPatientDemographics()');
+    req.logger.debug('jds-sync-subsystem.syncPatientDemographics()');
 
     // Need to setup 'pidToUse' because the audit and the vx-sync sync status
     // endpoint expect to see "pid=DOD;<edipi>", not "edipi=<edipi>".
-    var pidToUse;
+    let pidToUse;
     if (payload.icn) {
         pidToUse = payload.icn;
     } else if (payload.edipi) {
@@ -247,14 +251,16 @@ function syncPatientDemographics(payload, req, callback) {
         return;
     }
 
-    req.logger.debug('jds-sync-subsystem.syncPatientDemographics() using pid: ' + pidToUse);
+    req.logger.debug('jds-sync-subsystem.syncPatientDemographics() using pid: [%s]' + pidToUse);
 
-    var config = jdsSyncConfig.configure('syncPatientDemographics', pidToUse, req);
+    let config = jdsSyncConfig.configure('syncPatientDemographics', pidToUse, req);
     payload.pid = pidToUse;
     config.body = payload;
-    httpUtil.post(config, function(loaderr, response, loadres) {
-        if (isNullish(loadres)) {
-            req.logger.error(loaderr);
+    httpUtil.post(config, function(error, response, body) {
+        if (isNullish(body)) {
+            req.logger.error({
+                error: error
+            }, `jds-sync-subsystem.syncPatientDemographics() error syncing patient using pid: [%${pidToUse}]`);
             callback(500, createErrorResponse());
             return;
         }
@@ -270,21 +276,21 @@ function syncPatientDemographics(payload, req, callback) {
 }
 
 function getOperationalStatus(site, req, callback) {
-    req.logger.debug('jds-sync-subsystem.getOperationStatus() site: %s', site);
-    var config = jdsSyncConfig.configure('getOperationalStatus', undefined, req);
+    req.logger.debug('jds-sync-subsystem.getOperationStatus() site: [%s]', site);
+    let config = jdsSyncConfig.configure('getOperationalStatus', undefined, req);
     jdsSyncConfig.addSiteToPath(config, req, site);
     httpUtil.get(config, syncStatusResultProcessor.bind(null, null, callback, req));
 }
 
 // used in text-search.js and document-detail.js
 function getPatientAllSites(pid, req, callback) {
-    req.logger.debug('jds-sync-subsystem.getPatientAllSites() pid: %s', pid);
-    var config = jdsSyncConfig.configureWithPidInPath('getPatientByPidAllSites', pid, req);
+    req.logger.debug('jds-sync-subsystem.getPatientAllSites() pid: [%s]', pid);
+    let config = jdsSyncConfig.configureWithPidInPath('getPatientByPidAllSites', pid, req);
     httpUtil.get(config, syncStatusResultProcessor.bind(null, pid, callback, req));
 }
 
 function doLoad(config, pid, immediate, prioritySite, req, callback) {
-    req.logger.debug('jds-sync-subsystem.doLoad() pid: %s, immediate: %s, prioritySite: %s', pid, immediate, prioritySite);
+    req.logger.debug('jds-sync-subsystem.doLoad() pid: [%s], prioritySite: [%s], immediate: [%s]', pid, prioritySite, immediate);
 
     if (_.isEmpty(prioritySite)) {
         prioritySite = [];
@@ -293,39 +299,42 @@ function doLoad(config, pid, immediate, prioritySite, req, callback) {
     }
 
     // call sync endpoint to start patient sync
-    httpUtil.post(config, function(loaderr, response, loadres) {
-        if (loaderr) {
-            req.logger.error(loaderr);
+    httpUtil.post(config, function(error, response, body) {
+        if (error) {
+            req.logger.error('jds-sync-subsystem.doLoad(): Error returned when starting sync for pid: [%s], prioritySite: [%s], error: %j', pid, prioritySite, error);
             return callback(500, createErrorResponse());
         }
 
         // If a sync patient is made for a patient that does not exist, VxSync will return
         // a response with status 400 and the message "Patient does not exist in Jds."
         if (response && response.statusCode === 400 || response.statusCode === 404) {
+            req.logger.warn('jds-sync-subsystem.doLoad(): Sync called for a patient that does not exist for pid: [%s], prioritySite: [%s]', pid, prioritySite);
             return callback(404, createErrorResponse(404, noSiteMessage));
         }
 
-        if (isNullish(loadres)) {
-            req.logger.error(loaderr || 'Sync for patient %s did not start sucessfully. Response status code was: %s', pid, response.statusCode);
+        if (isNullish(body)) {
+            req.logger.error('jds-sync-subsystem.doLoad(): Sync for pid: [%s], prioritySite: [%s] did not start sucessfully. Response status code was: %s, Error: %j', pid, prioritySite, response.statusCode, error);
             return callback(500, createErrorResponse());
         }
 
-        req.logger.debug('return immediately? ' + immediate);
+        req.logger.debug('jds-sync-subsystem.doLoad() pid: [%s], prioritySite: [%s], immediate? [%s]', pid, prioritySite, immediate);
         if (immediate) {
-            req.logger.debug('Sending response immediately after starting sync (not waiting for sync complete)');
+            req.logger.debug('jds-sync-subsystem.doLoad() pid: [%s], prioritySite: [%s] Sending response immediately after starting sync (not waiting for sync complete)');
             return getPatientStatusSimple(pid, req, function(error, simpleStatus) {
                 if (isNullish(simpleStatus)) {
-                    req.logger.error(error, 'Sync request error');
+                    req.logger.error({
+                        error: error
+                    }, `jds-sync-subsystem.doLoad() Sync request error for pid: [${pid}], prioritySite: [${prioritySite}]`);
                     return callback(500, createErrorResponse());
                 }
 
                 simpleStatus.status = 201;
-                req.logger.info('Sync request acknowledged');
+                req.logger.info('jds-sync-subsystem.doLoad() Sync request acknowledged for pid: [%s], prioritySite: [%s]', pid, prioritySite);
                 return callback(error, simpleStatus);
             });
         }
 
-        req.logger.trace(loadres);
+        req.logger.trace(body);
 
         waitForPatientLoad(pid, prioritySite, req, callback);
     });
@@ -345,76 +354,86 @@ req - HTTP request object. It must have the following:
 }
 */
 function waitForPatientLoad(pid, prioritySite, req, callback) {
-    req.logger.debug('jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s', pid, prioritySite);
+    req.logger.debug('jds-sync-subsystem.waitForPatientLoad() pid: [%s], prioritySite: [%s]', pid, prioritySite);
 
-    var startTime = process.hrtime();
-    var settings = req.app.config.jdsSync.settings;
-    var currentTime;
-    var totalTime;
+    let startTime = process.hrtime();
+    let settings = req.app.config.jdsSync.settings;
+    let currentTime;
+    let totalTimeMillis;
 
     // Define this function and then immediately invoke it via IIFE for a recursive loop
     (function checkSimpleStatus() {
+        req.logger.debug('jds-sync-subsystem.waitForPatientLoad() checkSimpleStatus() pid: [%s], prioritySite: [%s]', pid, prioritySite);
         // We need to get the "full" simple status in case the patient does not have
         // data in the prioritySite, as in that case, we will need to interrogate the
         // sync data for the status of other sites.
         getPatientStatusSimple(pid, req, function(error, simpleStatus) {
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() check errors while synching pid: %s, prioritySite: %s', pid, prioritySite);
-            req.logger.debug({
-                error: error
-            }, {
-                status: simpleStatus
-            }, 'jds-sync-subsystem.waitForPatientLoad() response pid: ' + pid + ', prioritySite: ' + prioritySite);
+            currentTime = process.hrtime(startTime);
+            totalTimeMillis = Math.floor((currentTime[0] * 1e9 + currentTime[1]) / 1e6); // calculate how long since load started in milliseconds
 
-            // a general error attempting to query JDS (network, etc.)
-            if (error || !simpleStatus.data || simpleStatus.status !== 200) {
+            req.logger.debug({
+                error: error,
+                status: simpleStatus
+            }, `jds-sync-subsystem.waitForPatientLoad() checkSimpleStatus() response pid: [${pid}], prioritySite: [${prioritySite}]`);
+
+            // 1. general error attempting to query JDS (network, etc.)
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 1. checkSimpleStatus() check errors while synching pid: [%s], prioritySite: [%s]', pid, prioritySite);
+            if (error || !simpleStatus.data || simpleStatus.status >= 500) {
                 req.logger.error({
                     error: error
-                }, 'jds-sync-subsystem.waitForPatientLoad() error pid: ' + pid + ', prioritySite: ' + prioritySite);
+                }, `jds-sync-subsystem.waitForPatientLoad() 1a. checkSimpleStatus() error pid: [${pid}], prioritySite: [${prioritySite}]`);
 
                 return callback(500, createErrorResponse());
             }
 
-            // JDS returned an error record instead of a simple status
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() check sync record while synching pid: %s, prioritySite: %s', pid, prioritySite);
+            // 2. JDS returned an error record instead of a simple status
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 2. checkSimpleStatus() check sync record while synching pid: [%s], prioritySite: [%s]', pid, prioritySite);
             if (simpleStatus.data.error) {
                 req.logger.error({
                     error: simpleStatus.data.error
-                }, 'jds-sync-subsystem.waitForPatientLoad() error code pid: ' + pid + ', prioritySite: ' + prioritySite);
+                }, `jds-sync-subsystem.waitForPatientLoad() 2a. checkSimpleStatus() error code pid: [${pid}], prioritySite: [${prioritySite}]`);
 
                 if (simpleStatus.data.error.code === 404) {
                     return callback(404, createErrorResponse(404, noSiteMessage));
                 }
 
-                return callback(500, createErrorResponse());
+                return callback(simpleStatus.data.error.code, createErrorResponse());
             }
 
-            // the sync is complete for the prioritySite or all sites if no value was passed in for prioritySite
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync status for complete while synching pid: %s, prioritySite: %s', pid, prioritySite);
+            // 3. the sync is complete for the prioritySite or all sites if no value was passed in for prioritySite
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 3. checkSimpleStatus() sync status for complete while synching pid: [%s], prioritySite: [%s]', pid, prioritySite);
             if (isSimpleSyncStatusComplete(simpleStatus.data, prioritySite)) {
-                req.logger.info({
-                    pid: pid,
-                    totalTime: totalTime
-                }, 'Sync complete');
-
-                req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync complete for pid: %s, prioritySite: %s', pid, prioritySite);
+                req.logger.info('jds-sync-subsystem.waitForPatientLoad() 3a. checkSimpleStatus() sync complete for pid: [%s], prioritySite: [%s], after %s milliseconds', pid, prioritySite, totalTimeMillis);
                 return callback(null, simpleStatus);
             }
 
-            // the simple status contains a 'hasError' attribute with a value of 'true'
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() sync status for hasError while synching pid: %s, prioritySite: %s', pid, prioritySite);
-            if (isSimpleSyncStatusWithError(simpleStatus.data, prioritySite)) {
-                return callback(500, createErrorResponse(500, 'An error occurred during the synchronization of patient pid: ' + pid));
-            }
-
-            currentTime = process.hrtime(startTime);
-            totalTime = (currentTime[0] * 1e9 + currentTime[1]) / 1e6; // calculate how long since load started in milliseconds
-            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() pid: %s, prioritySite: %s, sync time taken so far: %s', pid, prioritySite, totalTime);
-
-            if (totalTime > settings.timeoutMillis) {
-                req.logger.error('jds-sync-subsystem.waitForPatientLoad() pid: %s is taking too long to sync. Waited (milliseconds): %s before giving up and return error 500', pid, totalTime);
+            // 4. if latestEnterpriseSyncRequestTimestamp is empty, this will not resolve, so return an error
+            // This condition can happen when all of a patient's job history is deleted. Even
+            // though the patient sync was complete, removing the job history will cause the
+            // latestEnterpriseSyncRequestTimestamp field to contain an empty string (and the
+            // sync status to be incomplete).
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 4. checkSimpleStatus() pid: [%s], prioritySite: [%s], latestEnterpriseSyncRequestTimestamp: [%s]', pid, prioritySite, simpleStatus.data.latestEnterpriseSyncRequestTimestamp);
+            if (!isParsedToPositiveInteger(simpleStatus.data.latestEnterpriseSyncRequestTimestamp)) {
+                req.logger.error('jds-sync-subsystem.waitForPatientLoad() 4a. checkSimpleStatus() pid: [%s], prioritySite: [%s] latestEnterpriseSyncRequestTimestamp: [%s] is not an Integer', pid, prioritySite, simpleStatus.data.latestEnterpriseSyncRequestTimestamp);
                 return callback(500, createErrorResponse());
             }
 
+            // 5. the simple status contains a 'hasError' attribute with a value of 'true'
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 5. checkSimpleStatus() check sync status for hasError while synching pid: [%s], prioritySite: [%s]', pid, prioritySite);
+            if (isSimpleSyncStatusWithError(simpleStatus.data, prioritySite)) {
+                req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 5a. checkSimpleStatus() sync status hasError true while synching pid: [%s], prioritySite: [%s]', pid, prioritySite);
+                return callback(500, createErrorResponse(500, `An error occurred during the synchronization of patient pid: [${pid}], prioritySite: [%{prioritySite}]`));
+            }
+
+            // 6. timeout while waiting to sync
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 6. checkSimpleStatus() pid: [%s], prioritySite: [%s], sync time taken so far: %s milliseconds', pid, prioritySite, totalTimeMillis);
+            if (totalTimeMillis > settings.timeoutMillis) {
+                req.logger.error('jds-sync-subsystem.waitForPatientLoad() 6a. checkSimpleStatus() pid: [%s], prioritySite: [%s] is taking too long to sync. Waited %s milliseconds before giving up and return error 500', pid, prioritySite, totalTimeMillis);
+                return callback(500, createErrorResponse());
+            }
+
+            // 7. still syncing, loop again
+            req.logger.debug('jds-sync-subsystem.waitForPatientLoad() 7. checkSimpleStatus() pid: [%s], prioritySite: [%s], looping again', pid, prioritySite);
             setTimeout(checkSimpleStatus, settings.waitMillis);
         });
     })();
@@ -440,7 +459,7 @@ function isSimpleSyncStatusWithError(simpleSyncStatus, prioritySite) {
 
     // If prioritySite has a non-nullish non-empty value, and it exists
     // in the status, return its error value.
-    if(!_.isEmpty(prioritySite) && _.has(simpleSyncStatus.sites, prioritySite)) {
+    if (!_.isEmpty(prioritySite) && _.has(simpleSyncStatus.sites, prioritySite)) {
         return !!simpleSyncStatus.sites[prioritySite].hasError;
     }
 
@@ -478,7 +497,7 @@ function isSimpleSyncStatusComplete(simpleSyncStatus, prioritySite) {
 
     // No prioritySite value or it does not exist in the status,
     // so check if at least one site is complete
-    if(_.isEmpty(prioritySite) || !_.has(simpleSyncStatus.sites, prioritySite)) {
+    if (_.isEmpty(prioritySite) || !_.has(simpleSyncStatus.sites, prioritySite)) {
         return _.some(simpleSyncStatus.sites, function(site) {
             return site.syncCompleted;
         });
@@ -491,18 +510,18 @@ function isSimpleSyncStatusComplete(simpleSyncStatus, prioritySite) {
 function syncStatusResultProcessor(pid, callback, req, error, response, data) {
     if (error) {
         req.logger.info('Sync status result error');
-        req.logger.info(error);
+        req.logger.error(error);
         return callback(error, createErrorResponse(500, data || 'There was an error processing your request. The error has been logged. The sync status server could not be reached.'));
     }
 
     if (!response) {
         req.logger.info('Sync status result error');
-        req.logger.info(error);
+        req.logger.error(error);
         return callback(error, createErrorResponse(500, data || 'There was an error processing your request. The error has been logged. The sync status response was empty.'));
     }
 
     if (response.statusCode === 404) {
-        return callback(error, createErrorResponse(404, util.format('pid %s is unsynced', pid)));
+        return callback(error, createErrorResponse(404, `pid ${pid} is unsynced`));
     }
 
     if (response.statusCode === 200 || response.statusCode === 202) {

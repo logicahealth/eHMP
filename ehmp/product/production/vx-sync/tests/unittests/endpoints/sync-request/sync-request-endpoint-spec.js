@@ -58,11 +58,11 @@ var env = {
 
 var config = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'stationNumber': 500,
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'stationNumber': 500,
         }
@@ -90,7 +90,7 @@ describe('sync-request-endpoint.js', function() {
             var jobFactory = registerSyncAPI._jobFactory;
             var req = new DummyRequest({});
             req.patientIdentifier = {
-                'value': '9E7A;3',
+                'value': 'SITE;3',
                 'type': 'pid'
             };
             req.jpid = 'jpid';
@@ -104,7 +104,7 @@ describe('sync-request-endpoint.js', function() {
             expect(testJob.referenceInfo.sessionId).toEqual('sessionId');
             expect(testJob.referenceInfo.requestId).toEqual('requestId');
             expect(testJob.referenceInfo.test).toEqual('testReference');
-            expect(testJob.referenceInfo.initialSyncId).toEqual('9E7A;3');
+            expect(testJob.referenceInfo.initialSyncId).toEqual('SITE;3');
         });
     });
 
@@ -141,7 +141,7 @@ describe('sync-request-endpoint.js', function() {
 
         it('Operates all middleware on a dummy request', function() {
             var request = new DummyRequest({
-                'pid': '9E7A;4'
+                'pid': 'SITE;4'
             });
             var response = new DummyResponse();
             var next = jasmine.createSpy();
@@ -153,7 +153,7 @@ describe('sync-request-endpoint.js', function() {
                 patientMiddleware.validatePatientIdentifier(request, response, function() {
                     expect(request.patientIdentifier).toBeDefined();
                     expect(request.patientIdentifier.type).toEqual('pid');
-                    expect(request.patientIdentifier.value).toEqual('9E7A;4');
+                    expect(request.patientIdentifier.value).toEqual('SITE;4');
                     expect(response.statusCode).toBeUndefined();
                     patientMiddleware.verifyPatientExists(request, response, function() {
                         patientMiddleware.getJPID(request, response, function() {
@@ -171,7 +171,7 @@ describe('sync-request-endpoint.js', function() {
                                     expect(response.job.jpid).toEqual('21EC2020-3AEA-4069-A2DD-FFFFFFFFFFFF');
                                     expect(response.job.patientIdentifier).toBeDefined();
                                     expect(response.job.patientIdentifier.type).toEqual('pid');
-                                    expect(response.job.patientIdentifier.value).toEqual('9E7A;4');
+                                    expect(response.job.patientIdentifier.value).toEqual('SITE;4');
                                     jobMiddleware.jobVerification([ 'completed' ], request, response, function() {
                                         expect(response.currentJob).toBeUndefined();
                                         expect(response.statusCode).toBeUndefined();

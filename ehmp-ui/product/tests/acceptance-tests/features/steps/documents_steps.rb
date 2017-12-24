@@ -13,35 +13,35 @@ class Documents < AllApplets
     add_action(CucumberLabel.new("Coversheet Dropdown"), ClickAction.new, AccessHtmlElement.new(:id, "screenName"))
     add_verify(CucumberLabel.new("Drop Down Menu"), VerifyText.new, AccessHtmlElement.new(:class, "dropdown-menu"))
     add_action(CucumberLabel.new("Documents"), ClickAction.new, AccessHtmlElement.new(:link_text, "Documents"))
-    add_verify(CucumberLabel.new("Is Table Visible"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-documents"))
-    add_action(CucumberLabel.new("Discharge Summary"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-9E7A-65-300']/td[1]"))
-    add_action(CucumberLabel.new("Progress Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-9E7A-65-747']/td[1]"))
-    add_action(CucumberLabel.new("Progress Note DoD*"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-DOD-0000000011-1000003813']/td[1]"))
-    add_action(CucumberLabel.new("Procedure"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-procedure-9E7A-65-5-MCAR(699,']/td[1]"))
-    add_action(CucumberLabel.new("Surgery"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-surgery-9E7A-65-28']/td[1]"))
-    add_action(CucumberLabel.new("Consult Report"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='documents']/descendant::*[@id='urn-va-consult-9E7A-100012-563']/td[1]"))
-    add_action(CucumberLabel.new("Advance Directive"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-9E7A-100012-3944']/td[1]"))
-    add_action(CucumberLabel.new("Crisis Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-9E7A-231-1693']/td[1]"))
-    add_action(CucumberLabel.new("Lab Report"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-9E7A-17-CY-7049593']/td[1]"))
-    add_action(CucumberLabel.new("Administrative Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-document-DOD-0000000014-1000004202']/td[1]"))
-    add_action(CucumberLabel.new("Imaging"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@id='urn-va-image-9E7A-17-7028886-8889-1']/td[1]"))
+    add_verify(CucumberLabel.new("Is Table Visible"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=documents]"))
+    add_action(CucumberLabel.new("Discharge Summary"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-SITE-65-300']/td[1]"))
+    add_action(CucumberLabel.new("Progress Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-SITE-65-747']/td[1]"))
+    add_action(CucumberLabel.new("Progress Note DoD*"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-DOD-0000000011-1000003813']/td[1]"))
+    add_action(CucumberLabel.new("Procedure"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-procedure-SITE-65-5-MCAR(699,']/td[1]"))
+    add_action(CucumberLabel.new("Surgery"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-surgery-SITE-65-28']/td[1]"))
+    add_action(CucumberLabel.new("Consult Report"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='documents']/descendant::*[@id='urn-va-consult-SITE-100012-563']/td[1]"))
+    add_action(CucumberLabel.new("Advance Directive"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-SITE-100012-3944']/td[1]"))
+    add_action(CucumberLabel.new("Crisis Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-SITE-231-1693']/td[1]"))
+    add_action(CucumberLabel.new("Lab Report"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-SITE-17-CY-7049593']/td[1]"))
+    add_action(CucumberLabel.new("Administrative Note"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-document-DOD-0000000014-1000004202']/td[1]"))
+    add_action(CucumberLabel.new("Imaging"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@id='urn-va-image-SITE-17-7028886-8889-1']/td[1]"))
     add_verify(CucumberLabel.new("Details Title"), VerifyText.new, AccessHtmlElement.new(:css, ".doc-detail-wrapper h4:first-child"))
     add_verify(CucumberLabel.new("Is Detail Panel Text visible"), VerifyText.new, AccessHtmlElement.new(:class, "doc-detail-region"))
     add_action(CucumberLabel.new("Close"), ClickAction.new, AccessHtmlElement.new(:css, ".doc-detail-wrapper button.pull-right"))
-    add_verify(CucumberLabel.new("Surgery Count"), VerifyText.new, AccessHtmlElement.new(:css, "[data-group-instanceid='Surgery_groupCount']"))
-    add_action(CucumberLabel.new("Surgery Row"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*//td[contains(string(),'Surgery')]"))
-    add_action(CucumberLabel.new("Documents Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "input[name='q-documents']"))
-    add_action(CucumberLabel.new("Search Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-documents"))
-    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:css, "#data-grid-documents tr.empty"))
-    add_action(CucumberLabel.new("August 1992"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*//td[contains(string(),'August 1992')]"))
-    add_verify(CucumberLabel.new("August 1992 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*[@data-group-instanceid='199208_groupCount']"))
+    add_verify(CucumberLabel.new("Surgery Count"), VerifyText.new, AccessHtmlElement.new(:css, "[data-group-appletid='Surgery_groupCount']"))
+    add_action(CucumberLabel.new("Surgery Row"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*//td[contains(string(),'Surgery')]"))
+    add_action(CucumberLabel.new("Documents Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "[data-appletid=documents] .grid-filter input"))
+    add_action(CucumberLabel.new("Search Filter"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=documents] .applet-filter-button"))
+    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=documents] tr.empty"))
+    add_action(CucumberLabel.new("August 1992"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*//td[contains(string(),'August 1992')]"))
+    add_verify(CucumberLabel.new("August 1992 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']/descendant::*[@data-group-instanceid='199208_groupCount']"))
     add_verify(CucumberLabel.new("Document Modal Details"), VerifyContainsText.new, AccessHtmlElement.new(:class, "doc-detail-region"))
     add_verify(CucumberLabel.new("DoD* Content Details"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//body"))
 
-    @@documents_applet_data_grid_rows = AccessHtmlElement.new(:xpath, ".//*[@data-instanceid='documents']/descendant::*//table[@id='data-grid-documents']/descendant::tr")
+    @@documents_applet_data_grid_rows = AccessHtmlElement.new(:xpath, ".//*[@data-appletid='documents']//table/descendant::tr")
     add_verify(CucumberLabel.new("Number of Documents Applet Rows"), VerifyXpathCount.new(@@documents_applet_data_grid_rows), @@documents_applet_data_grid_rows)         
   
-    add_action(CucumberLabel.new("Documents Filter Button"), ClickAction.new, AccessHtmlElement.new(:id, 'grid-filter-button-documents'))
+    add_action(CucumberLabel.new("Documents Filter Button"), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid=documents] .applet-filter-button'))
 
     add_applet_add_button appletid_css
     add_applet_buttons appletid_css
@@ -104,7 +104,7 @@ When(/^user selects Documents from Coversheet dropdown$/) do
 end
 
 When(/^user navigates to Documents Screen$/) do
-  navigate_in_ehmp '#documents-list'
+  navigate_in_ehmp '#/patient/documents-list'
 
   documents = PobDocumentsList.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
@@ -194,7 +194,7 @@ end
 
 def verify_table_rows_documents(table)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.compare_specific_row(table, '[data-appletid=documents] #data-grid-documents') }
+  wait.until { VerifyTableValue.compare_specific_row(table, '[data-appletid=documents] .data-grid table') }
 end
 
 Then(/^take screenshot for comparison purposes with name "(.*?)"$/) do |screenshot_name|
@@ -290,10 +290,10 @@ Then(/^the Documents grid is sorted in "([^"]*)" order based on "([^"]*)"$/) do 
   order_options['reverse alphabetic order'] = false
   
   column_options = {}
-  column_options['Description'] = 2
-  column_options['Type'] = 3
-  column_options['Facility'] = 5
-  column_options['Author'] = 4
+  column_options['Description'] = 3
+  column_options['Type'] = 4
+  column_options['Facility'] = 6
+  column_options['Author'] = 5
     
   documents_applet = Documents.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
@@ -439,5 +439,10 @@ Given(/^the user expands the Documents applet$/) do
   end
   
   wait.until { documents.applet_loaded? }
+end
+
+Then(/^user scrolls the Documents applet into view$/) do
+  documents = PobDocumentsList.new
+  documents.scroll_into_view
 end
 

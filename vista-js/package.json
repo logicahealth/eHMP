@@ -1,6 +1,6 @@
 {
   "name": "vista-js",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "Client Implementation of the Vista-RPC Protocol",
   "main": "index.js",
   "scripts": {

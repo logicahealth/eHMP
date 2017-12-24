@@ -1,0 +1,36 @@
+@mixin colorsAndBackgroundColorsTheme ($color-primary, $color-primary-dark, $color-primary-light, $color-primary-light-alt, $color-primary-lighter, $color-primary-lightest, $color-secondary, $color-secondary-light, $color-secondary-dark){
+    // color and background-colors
+    // e.g: .color-primary and .background-color-primary for all colors in our colorListVariables variable below
+    $colorListVariables: $color-primary-dark $color-primary-light $color-primary-light-alt $color-primary-lighter $color-primary-lightest $color-secondary $color-secondary-light $color-secondary-dark;
+    $colorlistName: primary-dark primary-light primary-light-alt primary-lighter primary-lightest secondary secondary-light secondary-dark;
+    @each $item in $colorlistName {
+        .#{'color-' + '' + $item} {
+            $thisItem: index($colorlistName, $item);
+            $varItem: nth($colorListVariables, $thisItem);
+            color: $varItem !important;
+        }
+    }
+    $colorListVariables: $color-primary $color-primary-dark $color-primary-light $color-primary-light-alt $color-primary-lighter $color-primary-lightest $color-secondary $color-secondary-light $color-secondary-dark;
+    $colorlistName: primary primary-dark primary-light primary-light-alt primary-lighter primary-lightest secondary secondary-light secondary-dark;
+    @each $item in $colorlistName {
+        .#{'background-color-' + '' + $item} {
+            $thisItem: index($colorlistName, $item);
+            $varItem: nth($colorListVariables, $thisItem);
+            background-color: $varItem !important;
+        }
+    }
+    .bgc-primary-dark {
+        color: $pure-white !important;
+        &:hover,
+        &:focus {
+            color: $pure-white !important;
+        }
+    }
+    .bgc-pure-white, .bgc-primary-light {
+        color: $color-primary !important;
+        &:hover,
+        &:focus {
+            color: $color-primary-dark !important;
+        }
+    }
+}

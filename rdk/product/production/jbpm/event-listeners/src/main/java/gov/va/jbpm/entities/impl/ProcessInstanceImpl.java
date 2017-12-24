@@ -10,7 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "ACTIVITYDB.AM_PROCESSINSTANCE")
+@Table(name = "AM_PROCESSINSTANCE", schema = "ACTIVITYDB")
 public class ProcessInstanceImpl {
 	@Id
 	private long processInstanceId;
@@ -43,10 +43,13 @@ public class ProcessInstanceImpl {
 	private String type;
 	private String domain;
 	private String description;
+	private String pid;
 
 	@Transient
 	private List<ProcessRouteImpl> routes;
 
+	@Transient
+	private String activityJSON;
 
 //-----------------------------------------------------------------------------
 //-----------------------Constructors------------------------------------------
@@ -56,11 +59,11 @@ public class ProcessInstanceImpl {
 	}
 
 	public ProcessInstanceImpl(long processInstanceId, String icn, String facilityId, String processName,
-			String processDefinitionId, String deploymentId, long statusId, Date statusTimeStamp, String createdById,
-			String version, Date initiationDate, Long parentInstanceId, String instanceName, String state,
-			Date stateStartDate, Date stateDueDate, Long urgency, String destinationFacilityId, Long focusAreaId,
-			String assignedTo, String clinicalObjectUid, Boolean activityHealthy, String activityHealthDescription, 
-			String type, String domain, String description, List<ProcessRouteImpl> routes) {
+								   String processDefinitionId, String deploymentId, long statusId, Date statusTimeStamp, String createdById,
+								   String version, Date initiationDate, Long parentInstanceId, String instanceName, String state,
+								   Date stateStartDate, Date stateDueDate, Long urgency, String destinationFacilityId, Long focusAreaId,
+								   String assignedTo, String clinicalObjectUid, Boolean activityHealthy, String activityHealthDescription,
+								   String type, String domain, String description, List<ProcessRouteImpl> routes, String activityJSON, String pid) {
 		this.processInstanceId = processInstanceId;
 		this.icn = icn;
 		this.facilityId = facilityId;
@@ -88,6 +91,9 @@ public class ProcessInstanceImpl {
 		this.domain = domain;
 		this.description = description;
 		this.routes = routes;
+		this.activityJSON = activityJSON;
+		this.pid = pid;
+
 	}
 
 //-----------------------------------------------------------------------------
@@ -322,7 +328,16 @@ public class ProcessInstanceImpl {
 	public void setRoutes(List<ProcessRouteImpl> routes) {
 		this.routes = routes;
 	}
-	
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String newPid) {
+		this.pid = newPid;
+	}
+
+
 //-----------------------------------------------------------------------------
 //-----------------------toString----------------------------------------------
 //-----------------------------------------------------------------------------
@@ -336,14 +351,15 @@ public class ProcessInstanceImpl {
 				+ ", parentInstanceId=" + parentInstanceId + ", instanceName=" + instanceName + ", state=" + state
 				+ ", stateStartDate=" + stateStartDate + ", stateDueDate=" + stateDueDate + ", urgency=" + urgency
 				+ ", destinationFacilityId=" + destinationFacilityId + ", focusAreaId=" + focusAreaId + ", assignedTo="
-				+ assignedTo + ", clinicalObjectUid=" + clinicalObjectUid 
+				+ assignedTo + ", clinicalObjectUid=" + clinicalObjectUid
 				+ ", activityHealthy="+activityHealthy
 				+ ", activityHealthDescription="+activityHealthDescription
 				+ ", type="+type
 				+ ", domain="+domain
 				+ ", description="+description
+				+ ", pid=" + pid
 				+ "]";
 	}
-	
-	
+
+
 }

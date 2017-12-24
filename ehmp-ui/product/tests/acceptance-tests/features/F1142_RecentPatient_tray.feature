@@ -2,11 +2,9 @@
 Feature: Home Page Usability (Staff View) - Implement Recent Patient list tray
 
 Background:
-  # Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
-  #Then staff view screen is displayed
-  And user searches for and selects "Eight,PATIENT"
-  Then Overview is active
-  And user navigates to the staff view screen
+  Given user searches for and selects "Eight,PATIENT"
+  And Overview is active
+  When user navigates to the staff view screen
   Then staff view screen is displayed
 
 @US17414_1
@@ -34,5 +32,6 @@ Scenario: Verify user can load a patient from a Recent Patients Tray
     And the Recent Patients Tray contains search results
     When user chooses to load a patient from the Recent Patients results list
     Then Overview is active
-    And the Global Header displays the selected user name
+    And the Patient View Current Patient displays the selected patient name
+
 

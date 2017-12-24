@@ -6,8 +6,8 @@ Feature: F144 - eHMP Viewer GUI - Orders
 # This test replaces the Orders Display for GDF All test in ehmp-ui
 @F144_Orders_GDF_all @US2926
 Scenario: Verify Orders will display all orders for a given patient
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests the ORDERS for the patient "9E7A;100022" with GDF set to all
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests the ORDERS for the patient "SITE;100022" with GDF set to all
 Then a successful response is returned
 And the VPR results contain
       | field           	| value                 |
@@ -34,8 +34,8 @@ And the VPR results contain
       
 @F144_Orders_Custom_Date_Range @US2926
 Scenario: Verify Orders will display all orders that fall withing a given range of GDF for a given patient
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests the ORDERS for the patient "9E7A;100022" with GDF set to custom date range between "20140101" and "20140131235959"
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests the ORDERS for the patient "SITE;100022" with GDF set to custom date range between "20140101" and "20140131235959"
 Then a successful response is returned
 And the VPR results contain
       | field           	| value                 |

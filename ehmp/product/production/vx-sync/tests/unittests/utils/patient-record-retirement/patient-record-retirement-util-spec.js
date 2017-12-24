@@ -67,7 +67,7 @@ var errorPatient = {
 
 describe('patient-record-retirement-util', function() {
 	describe('getPidsToRetire', function() {
-		it('normal path', function() {
+		it('normal path', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [{
 				statusCode: 200
@@ -84,10 +84,11 @@ describe('patient-record-retirement-util', function() {
 				expect(patientList[0].patientIdentifiers).toBeTruthy();
 				expect(patientList[0].patientIdentifiers).toContain('AAAA;1');
 				expect(patientList[0].patientIdentifiers).toContain('BBBB;1');
+				done();
 			});
 		});
 
-		it('error path: error from jds', function() {
+		it('error path: error from jds', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData(['error!'], [null], [null]);
 
@@ -96,9 +97,10 @@ describe('patient-record-retirement-util', function() {
 			recordRetirementUtil.getPidsToRetire(function(error, patientList) {
 				expect(error).toBeTruthy();
 				expect(patientList).toBeFalsy();
+				done();
 			});
 		});
-		it('error path: no response from jds', function() {
+		it('error path: no response from jds', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [null], [null]);
 
@@ -107,9 +109,10 @@ describe('patient-record-retirement-util', function() {
 			recordRetirementUtil.getPidsToRetire(function(error, patientList) {
 				expect(error).toBeTruthy();
 				expect(patientList).toBeFalsy();
+				done();
 			});
 		});
-		it('error path: unexpected response from jds', function() {
+		it('error path: unexpected response from jds', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [{
 				statusCode: 400,
@@ -123,9 +126,10 @@ describe('patient-record-retirement-util', function() {
 			recordRetirementUtil.getPidsToRetire(function(error, patientList) {
 				expect(error).toBeTruthy();
 				expect(patientList).toBeFalsy();
+				done();
 			});
 		});
-		it('error path: null result from jds', function() {
+		it('error path: null result from jds', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [{
 				statusCode: 200
@@ -136,10 +140,11 @@ describe('patient-record-retirement-util', function() {
 			recordRetirementUtil.getPidsToRetire(function(error, patientList) {
 				expect(error).toBeTruthy();
 				expect(patientList).toBeFalsy();
+				done();
 			});
 		});
 
-		it('use instance\'s lastAccessed value if it exists', function() {
+		it('use instance\'s lastAccessed value if it exists', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [{
 				statusCode: 200
@@ -167,10 +172,11 @@ describe('patient-record-retirement-util', function() {
 				var resultLastAccessTime = environment.jds.getPatientList.calls[0].args[0];
 				expect(moment(resultLastAccessTime, 'YYYYMMDDHHmmss').isSame(lastAccessTime, 'day')).toBe(true);
 				expect(moment(resultLastAccessTime, 'YYYYMMDDHHmmss').isSame(configLastAccessTime, 'day')).toBe(false);
+				done();
 			});
 		});
 
-		it('use config lastAccessed value if instance\'s lastAccessed value does not exist', function() {
+		it('use config lastAccessed value if instance\'s lastAccessed value does not exist', function(done) {
 			var environment = createEnvironment(log, config);
 			environment.jds._setResponseData([null], [{
 				statusCode: 200
@@ -194,6 +200,7 @@ describe('patient-record-retirement-util', function() {
 
 				var resultLastAccessTime = environment.jds.getPatientList.calls[0].args[0];
 				expect(moment(resultLastAccessTime, 'YYYYMMDDHHmmss').isSame(configLastAccessTime, 'day')).toBe(true);
+				done();
 			});
 		});
 	});
@@ -344,7 +351,7 @@ describe('patient-record-retirement-util', function() {
 			utilityType: 'Patient Record Retirement Utility Unit Test'
 		};
 
-		it('normal path', function() {
+		it('normal path', function(done) {
 			var environment = createEnvironment(log, config);
 			var recordRetirementUtil = new RecordRetirementUtil(log, config, environment);
 
@@ -366,9 +373,10 @@ describe('patient-record-retirement-util', function() {
 						utilityType: referenceInfo.utilityType
 					}));
 				});
+				done();
 			});
 		});
-		it('normal path: no patients', function(){
+		it('normal path: no patients', function(done){
 			var environment = createEnvironment(log, config);
 			var recordRetirementUtil = new RecordRetirementUtil(log, config, environment);
 
@@ -382,9 +390,10 @@ describe('patient-record-retirement-util', function() {
 				expect(error).toBeFalsy();
 				expect(count).toEqual(0);
 				expect(jobsSentToBeanstalk.length).toEqual(0);
+				done();
 			});
 		});
-		it('error path: publisherRouter returns error', function() {
+		it('error path: publisherRouter returns error', function(done) {
 			var environment = createEnvironment(log, config);
 			var recordRetirementUtil = new RecordRetirementUtil(log, config, environment);
 
@@ -395,8 +404,8 @@ describe('patient-record-retirement-util', function() {
 			recordRetirementUtil.sendRetirementJobs(fullPatientList, referenceInfo, function(error, count) {
 				expect(error).toBeTruthy();
 				expect(count).toEqual(0);
+				done();
 			});
-
 		});
 	});
 });

@@ -15,12 +15,12 @@ ehmp_ui_deps = parse_dependency_versions "ehmp-ui_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 r_list << "role[ehmp-balancer]"
 r_list << "recipe[ehmp_balancer@#{ehmp_ui_deps["ehmp_balancer"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 mixed_stack_name = ENV["MIX_STACK_NAME"] if ENV.has_key?("MIX_STACK_NAME")
 
@@ -47,6 +47,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -64,7 +65,12 @@ machine machine_name do
     },
     ehmp_balancer: {
       mix_stack_name: mixed_stack_name,
-      ssoi_deploy: node[:machine][:driver] == "ssh"
+      ssoi_deploy: node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
   )
   files lazy { node[:'ehmp-ui_provision'][:'ehmp-balancer'][:copy_files] }

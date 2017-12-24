@@ -35,16 +35,12 @@ define([
             }
             var ariaRegion = header.parent().find('[aria-live]');
             if(dir === "asc") {
-                ariaRegion.text('Sorted ascending. Press enter to sort descending');
-                header.find('.sort-span').text("Sorted ascending. Press enter to sort descending");
+                ariaRegion.text('Sorted ascending.');
             } else if (dir === "desc") {
-                ariaRegion.text('Sorted descending. Press enter to sort ascending');
-                header.find('.sort-span').text("Sorted descending. Press enter to sort ascending");
+                ariaRegion.text('Sorted descending.');
             } else {
-                ariaRegion.text('Press enter to sort');
-                header.find('.sort-span').text("Press enter to sort");
+                ariaRegion.text('No sort applied.');
             }
-            header.siblings().find('.sort-span').text('Press enter to sort');
         },
         onClick: function(e) {
             e.preventDefault();

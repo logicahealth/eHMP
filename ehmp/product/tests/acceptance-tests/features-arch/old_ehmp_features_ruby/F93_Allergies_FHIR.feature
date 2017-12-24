@@ -7,13 +7,13 @@ Feature: F93 Return of Allergies in FHIR format
 @US949_fhir_freetext
 Scenario: Client can request free text allergies in FHIR format
 	Given a patient with "allergies" in multiple VistAs
-      Given a patient with pid "9E7A;1" has been synced through Admin API
-	When the client requests allergies for the patient "9E7A;1" in FHIR format
+      Given a patient with pid "SITE;1" has been synced through Admin API
+	When the client requests allergies for the patient "SITE;1" in FHIR format
 	Then a successful response is returned
 	And the client receives 8 FHIR VistA result(s)
     And the FHIR results contain                                                       
       | allergies_field_list | allergies_values                                   |
-      | title                | AdverseReaction with subject.identifier '9E7A;1' |
+      | title                | AdverseReaction with subject.identifier 'SITE;1' |
     And the FHIR results contain allergy                                               
       | allergies_field_list | panorama_allergies_values         |
       | content.text.div     | <div>DOG HAIR ( FREE TEXT )</div> |
@@ -72,7 +72,7 @@ Scenario: Client can request historical allergies in FHIR format
       | content.contained.type.text           | CHOCOLATE                                                                   |
       | content.identifier.use                | official                                                                    |
       | content.identifier.system             | urn:oid:2.16.840.1.113883.6.233                                             |
-      | content.identifier.value              | urn:va:allergy:9E7A:100716:973                                              |
+      | content.identifier.value              | urn:va:allergy:SITE:100716:973                                              |
       | content.subject.reference             | Patient/100716                                                              |
       | content.didNotOccurFlag               | false                                                                       |
       | content.exposure.substance.reference  | IS_SET                                                                      |

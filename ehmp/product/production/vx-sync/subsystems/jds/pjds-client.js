@@ -11,7 +11,6 @@ var inspect = require(global.VX_UTILS + 'inspect');
 var errorUtil = require(global.VX_UTILS + 'error');
 var objUtil = require(global.VX_UTILS + 'object-utils');
 var pidUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 
 /**
  * Creates an instance of the PjdsClient
@@ -98,7 +97,8 @@ PjdsClient.prototype.execute = function(path, dataToPost, method, metricsObj, ca
         method: method || 'GET',
         json: dataToPost,
         timeout: this.config.pjds.timeout || 60000,
-        agentClass: VxSyncForeverAgent
+        forever: true,
+        agentOptions: {maxSockets: self.config.handlerMaxSockets || 5}
     }, function(error, response, body) {
         self.log.debug('pjds-client.execute(): posted data to PJDS %s', url);
 
@@ -546,7 +546,7 @@ PjdsClient.prototype.getPrefetchPatients = function(filter, index, template, cal
     var searchFilter = _s.startsWith(filter, '?') ? filter : '?' + filter;
 
     var searchIndex = '/';
-    if (args.length === 2 && args[1]) {
+    if (args.length >= 2 && args[1]) {
         searchIndex += 'index/' + args[1];
     }
 

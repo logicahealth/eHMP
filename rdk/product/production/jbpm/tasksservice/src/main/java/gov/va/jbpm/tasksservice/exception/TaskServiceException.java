@@ -1,8 +1,5 @@
 package gov.va.jbpm.tasksservice.exception;
 
-import org.jboss.logging.Logger;
-
-
 /**
  * This exception can be used to provide a status code to the UI
  */
@@ -12,7 +9,6 @@ public class TaskServiceException extends Exception {
 	public static final Integer INTERNAL_SERVER_ERROR = 500;
 	
 	private Integer httpStatus = INTERNAL_SERVER_ERROR;
-	private static final Logger LOGGER = Logger.getLogger(TaskServiceException.class);
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
 //-----------------------------------------------------------------------------
@@ -27,7 +23,6 @@ public class TaskServiceException extends Exception {
 	public TaskServiceException(Integer httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 	/**
@@ -37,7 +32,6 @@ public class TaskServiceException extends Exception {
 	 */
 	public TaskServiceException(String message) {
 		super(message);
-		LOGGER.error(message);
 	}
 
 	/**
@@ -51,7 +45,6 @@ public class TaskServiceException extends Exception {
 	public TaskServiceException(Integer httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 	/**
@@ -62,7 +55,6 @@ public class TaskServiceException extends Exception {
 	 */
 	public TaskServiceException(String message, Throwable cause) {
 		super(message, cause);
-		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

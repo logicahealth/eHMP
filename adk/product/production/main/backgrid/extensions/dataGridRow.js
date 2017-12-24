@@ -3,10 +3,9 @@ define([
     'backgrid',
     'api/UserDefinedScreens',
     'marionette',
-    'main/components/appletToolbar/appletToolbarView',
     'api/Messaging',
     'main/adk_utils/crsUtil'
-], function(Backbone, Backgrid, UserDefinedScreens, Marionette, AppletToolbar, Messaging, CrsUtil) {
+], function(Backbone, Backgrid, UserDefinedScreens, Marionette, Messaging, CrsUtil) {
     'use strict';
 
     var ModelRow = Backgrid.Row.extend({
@@ -19,20 +18,12 @@ define([
             if (id) returnAttr['data-row-instanceid'] = id.replace(/:|;|\./g, '-');
 
             if (!this.simpleGrid) {
-                returnAttr.tabindex = '0';
                 returnAttr.class = 'selectable';
                 returnAttr["data-code"] = this.model.get('dataCode');
             }
 
             return returnAttr;
         },
-        /* this is configured in datagrid.js
-        behaviors: {
-            FloatingToolbar: {
-                buttonTypes: ['infobutton', 'detailsviewbutton'],
-                DialogContainer: '.toolbarContainer'
-            }
-        },*/
         constructor: function(options) {
             if (!options.model.get('excludeToolbar')) {
                 this._behaviors = Backbone.Marionette.Behaviors(this);
@@ -54,7 +45,25 @@ define([
                 this.events = events;
             }
 
-            var combinedEvents = {};
+            var combinedEvents = {
+                'click': function(e) {
+                    var tileOptions = this.getOption('tileOptions', {});
+                    var primaryAction = _.result(tileOptions, 'primaryAction', true);
+                    if (primaryAction) {
+                        if (!_.result(primaryAction, 'enabled', true)) return;
+                        var onClick = _.get(primaryAction, 'onClick');
+                        if (onClick) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return onClick.call(this, {
+                                model: this.model,
+                                collection: _.get(this, 'model.collection'),
+                                $el: this.$('.dropdown--quickmenu > button')
+                            }, e);
+                        }
+                    }
+                }
+            };
 
             var behaviorEvents = _.result(this, 'behaviorEvents') || {};
             var triggers = this.configureTriggers();
@@ -76,8 +85,8 @@ define([
         _bindUIElements: function() {
             Backbone.Marionette.ItemView.prototype._bindUIElements.apply(this, arguments);
         },
-        getOption: function() {
-            Backbone.Marionette.ItemView.prototype.getOption.apply(this, arguments);
+        getOption: function(optionsName) {
+            return _.get(this, ['options', optionsName], this[optionsName]);
         },
         undelegateEvents: function() {
             _.each(this._behaviors, function(behavior) {

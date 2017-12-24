@@ -21,5 +21,6 @@
     "freeze": true,
     "newcap": true,
     "quotmark": "single",
-    "unused": "vars"
+    "unused": "vars",
+    "esnext": true
 }

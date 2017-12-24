@@ -12,8 +12,8 @@ var configuration = {
     generalPurposeJdsServer: {
         baseUrl: 'http://IP             '
     },
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };

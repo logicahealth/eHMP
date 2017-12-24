@@ -68,7 +68,7 @@ define([
     var appletHelper = {
         defaults: {
             patientname: ADK.PatientRecordService.getCurrentPatient().get('displayName'),
-            patientid: ADK.PatientRecordService.getCurrentPatient().get('pid'),
+            patientid: ADK.PatientRecordService.getCurrentPatient().getIdentifier(),
             service: '',
             team: '',
             role: '',

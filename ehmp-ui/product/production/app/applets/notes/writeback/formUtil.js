@@ -22,7 +22,7 @@ define([
     var notesFormHeaderOptions = {
         actionItems: [],
         closeButtonOptions: {
-            title: 'Press enter to save and close note',
+            title: 'Save and close note',
             onClick: function() {
                 // This being the current form view that is shown
                 if (_.isFunction(this.onClickActionButton_Close)) {
@@ -35,7 +35,7 @@ define([
     var addendumFormHeaderOptions = {
         actionItems: [],
         closeButtonOptions: {
-            title: 'Press enter to save and close addendum',
+            title: 'Save and close addendum',
             onClick: function() {
                 // This being the current form view that is shown
                 if (_.isFunction(this.onClickActionButton_Close)) {

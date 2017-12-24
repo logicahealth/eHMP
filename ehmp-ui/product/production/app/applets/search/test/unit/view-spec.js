@@ -62,7 +62,6 @@ define([
                 view.onSolrError();
                 var hasOnErrorPlaceholder = _.includes(view.$('input').attr('placeholder'), 'Search is Unavailable');
                 expect(view.$('input')).toBeDisabled();
-                expect(view.$('.text-search-input-wrapper')).toHaveAttr('data-original-title', 'There was a problem reaching all data sources. Try again later.');
                 expect(hasOnErrorPlaceholder).toBe(true);
             });
         });

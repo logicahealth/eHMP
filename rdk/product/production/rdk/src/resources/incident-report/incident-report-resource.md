@@ -11,7 +11,7 @@ Create an incident report
     + Body
 
             {
-                "pid": "9E7A;3",
+                "pid": "SITE;3",
                 "icn": "",
                 "comment": "",
                 "simpleSyncStatus": {},
@@ -45,9 +45,9 @@ Create an incident report
                     "platform": "Win32",
                     "facility": "PANORAMA",
                     "duz": {
-                        "9E7A": "3"
+                        "SITE": "3"
                     },
-                    "site": "9E7A",
+                    "site": "SITE",
                     "title": "Clinician",
                     "history": [
                         "/staff/provider-centric-view",

@@ -12,6 +12,7 @@ module.exports.getResourceConfig = function() {
         path: '',
         post: add,
         interceptors: {
+            synchronize: false
         },
         requiredPermissions: ['add-immunization'],
         isPatientCentric: true

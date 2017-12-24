@@ -6,8 +6,8 @@ var writebackContext = {
     vistaConfig: {
         host: 'IP        ',
         port: PORT,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true

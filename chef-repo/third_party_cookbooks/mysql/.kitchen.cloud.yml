@@ -53,14 +53,14 @@ platforms:
   driver_plugin: ec2
   driver_config:
     image_id: ami-9a6ed3f2
-    username: REDACTED
+    username: USER    
     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 # - name: redhat-6.5
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-8d756fe4
-#     username: REDACTED
+#     username: USER    
 #     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 #   run_list:
 #   - recipe[selinux::disabled]
@@ -69,7 +69,7 @@ platforms:
   driver_plugin: ec2
   driver_config:
     image_id: ami-a8d369c0
-    username: REDACTED
+    username: USER    
     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
   run_list:
   - recipe[selinux::disabled]

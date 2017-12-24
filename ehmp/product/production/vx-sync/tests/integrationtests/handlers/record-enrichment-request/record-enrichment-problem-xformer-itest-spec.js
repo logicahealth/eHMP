@@ -11,7 +11,8 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var _ = require('underscore');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + 'terminology/terminology-utils');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
@@ -30,16 +31,16 @@ var originalVaProblem = {
     'lastUpdateTime': 20070410000000,
     'localId': 627,
     'onset': 20050407,
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'problemText': 'Hypertension (ICD-9-CM 401.9)',
     'providerName': 'VEHU,ONEHUNDRED',
-    'providerUid': 'urn:va:user:9E7A:10000000031',
+    'providerUid': 'urn:va:user:SITE:10000000031',
     'service': 'MEDICAL',
     'serviceConnected': false,
     'stampTime': 20070410000000,
     'statusCode': 'urn:sct:55561003',
     'statusName': 'ACTIVE',
-    'uid': 'urn:va:problem:9E7A:3:627',
+    'uid': 'urn:va:problem:SITE:3:627',
     'updated': 20070410
 };
 

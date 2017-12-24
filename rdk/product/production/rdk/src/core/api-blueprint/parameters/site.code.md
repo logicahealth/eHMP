@@ -1,1 +1,1 @@
-+ site.code: `9E7A` (string, required) - Site code.
++ site.code: `SITE` (string, required) - Site code.

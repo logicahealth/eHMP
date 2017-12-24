@@ -15,12 +15,12 @@ var RdkError = rdk.utils.RdkError;
  * @return {Object|undefined}
  */
 var accessVerifyConnection = function(req, res, connectCB, params) {
+    var errorObj;
     var logger = req.logger;
     var rpcClient = params.rpcClient;
     var site = params.site;
     var division = params.division;
     var vistaSites = _.get(req, 'app.config.vistaSites', {});
-    var errorObj;
 
     var timer = new RdkTimer({
         'name': 'vistaAuthTimer',
@@ -38,9 +38,7 @@ var accessVerifyConnection = function(req, res, connectCB, params) {
         if (error) {
             var code = 'vista.401.1001';
             var message = error.message || error || '';
-            console.log(error);
-            if (message.match(/No DUZ returned from login request/) ||
-            message.match(/(access code)|(verify code)/gi)) {
+            if (message.match(/No DUZ returned from login request/) || message.match(/(access code)|(verify code)/gi)) {
                 code = 'vista.401.1002';
             } else if (message.match(/MULTIPLE SIGNONS/)) {
                 code = 'vista.401.1003';
@@ -50,20 +48,23 @@ var accessVerifyConnection = function(req, res, connectCB, params) {
                 code = 'vista.503.1001';
             } else if (message.match(/Selected division not found for this user/)) {
                 code = 'vista.401.1011';
+            } else if (message.match(/VistA SECURITY .+ HMP UI CONTEXT/gi)) {
+                code = 'vista.401.1012';
             }
             //Error Handling for Authentication
             errorObj = new RdkError({
-                'error': error,
-                'code': code
+                error: error,
+                code: code,
+                logger: logger
             });
 
-            logger.trace(errorObj, 'from vistaConnection');
             return callback(errorObj, null);
         }
 
         if (!vistaJSAuthResult) {
             errorObj = new RdkError({
-                'code': 'rdk.401.1001'
+                code: 'rdk.401.1001',
+                logger: logger
             });
             return callback(errorObj, null);
         }

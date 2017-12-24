@@ -1,4 +1,4 @@
-@documents_modal_details2 @regression @data_specific @documents_applet @F1135 @reg2
+@documents_modal_details2 @regression @data_specific @documents_applet @F1135 @reg4
 Feature: F144 - eHMP Viewer GUI - Documents - (Modal Detail Verification2)
 
 #Background:

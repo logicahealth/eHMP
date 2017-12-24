@@ -34,7 +34,7 @@ function getResourceConfig() {
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/procedurerequest?_count=1
+ *      http://IP           /resource/fhir/patient/SITE;253/procedurerequest?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/procedurerequest.html">Procedure Request FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:

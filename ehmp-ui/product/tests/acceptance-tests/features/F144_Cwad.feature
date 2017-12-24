@@ -4,10 +4,7 @@ Feature: F144-eHMP Viewer GUI - Crisis Notes, Warnings, Allergies, Directives (C
 The user should be able look at CWAD flags in patient header and user looks for patient-status-icon
 
 Background:
-    # Given user is logged into eHMP-UI
     When user searches for and selects "Eight,Patient"
-    #Then Overview is active
-    #Then Cover Sheet is active
     Then Summary View is active
 
 @US3584_cwad_crisisnotes @DE979 @DE1045 @crisis
@@ -79,9 +76,10 @@ Scenario: The user looks for patient-status-icon
     And "Bottom Region" contains "eHMP version"
     Then the user looks for patientstatus icon site,All VA ,DOD and Externals
      | field	 |
-	 | My Site   |
+	   | My Site   |
      | All VA    |
-	 | DoD       |
-	 | Communities |
+	   | DoD       |
+	   | Communities |
+
 
   

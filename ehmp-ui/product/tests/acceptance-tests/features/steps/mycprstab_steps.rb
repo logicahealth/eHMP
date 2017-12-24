@@ -47,17 +47,19 @@ end
 
 Then(/^the staff view screen displays My CPRS list in the sidebar tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_cprslist).to eq(true), "Unselected My CPRS list button is not visible"
-  expect(staff_view.wait_for_btn_open_cprslist).to eq(true)
-  expect(staff_view.btn_open_cprslist.text.upcase).to eq("MY CPRS LIST")
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_btn_closed_cprslist).to eq(true), "Unselected My CPRS list button is not visible"
+  expect(staff_view.patient_search_tray.btn_closed_cprslist.text.upcase).to eq("MY CPRS LIST")
 end
 
 When(/^the user opens the My CPRS list tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_cprslist).to eq(true), "Unselected My CPRS list button is not visible"
-  expect(staff_view.wait_for_btn_open_cprslist).to eq(true), "Button to open My CPRS list tray is not visible"
-  staff_view.btn_open_cprslist.click
-  expect(staff_view.wait_for_open_cprslist).to eq(true), "My CPRS list tray did not open"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_btn_closed_cprslist).to eq(true), "Unselected My CPRS list button is not visible"
+  staff_view.patient_search_tray.btn_closed_cprslist.click
+  expect(staff_view.patient_search_tray.wait_for_btn_open_cprslist).to eq(true), "My CPRS list tray did not open"
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray (with a title) to open"
+  expect(staff_view.fld_tray_title.text.upcase).to eq('my cprs list'.upcase)
 end
 
 When(/^the My CPRS list tray displays a close x button$/) do

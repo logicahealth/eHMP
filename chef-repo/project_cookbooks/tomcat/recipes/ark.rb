@@ -29,6 +29,10 @@ ark tomcat_version do
   owner node['tomcat']['user']
 end
 
+execute 'change permissions of contents in tomcat directory to allow others to see files' do
+  command "chmod -R o+rx #{node[:tomcat][:home]}/*"
+end
+
 directory "#{node['tomcat']['home']}/webapps/examples" do
   recursive true
   action :delete

@@ -22,6 +22,7 @@ var PROVIDER = 'PROVIDER';
  * @return {Object|undefined}
  */
 var userClassRPC = function(req, res, userClassCB, params) {
+    var errorObj;
     var logger = req.logger;
     var rpcClient = params.rpcClient;
     var site = params.site;
@@ -32,55 +33,57 @@ var userClassRPC = function(req, res, userClassCB, params) {
         'start': true
     });
 
-    var callback = function(err, data) {
+    var callback = function (err, data) {
         timer.log(logger, {
             'stop': true
         });
         return userClassCB(err, data);
     };
-    var errorObj;
+
     rpcClient.execute(USERCLASS_RPC, {
-            '"command"': 'getUserInfo',
-            '"userId"': data.duz[site]
-        },
-        function(error, result) {
-            if (error) {
-                //Error Handling for Authentication
-                errorObj = new RdkError({
-                    'error': error,
-                    'code': 'vista.401.1005'
-                });
-                return callback(errorObj, null);
-            }
+        '"command"': 'getUserInfo',
+        '"userId"': data.duz[site]
+    }, function (error, result) {
+        if (error) {
+            //Error Handling for Authentication
+            errorObj = new RdkError({
+                error: error,
+                code: 'vista.401.1005',
+                logger: logger
+            });
+            return callback(errorObj, null);
+        }
 
-            if (!_.isString(result)) {
-                errorObj = new RdkError({
-                    'code': 'vista.401.1006'
-                });
-                return callback(errorObj, null);
-            }
+        if (!_.isString(result)) {
+            errorObj = new RdkError({
+                code: 'vista.401.1006',
+                logger: logger
+            });
+            return callback(errorObj, null);
+        }
 
-            try {
-                result = JSON.parse(result);
-            } catch (e) {
-                errorObj = new RdkError({
-                    'error': e,
-                    'code': 'vista.401.1007'
-                });
-                return callback(errorObj, null);
-            }
-            logger.trace(result, 'user class rpc parsed result');
-            var returnObj = {};
-            returnObj.vistaUserClass = _.result(result, 'vistaUserClass', []);
-            returnObj.vistaKeys = _.keys(_.result(result, 'vistaKeys', {}));
-            returnObj.title = _.result(result, 'vistaPositions.role') || '';
-            returnObj.dgRecordAccess = (returnObj.vistaKeys.indexOf(DG_RECORD_ACCESS) > -1).toString();
-            returnObj.dgSensitiveAccess = (returnObj.vistaKeys.indexOf(DG_SENSITIVITY) > -1).toString();
-            returnObj.dgSecurityOfficer = (returnObj.vistaKeys.indexOf(DG_SECURITY_OFFICER) > -1).toString();
-            returnObj.provider = (returnObj.vistaKeys.indexOf(PROVIDER) > -1);
+        try {
+            result = JSON.parse(result);
+        } catch (e) {
+            errorObj = new RdkError({
+                error: e,
+                code: 'vista.401.1007',
+                logger: logger
+            });
+            return callback(errorObj, null);
+        }
+        logger.trace(result, 'user class rpc parsed result');
+        var returnObj = {};
+        returnObj.vistaUserClass = _.result(result, 'vistaUserClass', []);
+        returnObj.vistaKeys = _.keys(_.result(result, 'vistaKeys', {}));
+        returnObj.title = _.result(result, 'vistaPositions.role') || '';
+        returnObj.dgRecordAccess = (returnObj.vistaKeys.indexOf(DG_RECORD_ACCESS) > -1).toString();
+        returnObj.dgSensitiveAccess = (returnObj.vistaKeys.indexOf(DG_SENSITIVITY) > -1).toString();
+        returnObj.dgSecurityOfficer = (returnObj.vistaKeys.indexOf(DG_SECURITY_OFFICER) > -1).toString();
+        returnObj.provider = (returnObj.vistaKeys.indexOf(PROVIDER) > -1);
 
-            return callback(null, returnObj);
-        });
+        return callback(null, returnObj);
+    });
 };
 
 module.exports = userClassRPC;

@@ -7,7 +7,7 @@ var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
 var yargs = require('yargs');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var OsyncClinicUtils = require(global.VX_UTILS + 'osync/osync-clinic-utils');
 
 var argv = yargs
@@ -56,7 +56,7 @@ if ((_.isEmpty(argv.uid)) && (_.isEmpty(argv.site))) {
 
 var environment = {
     jds: new JdsClient(log, log, config),
-    pjds: new PjdsClient(log, log, config)
+    pjds: new PjdsClient(log, log, config.pjds)
 };
 
 var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);

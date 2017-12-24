@@ -25,10 +25,10 @@ var patientIdList = [{
     value: '10110'
 }, {
     type: 'pid',
-    value: 'C877;8'
+    value: 'SITE;8'
 }, {
     type: 'pid',
-    value: '9E7A;8'
+    value: 'SITE;8'
 }, {
     type: 'vhicid',
     value: '1111'
@@ -42,10 +42,10 @@ var patientIdListVistaHdr = [{
     value: '10110'
 }, {
     type: 'pid',
-    value: 'C877;8'
+    value: 'SITE;8'
 }, {
     type: 'pid',
-    value: '9E7A;8'
+    value: 'SITE;8'
 }, {
     'type': 'pid',
     'value': '3A8B;111',
@@ -67,10 +67,10 @@ var patientIdentifiers = [{
     value: '10110V004877'
 }, {
     type: 'pid',
-    value: 'C877;8'
+    value: 'SITE;8'
 }, {
     type: 'pid',
-    value: '9E7A;8'
+    value: 'SITE;8'
 }, {
     type: 'pid',
     value: 'DOD;10110'
@@ -89,12 +89,12 @@ var patientIdentifiers = [{
 }];
 
 var vistaSites = {
-    '9E7A': {
+    'SITE': {
         panorama: 'panorama',
         host: '127.0.0.1',
         port: 10001
     },
-    'C877': {
+    'SITE': {
         name: 'kodak',
         host: '127.0.0.1',
         port: 10002
@@ -222,13 +222,13 @@ function createEnvironment() {
 //------------------------------------------------
 function createOptions(log, config, env) {
     var requestJob = new DummyRequest({
-        'pid': '9E7A;3'
+        'pid': 'SITE;3'
     });
 
     requestJob.jpid = '00000000-0000-0000-0000-000000000000';
     requestJob.patientIdentifier = {
         'type': 'pid',
-        'value': '9E7A;3'
+        'value': 'SITE;3'
     };
     var job = jobUtil.createEnterpriseSyncRequest(requestJob.patientIdentifier, requestJob.jpid, requestJob.force);
     job.jobId = 1;
@@ -253,17 +253,17 @@ describe('enterprise-sync-request-handler.js', function() {
     it('verify has()', function() {
         var env = createEnvironment();
         var opts = createOptions(log, config, env);
-        var job2 = jobUtil.createVistaSubscribeRequest('C877', {
+        var job2 = jobUtil.createVistaSubscribeRequest('SITE', {
             type: 'pid',
-            value: 'C877;8'
+            value: 'SITE;8'
         });
-        var job3 = jobUtil.createVistaSubscribeRequest('9E7A', {
+        var job3 = jobUtil.createVistaSubscribeRequest('SITE', {
             type: 'pid',
-            value: '9E7A;8'
+            value: 'SITE;8'
         });
 
         expect(has([opts.job], jobUtil.enterpriseSyncRequestType())).toBe(true);
-        expect(has([job2], jobUtil.vistaSubscribeRequestType('C877'))).toBe(true);
+        expect(has([job2], jobUtil.vistaSubscribeRequestType('SITE'))).toBe(true);
         expect(has([job2, job3], jobUtil.vistaSubscribeRequestType('00A0'))).toBe(false);
     });
 
@@ -377,11 +377,11 @@ describe('enterprise-sync-request-handler.js', function() {
                     }));
                     expect(expectedResult).toContain(jasmine.objectContaining({
                         type: 'pid',
-                        value: '9E7A;8'
+                        value: 'SITE;8'
                     }));
                     expect(expectedResult).toContain(jasmine.objectContaining({
                         type: 'pid',
-                        value: 'C877;8'
+                        value: 'SITE;8'
                     }));
                     expect(expectedResult).toContain(jasmine.objectContaining({
                         type: 'pid',
@@ -449,11 +449,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -489,11 +489,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -530,10 +530,10 @@ describe('enterprise-sync-request-handler.js', function() {
                         value: '10110'
                     }, {
                         type: 'pid',
-                        value: 'C877;8'
+                        value: 'SITE;8'
                     }, {
                         type: 'pid',
-                        value: '9E7A;8'
+                        value: 'SITE;8'
                     }, {
                         type: 'vhicid',
                         value: '1111'
@@ -580,11 +580,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -612,11 +612,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -644,11 +644,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -676,11 +676,11 @@ describe('enterprise-sync-request-handler.js', function() {
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: '9E7A;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
-                    value: 'C877;8'
+                    value: 'SITE;8'
                 }));
                 expect(expectedResult).toContain(jasmine.objectContaining({
                     type: 'pid',
@@ -701,13 +701,13 @@ describe('enterprise-sync-request-handler.js', function() {
             var env = createEnvironment();
             var opts = createOptions(log, config, env);
             var completed = false;
-            var job2 = jobUtil.createVistaSubscribeRequest('C877', {
+            var job2 = jobUtil.createVistaSubscribeRequest('SITE', {
                 type: 'pid',
-                value: 'C877;8'
+                value: 'SITE;8'
             });
-            var job3 = jobUtil.createVistaSubscribeRequest('9E7A', {
+            var job3 = jobUtil.createVistaSubscribeRequest('SITE', {
                 type: 'pid',
-                value: '9E7A;8'
+                value: 'SITE;8'
             });
 
             runs(function() {
@@ -741,7 +741,7 @@ describe('enterprise-sync-request-handler.js', function() {
             spyOn(env.jds, 'getPtDemographicsByPid').andCallThrough();
 
             var demographicsFromVista = {
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'birthDate': '19350407',
                 'last4': '0008',
                 'last5': 'E0008',
@@ -753,7 +753,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 'genderCode': 'urn:va:pat-gender:M',
                 'genderName': 'Male',
                 'sensitive': false,
-                'uid': 'urn:va:patient:9E7A:3:3',
+                'uid': 'urn:va:patient:SITE:3:3',
                 'summary': 'Eight,Patient',
                 'ssn': '666000008',
                 'localId': 3
@@ -823,7 +823,7 @@ describe('enterprise-sync-request-handler.js', function() {
             spyOn(env.jds, 'getPtDemographicsByPid').andCallThrough();
 
             var demographicsFromVista = {
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'birthDate': '19350407',
                 'last4': '0008',
                 'last5': 'E0008',
@@ -835,7 +835,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 'genderCode': 'urn:va:pat-gender:M',
                 'genderName': 'Male',
                 'sensitive': false,
-                'uid': 'urn:va:patient:9E7A:3:3',
+                'uid': 'urn:va:patient:SITE:3:3',
                 'summary': 'Eight,Patient',
                 'ssn': '666000008',
                 'localId': 3
@@ -992,7 +992,7 @@ describe('enterprise-sync-request-handler.js', function() {
 
             var jobs = [{
                 type: 'pid',
-                value: '9E7A;432'
+                value: 'SITE;432'
             }, {
                 type: 'pid',
                 value: 'HDR;4325679V4325679'

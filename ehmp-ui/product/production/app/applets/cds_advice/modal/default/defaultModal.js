@@ -21,34 +21,35 @@ define([
                 }
                 return data;
             },
-            showDetails: function(model) {
+            showDetails: function(model, targetElement) {
                 var AdviceModal = require('app/applets/cds_advice/modal/advice/adviceModal');
                 var ReminderModal = require('app/applets/cds_advice/modal/reminder/reminderModal');
 
                 switch (model.get('type')) {
                     case Util.ADVICE_TYPE.REMINDER:
-                        ReminderModal.show(model);
+                        ReminderModal.show(model, targetElement);
                         break;
 
                     case Util.ADVICE_TYPE.ADVICE:
-                        AdviceModal.show(model);
+                        AdviceModal.show(model, targetElement);
                         break;
 
                     default:
-                        showModal(model);
+                        showModal(model, targetElement);
                 }
             },
-            getDetailsModal: function(model) {
-                this.showDetails(model);
+            getDetailsModal: function(model, targetElement) {
+                this.showDetails(model, targetElement);
             }
         });
         return new View(opts);
     }
 
-    function showModal(model) {
+    function showModal(model, targetElement) {
         var view = createView(model);
         var modalOptions = {
             title: 'CDS Advice',
+            triggerElement: targetElement,
             'nextPreviousCollection': model.collection
         };
         var modal = new ADK.UI.Modal({
@@ -65,8 +66,8 @@ define([
          *
          * @param {BackboneJS.Model} model The model object created for the list item.
          */
-        show: function (model) {
-            showModal(model);
+        show: function (model, targetElement) {
+            showModal(model, targetElement);
         },
         createView: createView
     };

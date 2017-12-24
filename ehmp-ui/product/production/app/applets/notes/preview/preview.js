@@ -71,7 +71,6 @@ define([
                                 control: "button",
                                 name: "note-preview-close",
                                 id: "preview-form-close-btn",
-                                title: "Press enter to close.",
                                 extraClasses: ["btn-default", "btn-sm"]
                                 }]
                         }]

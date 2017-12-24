@@ -20,7 +20,7 @@ var config = {
 };
 
 var lastUpdateTimeValue = '3150106-1624';
-var vistaIdValue = 'C877';
+var vistaIdValue = 'SITE';
 var uidValue = 'urn:va:vprupdate:' + vistaIdValue;
 
 var jdsClientDummy = new JdsClientDummy(dummyLogger, config);

@@ -1,0 +1,984 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>1705. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>1705. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:26 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>1705.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\ehmp-ui\ehmp-ui\product\production\app\applets\narrative_lab_results_grid\test\unit</td> 
+     <td>narrativeLabsSpec.js</td> 
+     <td>Mon Jun 12 13:58:56 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\ehmp-ui\ehmp-ui\product\production\app\applets\narrative_lab_results_grid\test\unit</td> 
+     <td>narrativeLabsSpec.js</td> 
+     <td>Thu Oct 12 18:00:07 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1705.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">7</td> 
+     <td style="text-align: right;">294</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">6</td> 
+     <td style="text-align: right;">16</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1705.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1705.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>1705.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">/*jslint&nbsp;n</span> <span class="U2">ode:&nbsp;true,</span> <span class="U2">&nbsp;nomen:&nbsp;tr</span> <span class="U2">ue,&nbsp;unpara</span> <span class="U2">m:&nbsp;true&nbsp;*/</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">/*global&nbsp;w</span> <span class="U2">indow,&nbsp;jqu</span> <span class="U2">ery,&nbsp;$,&nbsp;_,</span> <span class="U2">&nbsp;define,&nbsp;M</span> <span class="U2">arionette,</span> <span class="U2">&nbsp;jqm,&nbsp;desc</span> <span class="U2">ribe,&nbsp;it,&nbsp;</span> <span class="U2">expect,&nbsp;be</span> <span class="U2">foreEach,&nbsp;</span> <span class="U2">spyOn&nbsp;*/</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">define([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'requi</span> <span class="U2">re',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'test/</span> <span class="U2">stubs',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'jasmi</span> <span class="U2">nejquery',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'under</span> <span class="U2">score',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'backb</span> <span class="U2">one'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">],&nbsp;functio</span> <span class="U2">n(require,</span> <span class="U2">&nbsp;Stubs,&nbsp;ja</span> <span class="U2">sminejquer</span> <span class="U2">y,&nbsp;_,&nbsp;Back</span> <span class="U2">bone)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'use&nbsp;s</span> <span class="U2">trict';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;descri</span> <span class="U2">be('Setup&nbsp;</span> <span class="U2">Narrative&nbsp;</span> <span class="U2">Labs',&nbsp;fun</span> <span class="U2">ction&nbsp;narr</span> <span class="U2">ativeLabs(</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;response</span> <span class="U2">&nbsp;=&nbsp;[];</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;DomainMo</span> <span class="U2">del&nbsp;=&nbsp;_.ge</span> <span class="U2">t(window,&nbsp;</span> <span class="U2">ADK.Resour</span> <span class="U2">ceService.</span> <span class="U2">DomainMode</span> <span class="U2">l);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;addFacil</span> <span class="U2">ityMoniker</span> <span class="U2">&nbsp;=&nbsp;_.get(w</span> <span class="U2">indow,&nbsp;'AD</span> <span class="U2">K.Enrichme</span> <span class="U2">nt.addFaci</span> <span class="U2">lityMonike</span> <span class="U2">r');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;Model;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if</span> <span class="U2">&nbsp;(!DomainM</span> <span class="U2">odel)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;//&nbsp;This&nbsp;</span> <span class="U2">needs&nbsp;to&nbsp;e</span> <span class="U2">xist&nbsp;befor</span> <span class="U2">e&nbsp;require&nbsp;</span> <span class="U2">a&nbsp;well</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;_.set(wi</span> <span class="U2">ndow,&nbsp;'ADK</span> <span class="U2">.ResourceS</span> <span class="U2">ervice.Dom</span> <span class="U2">ainModel',</span> <span class="U2">&nbsp;Backbone.</span> <span class="U2">Model);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be</span> <span class="U2">foreEach(f</span> <span class="U2">unction(do</span> <span class="U2">ne)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;_.set(wi</span> <span class="U2">ndow,&nbsp;'ADK</span> <span class="U2">.ResourceS</span> <span class="U2">ervice.Dom</span> <span class="U2">ainModel',</span> <span class="U2">&nbsp;Backbone.</span> <span class="U2">Model);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;_.set(wi</span> <span class="U2">ndow,&nbsp;'ADK</span> <span class="U2">.Enrichmen</span> <span class="U2">t.addFacil</span> <span class="U2">ityMoniker</span> <span class="U2">',&nbsp;functio</span> <span class="U2">n(response</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp</span> <span class="U2">onse.facil</span> <span class="U2">ityMoniker</span> <span class="U2">&nbsp;=&nbsp;'PAN';</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retu</span> <span class="U2">rn&nbsp;respons</span> <span class="U2">e;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;(_.is</span> <span class="U2">Undefined(</span> <span class="U2">Model))&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;requ</span> <span class="U2">ire(['app/</span> <span class="U2">resources/</span> <span class="U2">fetch/narr</span> <span class="U2">ative_labs</span> <span class="U2">/model'],&nbsp;</span> <span class="U2">function(m</span> <span class="U2">odel)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">Model&nbsp;=&nbsp;mo</span> <span class="U2">del;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">return&nbsp;don</span> <span class="U2">e();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;}&nbsp;else&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retu</span> <span class="U2">rn&nbsp;done();</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;af</span> <span class="U2">terEach(fu</span> <span class="U2">nction()&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;_.set(wi</span> <span class="U2">ndow,&nbsp;'ADK</span> <span class="U2">.ResourceS</span> <span class="U2">ervice.Dom</span> <span class="U2">ainModel',</span> <span class="U2">&nbsp;DomainMod</span> <span class="U2">el);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;_.set(wi</span> <span class="U2">ndow,&nbsp;'ADK</span> <span class="U2">.Enrichmen</span> <span class="U2">t.addFacil</span> <span class="U2">ityMoniker</span> <span class="U2">',&nbsp;addFaci</span> <span class="U2">lityMonike</span> <span class="U2">r);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">scribe('Te</span> <span class="U2">sting&nbsp;narr</span> <span class="U2">ative&nbsp;labs</span> <span class="U2">&nbsp;model',&nbsp;f</span> <span class="U2">unction&nbsp;na</span> <span class="U2">rrativeLab</span> <span class="U2">s()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;beforeEa</span> <span class="U2">ch(functio</span> <span class="U2">n()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp</span> <span class="U2">onse&nbsp;=&nbsp;[{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'abnormal'</span> <span class="U2">:&nbsp;false,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'categoryC</span> <span class="U2">ode':&nbsp;'urn</span> <span class="U2">:va:lab-ca</span> <span class="U2">tegory:EM'</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'categoryN</span> <span class="U2">ame':&nbsp;'Pat</span> <span class="U2">hology',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'facilityC</span> <span class="U2">ode':&nbsp;'500</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'facilityN</span> <span class="U2">ame':&nbsp;'CAM</span> <span class="U2">P&nbsp;MASTER',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'groupName</span> <span class="U2">':&nbsp;'EM&nbsp;97&nbsp;</span> <span class="U2">2',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'kind':&nbsp;'P</span> <span class="U2">athology',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'lastUpdat</span> <span class="U2">eTime':&nbsp;'1</span> <span class="U2">9971023000</span> <span class="U2">000',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'localId':</span> <span class="U2">&nbsp;'EM;70289</span> <span class="U2">76',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'micro':&nbsp;f</span> <span class="U2">alse,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'observed'</span> <span class="U2">:&nbsp;'1997102</span> <span class="U2">3',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'organizer</span> <span class="U2">Type':&nbsp;'ac</span> <span class="U2">cession',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">64</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'pid':&nbsp;'</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'qualified</span> <span class="U2">Name':&nbsp;'(u</span> <span class="U2">rine,&nbsp;urin</span> <span class="U2">e&nbsp;cath.&nbsp;wa</span> <span class="U2">sh)',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'resulted'</span> <span class="U2">:&nbsp;'',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'results':</span> <span class="U2">&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'local</span> <span class="U2">Title':&nbsp;'L</span> <span class="U2">R&nbsp;ELECTRON</span> <span class="U2">&nbsp;MICROSCOP</span> <span class="U2">Y&nbsp;REPORT',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">69</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">'resultUid</span> <span class="U2">':&nbsp;'urn:va</span> <span class="U2">:document:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:EM;7028</span> <span class="U2">976',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">70</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">'uid':&nbsp;'ur</span> <span class="U2">n:va:lab:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:EM;7028</span> <span class="U2">976'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">}],</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'specimen'</span> <span class="U2">:&nbsp;'urine,&nbsp;</span> <span class="U2">urine&nbsp;cath</span> <span class="U2">.&nbsp;wash',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'stampTime</span> <span class="U2">':&nbsp;'199710</span> <span class="U2">23000000',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'statusCod</span> <span class="U2">e':&nbsp;'urn:v</span> <span class="U2">a:lab-stat</span> <span class="U2">us:complet</span> <span class="U2">ed',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'statusNam</span> <span class="U2">e':&nbsp;'compl</span> <span class="U2">eted',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'summary':</span> <span class="U2">&nbsp;'(urine,&nbsp;</span> <span class="U2">urine&nbsp;cath</span> <span class="U2">.&nbsp;wash)',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">77</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'uid':&nbsp;'ur</span> <span class="U2">n:va:lab:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:EM;7028</span> <span class="U2">976'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'abnormal'</span> <span class="U2">:&nbsp;false,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'categoryC</span> <span class="U2">ode':&nbsp;'urn</span> <span class="U2">:va:lab-ca</span> <span class="U2">tegory:SP'</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'categoryN</span> <span class="U2">ame':&nbsp;'Sur</span> <span class="U2">gical&nbsp;Path</span> <span class="U2">ology',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'facilityC</span> <span class="U2">ode':&nbsp;'500</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'facilityN</span> <span class="U2">ame':&nbsp;'CAM</span> <span class="U2">P&nbsp;MASTER',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'groupName</span> <span class="U2">':&nbsp;'SP&nbsp;00&nbsp;</span> <span class="U2">7',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'kind':&nbsp;'S</span> <span class="U2">urgical&nbsp;Pa</span> <span class="U2">thology',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'lastUpdat</span> <span class="U2">eTime':&nbsp;'2</span> <span class="U2">0000126000</span> <span class="U2">000',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'localId':</span> <span class="U2">&nbsp;'SP;69998</span> <span class="U2">72.99996',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'micro':&nbsp;f</span> <span class="U2">alse,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'observed'</span> <span class="U2">:&nbsp;'2000012</span> <span class="U2">6000000',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'organizer</span> <span class="U2">Type':&nbsp;'ac</span> <span class="U2">cession',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">91</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'pid':&nbsp;'</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'qualified</span> <span class="U2">Name':&nbsp;'(e</span> <span class="U2">ar)',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'resulted'</span> <span class="U2">:&nbsp;'',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'results':</span> <span class="U2">&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;'local</span> <span class="U2">Title':&nbsp;'L</span> <span class="U2">R&nbsp;SURGICAL</span> <span class="U2">&nbsp;PATHOLOGY</span> <span class="U2">&nbsp;REPORT',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">96</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">'resultUid</span> <span class="U2">':&nbsp;'urn:va</span> <span class="U2">:document:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:SP;6999</span> <span class="U2">872.</span> <span class="C2">PORT</span> <span class="U2">6',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">97</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">'uid':&nbsp;'ur</span> <span class="U2">n:va:lab:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:SP;6999</span> <span class="U2">872.99996'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">}],</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'specimen'</span> <span class="U2">:&nbsp;'ear',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'stampTime</span> <span class="U2">':&nbsp;'200001</span> <span class="U2">26000000',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'statusCod</span> <span class="U2">e':&nbsp;'urn:v</span> <span class="U2">a:lab-stat</span> <span class="U2">us:complet</span> <span class="U2">ed',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'statusNam</span> <span class="U2">e':&nbsp;'compl</span> <span class="U2">eted',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'summary':</span> <span class="U2">&nbsp;'(ear)',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">104</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'uid':&nbsp;'ur</span> <span class="U2">n:va:lab:</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:8:SP;6999</span> <span class="U2">872.99996'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}];</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;it('corr</span> <span class="U2">ectly&nbsp;pars</span> <span class="U2">es&nbsp;the&nbsp;mod</span> <span class="U2">el',&nbsp;funct</span> <span class="U2">ion()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">responseOn</span> <span class="U2">e&nbsp;=&nbsp;respon</span> <span class="U2">se[0];</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">responseTw</span> <span class="U2">o&nbsp;=&nbsp;respon</span> <span class="U2">se[1];</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">responseTh</span> <span class="U2">ree&nbsp;=&nbsp;{};</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">modelOne&nbsp;=</span> <span class="U2">&nbsp;new&nbsp;Model</span> <span class="U2">(responseO</span> <span class="U2">ne,&nbsp;{parse</span> <span class="U2">:&nbsp;true});</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">modelTwo&nbsp;=</span> <span class="U2">&nbsp;new&nbsp;Model</span> <span class="U2">(responseT</span> <span class="U2">wo,&nbsp;{parse</span> <span class="U2">:&nbsp;true});</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">modelThree</span> <span class="U2">&nbsp;=&nbsp;new&nbsp;Mod</span> <span class="U2">el(respons</span> <span class="U2">eThree,&nbsp;{p</span> <span class="U2">arse:&nbsp;true</span> <span class="U2">});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelOn</span> <span class="U2">e.get('dis</span> <span class="U2">playTypeNa</span> <span class="U2">me')).toBe</span> <span class="U2">(responseO</span> <span class="U2">ne.categor</span> <span class="U2">yName);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelOn</span> <span class="U2">e.get('nar</span> <span class="U2">rativeDesc</span> <span class="U2">ription'))</span> <span class="U2">.toBe(resp</span> <span class="U2">onseOne.re</span> <span class="U2">sults[0].l</span> <span class="U2">ocalTitle)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelOn</span> <span class="U2">e.get('pat</span> <span class="U2">hology')).</span> <span class="U2">toBe(true)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelOn</span> <span class="U2">e.get('loi</span> <span class="U2">nc')).toBe</span> <span class="U2">(undefined</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelOn</span> <span class="U2">e.get('std</span> <span class="U2">TestNames'</span> <span class="U2">)).toBe(un</span> <span class="U2">defined);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTw</span> <span class="U2">o.get('dis</span> <span class="U2">playTypeNa</span> <span class="U2">me')).toBe</span> <span class="U2">(responseT</span> <span class="U2">wo.categor</span> <span class="U2">yName);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTw</span> <span class="U2">o.get('nar</span> <span class="U2">rativeDesc</span> <span class="U2">ription'))</span> <span class="U2">.toBe(resp</span> <span class="U2">onseTwo.re</span> <span class="U2">sults[0].l</span> <span class="U2">ocalTitle)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTw</span> <span class="U2">o.get('pat</span> <span class="U2">hology')).</span> <span class="U2">toBe(true)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTw</span> <span class="U2">o.get('loi</span> <span class="U2">nc')).toBe</span> <span class="U2">(undefined</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTw</span> <span class="U2">o.get('std</span> <span class="U2">TestNames'</span> <span class="U2">)).toBe(un</span> <span class="U2">defined);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTh</span> <span class="U2">ree.get('d</span> <span class="U2">isplayType</span> <span class="U2">Name')).to</span> <span class="U2">Be('None')</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTh</span> <span class="U2">ree.get('n</span> <span class="U2">arrativeDe</span> <span class="U2">scription'</span> <span class="U2">)).toBe('N</span> <span class="U2">one');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTh</span> <span class="U2">ree.get('p</span> <span class="U2">athology')</span> <span class="U2">).toBe(und</span> <span class="U2">efined);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTh</span> <span class="U2">ree.get('l</span> <span class="U2">oinc')).to</span> <span class="U2">Be(undefin</span> <span class="U2">ed);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(modelTh</span> <span class="U2">ree.get('s</span> <span class="U2">tdTestName</span> <span class="U2">s')).toBe(</span> <span class="U2">undefined)</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;it('gets</span> <span class="U2">&nbsp;the&nbsp;corre</span> <span class="U2">ct&nbsp;categor</span> <span class="U2">y&nbsp;code',&nbsp;f</span> <span class="U2">unction()&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">model&nbsp;=&nbsp;ne</span> <span class="U2">w&nbsp;Model(re</span> <span class="U2">sponse[0],</span> <span class="U2">&nbsp;{parse:&nbsp;t</span> <span class="U2">rue});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.g</span> <span class="U2">etResponse</span> <span class="U2">CategoryCo</span> <span class="U2">de()).toBe</span> <span class="U2">('EM');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.g</span> <span class="U2">etResponse</span> <span class="U2">CategoryCo</span> <span class="U2">de(respons</span> <span class="U2">e[1].categ</span> <span class="U2">oryCode)).</span> <span class="U2">toBe('SP')</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">141</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">142</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">143</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;it('chec</span> <span class="U2">ks&nbsp;if&nbsp;the&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;in&nbsp;patho</span> <span class="U2">logy&nbsp;corre</span> <span class="U2">ctly',&nbsp;fun</span> <span class="U2">ction()&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">144</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">model&nbsp;=&nbsp;ne</span> <span class="U2">w&nbsp;Model(re</span> <span class="U2">sponse[0],</span> <span class="U2">&nbsp;{parse:&nbsp;t</span> <span class="U2">rue});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">145</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">146</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.i</span> <span class="U2">nPathology</span> <span class="U2">()).toBe(t</span> <span class="U2">rue);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">147</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.i</span> <span class="U2">nPathology</span> <span class="U2">(response[</span> <span class="U2">1].categor</span> <span class="U2">yCode)).to</span> <span class="U2">Be(true);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">148</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.i</span> <span class="U2">nPathology</span> <span class="U2">('AB')).to</span> <span class="U2">Be(false);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">149</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expe</span> <span class="U2">ct(model.i</span> <span class="U2">nPathology</span> <span class="U2">('CY')).to</span> <span class="U2">Be(true);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">150</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">151</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">152</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">153</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">154</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">155</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

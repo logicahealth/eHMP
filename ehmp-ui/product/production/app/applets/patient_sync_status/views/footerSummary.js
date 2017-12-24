@@ -5,7 +5,7 @@ define([
     'moment',
     'app/applets/patient_sync_status/views/detailsModalView',
     'app/applets/patient_sync_status/views/detailsModalFooterView',
-    'hbs!app/applets/patient_sync_status/templates/footerSummaryTemplate',
+    'hbs!app/applets/patient_sync_status/templates/footerSummaryTemplate'
 ], function(
     Backbone,
     Marionette,
@@ -49,8 +49,6 @@ define([
             if (!isDataValid) {
                 return '';
             }
-            //var endDate = moment(dateString, 'YYYYMMDDHHmmssSSS');
-            //var startDate  = moment();
             var endDate = moment().subtract(maxTimeZoneOffset, 'hours');
             if (startDate.isAfter(endDate)) {
                 return '< 1 day';
@@ -106,12 +104,19 @@ define([
             this._lock = 0;
             this.currentWorkspaceAndContextModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
             this.listenTo(this.currentWorkspaceAndContextModel, 'change', this.changeInWorkspace);
+            this.listenTo(ADK.PatientRecordService.getCurrentPatient(), 'change:pid', this.handlePatientSwitchWhileOnWorkspace);
             ADK.Messaging.getChannel('patient_sync_status').reply('get:simple:sync:status', _.bind(function() {
                 return this.model.get('rawData');
             }, this));
         },
-        changeInWorkspace: function(model) {
-            if (model.get('context') === 'patient' && model.get('workspace') !== 'patient-search-screen') {
+        handlePatientSwitchWhileOnWorkspace: function(){
+            if(this.currentWorkspaceAndContextModel.get('context') === 'patient'){
+                this.updatePatientSyncStatus(true);
+                this.startAutoPolling();
+            }
+        },
+        changeInWorkspace: function() {
+            if (this.currentWorkspaceAndContextModel.get('context') === 'patient') {
                 this.updatePatientSyncStatus(true);
                 this.startAutoPolling();
             } else {
@@ -128,8 +133,7 @@ define([
             });
         },
         onShow: function() {
-            this.changeInWorkspace(this.currentWorkspaceAndContextModel);
-            // this.startAutoPolling();
+            this.changeInWorkspace();
         },
         onDestroy: function() {
             this.stopAutoPolling();
@@ -326,9 +330,6 @@ define([
                         statInfo.isSolrSyncCompleted = curSite.isSolrSyncCompleted || false;
                         ADK.PatientRecordService.getCurrentPatient().set('mySiteSolrSyncCompleted', statInfo.isSolrSyncCompleted);
                         statInfo.completed = completedStatus;
-                        // if (statInfo.completed === true && curSite.completedStamp) {
-                        //     statInfo.timeStamp = ADK.utils.getTimeSince(curSite.completedStamp.toString(), false).timeSince;
-                        // }
                         statInfo.hoverTip = ADK.utils.tooltipMappings.patientSync_mySite;
                         stats.push(statInfo);
                     }

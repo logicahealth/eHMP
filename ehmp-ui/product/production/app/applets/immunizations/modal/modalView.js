@@ -26,9 +26,8 @@ define([
         sortable: false
     }, {
         name: "reactionName",
-        cell: "handlebars",
+        cell: "string",
         label: "Reaction",
-        template: Handlebars.compile('{{#if reactionName}}{{reactionName}}{{else}}NONE{{/if}}'),
         sortable: false
     }, {
         name: "seriesName",

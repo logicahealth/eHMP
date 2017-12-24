@@ -24,7 +24,9 @@ define([
             console.log("Response Status Text: " + this.model.get('statusText'));
             console.log("Response Status: " + this.model.get('status'));
             console.log("----------- END ERROR -----------");
-            this.model.set('message', ErrorMessaging.getMessage(this.model.get('status')));
+            if (!_.isString(this.model.get('message'))) {
+                this.model.set('message', ErrorMessaging.getMessage(this.model.get('status')));
+            }
             var headingLevel = _.parseInt(this.getOption('headingLevel'));
             headingLevel = _.inRange(headingLevel, 7) ? headingLevel : this.headingLevel;
             this.model.set('headingLevel', headingLevel);

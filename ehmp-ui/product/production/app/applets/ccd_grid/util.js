@@ -52,7 +52,9 @@ define([
 
     // pretty ugly, but this gets us at least some of the word forms that should be highlighted for this doc
     var getHighlights = function(highlights) {
-        var regex = /<span class="cpe-search-term-match">(.*?)<\/span>/gi;
+        var markStart = '{{addTag \"';
+        var markEnd = '\" \"mark\" \"cpe-search-term-match\"}}';
+        var regex = new RegExp(markStart + '(.*?)' + markEnd, 'g');
         var match;
         var keywords = [];
 

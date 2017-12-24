@@ -51,7 +51,7 @@ Scenario: Client can request demographics in FHIR format
       # identifier[zzz uid]
       | entry.content.identifier.label                        | uid                                                       |
       | entry.content.identifier.system                       | http://vistacore.us/fhir/id/uid                           |
-      | entry.content.identifier.value                        | urn:va:patient:9E7A:100716:100716                         |
+      | entry.content.identifier.value                        | urn:va:patient:SITE:100716:100716                         |
       # identifier[y icn]
       | entry.content.identifier.label                        | icn                                                       |
       | entry.content.identifier.system                       | http://vistacore.us/fhir/id/icn                           |

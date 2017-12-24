@@ -22,7 +22,7 @@ class NumericLabResults < AllApplets
 
     add_applet_add_button @appletid_css
 
-    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, "##{@table_id} tbody tr.empty"))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, "#{@appletid_css} tbody tr.empty"))
 
     # specific data for Eight,Patient
     add_verify(CucumberLabel.new('PANEL_FROM_TST1'), VerifyText.new, AccessHtmlElement.new(:xpath, "//td[contains(string(), 'CHEM 7 BLOOD   SERUM SP LB #18415')]/ancestor::tr/descendant::td[contains(string(), 'TST1')]"))
@@ -33,14 +33,14 @@ class NumericLabResults < AllApplets
   def applet_loaded?
     # wait until at least one row is displayed 
     return true if am_i_visible? 'Empty Row'
-    return TestSupport.driver.find_elements(:css, "##{@table_id} tbody tr.selectable").length > 0
+    return TestSupport.driver.find_elements(:css, "#{@appletid_css} tbody tr.selectable").length > 0
   rescue Exception => myerror
     p myerror
     return false
   end
 
   def row_count
-    count = TestSupport.driver.find_elements(:css, "##{@table_id} tbody tr.selectable").length
+    count = TestSupport.driver.find_elements(:css, "#{@appletid_css} tbody tr.selectable").length
     p "count: #{count}"
     return count
   end
@@ -51,11 +51,12 @@ Before do
 end
 
 Then(/^user navigates to expanded Numeric Lab Results Applet$/) do
-  navigate_in_ehmp '#lab-results-grid-full'
+  navigate_in_ehmp '#/patient/lab-results-grid-full'
 end
 
 Then(/^Numeric Lab Results applet loads without issue$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  timing = DefaultTiming.default_table_row_load_time * 2
+  wait = Selenium::WebDriver::Wait.new(:timeout => timing)
   wait.until { @numeric_lab_results.applet_loaded? }
 end
 
@@ -180,7 +181,7 @@ end
 
 When(/^the user navigates to Numeric Lab Results Expanded$/) do
   # lab-results-grid-full
-  navigate_in_ehmp '#lab-results-grid-full'
+  navigate_in_ehmp '#/patient/lab-results-grid-full'
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { @numeric_lab_results.applet_loaded? }
 end
@@ -224,9 +225,10 @@ When(/^the user clicks the first row in the Numeric Lab Results Gist applet$/) d
   ehmp = PobNumericLabApplet.new
   ehmp.wait_for_fld_lab_names
   expect(ehmp.fld_lab_names.length).to be > 2, "This test has a prerequestite requirement that the patient used has more then 2 numeric lab results. There are currently only #{ehmp.fld_lab_names.length}"
-  ehmp.fld_lab_names.first.click
-  ehmp.wait_for_fld_toolbar
-  expect(ehmp).to have_fld_toolbar
+  ehmp.fld_lab_names.first.hover
+  ehmp.wait_for_fld_toolbar_visible
+  expect(ehmp).to have_fld_toolbar_visible
+  ehmp.fld_toolbar_visible.click
 end
 
 When(/^user refreshes Numeric Lab Result Gist Applet$/) do
@@ -242,9 +244,9 @@ When(/^the user clicks the date control All in the Numeric Lab Results applet$/)
   ehmp = PobNumericLabApplet.new
   ehmp.wait_for_btn_applet_filter_toggle
   expect(ehmp).to have_btn_applet_filter_toggle
-  ehmp.btn_applet_filter_toggle.click unless ehmp.has_btn_all_range?
-  ehmp.wait_until_btn_all_range_visible
-  expect(ehmp).to have_btn_all_range
+  ehmp.btn_applet_filter_toggle.click unless ehmp.date_range_filter.has_btn_all?
+  ehmp.date_range_filter.wait_for_btn_all
+  expect(ehmp.date_range_filter).to have_btn_all
 end
 
 Given(/^the Numeric Lab Results Applet displays at least (\d+) row of data$/) do |arg1|
@@ -256,10 +258,18 @@ end
 
 Then(/^the Lab Detail table contains headers$/) do |table|
   ehmp = PobNumericLabApplet.new
-  ehmp.wait_for_tbl_lab_detail_header
   expected_headers = table.headers
-  for i in 0...expected_headers.size do
-    expect(object_exists_in_list(ehmp.tbl_lab_detail_header, "#{expected_headers[i]}")).to eq(true)
+  max_attempt = 4
+  begin
+    ehmp.wait_for_tbl_lab_detail_header
+    for i in 0...expected_headers.size do
+      expect(object_exists_in_list(ehmp.tbl_lab_detail_header, "#{expected_headers[i]}")).to eq(true)
+    end
+  rescue Exception => e
+    p "Exception received: trying again"
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    retry if max_attempt > 0
   end
 end
 

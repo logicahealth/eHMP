@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet @Lab_Results  @reg1
+@F144_Lab_Results_Base_Applet @Lab_Results  @reg3
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 # Team: Andromeda, inherited by Team Venus
@@ -64,19 +64,4 @@ Scenario: View ALL numeric lab results on Cover sheet
   When the user scrolls to the bottom of the Numeric Lab Results Applet
   Then the Numeric Lab Results Applet table contains more then 300 rows
   
-@f297_numeric_lab_info_button_integration_overview
-Scenario: Verify Numeric Lab Results applet on overview page has info button toolbar
-  And user searches for and selects "Eight,Patient"
-  Then Overview is active
-  And numeric lab results gist is loaded successfully
-  When user opens the first numeric lab results gist item
-  Then numeric lab results info button is displayed
- 
-@f297_numeric_lab_info_button_integration_expand_view
-Scenario: Verify Numeric Lab Result applet expanded view has info button toolbar
-  And user searches for and selects "Eight,Patient"
-  Then Overview is active
-  And the user has selected All within the global date picker 
-  And user navigates to numeric lab results expanded view 
-  When user opens the first non-panel numeric lab results row
-  Then numeric lab results info button is displayed
+

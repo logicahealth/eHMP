@@ -1,6 +1,10 @@
 'use strict';
-var _ = require('lodash');
+var rdk = require('../core/rdk');
+var logger = sinon.stub(require('bunyan').createLogger({
+    name: 'validate-pid'
+}));
 var validatePid = require('./validate-pid');
+var RdkError = rdk.utils.RdkError;
 
 
 describe('validatePid Interceptor', function() {
@@ -11,12 +15,21 @@ describe('validatePid Interceptor', function() {
 
     it('pass an ICN - validation passes', function(done) {
         var req = mockRequest('10108V420871');
+        validatePid(req, mockResponse(done), mockNext(done));
+    });
 
+    it('pass an HDR - validation passes', function(done) {
+        var req = mockRequest('HDR;10108V420871');
+        validatePid(req, mockResponse(done), mockNext(done));
+    });
+
+    it('pass a DOD site pid - validation succeeds', function(done) {
+        var req = mockRequest('DOD;1010');
         validatePid(req, mockResponse(done), mockNext(done));
     });
 
     it('pass a primary site id - validation passes', function(done) {
-        var req = mockRequest('9E7A;3');
+        var req = mockRequest('SITE;3');
         validatePid(req, mockResponse(done), mockNext(done));
     });
 
@@ -26,27 +39,27 @@ describe('validatePid Interceptor', function() {
     });
 
     it('pass a primary site pid that is on the users logged in site - validation passes', function(done) {
-        var req = mockRequest('9E7A;3');
+        var req = mockRequest('SITE;3');
         validatePid(req, mockResponse(done), mockNext(done));
     });
 
     it('pass a primary site pid that is not on the users logged in site - validation passes', function(done) {
-        var req = mockRequest('C877;3');
+        var req = mockRequest('SITE;3');
         validatePid(req, mockResponse(done), mockNext(done));
     });
 
-    it('pass a secondary site pid - validation fails', function(done) {
-        var req = mockRequest('/some/url');
-        expectedErrors = 'Invalid Pid. Please pass either ICN, EDIPI or Primary Site ID.';
+    it('pass an invalid secondary site pid - validation fails', function(done) {
+        var req = mockRequest('site;345v346');
+        expectedErrors = new RdkError({
+            code: '200.400.1027',
+            logger: req.logger
+        });
         validatePid(req, mockResponse(done), mockNext(done));
     });
 
     function mockRequest(pid) {
         return {
-            logger: {
-                info: function() {},
-                debug: function() {},
-            },
+            logger: logger,
             param: function() {
                 return this.query.pid;
             },
@@ -55,7 +68,7 @@ describe('validatePid Interceptor', function() {
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             }
         };
@@ -64,9 +77,9 @@ describe('validatePid Interceptor', function() {
     function mockResponse(done) {
         return {
             rdkSend: function(response) {
-                var sentErrors = _.isString(response) ? response : response.data.errors;
+                var sentErrors = response;
                 if (expectedErrors) {
-                    expect(sentErrors).to.match(expectedErrors);
+                    expect(sentErrors.code).to.match(expectedErrors.code);
                 } else {
                     expect(sentErrors).to.be.falsy();
                 }

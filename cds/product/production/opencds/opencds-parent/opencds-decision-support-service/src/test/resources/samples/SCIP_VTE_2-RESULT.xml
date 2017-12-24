@@ -16,7 +16,7 @@
                         <observationFocus code="concepts" codeSystem="2.16.840.1.113883.3.795.12.1.1" codeSystemName="OpenCDS concepts" displayName="Concepts found in working memory"/>
                         <observationEventTime high="20140116062332.435-0700" low="20140116062332.435-0700"/>
                         <observationValue>
-                            <text value="C238=Inpatient Encounter,C374=Abdominopelvic Procedure,C377=Operating Room Procedure,C405=Part of,C475=Inpatient Discharge Disposition,C482=NUBC Value Sets,C496=Major Surgery,C500=Gynecological Surgery,C562=Anesthesia,C575=VTE Prophylaxis 1 Low dose unfractionated heparin (LDUH),C577=VTE Prophylaxis 3 Intermittent pneumatic compression devices (IPC),C594=Subcutaneous,C60=Hysterectomy,C781=VTE Prophylaxis 7 Compression Boots,C877=Associated with"/>
+                            <text value="C238=Inpatient Encounter,C374=Abdominopelvic Procedure,C377=Operating Room Procedure,C405=Part of,C475=Inpatient Discharge Disposition,C482=NUBC Value Sets,C496=Major Surgery,C500=Gynecological Surgery,C562=Anesthesia,C575=VTE Prophylaxis 1 Low dose unfractionated heparin (LDUH),C577=VTE Prophylaxis 3 Intermittent pneumatic compression devices (IPC),C594=Subcutaneous,C60=Hysterectomy,C781=VTE Prophylaxis 7 Compression Boots,SITE=Associated with"/>
                         </observationValue>
                     </observationResult>
                     <observationResult>

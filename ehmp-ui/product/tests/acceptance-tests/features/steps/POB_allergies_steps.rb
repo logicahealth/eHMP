@@ -48,3 +48,52 @@ When(/^user opens the first allergy row$/) do
   expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
   rows[0].click
 end
+
+Given(/^user can view the Quick Menu Icon in allergies applet$/) do
+  ehmp = PobAllergiesApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in allergies applet$/) do
+  ehmp = PobAllergiesApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in allergies applet$/) do
+  ehmp = PobAllergiesApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the allergies applet$/) do |table|
+  ehmp = PobAllergiesApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+Then(/^user scrolls the allergies applet into view$/) do 
+  ehmp = PobAllergiesApplet.new
+  ehmp.scroll_into_view
+end
+
+When(/^user hovers over the allergy pill$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_fld_allergy_gist_pills
+  expect(ehmp).to have_fld_allergy_gist_pills
+  rows = ehmp.fld_allergy_gist_pills
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+When(/^user hovers over the allergy row$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_expanded_rows
+  expect(ehmp).to have_expanded_rows
+  rows = ehmp.expanded_rows
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+When(/^user selects the detail view from Quick Menu Icon of allergies applet$/) do
+  ehmp = PobAllergiesApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+

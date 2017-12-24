@@ -11,8 +11,8 @@ Feature: F100 Return of Inpatient Medications in FHIR format
 @f100_1_inpatient_medication_fhir @fhir
 Scenario: Client can request in-patient medication results in FHIR format
 Given a patient with "in-patient medication results" in multiple VistAs
-Given a patient with pid "9E7A;100033" has been synced through Admin API
-When the client requests in-patient medication results for the patient "9E7A;100033" in FHIR format
+Given a patient with pid "SITE;100033" has been synced through Admin API
+When the client requests in-patient medication results for the patient "SITE;100033" in FHIR format
 Then a successful response is returned
 Then the client receives 2 FHIR "VistA" result(s)
 And the client receives 2 FHIR "panorama" result(s)
@@ -20,7 +20,7 @@ And the FHIR results contain "in-patient medication administration results"
 
 	| field														| panorama_value										|
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:100033						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100033						|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 2U;I													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -30,24 +30,24 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:105903003										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:9E7A:10000000047							|
+	| content.contained.extension.valueString					| urn:va:user:SITE:10000000047							|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| LABTECH,FIFTYSEVEN									|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	#| content.contained.extension.valueString					| urn:va:order:9E7A:100033:17694						|
+	#| content.contained.extension.valueString					| urn:va:order:SITE:100033:17694						|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Inpatient									|
-	| content.contained.identifier.value						| urn:va:user:9E7A:10958								|
+	| content.contained.identifier.value						| urn:va:user:SITE:10958								|
 	| content.contained.name.text								| WARDCLERK,FIFTYTHREE									|
 	| content.contained.location.period.start					| 2006-06-16T12:38:00									|
 	| content.contained.location.period.end						| 2006-06-16T12:38:00									|
 	| content.contained.type.text								| I														|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#locationUid	|
-	| content.contained.extension.valueString					| urn:va:location:9E7A:11								|
+	| content.contained.extension.valueString					| urn:va:location:SITE:11								|
 	#uid field
-	| content.contained.identifier.value						| urn:va:med:9E7A:100033:17694							|
+	| content.contained.identifier.value						| urn:va:med:SITE:100033:17694							|
 	| content.contained.location.location.display				| BCMA													|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 2006-06-16T12:38:00									|
@@ -93,16 +93,16 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.extension.valueString								| Medication, Inpatient									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.extension.valueString								| urn:va:order:9E7A:100033:17694						|
+	| content.extension.valueString								| urn:va:order:SITE:100033:17694						|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.extension.valueString								| urn:va:user:9E7A:10000000047							|
+	| content.extension.valueString								| urn:va:user:SITE:10000000047							|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.extension.valueString								| LABTECH,FIFTYSEVEN									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.extension.valueString								| false													|
-	| content.contained.identifier.value						| urn:va:user:9E7A:10958								|
+	| content.contained.identifier.value						| urn:va:user:SITE:10958								|
 	| content.contained.name.text								| WARDCLERK,FIFTYTHREE									|
-	#No longer mapped | content.contained.identifier.value		| 9E7A;100033											|
+	#No longer mapped | content.contained.identifier.value		| SITE;100033											|
 	#providerUID
 	#providerName they are repeated.  Are they needed.  There are few more field that are repeated.
 	| content.whenGiven.start									| 2006-06-16T11:00:00									|
@@ -112,7 +112,7 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#relativeStop	|
 	| content.dosage.extension.valueString						| 144780												|
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#predecessor	|
-	| content.dosage.extension.valueString						| urn:va:med:9E7A:100033:17693							|
+	| content.dosage.extension.valueString						| urn:va:med:SITE:100033:17693							|
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#imo			|
 	| content.dosage.extension.valueString						| false													|
 	| content.dosage.timingPeriod.extension.url					| http://vistacore.us/fhir/extensions/med#scheduleName	|
@@ -125,7 +125,7 @@ And the FHIR results contain "in-patient medication administration results"
 	And the FHIR results contain "in-patient medication administration results"
 	
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#successor		|
-	| content.dosage.extension.valueString						| urn:va:med:9E7A:100033:17694							|
+	| content.dosage.extension.valueString						| urn:va:med:SITE:100033:17694							|
 	
 
 @f100_2_inpatient_medication_fhir @fhir
@@ -140,7 +140,7 @@ And the FHIR results contain "in-patient medication administration results"
 
 	| field														| kodak_value					    					|
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:C877:100033						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100033						|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 2U;I													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -150,24 +150,24 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:105903003										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:C877:10000000047							|
+	| content.contained.extension.valueString					| urn:va:user:SITE:10000000047							|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| LABTECH,FIFTYSEVEN									|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.contained.extension.valueString					| urn:va:order:C877:100033:17694						|
+	| content.contained.extension.valueString					| urn:va:order:SITE:100033:17694						|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Inpatient									|
-	#| content.contained.identifier.value						| urn:va:user:C877:10958								|
+	#| content.contained.identifier.value						| urn:va:user:SITE:10958								|
 	| content.contained.name.text								| WARDCLERK,FIFTYTHREE									|
 	| content.contained.location.period.start					| 2006-06-16T12:38:00									|
 	| content.contained.location.period.end						| 2006-06-16T12:38:00									|
 	| content.contained.type.text								| I														|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#locationUid	|
-	| content.contained.extension.valueString					| urn:va:location:C877:11								|
+	| content.contained.extension.valueString					| urn:va:location:SITE:11								|
 	#uid field
-	| content.contained.identifier.value						| urn:va:med:C877:100033:17694							|
+	| content.contained.identifier.value						| urn:va:med:SITE:100033:17694							|
 	| content.contained.location.location.display				| BCMA													|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 2006-06-16T12:38:00									|
@@ -213,16 +213,16 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.extension.valueString								| Medication, Inpatient									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.extension.valueString								| urn:va:order:C877:100033:17694						|
+	| content.extension.valueString								| urn:va:order:SITE:100033:17694						|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.extension.valueString								| urn:va:user:C877:10000000047							|
+	| content.extension.valueString								| urn:va:user:SITE:10000000047							|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.extension.valueString								| LABTECH,FIFTYSEVEN									|
 	| content.extension.url										| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.extension.valueString								| false													|
-	| content.contained.identifier.value						| urn:va:user:C877:10958								|
+	| content.contained.identifier.value						| urn:va:user:SITE:10958								|
 	| content.contained.name.text								| WARDCLERK,FIFTYTHREE									|
-	#No longer mapped | content.contained.identifier.value		| 9E7A;100033											|
+	#No longer mapped | content.contained.identifier.value		| SITE;100033											|
 	#providerUID
 	#providerName they are repeated.  Are they needed.  There are few more field that are repeated.
 	| content.whenGiven.start									| 2006-06-16T11:00:00									|
@@ -232,7 +232,7 @@ And the FHIR results contain "in-patient medication administration results"
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#relativeStop	|
 	| content.dosage.extension.valueString						| 144780												|
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#predecessor	|
-	| content.dosage.extension.valueString						| urn:va:med:C877:100033:17693							|
+	| content.dosage.extension.valueString						| urn:va:med:SITE:100033:17693							|
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#imo			|
 	| content.dosage.extension.valueString						| false													|
 	| content.dosage.timingPeriod.extension.url					| http://vistacore.us/fhir/extensions/med#scheduleName	|
@@ -245,7 +245,7 @@ And the FHIR results contain "in-patient medication administration results"
 	And the FHIR results contain "in-patient medication administration results"
 	
 	| content.dosage.extension.url								| http://vistacore.us/fhir/extensions/med#successor		|
-	| content.dosage.extension.valueString						| urn:va:med:C877:100033:17694							|
+	| content.dosage.extension.valueString						| urn:va:med:SITE:100033:17694							|
 
 
 # following 2 scenarios are checking for another patient for return of medication results.
@@ -265,7 +265,7 @@ And the client receives 8 FHIR "panorama" result(s)
 And the FHIR results contain "in-patient medication administration results"
 
 	| field														| value													|
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:100022						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100022						|
 	| content.contained.product.form.text						| TAB													|
 	| content.contained.dosageInstruction.text					| Give: 325MG PO Q4H									|
 	| content.contained.type.text								| I														|
@@ -295,7 +295,7 @@ And the client receives 8 FHIR "kodak" result(s)
 And the FHIR results contain "in-patient medication administration results"
 
 	| field														| value													|
-	| content.identifier.value									| CONTAINS urn:va:med:C877:100022						|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:100022						|
 	| content.contained.product.form.text						| TAB													|
 	| content.contained.dosageInstruction.text					| Give: 325MG PO Q4H									|
 	| content.contained.type.text								| I														|
@@ -316,8 +316,8 @@ And the FHIR results contain "in-patient medication administration results"
 @f100_5_in_medication_neg_fhir	
 Scenario: Negative scenario.  Client can request Inpatient Medications in FHIR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests in-patient medication results for the patient "9E7A;100184" in FHIR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests in-patient medication results for the patient "SITE;100184" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed	
 	

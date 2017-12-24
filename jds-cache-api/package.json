@@ -1,0 +1,43 @@
+{
+  "name": "jds-cache-api",
+  "version": "1.0.3",
+  "description": "JDS methods for VX-Sync and RDK",
+  "author": "David Wicksell <david.wicksell@accenturefederal.com>",
+  "contributors": [
+    "David Aderton <david.aderton@accenturefederal.com>"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint bin src tests utils",
+    "test": "set -x; npm run lint && npm run test:unit",
+    "unit-test": "npm run test:unit",
+    "unit-test-coverage": "npm run test:unit:coverage",
+    "int-test": "npm run test:int",
+    "test:unit": "jasmine-node tests/unittests/ --forceexit --verbose --color --captureExceptions",
+    "test:unit:select": "jasmine-node --forceexit --verbose --color --captureExceptions",
+    "test:unit:coverage": "istanbul cover --include-all-sources -x 'bin/*' jasmine-node tests/unittests/ --forceexit --verbose --color --captureExceptions",
+    "test:int": "./bin/stuff-test-data.js && jasmine-node --forceexit tests/integrationtests/ --verbose --color --captureExceptions",
+    "jsdoc": "jsdoc src",
+    "check-publish-dates-of-installed-packages": "which jq >/dev/null 2>&1 || { echo 'Install jq to run this command.'; exit; }; npm ls --depth=0 --json | jq -r '.dependencies | to_entries | map(\"\\(.key) \\(.value.version)\") | .[]' | while read line; do name=\"${line/ */}\"; version=\"${line/* /}\"; npm view --json $name@$version time | (jq -r --arg version $version '.[$version]'; echo $name) | paste - -; done | sort"
+  },
+  "dependencies": {
+    "async": "^2.0.1",
+    "bunyan": "^1.8.10",
+    "bunyan-format": "^0.2.1",
+    "cache": "~6.10.1",
+    "docopt": "^0.6.2",
+    "doctrine": "^2.0.0",
+    "esprima": "^2.7.3",
+    "lodash": "^4.17.4",
+    "node-uuid": "~1.4.1",
+    "performance-now": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "istanbul": "^0.4.5",
+    "jasmine-node": "1.14.x",
+    "jsdoc": "^3.5.3",
+    "request": "^2.81.0",
+    "semver": "^5.4.1"
+  }
+}

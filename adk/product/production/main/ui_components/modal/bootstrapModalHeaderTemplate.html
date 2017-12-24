@@ -2,10 +2,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-11">
-			<h4 class="modal-title" id="mainModalLabel">{{{modal-title}}}</h4>
+			<h4 class="modal-title" id="mainModalLabel">{{highlightText modal-title}}</h4>
         </div>
         <div class="col-xs-1 text-right top-margin-sm">
-            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
+            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close" aria-label="Close">
                 <i class="fa fa-times fa-lg"></i>
             </button>
         </div>
@@ -15,16 +15,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-7">
-            <h4 class="modal-title" id="mainModalLabel">{{modal-title}}</h4>
+            <h4 class="modal-title" id="mainModalLabel">{{highlightText modal-title}}</h4>
         </div>
         <div class="col-xs-5 text-right top-margin-sm">
-            <button type="button" class="btn btn-default btn-xs right-margin-xs" id="toPrevious" title="Press enter to load previous.">
+            <button type="button" class="btn btn-default btn-xs right-margin-xs" id="toPrevious" aria-label="Load previous">
                 <i class="fa fa-angle-left right-padding-xs"></i>Previous
             </button>
-            <button type="button" class="btn btn-default btn-xs" id="toNext" title="Press enter to load next.">
+            <button type="button" class="btn btn-default btn-xs" id="toNext" aria-label="Load next">
                 Next<i class="fa fa-angle-right left-padding-xs"></i>
             </button>
-            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
+            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close" aria-label="Close">
                 <i class="fa fa-times fa-lg"></i>
             </button>
         </div>

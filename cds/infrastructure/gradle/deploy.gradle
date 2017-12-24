@@ -1,0 +1,335 @@
+if(System.getenv()['CHEF_REPO']){
+  def commit = "git rev-parse HEAD".execute(null, new File("${rootDir}/../../chef-repo")).text
+  println "chef-repo commit hash: ${commit}"
+}
+
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+
+configurations {
+  antform
+}
+
+buildscript {
+  repositories {
+    maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+  }
+
+  dependencies {
+    classpath 'net.java.dev.jna:jna:4.0.0'
+  }
+}
+
+dependencies {
+  antform group: 'com.sardak', name: 'antform', version: '2.0'
+}
+
+def deployGroup = 'Deployment/Vagrant'
+
+println "In deploy.gradle, version = ${version}"
+
+def projectInfoCollection = [
+  [
+   taskNamePart : 'CDSInvocation',
+   dependsOn : [':production:cdsinvocation:build'],
+   machineName: "cdsinvocation",
+   vagrantDir : "${rootDir}/../../.chef/vms",
+   devDeploy : true,
+   testDeploy : true,
+   vagrantEnvVarsLocal : [
+      'CDSI_METRICS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-metrics-collection-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'CDSI_RESULTS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-results-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : 'true'
+   ],
+   vagrantEnvVarsVersion : [
+      'CDSI_METRICS_VERSION' : "${-> chooseStableBuild('cds','acceptance-test','CDSI_METRICS_VERSION')}",
+      'CDSI_RESULTS_VERSION' : "${-> chooseStableBuild('cds','acceptance-test','CDSI_RESULTS_VERSION')}",
+    ],
+   provisioner : "cds_provision"
+ ],
+ [
+   taskNamePart : 'cdsdb',
+   dependsOn : [],
+   machineName: "cdsdb",
+   vagrantDir : "${rootDir}/../../.chef/vms",
+   devDeploy : false,
+   testDeploy : true,
+   vagrantEnvVarsLocal : [],
+   vagrantEnvVarsVersion : [],
+   provisioner : "cds_provision"
+ ],
+ [
+    taskNamePart : 'cdsdashboard',
+    dependsOn : [':production:cdsdashboard:build'],
+    machineName: "cdsdashboard",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    devDeploy : true,
+    testDeploy : true,
+    vagrantEnvVarsLocal : [
+      'CDSDASHBOARD_LOCAL_FILE' : "${-> project(':production:cdsdashboard:cds-dashboard').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : 'true'
+    ],
+    vagrantEnvVarsVersion : ['CDSDASHBOARD_VERSION' : "${-> chooseStableBuild('cds','acceptance-test','CDSDASHBOARD_VERSION')}"],
+    provisioner : "cds_provision"
+  ],
+  [
+    taskNamePart : 'OpenCDS',
+    dependsOn : [':production:opencds:build'],
+    machineName: "opencds",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    devDeploy : true,
+    testDeploy : true,
+    vagrantEnvVarsLocal : [
+      //'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_LOCAL_FILE': "${-> project(':production:opencds').makeZipOpenCDS.outputs.files.singleFile.getCanonicalPath()}",
+      'OPENCDS_LOCAL_FILE': "${-> project(':production:opencds:opencds-knowledge-repository-data').makeZipKnowRepo.outputs.files.singleFile.getCanonicalPath()}",
+      'CDS_ENGINE_AGENT_LOCAL_FILE' : "${rootDir}/production/cdsinvocation/cds-engine-agent/build/libs/cds-engine-agent.war",
+      'DEV_DEPLOY' : "true"
+    ],
+    vagrantEnvVarsVersion : [
+      //'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
+      'OPENCDS_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_VERSION')}",
+      //'CDS_ENGINE_AGENT_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'CDS_ENGINE_AGENT_VERSION')}"
+      'CDS_ENGINE_AGENT_VERSION' : "2.0.0.10"
+    ],
+    cdsDeploy: true,
+    provisioner : "cds_provision"
+  ],
+  [
+    taskNamePart : 'CDS',
+    dependsOn : [
+    ':production:cdsinvocation:build',
+    ':production:cdsdashboard:build',
+    ':production:opencds:build',
+    ':production:cdsinvocation:cds-engine-agent:build'
+    ],
+    machineName: "cds",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    devDeploy : true,
+    testDeploy : true,
+    vagrantEnvVarsLocal : [
+      'CDSI_METRICS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-metrics-collection-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'CDSI_RESULTS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-results-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : 'true',
+      'CDSDASHBOARD_LOCAL_FILE' : "${-> project(':production:cdsdashboard:cds-dashboard').war.outputs.files.singleFile.getCanonicalPath()}",
+      //'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_LOCAL_FILE': "${-> project(':production:opencds').makeZipOpenCDS.outputs.files.singleFile.getCanonicalPath()}",
+      'OPENCDS_LOCAL_FILE': "${-> project(':production:opencds:opencds-knowledge-repository-data').makeZipKnowRepo.outputs.files.singleFile.getCanonicalPath()}",
+      'CDS_ENGINE_AGENT_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-engine-agent').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : "true"
+   ],
+    vagrantEnvVarsVersion : [
+      'OPENCDS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'OPENCDS_VERSION')}",
+      'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
+      'CDSI_METRICS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_METRICS_VERSION')}",
+      'CDSI_RESULTS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_RESULTS_VERSION')}",
+      'CDS_ENGINE_AGENT_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'CDS_ENGINE_AGENT_VERSION')}",
+      'CDSDASHBOARD_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSDASHBOARD_VERSION')}"
+    ],
+    cdsDeploy: true,
+    provisioner : "cds_provision"
+  ]
+]
+
+projectInfoCollection.each { projectInfo ->
+  ext.set("deploy${projectInfo['taskNamePart']}DevFlag", false)
+  ext.set("deploy${projectInfo['taskNamePart']}Flag", false)
+  ext.set("start${projectInfo['taskNamePart']}Flag", false)
+  ext.set("stop${projectInfo['taskNamePart']}Flag", false)
+  ext.set("reload${projectInfo['taskNamePart']}Flag", false)
+  ext.set("destroy${projectInfo['taskNamePart']}Flag", false)
+  ext.set("snapshot${projectInfo['taskNamePart']}Flag", false)
+  ext.set("restore${projectInfo['taskNamePart']}Flag", false)
+  ext.set("ssh${projectInfo['taskNamePart']}Flag", false)
+}
+ext.set("deployForTesterFlag", false)
+ext.set("deployBackendDevFlag", false)
+ext.set("deployBackendFlag", false)
+ext.set("destroyBackendDevFlag", false)
+ext.set("stopBackendDevFlag", false)
+ext.set("startBackendDevFlag", false)
+ext.set("destroyAllFlag", false)
+ext.set("stopAllFlag", false)
+ext.set("startAllFlag", false)
+ext.set("deployVE2Flag",false)
+ext.set("destroyVE2Flag",false)
+
+allprojects  {
+  projectInfoCollection.each { projectInfo ->
+
+    if (projectInfo['devDeploy']) {
+      task "deploy${projectInfo['taskNamePart']}Dev"(dependsOn:projectInfo['dependsOn']) {
+        group deployGroup
+        description "Locally deploys ${projectInfo['taskNamePart']} server from locally built binaries."
+        doLast {
+          if (rootProject."deploy${projectInfo['taskNamePart']}DevFlag" == false) {
+            rootProject."deploy${projectInfo['taskNamePart']}DevFlag" = true
+            executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'converge', projectInfo['provisioner'])
+          }
+        }
+      }
+    }
+
+    if (projectInfo['testDeploy']) {
+      task "deploy${projectInfo['taskNamePart']}" {
+        group deployGroup
+        description "Locally deploys ${projectInfo['taskNamePart']} server from Nexus."
+        doLast {
+          if (rootProject."deploy${projectInfo['taskNamePart']}Flag" == false) {
+            rootProject."deploy${projectInfo['taskNamePart']}Flag" = true
+            executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'],projectInfo['vagrantEnvVarsVersion'], 'converge', projectInfo['provisioner'])
+          }
+        }
+      }
+    }
+
+    task "start${projectInfo['taskNamePart']}" {
+      group deployGroup
+      description "Starts the local ${projectInfo['taskNamePart']} server."
+      doLast {
+        if (rootProject."start${projectInfo['taskNamePart']}Flag" == false) {
+          rootProject."start${projectInfo['taskNamePart']}Flag" = true
+          startVM(projectInfo['machineName'], projectInfo['vagrantDir'])
+        }
+      }
+    }
+
+    task "stop${projectInfo['taskNamePart']}" {
+      group deployGroup
+      description "Stops the local ${projectInfo['taskNamePart']} server."
+      doLast {
+        if (rootProject."stop${projectInfo['taskNamePart']}Flag" == false) {
+          rootProject."stop${projectInfo['taskNamePart']}Flag" = true
+          stopVM(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['provisioner'])
+        }
+      }
+    }
+
+    task "reload${projectInfo['taskNamePart']}" {
+      group deployGroup
+      description "Reloads (restarts and applies changes from Vagantfile) to the local ${projectInfo['taskNamePart']} server."
+      doLast {
+        if (rootProject."reload${projectInfo['taskNamePart']}Flag" == false) {
+          rootProject."reload${projectInfo['taskNamePart']}Flag" = true
+          stopVM(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['provisioner'])
+          startVM(projectInfo['machineName'], projectInfo['vagrantDir'])
+
+        }
+      }
+    }
+
+    task "destroy${projectInfo['taskNamePart']}" {
+      group deployGroup
+      description "Destroys local ${projectInfo['taskNamePart']} server."
+      doLast {
+        if (rootProject."destroy${projectInfo['taskNamePart']}Flag" == false) {
+          rootProject."destroy${projectInfo['taskNamePart']}Flag" = true
+          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'destroy', projectInfo['provisioner'])
+        }
+      }
+    }
+  }
+}
+
+
+def executeVagrant(vagrantDir, command) {
+  exec {
+    executable = System.getenv()['VAGRANT_BIN']
+    args = command
+    workingDir vagrantDir
+  }
+}
+
+def vxSyncShutdown(vagrantDir) {
+  exec {
+    executable = "sh"
+    args = ["vxsync_stop.sh"]
+    workingDir "${rootDir}/../infrastructure/gradle/vxsync"
+  }
+}
+
+def startVM(vagrantMachine, vagrantDir) {
+  executeVagrant(vagrantDir, ["up", "${vagrantMachine}-${System.getenv()['USER']}"])
+}
+
+def stopVM(vagrantMachine, vagrantDir, provisioner) {
+  executeChefClient(vagrantMachine, vagrantDir, [], 'stop', provisioner)
+}
+
+def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'converge', provisioner) {
+  def newVars = envVars
+  println "ASDFASDFASDF"
+  println envVars
+  def logLevel = (System.getenv()['LOG_LEVEL'] == null || "") ? "warn" : System.getenv()['LOG_LEVEL']
+  println "LOG_LEVEL: ${logLevel}"
+  println "ENV_VARS: ${envVars}"
+  newVars << ['MACHINE_NAME':"${vagrantMachine}", 'DRIVER': 'vagrant', 'ACTION': "${action}",'ALLOW_WEB_ACCESS':'true','PATH':'/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin']
+
+  def knife_path = "${System.getenv()['WORKSPACE']}/.chef/knife.rb"
+  def chefArgs = []
+
+  syncNodesBetweenChefServerAndChefZero(vagrantMachine)
+  if(System.getenv()['CHEF_REPO']){
+    chefArgs = ['-z', '-o', "${provisioner}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+  } else if(envVars["DEV_DEPLOY"]){
+    chefArgs = ['-o', "${provisioner}@${local_provision_version()}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+  } else {
+    chefArgs = ['-o', "${provisioner}@${chooseStableBuild(provisionerRepo(provisioner),'acceptance-test',provisioner)}", "--environment", "_default", "--config", knife_path, '--force-formatter', '-l', logLevel]
+  }
+  exec {
+    executable = '/opt/chefdk/bin/chef-client'
+    args = chefArgs
+    environment(newVars)
+  }
+  reconcileDelete(vagrantMachine, action)
+  syncNodesBetweenChefServerAndChefZero(vagrantMachine)
+}
+
+def reconcileDelete(String vagrantMachine, String action){
+  exec{
+    executable = "rake"
+    args = ["reconcile_delete[${vagrantMachine},${stackName()},${action}]"]
+    workingDir "${rootDir}/../infrastructure/gradle"
+  }
+}
+
+def syncNodesBetweenChefServerAndChefZero(machine = '*'){
+  exec{
+    executable = "rake"
+    args = ["sync_nodes_between_chef_server_and_chef_zero[${machine}]"]
+    workingDir "${rootDir}/../infrastructure/gradle"
+  }
+}
+
+def local_provision_version() {
+  def text = new File("$rootDir/provisioner/provisionerVersion").text.trim()
+  return text
+}
+
+def provisionerRepo(String provisioner){
+  return provisioner.minus("_provision")
+}
+
+def stackName(){
+  def text = new File("$rootDir/../infrastructure/properties/releaseVersion").text.trim()
+  def stack = "${System.getenv()['USER'].replaceAll('_','-')}-${text}"
+  return stack
+}
+
+def chooseStableBuild(String repoName, String buildType, String artifactVersionName) {
+  def protocol = 'https://'
+  def serverName = 'ci.vistacore.us'
+  def port = ''
+  def branchName = new File('../infrastructure/properties/jenkinsVersion').text.trim()
+  def jobName = "${repoName}-${buildType}-build-${branchName}"
+  def formatted_artifact = artifactVersionName.replace("-","_").toUpperCase()
+  def auth = 'build:38dfad82cfdffe645bb67df1253a3baf'.getBytes().encodeBase64().toString()
+  def restEndPointBuildList = "${protocol}${serverName}${port}/job/${jobName}/lastStableBuild/api/xml"
+  def conn = restEndPointBuildList.toURL().openConnection()
+  conn.setRequestProperty('Authorization', "Basic ${auth}")
+  def buildResult = new XmlSlurper().parseText(conn.content.text)
+  def buildNumber = buildResult.action.parameter.find{ param -> param.name.text() == formatted_artifact }.value.text()
+  return buildNumber
+}
+
+repositories {
+  maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+}

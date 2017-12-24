@@ -6,6 +6,7 @@ define([
     var Teams = ADK.Resources.Picklist.Collection.extend({
         resource: 'write-pick-list-teams-for-facility-patient-related',
         model: Team,
+        cache: true,
         params: function(method, options) {
             return {
                 facilityID: options.facilityID || '',

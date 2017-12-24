@@ -113,7 +113,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;239");
+        queries.add("patient/SITE;239");
 
         this.getFhirData(queries);
     }
@@ -127,7 +127,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;140/observation?_tag=vital-signs");
+        queries.add("patient/SITE;140/observation?_tag=vital-signs");
 
         this.getFhirData(queries);
     }
@@ -136,7 +136,7 @@ public class FhirDataRetrieverIT {
     @Test
     public void testGetDiagnosticWithDateParam() throws DataRetrievalException, InterruptedException, IOException {
         List<String> queries = new ArrayList<String>();
-        StringBuffer query = new StringBuffer("patient/9E7A;3/diagnosticreport?domain=lab&amp;date=##dateGreaterThanOrEqual-360d##");
+        StringBuffer query = new StringBuffer("patient/SITE;3/diagnosticreport?domain=lab&amp;date=##dateGreaterThanOrEqual-360d##");
         FHIRJSONDataModelHandler modelHander = new FHIRJSONDataModelHandler() {
 			@Override
 			public IFhirDataRetriever createFhirDataRetriever() {
@@ -157,7 +157,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;140");
+        queries.add("patient/SITE;140");
         this.getFhirData(queries);
         
         //----------------------------------------------------------------------
@@ -172,7 +172,7 @@ public class FhirDataRetrieverIT {
         
 
         queries.clear();
-        queries.add("patient/9E7A;140/observation?profile=CDS&_tag=vital-signs");
+        queries.add("patient/SITE;140/observation?profile=CDS&_tag=vital-signs");
 
         this.getFhirData(queries);
     }
@@ -186,7 +186,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;140/condition");
+        queries.add("patient/SITE;140/condition");
         this.getFhirData(queries);
     }
 
@@ -198,7 +198,7 @@ public class FhirDataRetrieverIT {
 
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
-        queries.add("patient/9E7A;140/observation");
+        queries.add("patient/SITE;140/observation");
 
         this.getFhirData(queries);
     }
@@ -212,7 +212,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;253/procedure?_tag=educations");
+        queries.add("patient/SITE;253/procedure?_tag=educations");
         
         this.getFhirData(queries);
     }
@@ -226,7 +226,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/C877;227/procedure");
+        queries.add("patient/SITE;227/procedure");
         
         this.getFhirData(queries);
     }
@@ -240,7 +240,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
        // TODO health factors fhir query is disabled from RDK side. Enable this query in the future when it's enabled from RDK side
-       // queries.add("patient/9E7A;140/observation?_tag=social-history");
+       // queries.add("patient/SITE;140/observation?_tag=social-history");
 
         this.getFhirData(queries);
     }
@@ -254,7 +254,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("medicationdispense?subject.identifier=9E7A;140");
+        queries.add("medicationdispense?subject.identifier=SITE;140");
 
         this.getFhirData(queries);
     }
@@ -270,7 +270,7 @@ public class FhirDataRetrieverIT {
 
         //This has issues due to a change in fhir spec - this was from a period 
         //when we were transitioning versions.
-        queries.add("patient/9E7A;301/medicationprescription");
+        queries.add("patient/SITE;301/medicationprescription");
 
         this.getFhirData(queries);
     }
@@ -284,7 +284,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("medicationadministration?subject.identifier=9E7A;140");
+        queries.add("medicationadministration?subject.identifier=SITE;140");
 
         this.getFhirData(queries);
     }
@@ -298,7 +298,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("allergyintolerance?subject.identifier=9E7A;140");
+        queries.add("allergyintolerance?subject.identifier=SITE;140");
 
         this.getFhirData(queries);
     }
@@ -317,7 +317,7 @@ public class FhirDataRetrieverIT {
               return instance;
             }
           };
-          StringBuffer query = new StringBuffer("/patient/9E7A;253/diagnosticreport?domain=lab&date=##dateLessThanOrEqual-180d##");
+          StringBuffer query = new StringBuffer("/patient/SITE;253/diagnosticreport?domain=lab&date=##dateLessThanOrEqual-180d##");
           String resolvedQuery = modelHander.resolveDateParams(query).toString();
           queries.add(resolvedQuery);
           this.getFhirData(queries);
@@ -332,7 +332,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("immunization?subject.identifier=9E7A;140");
+        queries.add("immunization?subject.identifier=SITE;140");
 
         this.getFhirData(queries);
     }
@@ -346,7 +346,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("composition?subject.identifier=9E7A;140&limit=1");
+        queries.add("composition?subject.identifier=SITE;140&limit=1");
 
         this.getFhirData(queries);
     }
@@ -360,7 +360,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("referralrequest?subject.identifier=9E7A;140");
+        queries.add("referralrequest?subject.identifier=SITE;140");
 
         this.getFhirData(queries);
     }
@@ -374,7 +374,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("order?subject.identifier=9E7A;8&detail.display=DiagnosticOrder");
+        queries.add("order?subject.identifier=SITE;8&detail.display=DiagnosticOrder");
 
         this.getFhirData(queries, "testGetOrderDiagnosticOrder.json");
     }
@@ -388,7 +388,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;8/diagnosticorder");
+        queries.add("patient/SITE;8/diagnosticorder");
 
         this.getFhirData(queries);
     }
@@ -402,7 +402,7 @@ public class FhirDataRetrieverIT {
         List<String> queries = new ArrayList<String>();
         Bundle b = new Bundle();
 
-        queries.add("patient/9E7A;239/procedure?_tag=procedure");
+        queries.add("patient/SITE;239/procedure?_tag=procedure");
 
         this.getFhirData(queries);
     }
@@ -476,15 +476,15 @@ public class FhirDataRetrieverIT {
         try{
         	//Be sure to check this list beforehand - http://IP             /vpr/all/index/pid/pid
         	//This may fail the first time with timeout due to sync issues.
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),1,"patient/9E7A;3","urn:va:patient:9E7A:3:3"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),2,"patient/9E7A;100817","urn:va:patient:9E7A:100817:100817"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),3,"patient/9E7A;71","urn:va:patient:9E7A:71:71"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),4,"patient/9E7A;239","urn:va:patient:9E7A:239:239"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),5,"patient/9E7A;149","urn:va:patient:9E7A:149:149"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),6,"patient/9E7A;227","urn:va:patient:9E7A:227:227"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),7,"patient/9E7A;167","urn:va:patient:9E7A:149:167"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),8,"patient/9E7A;100599","urn:va:patient:9E7A:100599:100599"));
-        	threadWorkers.add(new WebClientWorker(instance.getClient(),9,"patient/9E7A;230","urn:va:patient:9E7A:230:230"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),1,"patient/SITE;3","urn:va:patient:SITE:3:3"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),2,"patient/SITE;100817","urn:va:patient:SITE:100817:100817"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),3,"patient/SITE;71","urn:va:patient:SITE:71:71"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),4,"patient/SITE;239","urn:va:patient:SITE:239:239"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),5,"patient/SITE;149","urn:va:patient:SITE:149:149"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),6,"patient/SITE;227","urn:va:patient:SITE:227:227"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),7,"patient/SITE;167","urn:va:patient:SITE:149:167"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),8,"patient/SITE;100599","urn:va:patient:SITE:100599:100599"));
+        	threadWorkers.add(new WebClientWorker(instance.getClient(),9,"patient/SITE;230","urn:va:patient:SITE:230:230"));
 
             ExecutorService executor = Executors.newFixedThreadPool(threadWorkers.size());
         	executor.invokeAll(threadWorkers);

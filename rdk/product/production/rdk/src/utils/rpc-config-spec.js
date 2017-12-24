@@ -1,7 +1,7 @@
 'use strict';
 
 var rpcUtil = require('./rpc-config');
-var siteHash = '9E7A';
+var siteHash = 'SITE';
 var division = '500';
 var user = {
     site: siteHash,
@@ -12,29 +12,29 @@ var config = {
         context: 'HMP UI CONTEXT'
     },
     vistaSites: {
-        '9E7A': {
+        'SITE': {
             division: [{
                 id: '500',
                 name: 'PANORAMA'
             }],
             host: 'IP        ',
-            port: 9210,
+            port: PORT,
             production: false,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         },
-        'C877': {
+        'SITE': {
             division: [{
                 id: '500',
                 name: 'KODAK'
             }],
             host: 'IP        ',
-            port: 9210,
+            port: PORT,
             production: false,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         }
@@ -48,10 +48,10 @@ describe('getVistaRpcConfig', function() {
             context: 'HMP UI CONTEXT',
             division: '500',
             host: 'IP        ',
-            port: 9210,
+            port: PORT,
             production: false,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: '127.0.0.1',
             localAddress: 'localhost'
         });

@@ -6,7 +6,7 @@
 
     :[pid]({{{common}}}/parameters/pid.md)
 
-    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:problem:C877:3:747" required:"required")
+    :[uid]({{{common}}}/parameters/uid.md example:"urn:va:problem:SITE:3:747" required:"required")
 
 
 ### Get [GET]

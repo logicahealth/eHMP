@@ -45,8 +45,8 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
 
     response = rdk_fetch(@command,
                          'pid' => '10107V395912',
-                         'uid' => 'urn:va:lab:9E7A:253:CH;6899693.879999;80')
-    # 'uid' => 'urn:va:lab:9E7A:164:CH;7039894.9085;80')
+                         'uid' => 'urn:va:lab:SITE:253:CH;6899693.87PORT;80')
+    # 'uid' => 'urn:va:lab:SITE:164:CH;7039894.9085;80')
     items = hash_to_array(get_hash_items(response.body))
     expect(items.size).to be >= (@uid_item_count)
     @uid_item_count = items.size
@@ -55,7 +55,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
   context 'pid' do
     it '. omitted' do
       response = rdk_fetch(@command,
-                           'uid' => 'urn:va:visit:9E7A:164:H918')
+                           'uid' => 'urn:va:visit:SITE:164:H918')
 
       expect(response.code).to eq(403)
     end
@@ -84,7 +84,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;164')
+                           'pid' => 'SITE;164')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -104,7 +104,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;848484')
+                           'pid' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 
@@ -126,8 +126,8 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'normal lab' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:lab:9E7A:253:CH;6899693.879999;80')
-      #                    'uid' => 'urn:va:lab:9E7A:164:CH;7039894.9085;80')
+                           'uid' => 'urn:va:lab:SITE:253:CH;6899693.87PORT;80')
+      #                    'uid' => 'urn:va:lab:SITE:164:CH;7039894.9085;80')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -142,8 +142,8 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
 
     it 'normal visit 1' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;164',
-                           'uid' => 'urn:va:visit:9E7A:164:H918')
+                           'pid' => 'SITE;164',
+                           'uid' => 'urn:va:visit:SITE:164:H918')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -158,7 +158,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'normal visit 2' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:visit:C877:253:10807')
+                           'uid' => 'urn:va:visit:SITE:253:10807')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -190,8 +190,8 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'upper case' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'URN:VA:LAB:9E7A:253:CH;6899693.879999;80')
-      #                      'uid' => 'URN:VA:LAB:9E7A:164:CH;7039894.9085;80')
+                           'uid' => 'URN:VA:LAB:SITE:253:CH;6899693.87PORT;80')
+      #                      'uid' => 'URN:VA:LAB:SITE:164:CH;7039894.9085;80')
       dump(response.body)
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -207,7 +207,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'incomplete' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:lab:9e7a:253:ch;6899693.879999;80')
+                           'uid' => 'urn:va:lab:9e7a:253:ch;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -223,7 +223,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'truncated' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:lab:9E7A:253:')
+                           'uid' => 'urn:va:lab:SITE:253:')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -239,7 +239,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'non-existing domain' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:noex:9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'urn:va:noex:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -255,7 +255,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'upper case urn' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'URN:va:lab:9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'URN:va:lab:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -271,7 +271,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'upper case va' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:VA:lab:9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'urn:VA:lab:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -287,7 +287,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'upper case domain' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:LAB:9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'urn:va:LAB:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -303,7 +303,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'missing urn' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => ':va:lab:9E7A:253:CH;6899693.879999;80')
+                           'uid' => ':va:lab:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -319,7 +319,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'missing va' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn::lab:9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'urn::lab:SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -335,7 +335,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'missing domain' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va::9E7A:253:CH;6899693.879999;80')
+                           'uid' => 'urn:va::SITE:253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -351,7 +351,7 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'missing site' do
       response = rdk_fetch(@command,
                            'pid' => '10107V395912',
-                           'uid' => 'urn:va:lab::253:CH;6899693.879999;80')
+                           'uid' => 'urn:va:lab::253:CH;6899693.87PORT;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))
@@ -383,8 +383,8 @@ describe 'f664_patient_record_timeline_spec.rb', debug: true do
     it 'uid of different pid' do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
-                           'uid' => 'urn:va:lab:9E7A:253:CH;6899693.879999;80')
-      #                      'uid' => 'urn:va:lab:9E7A:164:CH;7039894.9085;80')
+                           'uid' => 'urn:va:lab:SITE:253:CH;6899693.87PORT;80')
+      #                      'uid' => 'urn:va:lab:SITE:164:CH;7039894.9085;80')
 
       expect(response.code).to eq(200)
       items = hash_to_array(get_hash_items(response.body))

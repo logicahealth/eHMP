@@ -2,7 +2,7 @@
 
 var rdk = require('../../core/rdk');
 var moment = require('moment');
-var pjds = rdk.utils.pjdsStore;
+var pjdsUtil = rdk.utils.pjdsUtil;
 var _ = require('lodash');
 var pidValidator = rdk.utils.pidValidator;
 var VIEWED_PATIENT_CONTEXT_LIST_LIMIT = 20;
@@ -81,7 +81,7 @@ function setEhmpUserContext(req, res, next) {
     };
     var patientIdentifier = '';
     if (_.isUndefined(pid)) {
-        res.status(rdk.httpstatus.bad_request).rdkSend('Missing Pid.');
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing Pid.');
     }
     var formattedPatientIdentifier = formatPatientIdentifier(patientId, patientIdentifier);
     if (!workspaceContext) {
@@ -107,19 +107,17 @@ function setEhmpUserContext(req, res, next) {
         key: uid
     };
 
-    pjds.get(req, res, pjdsOptions, function(error, response) {
-        pjdsOptions.data = response.data;
-        var updatedEHMPUIContext;
+    pjdsUtil.getUser(req, res, pjdsOptions, function(error, response) {
         if (error) {
             return res.status(rdk.httpstatus.bad_request).rdkSend(error.message);
         }
-        if (_.isUndefined(pjdsOptions.data.eHMPUIContext)) {
-            pjdsOptions.data.eHMPUIContext = [];
-        }
+        var eHMPUIContext = _.get(response, 'data.eHMPUIContext', []);
+        var updatedEHMPUIContext;
+        pjdsOptions.data = {};
         if (clearContextHistory === 'true') {
             updatedEHMPUIContext = [];
         } else {
-            _.each(pjdsOptions.data.eHMPUIContext, function(previousPatient) {
+            _.each(eHMPUIContext, function(previousPatient) {
                 var nextPatientIdentifier;
                 if (_.isUndefined(previousPatient.patientId)) {
                     previousPatient.patientId = {
@@ -131,10 +129,10 @@ function setEhmpUserContext(req, res, next) {
                     previousPatient.patientIdentifier = nextPatientIdentifier.patientIdentifier;
                 }
             });
-            updatedEHMPUIContext = updatePreviousPatientsList(viewedPatientContext, pjdsOptions.data.eHMPUIContext);
+            updatedEHMPUIContext = updatePreviousPatientsList(viewedPatientContext, eHMPUIContext);
         }
         pjdsOptions.data.eHMPUIContext = updatedEHMPUIContext;
-        pjds.put(req, res, pjdsOptions, function(error, response) {
+        pjdsUtil.patchUser(req, res, pjdsOptions, function(error, response) {
             if (error) {
                 res.status(rdk.httpstatus.bad_request).rdkSend(error.message);
             } else {

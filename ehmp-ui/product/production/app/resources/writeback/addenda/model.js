@@ -88,7 +88,7 @@ define([
                 //TEMPORARY DATA until clinical objects validator stops requiring
                 //unnecessary visit information
                 'encounterServiceCategory': 'A',
-                'locationUid': 'urn:va:location:9E7A:64',
+                'locationUid': 'urn:va:location:SITE:64',
                 'encounterDateTime': '20160101080000',
                 'localId': null,
                 'localTitle': null,

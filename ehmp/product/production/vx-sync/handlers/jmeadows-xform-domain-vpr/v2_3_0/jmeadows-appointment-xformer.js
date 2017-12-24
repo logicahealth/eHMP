@@ -7,7 +7,7 @@ var moment = require('moment');
 appointment - a single appointment record
 
 */
-function dodAppointmentToVPR(appointment, edipi){
+function dodAppointmentToVPR(logger, appointment, edipi){
     var systemId = 'DOD';
 
     if(!appointment){

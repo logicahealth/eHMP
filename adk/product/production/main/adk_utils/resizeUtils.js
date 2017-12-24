@@ -233,7 +233,9 @@ define([
             return gridsterWidgetHeight;
         },
         calculateWidth: function() {
-            if (appDimensions.openTray.trayOpen()) return this.get('width');
+            if (appDimensions.openTray.trayOpen() && this.get('width')) {
+                return this.get('width');
+            }
             var $gridsterEl = Messaging.request('get:adkApp:region', 'centerRegion').$el.find('.gridster');
             if (_.isEmpty($gridsterEl)) {
                 $gridsterEl = $('#center-region .gridster');

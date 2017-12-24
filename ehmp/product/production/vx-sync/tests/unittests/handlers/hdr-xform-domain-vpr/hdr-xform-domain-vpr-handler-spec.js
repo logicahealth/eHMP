@@ -21,10 +21,10 @@ var mockConfig = {
         port: PORT
     },
     'vistaSites' : {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama'
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak'
         }
     }
@@ -51,7 +51,7 @@ var mockHandlerCallback = {
     }
 };
 
-var mockODSyncedSites = ['9E7A'];
+var mockODSyncedSites = ['SITE'];
 
 var hdrItems = require('../../../data/secondary/hdr/allergy');
 
@@ -212,7 +212,7 @@ describe('hdr-xform-domain-vpr-handler', function() {
 
                 job.patientIdentifier = {
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: 'SITE;3'
                 };
 
 
@@ -276,7 +276,7 @@ describe('hdr-xform-domain-vpr-handler', function() {
                 job.record = hdrItems; //{};
                 job.requestStampTime = '20140102120059.000';
                 job.jpid = 'aaa-aaaaa-aaaaaaaaaaa';
-                job.icn = '9E7A;3';
+                job.icn = 'SITE;3';
                 job.patientIdentifier = {
                     type: 'pid',
                     value: 'HDR;00001'

@@ -20,7 +20,6 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 //     level: 'debug'
 // });
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 
 var handle = require(global.VX_HANDLERS + 'vista-record-processor/vista-record-processor-handler');
 var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
@@ -30,14 +29,15 @@ var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var host = vx_sync_ip;
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
 var tubename = 'vx-sync-test';
 
 var config = {
     vistaSites: {
-        '9E7A': {},
-        'C877': {}
+        'SITE': {},
+        'SITE': {}
     },
     // remove this if it has not caused an integration test build to fail
     // mvi: _.defaults(realConfig.mvi, {
@@ -50,7 +50,12 @@ var config = {
         protocol: 'http',
         host: 'IP        ',
         port: PORT
-    })
+    }),
+    syncNotifications: {
+        discharge: {
+            dataDomain: 'discharge'
+        }
+    }
 };
 
 var environment = {
@@ -99,10 +104,10 @@ var vistaFullMessage = {
                                 stampTime: 20141031094920,
                                 itemMetaStamp: {
                                     'urn:va:asu-class:CCCC:19': {
-                                        'stampTime': 20141031094920,
+                                        'stampTime': 20141031094920
                                     },
                                     'urn:va:asu-class:CCCC:31': {
-                                        'stampTime': 20141031094920,
+                                        'stampTime': 20141031094920
                                     }
                                 }
                             }
@@ -245,6 +250,75 @@ var vistaFullMessage = {
                 verified: 20050317200936,
                 verifierName: '<auto-verified>'
             }
+        }]
+    }
+};
+
+var dischargeFullMessage = {
+    apiVersion: 1.02,
+    params: {
+        domain: 'PANORAMA.VISTACORE.US',
+        systemId: 'CCCC'
+    },
+    data: {
+        updated: '20150119135618',
+        totalItems: 6,
+        lastUpdate: '3150119-15430',
+        waitingPids: [],
+        processingPids: [],
+        remainingObjects: 0,
+        items: [{
+            collection: 'syncStart',
+            pid: 'CCCC;3',
+            systemId: 'CCCC',
+            localId: '3',
+            icn: icnValue,
+            rootJobId: '1',
+            jobId: '3',
+            metaStamp: {
+                icn: icnValue,
+                stampTime: '20150119135618',
+                sourceMetaStamp: {
+                    'CCCC': {
+                        pid: 'CCCC;3',
+                        localId: '3',
+                        stampTime: '20150119135618',
+                        domainMetaStamp: {
+                            discharge: {
+                                domain: 'discharge',
+                                stampTime: '20150119135618',
+                                eventMetaStamp: {
+                                    'urn:va:allergy:CCCC:3:751': {
+                                        stampTime: '20150119135618'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            seq: 1,
+            total: 1
+        }, {
+            collection: 'discharge',
+            pid: 'CCCC;3',
+            systemId: 'CCCC',
+            localId: '3',
+            icn: icnValue,
+            seq: 1,
+            total: 1,
+            unsolicitedUpdate: true,
+            object: {
+                deceased: true,
+                lastUpdateTime: '20170517094313',
+                facilityCode: '998',
+                facilityName: 'ABILENE (CAA)',
+                kind: 'discharge',
+                reasonName: 'CHEST PAIN',
+                stampTime: '20170517094313',
+                uid: 'urn:va:discharge:CCCC:3:H4654'
+            }
+
         }]
     }
 };
@@ -520,6 +594,58 @@ describe('vista-record-processor.js', function() {
                 expect(val(operationalDomainMetastamp, 'asu-class')).toBeTruthy();
                 expect(val(operationalDomainMetastamp, 'asu-class', 'domain')).toEqual('asu-class');
             });
+        });
+    });
+
+    describe('Verify handler processed the discharge messages, creates expected jobs, and does NOT stores metaStamps / sync status into JDS', function() {
+        beforeEach(function() {
+            // Clear SyncStatus
+            //-----------------
+            clearTestPatient(environment);
+            clearOperationalSyncStatus(environment);
+
+            // Clear Jobs
+            //-----------
+            clearTube(dummyLogger, host, port, tubename);
+
+            // Create the patient Identifiers
+            //--------------------------------
+            createPatientIdentifiers(icnValue, patientIdentifierValue, environment, function(error, response) {
+                expect(error).toBeNull();
+                expect(response).toBe('success');
+            });
+        });
+
+        afterEach(function() {
+            environment.publisherRouter.close();
+        });
+
+        var job = jobUtil.createVistaRecordProcessorRequest(dischargeFullMessage.data, null);
+
+        var actualResponse, actualError;
+
+        var matchingJobTypes = [jobUtil.syncNotificationType()];
+        testHandler(handle, dummyLogger, config, environment, host, port, tubename, job, matchingJobTypes, null, function(error, response) {
+            actualError = error;
+            actualResponse = response;
+            // Now that we have published and retrieved the jobs.  Lets retrieve the SyncStatus (meta stamp)
+            //-----------------------------------------------------------------------------------------------
+            var completed2 = false;
+            runs(function() {
+                dummyLogger.debug('it(poller processed correctly): before retrieving syncStatus.  error: %s; jobs: %j;', actualError, actualResponse);
+                environment.jds.getSyncStatus({
+                    type: 'pid',
+                    value: 'CCCC;3'
+                }, function(error, response, result) {
+                    //Patient not found
+                    expect(error).toBeFalsy();
+                    expect(response.statusCode).toBe(200);
+                    expect(result.syncStatus).toBeFalsy();
+                    completed2 = true;
+                });
+            });
+
+            waitsFor(function() {return completed2;}, 'response from poller._processBatch timed out.', 10000);
         });
     });
 });

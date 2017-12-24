@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# usage: sudo ./record-update/utils/run-vista-site-data-resync-util.sh --site 9E7A,C877 --domain allergy --updateTime 20071217151553
+# usage: sudo ./record-update/utils/run-vista-site-data-resync-util.sh --site SITE,SITE --domain allergy --updateTime 20071217151553
 
 # Each of the following values can all be overridden by
 # setting an environment variable of the same name:

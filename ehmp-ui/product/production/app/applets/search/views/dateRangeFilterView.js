@@ -19,90 +19,90 @@ define([
                 extraClasses: ['form-inline'],
                 items: {
                     control: 'container', // Buttons
-                    extraClasses: ['flex-display', 'flex-direction-row'],
+                    extraClasses: ['flex-display', 'flex-direction-row', 'btn-date-range'],
                     items: [{
                         control: 'container',
                         tagName: 'fieldset',
-                        template: '<legend class="sr-only">Filter results by date.</legend>',
-                        extraClasses: ['btn-group', 'flex-width-none', 'btn-group--date-range'],
+                        template: '<legend class="sr-only">Filter results by date</legend>',
+                        extraClasses: ['btn-group', 'flex-width-none', 'btn-group--date-range', 'btn-group-xs'],
                         items: [{
                             control: 'button',
                             name: 'allRange',
                             type: 'button',
                             label: 'All',
-                            title: 'Press enter to select all years',
+                            title: 'All years',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item', 'active']
                         }, {
                             control: 'button',
                             name: '2yrRange',
                             type: 'button',
                             label: '2yr',
-                            title: 'Press enter to select the past 2 years.',
+                            title: 'Past 2 years.',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '1yrRange',
                             type: 'button',
                             label: '1yr',
-                            title: 'Press enter to select last year.',
+                            title: 'Last year.',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '3moRange',
                             type: 'button',
                             label: '3m',
-                            title: 'Press enter to select the last 3 months',
+                            title: 'Last 3 months',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '1moRange',
                             type: 'button',
                             label: '1m',
-                            title: 'Press enter to select last month',
+                            title: 'Last month',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '7dRange',
                             type: 'button',
                             label: '7d',
-                            title: 'Press enter to select the last 7 days',
+                            title: 'Last 7 days',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '72hrRange',
                             type: 'button',
                             label: '72hr',
-                            title: 'Press enter to select the last 72 hours',
+                            title: 'Last 72 hours',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }, {
                             control: 'button',
                             name: '24hrRange',
                             type: 'button',
                             label: '24hr',
-                            title: 'Press enter to select the last 24 hours',
+                            title: 'Last 24 hours',
                             extraClasses: ['btn-sm', 'transform-none', 'btn-default', 'date-range-item']
                         }]
                     }, {
                         control: 'container', // Datepickers
-                        extraClasses: ['flex-width-none', 'left-margin-lg'],
+                        extraClasses: ['flex-width-none', 'left-margin-sm'],
                         items: [{
                             control: "datepicker",
                             name: "fromDate",
                             label: "From",
                             required: true,
-                            extraClasses: ['left-margin-md', 'valign-top'],
+                            extraClasses: ['left-margin-no','valign-top'],
                         }, {
                             control: "datepicker",
                             name: "toDate",
                             label: "To",
                             required: true,
-                            extraClasses: ['left-margin-md', 'valign-top'],
+                            extraClasses: ['left-margin-sm', 'valign-top'],
                         }, {
                             control: 'button',
                             type: 'submit',
                             label: 'Apply',
                             disabled: true,
-                            extraClasses: ['btn-primary', 'left-margin-md', 'valign-top']
+                            extraClasses: ['btn-primary', 'left-margin-sm', 'valign-top']
                         }]
                     }]
                 }

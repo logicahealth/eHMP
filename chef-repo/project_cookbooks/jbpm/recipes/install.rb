@@ -13,6 +13,16 @@
 
 include_recipe "jboss-eap_wrapper"
 
+admin_username = data_bag_item("credentials", "jbpm_admin_password", node[:data_bag_string])["username"]
+admin_password = data_bag_item("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
+jbpm_username = data_bag_item("credentials", "oracle_user_jbpm", node[:data_bag_string])["username"]
+jbpm_password = data_bag_item("credentials", "oracle_user_jbpm", node[:data_bag_string])["password"]
+
+oracle_node = find_optional_node_by_role("ehmp_oracle", node[:stack])
+oracle_ip = oracle_node[:ipaddress] if !oracle_node.nil?
+oracle_port = oracle_node[:ehmp_oracle][:oracle_config][:port] if !oracle_node.nil?
+oracle_sid = oracle_node[:ehmp_oracle][:oracle_sid] if !oracle_node.nil?
+
 template "#{node['jboss-eap']['jboss_home']}/bin/standalone.conf" do
   source 'standalone.conf.erb'
   owner 'jboss'
@@ -24,8 +34,6 @@ template "#{node['jboss-eap']['jboss_home']}/bin/standalone.conf" do
   )
   notifies :restart, "service[jboss]"
 end
-
-admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
 
 directory "#{node[:jbpm][:workdir]}" do
   owner  'root'
@@ -58,9 +66,12 @@ ruby_block "get current JBPM version" do
 end
 
 template "#{node[:jbpm][:workdir]}/jbpm.auto.xml" do
-  source "jbpm.auto.xml.erb"
-  mode "0755"
-  variables(:admin_password => admin_password)
+  source 'jbpm.auto.xml.erb'
+  mode '0755'
+  variables(
+    :admin_username => admin_username,
+    :admin_password => admin_password
+  )
 end
 
 remote_file "#{Chef::Config['file_cache_path']}/jboss-eap-6.4.9-patch.zip" do
@@ -69,8 +80,8 @@ remote_file "#{Chef::Config['file_cache_path']}/jboss-eap-6.4.9-patch.zip" do
   use_conditional_get true
 end
 
-remote_file "#{Chef::Config['file_cache_path']}/jboss-eap-6.4.13-patch.zip" do
-  source node[:jbpm][:install][:patch13]
+remote_file "#{Chef::Config['file_cache_path']}/jboss-eap-6.4.14-patch.zip" do
+  source node[:jbpm][:install][:patch14]
   mode   "0755"
   use_conditional_get true
 end
@@ -189,12 +200,12 @@ execute "Install EAP-6.4.9" do
   only_if { node[:jbpm][:cur_eap_version].gsub(/\D/, '').to_i < 649 }
 end
 
-execute "Install EAP-6.4.13" do
-  command "/opt/jboss/bin/jboss-cli.sh --command=\"patch apply #{Chef::Config['file_cache_path']}/jboss-eap-6.4.13-patch.zip\""
+execute "Install EAP-6.4.14" do
+  command "/opt/jboss/bin/jboss-cli.sh --command=\"patch apply #{Chef::Config['file_cache_path']}/jboss-eap-6.4.14-patch.zip --override=bin/standalone.conf\""
   user node['jboss-eap'][:jboss_user]
   notifies :run, "execute[Install EAP-6.4.9]", :before
   notifies :start, "service[jboss]", :immediately
-  only_if { node[:jbpm][:cur_eap_version].gsub(/\D/, '').to_i < 6413 }
+  only_if { node[:jbpm][:cur_eap_version].gsub(/\D/, '').to_i < 6414 }
 end
 
 # install patch 6.3.4 if the current jBPM version is 6.3.0 which uses 6.4.0-Final-redhat-xx jars
@@ -205,6 +216,23 @@ execute "Install bpmsuite-6.3.4-patch" do
   action :nothing
   notifies :stop, "service[jboss]", :before
   only_if { node[:jbpm][:cur_jbpm_version].to_i != 64013 }
+end
+
+# clear jbpm data from the database upon clean install
+cookbook_file "#{node[:jbpm][:workdir]}/clear_jbpm_data.sql"
+
+execute "Clear jBPM data upon clean install" do
+  cwd node[:jbpm][:workdir]
+  command "sqlplus -s /nolog <<-EOF>> #{node[:jbpm][:workdir]}/clear_jbpm_data.log
+    WHENEVER OSERROR EXIT 9;
+    WHENEVER SQLERROR EXIT SQL.SQLCODE;
+    connect #{jbpm_username}/#{jbpm_password}@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=#{oracle_ip})(PORT=#{oracle_port}))(CONNECT_DATA=(SERVICE_NAME=#{oracle_sid})))
+    @clear_jbpm_data.sql
+    EXIT
+  EOF"
+  sensitive true
+  action :nothing
+  only_if { node[:jbpm][:allow_clear_data] }
 end
 
 execute "Check if jBPM is installed" do
@@ -220,6 +248,7 @@ execute "Install jBPM" do
   user node['jboss-eap'][:jboss_user]
   action :nothing
   notifies :run, "execute[Install bpmsuite-6.3.4-patch]", :immediately
+  notifies :run, "execute[Clear jBPM data upon clean install]", :immediately
   notifies :start, "service[jboss]", :immediately
 end
 
@@ -252,6 +281,22 @@ execute "Install bpmsuite-6.3.0-patch" do
   only_if { node[:jbpm][:cur_jbpm_version].include? "62"}
 end
 
+# The following is only needed when upgrading jbpm6.1 to 6.3
+cookbook_file "#{node[:jbpm][:workdir]}/update_jbpm_30_schema.sql"
+execute "Update jbpm oracle schema" do
+  cwd node[:jbpm][:workdir]
+  command "sqlplus -s /nolog <<-EOF> #{node[:jbpm][:workdir]}/update_jbpm_30_schema.log
+    SET FEEDBACK ON SERVEROUTPUT ON
+    WHENEVER OSERROR EXIT 9;
+    WHENEVER SQLERROR EXIT SQL.SQLCODE;
+    connect #{jbpm_username}/#{jbpm_password}@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=#{oracle_ip})(PORT=#{oracle_port}))(CONNECT_DATA=(SERVICE_NAME=#{oracle_sid})))
+    @update_jbpm_30_schema.sql
+    EXIT
+  EOF"
+  sensitive true
+  only_if { node[:jbpm][:cur_jbpm_version].include? "62"}
+end
+
 common_directory "#{node['jbpm']['gitdir']}/.niogit" do
   owner node['jboss-eap'][:jboss_user]
   mode "0777"
@@ -265,8 +310,8 @@ common_directory "#{node[:jbpm][:m2_home]}" do
 end
 
 # Using sed to insert rest-all in the application-roles.properties
-execute "Add rest-all to #{node[:jbpm][:install][:admin_user]} user role" do
-  command "sed -i 's/#{node[:jbpm][:install][:admin_user]}=admin,/#{node[:jbpm][:install][:admin_user]}=admin,rest-all/' #{node[:jbpm][:home]}/configuration/application-roles.properties"
+execute "Add rest-all to #{admin_username} user role" do
+  command "sed -i 's/#{admin_username}=admin,/#{admin_username}=admin,rest-all/' #{node[:jbpm][:home]}/configuration/application-roles.properties"
   user node['jboss-eap'][:jboss_user]
   notifies :stop, "service[jboss]", :immediately
   not_if "grep rest-all #{node[:jbpm][:home]}/configuration/application-roles.properties"

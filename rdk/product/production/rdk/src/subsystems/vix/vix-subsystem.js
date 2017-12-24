@@ -38,6 +38,10 @@ module.exports.getSubsystemConfig = function(app, logger) {
             name: 'vix',
             interval: 100000,
             check: function(callback) {
+                if (!module.exports._vixServerConfigured) {
+                    return setImmediate(callback, false);
+                }
+
                 var httpConfig = _.extend({}, app.config.vix, {
                     logger: logger,
                     url: '/ping'
@@ -69,16 +73,21 @@ module.exports.getSubsystemConfig = function(app, logger) {
  *                               thumbnail objects if the record is DOD
  */
 module.exports.addImagesToDocument = function(req, jdsResponse, callback) {
+    if (!this._vixServerConfigured) {
+        return callback({error: 'vix is not configured'});
+    }
+
     var self = this;
     var logger = req.logger;
     // all patient records
     var patientRecords = jdsResponse.data.items;
-    var pid = _.get(req, 'interceptorResults.patientIdentifiers.siteDfn');
-    if (!rdk.utils.pidValidator.isSiteDfn(pid)) {
-        logger.info({location: 'vix-subsystem.getImagesForDocument', pid: pid, error: 'pid is a not valid site;dfn - returning error'});
-        return callback('pid is not a valid site;dfn');
-    }
     var icn = _.get(req, 'interceptorResults.patientIdentifiers.icn');
+    var pid = _.get(req, 'interceptorResults.patientIdentifiers.siteDfn');
+
+    if (!rdk.utils.pidValidator.isIcn(icn) && !rdk.utils.pidValidator.isSiteDfn(pid)) {
+        logger.error({location: 'vix-subsystem.addImagesForDocument', icn: icn, pid: pid, error: 'icn and site;dfn are not valid - returning error'});
+        return callback('icn and site;dfn are not valid');
+    }
     var queryRecords = {
         patientICN: icn,
         studies: []
@@ -126,7 +135,7 @@ module.exports.addImagesToDocument = function(req, jdsResponse, callback) {
             function(vixBody, callback) {
                 logger.debug({preLoopVixBody: vixBody});
                 if (_.isEmpty(vixBody.studies)) {
-                    logger.error({location: 'vix-subsystem.getImagesForDocument', error: 'Empty response from VIX'});
+                    logger.info('vix-subsystem.getImagesForDocument: empty response from VIX');
                     return callback(null, 'done');
                 }
                 _.each(patientRecords, function(patientRecord) {
@@ -153,10 +162,10 @@ module.exports.addImagesToDocument = function(req, jdsResponse, callback) {
         ],
         function(error, result) {
             if (error) {
-                logger.debug({error: error}, 'vix not available');
+                logger.error({error: error}, 'Error in VIX addImagesToDocument');
             }
             jdsResponse.data.items = patientRecords;
-            return callback(null, jdsResponse);
+            return callback(error, jdsResponse);
         }
     );
 };
@@ -168,28 +177,28 @@ module.exports.addImagesToDocument = function(req, jdsResponse, callback) {
  * @return {Object}            VIX response containing image meta data
  */
 module.exports.getImagesForDocument = function(req, callback) {
-    var logger = req.logger;
-    var pid = req.interceptorResults.patientIdentifiers.siteDfn;
-    if (!rdk.utils.pidValidator.isSiteDfn(pid)) {
-        logger.info({location: 'vix-subsystem.getImagesForDocument', pid: pid, error: 'pid is a not valid site;dfn - returning error'});
-        return callback('pid is not a valid site;dfn');
+    if (!this._vixServerConfigured) {
+        return callback({error: 'vix is not configured'});
     }
 
-    var icn = req.interceptorResults.patientIdentifiers.icn;
-    if (!rdk.utils.pidValidator.isIcn(icn)) {
-        logger.info({location: 'vix-subsystem.getImagesForDocument', icn: icn, error: 'icn is not valid - returning error'});
-        return callback('icn is not valid');
+    var logger = req.logger;
+    var icn = _.get(req, 'interceptorResults.patientIdentifiers.icn');
+    var pid = _.get(req, 'interceptorResults.patientIdentifiers.siteDfn');
+
+    if (!rdk.utils.pidValidator.isIcn(icn) && !rdk.utils.pidValidator.isSiteDfn(pid)) {
+        logger.error({location: 'vix-subsystem.getImagesForDocument', icn: icn, pid: pid, error: 'icn and site;dfn are not valid - returning error'});
+        return callback('icn and site;dfn are not valid');
     }
 
     var siteNumber = req.query.siteNumber;
     if (nullchecker.isNullish(siteNumber)) {
-        logger.info({location: 'vix-subsystem.getImagesForDocument', siteNumber: siteNumber, error: 'siteNumber is nullish - returning error'});
+        logger.error({location: 'vix-subsystem.getImagesForDocument', siteNumber: siteNumber, error: 'siteNumber is nullish - returning error'});
         return callback('siteNumber is nullish');
     }
 
     var contextId = req.query.contextId;
     if (nullchecker.isNullish(contextId)) {
-        logger.info({location: 'vix-subsystem.getImagesForDocument', contextId: contextId, error: 'contextId is nullish - returning error'});
+        logger.error({location: 'vix-subsystem.getImagesForDocument', contextId: contextId, error: 'contextId is nullish - returning error'});
         return callback('contextId is nullish');
     }
 
@@ -216,9 +225,10 @@ module.exports.getImagesForDocument = function(req, callback) {
             //process the returned data
             function(vixBody, callback) {
                 logger.debug({vixBody: vixBody});
-                if (_.isEmpty(vixBody.studies)) {
+                // If VIX response is empty then error. No error for empty studies element
+                if (_.isEmpty(vixBody)) {
                     var vixError = 'Empty response from VIX';
-                    logger.error({location: 'vix-subsystem.getImagesForDocument', error: vixError});
+                    logger.error({location: 'vix-subsystem.getImagesForDocument', error: vixError}, 'Error in VIX getImagesForDocument');
                     return callback(vixError);
                 }
 
@@ -230,9 +240,9 @@ module.exports.getImagesForDocument = function(req, callback) {
         ],
         function(error, result) {
             if (error) {
-                logger.debug({location: 'vix-subsystem.getImagesForDocument', error: error});
+                logger.error({location: 'vix-subsystem.getImagesForDocument', error: error}, 'Error in VIX getImagesForDocument');
             }
-            return callback(null, result);
+            return callback(error, result);
         }
     );
 };
@@ -240,7 +250,7 @@ module.exports.getImagesForDocument = function(req, callback) {
 module.exports._waterfallGetToken = function(req, callback) {
     this._checkBseToken(req, function(error, response){
         if (error) {
-            req.logger.debug({location: 'vix-subsystem.waterfallGetToken', error: error});
+            req.logger.error({location: 'vix-subsystem.waterfallGetToken', error: error});
             return callback(error);
         }
 
@@ -295,7 +305,7 @@ module.exports._getStudyQuery = function(req, bseToken, query, callback) {
 
     return http.post(config, function(vixError, vixResponse) {
         if (vixError) {
-            req.logger.debug({location: 'vix-subsystem._getStudyQuery', error: vixError});
+            req.logger.error({location: 'vix-subsystem._getStudyQuery', error: vixError});
             return callback(vixError);
         }
         return callback(null, vixResponse.body);
@@ -409,12 +419,12 @@ module.exports._checkBseToken = function(req, callback) {
     }
 
     if (nullchecker.isNullish(user.vixBseToken) || nullchecker.isNullish(user.vixBseTokenExpires)) {
-        req.logger.debug({location: 'vix-subsystem._checkBseToken', error: 'There is a problem with token or token expiration'});
+        req.logger.warn({location: 'vix-subsystem._checkBseToken', error: 'There is a problem with token or token expiration'});
         return self._regenerateBseToken(req, callback);
     }
 
     if (moment().format('X') > user.vixBseTokenExpires) {
-        req.logger.debug({location: 'vix-subsystem._checkBseToken', error: 'BSE token has expired'});
+        req.logger.warn({location: 'vix-subsystem._checkBseToken', error: 'BSE token has expired'});
         return self._regenerateBseToken(req, callback);
     }
 
@@ -431,7 +441,7 @@ module.exports._regenerateBseToken = function(req, callback) {
     var self = this;
     this._getBseToken(req, function(error, response) {
         if (error) {
-            req.logger.debug({location: 'vix-subsystem._regenerateBseToken', error: error});
+            req.logger.error({location: 'vix-subsystem._regenerateBseToken', error: error});
             return callback(error);
         }
 
@@ -495,7 +505,7 @@ module.exports._saveBseToken = function(req, token, callback) {
     var user = _.get(req, 'session.user', null);
 
     if (nullchecker.isNullish(token)) {
-        logger.debug({location: 'vix-subsystem._saveBseToken', error: 'Token not provided from VistA'});
+        logger.error({location: 'vix-subsystem._saveBseToken', error: 'Token not provided from VistA'});
         return callback('Token not provided from VistA');
     }
 

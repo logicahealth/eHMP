@@ -59,6 +59,22 @@ function createVlerXformVpr(patientIdentifier, domain, record, requestStampTime,
      return create(vlerXformVprType(), patientIdentifier, domain, record, requestStampTime, null, rootJob);
 }
 
+function createVlerDasSyncRequest(patientIdentifier, rootJob) {
+    return create(vlerDasSyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
+}
+
+function createVlerDasSubscribeRequest(patientIdentifier, requestStampTime, rootJob) {
+    return create(vlerDasSubscribeRequestType(), patientIdentifier, null, null, requestStampTime, null, rootJob);
+}
+
+function createVlerDasDocRetrieve(patientIdentifier, requestStampTime, rootJob) {
+    return create(vlerDasDocRetrieveType(), patientIdentifier, null, null, requestStampTime, null, rootJob);
+}
+
+function createVlerDasXformVpr(patientIdentifier, record, requestStampTime, rootJob) {
+     return create(vlerDasXformVprType(), patientIdentifier, null, record, requestStampTime, null, rootJob);
+}
+
 function createPgdSyncRequest(patientIdentifier, rootJob) {
     return create(pgdSyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
 }
@@ -180,6 +196,10 @@ function createPatientRecordRetirement(patientIdentifier, rootJob) {
     return create(patientRecordRetirementType(), patientIdentifier, null, null, null, null, rootJob);
 }
 
+function createSyncNotification(patientIdentifier, domain, record, rootJob){
+    return create(syncNotificationType(), patientIdentifier, domain, record, null, null, rootJob);
+}
+
 function enterpriseSyncRequestType() {
     return 'enterprise-sync-request';
 }
@@ -263,6 +283,22 @@ function vlerSyncRequestType() {
     return 'vler-sync-request';
 }
 
+function vlerDasSyncRequestType() {
+    return 'vler-das-sync-request';
+}
+
+function vlerDasSubscribeRequestType() {
+    return 'vler-das-subscribe-request';
+}
+
+function vlerDasDocRetrieveType() {
+    return 'vler-das-doc-retrieve';
+}
+
+function vlerDasXformVprType() {
+    return 'vler-das-xform-vpr';
+}
+
 function jmeadowsDomainSyncRequestType(domain) {
     return format('jmeadows-sync-%s-request', domain);
 }
@@ -335,6 +371,10 @@ function patientRecordRetirementType(){
     return 'patient-record-retirement';
 }
 
+function syncNotificationType(){
+    return 'sync-notification';
+}
+
 // FUTURETODO: requestStampTime
 function create(type, patientIdentifier, domain, record, requestStampTime, eventUid, meta) {
     var job = {
@@ -398,7 +438,6 @@ function create(type, patientIdentifier, domain, record, requestStampTime, event
 function createOperational(record) {
     return {
         type: operationalDataStoreType(),
-        jpid: uuid.v4(),
         record: record
     };
 }
@@ -503,6 +542,9 @@ fields[resyncRequestType()] = [];
 
 fields[vlerSyncRequestType()] = ['jpid'];
 fields[vlerXformVprType()] = ['domain', 'record', 'jpid'];
+fields[vlerDasSyncRequestType()] = ['jpid'];
+fields[vlerDasDocRetrieveType()] = ['jpid', 'patientIdentifier'];
+fields[vlerDasXformVprType()] = ['jpid', 'record', 'requestStampTime'];
 fields[pgdSyncRequestType()] = ['jpid'];
 fields[pgdXformVprType()] = ['domain', 'record', 'jpid'];
 fields[dasSyncRequestType()] = ['jpid'];
@@ -554,6 +596,10 @@ jobUtil.createEventPrioritizationRequest = createEventPrioritizationRequest;
 jobUtil.createHdrSyncRequest = createHdrSyncRequest;
 jobUtil.createVlerSyncRequest = createVlerSyncRequest;
 jobUtil.createVlerXformVpr = createVlerXformVpr;
+jobUtil.createVlerDasSyncRequest = createVlerDasSyncRequest;
+jobUtil.createVlerDasSubscribeRequest = createVlerDasSubscribeRequest;
+jobUtil.createVlerDasDocRetrieve = createVlerDasDocRetrieve;
+jobUtil.createVlerDasXformVpr = createVlerDasXformVpr;
 jobUtil.createPgdSyncRequest = createPgdSyncRequest;
 jobUtil.createPgdXformVpr = createPgdXformVpr;
 jobUtil.createDasSyncRequest = createDasSyncRequest;
@@ -572,6 +618,7 @@ jobUtil.createJmeadowsPdfDocumentTransformRequest = createJmeadowsPdfDocumentTra
 jobUtil.createJmeadowsDocumentRetrievalRequest = createJmeadowsDocumentRetrievalRequest;
 jobUtil.createRecordUpdate = createRecordUpdate;
 jobUtil.createPatientRecordRetirement = createPatientRecordRetirement;
+jobUtil.createSyncNotification = createSyncNotification;
 
 jobUtil.patientRecordRetirementType = patientRecordRetirementType;
 jobUtil.enterpriseSyncRequestType = enterpriseSyncRequestType;
@@ -585,6 +632,11 @@ jobUtil.recordUpdateType = recordUpdateType;
 jobUtil.createResyncRequest = createResyncRequest;
 
 jobUtil.vlerSyncRequestType = vlerSyncRequestType;
+jobUtil.vlerXformVprType = vlerXformVprType;
+jobUtil.vlerDasSyncRequestType = vlerDasSyncRequestType;
+jobUtil.vlerDasSubscribeRequestType = vlerDasSubscribeRequestType;
+jobUtil.vlerDasDocRetrieveType = vlerDasDocRetrieveType;
+jobUtil.vlerDasXformVprType = vlerDasXformVprType;
 jobUtil.vlerXformVprType = vlerXformVprType;
 jobUtil.pgdSyncRequestType = pgdSyncRequestType;
 jobUtil.pgdXformVprType = pgdXformVprType;
@@ -621,3 +673,4 @@ jobUtil.createVistaHdrPollerDomainRequest = createVistaHdrPollerDomainRequest;
 jobUtil.vistahdrSubScribeRequestType = vistahdrSubScribeRequestType;
 jobUtil.vistahdrPollerRequestType = vistahdrPollerRequestType;
 jobUtil.errorRequestType = errorRequestType;
+jobUtil.syncNotificationType = syncNotificationType;

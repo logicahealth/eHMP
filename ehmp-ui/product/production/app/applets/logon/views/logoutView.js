@@ -12,8 +12,8 @@ define([
 
     var LogoutAlertFooterItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
-            '{{ui-button "No" classes="btn-default btn-sm alert-cancel" title="Press enter to cancel"}}',
-            '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Press enter to sign out"}}'
+            '{{ui-button "No" classes="btn-default btn-sm alert-cancel"}}',
+            '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Sign out"}}'
         ].join('\n')),
         events: {
             'click .alert-cancel': function() {
@@ -31,7 +31,13 @@ define([
     });
 
     var LogoutButton = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Sign out" classes="btn-icon" title="Sign out. Press enter to sign out" icon="fa-sign-out font-size-18" srOnlyLabel=true}}'),
+        behaviors: {
+            Tooltip: {
+                trigger: 'hover focus',
+                placement: 'left'
+            }
+        },
+        template: Handlebars.compile('{{ui-button "Sign out" classes="btn-icon" title="Sign out" icon="fa-sign-out font-size-18" srOnlyLabel=true attributes=\'data-toggle="tooltip"\'}}'),
         events: {
             'click button': function() {
                 var alertView = new ADK.UI.Alert({

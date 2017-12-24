@@ -14,13 +14,15 @@ Scenario: Verify that by default the flagged checkbox is unchecked
 Scenario: Create a physical therapy consult order and review it in cosnult applet expanded view
 
   When user searches for and selects "bcma,eight"
-  # Then Summary View is active
+  Then Summary View is active
   And user navigates to expanded consult applet
   And the user takes note of number of existing consults
   And user adds a new consult
   And user selects "Physical Therapy" consult
+  Then the Physical Therapy tray displays
   And user enters a request reason text "Test request reason"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
   Then a consult is added to the applet
   
 @US17396_add_consult_Neurosurgery
@@ -37,6 +39,7 @@ Scenario: Create a Neurosurgery consult order and review it in cosnult applet ex
   And user provides a override reason "Overriding BMI"
   And user enters a request reason text "Test request reason"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
   Then a consult is added to the applet
   
 @US17396_add_consult_Rheumatology
@@ -53,6 +56,7 @@ Scenario: Create a Rheumatology consult order and review it in cosnult applet ex
   And user provides a override reason "Overriding orders and results"
   And user enters a request reason text "Test request reason"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
   Then a consult is added to the applet
   
 @US17396_consult_view_details @DE7396
@@ -135,6 +139,7 @@ Scenario: Create a physical therapy consult for another patient and verify in st
   And user selects "Physical Therapy" consult
   And user enters a request reason text "Requesting to contact the second patient"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
   And user navigates to the staff view screen
   Then a consult is added to the applet
 

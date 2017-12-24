@@ -21,6 +21,7 @@ if( tasks.size() == 0 || eclipseTask.size() != 0 ) {
 	include ':production:cdsinvocation:cds-results-service'
 	include ':production:cdsinvocation:cds-invocation'
 	include ':production:cdsinvocation:cds-engine-agent'
+	include ':production:cdsutils'
 }
 
 tasks.each { taskName ->

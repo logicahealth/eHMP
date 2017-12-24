@@ -1,4 +1,4 @@
-@F564  @reg1
+@F564  @reg3
 
 Feature: Encounters Applet Enhancements
 

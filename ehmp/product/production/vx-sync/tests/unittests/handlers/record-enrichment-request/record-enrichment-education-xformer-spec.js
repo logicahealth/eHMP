@@ -12,30 +12,30 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 // });
 var educationTransformedRecord = {
         encounterName: '0Apr 17, 2000',
-        encounterUid: 'urn:va:visit:9E7A:237:2056',
+        encounterUid: 'urn:va:visit:SITE:237:2056',
         entered: '20000417000000',
         facilityCode: '500',
         facilityName: 'CAMP MASTER',
         lastUpdateTime: '20000417000000',
         localId: '42',
         name: 'SMOKING CESSATION',
-        pid: '9E7A;237',
+        pid: 'SITE;237',
         stampTime: '20000417000000',
-        uid: 'urn:va:education:9E7A:237:42'
+        uid: 'urn:va:education:SITE:237:42'
       };
 
 var educationRecord = {
         encounterName: '0Apr 17, 2000',
-        encounterUid: 'urn:va:visit:9E7A:237:2056',
+        encounterUid: 'urn:va:visit:SITE:237:2056',
         entered: 20000417000000,
         facilityCode: 500,
         facilityName: 'CAMP MASTER',
         lastUpdateTime: 20000417000000,
         localId: 42,
         name: 'SMOKING CESSATION',
-        pid: '9E7A;237',
+        pid: 'SITE;237',
         stampTime: 20000417000000,
-        uid: 'urn:va:education:9E7A:237:42'
+        uid: 'urn:va:education:SITE:237:42'
       };
 
 describe('record-enrichment-education-xformer.js', function(){

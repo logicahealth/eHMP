@@ -1,5 +1,5 @@
-HMPDJ2 ;SLC/MKB,ASMR/RRB,CK - HMP Object RPCs;May 15, 2016 14:15
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2**;May 15, 2016;Build 11
+HMPDJ2 ;SLC/MKB,ASMR/RRB,CK,CPC - HMP Object RPCs;May 15, 2016 14:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,4**;May 15, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
@@ -55,7 +55,7 @@ PUT(HMP,TYPE,JSON) ; -- Save/update JSON OBJECT in ^HMP(800000.11), return UID i
  . S HMPTXT(1)="Problem decoding json input."
  . D SETERROR^HMPUTILS(.HMPTMP,.HMPERR,.HMPTXT,.JSON)
  . K HMPERR D ENCODE^HMPJSON("HMPTMP","ARRAY","HMPERR")
- . S HMP(.5)="{""apiVersion"":""1.01"",""error"":{"
+ . S HMP(.5)="{"_$$APIVERS^HMPDJFS()_",""error"":{"
  . M HMP(1)=ARRAY
  . S HMP(2)="}}"
  ;
@@ -71,7 +71,7 @@ PUT(HMP,TYPE,JSON) ; -- Save/update JSON OBJECT in ^HMP(800000.11), return UID i
  .. S HMPTXT(1)="Problem encoding json output."
  .. D SETERROR^HMPUTILS(.HMPTMP,.HMPERR,.HMPTXT,.ARRAY)
  .. K HMPERR D ENCODE^HMPJSON("HMPTMP","JSON","HMPERR")
- .. S HMP(.5)="{""apiVersion"":""1.01"",""error"":{"
+ .. S HMP(.5)="{"_$$APIVERS^HMPDJFS()_",""error"":{"
  .. M HMP(1)=JSON
  .. S HMP(2)="}}"
  ;
@@ -80,8 +80,8 @@ PUT(HMP,TYPE,JSON) ; -- Save/update JSON OBJECT in ^HMP(800000.11), return UID i
  S:$G(CNT) ^HMP(800000.11,DA,1,0)="^800000.111^"_CNT_U_CNT
  ;
 PTQ ; add item count and terminating characters
- I $D(ERR) S HMP="{""apiVersion"":""1.01"",""error"":{""message"":"""_ERR_"""},""success"":false}" Q
- S HMP="{""apiVersion"":""1.01"",""data"":{""updated"":"_""""_$$HL7NOW_""""_",""uid"":"""_UID_"""},""success"":true}"
+ I $D(ERR) S HMP="{"_$$APIVERS^HMPDJFS()_",""error"":{""message"":"""_ERR_"""},""success"":false}" Q
+ S HMP="{"_$$APIVERS^HMPDJFS()_",""data"":{""updated"":"_""""_$$HL7NOW_""""_",""uid"":"""_UID_"""},""success"":true}"
  D POSTX^HMPEVNT(TYPE,DA,$G(ACTION)) ;UID)
  Q
  ;

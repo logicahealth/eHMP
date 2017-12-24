@@ -43,7 +43,7 @@ describe 'f117_patient_complex_note_spec.rb', acceptance: true do
 
     it 'DE2115: pid format' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;3',
+                           'pid' => 'SITE;3',
                            'uid' => 'urn:va:document:DOD:0000000003:1000000648')
       expect(response.code).to eq(200)
     end
@@ -73,7 +73,7 @@ describe 'f117_patient_complex_note_spec.rb', acceptance: true do
     it 'non-complex document' do
       response = rdk_fetch(@command,
                            'pid' => @pid_data,
-                           'uid' => 'urn:va:document:9E7A:3:2745')
+                           'uid' => 'urn:va:document:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 

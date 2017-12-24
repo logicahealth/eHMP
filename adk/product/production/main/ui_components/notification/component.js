@@ -5,8 +5,9 @@ define([
     'handlebars',
     'underscore',
     'api/Messaging',
-    'bootstrap-notify'
-], function(Backbone, Marionette, $, Handlebars, _, Messaging, BootstrapNotify) {
+    'bootstrap-notify',
+    'main/Utils'
+], function(Backbone, Marionette, $, Handlebars, _, Messaging, BootstrapNotify, Utils) {
     'use strict';
 
     // This keeps all of sticky growls currently being displayed on the screen.
@@ -65,7 +66,7 @@ define([
                     enter: 'animated bounceIn',
                     exit: 'animated bounceOut'
                 },
-                z_index: 1060,
+                z_index: Utils.cssCalc.zIndex.getNextLayer() || 1060,
                 template: '<div data-notify="container" class="growl-alert growl-alert-user col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
                     '   <div class="alert-content">' +
                     '       <span data-notify="icon"></span>' +
@@ -73,7 +74,7 @@ define([
                     '           <span data-notify="title">{1}</span>' +
                     '           <span data-notify="message">{2}</span>' +
                     '       </span>' +
-                    '       <button type="button" class="close" data-notify="dismiss" title="Press enter to close the alert' +
+                    '       <button type="button" class="close" data-notify="dismiss" title="Close the alert' +
                     (!!_.get(alertOptions, 'autoClose') ? ', or wait ten seconds for autodismissal' : '.') +
                     '"><i class="fa fa-times"></i></button>' +
                     '       <div class="progress" data-notify="progressbar">' +

@@ -27,7 +27,7 @@ function createTestJson(name, scope) {
                     'entityType': 'User',
                     'codeSystem': 'VA:DUZ',
                     'name': 'USER PANORAMA',
-                    'id': 'REDACTED',
+                    'id': 'PW         ',
                     'type': 'provider'
                 },
                 'location': {
@@ -63,7 +63,7 @@ function createTestJson(name, scope) {
             'entityType': 'User',
             'codeSystem': 'VA:DUZ',
             'name': 'USER PANORAMA',
-            'id': '9E7A:10000000230',
+            'id': 'SITE:10000000230',
             'type': 'provider'
         },
         'description': 'A Test job from the unit tests',
@@ -77,63 +77,51 @@ function createTestJson(name, scope) {
 }
 
 describe('CDS Execute Resource', function() {
-    var resources = cdsexecuteResource.getResourceConfig(appReference());
-    var interceptors = {
-        audit: true,
-        metrics: true,
-        authentication: true,
-        operationalDataCheck: false,
-        synchronize: false
-    };
+    describe('Test configuration', function() {
+        var resources = cdsexecuteResource.getResourceConfig(appReference());
+        var interceptors = {
+            audit: true,
+            metrics: true,
+            authentication: true,
+            operationalDataCheck: false,
+            synchronize: false
+        };
 
-    it('has 4 endpoints configured', function() {
-        expect(resources.length).to.equal(4);
-    });
+        it('has 4 endpoints configured', function() {
+            expect(resources.length).to.equal(4);
+        });
 
-    it('has correct configuration for CDS Execute get ', function() {
-        var r = resources[0];
-        expect(r.name).to.equal('cds-execute-cds-execute-get');
-        expect(r.path).to.equal('/request');
-        expect(r.get).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Execute post ', function() {
-        var r = resources[1];
-        expect(r.name).to.equal('cds-execute-cds-execute-post');
-        expect(r.path).to.equal('/request');
-        expect(r.post).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Execute put ', function() {
-        var r = resources[2];
-        expect(r.name).to.equal('cds-execute-cds-execute-put');
-        expect(r.path).to.equal('/request');
-        expect(r.put).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Execute delete', function() {
-        var r = resources[3];
-        expect(r.name).to.equal('cds-execute-cds-execute-delete');
-        expect(r.path).to.equal('/request');
-        expect(r.delete).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-
-    var res = mockReqResUtil.response;
-    beforeEach(function() {
-        sinon.spy(res, 'status');
-        //sinon.spy(res, 'rdkSend');
+        it('has correct configuration for CDS Execute get ', function() {
+            var r = resources[0];
+            expect(r.name).to.equal('cds-execute-cds-execute-get');
+            expect(r.path).to.equal('/request');
+            expect(r.get).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Execute post ', function() {
+            var r = resources[1];
+            expect(r.name).to.equal('cds-execute-cds-execute-post');
+            expect(r.path).to.equal('/request');
+            expect(r.post).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Execute put ', function() {
+            var r = resources[2];
+            expect(r.name).to.equal('cds-execute-cds-execute-put');
+            expect(r.path).to.equal('/request');
+            expect(r.put).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Execute delete', function() {
+            var r = resources[3];
+            expect(r.name).to.equal('cds-execute-cds-execute-delete');
+            expect(r.path).to.equal('/request');
+            expect(r.delete).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
     });
 
     describe('Execute endpoint HTTP response codes', function() {
-
-        beforeEach(function() {
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
-                callback(null, db);
-            });
-            execute.init(appReference());
-        });
-
         //Create the mocked MongoDB functions that are used by the code that we're testing...
         var db = cdsSpecUtil.createMockDb({
             find: function(callback) {
@@ -157,46 +145,58 @@ describe('CDS Execute Resource', function() {
             }
         });
 
+        function buildRes(expectedStatus) {
+            return {
+                status: function(statusCode) {
+                    expect(statusCode === expectedStatus).to.be.true();
+                    return this;
+                },
+                rdkSend: function() {
+                    return this;
+                },
+                send: function() {
+                    return this;
+                },
+                end: function() {
+                    return this;
+                }
+            };
+        }
+
+        beforeEach(function() {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
+                callback(null, db);
+            });
+        });
+
         it('GET responds HTTP Not Found', function() {
-            //GET w/name, and return a status 404 (not found)
-            execute.getExecute(mockReqResUtil.createRequestWithParam(null, null), res);
-            expect(res.status.calledWith(rdk.httpstatus.not_found)).to.be.true();
+            execute.getExecute(mockReqResUtil.createRequestWithParam(null, null), buildRes(rdk.httpstatus.not_found));
         });
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
 
         it('POST responds HTTP Created', function() {
-            //POST provide required name - this should create one, and return a status 201 (created)
             var testJson = createTestJson('execute1');
-            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.created)).to.be.true();
+            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.created));
         });
 
         it('POST responds HTTP Bad Request when payload has an _id attribute', function() {
-            //POST with _id set returns a 400 (bad request)
             var testJson = createTestJson('execute1');
             testJson._id = 'foo';
-            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            execute.postExecute(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
 
         it('PUT responds HTTP Bad Request when required parameter missing', function() {
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            execute.putExecute(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            execute.putExecute(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
 
         it('Delete responds HTTP Bad Request when required parameter missing', function() {
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            execute.deleteExecute(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            execute.deleteExecute(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
     });
 });

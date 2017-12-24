@@ -6,18 +6,9 @@ define([
     "use strict";
 
     var TileSortRowItemView = Backbone.Marionette.ItemView.extend({
-        behaviors: {
-            FloatingToolbar: {
-                DialogContainer: '.toolbar-container'
-            }
-        },
-        ui: {
-            popoverEl: '[data-toggle=popover]',
-            toolbarToggler: '.selectable:not([data-toggle=popover])'
-        },
         events: {
             'dragstart': function(event) {
-                var index = this.$el.parent().find('.row').index(this.el);
+                var index = this.$el.parent().find('.gist-item').index(this.el);
                 if (event.originalEvent && event.currentTarget === this.el) {
                     this.dragged = event.target;
                     event.originalEvent.dataTransfer.setData('text', index);
@@ -44,7 +35,7 @@ define([
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 var originalIndex = Number(this.manualOriginalIndex);
-                var targetIndex = this.$el.parent().find('.row').index(this.el);
+                var targetIndex = this.$el.parent().find('.gist-item').index(this.el);
                 var reorder = {
                     oldIndex: originalIndex,
                     newIndex: targetIndex
@@ -55,12 +46,6 @@ define([
                 // Handle when dropped outside of placeholder
                 event.preventDefault();
                 this.$el.parent().parent().find('.placeholder-tile-sort').addClass('hidden');
-            }
-        },
-        initialize: function() {
-            if (_.result(_.get(this, 'toolbarOptions'), 'buttonTypes') && !_.get(ADK.Messaging.request('get:current:screen'), 'config.predefined')) {
-                this.toolbarOptions.buttonTypes.unshift('tilesortbutton');
-                this.toolbarOptions.isStackedGraph = true;
             }
         },
         onRender: function() {
@@ -76,9 +61,6 @@ define([
         },
         performManualDragStart: function(originalIndex) {
             this.manualOriginalIndex = originalIndex;
-        },
-        onDestroy: function() {
-            this.ui.popoverEl.popup('destroy');
         }
     });
 

@@ -17,15 +17,15 @@ Scenario: Patient record sync process for FHIR api testing
     #Given a patient with pid "11016" has been synced through FHIR    
     #Given a patient with pid "11006" has been synced through FHIR
     #Given a patient with pid "10108" has been synced through FHIR
-    #Given a patient with pid "B362;100022" has been synced through FHIR
-    #Given a patient with pid "B362;167" has been synced through FHIR
-    #Given a patient with pid "B362;230" has been synced through FHIR    
+    #Given a patient with pid "SITE;100022" has been synced through FHIR
+    #Given a patient with pid "SITE;167" has been synced through FHIR
+    #Given a patient with pid "SITE;230" has been synced through FHIR    
 
 
 @perf.FHIRhttparty @perf.FHIRallergies
 Scenario: User, with 10 allergies record, requests direct REST call to FHIR api end-points
     Given a patient with "allergies" in multiple VistAs
-    When user requests allergies in FHIR format for a patient, "B362;100022" 
+    When user requests allergies in FHIR format for a patient, "SITE;100022" 
     Then a successful response is returned
     And the result is validated
 
@@ -46,7 +46,7 @@ Scenario: User, with 2 allergies record, requests direct REST call to FHIR api e
 @perf.FHIRhttparty @perf.FHIRvitals
 Scenario: User, with 16 vitals record, requests direct REST call to FHIR api end-points
     Given a patient with "vitals" in multiple VistAs
-    Then user requests vitals in FHIR format for a patient, "B362;100022" 
+    Then user requests vitals in FHIR format for a patient, "SITE;100022" 
     And a successful response is returned    
     And the result is validated
 
@@ -74,7 +74,7 @@ Scenario: User, with 102 vitals record, requests direct REST call to FHIR api en
 @perf.FHIRhttparty @perf.FHIRdemographics
 Scenario: User requests direct REST call to FHIR api end-points   #Bcma,Eight
     Given a patient with "demographics" in multiple VistAs
-    Then user requests demographics in FHIR format for a patient, "B362;100022" 
+    Then user requests demographics in FHIR format for a patient, "SITE;100022" 
     And a successful response is returned    
     And the result is validated
 
@@ -116,6 +116,6 @@ Scenario: User, with 90 laboratory record, requests direct REST call to FHIR api
 @perf.FHIRhttparty @perf.FHIRlabs
 Scenario: User, with 6 laboratory record, requests direct REST call to FHIR api end-points    #Bcma,Eight
     Given a patient with "labs" in multiple VistAs
-    Then user requests labs in FHIR format for a patient, "B362;100022" 
+    Then user requests labs in FHIR format for a patient, "SITE;100022" 
     And a successful response is returned    
     And the result is validated

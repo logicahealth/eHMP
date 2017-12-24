@@ -14,6 +14,11 @@ define([
     'use strict';
 
     var Input = BaseInputControl.extend({
+        behaviors: _.extend({
+            UpdateUiElements: {
+                behaviorClass: ControlService.Behaviors.UpdateUiElements
+            }
+        }, BaseInputControl.prototype.behaviors),
         templateHelpers: function() {
             var self = this;
             return {
@@ -107,41 +112,48 @@ define([
                 helpMessage
             ].join("\n"));
         },
-        events: _.defaults({
-            "input": "countChar",
-            "change select": function() {
-                this.onChange.apply(this, arguments);
-                this.onUserInput.apply(this, arguments);
-            },
-            //Events to be Triggered By User
-            "control:required": function(event, booleanValue) {
-                this.setBooleanFieldOption("required", booleanValue, event);
-            },
-            "control:disabled": function(event, booleanValue) {
-                this.setBooleanFieldOption("disabled", booleanValue, event);
-            },
-            "control:readonly": function(event, booleanValue) {
-                this.setBooleanFieldOption("readonly", booleanValue, event);
-            },
-            "control:charCount": function(event, booleanValue) {
-                this.setBooleanFieldOption("charCount", booleanValue, event);
-            },
-            "control:title": function(event, stringValue) {
-                this.setStringFieldOption("title", stringValue, event);
-            },
-            "control:placeholder": function(event, stringValue) {
-                this.setStringFieldOption("placeholder", stringValue, event);
-            },
-            "control:helpMessage": function(event, stringValue) {
-                this.setStringFieldOption("helpMessage", stringValue, event);
-            },
-            "control:units": function(event, stringValue) {
-                this.setStringFieldOption("units", stringValue, event);
-            },
-            "control:maxlength": function(event, intValue) {
-                this.setIntegerFieldOption("maxlength", intValue, event);
+        events: function() {
+            var mixins = {};
+            var changeEvent = this.field.get('changeEvent');
+            if (_.isString(changeEvent) && !_.isEmpty(changeEvent)) {
+                mixins[(changeEvent + ' input')] = '_onInputChange';
             }
-        }, BaseInputControl.prototype.events),
+            return _.defaults(mixins, {
+                "input": "countChar",
+                "change select": function() {
+                    this.onChange.apply(this, arguments);
+                    this.onUserInput.apply(this, arguments);
+                },
+                //Events to be Triggered By User
+                "control:required": function(event, booleanValue) {
+                    this.setBooleanFieldOption("required", booleanValue, event);
+                },
+                "control:disabled": function(event, booleanValue) {
+                    this.setBooleanFieldOption("disabled", booleanValue, event);
+                },
+                "control:readonly": function(event, booleanValue) {
+                    this.setBooleanFieldOption("readonly", booleanValue, event);
+                },
+                "control:charCount": function(event, booleanValue) {
+                    this.setBooleanFieldOption("charCount", booleanValue, event);
+                },
+                "control:title": function(event, stringValue) {
+                    this.setStringFieldOption("title", stringValue, event);
+                },
+                "control:placeholder": function(event, stringValue) {
+                    this.setStringFieldOption("placeholder", stringValue, event);
+                },
+                "control:helpMessage": function(event, stringValue) {
+                    this.setStringFieldOption("helpMessage", stringValue, event);
+                },
+                "control:units": function(event, stringValue) {
+                    this.setStringFieldOption("units", stringValue, event);
+                },
+                "control:maxlength": function(event, intValue) {
+                    this.setIntegerFieldOption("maxlength", intValue, event);
+                }
+            }, BaseInputControl.prototype.events);
+        },
         ui: {
             'InputCharCount': '.input-char-count',
             'InputCharCountPluralLetter': '.char-count-plural'

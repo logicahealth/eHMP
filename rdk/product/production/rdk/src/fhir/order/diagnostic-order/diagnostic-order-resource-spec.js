@@ -12,13 +12,13 @@ var singleRecord = input.data.items[0];
 
 var req = {
     query: {
-        pid: '9E7A;8'
+        pid: 'SITE;8'
     },
     headers: {
-        host: 'localhost:8888'
+        host: 'localhost:PORT'
     },
     protocol: 'http',
-    originalUrl: '/fhir/patient/9E7A;8/diagnosticorder'
+    originalUrl: '/fhir/patient/SITE;8/diagnosticorder'
 };
 
 function findExtension(name, extensions) {
@@ -87,7 +87,7 @@ describe('DiagnosticOrder FHIR conversion methods', function() {
         expect(fhirBundle.id).to.not.be.undefined();
         expect(fhirBundle.link.length).to.equal(1);
         expect(fhirBundle.link[0].relation).to.equal('self');
-        expect(fhirBundle.link[0].url).to.equal('http://localhost:8888/fhir/patient/9E7A;8/diagnosticorder');
+        expect(fhirBundle.link[0].url).to.equal('http://localhost:PORT/fhir/patient/SITE;8/diagnosticorder');
         expect(fhirBundle.total).to.equal(695);
         expect(fhirBundle.entry).to.not.be.undefined();
         // There are three orders but one has four children. The children are mapped to individual resources and added

@@ -1,8 +1,13 @@
 'use strict';
 
 require('../../../../../env-setup');
-//var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_3_0_2/jmeadows-encounter-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '00001';
 
@@ -74,7 +79,7 @@ var sampleVprEncounter = {
     pid: 'DOD;00001'
 };
 
-var result = xformer(sampleDodEncounter, mockEdipi);
+var result = xformer(log, sampleDodEncounter, mockEdipi);
 
 //console.log(result);
 

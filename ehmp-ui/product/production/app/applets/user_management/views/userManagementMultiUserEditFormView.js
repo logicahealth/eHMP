@@ -8,42 +8,54 @@ define([
     'app/applets/user_management/views/userManagementMultiUserEditForms'
 ], function(Backbone, Marionette, $, Handlebars, appletUtil, eventHandler, userManagementMultiUserEditForms) {
     "use strict";
+    var UMA_CHANNEL = ADK.Messaging.getChannel('user-management-applet');
+    var WITHOUT_ME_MESSSAGE = ' with myself removed from the list of available users to select';
+    var EDIT_OWN_PERMISSIONS = 'edit-own-permissions';
+    var ACCESS_CONTROL_COORDINATOR = 'acc';
     var formView = ADK.UI.Form.extend({
+        searchedUsersCollectionEvents: {
+            'bulk-edit-reset': function(models) {
+                this.enableSearchForm();
+                this.setPaging();
+                var cleanedModels = this.cleanSearchResults(new Backbone.Collection(models));
 
+                // A unique copy of the parent collection
+                var collectionCopy = appletUtil.removeDuplicatesFromCollection(this.currentSelectedUsers, new Backbone.Collection(cleanedModels), 'duz');
+
+                this.model.get('usersListResults').reset(collectionCopy.models.concat(this.currentSelectedUsers));
+                this.model.get('usersListResults').trigger('update');
+                this.hideLoadingView();
+                if (cleanedModels.length !== models.length) {
+                    this.setPaging(WITHOUT_ME_MESSSAGE);
+                } else {
+                    this.setPaging();
+                }
+            },
+            'showAlert': function(model) {
+                this.showAlert(model.get('icon'), model.get('type'), model.get('title'), model.get('message'));
+            },
+            'hide-loading-view': 'hideLoadingView',
+            'bulk-edit-error': 'onError',
+            'enable-form': 'enableForm'
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.searchedUsersCollection, this.searchedUsersCollectionEvents);
+            if (_.isFunction(ADK.UI.Form.prototype.onDestroy)) {
+                ADK.UI.Form.prototype.onDestroy.apply(this, arguments);
+            }
+        },
         onInitialize: function() {
             this.workflowParent = this.options.workflow.parentViewInstance;
             this.model.set('alertMessage', '');
+            this.sharedModel = ADK.UIResources.Fetch.Permission.SharedModel(this);
+            this.basePermissionSetsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionSetsCollection(this.sharedModel.get('permissionSets').originalModels, {
+                parse: true
+            });
+            this.basePermissionsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionsCollection(this.sharedModel.get('permissions').originalModels, {
+                parse: true
+            });
             this.searchedUsersCollection = new Backbone.Collection(this.model.get('usersListResults').models);
-            var self = this;
-            this.listenTo(this.searchedUsersCollection, 'bulk-edit-reset',
-                function(models) {
-                    self.enableSearchForm();
-                    self.setPaging();
-                    var cleanedModels = self.cleanSearchResults(new Backbone.Collection(models));
-
-                    var resetParrentCollectionWithoutDuplicates = appletUtil.removeDuplicatesFromCollection(self.currentSelectedUsers, new Backbone.Collection(cleanedModels), 'duz');
-                    var resetParrentCollectionWithoutDuplicatesModels = resetParrentCollectionWithoutDuplicates.models;
-                    self.model.get('usersListResults').reset(resetParrentCollectionWithoutDuplicatesModels.concat(self.currentSelectedUsers));
-                    self.model.get('usersListResults').trigger('update');
-                    self.hideLoadingView();
-                    if (cleanedModels.length !== models.length) {
-                        self.setPaging(' with myself removed from the list of available users to select');
-                    } else {
-                        self.setPaging();
-                    }
-                });
-            this.listenTo(this.searchedUsersCollection, 'showAlert', function(model) {
-                self.showAlert(model.get('icon'), model.get('type'), model.get('title'), model.get('message'));
-            });
-            this.listenTo(this.searchedUsersCollection, 'hide-loading-view', function() {
-                self.hideLoadingView();
-            });
-            this.listenTo(this.searchedUsersCollection, 'On Error', function(response) {
-                self.onError(response);
-            });
-            this.listenTo(this.searchedUsersCollection, 'enable-form', function() {
-                self.enableForm();
-            });
+            this.bindEntityEvents(this.searchedUsersCollection, this.searchedUsersCollectionEvents);
         },
         cleanSearchResults: function(collection) {
             var session = ADK.UserService.getUserSession();
@@ -56,17 +68,27 @@ define([
                 appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Removed User Warning', 'You are not allowed to edit your own permissions. User removed from selection list.', true);
                 return filteredModels;
             }
-            _.each(collection.models, function(model) {
-                appletUtil.appendBulkEditDataToUserModel(model);
-            });
+            collection.each(function(model) {
+                var formattedPermissionSets = this.basePermissionSetsCollection.getLabels(_.get(model.get('permissionSet'), 'val', []));
+                var formattedPermissionSetsString = formattedPermissionSets.join(', ');
+                model.set({
+                    formattedPermissionSets: formattedPermissionSets,
+                    formattedPermissionSetsString: formattedPermissionSetsString
+                });
+            }, this);
             return collection.models;
         },
         setPaging: function(messageToAppend) {
-            if (this.searchedUsersCollection.models.length > 0) {
+            var searchedUsersCount = this.searchedUsersCollection.length;
+            if (searchedUsersCount > 0) {
                 var paging_data = this.searchedUsersCollection.where({
                     has_paging_data: true
                 })[0].get('paging_data');
+                var usersListResultCount = _.size(this.model.get('usersListResults').models) || 0;
                 var message = paging_data.message;
+                if (usersListResultCount > 0 && usersListResultCount !== searchedUsersCount) {
+                    message = message.replace(new RegExp(searchedUsersCount, 'g'), usersListResultCount); // DE5853 
+                }
                 if (messageToAppend) {
                     message = message + messageToAppend;
                 }
@@ -105,11 +127,10 @@ define([
                 label: "Clear All",
                 id: 'clear-permissions-button',
                 extraClasses: ['btn-default', 'btn-sm', "remove-from-clone", "disable-on-warning"],
-                title: 'Press enter to clear all filters.',
                 disabled: true
             };
             this.ui.editUsersAdditionalPermissionsContainer.trigger('control:items:update',
-                userManagementMultiUserEditForms.getPermissionsSelect(appletUtil.getPermissions()));
+                userManagementMultiUserEditForms.getPermissionsSelect(this.basePermissionsCollection.toPicklist()));
             this.ui.editUsersAdditionalPermissionsContainer.trigger('control:items:add', clearPermissionButton);
         },
         onRender: function() {
@@ -136,7 +157,7 @@ define([
             }
         },
         onError: function(response) {
-            var errorMessage = JSON.parse(response.responseText).message;
+            var errorMessage = _.get(response, 'responseText.message', 'Unknown Error handled');
             appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Error Retrieving Users', errorMessage, true);
             this.hideLoadingView();
 
@@ -228,10 +249,10 @@ define([
         updateEditUsersSelectedUsersTextArea: function() {
             this.resetAdditionalPermissionsSelect();
             this.ui.permissionSetsPicklist.trigger('control:picklist:set', [
-                appletUtil.getUnduplicatedPermissionSets()
+                this.basePermissionSetsCollection.toPicklist()
             ]);
             this.ui.permissionSetsForSearchPicklist.trigger('control:items:update',
-                userManagementMultiUserEditForms.getPermissionSetsSearchSelect(appletUtil.getUnduplicatedPermissionSets()));
+                userManagementMultiUserEditForms.getPermissionSetsSearchSelect(this.basePermissionSetsCollection.toPicklist()));
             this.ui.removeFromClone = this.$el.find(".remove-from-clone");
             var selectedUsers = this.getSelectedUsers();
             this.ui.editUsersAdditionalPermissions = this.$el.find('.editUsersAdditionalPermissions');
@@ -325,7 +346,6 @@ define([
             'click #cancel-button': function(e) {
                 e.preventDefault();
                 ADK.UI.Workflow.hide();
-                appletUtil.focusPreviousTarget();
             },
             'click #edit-users-button': function(e) {
                 e.preventDefault();
@@ -386,41 +406,33 @@ define([
             'click #remove-permissions-button': function(e) {
                 e.preventDefault();
                 this.clearAlert();
-                var self = this;
                 var usersWithRetainedPermissions = [];
-                var permissionsForSelectedUser = this.getAllFormattedPermissions(this.model.get('editUsersPermissionSets'),
-                    this.model.get('editUsersAdditionalPermissions'), true);
-                var formattedSelectedPermissionsSets = appletUtil.formatPermissionSetList(this.model.get('editUsersPermissionSets'));
-                var formattedSelectedAdditionalPermissions = appletUtil.formatPermissionList(this.model.get('editUsersAdditionalPermissions'));
-
+                var selectedPermissionSets = this.model.get('editUsersPermissionSets');
+                var selectedAdditionalPermissions = this.model.get('editUsersAdditionalPermissions');
                 _.each(this.getSelectedUsers(), function(nextUser) {
-                    var newPermissionSets = nextUser.get('formattedPermissionSets');
-                    _.each(formattedSelectedPermissionsSets, function(formattedSelectedPermissionsSet) {
-                        newPermissionSets = _.without(newPermissionSets, formattedSelectedPermissionsSet);
+                    var previousPermissionSets = _.get(nextUser.get('permissionSet'), 'val', []);
+                    var previousAdditionalPermissions = _.get(nextUser.get('permissionSet'), 'additionalPermissions', []);
+
+                    var newPermissionSets = _.clone(previousPermissionSets);
+                    _.remove(newPermissionSets, function(permSet) {
+                        return permSet !== ACCESS_CONTROL_COORDINATOR && _.indexOf(selectedPermissionSets, permSet) >= 0;
+                    });
+                    var newAdditionalPermissions = _.clone(previousAdditionalPermissions);
+                    _.remove(newAdditionalPermissions, function(permission) {
+                        return permission !== EDIT_OWN_PERMISSIONS && _.indexOf(selectedAdditionalPermissions, permission) >= 0;
                     });
 
-                    var newAdditionalPermissions = nextUser.get('additionalPermissionsLabels');
-                    _.each(formattedSelectedAdditionalPermissions, function(formattedSelectedAdditionalPermission) {
-                        newAdditionalPermissions = _.without(newAdditionalPermissions, formattedSelectedAdditionalPermission);
-                    });
-                    var oldPermissions = self.getAllFormattedPermissions(nextUser.get('formattedPermissionSets'),
-                        nextUser.get('additionalPermissionsLabels'));
-                    var permissionsForNextUser = self.getAllFormattedPermissions(newPermissionSets, newAdditionalPermissions);
-                    if (_.indexOf(nextUser.get('formattedPermissionSets'), 'Access Control Coordinator') !== -1) {
-                        permissionsForNextUser = permissionsForNextUser.concat(appletUtil.formattedPermissionsMap['Access Control Coordinator']);
-                    }
-                    if (_.indexOf(nextUser.get('additionalPermissionsLabels'), 'Edit Own Permissions') !== -1) {
-                        permissionsForNextUser.push('Edit Own Permissions');
-                    }
-                    oldPermissions = _.uniq(oldPermissions);
-                    permissionsForNextUser = _.uniq(permissionsForNextUser);
-                    var retainedPermissions = _.intersection(permissionsForNextUser, oldPermissions);
-                    nextUser.set('retainedPermissions', retainedPermissions);
+                    var newAllPermissions = this.getAllPermissions(newPermissionSets, newAdditionalPermissions);
+                    var previousAllPermissions = this.getAllPermissions(previousPermissionSets, previousAdditionalPermissions);
+
+                    var retainedPermissions = _.intersection(newAllPermissions, previousAllPermissions);
+                    var retainedPermissionsLabels = this.getAllPermissionsLabels(retainedPermissions);
+                    nextUser.set('retainedPermissions', retainedPermissionsLabels);
                     nextUser.set('retainedPermissionsCountText', '(' + retainedPermissions.length + ')');
                     if (retainedPermissions.length > 0) {
                         usersWithRetainedPermissions.push(nextUser);
                     }
-                });
+                }.bind(this));
                 var usersString = '';
                 _.each(usersWithRetainedPermissions, function(user) {
                     usersString = usersString + user.get('formattedName') + ', ';
@@ -532,25 +544,11 @@ define([
             }
             this.saveSelectforms();
         },
-        getAllFormattedPermissions: function(formattedPermissionSets, formattedAdditionalPermissions, valueMap) {
-            var formattedPermissionsMap = appletUtil.formattedPermissionsMap;
-            var formattedAdditionalPermissionsToAppend = formattedAdditionalPermissions;
-            if (valueMap === true) {
-                formattedAdditionalPermissionsToAppend = appletUtil.formatPermissionList(formattedAdditionalPermissions);
-                formattedPermissionsMap = appletUtil.permissionsMap;
-            }
-            var formattedPermissionsSetsLabelMap = appletUtil.formattedPermissionsSetsLabelMap;
-            var formattedPermissions = [];
-            _.each(formattedPermissionSets, function(permissionSet) {
-                if (valueMap === true) {
-                    formattedPermissions = formattedPermissions.concat(appletUtil.formatPermissionList(formattedPermissionsMap[permissionSet]));
-                } else {
-                    formattedPermissions = formattedPermissions.concat(formattedPermissionsMap[permissionSet]);
-
-                }
-            });
-            formattedPermissions = formattedPermissions.concat(formattedAdditionalPermissionsToAppend);
-            return _.uniq(formattedPermissions);
+        getAllPermissions: function(permissionSets, additionalPermissions) {
+            return _.uniq(additionalPermissions.concat(this.basePermissionSetsCollection.getPermissions(permissionSets)));
+        },
+        getAllPermissionsLabels: function(allPermissions) {
+            return this.basePermissionsCollection.getLabels(allPermissions);
         },
         updateResultCount: function() {
             var newCount = this.model.get('resultCount');
@@ -558,7 +556,6 @@ define([
             var resultCountLabelBulkEdit = this.$el.find('#resultCountLabelBulkEdit');
             resultCountLabelBulkEdit.text(newCount);
             resultCountLabelBulkEdit.attr('title', 'Table is now ' + newCount + '');
-            //appletUtil.setStorageModel('bulkEditFormModel', this.model.attributes);
         },
         onSelectUserTemplate: function() {
             var selectedUser;
@@ -578,27 +575,39 @@ define([
                 nextUsersForTable = _.without(this.getSelectedUsers(), selectedUser);
                 this.usersToClone = this.getCondensedUsers(nextUsersForTable);
                 this.cloneTemplateUser = selectedUser;
-                var permissionsForSelectedUser = this.getAllFormattedPermissions(selectedUser.get('formattedPermissionSets'),
-                    selectedUser.get('additionalPermissionsLabels'));
+
+                var selectedUserPermissionSets = _.get(selectedUser.get('permissionSet'), 'val', []);
+                var selectedUserAdditionalPermissions = _.get(selectedUser.get('permissionSet'), 'additionalPermissions', []);
+                var permissionsForSelectedUser = this.getAllPermissions(selectedUserPermissionSets, selectedUserAdditionalPermissions);
+
                 var usersWithLostPermissions = [];
                 _.each(nextUsersForTable, function(nextUser) {
-                    var newPermissions = permissionsForSelectedUser;
-                    var permissionsForNextUser = self.getAllFormattedPermissions(nextUser.get('formattedPermissionSets'),
-                        nextUser.get('additionalPermissionsLabels'));
-                    if (_.indexOf(nextUser.get('formattedPermissionSets'), 'Access Control Coordinator') !== -1) {
-                        newPermissions = newPermissions.concat(appletUtil.formattedPermissionsMap['Access Control Coordinator']);
+                    var previousPermissionSets = _.get(nextUser.get('permissionSet'), 'val', []);
+                    var previousAdditionalPermissions = _.get(nextUser.get('permissionSet'), 'additionalPermissions', []);
+
+                    var newPermissionSets = _.clone(selectedUserPermissionSets);
+                    if (_.indexOf(previousPermissionSets, ACCESS_CONTROL_COORDINATOR) < 0) {
+                        newPermissionSets.push(ACCESS_CONTROL_COORDINATOR);
                     }
-                    if (_.indexOf(nextUser.get('additionalPermissionsLabels'), 'Edit Own Permissions') !== -1) {
-                        newPermissions.push('Edit Own Permissions');
+                    var newAdditionalPermissions = _.clone(selectedUserAdditionalPermissions);
+                    if (_.indexOf(previousAdditionalPermissions, EDIT_OWN_PERMISSIONS) < 0) {
+                        newAdditionalPermissions.push(EDIT_OWN_PERMISSIONS);
                     }
-                    newPermissions = _.uniq(newPermissions);
-                    var lostPermissions = _.difference(permissionsForNextUser, newPermissions);
-                    nextUser.set('lostPermissions', lostPermissions);
+
+                    var newAllPermissions = this.getAllPermissions(newPermissionSets, newAdditionalPermissions);
+                    var previousAllPermissions = this.getAllPermissions(previousPermissionSets, previousAdditionalPermissions);
+
+                    var lostPermissions = _.difference(previousAllPermissions, newAllPermissions);
+                    var lostPermissionsLabels = this.getAllPermissionsLabels(lostPermissions);
+                    nextUser.set('lostPermissions', lostPermissionsLabels);
                     nextUser.set('lostPermissionsCountText', '(' + lostPermissions.length + ')');
                     if (lostPermissions.length > 0) {
                         usersWithLostPermissions.push(nextUser);
                     }
-                });
+                }.bind(this));
+
+
+
                 var usersString = '';
                 _.each(usersWithLostPermissions, function(user) {
                     usersString = usersString + user.get('formattedName') + ', ';
@@ -615,12 +624,16 @@ define([
             }
             this.ui['clone-permissions-button'] = this.$el.find('#clone-permissions-button');
         },
-        updateSelectedUsersTable: function(users, permissionSets, additionalPermissions) {
+        updateSelectedUsersTable: function(users, permissionSet, additionalPermissions) {
             this.ui.selectableUsersTableContainer.trigger('control:items:update',
                 userManagementMultiUserEditForms.getSelectableTable(new Backbone.Collection(users), this.model.get('editMode')));
         },
         showAlert: function(icon, type, title, message) {
-            this.ui.alertBannerControl.trigger('control:icon', icon).trigger('control:type', type).trigger('control:title', title);
+            this.ui.alertBannerControl.trigger('control:update:config', {
+                icon: icon,
+                type: type,
+                title: title
+            });
             this.model.set('alertMessage', message);
             this.ui.alertBannerControl.find('button.close').focus();
         },
@@ -678,8 +691,8 @@ define([
             var selectedPermissionsValues = this['editUsersAdditionalPermissions-' + this.model.get('editMode')];
             if (this.model.get('editMode') === 'clone-permissions' && this.cloneTemplateUser) {
                 usersToEdit = this.usersToClone;
-                selectedPermissionSetsValues = this.cloneTemplateUser.get('permissionSets').val;
-                selectedPermissionsValues = this.cloneTemplateUser.get('permissionSets').additionalPermissions;
+                selectedPermissionSetsValues = this.cloneTemplateUser.get('permissionSet').val;
+                selectedPermissionsValues = this.cloneTemplateUser.get('permissionSet').additionalPermissions;
             }
             if (_.isUndefined(selectedPermissionSetsValues)) {
                 selectedPermissionSetsValues = [];
@@ -706,7 +719,7 @@ define([
                         editedUserNames = editedUserNames + user.fname + ' ' + user.lname + ', ';
                     });
                     editedUserNames = editedUserNames.substring(0, editedUserNames.lastIndexOf(', ')) + '';
-                    ADK.Messaging.trigger('users-applet:bulk-edit-successful', editedUserNames);
+                    UMA_CHANNEL.trigger('users-applet:bulk-edit-successful', editedUserNames);
                     ADK.UI.Workflow.hide();
                 },
                 onError: function(error, response) {

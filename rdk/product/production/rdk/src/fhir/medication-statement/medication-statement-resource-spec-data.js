@@ -45,17 +45,17 @@ var jdsInput = {
                 'orders': [
                     {
                         'locationName': 'GENERAL MEDICINE',
-                        'locationUid': 'urn:va:location:9E7A:23',
-                        'orderUid': 'urn:va:order:9E7A:253:18072',
+                        'locationUid': 'urn:va:location:SITE:23',
+                        'orderUid': 'urn:va:order:SITE:253:18072',
                         'ordered': '200704111629',
                         'providerName': 'VEHU,ONEHUNDRED',
-                        'providerUid': 'urn:va:user:9E7A:10000000031',
+                        'providerUid': 'urn:va:user:SITE:10000000031',
                         'summary': 'MedicationOrder{uid=\'\'}'
                     }
                 ],
                 'overallStart': '200704111629',
                 'overallStop': '200704111629',
-                'pid': '9E7A;253',
+                'pid': 'SITE;253',
                 'productFormName': 'TAB,EC',
                 'products': [
                     {
@@ -87,7 +87,7 @@ var jdsInput = {
                 'summary': 'ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING',
                 'supply': false,
                 'type': 'OTC',
-                'uid': 'urn:va:med:9E7A:253:18072',
+                'uid': 'urn:va:med:SITE:253:18072',
                 'units': 'MG',
                 'vaStatus': 'ACTIVE',
                 'vaType': 'N'
@@ -131,17 +131,17 @@ var jdsInput = {
                 'orders': [
                     {
                         'locationName': 'GENERAL MEDICINE',
-                        'locationUid': 'urn:va:location:C877:23',
-                        'orderUid': 'urn:va:order:C877:253:18072',
+                        'locationUid': 'urn:va:location:SITE:23',
+                        'orderUid': 'urn:va:order:SITE:253:18072',
                         'ordered': '200704111629',
                         'providerName': 'VEHU,ONEHUNDRED',
-                        'providerUid': 'urn:va:user:C877:10000000031',
+                        'providerUid': 'urn:va:user:SITE:10000000031',
                         'summary': 'MedicationOrder{uid=\'\'}'
                     }
                 ],
                 'overallStart': '200704111629',
                 'overallStop': '200704111629',
-                'pid': 'C877;253',
+                'pid': 'SITE;253',
                 'productFormName': 'TAB,EC',
                 'products': [
                     {
@@ -173,7 +173,7 @@ var jdsInput = {
                 'summary': 'ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING',
                 'supply': false,
                 'type': 'OTC',
-                'uid': 'urn:va:med:C877:253:18072',
+                'uid': 'urn:va:med:SITE:253:18072',
                 'units': 'MG',
                 'vaStatus': 'ACTIVE',
                 'vaType': 'N'
@@ -228,17 +228,17 @@ var singleRecord = {
                 'orders': [
                     {
                         'locationName': 'GENERAL MEDICINE',
-                        'locationUid': 'urn:va:location:9E7A:23',
-                        'orderUid': 'urn:va:order:9E7A:253:18072',
+                        'locationUid': 'urn:va:location:SITE:23',
+                        'orderUid': 'urn:va:order:SITE:253:18072',
                         'ordered': '200704111629',
                         'providerName': 'VEHU,ONEHUNDRED',
-                        'providerUid': 'urn:va:user:9E7A:10000000031',
+                        'providerUid': 'urn:va:user:SITE:10000000031',
                         'summary': 'MedicationOrder{uid=\'\'}'
                     }
                 ],
                 'overallStart': '200704111629',
                 'overallStop': '200704111629',
-                'pid': '9E7A;253',
+                'pid': 'SITE;253',
                 'productFormName': 'TAB,EC',
                 'products': [
                     {
@@ -270,7 +270,7 @@ var singleRecord = {
                 'summary': 'ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING',
                 'supply': false,
                 'type': 'OTC',
-                'uid': 'urn:va:med:9E7A:253:18072',
+                'uid': 'urn:va:med:SITE:253:18072',
                 'units': 'MG',
                 'vaStatus': 'ACTIVE',
                 'vaType': 'N'

@@ -73,7 +73,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
         elsif e == 'skin'
           pid = '5000000341V359724'
         elsif e == 'ptf'
-          pid = '9E7A;71'
+          pid = 'SITE;71'
         else
           pid = '10107V395912'
         end
@@ -137,7 +137,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'upper case' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'URN:VA:LAB:C877:227:CH;7049580.915555;5')
+                           'uid' => 'URN:VA:LAB:SITE:227:CH;7049580.915555;5')
       # dump(response.body)
       verify_response_contains([%w(totalItems 0)],
                                response.body)
@@ -146,7 +146,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'nominal' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:lab:C877:227:CH;7049580.915555;5')
+                           'uid' => 'urn:va:lab:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -157,7 +157,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'incomplete' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:lab:C877:227:CH;7049580.915555')
+                           'uid' => 'urn:va:lab:SITE:227:CH;7049580.915555')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -168,7 +168,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'truncated' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:lab:C877:227:CH;7049580')
+                           'uid' => 'urn:va:lab:SITE:227:CH;7049580')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -179,7 +179,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'non-existing domain' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:lab:C877:227:CH')
+                           'uid' => 'urn:va:lab:SITE:227:CH')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -190,7 +190,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'upper case urn' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'URN:va:lab:C877:227:CH;7049580.915555;5')
+                           'uid' => 'URN:va:lab:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -201,7 +201,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'upper case va' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:VA:lab:C877:227:CH;7049580.915555;5')
+                           'uid' => 'urn:VA:lab:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -212,7 +212,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'upper case domain' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:LAB:C877:227:CH;7049580.915555;5')
+                           'uid' => 'urn:va:LAB:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -223,7 +223,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'missing urn' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => ':va:lab:C877:227:CH;7049580.915555;5')
+                           'uid' => ':va:lab:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -234,7 +234,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'missing va' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn::lab:C877:227:CH;7049580.915555;5')
+                           'uid' => 'urn::lab:SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -245,7 +245,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     it 'missing domain' do
       response = rdk_fetch(@command_lab,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va::C877:227:CH;7049580.915555;5')
+                           'uid' => 'urn:va::SITE:227:CH;7049580.915555;5')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -847,7 +847,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     end
 
     it '. site/dfn' do
-      response = rdk_fetch(@command_order, 'pid' => '9E7A;227')
+      response = rdk_fetch(@command_order, 'pid' => 'SITE;227')
 
       expect(response.code).to eq(200)
 
@@ -864,7 +864,7 @@ describe 'f137_patient_record_domain_spec.rb', debug: true do
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command_order, 'pid' => '9E7A;848484')
+      response = rdk_fetch(@command_order, 'pid' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 

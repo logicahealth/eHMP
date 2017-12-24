@@ -17,6 +17,7 @@ var JDS_HTTP_FETCH_TIMEOUT_MILLS = 5000;
  * @return {Object|undefined}
  */
 var jdsUserData = function(req, res, userInfoCB, params) {
+    var errObj;
     var logger = req.logger;
     var site = params.site;
     var data = params.data;
@@ -46,8 +47,9 @@ var jdsUserData = function(req, res, userInfoCB, params) {
     };
 
     if (_s.isBlank(duz) || _s.isBlank(site)) {
-        var errObj = new RdkError({
-            code: 'jds.412.1001'
+        errObj = new RdkError({
+            code: 'jds.412.1001',
+            logger: logger
         });
         return callback(errObj, null);
     }
@@ -63,8 +65,9 @@ var jdsUserData = function(req, res, userInfoCB, params) {
     }, function(err, response, body) {
         if (err) {
             var errorObj = new RdkError({
-                'error': err,
-                'code': 'jds.401.1001'
+                error: err,
+                code: 'jds.401.1001',
+                logger: logger
             });
             return callback(errorObj, null);
         }

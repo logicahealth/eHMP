@@ -1,10 +1,13 @@
 'use strict';
 
 require('../../../../../env-setup');
-//var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-progressNote-xformer');
-
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '00001';
 
@@ -39,7 +42,7 @@ var sampleDodNote = {
     },
     'sourceProtocol': 'DODADAPTER',
     'amended': null,
-    'complexDataUrl': 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157585042',
+    'complexDataUrl': 'http://127.0.0.1:8080/MockDoDAdaptor/async/complex/note/2157585042',
     'images': null,
     'location': 'NH Great Lakes IL/0056',
     'noteDate': 1320950895000,
@@ -80,10 +83,10 @@ var sampleVprNote = {
     uid: 'urn:va:document:DOD:00001:1000000648',
     pid: 'DOD;00001',
     text: [],
-    dodComplexNoteUri: 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157585042'
+    dodComplexNoteUri: 'http://127.0.0.1:8080/MockDoDAdaptor/async/complex/note/2157585042'
 };
 
-var result = xformer(sampleDodNote, mockEdipi);
+var result = xformer(log, sampleDodNote, mockEdipi);
 //console.log(result);
 
 describe('dodNoteToVpr', function() {

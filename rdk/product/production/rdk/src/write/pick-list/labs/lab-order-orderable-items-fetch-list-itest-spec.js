@@ -17,8 +17,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };

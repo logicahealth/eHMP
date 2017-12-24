@@ -1,0 +1,22 @@
+@mixin tooltipColorTheme($color-primary-dark) {
+    .tooltip {
+        &.top .tooltip-arrow {
+            border-top-color: $color-primary-dark;
+        }
+        &.bottom .tooltip-arrow {
+            border-bottom-color: $color-primary-dark;
+        }
+        &.right .tooltip-arrow {
+            border-right-color: $color-primary-dark;
+        }
+        &.left .tooltip-arrow {
+            border-left-color: $color-primary-dark;
+        }
+        .tooltip-inner {
+            background-color: $color-primary-dark;
+            color: $pure-white;
+            opacity: 1;
+            max-width: 250px;
+        }
+    }
+}

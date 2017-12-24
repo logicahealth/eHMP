@@ -6,8 +6,8 @@ Feature: F323 Operational sync status can be retrieved for verification
       
 @operational_data
 Scenario: Client can request operational sync status from multiple sites and domains
-  When the client requests operational sync status for "9E7A" site
-  Then the operational data results contain different domains from "9E7A"
+  When the client requests operational sync status for "SITE" site
+  Then the operational data results contain different domains from "SITE"
       | field     			|
       | asu-class			| 
       | asu-rule			|
@@ -28,8 +28,8 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | vitalqualifier-list	|
       | vitaltypes-list		|
       
-  When the client requests operational sync status for "C877" site
-  Then the operational data results contain different domains from "C877"
+  When the client requests operational sync status for "SITE" site
+  Then the operational data results contain different domains from "SITE"
       | field     			|
       | asu-class			| 
       | asu-rule			|

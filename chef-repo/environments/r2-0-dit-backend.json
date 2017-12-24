@@ -1,0 +1,20 @@
+{
+  "name": "r2-0-dit-backend",
+  "description": "Uses the 2.0 DIT for backend",
+  "override_attributes": {
+    "override_stacks": {
+      "jds": "ehmp-ui-deploy-demo-build-r2.0",
+      "pjds": "ehmp-ui-deploy-demo-build-r2.0",
+      "solr": "ehmp-ui-deploy-demo-build-r2.0",
+      "asu": "ehmp-ui-deploy-demo-build-r2.0",
+      "vxsync_vista": "ehmp-ui-deploy-demo-build-r2.0",      
+      "vxsync_client": "ehmp-ui-deploy-demo-build-r2.0",
+      "vista": "ehmp-ui-deploy-demo-build-r2.0",
+      "mocks": "ehmp-ui-deploy-demo-build-r2.0",
+      "zookeeper": "ehmp-ui-deploy-demo-build-r2.0",
+      "mvi": "ehmp-ui-deploy-demo-build-r2.0",
+      "vhic": "ehmp-ui-deploy-demo-build-r2.0",
+      "vista-.*": "ehmp-ui-deploy-demo-build-r2.0"
+    }
+  }
+}

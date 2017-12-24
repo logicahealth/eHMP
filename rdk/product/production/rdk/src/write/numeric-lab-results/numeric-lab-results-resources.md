@@ -13,18 +13,18 @@ First, find Clinical Object in pJDS.  If not found, create new Clinical Object. 
     + Body
 
             {
-                "referenceId": "urn:va:lab:9E7A:8:CH;6859185.83987;381",
-                "patientUid": "urn:va:patient:9E7A:100615:100615",
-                "authorUid": "urn:va:user:9E7A:10000000238",
+                "referenceId": "urn:va:lab:SITE:8:CH;6859185.83987;381",
+                "patientUid": "urn:va:patient:SITE:100615:100615",
+                "authorUid": "urn:va:user:SITE:10000000238",
                 "visit": {
-            	    "location": "urn:va:location:9E7A:285",
+            	    "location": "urn:va:location:SITE:285",
                     "serviceCategory": "PSB",
                     "dateTime": "20160102123040"
                 },
                 "data": {
                     "madlib": null,
             	    "annotation": "bar",
-            	    "problemRelationship": "urn:va:problem:9E7A:100615:183"
+            	    "problemRelationship": "urn:va:problem:SITE:100615:183"
                 }
             }
     
@@ -36,7 +36,7 @@ First, find Clinical Object in pJDS.  If not found, create new Clinical Object. 
             {
               "data": {
                 "status": 200,
-                "data": "http://IP             /clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef"
+                "data": "http://IP             /clinicobj/urn:va:ehmp-note:SITE:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef"
               },
               "status": 200
             }

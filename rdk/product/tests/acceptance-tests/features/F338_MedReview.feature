@@ -3,8 +3,8 @@ Feature: F338 - Meds Review Sparkline 2 -  Med Review applet display
 
 @f338_MedReviewApplet_Inpatient
 Scenario: Verify Med Review Inpatient Meds
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests medications for the patient "9E7A;100022" with parameters
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests medications for the patient "SITE;100022" with parameters
 	| parameter | value |
 	|filter		|nin(vaStatus,["CANCELLED", "UNRELEASED"])|
 Then a successful response is returned
@@ -27,8 +27,8 @@ And the VPR results contain
 @f338_MedReviewApplet_outpatient
 Scenario: Verify Med Review Outpatient Meds
 # 10114V651499 = fourteen, patient
-Given a patient with pid "9E7A;271" has been synced through the RDK API
-When the client requests medications for the patient "9E7A;271" with parameters
+Given a patient with pid "SITE;271" has been synced through the RDK API
+When the client requests medications for the patient "SITE;271" with parameters
 	| parameter | value |
 	|filter|nin(vaStatus,["CANCELLED", "UNRELEASED"])|
 Then a successful response is returned
@@ -69,4 +69,4 @@ Then a successful response is returned
       | kind                        | Medication, Non-VA |
       | products.strength           | 81 MG              |
       | vaStatus                    | ACTIVE             |
-      | calculatedStatus            | Expired            |
+      | calculatedStatus            | Active             |

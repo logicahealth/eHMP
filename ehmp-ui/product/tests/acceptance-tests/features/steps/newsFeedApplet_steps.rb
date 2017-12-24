@@ -35,51 +35,41 @@ class NewsFeedApplet < ADKContainer
     add_verify(CucumberLabel.new("Drop Down Menu"), VerifyText.new, AccessHtmlElement.new(:class, "dropdown-menu"))
     add_action(CucumberLabel.new("Timeline"), ClickAction.new, AccessHtmlElement.new(:css, "a[href$='news-feed']"))
     add_verify(CucumberLabel.new("TIMELINE"), VerifyText.new, AccessHtmlElement.new(:css, "span.center-block.text-center.panel-title"))    
-    add_verify(CucumberLabel.new("NewsFeed Page Title"), VerifyText.new, AccessHtmlElement.new(:css, "span.center-block.text-center.panel-title"))    
-    add_verify(CucumberLabel.new("isTableVisible"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-newsfeed"))
     add_verify(CucumberLabel.new("Providers"), VerifyText.new, AccessHtmlElement.new(:id, "providerSection"))
     add_verify(CucumberLabel.new("Movements"), VerifyText.new, AccessHtmlElement.new(:id, "movementSection"))
     add_verify(CucumberLabel.new("modalPopUpTitle"), VerifyText.new, AccessHtmlElement.new(:id, "mainModalLabel"))      
-    #add_action(CucumberLabel.new("NewsFeed Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#content-region #grid-panel-newsfeed #input-filter-search"))
-    add_action(CucumberLabel.new("NewsFeed Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#content-region #grid-panel-newsfeed input[type=search]"))
+    add_action(CucumberLabel.new("NewsFeed Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#content-region [data-appletid='newsfeed'] .grid-applet-panel input[type=search]"))
     
-    add_action(CucumberLabel.new("Search Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-newsfeed"))      
+    add_action(CucumberLabel.new("Search Filter"), ClickAction.new, AccessHtmlElement.new(:css, "#content-region [data-appletid=newsfeed] .applet-filter-button"))
 
-    add_action(CucumberLabel.new("Visit 1996"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-677'] td:nth-child(2)"))
-    add_action(CucumberLabel.new("Discharged 1993"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-H918'] td:nth-child(2)"))
-    add_action(CucumberLabel.new("Admitted 1995"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-H2303'] td:nth-child(2)"))
-    add_action(CucumberLabel.new("Immunization 2000"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-immunization-9E7A-287-45'] td:nth-child(2)"))
-    add_action(CucumberLabel.new("Surgery 1994"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-surgery-9E7A-65-28'] td:nth-child(2)"))
-    add_action(CucumberLabel.new("Consult 1995"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-consult-9E7A-164-70'] td:nth-child(2)"))
+    add_action(CucumberLabel.new("Admitted 1995"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-row-instanceid='urn-va-visit-SITE-164-H2303'] td:nth-child(2)"))
+    add_action(CucumberLabel.new("Immunization 2000"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-row-instanceid='urn-va-immunization-SITE-287-45'] td:nth-child(2)"))
+    add_action(CucumberLabel.new("Surgery 1994"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-row-instanceid='urn-va-surgery-SITE-65-28'] td:nth-child(2)"))
+    add_action(CucumberLabel.new("Consult 1995"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-row-instanceid='urn-va-consult-SITE-164-70'] td:nth-child(2)"))
 
     # had to use xpath instead of css, suspect the css didn't like the comma in the id
-    add_action(CucumberLabel.new("Procedure 2005"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-procedure-9E7A-100599-8-MDD(702,']/td[2]"))
 
     add_verify(CucumberLabel.new("CloseButton"), VerifyText.new, AccessHtmlElement.new(:id, "modal-close-button"))
     add_action(CucumberLabel.new("Close"), ClickAction.new, AccessHtmlElement.new(:id, "modal-close-button"))  
-    add_action(CucumberLabel.new("May 1996"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1996')]"))
-    add_action(CucumberLabel.new("December 1995"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'December 1995')]")) 
-    add_verify(CucumberLabel.new("May 1996 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-group-instanceid='199605_groupCount']"))  
+    add_action(CucumberLabel.new("December 1995"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::td[contains(string(),'December 1995')]")) 
 
-    add_verify(CucumberLabel.new("December 1995 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-group-instanceid='199512_groupCount']"))  
+    add_verify(CucumberLabel.new("December 1995 Count"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::*[@data-group-instanceid='199512_groupCount']"))
     add_verify(CucumberLabel.new("title1"), VerifyText.new, AccessHtmlElement.new(:id, "tl_time_title"))
     add_verify(CucumberLabel.new("title2"), VerifyText.new, AccessHtmlElement.new(:id, "tl_time_range"))
-    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'No Records Found')]"))
-    add_action(CucumberLabel.new("Search Spinner"), ClickAction.new, AccessHtmlElement.new(:class, "searchSpinner")) 
-    add_action(CucumberLabel.new("DoD Appointment"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-appointment-DOD-0000000011-1000000717']/td[2]"))
-    add_action(CucumberLabel.new("Lab 1998"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-lab-9E7A-17-CH-7018878-8366-7']/td[2]"))
-    add_action(CucumberLabel.new("DoD Encounter 2012"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@data-row-instanceid='urn-va-visit-DOD-0000000011-1000000721']/td[2]"))
+    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::td[contains(string(),'No Records Found')]"))
+    add_action(CucumberLabel.new("DoD Appointment"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::*[@data-row-instanceid='urn-va-appointment-DOD-0000000011-1000000717']/td[2]"))
+    add_action(CucumberLabel.new("Lab 1998"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::*[@data-row-instanceid='urn-va-lab-SITE-17-CH-7018878-8366-7']/td[2]"))
+    add_action(CucumberLabel.new("DoD Encounter 2012"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::*[@data-row-instanceid='urn-va-visit-DOD-0000000011-1000000721']/td[2]"))
     add_verify(CucumberLabel.new("Newsfeed Modal Details"), VerifyContainsText.new, AccessHtmlElement.new(:id, "modal-body"))
       
-    #@@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-newsfeed']/descendant::tr")
-    @@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:css, "#data-grid-newsfeed > tbody > tr")
+    @@newsfeed_applet_data_grid_rows = AccessHtmlElement.new(:css, "[data-appletid=newsfeed] [id^=data-grid-applet-] > tbody > tr")
     add_verify(CucumberLabel.new("Number of Newsfeed Applet Rows"), VerifyXpathCount.new(@@newsfeed_applet_data_grid_rows), @@newsfeed_applet_data_grid_rows)
-    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '#content-region #data-grid-newsfeed tr.empty'))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '#content-region [data-appletid=newsfeed] [id^=data-grid-applet-] tr.empty'))
   end
 
   def applet_loaded?
     return true if am_i_visible? 'Empty Row'
-    return TestSupport.driver.find_elements(:css, '#content-region #data-grid-newsfeed tbody tr.selectable').length > 0
+    return TestSupport.driver.find_elements(:css, '#content-region [data-appletid=newsfeed] tbody tr.selectable').length > 0
   rescue => e 
     # p e
     false
@@ -126,7 +116,7 @@ class NewsFeedApplet < ADKContainer
   def verify_alphabetic_sort_caseinsensitive(table_id, column_index, a_z)
     for_error_message = a_z ? "is not greater then" : "is not less then"
     driver = TestSupport.driver
-    css_string = "#content-region ##{table_id} tbody td:nth-child(#{column_index})"
+    css_string = "#content-region #{table_id} tbody td:nth-child(#{column_index})"
     columns = driver.find_elements(:css, css_string)
     higher = columns[0].text.downcase
     (1..columns.length-1).each do |i|
@@ -159,40 +149,14 @@ class NewsFeedColumnHeader < ADKContainer
   include Singleton
   def initialize
     super 
-    add_verify(CucumberLabel.new("Header1"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activityDateTime']"))
-    add_verify(CucumberLabel.new("Header2"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activity']"))
-    add_verify(CucumberLabel.new("Header3"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-displayType']"))
-    add_verify(CucumberLabel.new("Header4"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-primaryProviderDisplay']"))
-    add_verify(CucumberLabel.new("Header5"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-facilityName']"))
-    add_action(CucumberLabel.new("Date/Time"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activityDateTime'] a"))
-    add_action(CucumberLabel.new("Type"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-displayType'] a"))  
-    add_action(CucumberLabel.new("Facility"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-facilityName'] a"))    
-  end
-end
-
-class NewsFeedGroup < ADKContainer
-  include Singleton
-  def initialize
-    super
-    #add_verify(CucumberLabel.new("date_group1"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-newsfeed']/descendant::td[contains(string(),'May 1996')]"))
-
-    add_verify(CucumberLabel.new("date_group1"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1996')]"))
-    add_verify(CucumberLabel.new("date_group2"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'December 1995')]"))
-    add_verify(CucumberLabel.new("date_group3"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'September 1995')]"))
-    add_verify(CucumberLabel.new("date_group4"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'July 1995')]"))
-    add_verify(CucumberLabel.new("date_group5"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'June 1995')]"))
-    add_verify(CucumberLabel.new("date_group6"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'January 1995')]"))
-    add_verify(CucumberLabel.new("date_group7"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'May 1993')]"))
-    add_verify(CucumberLabel.new("row_first"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'November 2006')]/b"))
-    add_verify(CucumberLabel.new("row_last"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'February 2005')]/b"))  
-      
-    add_verify(CucumberLabel.new("type_group1"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'Procedure')]"))
-    add_verify(CucumberLabel.new("type_group2"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'Visit')]"))
-    add_verify(CucumberLabel.new("type_group3"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'Appointment')]"))
-      
-    add_verify(CucumberLabel.new("facility_group1"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'ABILENE (CAA)')]"))
-    add_verify(CucumberLabel.new("facility_group2"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'CAMP MASTER')]"))
-    add_verify(CucumberLabel.new("facility_group3"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@data-instanceid='newsfeed']/descendant::td[contains(string(),'FT. LOGAN')]"))
+    add_verify(CucumberLabel.new("Header1"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-activityDateTime']"))
+    add_verify(CucumberLabel.new("Header2"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-activity']"))
+    add_verify(CucumberLabel.new("Header3"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-displayType']"))
+    add_verify(CucumberLabel.new("Header4"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-primaryProviderDisplay']"))
+    add_verify(CucumberLabel.new("Header5"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-facilityName']"))
+    add_action(CucumberLabel.new("Date/Time"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-activityDateTime'] a"))
+    add_action(CucumberLabel.new("Type"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-displayType'] a"))
+    add_action(CucumberLabel.new("Facility"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='newsfeed'] [id^=data-grid-applet-] [data-header-instanceid='newsfeed-facilityName'] a"))
   end
 end
 
@@ -208,22 +172,22 @@ When(/^user selects Timeline from Coversheet dropdown$/) do
 end
 
 When(/^user navigates to Timeline Applet$/) do
-  navigate_in_ehmp '#news-feed'
+  navigate_in_ehmp '#/patient/news-feed'
   newsfeed = NewsFeedApplet.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { newsfeed.applet_loaded? }
   newsfeed.clear_filter
 end
 
-Then(/^the Timeline page title is "(.*?)"$/) do |page_title|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("NewsFeed Page Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("NewsFeed Page Title", page_title)).to be_true
+Then(/^the Timeline applet is loaded$/) do
+  newsfeed = NewsFeedApplet.instance
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { newsfeed.applet_loaded? }
 end
 
 def debug_on_jenkins
   driver = TestSupport.driver
-  headers = driver.find_elements(:xpath, "//*[@data-instanceid='newsfeed']/descendant::th")
+  headers = driver.find_elements(:xpath, "//*[@data-appletid='newsfeed']/descendant::th")
   p "number of headers #{headers.length}"
   headers.each do |th|
     p "header: #{th.attribute('id')} with value #{th.attribute('value')} #{th.text}"
@@ -239,29 +203,6 @@ Then(/^the newsfeed table contains headers$/) do |table|
   end #table
 end
 
-Then(/^the user sees "(.*?)" and "(.*?)" highlighted in orange$/) do |_admitted, _discharged|
-  driver = TestSupport.driver
-  matched = false
-  text_color = ""
-  admitted_element = driver.find_element(:id, "admittedVisit")
-  discharged_element = driver.find_element(:id, "discharged")
-  admitted_element_color = admitted_element.css_value("background-color")
-  discharged_element_color = discharged_element.css_value("background-color") 
-  if admitted_element_color && discharged_element_color  == "rgba(240, 173, 78, 1)"
-    matched = true
-  else
-    matched = false
-  end
-
-  expect(matched).to be_true, "color in browser: #{text_color} found in feature file orange"
-end
-
-Then(/^the user clicks on newsfeed search filter$/) do
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("Search Filter", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action("Search Filter", "")).to be_true
-end
-
 Then(/^the user opens newsfeed search filter$/) do
   aa = NewsFeedApplet.instance
   unless aa.am_i_visible? 'NewsFeed Filter input'
@@ -271,95 +212,10 @@ Then(/^the user opens newsfeed search filter$/) do
   end
 end
 
-Then(/^when the user types "(.*?)" in input box$/) do |search_field|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("NewsFeed Filter input", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action("NewsFeed Filter input", search_field)).to be_true
-end
-
-Then(/^the user clicks on the event "(.*?)" in NewsFeedApplet$/) do |table_cell|
-  driver = TestSupport.driver  
-  aa = NewsFeedApplet.instance
-  #expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  expect(aa.perform_action(table_cell, "")).to be_true
-end
-
-Then(/^the user sees modal pop\-up title "(.*?)"$/) do |modal_popup_title|
-  driver = TestSupport.driver
-  aa = NewsFeedApplet.instance  
-  expect(aa.wait_until_action_element_visible("modalPopUpTitle", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("modalPopUpTitle", modal_popup_title)).to be_true 
-end
-
-Then(/^the user sees the modal pop\-up$/) do |table|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("CloseButton", DefaultLogin.wait_time)).to be_true
-  table.rows.each do |row|
-    expect(aa.perform_verification('Newsfeed Modal Details', row[0])).to be_true, "The value #{row[0]} is not present in the newsfeed modal details"
-    expect(aa.perform_verification('Newsfeed Modal Details', row[1])).to be_true, "The value #{row[1]} is not present in the newsfeed modal details"
-  end 
-end
-
-Then(/^the user sees modal details$/) do |table|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("CloseButton", DefaultLogin.wait_time)).to be_true
-  table.rows.each do |row|
-    expect(aa.perform_verification('Newsfeed Modal Details', row[0])).to be_true, "The value #{row[0]} is not present in the newsfeed modal details"
-  end
-end
-
-Then(/^the user sees the section header "(.*?)"$/) do |header_type|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible(header_type, DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification(header_type, header_type)).to be_true
-end
-
-Then(/^user clicks on the Close button$/) do 
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("Close", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action("Close", "")).to be_true
-end
-
-Then(/^the detail view in NewsFeed Applet closes$/) do
-  wait_until_modal_is_not_displayed
-end
-
-Then(/^the user sees the following groups in Newsfeed Applet$/) do |table|
-  aa = NewsFeedGroup.instance
-  cc = NewsFeedApplet.instance
-  expect(cc.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  table.rows.each do |key, value|
-    expect(aa.perform_verification(key, value)).to be_true
-  end #table
-end
-
-When(/^the user clicks on date\/time "(.*?)" in the newsfeed applet$/) do |dateTime|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 8)).to be_true
-  expect(aa.perform_action(dateTime, "")).to be_true
-end
-
-Then(/^the date\/time collapses and shows "(.*?)" result for "(.*?)" in the newsfeed applet$/) do |visit_count, visit_year|
-  aa = NewsFeedApplet.instance
-  driver = TestSupport.driver
-  #expect(aa.wait_until_action_element_visible("isTableVisible", DefaultLogin.wait_time)).to be_true
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 10)).to be_true
-  count_text = visit_year + " Count"
-  #expect(aa.wait_until_action_element_visible(count_text, DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification(count_text, visit_count)).to be_true
-end
-
 Then(/^the default sorting by Date\/Time is in descending in Newsfeed Applet$/) do
   timeline = PobTimeline.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
   wait.until { timeline.verify_date_time_sort_selectable(true) == true }
-end
-
-When(/^user clicks on "(.*?)" column header in Newsfeed Applet$/) do |groupBy|
-  aa = NewsFeedColumnHeader.instance
-  cc = NewsFeedApplet.instance
-  expect(cc.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  expect(aa.perform_action(groupBy, "")).to be_true
 end
 
 Then(/^the sorting by Date\/Time is in ascending in Newsfeed Applet$/) do
@@ -368,58 +224,14 @@ Then(/^the sorting by Date\/Time is in ascending in Newsfeed Applet$/) do
   wait.until { timeline.verify_date_time_sort_selectable(false) == true }
 end
 
-Then(/^the user sees title "(.*?)", "(.*?)" in Newsfeed Applet$/) do |title1, title2|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_action_element_visible("isTableVisible", DefaultLogin.wait_time)).to be_true
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  expect(aa.perform_verification("title1", title1)).to be_true
-  expect(aa.perform_verification("title2", title2)).to be_true
-end
-
-Then(/^the first row is as below when grouped by "(.*?)" in Newsfeed Applet$/) do |_groupBy, table|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  verify_table_rows_newsfeed(table)
-end
-
-Then(/^the last row is as below when grouped by "(.*?)" in Newsfeed Applet$/) do |_groupBy, table|
-  aa = NewsFeedApplet.instance
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-  verify_table_rows_newsfeed(table)
-end
-
-Then(/^the search results say "(.*?)" in NewsFeed Applet$/) do |search_result_text|
-  aa = NewsFeedApplet.instance
-  expect(aa.perform_verification("No Records Found", search_result_text)).to be_true
-end
-
-Then(/^only (?:these|this) (\d+) (?:row|rows) (?:is|are) visible in Newfeed Applet$/) do |expected_rows| 
-  driver = TestSupport.driver
-  aa = NewsFeedApplet.instance
-  displayed = false
-  expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 2)).to be_true
-
-  browser_elements_list = driver.find_elements(:css, "#center-region #data-grid-newsfeed tr.selectable")
-  expect(browser_elements_list.length).to eq(expected_rows.to_i), "Expected 1 row but #{browser_elements_list.length} are shown"
-end
-
-Then(/^the NewsFeed Applet table contains specific rows$/) do |table|
-  verify_table_rows_newsfeed(table)
-end
-
-def verify_table_rows_newsfeed(table)
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time * 2)
-  wait.until { VerifyTableValue.compare_specific_row(table, '[data-instanceid=newsfeed] #data-grid-newsfeed') }
-end
-
 Then(/^the NewsFeed Applet table contains rows$/) do |table|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time * 2)
   table_verifier = VerifyTableValue.new
   driver = TestSupport.driver
 
   wait.until {  
-    browser_elements_list = driver.find_elements(:css, "#data-grid-newsfeed tbody tr")  
-    table_verifier.perform_table_verification(browser_elements_list, "#news-feed #data-grid-newsfeed", table)
+    browser_elements_list = driver.find_elements(:css, "[data-appletid=newsfeed] [id^=data-grid-applet-] tbody tr")
+    table_verifier.perform_table_verification(browser_elements_list, "[data-appletid=newsfeed] [id^=data-grid-applet-]", table)
   }
 end
 
@@ -435,7 +247,7 @@ end
 Then(/^the Newsfeed table only diplays rows including text "([^"]*)"$/) do |input_text|
   upper = input_text.upcase
   lower = input_text.downcase
-  newsfeed_grid_xpath = "//*[@id='content-region']/descendant::table[@id='data-grid-newsfeed']"
+  newsfeed_grid_xpath = "//*[@id='content-region']/descendant::div[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]"
   path =  "#{newsfeed_grid_xpath}/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
   p path
   row_count = TableContainer.instance.get_elements('Rows - Newsfeed Applet data').size 
@@ -443,38 +255,16 @@ Then(/^the Newsfeed table only diplays rows including text "([^"]*)"$/) do |inpu
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
 end
 
-When(/^the user sorts the Timeline grid by "([^"]*)"$/) do |groupBy|
-  aa = NewsFeedColumnHeader.instance
-  expect(aa.perform_action(groupBy, "")).to be_true
-end
-
-Then(/^the Timeline grid is sorted in "([^"]*)" order based on "([^"]*)"$/) do |order, column|
-  order_options = {}
-  order_options['alphabetic'] = true
-  order_options['reverse alphabetic order'] = false
-
-  column_options = {}
-  column_options['Type'] = 3
-  column_options['Facility'] = 5
-  
-  newsfeed_applet = NewsFeedApplet.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { newsfeed_applet.verify_alphabetic_sort_caseinsensitive('data-grid-newsfeed', column_options[column], order_options[order]) }
-end
-
-# #content-region #data-grid-newsfeed tr.selectable td:nth-child(3)
 Then(/^the Timeline table diplays Type "([^"]*)" rows$/) do |input_text|  
-  newsfeed_applet = NewsFeedApplet.instance
-  label = CucumberLabel.new("Type column values")
-  elements = AccessHtmlElement.new(:css, '#content-region #data-grid-newsfeed tr.selectable td:nth-child(3)')
-  newsfeed_applet.add_verify(label, VerifyArrayContainsText.new(elements), elements)
-  expect(newsfeed_applet.perform_verification("Type column values", input_text)).to eq(true)
+  ehmp = PobTimeline.new
+  ehmp.wait_for_td_type_column
+  expect(object_exists_in_list(ehmp.td_type_column, input_text)).to eq(true), "'#{input_text}' was not found"
 end
 
 Then(/^the NewsFeed Applet table contains rows of type "([^"]*)"$/) do |arg1|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infiniate_scroll("#data-grid-newsfeed tbody") }
-  xpath = "//table[@id='data-grid-newsfeed']/descendant::td[contains(string(), '#{arg1}')]"
+  wait.until { infiniate_scroll("[data-appletid=newsfeed] [id^=data-grid-applet-] tbody") }
+  xpath = "//div[@data-appletid='newsfeed']//table[starts-with(@id, 'data-grid-applet-')]/descendant::td[contains(string(), '#{arg1}')]"
   p xpath
   applet = NewsFeedApplet.instance
 
@@ -488,7 +278,7 @@ When(/^the NewsFeed Applet table contains data rows$/) do
   newsfeed = PobTimeline.new
 
   expect(newsfeed).to_not have_fld_empty_row
-  compare_item_counts("[data-instanceid='newsfeed'] tbody tr")
+  compare_item_counts("[data-appletid='newsfeed'] [id^=data-grid-applet-] tbody tr")
 end
 
 When(/^user refreshes Timeline Applet$/) do
@@ -501,3 +291,160 @@ end
 Then(/^the message on the Timline Applet does not say "(.*?)"$/) do |message_text|
   compare_applet_refresh_action_response("newsfeed", message_text)
 end
+
+Then(/^the Timeline Applet has grouped headers in format MonthName YEAR$/) do
+  timeline = PobTimeline.new
+  expect(timeline.group_header_rows.length).to be > 0
+  expect(timeline.group_header_btns.length).to be > 0
+  header_text = timeline.group_header_btns.map { |element| element.text }
+  
+  months = Date::MONTHNAMES.slice(1, Date::MONTHNAMES.length).join('|')
+  month_matcher = Regexp.new("\\d+ Results In (#{months}) \\d{3}")
+  header_text.each do | temp_header |
+    expect(month_matcher.match(temp_header)).to_not be_nil, "Header #{temp_header} did not match expected format"
+  end
+end
+
+Then(/^the headers are named for row dates$/) do
+  timeline = PobTimeline.new
+  months = Date::MONTHNAMES.slice(1, Date::MONTHNAMES.length).join('|')
+  month_matcher = Regexp.new("(#{months}) \\d{4}")
+  header_texts = timeline.group_header_btns.map { |element| month_matcher.match(element.text).to_s }
+
+  # don't check every row, just unique rows
+  date_only = Set.new(timeline.date_column_text_only.map { |full_text| /\d{2}\/\d{2}\/\d{4}/.match(full_text).to_s })
+  date_objects = date_only.map { |row_date| Date.strptime(row_date, '%m/%d/%Y') }
+  
+  date_objects.each do | date_obj |
+    temp = date_obj.strftime("%B %Y")
+    expect(header_texts).to include temp
+  end
+end
+
+Given(/^the Timeline Applet displays grouped headers and rows$/) do
+  timeline = PobTimeline.new
+  expect(timeline.group_header_rows.length).to be > 0, "Expected at least 1 group header"
+  expect(timeline.tbl_timeline_table_data.length).to be > 0, "Expected at least 1 data row"
+end
+
+Given(/^the user counts the rows displayed for a specific grouped header in the timeline applet$/) do
+  timeline = PobTimeline.new
+  specific_dates = timeline.date_column_text_only
+  months = Date::MONTHNAMES.slice(1, Date::MONTHNAMES.length).join('|')
+  month_matcher = Regexp.new("(#{months}) \\d{4}")
+  
+  header_texts = timeline.group_header_btns.map { |element| month_matcher.match(element.text).to_s }
+
+  group_date = Date.strptime(header_texts[0], '%B %Y')
+  row_count = 0
+  specific_dates.each do | temp_row_date |
+    temp_date = Date.strptime(temp_row_date, '%m/%d/%Y')
+    row_count += 1 if temp_date >= group_date && temp_date < group_date.next_month
+  end
+
+  @total_rows_before_collapse = timeline.tbl_timeline_table_data.length
+  @expected_badge_count = row_count
+end
+
+When(/^the user clicks on a group header in the timeline applet$/) do
+  timeline = PobTimeline.new
+  before_click = timeline.tbl_timeline_table_data.length
+  timeline.group_header_btns[0].click
+  wait_until { timeline.tbl_timeline_table_data.length != before_click }
+end
+
+Then(/^the group header collapses and a badge displays number of hidden rows in the timeline applet$/) do
+  timeline = PobTimeline.new
+  expect(timeline.groupd_header_badges_nothidden.length).to eq(1)
+
+  expect(timeline.groupd_header_badges_nothidden[0].text).to eq("#{@expected_badge_count}")
+  expect(timeline.tbl_timeline_table_data.length).to eq(@total_rows_before_collapse - @expected_badge_count)
+end
+
+When(/^the user sorts the Timeline grid by Type$/) do
+  timeline = PobTimeline.new
+  timeline.wait_for_fld_type_column_header
+  expect(timeline).to have_fld_type_column_header
+  timeline.fld_type_column_header.click
+end
+
+Then(/^the Timeline grid is sorted in alphabetic order based on Type$/) do
+  ehmp = PobTimeline.new
+  ehmp.wait_for_td_type_column   
+  column_values = ehmp.td_type_column
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Timeline grid is sorted in reverse alphabetic order based on Type$/) do
+  ehmp = PobTimeline.new
+  ehmp.wait_for_td_type_column    
+  column_values = ehmp.td_type_column
+  expect(column_values.length).to be >= 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end
+
+When(/^the user sorts the Timeline grid by Facility$/) do
+  timeline = PobTimeline.new
+  timeline.wait_for_fld_facility_column_header
+  expect(timeline).to have_fld_facility_column_header
+  timeline.fld_facility_column_header.click
+end
+
+Then(/^the Timeline grid is sorted in alphabetic order based on Facility$/) do
+  ehmp = PobTimeline.new
+  ehmp.wait_for_td_facility_column   
+  column_values = ehmp.td_facility_column
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Timeline grid is sorted in reverse alphabetic order based on Facility$/) do
+  ehmp = PobTimeline.new
+  ehmp.wait_for_td_facility_column    
+  column_values = ehmp.td_facility_column
+  expect(column_values.length).to be >= 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end
+
+When(/^user sorts on Date\/Time column header in Newsfeed Applet$/) do
+  timeline = PobTimeline.new
+  timeline.wait_for_fld_date_column_header
+  expect(timeline).to have_fld_date_column_header
+  timeline.fld_date_column_header.click
+end
+
+Given(/^user can view the Quick Menu Icon in timeline applet$/) do
+  ehmp = PobTimeline.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in timeline applet$/) do
+  ehmp = PobTimeline.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in timeline applet$/) do
+  ehmp = PobTimeline.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the timeline applet$/) do |table|
+  ehmp = PobTimeline.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+When(/^user hovers over the timeline applet row$/) do
+  ehmp = PobTimeline.new
+  ehmp.wait_for_tbl_timeline_table_data
+  expect(ehmp).to have_tbl_timeline_table_data
+  rows = ehmp.tbl_timeline_table_data
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+

@@ -127,7 +127,7 @@ Then(/^the Clinical Reminders table only displays rows including text "([^"]*)"$
   upper = input_text.upcase
   lower = input_text.downcase
   row_count = @ehmp.tbl_cds_rows.length
-  cds_grid_xpath = "//table[@id='data-grid-cds_advice']"
+  cds_grid_xpath = "//div[@data-appletid='cds_advice']//table"
   path =  "#{cds_grid_xpath}/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
@@ -155,5 +155,38 @@ When(/^user navigates to Clinical Reminders Applet expanded view$/) do
   expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Clinical Reminders".upcase)
 end
 
+When(/^user hovers over the clinical reminders applet row$/) do
+  ehmp = PobClinicalRemindersApplet.new
+  ehmp.wait_for_tbl_cds_rows
+  expect(ehmp).to have_tbl_cds_rows
+  rows = ehmp.tbl_cds_rows
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+Given(/^user can view the Quick Menu Icon in clinical reminders applet$/) do
+  ehmp = PobClinicalRemindersApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in clinical reminders applet$/) do
+  ehmp = PobClinicalRemindersApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in clinical reminders applet$/) do
+  ehmp = PobClinicalRemindersApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the clinical reminders applet$/) do |table|
+  ehmp = PobClinicalRemindersApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+When(/^user selects the detail view from Quick Menu Icon of clinical reminders applet$/) do
+  ehmp = PobClinicalRemindersApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
 
 

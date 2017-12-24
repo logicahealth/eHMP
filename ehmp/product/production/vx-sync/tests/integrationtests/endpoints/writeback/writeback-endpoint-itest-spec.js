@@ -4,13 +4,14 @@ require('../../../../env-setup');
 var _ = require('underscore');
 var moment = require('moment');
 var request = require('request');
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var port = PORT;
 var jds = new JdsClient(logger, wConfig);
-var tstPid = '9E7A;3';
+var tstPid = 'SITE;3';
 
 var httpConfig = {
     path: '/writeback',
@@ -50,7 +51,7 @@ var recordBody = {
     'stampTime': '20050317200936',
     'summary': 'PENICILLIN',
     'typeName': 'DRUG',
-    'uid': 'urn:va:allergy:9E7A:3:751',
+    'uid': 'urn:va:allergy:SITE:3:751',
     'verified': '20050317200936',
     'verifierName': '<auto-verified>'
 };
@@ -69,7 +70,7 @@ xdescribe('writeback-endpoint', function() {
     //             if (!error) {
     //                 if (jdsResponse.statusCode === 404) {
     //                     var syncConfig = _.clone(httpConfig);
-    //                     syncConfig.PORT       ;
+    //                     syncConfig.port = PORT;
     //                     syncConfig.url = 'http://' + vx_sync_ip + ':' + syncConfig.port + '/sync/doLoad';
     //                     syncConfig.path = '/sync/doLoad';
     //                     syncConfig.method = 'GET';
@@ -90,7 +91,7 @@ xdescribe('writeback-endpoint', function() {
     //                                             if (jdsBody && jdsBody.completedStamp) {
     //                                                 var completedSites = _.keys(jdsBody.completedStamp.sourceMetaStamp);
     //                                                 logger.debug(completedSites);
-    //                                                 if (jdsBody.completedStamp.sourceMetaStamp['9E7A']) {
+    //                                                 if (jdsBody.completedStamp.sourceMetaStamp['SITE']) {
     //                                                     patientIsSynced = true;
     //                                                     clearInterval(syncStatus);
     //                                                 }
@@ -106,7 +107,7 @@ xdescribe('writeback-endpoint', function() {
     //                         }, 10000);
     //                     });
     //                 } else {
-    //                     if (jdsBody && jdsBody.completedStamp && jdsBody.completedStamp.sourceMetaStamp['9E7A']) {
+    //                     if (jdsBody && jdsBody.completedStamp && jdsBody.completedStamp.sourceMetaStamp['SITE']) {
     //                         patientIsSynced = true;
     //                     }
     //                 }
@@ -118,7 +119,7 @@ xdescribe('writeback-endpoint', function() {
 
     //     waitsFor(function() {
     //         return patientIsSynced;
-    //     }, 'patient 9E7A;3 to sync', 950000);
+    //     }, 'patient SITE;3 to sync', 950000);
     //     clearInterval(syncStatus);
     // });
 
@@ -144,7 +145,7 @@ xdescribe('writeback-endpoint', function() {
                 expect(jdsResponse.statusCode).toBe(200);
                 expect(jdsBody).toBeTruthy();
                 var expectedStampTime = now - 1;
-                var stampTime = jdsBody.completedStamp.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.stampTime;
+                var stampTime = jdsBody.completedStamp.sourceMetaStamp['SITE'].domainMetaStamp.allergy.stampTime;
                 expect(String(stampTime)).toBe(String(expectedStampTime));
             });
         });
@@ -167,7 +168,7 @@ xdescribe('writeback-endpoint', function() {
         var now = moment().format(dateFormat);
         var body1 = _.clone(recordBody);
         body1.lastUpdateTime = now;
-        body1.uid = 'urn:va:allergy:9E7A:3:751:somethingelse';
+        body1.uid = 'urn:va:allergy:SITE:3:751:somethingelse';
         config.body = body1;
 
         request(config, function(err, response) {
@@ -224,7 +225,7 @@ xdescribe('writeback-endpoint', function() {
                 expect(error).toBeFalsy();
                 expect(jdsResponse.statusCode).toBe(200);
                 expect(jdsBody).toBeTruthy();
-                var stampTime = jdsBody.completedStamp.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.stampTime;
+                var stampTime = jdsBody.completedStamp.sourceMetaStamp['SITE'].domainMetaStamp.allergy.stampTime;
                 expect(moment(stampTime, dateFormat).isAfter(moment(old, dateFormat))).toBeTruthy();
             });
         });

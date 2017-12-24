@@ -41,6 +41,7 @@ define([
         onClickRow: _.noop,
         groupable: false,
         emptyText: 'No Records Found',
+        fetchOnInstantiation: true,
         eventMapper: {
             'refresh': '_onRefresh',
             'add': 'onClickAdd'
@@ -80,10 +81,10 @@ define([
             };
         },
         initialize: function(options) {
-            this._showToolBar();
             this._createFilterView();
         },
         onRender: function() {
+            this._showToolBar();
             this._showContentView();
             this._showFilterView();
         },
@@ -136,12 +137,16 @@ define([
         _initializeCurrentScreenProperties: function(options) {
             var appletConfig = _.get(options, 'appletConfig');
             var currentWorkspace = ADK.WorkspaceContextRepository.currentWorkspace;
+            var fromPredefinedFilter = _.get(options, 'fromPredefinedFilter', false);
             var isPredefinedWorkspace = currentWorkspace.get('predefined');
             isPredefinedWorkspace = _.isBoolean(isPredefinedWorkspace) ? isPredefinedWorkspace : true;
+            var predefinedFilter = _.get(appletConfig, 'predefinedFilter', false) || fromPredefinedFilter;
             var multipleFilters = _.isBoolean(appletConfig.fullScreen) && appletConfig.fullScreen ? true : !isPredefinedWorkspace;
             _.extend(this, {
                 'isPredefinedWorkspace': isPredefinedWorkspace,
+                'predefinedFilter': predefinedFilter,
                 'multipleFilters': multipleFilters,
+                'fromPredefinedFilter': fromPredefinedFilter,
                 'appletInstanceId': _.get(appletConfig, 'instanceId'),
                 'workspaceId': _.get(options, 'screenModule.id')
             });
@@ -171,7 +176,10 @@ define([
             }
             this.bindEntityEvents(this._collection, this._serverPagingCollectionEvents);
             this._createContentView();
-            this._fetchData();
+
+            if (this.getOption('fetchOnInstantiation')) {
+                this._fetchData();
+            }
         },
         _showToolBar: function() {
             if (!!this.toolbarView) {
@@ -188,6 +196,7 @@ define([
         },
         _createContentView: function() {
             this.contentView = new TableView(_.extend({}, this.dataGridOptions, {
+                tileOptions: this.getOption('tileOptions'),
                 collection: this.collection,
                 columns: this.getColumns(),
                 helpers: this.helpers,
@@ -202,7 +211,7 @@ define([
                     var $el = this.$(el);
                     $el.attr({
                         'data-infobutton': $el.find('td:first').text()
-                    }).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
+                    });
                 }, this);
             }
         },
@@ -268,8 +277,10 @@ define([
         },
         _onRefresh: function(event, options) {
             ResourceService.clearCacheByResourceTitle(this.collection.resourceTitle);
-            this.collection.groupName = this.collection._initialGroupName;
-            this.collection.setGrouping(this.collection._initialGroupKey);
+            if (!_.isUndefined(this.collection.groupName)) {
+                this.collection.groupName = this.collection._initialGroupName;
+                this.collection.setGrouping(this.collection._initialGroupKey);
+            }
             this.collection.Criteria.Order.setSortKey(this.collection.Criteria.Order.default);
             this.collection.reset();
             this.collection.trigger('refresh');
@@ -297,8 +308,9 @@ define([
         _createFilterView: function() {
             this.filterView = new FilterLayoutView({
                 collection: this._filterCollection,
-                showFilterTitle: !this.isPredefinedWorkspace,
+                showFilterTitle: !this.isPredefinedWorkspace || this.predefinedFilter,
                 multipleFilters: this.multipleFilters,
+                predefinedFilter: this.predefinedFilter,
                 instanceId: this.appletInstanceId,
                 filterTitle: _.get(this.getOption('appletConfig'), 'filterName', '')
             });
@@ -319,11 +331,17 @@ define([
         This does not include filters that the user can't remove.
         An example of a filter that a user can't remove would be a filter
         on a Condition Based Workspace or an Applet with hardcoded filters.
+        Will return true if preDefined filters are shown.
         */
         _anyVisibleFilters: function() {
             var conditionObject = { removable: true };
             if (this.multipleFilters) {
                 conditionObject.shouldShow = true;
+            }
+            if (this.predefinedFilter) {
+                conditionObject = {
+                    shouldShow: true
+                };
             }
             return !_.isEmpty(this._filterCollection.getCombinedFilterString(conditionObject));
         },
@@ -361,11 +379,12 @@ define([
                     text: filterTextFromNavigation
                 });
             }
-            if (this._shouldLoadAndSaveFilters()) {
+            if (this.fromPredefinedFilter || this._shouldLoadAndSaveFilters()) {
                 var filterTextFromSession = SessionStorage.getAppletStorageModel(this.appletInstanceId, 'filterText', true);
                 if (!_.isUndefined(filterTextFromSession) && _.isString(filterTextFromSession)) {
                     filtersToAdd.push({
-                        text: filterTextFromSession
+                        text: filterTextFromSession,
+                        shouldShow: !this.predefinedFilter
                     });
                 }
                 /*
@@ -389,9 +408,12 @@ define([
             */
             var userDefinedFilterArray = _.get(args, 'applet.filters', []);
             if (!_.isArray(userDefinedFilterArray)) return;
+            var predefined = this.predefinedFilter;
             this._filterCollection.add(_.map(userDefinedFilterArray, function(filterText) {
                 return {
-                    text: filterText
+                    text: filterText,
+                    removable: !predefined,
+                    shouldShow: predefined
                 };
             }));
         },

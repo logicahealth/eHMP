@@ -17,17 +17,14 @@ configurations {
     exportedLibs
 }
 
-configurations {
-    exportedLibs
-}
-
 dependencies {
 
     compile group: 'org.kie', name: 'kie-api', version: property('kie-version')
     compile group: 'org.kie', name: 'kie-internal', version: property('kie-version')
-    compile 'javax.persistence:persistence-api:1.0.2'
+    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: property('hibernate-jpa-version')
+    compile group: 'org.hibernate', name: 'hibernate-core', version: property('hibernate-core-version')
+	compile group: 'org.json', name: 'json', version: property('json-version')
     compile project(':production:jbpm:JbpmUtils')
-    
 
     exportedLibs group: 'org.springframework', name: 'spring-web', version: property('spring-version')
     exportedLibs group: 'com.google.code.gson', name: 'gson', version: property('gson-version')

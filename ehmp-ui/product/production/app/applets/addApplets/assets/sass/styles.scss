@@ -39,39 +39,32 @@
             display: none;
         }
     }
-    .carousel {
+    .applet-carousel {
         background-color: #4A4D52;
-        min-height: 65px;
         text-align: center;
-        .item {
-            display: none;
-            &.active {
-                display: block;
-            }
-        }
-        button {
-            margin-top: 10px;
-            color: white;
-        }
-    }
-    .carousel-inner {
-        background-color: #4A4D52;
-        height: 64px;
         padding-top: 10px;
-        .applet-thumbnail {
-            background-color: $pure-white;
-            border: 1px solid $grey-lighter;
-            border-radius: 4px;
-            color: $grey-darker;
-            height: 50px;
-            padding: 3px;
-            position: absolute;
-            width: 84px;
-            &:hover,
-            &:focus {
-                border: 1px solid $primary-dark;
-                color: $primary-dark;
-                cursor: pointer;
+        min-height: 65px;
+        max-height: 100px;
+        .applet-items-container {
+            .applet-thumbnail {
+                background-color: $pure-white;
+                border: 1px solid $grey-lighter;
+                border-radius: 4px;
+                color: $grey-darker;
+                padding: 3px;
+                margin: 0 2px;
+                min-width: 84px;
+                max-width: 90px;
+                &:hover,
+                &:focus {
+                    border: 1px solid $pure-white;
+                    color: $pure-white;
+                    background: $primary;
+                    cursor: pointer;
+                }
+            }
+            .empty-applets-message {
+                align-self: center;
             }
         }
     }

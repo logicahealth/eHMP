@@ -15,18 +15,18 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var sampleOpDataStamp = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        '9E7A': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'doc-def': {
                     'domain': 'doc-def',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:doc-def:9E7A:1001': {
+                        'urn:va:doc-def:SITE:1001': {
                             'stampTime': 20141031094920,
                             'stored': true
                         },
-                        'urn:va:doc-def:9E7A:1002': {
+                        'urn:va:doc-def:SITE:1002': {
                             'stampTime': 20141031094920,
                             'stored': true
                         }
@@ -36,11 +36,11 @@ var sampleOpDataStamp = {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:9E7A:3:3': {
+                        'urn:va:pt-select:SITE:3:3': {
                             'stampTime': 20141031094920,
                             'stored': true
                         },
-                        'urn:va:pt-select:9E7A:1000:1000': {
+                        'urn:va:pt-select:SITE:1000:1000': {
                             'stampTime': 20141031094920,
                             'stored': true
                         }
@@ -55,18 +55,18 @@ var sampleOpDataStamp = {
 var sampleOpDataStamp2 = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        'C877': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'pt-select': {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:C877:3:3': {
+                        'urn:va:pt-select:SITE:3:3': {
                             'stampTime': 20141031094920,
                             'stored': true
                         },
-                        'urn:va:pt-select:C877:1000:1000': {
+                        'urn:va:pt-select:SITE:1000:1000': {
                             'stampTime': 20141031094920,
                             'stored': true
                         }
@@ -78,21 +78,21 @@ var sampleOpDataStamp2 = {
     }
 };
 
-var sampleOpDataStamp9E7ApatientIncomplete = {
+var sampleOpDataStampSITEpatientIncomplete = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        '9E7A': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'doc-def': {
                     'domain': 'doc-def',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:doc-def:9E7A:1001': {
+                        'urn:va:doc-def:SITE:1001': {
                             'stampTime': 20141031094920,
                             'stored': true
                         },
-                        'urn:va:doc-def:9E7A:1002': {
+                        'urn:va:doc-def:SITE:1002': {
                             'stampTime': 20141031094920,
                             'stored': true
                         }
@@ -102,10 +102,10 @@ var sampleOpDataStamp9E7ApatientIncomplete = {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:9E7A:3:3': {
+                        'urn:va:pt-select:SITE:3:3': {
                             'stampTime': 20141031094920
                         },
-                        'urn:va:pt-select:9E7A:1000:1000': {
+                        'urn:va:pt-select:SITE:1000:1000': {
                             'stampTime': 20141031094920,
                             'stored': true
                         }
@@ -117,21 +117,21 @@ var sampleOpDataStamp9E7ApatientIncomplete = {
     }
 };
 
-var sampleOpDataStampC877DifferentPatientIncomplete = {
+var sampleOpDataStampSITEDifferentPatientIncomplete = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        'C877': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'pt-select': {
                     'domain': 'pt-select',
                     'stampTime': 20141031094920,
                     'itemMetaStamp': {
-                        'urn:va:pt-select:C877:3:3': {
+                        'urn:va:pt-select:SITE:3:3': {
                             'stampTime': 20141031094920,
                             'stored': true
                         },
-                        'urn:va:pt-select:C877:1000:1000': {
+                        'urn:va:pt-select:SITE:1000:1000': {
                             'stampTime': 20141031094920
                         }
                     }
@@ -147,10 +147,10 @@ var mockPatientIds = [{
     value: '10108V420871'
 }, {
     type: 'pid',
-    value: '9E7A;3'
+    value: 'SITE;3'
 }, {
     type: 'pid',
-    value: 'C877;3'
+    value: 'SITE;3'
 }, {
     type: 'pid',
     value: 'DOD;00000008'
@@ -175,8 +175,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -212,8 +212,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -250,8 +250,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -290,8 +290,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -330,8 +330,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -375,8 +375,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -420,8 +420,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -461,8 +461,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -501,8 +501,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -522,7 +522,7 @@ describe('operational-data-sync-rule', function() {
         }, {
             statusCode: 200
         }], [{
-            'inProgress': sampleOpDataStamp9E7ApatientIncomplete
+            'inProgress': sampleOpDataStampSITEpatientIncomplete
         }, {
             'completedStamp': sampleOpDataStamp2
         }]);
@@ -546,8 +546,8 @@ describe('operational-data-sync-rule', function() {
         var done = false;
         var config = {
             vistaSites: {
-                '9E7A': {},
-                'C877': {}
+                'SITE': {},
+                'SITE': {}
             },
             jds: {
                 protocol: 'http',
@@ -569,7 +569,7 @@ describe('operational-data-sync-rule', function() {
         }], [{
             'completedStamp': sampleOpDataStamp
         }, {
-            'inProgress': sampleOpDataStampC877DifferentPatientIncomplete
+            'inProgress': sampleOpDataStampSITEDifferentPatientIncomplete
         }]);
         var environment = {
             jds: jdsClientDummy,

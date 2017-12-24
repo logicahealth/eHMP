@@ -17,7 +17,6 @@ define([
             this.displayGroup = ADK.SessionStorage.getAppletStorageModel(this.expandedAppletId, 'activeMenuItem', true, this.parentWorkspace) || 'ALL';
         },
         template: ordersFilterTemplate,
-        className: 'toolbar-item',
         events: {
             'change select': 'filterChange'
         },

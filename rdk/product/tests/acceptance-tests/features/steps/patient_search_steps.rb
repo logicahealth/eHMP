@@ -37,7 +37,7 @@ end
 
 When(/^the client requests Clinics patient search results for a clinic without patients$/) do
   query = RDKQueryPicklist.new("write-pick-list-clinics-fetch-list")
-  query.add_parameter('site', '9E7A')
+  query.add_parameter('site', 'SITE')
   @response = HTTPartyRDK.get(query.path)
   expect(@response.code).to eq(200)
   @json_object = JSON.parse(@response.body)
@@ -60,7 +60,7 @@ end
 
 When(/^the client requests Wards patient search results for a ward without patients$/) do
   query = RDKQueryPicklist.new("write-pick-list-wards-fetch-list")
-  query.add_parameter('site', '9E7A')
+  query.add_parameter('site', 'SITE')
   @response = HTTPartyRDK.get(query.path)
   expect(@response.code).to eq(200)
   @json_object = JSON.parse(@response.body)

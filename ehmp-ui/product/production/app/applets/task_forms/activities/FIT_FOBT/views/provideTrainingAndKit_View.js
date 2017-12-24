@@ -71,14 +71,12 @@ define([
                 extraClasses: ['modal-footer'],
                 items: [{
                     control: 'button',
-                    title: 'Press enter to cancel.',
                     extraClasses: ['btn', 'btn-default', 'btn-sm'],
                     id: 'modal-cancel-button',
                     type: 'button',
                     label: 'Cancel',
                 }, {
                     control: 'button',
-                    title: 'Press enter to complete',
                     extraClasses: ['btn', 'btn-success', 'btn-sm'],
                     id: 'modal-save-button',
                     type: 'button',

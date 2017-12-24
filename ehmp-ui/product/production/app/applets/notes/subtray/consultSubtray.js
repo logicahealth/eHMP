@@ -42,7 +42,7 @@ define([
                 button.attr('disabled', true).addClass('disabled');
             }
             button.html('Associate');
-            button.attr('title', 'Press enter to associate this consult');
+            button.attr('aria-label', 'Associate this consult');
         } else if (noteModel.get('uid') === consultModel.get('noteClinicalObjectUid')) {
             if (requestEnable) {
                 button.attr('disabled', false).removeClass('disabled');
@@ -50,12 +50,12 @@ define([
                 button.attr('disabled', true).addClass('disabled');
             }
             button.html('Disassociate');
-            button.attr('title', 'Press enter to disassociate this consult');
+            button.attr('aria-label', 'Disassociate this consult');
         } else {
             //Ingore request to enable or disable; disable the button by default
             button.attr('disabled', true).addClass('disabled');
             button.html('Associate');
-            button.attr('title', 'Press enter to associate this consult');
+            button.attr('aria-label', 'Associate this consult');
         }
     };
 
@@ -326,13 +326,14 @@ define([
         fetchConsults: function() {
             var self = this;
             var site = ADK.UserService.getUserSession().get('site');
+            var patient = ADK.PatientRecordService.getCurrentPatient();
             var fetchOptions = {
                 resourceTitle: 'tasks-openconsults',
                 fetchType: 'GET',
                 cache: false,
-                patient: ADK.PatientRecordService.getCurrentPatient(),
+                patient: patient,
                 criteria: {
-                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid')
+                    pid: patient.getIdentifier()
                 }
             };
             fetchOptions.onError = function(model, resp) {

@@ -4,6 +4,17 @@ Then(/^the toolbar displays with a Tile Sort button$/) do
   expect(problems).to have_btn_tile_sort
 end
 
+def wait_for_jquery_to_return(timeout = DefaultLogin.wait_time)
+  wait = Selenium::WebDriver::Wait.new(:timeout => timeout)
+  begin
+    wait.until { TestSupport.driver.execute_script("return window.jQuery.active") == 0 }
+  rescue Exception => e
+    count = TestSupport.driver.execute_script("return window.jQuery.active")
+    p "We still have outstanding jQuery calls (#{count})"
+    p "attempt to continue"
+  end
+end
+
 When(/^the user moves the problem row to the top of the applet$/) do
   problems = PobProblemsApplet.new
   problems.wait_for_fld_gist_problem_names
@@ -23,7 +34,9 @@ When(/^the user moves the problem row to the top of the applet$/) do
   (0..move_times).each do |i|
     problems.btn_tile_sort.native.send_keys(:up)
   end
+
   problems.btn_tile_sort.native.send_keys(:enter)
+  wait_for_jquery_to_return
   problems.wait_until_btn_tile_sort_active_invisible
   expect(problems.gist_problem_names_only).to eq(expected_name_order)
   @manual_problem_gist_order = problems.gist_problem_names_only
@@ -49,6 +62,7 @@ When(/^the user moves the numeric lab gist row to the bottom of the applet$/) do
     ehmp.btn_tile_sort.native.send_keys(:down)
   end
   ehmp.btn_tile_sort.native.send_keys(:enter)
+  wait_for_jquery_to_return
   ehmp.wait_until_btn_tile_sort_active_invisible
   expect(ehmp.gist_numeric_lab_names_only).to eq(expected_name_order)
   @manual_numeric_gist_order = ehmp.gist_numeric_lab_names_only
@@ -74,6 +88,7 @@ When(/^the user moves the vital gist row to the bottom of the applet$/) do
     ehmp.btn_tile_sort.native.send_keys(:down)
   end
   ehmp.btn_tile_sort.native.send_keys(:enter)
+  wait_for_jquery_to_return
   ehmp.wait_until_btn_tile_sort_active_invisible
   expect(ehmp.gist_vital_names_only).to eq(expected_name_order)
   @manual_vitals_order = ehmp.gist_vital_names_only
@@ -81,8 +96,8 @@ end
 
 Then(/^the Problems applet reports Manual sort$/) do
   problems = PobProblemsApplet.new
-  problems.wait_for_fld_manual_sort
-  problems.wait_for_btn_remove_manual_sort
+  expect(problems.wait_for_fld_manual_sort(20)).to eq(true)
+  expect(problems.wait_for_btn_remove_manual_sort(20)).to eq(true)
   expect(problems).to have_fld_manual_sort
   expect(problems).to have_btn_remove_manual_sort
 end
@@ -150,4 +165,5 @@ When(/^the user clicks Manual sort to remove it$/) do
   problems.wait_for_btn_remove_manual_sort
   expect(problems).to have_btn_remove_manual_sort
   problems.btn_remove_manual_sort.click
+  wait_for_jquery_to_return
 end

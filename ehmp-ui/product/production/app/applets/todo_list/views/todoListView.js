@@ -10,10 +10,9 @@ define([
     'app/applets/todo_list/util',
     'app/applets/todo_list/toolbar/toolbarView',
     'app/applets/todo_list/statusView',
-    'app/applets/todo_list/statusNotCompletedView',
-    'hbs!app/applets/todo_list/templates/statusModalFooterTemplate'
-], function(Backbone, Marionette, _, Handlebars, moment, Backgrid, EventHandler, ColumnsConfig, Util, ToolbarView, StatusView, StatusNotCompletedView, StatusModalFooterTemplate) {
-    "use strict";
+    'app/applets/todo_list/statusNotCompletedView'
+], function(Backbone, Marionette, _, Handlebars, moment, Backgrid, EventHandler, ColumnsConfig, Util, ToolbarView, StatusView, StatusNotCompletedView) {
+    'use strict';
 
     var Config = ColumnsConfig;
 
@@ -74,11 +73,61 @@ define([
         }
     });
 
+    var DataGrid = ADK.Applets.BaseGridApplet.DataGrid;
+    var DataGridRow = DataGrid.DataGridRow;
+    var tooltip = Handlebars.compile([
+        '<div class="row">',
+        '<div class="col-xs-12">',
+        '<h5 class="top-margin-no bottom-margin-no top-padding-no bottom-padding-no">Task Description</h5>',
+        '</div>',
+        '</div>',
+        '<div class="row">',
+        '<div class="col-xs-12">',
+        '<p class="top-margin-no bottom-margin-no top-padding-no bottom-padding-no">{{text}}</p>',
+        '</div>',
+        '</div>'
+    ].join('\n'));
+
+    var getDetailsView = function(eventParams) {
+        var params = {
+            processId: eventParams.model.get('PROCESSINSTANCEID'),
+            triggerElement: this.$('.dropdown--quickmenu > button')
+        };
+        ADK.PatientRecordService.setCurrentPatient(eventParams.model.get('PATIENTICN'), {
+            confirmationOptions: {
+                navigateToPatient: false,
+                reconfirm: Util.isStaffView()
+            },
+            triggerElement: params.triggerElement,
+            callback: function() {
+                ADK.Messaging.getChannel('task_forms').request('activity_detail', params);
+            }
+        });
+    };
+
     var view = ADK.AppletViews.GridView.extend({
+        DataGrid: DataGrid.extend({
+            DataGridRow: DataGridRow.extend({
+                attributes: function() {
+                    var orig = DataGridRow.prototype.attributes.apply(this, arguments);
+                    if (!_.isString(this.model.get('DESCRIPTION')) || _.isEmpty(this.model.get('DESCRIPTION').trim())) {
+                        return orig;
+                    }
+                    return _.extend({}, orig, {
+                        'data-toggle': 'popover',
+                        'data-content': tooltip({
+                            text: this.model.get('DESCRIPTION')
+                        })
+                    });
+                }
+            })
+        }),
         _super: ADK.AppletViews.GridView.prototype,
         initialize: function(options) {
             var toolbarView, assignedTo, status, dateFilter;
-            this.taskCollection = new ADK.UIResources.Fetch.Tasks.Tasks({isClientInfinite: true});
+            this.taskCollection = new ADK.UIResources.Fetch.Tasks.Tasks({
+                isClientInfinite: true
+            });
             this.expandedAppletId = this.options.appletConfig.instanceId;
 
             if (this.options.appletConfig.fullScreen) {
@@ -160,7 +209,7 @@ define([
                 //patient data
                 this.criteria = {
                     context: "patient",
-                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid'),
+                    pid: ADK.PatientRecordService.getCurrentPatient().getIdentifier(),
                     subContext: assignedTo,
                     status: statusMappings[status].toString(),
                     getNotifications: true
@@ -199,18 +248,64 @@ define([
                 isStaffView: Util.isStaffView()
             });
 
+            var columnsViewType = this.columnsViewType;
             this.appletOptions = {
                 columns: this.columns,
                 collection: this.taskCollection,
                 filterFields: _.union(this.filterFields, ['dueDate'], ['INSTANCENAME']),
                 onClickRow: this.onClickRow,
-                parent: this,
                 toolbarView: toolbarView,
                 filterDateRangeEnabled: true,
                 filterDateRangeField: {
                     name: "DUEDATEFORMATTED",
                     label: "Date",
                     format: "YYYYMMDDHHmm"
+                },
+                tileOptions: {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: getDetailsView
+                        }, {
+                            type: 'gotoactionbutton',
+                            actionType: 'task',
+                            shouldShow: function() {
+                                return this.model.get('actionable') === true;
+                            },
+                            onClick: function(event, model) {
+                                EventHandler.todoListViewOnClickRow.call(this, model, event);
+                            }
+                        }]
+                    },
+                    actions: {
+                        enabled: true,
+                        actionType: 'task',
+                        shouldShow: function(model) {
+                            return model.get('actionable');
+                        },
+                        onClickButton: function(event, model) {
+                            EventHandler.todoListViewOnClickRow.call(this, model, event);
+                            event.currentTarget.focus();
+                        }
+                    },
+                    notifications: {
+                        enabled: true,
+                        container: '.notification-container',
+                        titleAttr: 'NOTIFICATIONTITLE',
+                        shouldShow: function(model) {
+                            return model.get('NOTIFICATION');
+                        }
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: getDetailsView
+                    },
+                    quickLooks: {
+                        enabled: function() {
+                            return columnsViewType === 'summary';
+                        }
+                    }
                 }
             };
 
@@ -252,84 +347,6 @@ define([
         },
         dateRangeRefresh: function(filterParameter, options) {
             this.sharedModel.set('dateFilter', options);
-        },
-        onClickRow: function(model, event) {
-            var reason = '',
-                modalModel, view, modalOptions, modal, headerView, footerView;
-
-            footerView = Backbone.Marionette.ItemView.extend({
-                template: StatusModalFooterTemplate,
-                model: new Backbone.Model({
-                    patientId: model.get('PATIENTICN'),
-                    params: {
-                        processId: model.get('PROCESSINSTANCEID')
-                    }
-                }),
-                events: {
-                    'click #activDetailBtn': 'activDetail'
-                },
-                event: event,
-                activDetail: function(event) {
-                    event.preventDefault();
-                    var params = this.model.get('params');
-                    ADK.PatientRecordService.setCurrentPatient(this.model.get('patientId'), {
-                        reconfirm: Util.isStaffView(),
-                        navigation: false,
-                        callback: function() {
-                            ADK.Messaging.getChannel('task_forms').request('activity_detail', params);
-                        }
-                    });
-                }
-            });
-            if (model.get('STATUS') === 'Completed') {
-                headerView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary font-size-18 right-padding-xs" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
-                });
-
-                reason = 'This task was completed and no further actions are required.';
-                modalModel = {
-                    reason: reason
-                };
-                view = new StatusView({
-                    model: new Backbone.Model(modalModel)
-                });
-                modalOptions = {
-                    'size': 'normal',
-                    'headerView': headerView,
-                    'footerView': footerView
-                };
-                modal = new ADK.UI.Modal({
-                    view: view,
-                    options: modalOptions
-                });
-                modal.show();
-            } else if (model.get('ACTIVE') && (model.get('dueTextValue') !== 1) && model.get('hasPermissions')) {
-                EventHandler.todoListViewOnClickRow.call(this.parent, model, event);
-                event.currentTarget.focus();
-            } else {
-                headerView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
-                });
-
-                modalModel = {
-                    reason: reason,
-                    icon: 'fa-exclamation-circle',
-                    color: 'color-red'
-                };
-                view = new StatusNotCompletedView({
-                    model: new Backbone.Model(modalModel)
-                });
-                modalOptions = {
-                    'size': 'xsmall',
-                    'headerView': headerView,
-                    'footerView': footerView
-                };
-                modal = new ADK.UI.Modal({
-                    view: view,
-                    options: modalOptions
-                });
-                modal.show();
-            }
         }
     });
 

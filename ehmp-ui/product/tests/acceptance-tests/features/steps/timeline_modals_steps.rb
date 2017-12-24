@@ -15,26 +15,8 @@ class TimelineAppletModalDetail < ADKContainer
     add_verify(CucumberLabel.new("Providers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-group-instanceid=providerSection]"))
     add_verify(CucumberLabel.new('Discharge Diagnoses'), VerifyText.new, AccessHtmlElement.new(:css, "[data-group-instanceid=diagnosisSection]"))
     # Newsfeed Rows
-    rows = AccessHtmlElement.new(:css, '#data-grid-newsfeed tbody tr.selectable')
+    rows = AccessHtmlElement.new(:css, '[data-appletid=newsfeed] [id^=data-grid-applet-] tbody tr.selectable')
     add_verify(CucumberLabel.new('Timeline Rows'), VerifyXpathCount.new(rows), rows)
-    # First Visit Row
-    add_action(CucumberLabel.new('First Visit Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-677'] td:nth-child(2)"))
-    # First Admission Row
-    add_action(CucumberLabel.new('First Admission Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-H2303'] td:nth-child(2)"))
-    # First Admission Row
-    add_action(CucumberLabel.new('First Discharge Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-9E7A-164-H918'] td:nth-child(2)"))
-    # First Immunization Row
-    add_action(CucumberLabel.new('First Immunization Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-immunization-9E7A-287-45'] td:nth-child(2)"))
-    # First Surgery Row
-    add_action(CucumberLabel.new('First Surgery Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-surgery-9E7A-65-28'] td:nth-child(2)"))
-    # First Procedure Row
-    add_action(CucumberLabel.new('First Procedure Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-procedure-9E7A-100599-8-MDD(702,'] td:nth-child(2)"))
-    # First DoD Appointment Row
-    add_action(CucumberLabel.new('First Appointment Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-appointment-DOD-0000000011-1000000717'] td:nth-child(2)"))
-    # First DoD Encounter Row
-    add_action(CucumberLabel.new('First Encounter Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-visit-DOD-0000000011-1000000721'] td:nth-child(2)"))
-    # First Lab Row
-    add_action(CucumberLabel.new('First Lab Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-row-instanceid='urn-va-lab-9E7A-17-CH-7018878-8366-2'] td:nth-child(2)"))
   end
 end
 
@@ -69,24 +51,51 @@ When(/^the user views the first Timeline event "(.*?)" detail view$/) do |event_
   expect(timeline_applet.wait_until_xpath_count_greater_than('Timeline Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
   
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infiniate_scroll("#data-grid-newsfeed tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=newsfeed] [id^=data-grid-applet-] tbody") }
 
-  first_event_row = "First " + event_type + " Row"
-  expect(timeline_applet.perform_action(first_event_row)).to eq(true)
+  timeline = PobTimeline.new
+  timeline.all_types event_type
+  expect(timeline.type_rows.length).to be > 0
+  timeline.type_rows[0].click
+end
+
+When(/^the user views the the details of the first row with an Activity of "([^"]*)" and Type "([^"]*)"$/) do |activity, type|
+  timeline_applet = TimelineAppletModalDetail.instance
+  expect(timeline_applet.wait_until_xpath_count_greater_than('Timeline Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other("[data-appletid=newsfeed] [id^=data-grid-applet-] tbody") }
+  
+  timeline = PobTimeline.new
+  timeline.all_activity_types activity, type
+  expect(timeline.type_rows.length).to be > 0
+  timeline.type_rows[0].click
+end
+
+When(/^the user views the first Timeline event Discharged Admission detail view$/) do
+  timeline_applet = TimelineAppletModalDetail.instance
+  expect(timeline_applet.wait_until_xpath_count_greater_than('Timeline Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other("[data-appletid=newsfeed] [id^=data-grid-applet-] tbody") }
+
+  timeline = PobTimeline.new
+  expect(timeline.discharged_admission_rows.length).to be > 0, "Expected at least 1 row of type Discharged Admission"
+  timeline.discharged_admission_rows[0].click
 end
 
 Then(/^the Timeline event "(.*?)" Detail modal displays$/) do |event_type, table|
   case event_type
   when 'Visit' , 'Admission' , 'Discharge' , 'Appointment' , 'Encounter'
     modal = TimelineAppletModalDetail.instance
-  when 'Surgery' , 'Procedure'
+  when 'Procedure'
     modal = TimelineAppletSurgeryProcedureModalDetail.instance
   when 'Lab'
     modal = TimelineAppletLabModalDetail.instance
   end
   
   table.rows.each do | row |
-    expect(modal.wait_until_action_element_visible("#{row[0]}")).to eq(true), "#{row[0]} is not visible after waiting"
+    expect(modal.wait_until_action_element_visible("#{row[0]}", 30)).to eq(true), "#{row[0]} is not visible after waiting"
     expect(modal.am_i_visible?(row[0])).to eq(true), "#{row[0]} was not visible"
   end
 end
@@ -103,3 +112,17 @@ Then(/^the Timeline event Immunization Detail modal displays$/) do |table|
   end
 end
 
+When(/^the selects the detail view button from Quick Menu Icon of the first timeline row$/) do
+  ehmp = PobTimeline.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+
+Then(/^the Timeline event Surgery Detail modal displays$/) do |table|
+  modal = SurgeryDetailModal.new
+  modal.wait_for_fld_details_section
+  expect(modal).to be_all_there
+  all_header_text = modal.fld_headers.map { |element| element.text.upcase }
+  table.rows.each do |element|
+    expect(all_header_text).to include "#{element[0].upcase}:"
+  end
+end

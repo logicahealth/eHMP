@@ -7,28 +7,14 @@ Scenario: Users will be able to see dropdown option in coversheet for screen sel
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
 	Then Cover Sheet is active
-	# And the "patient identifying traits" is displayed with information
-	# 	| field			| value 				|
-	# 	| patient name	| Eight,Patient 	    |
-	# And the applets are displayed on the coversheet
-	# 	| applet 					|
-	# 	| PROBLEMS	 			|
-	# 	| NUMERIC LAB RESULTS		|
-	# 	| VITALS 					|
-	# 	| ACTIVE MEDICATIONS		|
-	# 	| ALLERGIES					|
-	# 	| IMMUNIZATIONS				|
-	# 	| ORDERS					|
-	# 	| APPOINTMENTS				|
-	# 	| COMMUNITY HEALTH SUMMARIES|
 	When the user clicks the "CoversheetDropdown Button"
 	Then the CoversheetDropdown table contains headers
-	| headers |
-	|Coversheet|
-	|Timeline|
-	|Meds Review|
-	|Documents|
-	|Overview|
+      | headers           |
+      | Coversheet        |
+      | Timeline          |
+      | Medication Review |
+      | Documents         |
+      | Overview          |
 
 
 

@@ -14,7 +14,6 @@ define([
     'app/resources/writeback/problems/model',
     'app/resources/writeback/problems/collection',
     'app/resources/writeback/orders/model',
-    'app/resources/writeback/orders/detail',
     'app/resources/writeback/orders/draft/model',
     'app/resources/writeback/orders/draft/collection',
     'app/resources/writeback/orders/discontinue',
@@ -27,7 +26,11 @@ define([
     'app/resources/writeback/notes/notesSignModel',
     'app/resources/writeback/addenda/addendumSignModel',
     'app/resources/writeback/stackedGraph/model',
-    'app/resources/writeback/issueReport/model'
+    'app/resources/writeback/issueReport/model',
+    'app/resources/writeback/tasks/model',
+    'app/resources/writeback/video_visits/patientDemographicsModel',
+    'app/resources/writeback/video_visits/appointmentModel',
+    'app/resources/writeback/video_visits/providerContactInfoModel'
 ], function(
     Notes,
     Note,
@@ -44,7 +47,6 @@ define([
     Problem,
     Problems,
     Order,
-    OrderDetail,
     DraftOrder,
     DraftOrders,
     OrderDiscontinue,
@@ -57,7 +59,11 @@ define([
     NotesSignModel,
     AddendumSignModel,
     StackedGraph,
-    IssueReport
+    IssueReport,
+    Task,
+    VideoVisitsPatientDemographicsModel,
+    VideoVisitsAppointmentModel,
+    VideoVisitsProviderContactInfoModel
 ) {
     'use strict';
 
@@ -94,7 +100,6 @@ define([
             },
             Orders: {
                 Model: Order,
-                Detail: OrderDetail,
                 LabSupportData: LabSupportData,
                 Discontinue: OrderDiscontinue,
                 Sign: OrderSign,
@@ -122,6 +127,20 @@ define([
             },
             IssueReport: {
                 Model: IssueReport
+            },
+            Tasks: {
+                Model: Task
+            },            
+            VideoVisits: {
+                PatientDemographics: {
+                    Model: VideoVisitsPatientDemographicsModel
+                },
+                Appointment: {
+                    Model: VideoVisitsAppointmentModel
+                },
+                ProviderContactInfo: {
+                    Model: VideoVisitsProviderContactInfoModel
+                }
             }
         }
     };

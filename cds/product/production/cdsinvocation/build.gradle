@@ -1,9 +1,7 @@
 apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 def repoCommitCountClosure = {
-  def proc1 = ['sh', '-c', "git rev-list --full-history --all ${commitCountDir}"].execute()
-  def proc2 = 'wc -l'.execute()
-  proc1 | proc2
-  return proc2.text.trim()
+  def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+  return proc.text.trim()
 }
 def repoCommitCount = "${->repoCommitCountClosure()}"
 def version = "${->repoVersion + '.' + repoCommitCount}"
@@ -17,14 +15,9 @@ allprojects {
 
   ext.set('commitCountDir', projectDir)
   // Set dependency versions here:
-  ext.set('javaVersion', '1.8')
-  ext.set('targetJavaVersion', '1.8')
-  ext.set('cxfVersion', '3.1.6')
-  ext.set('jacksonVersion', '2.5.4')
   ext.set('openCDSDSSVersion', '2.1.2')
   ext.set('openCDSVMRVersion', '2.1.2')
   ext.set('javaxVersion', '2.0')
-  ext.set('log4jVersion', '2.4.1')
   ext.set('junitVersion', '4.12')
   ext.set('springVersion', '4.2.5.RELEASE')
   ext.set('springSecurityVersion', '4.0.4.RELEASE')
@@ -39,7 +32,7 @@ allprojects {
     repositories.mavenDeployer {
       pom.groupId = "${groupId}"
       pom.version = "${version}"
-      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
+      repository(url: "${->nexusURL}/nexus/content/repositories/${->uploadRepo}/") {
         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }

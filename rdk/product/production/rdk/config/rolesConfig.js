@@ -1,6 +1,6 @@
 // Temporary mock data - to be removed when the JBPM VM is complete
 module.exports.user = {
-    "REDACTED": [
+    "USER  ": [
         {
             "service": [
                 "HOME TELEHEALTH",

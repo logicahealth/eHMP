@@ -1,4 +1,4 @@
-@F144_NewsFeedApplet_NoData  
+@F144_NewsFeedApplet_NoData  @timeline_applet @reg4
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed)
 
 Background:
@@ -31,12 +31,10 @@ Scenario: News feed applet displays all of the Visits for a given patient in a g
 @f144_newsfeed_sorting_facility  @US2683 @DE776 @DE3810
 Scenario: Newsfeed applet displays sorting by Facility correctly
   When user navigates to Timeline Applet
-  And user clicks on "Facility" column header in Newsfeed Applet
-  Then the Timeline grid is sorted in "alphabetic" order based on "Facility"
-
-  When user clicks on "Facility" column header in Newsfeed Applet
-  Then the Timeline grid is sorted in "reverse alphabetic" order based on "Facility"
-
-  When user clicks on "Facility" column header in Newsfeed Applet
+  And the user sorts the Timeline grid by Facility 
+  Then the Timeline grid is sorted in alphabetic order based on Facility
+  And the user sorts the Timeline grid by Facility 
+  Then the Timeline grid is sorted in reverse alphabetic order based on Facility
+  And the user sorts the Timeline grid by Facility
   And the default sorting by Date/Time is in descending in Newsfeed Applet
 

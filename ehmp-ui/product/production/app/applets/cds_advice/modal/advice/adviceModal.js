@@ -32,10 +32,11 @@ define([
          *
          * @param {BackboneJS.Model} model The model object created for the list item.
          */
-        show: function(model) {
+        show: function(model, targetElement) {
             var view = createBodyView(model);
             var modalOptions = {
                 title: 'Advice',
+                triggerElement: targetElement
             };
             var modal = new ADK.UI.Modal({
                 view: view,

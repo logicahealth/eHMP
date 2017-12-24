@@ -1,5 +1,5 @@
 HMPACT ;ASMR/EJK/PB/JD - Patient Appointment Broker Call;May 15, 2016 14:15
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,4**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; 2/16/16 - JD - Removed the check in line tag ADMIT to allow processing of all patients
@@ -35,7 +35,7 @@ CLEAN ;CLEAN UP STRAY VARIABLES
  Q
  ;
 SETITEM(ROOT,X) ; -- set item in list - RRB US5872 
- S @ROOT@($O(@ROOT@(9999),-1)+1)=X
+ S @ROOT@($O(@ROOT@(PORT),-1)+1)=X
  Q
  ;
 APPT(HMPOUT,BEG,END,LOCIEN) ; Lookup appointments by date and location
@@ -161,6 +161,7 @@ GETADMIT(DFN) ;
  D INP^VADPT
  ; LOC = Ward (Location) IEN, LOCNAME = Ward (Location) Name, LRMBD = Room-Bed Name (Optional depending upon inpatient
  ; location setup), ADMIT = Admission date.time in VA format
+ Q:$G(VAIN(4))=""!($G(VAIN(5))="")!($G(VAIN(7))="")  ; Quit if the ward location or the room bed or the admission date time is null.
  S LOC=$P(VAIN(4),U),LOCNAME=$P(VAIN(4),U,2),LRMBD=VAIN(5),ADMIT=$P(VAIN(7),U)
  K PDATA
  S PDATA=DFN_U_ADMIT_U_LOCNAME_U_LRMBD_U_LOC

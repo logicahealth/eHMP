@@ -42,6 +42,9 @@ app.register('/labSupportData', ROOT + '/src/write/orders/lab/support-data/lab-s
 app.register('/patient/:pid/numeric-lab-results', ROOT + '/src/write/numeric-lab-results/numeric-lab-results-resources');
 
 var port = app.config.appServer.port;
+
+app.logger.info('UV_THREADPOOL_SIZE = %s', process.env.UV_THREADPOOL_SIZE);
+
 var server = app.rdkListen(port, function() {
     var address = server.address();
     app.logger.info('Writeback Data Service listening at http://%s:%s', address.host, address.port);

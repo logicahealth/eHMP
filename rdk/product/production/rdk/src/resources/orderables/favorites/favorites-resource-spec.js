@@ -118,7 +118,7 @@ describe.skip('Favorites', function() {
                 id: 'foo',
                 type: 'orderable',
                 domain: 'domain',
-                siteId: '9E7A'
+                siteId: 'SITE'
             });
             favorites.addFavorites(req, res);
             expect(pjds.post.called).to.be.true();

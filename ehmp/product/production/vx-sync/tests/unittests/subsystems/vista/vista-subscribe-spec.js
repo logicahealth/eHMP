@@ -14,23 +14,23 @@ var hmpServer = 'TheHmpServer';
 
 var config = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
-            'host': 'REDACTED    ',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 10000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
-            'host': 'REDACTED    ',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -43,17 +43,11 @@ var config = {
     'hmp.extract.schema': '3.001'
 };
 
-describe('vista-subscribe.js', function () {
-    // beforeEach(function() {
-    //     // Underlying JDS and RPC calls to monitor and make sure that they are made.
-    //     //---------------------------------------------------------------------------
-    //     spyOn(dummyRpcClient, 'callRpc').andCallThrough();
-    // });
-
-    describe('_createRpcConfigVprContext()', function () {
-        it('Verify context was added correctly', function () {
+describe('vista-subscribe.js', function() {
+    describe('_createRpcConfigVprContext()', function() {
+        it('Verify context was added correctly', function() {
             var siteConfig = config.vistaSites;
-            var rpcConfig = VistaClient._createRpcConfigVprContext(siteConfig, 'C877');
+            var rpcConfig = VistaClient._createRpcConfigVprContext(siteConfig, 'SITE');
             //          console.log("rpcConfig: %j", rpcConfig);
             expect(rpcConfig).toBeTruthy();
             expect(rpcConfig.name).toEqual('kodak');
@@ -64,7 +58,7 @@ describe('vista-subscribe.js', function () {
     describe('fetchAppointment()', function () {
         it('Happy Path', function () {
             var handler = new VistaClient(dummyLogger, dummyLogger, config, dummyRpcClient);
-            var site = 'C877';
+            var site = 'SITE';
             var dummyrpc = handler._getRpcClient(site);
             spyOn(dummyrpc, 'execute').andCallThrough();
             var expectedError;
@@ -92,7 +86,7 @@ describe('vista-subscribe.js', function () {
     describe('subscribe()', function () {
         it('Happy Path', function () {
             var handler = new VistaClient(dummyLogger, dummyLogger, config, dummyRpcClient);
-            var site = 'C877';
+            var site = 'SITE';
             var dummyrpc = handler._getRpcClient(site);
             spyOn(dummyrpc, 'execute').andCallThrough();
             var dfn = '3';
@@ -107,7 +101,7 @@ describe('vista-subscribe.js', function () {
                 'sessionId': 'some-session-id',
                 'requestId': 'some-request-id'
             };
-            handler.subscribe('C877', patientIdentifier, rootJobId, jobIds, jobPriority, referenceInfo, function (error, response) {
+            handler.subscribe('SITE', patientIdentifier, rootJobId, jobIds, jobPriority, referenceInfo, function (error, response) {
                 expectedError = error;
                 expectedResponse = response;
                 called = true;
@@ -152,7 +146,7 @@ describe('vista-subscribe.js', function () {
                 }
             };
 
-            var site = '9E7A';
+            var site = 'SITE';
             var dfn = '3';
             var patientIdentifier = idUtil.create('pid', site + ';' + dfn);
             var rootJobId = '1';
@@ -181,7 +175,7 @@ describe('vista-subscribe.js', function () {
     describe('unsubscribe()', function () {
         it('Happy Path', function () {
             var handler = new VistaClient(dummyLogger, dummyLogger, config, dummyRpcClient);
-            var site = 'C877';
+            var site = 'SITE';
             var dummyrpc = handler._getRpcClient(site);
             spyOn(dummyrpc, 'execute').andCallThrough();
             var dfn = '3';
@@ -215,7 +209,7 @@ describe('vista-subscribe.js', function () {
     describe('status()', function () {
         it('invokes the HMP SUBSCRIPTION STATUS RPC', function () {
             var handler = new VistaClient(dummyLogger, dummyLogger, config, dummyRpcClient);
-            var site = 'C877';
+            var site = 'SITE';
             var dummyrpc = handler._getRpcClient(site);
             spyOn(dummyrpc, 'execute').andCallThrough();
             var dfn = '3';
@@ -249,7 +243,7 @@ describe('vista-subscribe.js', function () {
     describe('getDemographics()', function () {
         it('Happy Path', function () {
             var handler = new VistaClient(dummyLogger, dummyLogger, config, dummyRpcClient);
-            var vistaId = 'C877';
+            var vistaId = 'SITE';
             var dummyrpc = handler._getRpcClient(vistaId);
             spyOn(dummyrpc, 'execute').andCallThrough();
             var dfn = '3';
@@ -297,13 +291,13 @@ describe('vista-subscribe.js', function () {
                     },
                     batchSize: ['1000'],
                     errors: [null],
-                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
+                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
                 },
                 _getRpcClient: function () {
                     return this.rpcClient;
                 }
             };
-            var vistaId = '9E7A';
+            var vistaId = 'SITE';
             var hmpBatchSize = '1000';
             var lastupdatetime = '0';
             runs(function () {
@@ -328,7 +322,13 @@ describe('vista-subscribe.js', function () {
                 log: dummyLogger,
                 metrics: dummyLogger,
                 config: config,
-                fetchNextBatch: function (vistaId, lastupdatetime, hmpBatchSize, callback) {
+                ERROR_LIST: {
+                    INVALID_JSON_ERROR: 'Invalid JSON with hmpBatchSize = 1',
+                    RPC_ERROR: 'RPC Error',
+                    INVALID_CONFIGURATION_ERROR: 'Invalid Configuration',
+                    VISTA_LOCK_DOWN_MODE: 'VistA Allocations Locked'
+                },
+                fetchNextBatch: function(vistaId, lastupdatetime, hmpBatchSize, callback){
                     expect(_.isString(hmpBatchSize)).toBeTruthy();
                     VistaClient.prototype.fetchNextBatch.call(fakeVista, vistaId, lastupdatetime, hmpBatchSize, callback);
                 },
@@ -341,14 +341,14 @@ describe('vista-subscribe.js', function () {
                     },
                     errors: [null, null],
                     batchSize: ['2', '1'],
-                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
-                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
+                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
+                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
                 },
                 _getRpcClient: function () {
                     return this.rpcClient;
                 }
             };
-            var vistaId = '9E7A';
+            var vistaId = 'SITE';
             var hmpBatchSize = '2';
             var lastupdatetime = '0';
             runs(function () {
@@ -371,7 +371,13 @@ describe('vista-subscribe.js', function () {
                 log: dummyLogger,
                 metrics: dummyLogger,
                 config: config,
-                fetchNextBatch: function (vistaId, lastupdatetime, hmpBatchSize, callback) {
+                ERROR_LIST: {
+                    INVALID_JSON_ERROR: 'Invalid JSON with hmpBatchSize = 1',
+                    RPC_ERROR: 'RPC Error',
+                    INVALID_CONFIGURATION_ERROR: 'Invalid Configuration',
+                    VISTA_LOCK_DOWN_MODE: 'VistA Allocations Locked'
+                },
+                fetchNextBatch: function(vistaId, lastupdatetime, hmpBatchSize, callback){
                     expect(_.isString(hmpBatchSize)).toBeTruthy();
                     VistaClient.prototype.fetchNextBatch.call(fakeVista, vistaId, lastupdatetime, hmpBatchSize, callback);
                 },
@@ -384,14 +390,15 @@ describe('vista-subscribe.js', function () {
                     },
                     errors: [null, null],
                     batchSize: ['1000', '500'],
-                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
-                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
+                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
+                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
                 },
                 _getRpcClient: function () {
                     return this.rpcClient;
                 }
             };
-            var vistaId = '9E7A';
+
+            var vistaId = 'SITE';
             var hmpBatchSize = '1000';
             var lastupdatetime = '0';
             runs(function () {
@@ -427,15 +434,15 @@ describe('vista-subscribe.js', function () {
                     },
                     errors: [null, null, null],
                     batchSize: ['3', '2', '1'],
-                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
-                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
-                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
+                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
+                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}',
+                        '{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"},\"data\":{\"updated\":\"20150721120512\",\"totalItems\":1000,\"lastUpdate\" : \"3150721-11303\"},\"items\":[{},{}]}']
                 },
                 _getRpcClient: function () {
                     return this.rpcClient;
                 }
             };
-            var vistaId = '9E7A';
+            var vistaId = 'SITE';
             var hmpBatchSize = '3'; //try batch size that isn't a power of 2
             var lastupdatetime = '0';
             runs(function () {
@@ -471,13 +478,13 @@ describe('vista-subscribe.js', function () {
                     },
                     errors: [null],
                     batchSize: ['1000'],
-                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"C877\"}}']
+                    results: ['{\"apiVersion\": 1.02,\"params\":{\"domain\":\"KODAK.VISTACORE.US\",\"systemId\":\"SITE\"}}']
                 },
                 _getRpcClient: function () {
                     return this.rpcClient;
                 }
             };
-            var vistaId = '9E7A';
+            var vistaId = 'SITE';
             var hmpBatchSize = '1000';
             var lastupdatetime = '0';
             runs(function () {

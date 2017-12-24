@@ -51,7 +51,7 @@ var job = {
         uid: 'urn:va:document:DOD:4325678:1000004203',
         pid: 'DOD;4325678',
         text: [ {} ],
-        dodComplexNoteUri: 'http://127.0.0.1:8089/documents?dir=444f443b34333235363738/1000004203&file=da39a3ee5e6b4b0d3255bfef95601890afd80709.html',
+        dodComplexNoteUri: 'http://127.0.0.1:8080/documents?dir=444f443b34333235363738/1000004203&file=da39a3ee5e6b4b0d3255bfef95601890afd80709.html',
         stampTime: '20150506125559',
         isInterdisciplinary: 'false',
         summary: 'Progress Note',
@@ -211,7 +211,7 @@ describe('publish-vx-data-change-request-handler.js', function() {
                      eventFilter: {
                         generic: {
                             sites: [
-                                'C877'
+                                'SITE'
                             ],
                             domains: [
                             ]

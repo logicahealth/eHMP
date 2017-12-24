@@ -1,34 +1,3 @@
-def verify_table_headers(access_browser_instance, table)
-  driver = TestSupport.driver
-  #headers = driver.find_elements(:css, "#appletContent th")
-  headers = driver.find_elements(:css, "#data-grid-numeric_lab_results_grid th")
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-
-  elements = access_browser_instance
-
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #verify_table_headers
-
-def verify_modal_headers(access_browser_instance, table)
-  driver = TestSupport.driver
-  headers = driver.find_elements(:css, "#mainModal th")
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-
-  elements = access_browser_instance
-
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #verify_modal_headers
-
 def avoid_block_nesting(row_defined_in_cucumber, cols_displayed_in_browser)
   for col_index in 0..row_defined_in_cucumber.length - 1
     #p "comparing #{row_defined_in_cucumber[col_index]} to #{cols_displayed_in_browser[col_index].attribute("innerHTML").strip}"
@@ -59,75 +28,6 @@ def avoid_block_nesting_text(row_defined_in_cucumber, cols_displayed_in_browser)
   return matched
 end
 
-class TableHeadersContainer < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    #Care team
-    add_verify(CucumberLabel.new("Headers - Care Team Details"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patientDemographic-providerInfo .table th"))
-
-    #Care Team Quicklook
-    add_verify(CucumberLabel.new("Headers - Care Team Quicklook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patientDemographic-providerInfo .popover-content .table th"))
-
-    # Orders
-    add_verify(CucumberLabel.new("Headers - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-orders th"))
-
-    # Numeric Lab Results
-    add_verify(CucumberLabel.new("Headers - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .table-responsive th"))
-    add_verify(CucumberLabel.new("Headers - Lab History"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-undefined th"))
-    add_verify(CucumberLabel.new("Headers - Panel"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#lab-results-header th"))
-    add_verify(CucumberLabel.new("Headers - Numeric Lab Results Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .backgrid th"))
-
-    #Active Medications
-    add_verify(CucumberLabel.new("Headers - Active & Recent Medications Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activeMeds th"))
-
-    #Immunization Gist
-    add_verify(CucumberLabel.new("Headers - Immunization Gist Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-immunizations th"))
-
-    #Immunization Gist hover table
-    add_verify(CucumberLabel.new("Headers - Immunization Gist Hover Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='urn:va:immunization:2939:57:44']/descendant::th"))
-
-    #Documents Gist
-    add_verify(CucumberLabel.new("Headers - Documents Gist Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-documents th"))
-
-    #Allery Gist
-    add_verify(CucumberLabel.new("Headers - Allergy Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid th"))
-
-    #Problems Gist Quick View table
-    add_verify(CucumberLabel.new("Headers - Problems Gist Quick View Table"), VerifyContainsText.new, AccessHtmlElement.new(:css, "div.gist-popover table th"))
-
-    #Stacked Graph Quick View Table
-    add_verify(CucumberLabel.new("Headers - Stacked Graph Quick View Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@id='urn:va:vital:DOD:0000000003:1000000582']/thead/tr"))
-
-    #Encounters Gist Quick View table - Visits
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Visits"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encountersTooltipVisits']/thead/descendant::th"))
-    #Encounters Gist Quick View table - Visit Type
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Visit Type"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encounters-Visit-GENERALINTERNALMEDICINE']/thead/descendant::th"))
-
-    #Encounters Gist Quick View table - Procedure
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Procedures"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encountersTooltipProcedures']/thead/descendant::th"))
-    #Encounters Gist Quick View table - Procedure Name
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Procedure Name"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encounters-Procedure-PULMONARYFUNCTIONINTERPRET']/thead/descendant::th"))
-
-    #Encounters Gist Quick View table - Appointment
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Appointments"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encountersTooltipAppointments']/thead/descendant::th"))
-    #Encounters Gist Quick View table - Appointment Type
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Appointment Type"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encounters-Appointment-GENERALINTERNALMEDICINE']/thead/descendant::th"))
-
-    #Encounters Gist Quick View table - Appointment
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Admissions"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encountersTooltipAdmissions']/thead/descendant::th"))
-    #Encounters Gist Quick View table - Appointment Type
-    add_verify(CucumberLabel.new("Headers - Encounters Gist Quick View - Diagnosis"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encounters-Admission-OBSERVATION']/thead/descendant::th"))
-
-    #Patient Header Phone Group Quick Look table
-    add_verify(CucumberLabel.new("Headers - Phone Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#ql-phone-table-container table thead tr th"))
-    add_verify(CucumberLabel.new("Headers - Address Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#ql-pt-address-table-container table thead tr th"))
-    add_verify(CucumberLabel.new("Headers - Next Of Kin Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-nok-contact > div:nth-child(2) > div:nth-child(2) > div > div > table > thead > tr > th"))
-    add_verify(CucumberLabel.new("Headers - Email Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#ql-email-table-container > table > thead > tr > th"))
-    add_verify(CucumberLabel.new("Headers - Emergency Contact Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#pt-header-em-contact > div:nth-child(2) > div:nth-child(2) > div > div > table > thead > tr > th"))
-  end # initialize
-end
-
 class TableContainer < AccessBrowserV2
   include Singleton
   def initialize
@@ -136,7 +36,7 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Care Team Details"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patientDemographic-providerInfo .table tbody tr"))
 
     # Orders
-    add_verify(CucumberLabel.new("Rows - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-orders tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Orders Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=orders] .data-grid table tbody tr"))
 
     # Numeric Lab Results
     add_verify(CucumberLabel.new("Rows - Lab Detail"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .table-responsive tbody"))
@@ -153,7 +53,7 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Active Medications Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#activeMeds-interventions-gist-items div.gist-item"))
 
     #Immunization Gist
-    add_verify(CucumberLabel.new("Rows - Immunization Gist Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-immunizations tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Immunization Gist Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=immunizations] .data-grid table tbody tr"))
 
     #Immunization Gist hover table
     add_verify(CucumberLabel.new("Rows - Immunization Gist Hover Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='urn:va:immunization:2939:57:44']/tbody/descendant::tr"))
@@ -165,7 +65,7 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Allergy Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tbody tr"))
 
     #Problems Gist Quick View table
-    add_verify(CucumberLabel.new("Rows - Problems Gist Quick View Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='urn_va_problem_9E7A_711_141']/tbody/descendant::tr"))
+    add_verify(CucumberLabel.new("Rows - Problems Gist Quick View Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='urn_va_problem_SITE_711_141']/tbody/descendant::tr"))
 
     #Stacked Graph Quick View Table
     add_verify(CucumberLabel.new("Rows - Stacked Graph Quick View Table"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@id='urn:va:vital:DOD:0000000003:1000000582']/tbody/tr"))
@@ -191,8 +91,8 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Encounters Gist Quick View - Diagnosis"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//table[@id='encounters-Admission-OBSERVATION']/tbody/descendant::tr"))
 
     #Active Problems expand view table
-    add_verify(CucumberLabel.new("Rows - Active Problems Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-problems tbody tr"))
-    add_verify(CucumberLabel.new("Rows - Activities Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-activities tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Active Problems Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=problems] table tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Activities Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=activities] table tbody tr"))
 
     #Patient Header Phone Group Quick Look table
     add_verify(CucumberLabel.new("Rows - Phone Group QuickLook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#ql-phone-table-container table tbody tr"))
@@ -203,21 +103,21 @@ class TableContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Rows - Care Team Quicklook"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#patientDemographic-providerInfo .popover-content .table tbody tr"))
   
     # Newsfeed / Time table
-    add_verify(CucumberLabel.new("Rows - Newsfeed Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region #data-grid-newsfeed tbody tr"))
-    add_verify(CucumberLabel.new("Rows - Newsfeed Applet data"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region #data-grid-newsfeed tbody tr.selectable"))
-    add_verify(CucumberLabel.new("Rows - Newsfeed Applet groups"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#content-region #data-grid-newsfeed tr.groupByHeader'))
+    add_verify(CucumberLabel.new("Rows - Newsfeed Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region [data-appletid=newsfeed] .data-grid table tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Newsfeed Applet data"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region [data-appletid=newsfeed] .data-grid table tbody tr.selectable"))
+    add_verify(CucumberLabel.new("Rows - Newsfeed Applet groups"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#content-region [data-appletid=newsfeed] .data-grid table tr.groupByHeader'))
       
     # Documents / Time table
-    add_verify(CucumberLabel.new("Rows - Documents Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region #data-grid-documents tbody tr"))
-    add_verify(CucumberLabel.new("Rows - Documents Applet data"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region #data-grid-documents tbody tr.selectable"))
-    add_verify(CucumberLabel.new("Rows - Documents Applet groups"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#content-region #data-grid-documents tr.groupByHeader'))
+    add_verify(CucumberLabel.new("Rows - Documents Applet"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region [data-appletid=documents] .data-grid table tbody tr"))
+    add_verify(CucumberLabel.new("Rows - Documents Applet data"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#content-region [data-appletid=documents] .data-grid table tbody tr.selectable"))
+    add_verify(CucumberLabel.new("Rows - Documents Applet groups"), VerifyContainsText.new, AccessHtmlElement.new(:css, '#content-region [data-appletid=documents] .data-grid table tr.groupByHeader'))
   
     #Problems
     add_verify(CucumberLabel.new('Rows - Problems Gist Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='problems'] .gist-item"))
-    add_verify(CucumberLabel.new('Rows - Vitals Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#data-grid-vitals tr.selectable'))
+    add_verify(CucumberLabel.new('Rows - Vitals Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid=vitals] .data-grid table tr.selectable'))
   
     #Appointments
-    add_verify(CucumberLabel.new('Rows - Appointment Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, '#data-grid-appointments tbody tr.selectable'))
+    add_verify(CucumberLabel.new('Rows - Appointment Applet'), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid=appointments] .data-grid table tbody tr.selectable'))
     
   end # initialize
 end
@@ -240,158 +140,5 @@ def verify_single_row(table_name, expected_row)
   end
 end
 
-# ######################## When ########################
-
-When(/^clicks the first result in the "(.*?)"$/) do |applet_name|
-  @tc = TableContainer.instance
-  rows_key = "Rows - #{applet_name}"
-
-  attempts = 0
-
-  # sleep 0.5
-
-  begin
-    wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-    wait.until { @tc.get_elements(rows_key).size > 1 }
-    @tc.get_element(rows_key).location_once_scrolled_into_view
-    wait.until { @tc.get_element(rows_key) }
-    wait.until { @tc.get_element(rows_key).displayed? }
-    # wait.until { @tc.get_element(rows_key).click }
-    @tc.get_element(rows_key).click
-  rescue => e
-    p "There was an error clicking the row; attempting re-click."
-
-    attempts += 1
-    raise e if attempts > 5
-    if e.class == Selenium::WebDriver::Error::StaleElementReferenceError && attempts < 3
-      sleep 2
-      retry
-    elsif e.class == Selenium::WebDriver::Error::TimeOutError
-      # I don't like doing this, but phantomjs is the only 'browser' where this seems to be necessary
-      # I can't duplicate the need to occasionally refresh in chrome or manually
-      refresh_applet(applet_name)
-      retry
-    else
-      raise e
-    end # if/else
-  end # begin/rescue
-end
-
 # ######################## Then ########################
 
-Then(/^the "(.*?)" table contains (\d+) rows$/) do |table_name, expected_num_rows|
-  begin
-    row_count = 0
-    wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-    wait.until { 
-      row_count = TableContainer.instance.get_elements("Rows - #{table_name}").size 
-      row_count == expected_num_rows.to_i 
-    }
-  rescue Exception => e 
-    p "Error #{e}, received #{row_count} rows"
-    raise e
-  end
-end # Then()
-
-Then(/^the "(.*?)" table has headers$/) do |table_name, expected_table|
-  @tc = TableHeadersContainer.instance
-  expected_headers = expected_table.headers
-
-  browser_headers_key = "Headers - #{table_name}"
-
-  print "headers key is = #{browser_headers_key}"
-
-  begin
-    wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-    wait.until { @tc.get_elements(browser_headers_key).size == expected_headers.size }
-  rescue Exception => e
-    p "Expected number of headers (#{expected_headers.size}) did not match app number of headers (#{@tc.get_elements(browser_headers_key).size})"
-    raise e
-  end
-
-  browser_headers = @tc.get_elements(browser_headers_key)
-
-  for i in 0...expected_headers.size do
-    verify_elements_equal(expected_headers[i], browser_headers[i].text.split("\n")[0])
-  end
-end
-
-Then(/^the "(.*?)" table contains headers$/) do |table_name, expected_table|
-  @tc = TableHeadersContainer.instance
-  expected_headers = expected_table.headers
-
-  browser_headers_key = "Headers - #{table_name}"
-
-  print "headers key is = #{browser_headers_key}"
-
-  begin
-    wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-    wait.until { @tc.get_elements(browser_headers_key).size == expected_headers.size }
-  rescue Exception => e
-    p "Expected number of headers (#{expected_headers.size}) did not match app number of headers (#{@tc.get_elements(browser_headers_key).size})"
-    raise e
-  end
-
-  browser_headers = @tc.get_elements(browser_headers_key)
-
-  for i in 0...expected_headers.size do
-    browser_headers[i].location_once_scrolled_into_view
-    verify_elements_equal(expected_headers[i], browser_headers[i].text)
-  end
-end
-
-Then(/^the "(.*?)" table contains rows$/) do |table_name, expected_table|
-  @tc = TableContainer.instance
-  element_key = "Rows - #{table_name}"
-
-  p "table name = #{element_key}"
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-
-  wait.until { @tc.get_elements(element_key).size >= expected_table.rows.size }
-
-  if expected_table.rows.size == 1
-    attempts = 0
-    begin
-      # this code shouldn to used when you are expecting "No Records Found" (dones't match up with the expected headers either)
-      wait.until { @tc.get_elements(element_key)[0].text != "No Records Found" }
-    rescue StandardError => e
-      attempts += 1
-      if (e.class == Selenium::WebDriver::Error::StaleElementReferenceError) && (attempts < 3)
-        retry
-      else
-        raise e
-      end # if/else
-    end # begin/rescue
-  end
-
-  attempts = 0
-  begin
-    actual_rows = @tc.get_elements(element_key)
-
-    expected_rows = expected_table.rows
-
-    for i in 0...expected_rows.size do
-      expected_row = expected_rows[i]
-      actual_row = actual_rows[i]
-
-      actual_elements = actual_row.find_elements(:css, "td")
-
-      for j in 0...expected_row.size do
-        # add the gsub for F365-5.2_DemographicQuickLooks2, if it breaks another test, remove it and 
-        # write a new step for F365-5.2_DemographicQuickLooks2
-        verify_elements_equal(expected_row[j], actual_elements[j].text.rstrip.gsub("\n", " "))
-      end # j for
-    end # i for
-  rescue StandardError => e
-    attempts += 1
-
-    if (e.class == Selenium::WebDriver::Error::StaleElementReferenceError) && (attempts < 3)
-      p "Attemping retry of table verification."
-      retry
-    else
-      p "!! Error verifying table !!"
-      raise
-    end # if/else
-  end # begin/rescue
-end

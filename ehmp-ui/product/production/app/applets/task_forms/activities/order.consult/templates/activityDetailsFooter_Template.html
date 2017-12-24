@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-xs-6 text-left">
-        {{#hasPermission 'discontinue-consult-order'}} {{#if showDiscontinue}} {{ui-button "Discontinue" id="activityDetailDiscontinue" classes="btn-default btn-sm" title="Press enter to discontinue activity"}} {{/if}} {{/hasPermission}}
+        {{#hasPermission 'discontinue-consult-order'}} {{#if showDiscontinue}} {{ui-button "Discontinue" id="activityDetailDiscontinue" classes="btn-default btn-sm"}} {{/if}} {{/hasPermission}}
     </div>
     <div class="col-xs-6">
     	<div class="control inline-block-display dropdown-control dropup right-margin-sm">
 	        <div class="btn-group">
-	            <button type="button" class="btn dropdown-toggle dropup btn-sm btn-default btn-caret" title="Press enter for available actions" data-toggle="dropdown" {{#if actionButtons}}{{else}}disabled="true" {{/if}}>Actions <i class="fa fa-caret-up"></i></button>
+	            <button type="button" class="btn dropdown-toggle dropup btn-sm btn-default btn-caret" data-toggle="dropdown" {{#if actionButtons}}{{else}}disabled="true" {{/if}}>Actions <i class="fa fa-caret-up"></i></button>
 	            <ul id="consultAction" class="dropdown-menu dropdown-menu-right">
 	                {{#each actionButtons}}
 	                <li title="Press enter to select {{label}}" data-signal="{{signal}}">
@@ -16,7 +16,7 @@
 	        </div>
     	</div>
     	<div class="control inline-block-display">
-    		{{ui-button "Close" id="activityDetailClose" classes="btn-sm btn-default" title="Press enter to close." }}
+    		{{ui-button "Close" id="activityDetailClose" classes="btn-sm btn-default"}}
     	</div>
     </div>
 </div>

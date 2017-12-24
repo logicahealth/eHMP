@@ -16,8 +16,8 @@ var request = require('request');
 var config = require(global.VX_ROOT + 'worker-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
-var pjdsClient = new PjdsClient(logger, logger, config);
+var PjdsClient = require('jds-cache-api').PjdsClient;
+var pjdsClient = new PjdsClient(logger, logger, config.pjds);
 
 describe('pjds-client.js', function () {
     it('Is properly defined', function () {
@@ -295,17 +295,11 @@ describe('pjds-client.js', function () {
                                     pjdsClient.removeFromOsyncBlist('ABCD;3', 'ABCD', 'patient', function () {
                                         pjdsClient.getOsyncBlist('patient', function (error, response, result) {
                                             expect(result).toBeDefined();
-                                            expect(result.items).toBeDefined();
-                                            expect(result.items).not.toContain(jasmine.objectContaining({
-                                                'uid': 'urn:va:patient:ABCD:3:3'
-                                            }));
+                                            expect(result.items).not.toBeDefined();
                                             pjdsClient.removeFromOsyncBlist('10001', 'ABCD', 'user', function () {
                                                 pjdsClient.getOsyncBlist('user', function (error, response, result) {
                                                     expect(result).toBeDefined();
-                                                    expect(result.items).toBeDefined();
-                                                    expect(result.items).not.toContain(jasmine.objectContaining({
-                                                        'uid': 'urn:va:user:ABCD:10001'
-                                                    }));
+                                                    expect(result.items).not.toBeDefined();
                                                     finished = true;
                                                 });
                                             });
@@ -326,15 +320,15 @@ describe('pjds-client.js', function () {
 
     describe('OSync active user store', function () {
         var user6655 = {
-            uid: 'urn:va:user:9E7A:6655',
-            site: '9E7A',
+            uid: 'urn:va:user:SITE:6655',
+            site: 'SITE',
             id: '6655',
             lastSuccessfulLogin: moment().format('YYYYMMDDHHmmss')
         };
 
         var user7788 = {
-            uid: 'urn:va:user:9E7A:7788',
-            site: '9E7A',
+            uid: 'urn:va:user:SITE:7788',
+            site: 'SITE',
             id: '7788',
             lastSuccessfulLogin: '20000101100000'
         };
@@ -431,37 +425,37 @@ describe('pjds-client.js', function () {
 
     describe('Clinical Object store', function() {
         var consultActivity = {
-            authorUid: 'urn:va:user:9E7A:10000000271',
+            authorUid: 'urn:va:user:SITE:10000000271',
             displayName: 'Rheumatology',
             domain: 'ehmp-activity',
             ehmpState: 'active',
-            patientUid: 'urn:va:patient:9E7A:239:239',
+            patientUid: 'urn:va:patient:SITE:239:239',
             referenceId: '',
             subDomain: 'consult',
-            uid: 'urn:va:ehmp-activity:9E7A:239:29fe0301-14ac-4d8d-95a9-9f538866beba'
+            uid: 'urn:va:ehmp-activity:SITE:239:29fe0301-14ac-4d8d-95a9-9f538866beba'
         };
 
         var requestActivity = {
-            authorUid: 'urn:va:user:9E7A:10000000271',
+            authorUid: 'urn:va:user:SITE:10000000271',
             displayName: 'Post procedure follow-up',
             domain: 'ehmp-activity',
             ehmpState: 'active',
-            patientUid: 'urn:va:patient:9E7A:239:239',
+            patientUid: 'urn:va:patient:SITE:239:239',
             referenceId: '',
             subDomain: 'request',
-            uid: 'urn:va:ehmp-activity:9E7A:239:29fe0301-9999-4d8d-95a9-9f538866beba'
+            uid: 'urn:va:ehmp-activity:SITE:239:29fe0301-PORT-4d8d-95a9-9f538866beba'
         };
 
         var requestActivityUpdate = {
-            authorUid: 'urn:va:user:9E7A:10000000271',
+            authorUid: 'urn:va:user:SITE:10000000271',
             displayName: 'Post procedure follow-up',
             domain: 'ehmp-activity',
             ehmpState: 'active',
-            patientUid: 'urn:va:patient:9E7A:239:239',
+            patientUid: 'urn:va:patient:SITE:239:239',
             referenceId: '',
             subDomain: 'request',
             newData: 'test',
-            uid: 'urn:va:ehmp-activity:9E7A:239:29fe0301-9999-4d8d-95a9-9f538866beba'
+            uid: 'urn:va:ehmp-activity:SITE:239:29fe0301-PORT-4d8d-95a9-9f538866beba'
         };
 
         beforeEach(function() {
@@ -497,13 +491,13 @@ describe('pjds-client.js', function () {
             var tearDown = false;
 
             runs(function () {
-                var url = format('%s://%s:%s%s', config.pjds.protocol, config.pjds.host, config.pjds.port, '/clinicobj/urn:va:ehmp-activity:9E7A:239:29fe0301-14ac-4d8d-95a9-9f538866beba');
+                var url = format('%s://%s:%s%s', config.pjds.protocol, config.pjds.host, config.pjds.port, '/clinicobj/urn:va:ehmp-activity:SITE:239:29fe0301-14ac-4d8d-95a9-9f538866beba');
 
                 request.del(url, function(error, response) {
                     expect(error).toBeFalsy();
                     expect(response.statusCode).toBe(200);
 
-                    url = format('%s://%s:%s%s', config.pjds.protocol, config.pjds.host, config.pjds.port, '/clinicobj/urn:va:ehmp-activity:9E7A:239:29fe0301-9999-4d8d-95a9-9f538866beba');
+                    url = format('%s://%s:%s%s', config.pjds.protocol, config.pjds.host, config.pjds.port, '/clinicobj/urn:va:ehmp-activity:SITE:239:29fe0301-PORT-4d8d-95a9-9f538866beba');
 
                     request.del(url, function(error, response) {
                         expect(error).toBeFalsy();
@@ -520,7 +514,7 @@ describe('pjds-client.js', function () {
             var finished = false;
 
             runs(function() {
-                pjdsClient.getClinicalObject('filter=eq(patientUid, "urn:va:patient:9E7A:239:239"),in(subDomain, ["consult", "request"]),eq(domain, "ehmp-activity")', function(error, response, result) {
+                pjdsClient.getClinicalObject('filter=eq(patientUid, "urn:va:patient:SITE:239:239"),in(subDomain, ["consult", "request"]),eq(domain, "ehmp-activity")', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
                     expect(result.items).toContain(jasmine.objectContaining({
@@ -541,7 +535,7 @@ describe('pjds-client.js', function () {
             var finished = false;
 
             runs(function() {
-                pjdsClient.getClinicalObject('?filter=eq(patientUid, "urn:va:patient:9E7A:239:239"),eq(subDomain, "consult"),eq(domain, "ehmp-activity")', function(error, response, result) {
+                pjdsClient.getClinicalObject('?filter=eq(patientUid, "urn:va:patient:SITE:239:239"),eq(subDomain, "consult"),eq(domain, "ehmp-activity")', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
                     expect(result.items).toContain(jasmine.objectContaining({
@@ -562,7 +556,7 @@ describe('pjds-client.js', function () {
             var finished = false;
 
             runs(function() {
-                pjdsClient.getClinicalObject('range=urn:va:ehmp-activity:9E7A:239:29fe0301-9999-4d8d-95a9-9f538866beba', 'clinicobj_uid', function(error, response, result) {
+                pjdsClient.getClinicalObject('range=urn:va:ehmp-activity:SITE:239:29fe0301-PORT-4d8d-95a9-9f538866beba', 'clinicobj_uid', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
                     expect(result.items).not.toContain(jasmine.objectContaining({
@@ -614,8 +608,8 @@ describe('pjds-client.js', function () {
 
     describe('Prefetch Patient store', function() {
         var patientListPatient = {
-            uid: 'urn:va:patientList:9E7A:3:3',
-            pid: '9E7A;3',
+            uid: 'urn:va:patientList:SITE:3:3',
+            pid: 'SITE;3',
             patientIdentifier: '3^PI^501^USVHA^P',
             isEhmpPatient: true,
             source: 'patientList',
@@ -625,8 +619,8 @@ describe('pjds-client.js', function () {
         };
 
         var appointmentPatient = {
-            uid: 'urn:va:appointment:9E7A:8:8',
-            pid: '9E7A;8',
+            uid: 'urn:va:appointment:SITE:8:8',
+            pid: 'SITE;8',
             patientIdentifier: '8^PI^501^USVHA^P',
             isEhmpPatient: false,
             source: 'appointment',
@@ -682,10 +676,10 @@ describe('pjds-client.js', function () {
                 pjdsClient.getPrefetchPatients('range=[20160514092500..20180513092500]', 'ehmp-patients', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
-                    expect(result.items).toContain(jasmine.objectContaining({
+                    expect(result.items || []).toContain(jasmine.objectContaining({
                         'uid': patientListPatient.uid
                     }));
-                    expect(result.items).toContain(jasmine.objectContaining({
+                    expect(result.items || []).toContain(jasmine.objectContaining({
                         'uid': appointmentPatient.uid
                     }));
 
@@ -703,10 +697,10 @@ describe('pjds-client.js', function () {
                 pjdsClient.getPrefetchPatients('range=[20160514092500..20180513092500]>true', 'ehmp-patients', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
-                    expect(result.items).toContain(jasmine.objectContaining({
+                    expect(result.items || []).toContain(jasmine.objectContaining({
                         'uid': patientListPatient.uid
                     }));
-                    expect(result.items).not.toContain(jasmine.objectContaining({
+                    expect(result.items || []).not.toContain(jasmine.objectContaining({
                         'uid': appointmentPatient.uid
                     }));
 
@@ -724,12 +718,39 @@ describe('pjds-client.js', function () {
                 pjdsClient.getPrefetchPatients('range=appointment>[201601011200..201801011200]>501', 'ehmp-source', function(error, response, result) {
                     expect(result).toBeDefined();
                     expect(result.items).toBeDefined();
-                    expect(result.items).not.toContain(jasmine.objectContaining({
+                    expect(result.items || []).not.toContain(jasmine.objectContaining({
                         'uid': patientListPatient.uid
                     }));
-                    expect(result.items).toContain(jasmine.objectContaining({
+                    expect(result.items || []).toContain(jasmine.objectContaining({
                         'uid': appointmentPatient.uid
                     }));
+
+                    finished = true;
+                });
+            });
+
+            waitsFor(function() { return finished; }, 'finished', 20000);
+        });
+
+        it('gets appointments with template by date range and facility site code', function() {
+            var finished = false;
+
+            runs(function() {
+                pjdsClient.getPrefetchPatients('range=appointment>[201601011200..201801011200]>501', 'ehmp-source', 'minimal', function(error, response, result) {
+                    expect(result).toBeDefined();
+                    expect(result.items).toBeDefined();
+                    expect(result.items.length).toBe(1);
+
+                    var patient = result.items[0];
+
+                    //only expect 2 fields to be returned for record - patientIdentifier and isEhmpPatient
+                    expect(patient.uid).toBeUndefined();
+                    expect(patient.source).toBeUndefined();
+                    expect(patient.sourceDate).toBeUndefined();
+                    expect(patient.facility).toBeUndefined();
+                    expect(patient.clinic).toBeUndefined();
+                    expect(patient.patientIdentifier).toBe(appointmentPatient.patientIdentifier);
+                    expect(patient.isEhmpPatient).toBe(appointmentPatient.isEhmpPatient);
 
                     finished = true;
                 });

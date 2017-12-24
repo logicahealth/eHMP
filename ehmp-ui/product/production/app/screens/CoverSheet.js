@@ -21,6 +21,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "problems",
+            'instanceId': 'applet-1',
             "title": "Problems",
             "maximizeScreen": "problems-full",
             "region": "bc2652653929",
@@ -35,6 +36,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "vitals",
+            'instanceId': 'applet-2',
             "title": "Vitals",
             "maximizeScreen": "vitals-full",
             "region": "dc49ad17e67c",
@@ -49,6 +51,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "allergy_grid",
+            'instanceId': 'applet-3',
             "title": "Allergies",
             "maximizeScreen": "allergy-grid-full",
             "region": "e543e81ca31a",
@@ -63,6 +66,7 @@ define([
             "viewType": "gist"
         }, {
             "id": "appointments",
+            'instanceId': 'applet-4',
             "title": "Appointments & Visits",
             "maximizeScreen": "appointments-full",
             "region": "c7c6294343c0",
@@ -77,6 +81,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "immunizations",
+            'instanceId': 'applet-5',
             "title": "Immunizations",
             "maximizeScreen": "immunizations-full",
             "region": "a7dace4f6e1f",
@@ -91,6 +96,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "activeMeds",
+            'instanceId': 'applet-6',
             "title": "Active & Recent Medications",
             "region": "041456e4af17",
             "dataRow": "9",
@@ -105,6 +111,7 @@ define([
             "maximizeScreen": "medication-review"
         }, {
             "id": "lab_results_grid",
+            'instanceId': 'applet-7',
             "title": "Numeric Lab Results",
             "maximizeScreen": "lab-results-grid-full",
             "region": "9dc9f289d846",
@@ -119,6 +126,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "orders",
+            'instanceId': 'applet-8',
             "title": "Orders",
             "maximizeScreen": "orders-full",
             "region": "54cdb996d9c8",
@@ -133,6 +141,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "ccd_grid",
+            'instanceId': 'applet-9',
             "title": "Community Health Summaries",
             "maximizeScreen": "ccd-list-full",
             "region": "76fed10ec8c0",

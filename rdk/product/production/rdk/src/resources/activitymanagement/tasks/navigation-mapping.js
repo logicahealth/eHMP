@@ -20,7 +20,10 @@ function getParameters(row) {
         }, {
             name: 'taskName',
             property: 'TASKNAME'
-        }],
+        }, {
+            name: 'beforeEarliestDate',
+            property: 'BEFOREEARLIESTDATE'
+        }]
     }, {
         channel: 'notes',
         event: 'note:edit',

@@ -11,10 +11,6 @@ var interceptors = {
 };
 
 exports.getResourceConfig = function (app) {
-
-    // db setup
-    cdsExecute.init(app);
-
     return [{
         name: 'cds-execute-cds-execute-get',
         path: '/request',

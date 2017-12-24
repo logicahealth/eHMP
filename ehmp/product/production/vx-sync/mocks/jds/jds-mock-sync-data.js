@@ -5,8 +5,8 @@ var completedStamp = function(jpid, dfn) {
         'icn': '5000000116V912836',
         'syncCompleted': true,
         'sourceMetaStamp': {
-            '9E7A': {
-                'pid': '9E7A;' + dfn,
+            'SITE': {
+                'pid': 'SITE;' + dfn,
                 'localId': dfn,
                 'stampTime': 20141031094920,
                 'syncCompleted': true,
@@ -23,11 +23,11 @@ var completedStamp = function(jpid, dfn) {
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:1001': {
+                            'urn:va:allergy:SITE:3:1001': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:1002': {
+                            'urn:va:allergy:SITE:3:1002': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             }
@@ -43,11 +43,11 @@ var completedStamp = function(jpid, dfn) {
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:vital:9E7A:3:1001': {
+                            'urn:va:vital:SITE:3:1001': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             },
-                            'urn:va:vital:9E7A:3:1002': {
+                            'urn:va:vital:SITE:3:1002': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             }
@@ -105,8 +105,8 @@ var inProgress = function(jpid, dfn) {
         'icn': '5000000116V912836',
         'syncCompleted': false,
         'sourceMetaStamp': {
-            '9E7A': {
-                'pid': '9E7A;' + dfn,
+            'SITE': {
+                'pid': 'SITE;' + dfn,
                 'localId': dfn,
                 'stampTime': 20141031094950,
                 'syncCompleted': true,
@@ -123,11 +123,11 @@ var inProgress = function(jpid, dfn) {
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:1001': {
+                            'urn:va:allergy:SITE:3:1001': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:1002': {
+                            'urn:va:allergy:SITE:3:1002': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             }
@@ -143,11 +143,11 @@ var inProgress = function(jpid, dfn) {
                         'eventCount': 2,
                         'storedCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:vital:9E7A:3:1001': {
+                            'urn:va:vital:SITE:3:1001': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             },
-                            'urn:va:vital:9E7A:3:1002': {
+                            'urn:va:vital:SITE:3:1002': {
                                 'stampTime': 20141031094920,
                                 'stored': true
                             }

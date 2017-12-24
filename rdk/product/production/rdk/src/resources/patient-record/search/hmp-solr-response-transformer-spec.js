@@ -63,7 +63,7 @@ describe('update cumulative response data', function() {
                             numFound: 1,
                             start: 0,
                             docs: [{
-                                uid: 'urn:va:document:9E7A:3:3960',
+                                uid: 'urn:va:document:SITE:3:3960',
                                 summary: 'Discharge Summary',
                                 kind: 'Discharge Summary',
                                 facility_name: 'ABILENE (CAA)',
@@ -76,7 +76,7 @@ describe('update cumulative response data', function() {
                 }
             },
             highlighting: {
-                'urn:va:document:9E7A:3:3960': {
+                'urn:va:document:SITE:3:3960': {
                     body: [') Metoprolol 50mg PO BID\n2) <span class=\'cpe-search-term-match\'>Metformin</span> HCL 500 mg PO',
                         ') Metoprolol 50 mg PO BID\n2) <span class=\'cpe-search-term-match\'>Metformin</span> HCL 500 mg PO',
                         ' in \n150s-175s. Patient is receiving <span class=\'cpe-search-term-match\'>metformin</span>'
@@ -151,7 +151,7 @@ describe('transform solr highlighting to hmp object', function() {
                             'numFound': 1,
                             'start': 0,
                             'docs': [{
-                                'uid': 'urn:va:document:9E7A:3:3960',
+                                'uid': 'urn:va:document:SITE:3:3960',
                                 'summary': 'Discharge Summary',
                                 'kind': 'Discharge Summary',
                                 'facility_name': 'ABILENE (CAA)',
@@ -164,7 +164,7 @@ describe('transform solr highlighting to hmp object', function() {
                 }
             },
             'highlighting': {
-                'urn:va:document:9E7A:3:3960': {
+                'urn:va:document:SITE:3:3960': {
                     'body': [
                         ') Metoprolol 50mg PO BID\n2) <span class=\'cpe-search-term-match\'>Metformin</span> HCL 500 mg PO',
                         ') Metoprolol 50 mg PO BID\n2) <span class=\'cpe-search-term-match\'>Metformin</span> HCL 500 mg PO',
@@ -178,7 +178,7 @@ describe('transform solr highlighting to hmp object', function() {
             query: 'foobar'
         });
         hmpEmultatedResponseObject.data.items = [{
-            uid: 'urn:va:document:9E7A:3:3960'
+            uid: 'urn:va:document:SITE:3:3960'
         }];
         hmpEmultatedResponseObject = transformSolrHighlightingToHmpObject(solrResponse, hmpEmultatedResponseObject);
         expect(hmpEmultatedResponseObject.data.items[0].highlights.body.length).to.be.above(0);
@@ -186,6 +186,7 @@ describe('transform solr highlighting to hmp object', function() {
 });
 
 describe('transform solr items to hmp format', function() {
+    var req = {};
     it('should handle grouped items', function() {
         var solrResponse = {
             responseHeader: {
@@ -217,7 +218,7 @@ describe('transform solr items to hmp format', function() {
                             numFound: 5,
                             start: 0,
                             docs: [{
-                                uid: 'urn:va:med:9E7A:3:27837',
+                                uid: 'urn:va:med:SITE:3:27837',
                                 summary: 'METFORMIN HCL 500MG TAB,SA (EXPIRED)\n TAKE ONE TABLET MOUTH TWICE A DAY',
                                 facility_name: 'CAMP MASTER',
                                 datetime: '20100227',
@@ -232,14 +233,14 @@ describe('transform solr items to hmp format', function() {
                 }
             },
             highlighting: {
-                'urn:va:med:9E7A:3:27837': {}
+                'urn:va:med:SITE:3:27837': {}
             }
         };
 
         var hmpEmulatedResponseObject = buildResponseObjectSkeleton({
             query: 'foo'
         });
-        var hmpObject = transformSolrItemsToHmpFormat(solrResponse, hmpEmulatedResponseObject);
+        var hmpObject = transformSolrItemsToHmpFormat(req, solrResponse, hmpEmulatedResponseObject);
 
         expect(hmpObject.data.items.length)
             .to.equal(solrResponse.grouped.qualified_name.groups[0].doclist.docs.length);
@@ -272,7 +273,7 @@ describe('transform solr items to hmp format', function() {
                 numFound: 5,
                 start: 0,
                 docs: [{
-                    uid: 'urn:va:order:9E7A:3:30564',
+                    uid: 'urn:va:order:SITE:3:30564',
                     summary: 'POTASSIUM BLOOD SERUM WC LB #14908\n',
                     facility_name: 'CAMP MASTER',
                     status_name: 'PENDING',
@@ -280,7 +281,7 @@ describe('transform solr items to hmp format', function() {
                     datetime: '201003231059',
                     kind: 'Lab Order'
                 }, {
-                    uid: 'urn:va:order:9E7A:3:30463',
+                    uid: 'urn:va:order:SITE:3:30463',
                     summary: 'POTASSIUM BLOOD SERUM WC LB #14807\n',
                     facility_name: 'CAMP MASTER',
                     status_name: 'PENDING',
@@ -288,7 +289,7 @@ describe('transform solr items to hmp format', function() {
                     datetime: '201003231059',
                     kind: 'Lab Order'
                 }, {
-                    uid: 'urn:va:order:9E7A:3:30362',
+                    uid: 'urn:va:order:SITE:3:30362',
                     summary: 'POTASSIUM BLOOD SERUM WC LB #14706\n',
                     facility_name: 'CAMP MASTER',
                     status_name: 'PENDING',
@@ -296,7 +297,7 @@ describe('transform solr items to hmp format', function() {
                     datetime: '201003231058',
                     kind: 'Lab Order'
                 }, {
-                    uid: 'urn:va:order:9E7A:3:30261',
+                    uid: 'urn:va:order:SITE:3:30261',
                     summary: 'POTASSIUM BLOOD SERUM WC LB #14605\n',
                     facility_name: 'CAMP MASTER',
                     status_name: 'PENDING',
@@ -304,7 +305,7 @@ describe('transform solr items to hmp format', function() {
                     datetime: '201003231057',
                     kind: 'Lab Order'
                 }, {
-                    uid: 'urn:va:order:9E7A:3:30160',
+                    uid: 'urn:va:order:SITE:3:30160',
                     summary: 'POTASSIUM BLOOD SERUM WC LB #14504\n',
                     facility_name: 'CAMP MASTER',
                     status_name: 'PENDING',
@@ -314,19 +315,19 @@ describe('transform solr items to hmp format', function() {
                 }]
             },
             highlighting: {
-                'urn:va:order:9E7A:3:30564': {
+                'urn:va:order:SITE:3:30564': {
                     content: ['<span class=\'cpe-search-term-match\'>POTASSIUM</span> BLOOD SERUM WC LB #14908\n']
                 },
-                'urn:va:order:9E7A:3:30463': {
+                'urn:va:order:SITE:3:30463': {
                     content: ['<span class=\'cpe-search-term-match\'>POTASSIUM</span> BLOOD SERUM WC LB #14807\n']
                 },
-                'urn:va:order:9E7A:3:30362': {
+                'urn:va:order:SITE:3:30362': {
                     content: ['<span class=\'cpe-search-term-match\'>POTASSIUM</span> BLOOD SERUM WC LB #14706\n']
                 },
-                'urn:va:order:9E7A:3:30261': {
+                'urn:va:order:SITE:3:30261': {
                     content: ['<span class=\'cpe-search-term-match\'>POTASSIUM</span> BLOOD SERUM WC LB #14605\n']
                 },
-                'urn:va:order:9E7A:3:30160': {
+                'urn:va:order:SITE:3:30160': {
                     content: ['<span class=\'cpe-search-term-match\'>POTASSIUM</span> BLOOD SERUM WC LB #14504\n']
                 }
             }
@@ -334,7 +335,7 @@ describe('transform solr items to hmp format', function() {
         var hmpEmulatedResponseObject = buildResponseObjectSkeleton({
             query: 'foo'
         });
-        var hmpObject = transformSolrItemsToHmpFormat(solrResponse, hmpEmulatedResponseObject);
+        var hmpObject = transformSolrItemsToHmpFormat(req, solrResponse, hmpEmulatedResponseObject);
 
         expect(hmpObject.data.items.length)
             .to.equal(solrResponse.response.docs.length);
@@ -360,7 +361,7 @@ describe('get searched domain from solr response', function() {
                 numFound: 1,
                 start: 0,
                 docs: [{
-                    uid: 'urn:va:consult:9E7A:3:382',
+                    uid: 'urn:va:consult:SITE:3:382',
                     summary: 'HEMATOLOGY CONSULT Cons',
                     kind: 'Consult',
                     facility_name: 'CAMP MASTER',
@@ -393,7 +394,7 @@ describe('get synonyms from solr response', function() {
                 numFound: 1,
                 start: 0,
                 docs: [{
-                    uid: 'urn:va:consult:9E7A:3:382',
+                    uid: 'urn:va:consult:SITE:3:382',
                     summary: 'HEMATOLOGY CONSULT Cons',
                     kind: 'Consult',
                     facility_name: 'CAMP MASTER',
@@ -426,7 +427,7 @@ describe('get synonyms from solr response', function() {
             query: 'foobar'
         });
         hmpEmultatedResponseObject.data.items = [{
-            uid: 'urn:va:document:9E7A:3:3960'
+            uid: 'urn:va:document:SITE:3:3960'
         }];
         hmpEmultatedResponseObject = addSynonymsToResponse(solrResponse, hmpEmultatedResponseObject);
         expect(hmpEmultatedResponseObject.data.synonyms.length).to.be.above(0);
@@ -454,7 +455,7 @@ describe('get synonyms from solr response', function() {
                 numFound: 1,
                 start: 0,
                 docs: [{
-                    uid: 'urn:va:consult:9E7A:3:382',
+                    uid: 'urn:va:consult:SITE:3:382',
                     summary: 'HEMATOLOGY CONSULT Cons',
                     kind: 'Consult',
                     facility_name: 'CAMP MASTER',
@@ -495,7 +496,7 @@ describe('get synonyms from solr response', function() {
             query: 'foobar'
         });
         hmpEmultatedResponseObject.data.items = [{
-            uid: 'urn:va:document:9E7A:3:3960'
+            uid: 'urn:va:document:SITE:3:3960'
         }];
         hmpEmultatedResponseObject = addSynonymsToResponse(solrResponse, hmpEmultatedResponseObject);
         var rdkResult = ['blood sugar', 'heavy meromyosin', 'hexamethyl melamine', 'hexamethyl-melamine', 'hexamethylmelamine', 'hexamethylomelamine',
@@ -524,7 +525,7 @@ describe('get synonyms from solr response', function() {
                 numFound: 1,
                 start: 0,
                 docs: [{
-                    uid: 'urn:va:consult:9E7A:3:382',
+                    uid: 'urn:va:consult:SITE:3:382',
                     summary: 'HEMATOLOGY CONSULT Cons',
                     kind: 'Consult',
                     facility_name: 'CAMP MASTER',
@@ -558,7 +559,7 @@ describe('get synonyms from solr response', function() {
             query: 'foobar'
         });
         hmpEmultatedResponseObject.data.items = [{
-            uid: 'urn:va:document:9E7A:3:3960'
+            uid: 'urn:va:document:SITE:3:3960'
         }];
         hmpEmultatedResponseObject = addSynonymsToResponse(solrResponse, hmpEmultatedResponseObject);
         var rdkResult = ['\"locked-in\" syndrome', 'laboratory information system', 'lateral intercellular space', 'lisinopril', 'lysinopril'];

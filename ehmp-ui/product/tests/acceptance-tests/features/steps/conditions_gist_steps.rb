@@ -16,7 +16,7 @@ class ConditionsGist <  AllApplets
     add_applet_add_button appletid_css
     add_toolbar_buttons
 
-    add_action(CucumberLabel.new("quick view"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='quickLook_urn_va_problem_9E7A_711_141']"))
+    add_action(CucumberLabel.new("quick view"), ClickAction.new, AccessHtmlElement.new(:css, "[data-row-instanceid='quickLook_urn_va_problem_SITE_711_141']"))
     add_verify(CucumberLabel.new("Main Modal Label"), VerifyContainsText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
     add_action(CucumberLabel.new("Problem Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] [data-header-instanceid='name-header']"))
     add_action(CucumberLabel.new("Acuity Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] [data-header-instanceid='comment-header']"))
@@ -38,9 +38,9 @@ class ConditionsGist <  AllApplets
     # when I say locally
     #     a. laptop terminal against laptop vms with browser phantomjs
     #     b. laptop terminal against jenkins acc test job url with browser phantomjs
-    manic_disorder_xpath = "//*[@data-row-instanceid='row_urn:va:problem:9E7A:711:141']"
+    manic_disorder_xpath = "//*[@data-row-instanceid='row_urn:va:problem:SITE:711:141']"
     applet_toolbar_xpath = "descendant::div[contains(@class, 'toolbarPopover')]"
-    # //*[@data-row-instanceid='row_urn:va:problem:9E7A:711:141']/descendant::div[contains(@class, 'toolbarPopover')]/descendant::*[@button-type='detailView-button-toolbar']
+    # //*[@data-row-instanceid='row_urn:va:problem:SITE:711:141']/descendant::div[contains(@class, 'toolbarPopover')]/descendant::*[@button-type='detailView-button-toolbar']
     add_action(CucumberLabel.new("Mainic Disorder Quick View Icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "#{manic_disorder_xpath}/#{applet_toolbar_xpath}/descendant::*[@button-type='quick-look-button-toolbar']"))
     add_action(CucumberLabel.new("Mainic Disorder Detail View Icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "#{manic_disorder_xpath}/#{applet_toolbar_xpath}/descendant::*[@button-type='detailView-button-toolbar']"))
     # END COMMENT
@@ -78,12 +78,12 @@ class ProblemList <  ADKContainer
   include Singleton
   def initialize
     super
-    add_problem('MANIC DISORDER-MILD', 'urn_va_problem_9E7A_711_141')
-    add_problem('UPPER EXTREMITY', 'urn_va_problem_9E7A_711_139')
-    add_problem('Essential Hypertension', 'urn_va_problem_9E7A_711_79')
-    add_problem('ALCOH DEP NEC/NOS-REMISS', 'urn_va_problem_9E7A_711_69')
-    add_problem('Adjustment Reaction With Physical Symptoms', 'urn_va_problem_9E7A_711_70')
-    add_problem('Chronic Sinusitis', 'urn_va_problem_9E7A_711_72')
+    add_problem('MANIC DISORDER-MILD', 'urn_va_problem_SITE_711_141')
+    add_problem('UPPER EXTREMITY', 'urn_va_problem_SITE_711_139')
+    add_problem('Essential Hypertension', 'urn_va_problem_SITE_711_79')
+    add_problem('ALCOH DEP NEC/NOS-REMISS', 'urn_va_problem_SITE_711_69')
+    add_problem('Adjustment Reaction With Physical Symptoms', 'urn_va_problem_SITE_711_70')
+    add_problem('Chronic Sinusitis', 'urn_va_problem_SITE_711_72')
 
     # the data-cell-instanceid for this problem appears to change
     xpath = "//div[@data-appletid='problems']/descendant::span[contains(string(), 'Essential hypertension')]/ancestor::div[starts-with(@data-cell-instanceid, 'event_name_urn_va_problem')]"
@@ -107,7 +107,7 @@ class ActiveProblems <  ConditionsGist
   include Singleton
   def initialize
     super   
-    add_verify(CucumberLabel.new('Empty Problem Row'), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-problems tr.empty'))
+    add_verify(CucumberLabel.new('Empty Problem Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=problems] .data-grid table tr.empty'))
     add_action(CucumberLabel.new('Description Header'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='problems'] [data-header-instanceid='problems-problemText'] a")) 
     add_action(CucumberLabel.new('Acuity Header'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid="problems"] .grid-header-acuityName a'))
     add_action(CucumberLabel.new('Problem detail icon'), ClickAction.new, AccessHtmlElement.new(:css, '[data-appletid=problems] [button-type=detailView-button-toolbar]'))
@@ -115,7 +115,7 @@ class ActiveProblems <  ConditionsGist
 
   def applet_grid_loaded
     return true if am_i_visible? 'Empty Problem Row'
-    return TestSupport.driver.find_elements(:css, '#data-grid-problems tr.selectable').length > 0
+    return TestSupport.driver.find_elements(:css, '[data-appletid=problems] tr.selectable').length > 0
   rescue => e 
     p e
     false
@@ -178,11 +178,11 @@ Then(/^hovering over the right side of problem trend view and selecting the "(.*
   expect(@cg.perform_action('hover', "")).to be_true
 end
 
-When(/^user clicks on the left hand side of the item "(.*?)"$/) do |problem_text|
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true 
-  problem_list = ProblemList.instance 
-  p "#{problem_text} - Problem Click"    
-  expect(problem_list.perform_action("#{problem_text} - Problem Click", "")).to be_true, "cannot click on the problem text"
+When(/^user hovers over the left hand side of the item "(.*?)"$/) do |problem_text|
+  ehmp = PobProblemsApplet.new
+  ehmp.wait_for_pbm_essential_hypertension
+  expect(ehmp).to have_pbm_essential_hypertension
+  ehmp.pbm_essential_hypertension.hover
 end
 
 When(/^user clicks on the column header "(.*?)" in Problems Gist$/) do |name_column_header|
@@ -201,9 +201,10 @@ When(/^the user clicks the last row in the problems applet$/) do
   problems = PobProblemsApplet.new
   problems.wait_for_fld_gist_problem_names
   expect(problems.fld_gist_problem_names.length).to be > 2, "This test has a prerequestite requirement that the patient used has more then 2 problems"
-  problems.fld_gist_problem_names.last.click
-  problems.wait_for_fld_toolbar
-  expect(problems).to have_fld_toolbar
+  problems.fld_gist_problem_names.last.hover
+  problems.wait_for_fld_toolbar_visible
+  expect(problems).to have_fld_toolbar_visible
+  problems.fld_toolbar_visible.click
 end
 
 Then(/^Problem column is sorted in default order in Problems Gist$/) do
@@ -212,8 +213,11 @@ Then(/^Problem column is sorted in default order in Problems Gist$/) do
 
   problems.wait_for_fld_gist_problem_names
   expect(@default_problem_gist_order).to_not be_nil, "Expected default problem order to be saved in a previous step"
-  wait.until { (problems.gist_problem_names_only <=> @default_problem_gist_order) == 0 }
-
+  begin
+    wait.until { (problems.gist_problem_names_only <=> @default_problem_gist_order) == 0 }
+  rescue
+    p "waiting for sort timed out"
+  end
   expect(problems.gist_problem_names_only).to eq(@default_problem_gist_order)
 end
 
@@ -347,11 +351,11 @@ When(/^hovering over the "(.*?)" side of the tile "(.*?)"$/) do |direction, _pro
        
   case direction
   when 'right'
-    hover = wait.until { driver.find_element(:css, "[data-row-instanceid='quickLook_urn_va_problem_9E7A_711_139']") }
+    hover = wait.until { driver.find_element(:css, "[data-row-instanceid='quickLook_urn_va_problem_SITE_711_139']") }
     driver.action.move_to(hover).perform 
     p hover.css_value("background-color")    
   when 'left'
-    hover = wait.until { driver.find_element(:css, "[data-appletid=problems] #event_urn_va_problem_9E7A_711_139 .col-sm-6.selectable.info-display.noPadding") }
+    hover = wait.until { driver.find_element(:css, "[data-appletid=problems] #event_urn_va_problem_SITE_711_139 .col-sm-6.selectable.info-display.noPadding") }
     driver.action.move_to(hover).perform 
     p hover.css_value("background-color")  
   else

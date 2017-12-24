@@ -23,8 +23,7 @@ module.exports.getResourceConfig = function(app) {
         description: description,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
         interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
+            operationalDataCheck: false
         },
         requiredPermissions: ['sign-note'],
         isPatientCentric: true

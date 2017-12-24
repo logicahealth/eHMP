@@ -30,8 +30,8 @@ var vprRecord = {
     'name': 'CHOCOLATE'
   }],
   'entered': '200712171515',
-  'enteredByUid': 'urn:va:user:9E7A:100',
-  'verifiedByUid': 'urn:va:user:9E7A:101',
+  'enteredByUid': 'urn:va:user:SITE:100',
+  'verifiedByUid': 'urn:va:user:SITE:101',
   'facilityCode': '500',
   'facilityName': 'CAMP MASTER',
   'historical': true,
@@ -40,7 +40,7 @@ var vprRecord = {
   'localId': '876',
   'mechanism': 'ALLERGY',
   'originatorName': 'PROVIDER,ONE',
-  'pid': '9E7A;3',
+  'pid': 'SITE;3',
   'products': [{
     'name': 'CHOCOLATE',
     'summary': 'AllergyProduct{uid=\'\'}',
@@ -55,7 +55,7 @@ var vprRecord = {
   'stampTime': '20071217151553',
   'summary': 'CHOCOLATE',
   'typeName': 'DRUG, FOOD',
-  'uid': 'urn:va:allergy:9E7A:3:876',
+  'uid': 'urn:va:allergy:SITE:3:876',
   'verified': '20071217151553',
   'verifierName': '<auto-verified>',
   'comments': [{
@@ -75,7 +75,7 @@ describe('solr-client.js', function() {
     it('Can send one document to SOLR.', function() {
       client = null;
       var solrConfig = config.solrClient;
-      client = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, log);
+      client = solrSmartClient.createClient(log, solrConfig);
 
       runs(function() {
         solrXform(vprRecord, log, config, function(error, solrRecord) {

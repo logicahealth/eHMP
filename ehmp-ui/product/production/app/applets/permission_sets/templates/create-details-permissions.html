@@ -1,0 +1,44 @@
+<div class='auto-overflow-y max-height-md'>
+    <table class='table table-bordered'>
+        <caption class='sr-only'>Description</caption>
+        <thead>
+        <tr>
+            <th scope='col'>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td> {{#if description}}{{description}}{{else}}None{{/if}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+    <table class='table table-bordered'>
+        <caption class='sr-only'>Notes</caption>
+        <thead>
+        <tr>
+            <th scope='col'>Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td> {{#if notes}}{{notes}}{{else}} None {{/if}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br/>
+    <table class='table table-bordered'>
+        <caption class='sr-only'>Examples</caption>
+        <thead>
+        <tr>
+            <th scope='col'>Examples</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{#if examples}}{{examples}}{{else}}None{{/if}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

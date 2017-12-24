@@ -46,8 +46,6 @@ ONSAVE ;; @TEST template creation on save
  K JSON,OBJ
  M JSON=^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:1","unit-test-instance")
  D DECODE^VPRJSON("JSON","OBJ")
- ;W ! ZW OBJ
- ;B   check to see that the appropriate JSON objects exist
  Q
 EXP1 ;; @TEST expanding fields in template
  N I,TAGS

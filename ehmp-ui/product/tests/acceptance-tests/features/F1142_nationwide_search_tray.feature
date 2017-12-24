@@ -11,8 +11,8 @@ Scenario: User has option to perform nationwide search
 @F1142_nationwide_2
 Scenario: Verify nationwide search tray display
     When the user opens the Nationwide tray
+    Then the Nationwide tray title is "NATIONWIDE"
     And the Nationwide tray displays a close x button
-    # And the Nationwide tray displays a help button
     And the Nationwide tray displays a Last name selection box
     And the Nationwide tray displays a First name selection box
     And the Nationwide tray displays a DOB selection box

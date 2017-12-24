@@ -1,4 +1,4 @@
-@F339   @DE3930 @US5278
+@F339   @DE3930 @US5278 @reg4
 Feature: F339 - User Defined Work Spaces 2
 
 @US6295 @TC317 
@@ -9,31 +9,12 @@ Scenario: visual Indicator for locked workspaces
     When the user clicks the Workspace Manager
     And the Workspace Manager is displayed
     And the predefined screens have a visual indicator indicating they are locked
-    |screen |
-    | Coversheet |
-    | Timeline |
-    | Overview |
-    | Meds Review |
-    | Documents |
-
-@US5275 @US6030 @US6030_a 
-Scenario: Verify Launch Behavior - launch links
-    And user searches for and selects "Eight,Patient"
-    Then Overview is active
-    When the user clicks the Workspace Manager
-    And the Workspace Manager is displayed
-    Then the user deletes all user defined workspaces
-    And the user creates a user defined workspace named "testlaunch"
-    And the user defined workspace name "testlaunch" is listed
-    And the user defined workspace "testlaunch" launch link says Customize
-    When the user customizes the "testlaunch" workspace
-    And the user adds an summary "allergy_grid" applet to the user defined workspace
-    And the user selects done to complete customizing the user defined workspace
-    Then the "TESTLAUNCH" screen is active
-    When the user clicks the Workspace Manager
-    And the Workspace Manager is displayed
-    And the user defined workspace name "testlaunch" is listed
-    And the user defined workspace "testlaunch" launch link says Launch
+      | screen      | value             |
+      | Coversheet  | cover-sheet       |
+      | Timeline    | news-feed         |
+      | Overview    | overview          |
+      | Meds Review | medication-review |
+      | Documents   | documents-list    |
 
 @US5275 @US6030 @US6030_b
 Scenario: Verify Launch Behavior - launch pre-defined screen ( using documents as example)
@@ -81,12 +62,12 @@ Scenario: Delete alert should appear on any workspace being deleted - Cancel
     And the Workspace Manager is displayed
     Then the user deletes all user defined workspaces
     And the user creates a user defined workspace named "testdelete"
-    And the user defined workspace name "testdelete" is listed
+    And the user defined workspace data screen id "testdelete" is listed
     When the user attempts to delete the user defined workspace named "testdelete"
     Then an alert with the title "Delete" displays
     When the user chooses to cancel the Delete Workspace action
     Then the alert closes
-    And the user defined workspace name "testdelete" is listed
+    And the user defined workspace data screen id "testdelete" is listed
 
 
 @US5719 @TC326 @TC326b
@@ -122,7 +103,7 @@ Scenario: UDW:  Deleting an active work space
     And the Workspace Manager is displayed
     Then the user deletes all user defined workspaces
     And the user creates a user defined workspace named "testdeleteactive"
-    And the user defined workspace name "testdeleteactive" is listed
+    And the user defined workspace data screen id "testdeleteactive" is listed
     When the user sets the "testdeleteactive" as the active workspace 
 
     # # Test fails (only in phantomjs) if 'user' deletes workspace without navigating to it at least once
@@ -173,13 +154,12 @@ Scenario: UDW:  Gridsterize Pre-defined Workspaces
     | medication-review |
     | documents-list    |
 
-@US4521 @TC87
+@US4521 @TC87 @US18774
 Scenario: Verify the Workspace Manager header
     Given user searches for and selects "Eight,Patient"
     And Overview is active
     When the user clicks the Workspace Manager
     Then the Workspace Manager is displayed
-    And the Workspace Manager title is "Workspace Manager"
     And the Workspace Manager displays a Close button
     And the Workspace Manager displays an Add New button
     And the Workspace Manager displays a filter

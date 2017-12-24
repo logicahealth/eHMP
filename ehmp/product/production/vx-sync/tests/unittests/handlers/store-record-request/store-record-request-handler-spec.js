@@ -65,7 +65,7 @@ describe('store-record-request-handler.js', function() {
     describe('handle()', function() {
         var patientIdentifier = {
             'type': 'pid',
-            'value': '9E7A;3'
+            'value': 'SITE;3'
         };
 
         var referenceInfo = {

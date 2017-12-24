@@ -25,7 +25,7 @@ Retrieve VistA orders and eHMP orders.
 				            "name": "PROVIDER,FIVE",
 				            "role": "S",
 				            "signedDateTime": 20150326165800,
-				            "uid": "urn:va:user:C877:988"
+				            "uid": "urn:va:user:SITE:988"
 				          }
 				        ],
 				        "content": "ELECTROCARDIOGRAM CARDIOLOGY Proc Bedside\r\n<DISCONTINUED BY SERVICE>\r\n",
@@ -37,18 +37,18 @@ Retrieve VistA orders and eHMP orders.
 				        "lastUpdateTime": "20150326165900",
 				        "localId": "38434",
 				        "locationName": "7A GEN MED",
-				        "locationUid": "urn:va:location:C877:158",
+				        "locationUid": "urn:va:location:SITE:158",
 				        "name": "ELECTROCARDIOGRAM",
 				        "oiCode": "urn:va:oi:111",
 				        "oiName": "ELECTROCARDIOGRAM",
 				        "oiPackageRef": "12;99PRC",
-				        "pid": "C877;3",
+				        "pid": "SITE;3",
 				        "providerDisplayName": "Provider,Five",
 				        "providerName": "PROVIDER,FIVE",
-				        "providerUid": "urn:va:user:C877:988",
+				        "providerUid": "urn:va:user:SITE:988",
 				        "results": [
 				          {
-				            "uid": "urn:va:consult:C877:3:646"
+				            "uid": "urn:va:consult:SITE:3:646"
 				          }
 				        ],
 				        "service": "GMRC",
@@ -59,10 +59,10 @@ Retrieve VistA orders and eHMP orders.
 				        "statusVuid": "urn:va:vuid:4500704",
 				        "stop": "20150326165900",
 				        "summary": "ELECTROCARDIOGRAM CARDIOLOGY Proc Bedside\r\n<DISCONTINUED BY SERVICE>\r\n",
-				        "uid": "urn:va:order:C877:3:38434"
+				        "uid": "urn:va:order:SITE:3:38434"
 			      	},
 			      	{
-		        		"authorUid": "urn:va:user:9E7A:10000000274",
+		        		"authorUid": "urn:va:user:SITE:10000000274",
 				        "creationDateTime": "20160519144736+0000",
 				        "data": {
 				          "activity": {
@@ -81,13 +81,13 @@ Retrieve VistA orders and eHMP orders.
 				            "consultName": "Physical Therapy Consult",
 				            "deploymentId": "VistaCore:Order:2.0.0.55",
 				            "earliestDate": "05/19/2016",
-				            "facility": "9E7A",
-				            "icn": "9E7A;3",
+				            "facility": "SITE",
+				            "icn": "SITE;3",
 				            "latestDate": "06/18/2016",
 				            "location": "500",
 				            "objectType": "consultOrder",
-				            "orderingProviderId": "9E7A;10000000274",
-				            "pid": "9E7A;3",
+				            "orderingProviderId": "SITE;10000000274",
+				            "pid": "SITE;3",
 				            "processDefId": "Order.Consult",
 				            "requestComment": "NONE",
 				            "requestQuestion": "NONE",
@@ -131,17 +131,17 @@ Retrieve VistA orders and eHMP orders.
 				        "displayName": "Physical Therapy Consult - 9",
 				        "domain": "ehmp-activity",
 				        "ehmpState": "active",
-				        "patientUid": "urn:va:patient:9E7A:3:3",
+				        "patientUid": "urn:va:patient:SITE:3:3",
 				        "referenceId": "",
 				        "subDomain": "consult",
-				        "uid": "urn:va:ehmp-activity:9E7A:3:48be5657-ac47-4483-83ea-df51e47a6821",
+				        "uid": "urn:va:ehmp-activity:SITE:3:48be5657-ac47-4483-83ea-df51e47a6821",
 				        "visit": {
 				          "dateTime": "20140814130730",
-				          "location": "urn:va:location:9E7A:158"
+				          "location": "urn:va:location:SITE:158"
 				        },
 				        "displayGroup": "eHMP CSLT",
 				        "facilityMoniker": "500",
-				        "providerDisplayName": "urn:va:user:9E7A:10000000274",
+				        "providerDisplayName": "urn:va:user:SITE:10000000274",
 				        "summary": "Diabetes Mellitus Type II or unspecified",
 				        "kind": "consult",
 				        "entered": "20160519144736+0000",

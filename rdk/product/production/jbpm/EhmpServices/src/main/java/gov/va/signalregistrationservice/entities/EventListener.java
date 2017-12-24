@@ -11,7 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.AM_EVENTLISTENER")
+@Table(name = "AM_EVENTLISTENER", schema = "ACTIVITYDB")
 public class EventListener {
 
 	@Id
@@ -135,6 +135,8 @@ public class EventListener {
 		this.eventMatchCriteriaId = eventMatchCriteriaId;
 	}
 
+	public EventListener() { }
+	
 	public EventListener(String eventActionScope, 
 			String apiVersion, 
 			String descriptionItem, 

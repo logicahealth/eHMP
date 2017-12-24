@@ -8,12 +8,12 @@ var nock = require('nock');
 function buildRequest() {
     var req = {
         audit: {
-            patientId: '9E7A;18'
+            patientId: 'SITE;18'
         },
         session: {
             user: {
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 ssn: '666884833',
                 breakglass: true,
                 sensitive: false,
@@ -29,7 +29,7 @@ function buildRequest() {
             isPatientCentric: true
         },
         query: {
-            pid: '9E7A;18'
+            pid: 'SITE;18'
         },
         logger: {
             info: function() {},
@@ -48,7 +48,7 @@ function buildRequest() {
                     baseUrl: 'http://localhost:8080'
                 },
                 vistaSites: {
-                    '9E7A': {
+                    'SITE': {
                         name: 'PANORAMA',
                         host: 'IP        '
                     }
@@ -62,8 +62,8 @@ var jdsResponse = {
     btg: {
         data: {
             items: [{
-                ssn: 'REDACTED',
-                pid: '9E7A;18',
+                ssn: '01201022',
+                pid: 'SITE;18',
                 sensitive: true
             }]
         }
@@ -71,8 +71,8 @@ var jdsResponse = {
     permit: {
         data: {
             items: [{
-                ssn: 'REDACTED',
-                pid: '9E7A;18',
+                ssn: '01201023',
+                pid: 'SITE;18',
                 sensitive: false
             }]
         }
@@ -80,8 +80,8 @@ var jdsResponse = {
     deny: {
         data: {
             items: [{
-                ssn: 'REDACTED',
-                pid: '9E7A;18',
+                ssn: '666884833',
+                pid: 'SITE;18',
                 sensitive: false
             }]
         }
@@ -91,7 +91,7 @@ var req;
 var res;
 var spyStatus;
 var spyHeader;
-var jdsPath = '/data/index/pt-select-pid?range=9E7A;18';
+var jdsPath = '/data/index/pt-select-pid?range=SITE;18';
 
 describe('PEP Policy', function() {
     beforeEach(function() {

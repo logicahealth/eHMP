@@ -16,7 +16,7 @@ define([
             '{{#if comments.models}}<button type="button" class="btn btn-icon show-comments-button" ' +
             'aria-exanded="true" title="Press enter to view comments">' +
             '<i class="fa fa-file-text"><span class="sr-only">Press enter to expand or collapse the comments for this row</span></i></button>' +
-            '{{else}}<button type="button" aria-expanded="false" class="btn btn-icon bottom-margin-xs all-padding-no show-comments-button" title="Press enter to add a comment">Add</button>{{/if}}'
+            '{{else}}<button type="button" aria-expanded="false" class="btn btn-icon bottom-margin-xs all-padding-no show-comments-button">Add</button>{{/if}}'
         ].join('\n')),
         initialize: function(options) {
             this.attributeMapping = options.attributeMapping;
@@ -64,7 +64,7 @@ define([
     var NCBRemoveButtonItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
             // '{{ui-button "" classes="btn btn-icon remove-panel-button" type="button" icon="fa-times"}}'
-            '<button type="button" class="btn btn-link btn-block all-padding-no remove-panel-button color-red-dark" title="Press enter to remove this item">Remove</button>'
+            '<button type="button" class="btn btn-link btn-block all-padding-no remove-panel-button color-red-dark">Remove</button>'
         ].join('\n')),
         ui: {
             'RemoveButton': '.remove-panel-button'

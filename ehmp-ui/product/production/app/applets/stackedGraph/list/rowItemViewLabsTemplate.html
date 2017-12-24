@@ -1,12 +1,10 @@
-<div role="gridcell" class="col-xs-1 selectable">
-    <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
-    <div class="toolbar-container"></div>
-    <span class="text-capitalize" data-cell-tilesort="tilesort">{{displayName}}</span>
-</div>
-<div role="gridcell" class="col-xs-1 selectable text-capitalize" data-cell-tilesort="tilesort">{{facilityMoniker}}</div>
-<div role="gridcell" class="col-xs-1 selectable">{{resultUnits}}</div>
-<div role="gridcell" class="col-xs-1 selectable right-border">{{last}}</div>
-<div role="gridcell" class="col-xs-8 selectable no-left-border" data-toggle="popover" data-content="{{tooltip}}">
-    <span class="sr-only">{{displayName}} Graph</span>
-    <div class="render-to"></div>
+<div class="col-xs-12 all-padding-no">
+	<div role="gridcell" class="col-xs-1 text-capitalize" data-cell-tilesort="tilesort">{{displayName}}</div>
+	<div role="gridcell" class="col-xs-1 text-capitalize" data-cell-tilesort="tilesort">{{facilityMoniker}}</div>
+	<div role="gridcell" class="col-xs-1">{{resultUnits}}</div>
+	<div role="gridcell" class="col-xs-1 right-border">{{last}}</div>
+	<div role="gridcell" class="col-xs-8 no-left-border">
+	    <span class="sr-only">{{displayName}} Graph</span>
+	    <div class="render-to"></div>
+	</div>
 </div>

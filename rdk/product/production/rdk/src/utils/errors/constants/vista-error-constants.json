@@ -41,7 +41,8 @@
         "1008": "Error during Tabs Request",
         "1009": "No Tabs Results",
         "1010": "VistA Security Error: No Tabs Permissions.",
-        "1011": "Selected division not found for this user"
+        "1011": "Selected division not found for this user",
+        "1012": "VistA Security Error: No HMP UI CONTEXT menu option."
     },
     "403": {
         "1000": "Forbidden"

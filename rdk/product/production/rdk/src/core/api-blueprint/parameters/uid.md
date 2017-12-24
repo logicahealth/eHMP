@@ -1,3 +1,3 @@
-+ uid: `:[example](example || "urn:va:consult:9E7A:204:646")` (string, :[is required](required || "optional")) - :[name](name || " ") UID.
++ uid: `:[example](example || "urn:va:consult:SITE:204:646")` (string, :[is required](required || "optional")) - :[name](name || " ") UID.
 
-    Pattern: `^([^?/",()=:]+:[^?/",()=:]+:[^?/",()=:]+(:[^?/",()=:]+)+)$`
+    Pattern: `^([^?/",()=:]+:[^?/",()=:]+:[^?/",()=:]+(:[^?/"=:]+)+)$`

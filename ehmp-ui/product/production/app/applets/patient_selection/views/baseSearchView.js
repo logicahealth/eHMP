@@ -15,7 +15,7 @@ define([
         template: Handlebars.compile(
             '<div class="filter"></div>' +
             '<div class="search-results" data-flex-width="1"></div>' +
-            '<div class="search-results-aria-live-region sr-only" aria-live="polite" aria-hidden="true"><p></p></div>'
+            '<div class="search-results-aria-live-region sr-only" aria-live="polite"><p></p></div>'
         ),
         regions: {
             filterRegion: '.filter',
@@ -45,7 +45,7 @@ define([
         onBeforeShow: function() {
             this.showChildView('searchResultsRegion', this.resultsView);
             if (this.FilterView) {
-                this.showChildView('filterRegion', new this.FilterView());
+                this.showChildView('filterRegion', new this.FilterView(this.options));
             }
         },
         collectionEvents: {

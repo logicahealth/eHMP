@@ -4,7 +4,7 @@ var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 
-function dodConsultToVPR(dodConsult, edipi){
+function dodConsultToVPR(logger, dodConsult, edipi){
     var vprConsult = {};
 
     vprConsult.codes = xformUtils.transformCodes(dodConsult.codes);

@@ -7,7 +7,7 @@ define([
     'use strict';
 
     // ============================== Constants ===============================
-    var TASK_ATTRIBUTES = ['taskId', 'taskName', 'taskDefinitionId', 'description', 'pastDueDate', 'isDue', 'isPastDue', 'priority', 'priorityText', 'navigation', 'instanceName', 'permission'];
+    var TASK_ATTRIBUTES = ['taskId', 'taskName', 'taskDefinitionId', 'description', 'pastDueDate', 'isDue', 'isPastDue', 'priority', 'priorityText', 'navigation', 'instanceName', 'permission', 'hasPermissions', 'beforeEarliestDate'];
     var COMPARATOR_ATTRIBUTES = ['priority', 'pastDueDate'];
 
     // ============================== Utilities ===============================
@@ -35,46 +35,8 @@ define([
         return (!_.isEmpty(itemLabel) ? itemLabel : 'Unknown Task');
     };
 
-    var taskHasPermissions = function(task) {
-        var isRequestReview = (_.get(task, 'taskName') === 'Review') || (_.get(task, 'TASKNAME') === 'Review');
-        var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
-        if (isRequestReview && !hasEditRequestPermission) {
-            return false;
-        }
-
-        var isRequestResponse = (_.get(task, 'taskName') === 'Response') || (_.get(task, 'TASKNAME') === 'Response');
-        var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
-        if (isRequestResponse && !hasRespondRequestPermission) {
-            return false;
-        }
-
-        if (_.isEmpty(task.permission)) {
-            return true;
-        }
-
-        var ehmp = task.permission.ehmp || [];
-        var user = task.permission.user || [];
-        if (_.isEmpty(ehmp) && _.isEmpty(user)) {
-            return true;
-        }
-
-        var userSession = ADK.UserService.getUserSession();
-        var userId = userSession.get('site') + ';' + userSession.get('duz')[userSession.get('site')];
-        var userIdExists = _.contains(user, userId);
-
-        if (_.isEmpty(ehmp) && userIdExists) {
-            return true;
-        }
-
-        if (ADK.UserService.hasPermissions(ehmp.join('|')) && (_.isEmpty(user) || userIdExists)) {
-            return true;
-        }
-
-        return false;
-    };
-
     var isTaskDue = function(task) {
-        return (task.isDue || task.isPastDue);
+        return (task.isDue || task.isPastDue || task.beforeEarliestDate);
     };
 
     var addToTasksGroupCollection = function(collection) {
@@ -88,7 +50,7 @@ define([
             });
         });
         taskGroupCollection = _.filter(taskGroupCollection, function(task) {
-            return (isTaskDue(task) && taskHasPermissions(task));
+            return (isTaskDue(task) && task.hasPermissions);
         });
 
         this.collection.add({

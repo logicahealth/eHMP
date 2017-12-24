@@ -5,7 +5,7 @@ Feature: F15 Demographics
 Background:
     Given a patient with pid "5000000217V519385" has been synced through Admin API
     Given a patient with pid "10105V001065" has been synced through Admin API
-    Given a patient with pid "9E7A;167" has been synced through Admin API
+    Given a patient with pid "SITE;167" has been synced through Admin API
     
     
 
@@ -21,11 +21,11 @@ Scenario: View patient demographics
     And user selects "Eight,Patient" from the patient list
     And user views the "Eight,Patient" demographics
     |field                          | value|
-    |Home Phone                     |(222) 555-8235|
+    |Home Phone                     |(555) 555-5555|
     |Cell Phone                     ||
     |Emergency Phone                ||
     |Next of Kin Phone              ||
-    |Work Phone                     |(222) 555-7720|
+    |Work Phone                     |(555) 555-5555|
     |Marital Status                 |Married|
     |Veteran                        |Yes|
     |Service Connected              |Yes (0%) |

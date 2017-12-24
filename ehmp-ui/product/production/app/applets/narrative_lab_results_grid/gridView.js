@@ -21,8 +21,21 @@ define([
                 label: "Date",
                 format: "YYYYMMDD"
             },
-            toolbarOptions: {
-                buttonTypes: ['infobutton', 'detailsviewbutton']
+            tileOptions: {
+                quickMenu: {
+                    enabled: true,
+                    buttons: [{
+                        type: 'infobutton'
+                    }, {
+                        type: 'detailsviewbutton'
+                    }]
+                },
+                primaryAction: {
+                    enabled: true,
+                    onClick: function(params) {
+                        ADK.Messaging.getChannel('narrative_lab_results').trigger('detailView', params);
+                    }
+                }
             }
         },
         _columns: {
@@ -30,36 +43,31 @@ define([
                 name: "observed",
                 label: "Date",
                 template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
-                cell: "handlebars",
-                hoverTip: 'narrativelab_date'
+                cell: "handlebars"
             },
             facility: {
                 name: "facilityMoniker",
                 label: "Facility",
                 template: Handlebars.compile('{{facilityMoniker}}'),
-                cell: "handlebars",
-                hoverTip: 'narrativelab_facility'
+                cell: "handlebars"
             },
             description: {
                 name: "narrativeDescription",
                 label: "Description",
                 template: Handlebars.compile('{{narrativeDescription}}'),
-                cell: "handlebars",
-                hoverTip: 'narrativelab_description'
+                cell: "handlebars"
             },
             author: {
                 name: "author",
                 label: "Author/Verifier",
                 template: Handlebars.compile('None'),
-                cell: "handlebars",
-                hoverTip: 'narrativelab_author'
+                cell: "handlebars"
             },
             type: {
                 name: "displayTypeName",
                 label: "Type",
                 template: Handlebars.compile('{{displayTypeName}}'),
-                cell: "handlebars",
-                hoverTip: 'narrativelab_type'
+                cell: "handlebars"
             }
         },
         summary: ['date', 'description', 'type', 'facility'],
@@ -78,7 +86,7 @@ define([
             _.set(this, 'appletOptions.tblRowSelector', rowSelector);
             _.set(this, 'isFullscreen', isFullscreen);
 
-            if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-lab-order')) {
                 _.set(this.appletOptions, 'onClickAdd', LabOrderTrayUtils.launchLabForm);
             }
 

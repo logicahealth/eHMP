@@ -80,12 +80,12 @@ describe('The syncInProcess check returns', function() {
                 "jpid": "0ae2a607-4836-44f2-9392-54c7828a498b",
                 "patientIdentifier": {
                     "type": "pid",
-                    "value": "9E7A;8"
+                    "value": "SITE;8"
                 },
                 "rootJobId": "b94fb03d-36f0-4d05-84ef-58050aace1f2",
                 "status": "created",
                 "timestamp": "1448120794619",
-                "type": "vista-9E7A-data-poller"
+                "type": "vista-SITE-data-poller"
             }]
         };
 
@@ -148,7 +148,7 @@ describe('The resync request handler that fail before load request', function() 
             type: 'resync-request',
             patientIdentifier: {
                 type: 'pid',
-                value: '9E7A;3' },
+                value: 'SITE;3' },
             rootJobId: '1',
             jobId: '1'
         };
@@ -256,7 +256,7 @@ describe('The resync request handler that execute all resource calls', function(
             type: 'resync-request',
             patientIdentifier: {
                 type: 'pid',
-                value: '9E7A;3' },
+                value: 'SITE;3' },
             rootJobId: '1',
             jobId: '1'
         };

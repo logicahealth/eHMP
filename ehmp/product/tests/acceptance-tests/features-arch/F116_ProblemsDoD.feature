@@ -14,8 +14,8 @@ Feature: F116 Access and Verify the patient problems in the hmp system with DoD 
       | field               | value                                                      |
       | statusDisplayName   | Active                                                     |
       | summary             | Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00) |
-      | uid                 | urn:va:problem:9E7A:3:183                                  |
-      | providerUid         | urn:va:user:9E7A:20010                                     |
+      | uid                 | urn:va:problem:SITE:3:183                                  |
+      | providerUid         | urn:va:user:SITE:20010                                     |
       | unverified          | false                                                      |
       | statusName          | ACTIVE                                                     |
       | onset               | 19980502                                                   |
@@ -27,7 +27,7 @@ Feature: F116 Access and Verify the patient problems in the hmp system with DoD 
       | icdName             | DIABETES MELLI W/O COMP TYP II                             |
       | kind                | Problem                                                    |
       | statusCode          | urn:sct:55561003                                           |
-      | locationUid         | urn:va:location:9E7A:32                                    |
+      | locationUid         | urn:va:location:SITE:32                                    |
       | acuityCode          | urn:va:prob-acuity:c                                       |
       | facility            | CAMP MASTER                                                |
       | updated             | 20040330                                                   |

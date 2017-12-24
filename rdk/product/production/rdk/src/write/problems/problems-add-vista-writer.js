@@ -50,16 +50,27 @@ function constructRpcArgs(model) {
     var params = {};
     var index = 0;
 
+    var problemName = '';
+
+    if (!_.isEmpty(model.problemName)) {
+        problemName = model.problemName.replace(/"/g, '""');
+    }
+
+    var newTermText = '';
+    if (!_.isEmpty(model.newTermText)) {
+        newTermText = model.newTermText.replace(/"/g, '""');
+    }
+
     params[index++] = 'GMPFLD(.01)="' + model.lexiconCode + '^' + model.code + '"';
     params[index++] = 'GMPFLD(.03)="0^"';
-    params[index++] = 'GMPFLD(.05)="^' + model.problemName + '"';
+    params[index++] = 'GMPFLD(.05)="^' + problemName + '"';
     params[index++] = 'GMPFLD(.08)="' + model.currentDate + '"';
     params[index++] = 'GMPFLD(.12)="' + model.status + '"';
     params[index++] = 'GMPFLD(.13)="' + model.dateOfOnset + '"';
     if (_.isUndefined(model.newTermText)) {
-        params[index++] = 'GMPFLD(1.01)="' + model.problemNumber + '^' + model.problemName + '"';
+        params[index++] = 'GMPFLD(1.01)="' + model.problemNumber + '^' + problemName + '"';
     } else {
-        params[index++] = 'GMPFLD(1.01)="' + 1 + '^' + model.newTermText + '"';
+        params[index++] = 'GMPFLD(1.01)="' + 1 + '^' + newTermText + '"';
     }
 
     params[index++] = 'GMPFLD(1.02)="' + model.condition + '"';
@@ -86,7 +97,7 @@ function constructRpcArgs(model) {
         params[index++] = 'GMPFLD(80102)="^"';
     } else {
         params[index++] = 'GMPFLD(80101)="1^True"';
-        params[index++] = 'GMPFLD(80102)="' + model.newTermText + '^' + model.newTermText + '"';
+        params[index++] = 'GMPFLD(80102)="' + newTermText + '^' + newTermText + '"';
     }
 
     params[index++] = 'GMPFLD(80201)="' + model.dateRecorded + '"';
@@ -96,7 +107,7 @@ function constructRpcArgs(model) {
     if (_.isArray(model.comments) && model.comments.length) {
         params[index++] = 'GMPFLD(10,0)="' + model.comments.length + '"';
         for (var x = 1; x <= model.comments.length; x++) {
-            params[index++] = 'GMPFLD(10,"NEW",' + x + ')="' + model.comments[x - 1] + '"';
+            params[index++] = 'GMPFLD(10,"NEW",' + x + ')="' + model.comments[x - 1].replace(/"/g, '""') + '"';
         }
     } else {
         params[index] = 'GMPFLD(10,0)="0"';

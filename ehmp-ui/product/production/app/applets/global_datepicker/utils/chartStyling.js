@@ -10,7 +10,7 @@ define([
 
         allEventsChartStyles: {
             chart: {
-                backgroundColor: '#001924',
+                backgroundColor: '#F4F4F4',
                 height: 125,
                 width: 682,
                 marginTop: 35,
@@ -31,12 +31,12 @@ define([
                 floating: true,
                 width: 0,
                 y: -12,
-                color: '#FFFFFF'
+                color: '#132F50'
             },
             series: [{
                 color: '#9acf09'
             }, {
-                color: '#8ADDFF'
+                color: '#0091cb'
 
                 /**{
                     pattern: '_assets/img//outpatient-diag-pat.svg',
@@ -50,7 +50,7 @@ define([
             xAxis: {
                 labels: {
                     style: {
-                        color: '#FFFFFF'
+                        color: '#132F50'
                     }
                 },
                 lineWidth: 2,
@@ -64,8 +64,8 @@ define([
             },
             plotOptions: {
                 column: {
-                    borderColor: '#000000',
-                    borderWidth: 1,
+                    borderColor: '#F4F4F4',
+                    borderWidth: 0,
                     pointWidth: 4
                 },
                 series: {
@@ -85,8 +85,8 @@ define([
                     selection: $.noop
                 },
                 margin: [0, 0, 0, 0],
-                backgroundColor: '#001924',
-                height: 25,
+                backgroundColor: '#F4F4F4',
+                height: 27,
                 width: 150
             },
             legend: {
@@ -96,15 +96,15 @@ define([
                 column: {
                     stacking: 'normal',
                     pointWidth: 6, //default, changes dynamically
-                    borderWidth: 1,
-                    borderColor: '#000000'
+                    borderWidth: 0,
+                    borderColor: '#F4F4F4'
                 }
             },
 
             series: [{
                 color: '#9acf09'
             }, {
-                color: '#8ADDFF'
+                color: '#0091cb'
 
                 /**{
                     pattern: '_assets/img//outpatient-diag-pat.svg',

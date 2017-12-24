@@ -2,24 +2,24 @@
 
 Feature: F295 - Encounters Applet 
 
-@f295_1_timeline @VPR @US2845 @9E7A;100022
+@f295_1_timeline @VPR @US2845 @SITE;100022
 
 Scenario: Timeline: Add additional data types Appointment and Lab results
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests timeline for the patient "9E7A;100022" in RDK format
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests timeline for the patient "SITE;100022" in RDK format
 Then a successful response is returned
 And the client receives 101 result(s)
 Then the VPR results contain
 
       | field                               | value                         |
-      | uid                                 | urn:va:visit:9E7A:100022:H3419|
+      | uid                                 | urn:va:visit:SITE:100022:H3419|
       | current                             | false                         |
       | facilityCode                        | 500                           |
       | facilityName                        | CAMP MASTER                   |
       | patientClassName                    | Inpatient                     |
       | dateTime                            | 20020130114524                |
       | service                             | MEDICINE                      |
-      | locationUid                         | urn:va:location:9E7A:11		|
+      | locationUid                         | urn:va:location:SITE:11		|
       | locationName                        | BCMA                      	|
       | shortLocationName                   | BCMA                         	|
       | locationDisplayName                 | Bcma                      	|
@@ -28,7 +28,7 @@ Then the VPR results contain
       | movements.movementType              | DISCHARGE                     |
       | movements.summary                   | CONTAINS EncounterMovement    |
       | kind                                | Admission                     |
-      | pid                                 | 9E7A;100022                   |
+      | pid                                 | SITE;100022                   |
       | localId                             | H3419                         |
       | typeName                            | HOSPITALIZATION               |
       | typeDisplayName                     | Hospitalization               |
@@ -37,7 +37,7 @@ Then the VPR results contain
       | categoryName                        | Admission                     |
       | specialty                           | GENERAL MEDICINE              |
       | providers.role                      | A                             |
-      | providers.providerUid               | urn:va:user:9E7A:11815        |
+      | providers.providerUid               | urn:va:user:SITE:11815        |
       | providers.providerName              | RADTECH,THIRTYNINE           	|
       | providers.providerDisplayName       | Radtech,Thirtynine           	|
       | providers.summary                   | EncounterProvider{uid=''} 	|
@@ -46,21 +46,21 @@ Then the VPR results contain
       | reasonName                          | ILL	                		|
      
 
-@f295_2_timeline @VPR @US2845 @9E7A164
+@f295_2_timeline @VPR @US2845 @SITE164
 
 Scenario: Timeline: Add additional data types Appointment and Lab results
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests timeline for the patient "9E7A;100022" in RDK format
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests timeline for the patient "SITE;100022" in RDK format
 Then a successful response is returned
 And the client receives 101 result(s)
 Then the VPR results contain
       | field            | value                                                                    |
-      | uid              | urn:va:lab:9E7A:100022:CH;6849395.8546;386                               |
+      | uid              | urn:va:lab:SITE:100022:CH;6849395.8546;386                               |
       | facilityCode     | 500                                                                      |
       | facilityName     | CAMP MASTER                                                              |
       | groupName        | HE 0603 1                                                               	|
       | activityDateTime | 20150603145400                                                             |
-      | groupUid         | urn:va:accession:9E7A:100022:CH;6849395.8546                             |
+      | groupUid         | urn:va:accession:SITE:100022:CH;6849395.8546                             |
       | categoryCode     | urn:va:lab-category:CH                                                   |
       | categoryName     | Laboratory                                                               |
       | observed         | 20150603145400                                                             |
@@ -79,7 +79,7 @@ Then the VPR results contain
       | micro            | false                                                                    |
       | qualifiedName    | HGB (BLOOD)                                                             	|
       | summary          | HGB (BLOOD) 6.0<em>L</em> g/dL	                                        |
-      | pid              | 9E7A;100022                                                              |
+      | pid              | SITE;100022                                                              |
       | localId          | CH;6849395.8546;386                                                      |
       | typeName         | HGB                                                                      |
       | statusCode       | urn:va:lab-status:completed                                              |

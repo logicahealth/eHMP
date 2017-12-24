@@ -1,0 +1,2233 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>13. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>13. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:26:39 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>13.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\adk\adk\product\production\documentation\adk</td> 
+     <td>developing-adk.md</td> 
+     <td>Wed Jun 7 14:02:30 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\adk\adk\product\production\documentation\adk</td> 
+     <td>developing-adk.md</td> 
+     <td>Tue Oct 10 16:00:30 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>13.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">4</td> 
+     <td style="text-align: right;">810</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">3</td> 
+     <td style="text-align: right;">6</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>13.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>13.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>13.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;page-d</span> <span class="U2">escription</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;Developi</span> <span class="U2">ng&nbsp;in&nbsp;the&nbsp;</span> <span class="U2">ADK&nbsp;#</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">The&nbsp;follow</span> <span class="U2">ing&nbsp;guide&nbsp;</span> <span class="U2">is&nbsp;provide</span> <span class="U2">d&nbsp;as&nbsp;a&nbsp;ref</span> <span class="U2">erence&nbsp;for</span> <span class="U2">&nbsp;ADK&nbsp;devel</span> <span class="U2">opers</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">##&nbsp;ADK.UI.</span> <span class="U2">Form&nbsp;##</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;callou</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Form&nbsp;contr</span> <span class="U2">ols&nbsp;need&nbsp;t</span> <span class="U2">o&nbsp;be&nbsp;desig</span> <span class="U2">ned&nbsp;with&nbsp;f</span> <span class="U2">lexibility</span> <span class="U2">&nbsp;and&nbsp;usabi</span> <span class="U2">lity&nbsp;for&nbsp;o</span> <span class="U2">ptimal&nbsp;con</span> <span class="U2">sumption&nbsp;b</span> <span class="U2">y&nbsp;form&nbsp;dev</span> <span class="U2">elopers&nbsp;in</span> <span class="U2">&nbsp;mind.&nbsp;Thi</span> <span class="U2">s&nbsp;means&nbsp;th</span> <span class="U2">at&nbsp;config&nbsp;</span> <span class="U2">options&nbsp;sh</span> <span class="U2">ould&nbsp;be&nbsp;co</span> <span class="U2">nsistent&nbsp;a</span> <span class="U2">cross&nbsp;cont</span> <span class="U2">rols&nbsp;while</span> <span class="U2">&nbsp;balancing</span> <span class="U2">&nbsp;the&nbsp;level</span> <span class="U2">&nbsp;of&nbsp;config</span> <span class="U2">urability&nbsp;</span> <span class="U2">to&nbsp;pass&nbsp;th</span> <span class="U2">rough&nbsp;to&nbsp;t</span> <span class="U2">he&nbsp;form&nbsp;de</span> <span class="U2">velopers.&nbsp;</span> <span class="U2">It&nbsp;is&nbsp;also</span> <span class="U2">&nbsp;important</span> <span class="U2">&nbsp;to&nbsp;ensure</span> <span class="U2">&nbsp;that&nbsp;the&nbsp;</span> <span class="U2">controls&nbsp;a</span> <span class="U2">re&nbsp;as&nbsp;effi</span> <span class="U2">cient&nbsp;and&nbsp;</span> <span class="U2">memory-lea</span> <span class="U2">k-free&nbsp;as&nbsp;</span> <span class="U2">possible;&nbsp;</span> <span class="U2">familiarit</span> <span class="U2">y&nbsp;with&nbsp;Bac</span> <span class="U2">kbone&nbsp;and&nbsp;</span> <span class="U2">Marionette</span> <span class="U2">&nbsp;is&nbsp;essent</span> <span class="U2">ial&nbsp;to&nbsp;ach</span> <span class="U2">ieve&nbsp;this.</span> <span class="U2">&nbsp;Additiona</span> <span class="U2">lly,&nbsp;each&nbsp;</span> <span class="U2">control&nbsp;ne</span> <span class="U2">eds&nbsp;to&nbsp;be&nbsp;</span> <span class="U2">thoroughly</span> <span class="U2">&nbsp;tested&nbsp;to</span> <span class="U2">&nbsp;ensure&nbsp;la</span> <span class="U2">sting&nbsp;func</span> <span class="U2">tionality.</span> <span class="U2">&nbsp;Finally,&nbsp;</span> <span class="U2">no&nbsp;control</span> <span class="U2">&nbsp;can&nbsp;be&nbsp;co</span> <span class="U2">nsidered&nbsp;c</span> <span class="U2">omplete&nbsp;un</span> <span class="U2">til&nbsp;it&nbsp;has</span> <span class="U2">&nbsp;been&nbsp;vett</span> <span class="U2">ed&nbsp;for&nbsp;508</span> <span class="U2">&nbsp;complianc</span> <span class="U2">e&nbsp;/&nbsp;usabil</span> <span class="U2">ity&nbsp;for&nbsp;bo</span> <span class="U2">th&nbsp;sighted</span> <span class="U2">&nbsp;and&nbsp;unsig</span> <span class="U2">hted&nbsp;users</span> <span class="U2">.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">###&nbsp;Develo</span> <span class="U2">ping&nbsp;Contr</span> <span class="U2">ols&nbsp;###</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">To&nbsp;create&nbsp;</span> <span class="U2">a&nbsp;new&nbsp;cont</span> <span class="U2">rol:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Create</span> <span class="U2">**&nbsp;a&nbsp;new&nbsp;c</span> <span class="U2">ontrol&nbsp;fil</span> <span class="U2">e&nbsp;under&nbsp;`p</span> <span class="U2">roduct/pro</span> <span class="U2">duction/ma</span> <span class="U2">in/ui_comp</span> <span class="U2">onents/for</span> <span class="U2">m/controls</span> <span class="U2">/`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">The&nbsp;filena</span> <span class="U2">me&nbsp;should&nbsp;</span> <span class="U2">be&nbsp;camel-c</span> <span class="U2">ase&nbsp;with&nbsp;t</span> <span class="U2">he&nbsp;name&nbsp;eq</span> <span class="U2">uating&nbsp;to&nbsp;</span> <span class="U2">the&nbsp;name&nbsp;o</span> <span class="U2">f&nbsp;the&nbsp;cont</span> <span class="U2">rol&nbsp;(ie.&nbsp;'</span> <span class="U2">newExample</span> <span class="U2">.js')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Regist</span> <span class="U2">er**&nbsp;the&nbsp;n</span> <span class="U2">ew&nbsp;control</span> <span class="U2">&nbsp;in&nbsp;`produ</span> <span class="U2">ct/product</span> <span class="U2">ion/main/u</span> <span class="U2">i_componen</span> <span class="U2">ts/form/co</span> <span class="U2">mponent.js</span> <span class="U2">`.&nbsp;This&nbsp;is</span> <span class="U2">&nbsp;done&nbsp;by&nbsp;s</span> <span class="U2">imply&nbsp;incl</span> <span class="U2">uding&nbsp;the&nbsp;</span> <span class="U2">path&nbsp;to&nbsp;yo</span> <span class="U2">ur&nbsp;control</span> <span class="U2">&nbsp;in&nbsp;the&nbsp;`d</span> <span class="U2">efine`&nbsp;fun</span> <span class="U2">ction's&nbsp;ar</span> <span class="U2">ray&nbsp;so&nbsp;tha</span> <span class="U2">t&nbsp;when&nbsp;the</span> <span class="U2">&nbsp;component</span> <span class="U2">.js&nbsp;is&nbsp;req</span> <span class="U2">uired,&nbsp;all</span> <span class="U2">&nbsp;of&nbsp;the&nbsp;fo</span> <span class="U2">rm&nbsp;control</span> <span class="U2">s&nbsp;are&nbsp;also</span> <span class="U2">&nbsp;required.</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Changes&nbsp;r</span> <span class="U2">equired&nbsp;in</span> <span class="U2">&nbsp;component</span> <span class="U2">.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`JavaScrip</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;component</span> <span class="U2">.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">fine([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;.</span> <span class="U2">..&nbsp;other&nbsp;p</span> <span class="U2">aths</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mai</span> <span class="U2">n/ui_compo</span> <span class="U2">nents/form</span> <span class="U2">/controls/</span> <span class="U2">newExample</span> <span class="U2">'&nbsp;//&nbsp;only&nbsp;</span> <span class="U2">1&nbsp;line&nbsp;to&nbsp;</span> <span class="U2">add</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</span> <span class="U2">&nbsp;function(</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;.</span> <span class="U2">..&nbsp;compone</span> <span class="U2">nt.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Write*</span> <span class="U2">*&nbsp;the&nbsp;cont</span> <span class="U2">rol&nbsp;functi</span> <span class="U2">onality&nbsp;(i</span> <span class="U2">n&nbsp;our&nbsp;exam</span> <span class="U2">ple,&nbsp;newEx</span> <span class="U2">ample.js)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1)</span> <span class="U2">&nbsp;Ensure&nbsp;th</span> <span class="U2">at&nbsp;the&nbsp;fil</span> <span class="U2">e&nbsp;is&nbsp;set&nbsp;i</span> <span class="U2">n&nbsp;in&nbsp;our&nbsp;s</span> <span class="U2">tandard&nbsp;re</span> <span class="U2">quire&nbsp;modu</span> <span class="U2">le&nbsp;setup&nbsp;w</span> <span class="U2">ith&nbsp;the&nbsp;ap</span> <span class="U2">propriate&nbsp;</span> <span class="U2">requiremen</span> <span class="U2">ts&nbsp;spelled</span> <span class="U2">&nbsp;out.&nbsp;At&nbsp;a</span> <span class="U2">&nbsp;minimum,&nbsp;</span> <span class="U2">you&nbsp;need&nbsp;B</span> <span class="U2">ackbone,&nbsp;M</span> <span class="U2">arionette,</span> <span class="U2">&nbsp;Handlebar</span> <span class="U2">s&nbsp;(our&nbsp;pre</span> <span class="U2">ferred&nbsp;tem</span> <span class="U2">plate&nbsp;engi</span> <span class="U2">ne),&nbsp;Under</span> <span class="U2">score&nbsp;(for</span> <span class="U2">&nbsp;helpful&nbsp;f</span> <span class="U2">unctions),</span> <span class="U2">&nbsp;and&nbsp;Puppe</span> <span class="U2">tForm&nbsp;(our</span> <span class="U2">&nbsp;form&nbsp;libr</span> <span class="U2">ary):</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Setting&nbsp;u</span> <span class="U2">p&nbsp;newExamp</span> <span class="U2">le.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;newExampl</span> <span class="U2">e.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">fine([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'bac</span> <span class="U2">kbone',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mar</span> <span class="U2">ionette',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'han</span> <span class="U2">dlebars',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'und</span> <span class="U2">erscore'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</span> <span class="U2">&nbsp;function(</span> <span class="U2">Backbone,&nbsp;</span> <span class="U2">Marionette</span> <span class="U2">,&nbsp;Handleba</span> <span class="U2">rs,&nbsp;_)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">NewExample</span> <span class="U2">Control;&nbsp;/</span> <span class="U2">/&nbsp;we&nbsp;haven</span> <span class="U2">'t&nbsp;set&nbsp;up&nbsp;</span> <span class="U2">our&nbsp;views&nbsp;</span> <span class="U2">yet</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;a</span> <span class="U2">&nbsp;require&nbsp;m</span> <span class="U2">odule&nbsp;need</span> <span class="U2">s&nbsp;to&nbsp;retur</span> <span class="U2">n&nbsp;the&nbsp;item</span> <span class="U2">&nbsp;you&nbsp;want.</span> <span class="U2">..</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;i</span> <span class="U2">n&nbsp;this&nbsp;cas</span> <span class="U2">e,&nbsp;it&nbsp;will</span> <span class="U2">&nbsp;be&nbsp;our&nbsp;co</span> <span class="U2">ntrol,&nbsp;whi</span> <span class="U2">ch&nbsp;is&nbsp;empt</span> <span class="U2">y&nbsp;for&nbsp;now</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retu</span> <span class="U2">rn&nbsp;NewExam</span> <span class="U2">pleControl</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2)</span> <span class="U2">&nbsp;Next,&nbsp;we&nbsp;</span> <span class="U2">create&nbsp;our</span> <span class="U2">&nbsp;views&nbsp;tha</span> <span class="U2">t&nbsp;will&nbsp;mak</span> <span class="U2">e&nbsp;up&nbsp;our&nbsp;c</span> <span class="U2">ontrol.&nbsp;Fo</span> <span class="U2">r&nbsp;this&nbsp;exa</span> <span class="U2">mple,&nbsp;we&nbsp;w</span> <span class="U2">ill&nbsp;be&nbsp;cre</span> <span class="U2">ating&nbsp;a&nbsp;co</span> <span class="U2">ntrol&nbsp;that</span> <span class="U2">&nbsp;simply&nbsp;di</span> <span class="U2">splays&nbsp;a&nbsp;s</span> <span class="U2">elect&nbsp;as&nbsp;w</span> <span class="U2">ell&nbsp;as&nbsp;pre</span> <span class="U2">view&nbsp;text&nbsp;</span> <span class="U2">of&nbsp;the&nbsp;cur</span> <span class="U2">rently&nbsp;sel</span> <span class="U2">ected&nbsp;opti</span> <span class="U2">on.&nbsp;At&nbsp;thi</span> <span class="U2">s&nbsp;time,&nbsp;we</span> <span class="U2">&nbsp;should&nbsp;al</span> <span class="U2">so&nbsp;attach&nbsp;</span> <span class="U2">our&nbsp;contro</span> <span class="U2">l&nbsp;to&nbsp;the&nbsp;P</span> <span class="U2">uppetForm&nbsp;</span> <span class="U2">object.&nbsp;Do</span> <span class="U2">ing&nbsp;this&nbsp;r</span> <span class="U2">egisters&nbsp;o</span> <span class="U2">ur&nbsp;control</span> <span class="U2">&nbsp;within&nbsp;Pu</span> <span class="U2">ppetForm&nbsp;a</span> <span class="U2">nd&nbsp;starts&nbsp;</span> <span class="U2">the&nbsp;path&nbsp;t</span> <span class="U2">o&nbsp;making&nbsp;o</span> <span class="U2">ur&nbsp;control</span> <span class="U2">&nbsp;consumabl</span> <span class="U2">e&nbsp;in&nbsp;a&nbsp;for</span> <span class="U2">m.&nbsp;The&nbsp;for</span> <span class="U2">mat&nbsp;should</span> <span class="U2">&nbsp;be&nbsp;`Puppe</span> <span class="U2">tForm.NewE</span> <span class="U2">xampleCont</span> <span class="U2">rol`.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">NOTE**:&nbsp;yo</span> <span class="U2">u&nbsp;can&nbsp;also</span> <span class="U2">&nbsp;directly&nbsp;</span> <span class="U2">extend&nbsp;exi</span> <span class="U2">sting&nbsp;form</span> <span class="U2">&nbsp;controls.</span> <span class="U2">&nbsp;For&nbsp;an&nbsp;ex</span> <span class="U2">ample&nbsp;of&nbsp;t</span> <span class="U2">his,&nbsp;pleas</span> <span class="U2">e&nbsp;see&nbsp;the&nbsp;</span> <span class="U2">input&nbsp;cont</span> <span class="U2">rol&nbsp;in&nbsp;ui_</span> <span class="U2">components</span> <span class="U2">/form/cont</span> <span class="U2">rols/input</span> <span class="U2">.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Attaching</span> <span class="U2">&nbsp;control&nbsp;t</span> <span class="U2">o&nbsp;PuppetFo</span> <span class="U2">rm&nbsp;and&nbsp;det</span> <span class="U2">erming&nbsp;top</span> <span class="U2">-level&nbsp;vie</span> <span class="U2">w&nbsp;in&nbsp;newEx</span> <span class="U2">ample.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;Javascri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">leControl&nbsp;</span> <span class="U2">=&nbsp;PuppetFo</span> <span class="U2">rm.NewExam</span> <span class="U2">pleControl</span> <span class="U2">&nbsp;=&nbsp;Marione</span> <span class="U2">tte.Layout</span> <span class="U2">View.exten</span> <span class="U2">d();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;still&nbsp;emp</span> <span class="U2">ty&nbsp;but&nbsp;now</span> <span class="U2">&nbsp;our&nbsp;views</span> <span class="U2">&nbsp;are&nbsp;almos</span> <span class="U2">t&nbsp;ready&nbsp;to</span> <span class="U2">&nbsp;go</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">turn&nbsp;NewEx</span> <span class="U2">ampleContr</span> <span class="U2">ol;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3)</span> <span class="U2">&nbsp;Now&nbsp;that&nbsp;</span> <span class="U2">our&nbsp;basic&nbsp;</span> <span class="U2">structure&nbsp;</span> <span class="U2">of&nbsp;our&nbsp;con</span> <span class="U2">trol&nbsp;is&nbsp;se</span> <span class="U2">t&nbsp;up,&nbsp;we&nbsp;n</span> <span class="U2">ow&nbsp;want&nbsp;to</span> <span class="U2">&nbsp;extend&nbsp;th</span> <span class="U2">e&nbsp;default&nbsp;</span> <span class="U2">control&nbsp;im</span> <span class="U2">plementati</span> <span class="U2">on.&nbsp;Doing&nbsp;</span> <span class="U2">this&nbsp;will&nbsp;</span> <span class="U2">greatly&nbsp;re</span> <span class="U2">duce&nbsp;the&nbsp;a</span> <span class="U2">mount&nbsp;of&nbsp;c</span> <span class="U2">ode&nbsp;requir</span> <span class="U2">ed.&nbsp;At&nbsp;thi</span> <span class="U2">s&nbsp;time&nbsp;we&nbsp;</span> <span class="U2">will&nbsp;creat</span> <span class="U2">e&nbsp;another&nbsp;</span> <span class="U2">object&nbsp;var</span> <span class="U2">iable&nbsp;whic</span> <span class="U2">h&nbsp;will&nbsp;con</span> <span class="U2">tain&nbsp;the&nbsp;v</span> <span class="U2">iew's&nbsp;attr</span> <span class="U2">ibutes.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Extending</span> <span class="U2">&nbsp;control&nbsp;t</span> <span class="U2">o&nbsp;use&nbsp;Pupp</span> <span class="U2">etForm.Com</span> <span class="U2">monPrototy</span> <span class="U2">pe&nbsp;in&nbsp;newE</span> <span class="U2">xample.js:</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">le&nbsp;=&nbsp;{};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">leControl&nbsp;</span> <span class="U2">=&nbsp;PuppetFo</span> <span class="U2">rm.NewExam</span> <span class="U2">pleControl</span> <span class="U2">&nbsp;=&nbsp;Marione</span> <span class="U2">tte.Layout</span> <span class="U2">View.exten</span> <span class="U2">d(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.de</span> <span class="U2">faults(New</span> <span class="U2">Example,&nbsp;_</span> <span class="U2">.defaults(</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonPro</span> <span class="U2">totype,&nbsp;Pu</span> <span class="U2">ppetForm.C</span> <span class="U2">ommonEvent</span> <span class="U2">sFunctions</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">turn&nbsp;NewEx</span> <span class="U2">ampleContr</span> <span class="U2">ol;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4)</span> <span class="U2">&nbsp;We&nbsp;are&nbsp;re</span> <span class="U2">ady&nbsp;to&nbsp;set</span> <span class="U2">&nbsp;up&nbsp;our&nbsp;vi</span> <span class="U2">ew.&nbsp;For&nbsp;st</span> <span class="U2">arters,&nbsp;we</span> <span class="U2">&nbsp;need&nbsp;to&nbsp;c</span> <span class="U2">reate&nbsp;a&nbsp;te</span> <span class="U2">mplate.&nbsp;Si</span> <span class="U2">nce&nbsp;our&nbsp;co</span> <span class="U2">ntrol&nbsp;is&nbsp;a</span> <span class="U2">&nbsp;Marionett</span> <span class="U2">e.LayoutVi</span> <span class="U2">ew,&nbsp;we&nbsp;wan</span> <span class="U2">t&nbsp;to&nbsp;defin</span> <span class="U2">e&nbsp;regions&nbsp;</span> <span class="U2">in&nbsp;our&nbsp;tem</span> <span class="U2">plate.&nbsp;Sin</span> <span class="U2">ce&nbsp;we're&nbsp;c</span> <span class="U2">reating&nbsp;a&nbsp;</span> <span class="U2">control&nbsp;wi</span> <span class="U2">th&nbsp;two&nbsp;par</span> <span class="U2">ts,&nbsp;we&nbsp;can</span> <span class="U2">&nbsp;start&nbsp;wit</span> <span class="U2">h&nbsp;two&nbsp;regi</span> <span class="U2">ons.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Setting&nbsp;u</span> <span class="U2">p&nbsp;top&nbsp;leve</span> <span class="U2">l&nbsp;view&nbsp;in&nbsp;</span> <span class="U2">newExample</span> <span class="U2">.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">le&nbsp;=&nbsp;{&nbsp;//&nbsp;</span> <span class="U2">rememeber,</span> <span class="U2">&nbsp;this&nbsp;is&nbsp;a</span> <span class="U2">&nbsp;layout&nbsp;vi</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;te</span> <span class="U2">mplate:&nbsp;Ha</span> <span class="U2">ndlebars.c</span> <span class="U2">ompile([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;col-xs-6&nbsp;</span> <span class="U2">put&nbsp;on&nbsp;in&nbsp;</span> <span class="U2">order&nbsp;to&nbsp;h</span> <span class="U2">ave&nbsp;the&nbsp;tw</span> <span class="U2">o&nbsp;side&nbsp;by&nbsp;</span> <span class="U2">side</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'&lt;div&nbsp;cl</span> <span class="U2">ass="new-e</span> <span class="U2">xample-dro</span> <span class="U2">pdown-regi</span> <span class="U2">on&nbsp;col-xs-</span> <span class="U2">6"&gt;&lt;/div&gt;'</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'&lt;div&nbsp;cl</span> <span class="U2">ass="new-e</span> <span class="U2">xample-tex</span> <span class="U2">t-region&nbsp;c</span> <span class="U2">ol-xs-6"&gt;&lt;</span> <span class="U2">/div&gt;'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;].</span> <span class="U2">join('\n')</span> <span class="U2">),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ui</span> <span class="U2">:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'Dropdow</span> <span class="U2">nRegionDiv</span> <span class="U2">':&nbsp;'.new-e</span> <span class="U2">xample-dro</span> <span class="U2">pdown-regi</span> <span class="U2">on',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'TextReg</span> <span class="U2">ionDiv':&nbsp;'</span> <span class="U2">.new-examp</span> <span class="U2">le-text-re</span> <span class="U2">gion'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">gions:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;when&nbsp;poss</span> <span class="U2">ible,&nbsp;use&nbsp;</span> <span class="U2">the&nbsp;ui&nbsp;has</span> <span class="U2">h&nbsp;for&nbsp;impr</span> <span class="U2">oved&nbsp;maint</span> <span class="U2">ainability</span> <span class="U2">&nbsp;and&nbsp;perfo</span> <span class="U2">rmance</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'Dropdow</span> <span class="U2">nRegion':&nbsp;</span> <span class="U2">'@ui.Dropd</span> <span class="U2">ownRegionD</span> <span class="U2">iv',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'TextReg</span> <span class="U2">ion':&nbsp;'@ui</span> <span class="U2">.TextRegio</span> <span class="U2">nDiv'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;Ne</span> <span class="U2">wExampleCo</span> <span class="U2">ntrol&nbsp;=&nbsp;Pu</span> <span class="U2">ppetForm.N</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol&nbsp;=&nbsp;M</span> <span class="U2">arionette.</span> <span class="U2">LayoutView</span> <span class="U2">.extend(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">defaults(N</span> <span class="U2">ewExample,</span> <span class="U2">&nbsp;_.default</span> <span class="U2">s(PuppetFo</span> <span class="U2">rm.CommonP</span> <span class="U2">rototype,&nbsp;</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonEve</span> <span class="U2">ntsFunctio</span> <span class="U2">ns))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;NewExampl</span> <span class="U2">eControl;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5)</span> <span class="U2">&nbsp;Next,&nbsp;we&nbsp;</span> <span class="U2">want&nbsp;utili</span> <span class="U2">ze&nbsp;PuppetF</span> <span class="U2">orm.Common</span> <span class="U2">Prototype&nbsp;</span> <span class="U2">and&nbsp;do&nbsp;all</span> <span class="U2">&nbsp;the&nbsp;initi</span> <span class="U2">alize&nbsp;magi</span> <span class="U2">c&nbsp;that&nbsp;let</span> <span class="U2">s&nbsp;the&nbsp;cont</span> <span class="U2">rol&nbsp;work.&nbsp;</span> <span class="U2">Depending&nbsp;</span> <span class="U2">on&nbsp;what&nbsp;yo</span> <span class="U2">u're&nbsp;doing</span> <span class="U2">&nbsp;with&nbsp;your</span> <span class="U2">&nbsp;control,&nbsp;</span> <span class="U2">you&nbsp;may&nbsp;ne</span> <span class="U2">ed&nbsp;additio</span> <span class="U2">nal&nbsp;functi</span> <span class="U2">ons&nbsp;in&nbsp;ord</span> <span class="U2">er&nbsp;for&nbsp;you</span> <span class="U2">r&nbsp;control&nbsp;</span> <span class="U2">to&nbsp;work&nbsp;pr</span> <span class="U2">operly.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Calling&nbsp;C</span> <span class="U2">ommonProto</span> <span class="U2">ype&nbsp;functi</span> <span class="U2">ons&nbsp;enabli</span> <span class="U2">ng&nbsp;correct</span> <span class="U2">&nbsp;functiona</span> <span class="U2">lity&nbsp;in&nbsp;ne</span> <span class="U2">wExample.j</span> <span class="U2">s:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">le&nbsp;=&nbsp;{&nbsp;//&nbsp;</span> <span class="U2">rememeber,</span> <span class="U2">&nbsp;this&nbsp;is&nbsp;a</span> <span class="U2">&nbsp;layout&nbsp;vi</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;...&nbsp;templ</span> <span class="U2">ate,&nbsp;regio</span> <span class="U2">ns,&nbsp;and&nbsp;ui</span> <span class="U2">&nbsp;hidden&nbsp;fo</span> <span class="U2">r&nbsp;brevity</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in</span> <span class="U2">itialize:&nbsp;</span> <span class="U2">function(o</span> <span class="U2">ptions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;s</span> <span class="U2">ee&nbsp;PuppetF</span> <span class="U2">orm.Common</span> <span class="U2">Prototype&nbsp;</span> <span class="U2">in&nbsp;_assets</span> <span class="U2">/libs/cust</span> <span class="U2">om/puppetF</span> <span class="U2">orm.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;i</span> <span class="U2">n&nbsp;order&nbsp;to</span> <span class="U2">&nbsp;view&nbsp;what</span> <span class="U2">&nbsp;these&nbsp;fun</span> <span class="U2">ctions&nbsp;are</span> <span class="U2">&nbsp;doing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.ini</span> <span class="U2">tOptions(o</span> <span class="U2">ptions);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.set</span> <span class="U2">Formatter(</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.lis</span> <span class="U2">tenToField</span> <span class="U2">Options();</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;//&nbsp;end&nbsp;C</span> <span class="U2">ommonProto</span> <span class="U2">type&nbsp;funct</span> <span class="U2">ions</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;Ne</span> <span class="U2">wExampleCo</span> <span class="U2">ntrol&nbsp;=&nbsp;Pu</span> <span class="U2">ppetForm.N</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol&nbsp;=&nbsp;M</span> <span class="U2">arionette.</span> <span class="U2">LayoutView</span> <span class="U2">.extend(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">defaults(N</span> <span class="U2">ewExample,</span> <span class="U2">&nbsp;_.default</span> <span class="U2">s(PuppetFo</span> <span class="U2">rm.CommonP</span> <span class="U2">rototype,&nbsp;</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonEve</span> <span class="U2">ntsFunctio</span> <span class="U2">ns))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;NewExampl</span> <span class="U2">eControl;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6)</span> <span class="U2">&nbsp;Now&nbsp;that&nbsp;</span> <span class="U2">our&nbsp;layout</span> <span class="U2">&nbsp;view&nbsp;is&nbsp;a</span> <span class="U2">ll&nbsp;set&nbsp;up,</span> <span class="U2">&nbsp;we&nbsp;then&nbsp;n</span> <span class="U2">eed&nbsp;to&nbsp;put</span> <span class="U2">&nbsp;views&nbsp;in&nbsp;</span> <span class="U2">the&nbsp;region</span> <span class="U2">s.&nbsp;We'll&nbsp;s</span> <span class="U2">tart&nbsp;with&nbsp;</span> <span class="U2">the&nbsp;dropdo</span> <span class="U2">wn&nbsp;view&nbsp;fi</span> <span class="U2">rst.&nbsp;We&nbsp;wi</span> <span class="U2">ll&nbsp;be&nbsp;usin</span> <span class="U2">g&nbsp;the&nbsp;drop</span> <span class="U2">down&nbsp;contr</span> <span class="U2">ol&nbsp;that&nbsp;is</span> <span class="U2">&nbsp;already&nbsp;c</span> <span class="U2">reated.&nbsp;We</span> <span class="U2">&nbsp;want&nbsp;to&nbsp;c</span> <span class="U2">reate&nbsp;a&nbsp;ne</span> <span class="U2">w&nbsp;`PuppetF</span> <span class="U2">orm.Select</span> <span class="U2">Control`&nbsp;w</span> <span class="U2">ith&nbsp;the&nbsp;op</span> <span class="U2">tions&nbsp;requ</span> <span class="U2">ired&nbsp;for&nbsp;m</span> <span class="U2">inimal&nbsp;fun</span> <span class="U2">ctionality</span> <span class="U2">.&nbsp;The&nbsp;requ</span> <span class="U2">ired&nbsp;optio</span> <span class="U2">ns&nbsp;can&nbsp;be&nbsp;</span> <span class="U2">found&nbsp;in&nbsp;t</span> <span class="U2">he&nbsp;[Select</span> <span class="U2">&nbsp;Control's</span> <span class="U2">&nbsp;Documenta</span> <span class="U2">tion](form</span> <span class="U2">-controls.</span> <span class="U2">md#Select)</span> <span class="U2">.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">NOTE:**&nbsp;At</span> <span class="U2">&nbsp;this&nbsp;poin</span> <span class="U2">t,&nbsp;you&nbsp;wou</span> <span class="U2">ld&nbsp;probabl</span> <span class="U2">y&nbsp;want&nbsp;to&nbsp;</span> <span class="U2">view&nbsp;this&nbsp;</span> <span class="U2">working&nbsp;on</span> <span class="U2">&nbsp;the&nbsp;demo&nbsp;</span> <span class="U2">page.&nbsp;Foll</span> <span class="U2">ow&nbsp;the&nbsp;[De</span> <span class="U2">moing&nbsp;Cont</span> <span class="U2">rols&nbsp;Instr</span> <span class="U2">uctions](d</span> <span class="U2">eveloping-</span> <span class="U2">adk.md#Dem</span> <span class="U2">oing-Contr</span> <span class="U2">ols)&nbsp;to&nbsp;ge</span> <span class="U2">t&nbsp;started.</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Adding&nbsp;in</span> <span class="U2">stance&nbsp;of&nbsp;</span> <span class="U2">select&nbsp;con</span> <span class="U2">trol&nbsp;in&nbsp;ne</span> <span class="U2">wExample.j</span> <span class="U2">s:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;NewExamp</span> <span class="U2">le&nbsp;=&nbsp;{&nbsp;//&nbsp;</span> <span class="U2">rememeber,</span> <span class="U2">&nbsp;this&nbsp;is&nbsp;a</span> <span class="U2">&nbsp;layout&nbsp;vi</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;...&nbsp;templ</span> <span class="U2">ate&nbsp;and&nbsp;ui</span> <span class="U2">&nbsp;hidden&nbsp;fo</span> <span class="U2">r&nbsp;brevity</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">gions:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'Dropdow</span> <span class="U2">nRegion':&nbsp;</span> <span class="U2">'@ui.Dropd</span> <span class="U2">ownRegionD</span> <span class="U2">iv',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'TextReg</span> <span class="U2">ion':&nbsp;'@ui</span> <span class="U2">.TextRegio</span> <span class="U2">nDiv'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in</span> <span class="U2">itialize:&nbsp;</span> <span class="U2">function(o</span> <span class="U2">ptions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;.</span> <span class="U2">..&nbsp;CommonP</span> <span class="U2">rototype&nbsp;f</span> <span class="U2">unctions&nbsp;h</span> <span class="U2">ere,&nbsp;hidde</span> <span class="U2">n&nbsp;for&nbsp;brev</span> <span class="U2">ity</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;var&nbsp;comm</span> <span class="U2">entInputVi</span> <span class="U2">ewField&nbsp;=&nbsp;</span> <span class="U2">new&nbsp;Puppet</span> <span class="U2">Form.Field</span> <span class="U2">({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cont</span> <span class="U2">rol:&nbsp;"sele</span> <span class="U2">ct",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</span> <span class="U2">:&nbsp;this.fie</span> <span class="U2">ld.get('na</span> <span class="U2">me'),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labe</span> <span class="U2">l:&nbsp;this.fi</span> <span class="U2">eld.get('l</span> <span class="U2">abel'),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pick</span> <span class="U2">List:&nbsp;this</span> <span class="U2">.field.get</span> <span class="U2">('pickList</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.dro</span> <span class="U2">pdownView&nbsp;</span> <span class="U2">=&nbsp;new&nbsp;Pupp</span> <span class="U2">etForm.Sel</span> <span class="U2">ectControl</span> <span class="U2">({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">141</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fiel</span> <span class="U2">d:&nbsp;comment</span> <span class="U2">InputViewF</span> <span class="U2">ield,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">142</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</span> <span class="U2">l:&nbsp;this.mo</span> <span class="U2">del&nbsp;//&nbsp;ref</span> <span class="U2">ers&nbsp;(most&nbsp;</span> <span class="U2">often)&nbsp;to&nbsp;</span> <span class="U2">the&nbsp;form's</span> <span class="U2">&nbsp;model</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">143</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">144</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">145</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on</span> <span class="U2">Show:&nbsp;func</span> <span class="U2">tion()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">146</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;onBeforeS</span> <span class="U2">how&nbsp;would&nbsp;</span> <span class="U2">be&nbsp;preferr</span> <span class="U2">ed,&nbsp;but&nbsp;AD</span> <span class="U2">K.UI.Form&nbsp;</span> <span class="U2">is&nbsp;current</span> <span class="U2">ly&nbsp;a&nbsp;compo</span> <span class="U2">site&nbsp;view</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">147</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;and&nbsp;doesn</span> <span class="U2">'t&nbsp;fire&nbsp;on</span> <span class="U2">BeforeShow</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">148</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this</span> <span class="U2">.showChild</span> <span class="U2">View('Drop</span> <span class="U2">downRegion</span> <span class="U2">',&nbsp;this.dr</span> <span class="U2">opdownView</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">149</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">150</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">151</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;Ne</span> <span class="U2">wExampleCo</span> <span class="U2">ntrol&nbsp;=&nbsp;Pu</span> <span class="U2">ppetForm.N</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol&nbsp;=&nbsp;M</span> <span class="U2">arionette.</span> <span class="U2">LayoutView</span> <span class="U2">.extend(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">152</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">defaults(N</span> <span class="U2">ewExample,</span> <span class="U2">&nbsp;_.default</span> <span class="U2">s(PuppetFo</span> <span class="U2">rm.CommonP</span> <span class="U2">rototype,&nbsp;</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonEve</span> <span class="U2">ntsFunctio</span> <span class="U2">ns))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">153</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">154</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;NewExampl</span> <span class="U2">eControl;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">155</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">156</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">157</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">158</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7)</span> <span class="U2">&nbsp;After&nbsp;our</span> <span class="U2">&nbsp;select&nbsp;co</span> <span class="U2">ntrol&nbsp;is&nbsp;a</span> <span class="U2">ll&nbsp;set&nbsp;up,</span> <span class="U2">&nbsp;we&nbsp;can&nbsp;ad</span> <span class="U2">d&nbsp;our&nbsp;prev</span> <span class="U2">iew&nbsp;text&nbsp;v</span> <span class="U2">iew.&nbsp;Inste</span> <span class="U2">ad&nbsp;of&nbsp;inse</span> <span class="U2">rting&nbsp;anot</span> <span class="U2">her&nbsp;contro</span> <span class="U2">l,&nbsp;we&nbsp;will</span> <span class="U2">&nbsp;be&nbsp;provid</span> <span class="U2">ing&nbsp;our&nbsp;ow</span> <span class="U2">n&nbsp;view.&nbsp;Th</span> <span class="U2">e&nbsp;importan</span> <span class="U2">t&nbsp;things&nbsp;t</span> <span class="U2">o&nbsp;pass&nbsp;in&nbsp;</span> <span class="U2">are&nbsp;the&nbsp;co</span> <span class="U2">ntrol's&nbsp;mo</span> <span class="U2">del&nbsp;and&nbsp;fi</span> <span class="U2">eld.&nbsp;These</span> <span class="U2">&nbsp;are&nbsp;used&nbsp;</span> <span class="U2">to&nbsp;map&nbsp;the</span> <span class="U2">&nbsp;preview&nbsp;t</span> <span class="U2">ext&nbsp;view's</span> <span class="U2">&nbsp;template&nbsp;</span> <span class="U2">to&nbsp;the&nbsp;cor</span> <span class="U2">rect&nbsp;value</span> <span class="U2">&nbsp;from&nbsp;the&nbsp;</span> <span class="U2">select.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">159</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">160</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Adding&nbsp;pr</span> <span class="U2">eview&nbsp;text</span> <span class="U2">&nbsp;view&nbsp;to&nbsp;n</span> <span class="U2">ewExample.</span> <span class="U2">js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">161</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">162</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">r&nbsp;PreviewT</span> <span class="U2">extView&nbsp;=&nbsp;</span> <span class="U2">Marionette</span> <span class="U2">.ItemView.</span> <span class="U2">extend({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">163</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;te</span> <span class="U2">mplate:&nbsp;Ha</span> <span class="U2">ndlebars.c</span> <span class="U2">ompile([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">164</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;notice&nbsp;th</span> <span class="U2">e&nbsp;if&nbsp;used&nbsp;</span> <span class="U2">to&nbsp;avoid&nbsp;a</span> <span class="U2">n&nbsp;empty&nbsp;&lt;p</span> <span class="U2">&gt;&nbsp;tag</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">165</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'{{#if&nbsp;v</span> <span class="U2">alue}}'&nbsp;+</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">166</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'&lt;p&nbsp;clas</span> <span class="U2">s="new-exa</span> <span class="U2">mple-previ</span> <span class="U2">ew-text"&gt;{</span> <span class="U2">{value}}&nbsp;s</span> <span class="U2">elected!&lt;/</span> <span class="U2">p&gt;'&nbsp;+</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">167</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'{{/if}}</span> <span class="U2">'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">168</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;].</span> <span class="U2">join('\n')</span> <span class="U2">),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">169</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mo</span> <span class="U2">delEvents:</span> <span class="U2">&nbsp;function(</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">170</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;we&nbsp;need&nbsp;t</span> <span class="U2">o&nbsp;tell&nbsp;the</span> <span class="U2">&nbsp;view&nbsp;to&nbsp;r</span> <span class="U2">erender&nbsp;an</span> <span class="U2">y&nbsp;time&nbsp;the</span> <span class="U2">&nbsp;select's&nbsp;</span> <span class="U2">value&nbsp;chan</span> <span class="U2">ges</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">171</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">modelEvent</span> <span class="U2">sObject&nbsp;=&nbsp;</span> <span class="U2">{};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">172</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</span> <span class="U2">lEventsObj</span> <span class="U2">ect['chang</span> <span class="U2">e:'&nbsp;+&nbsp;this</span> <span class="U2">.field.get</span> <span class="U2">('name')]&nbsp;</span> <span class="U2">=&nbsp;'render'</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">173</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retu</span> <span class="U2">rn&nbsp;modelEv</span> <span class="U2">entsObject</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">174</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">175</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in</span> <span class="U2">itialize:&nbsp;</span> <span class="U2">function(o</span> <span class="U2">ptions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">176</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;need&nbsp;to&nbsp;a</span> <span class="U2">ssign&nbsp;the&nbsp;</span> <span class="U2">options&nbsp;pa</span> <span class="U2">ssed&nbsp;in&nbsp;to</span> <span class="U2">&nbsp;this&nbsp;view</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">177</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this</span> <span class="U2">.field&nbsp;=&nbsp;o</span> <span class="U2">ptions.fie</span> <span class="U2">ld;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">178</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">179</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;se</span> <span class="U2">rializeMod</span> <span class="U2">el:&nbsp;functi</span> <span class="U2">on(model)&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">180</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;this&nbsp;is&nbsp;w</span> <span class="U2">hy&nbsp;we&nbsp;need</span> <span class="U2">ed&nbsp;model&nbsp;a</span> <span class="U2">nd&nbsp;field</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">181</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;</span> <span class="U2">data&nbsp;=&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">182</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;value:</span> <span class="U2">&nbsp;model.get</span> <span class="U2">(this.fiel</span> <span class="U2">d.get('nam</span> <span class="U2">e'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">183</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">184</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retu</span> <span class="U2">rn&nbsp;data;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">185</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">186</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">187</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;Ne</span> <span class="U2">wExample&nbsp;=</span> <span class="U2">&nbsp;{&nbsp;//&nbsp;reme</span> <span class="U2">meber,&nbsp;thi</span> <span class="U2">s&nbsp;is&nbsp;a&nbsp;lay</span> <span class="U2">out&nbsp;view</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">188</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;...&nbsp;templ</span> <span class="U2">ate&nbsp;and&nbsp;ui</span> <span class="U2">&nbsp;hidden&nbsp;fo</span> <span class="U2">r&nbsp;brevity</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">189</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">gions:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">190</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'Dropdow</span> <span class="U2">nRegion':&nbsp;</span> <span class="U2">'@ui.Dropd</span> <span class="U2">ownRegionD</span> <span class="U2">iv',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">191</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'TextReg</span> <span class="U2">ion':&nbsp;'@ui</span> <span class="U2">.TextRegio</span> <span class="U2">nDiv'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">192</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">193</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in</span> <span class="U2">itialize:&nbsp;</span> <span class="U2">function(o</span> <span class="U2">ptions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">194</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;//&nbsp;...&nbsp;C</span> <span class="U2">ommonProto</span> <span class="U2">type&nbsp;funct</span> <span class="U2">ions&nbsp;and&nbsp;d</span> <span class="U2">ropdownVie</span> <span class="U2">w's&nbsp;init&nbsp;h</span> <span class="U2">idden&nbsp;for&nbsp;</span> <span class="U2">brevity</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">195</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.pre</span> <span class="U2">viewTextVi</span> <span class="U2">ew&nbsp;=&nbsp;new&nbsp;P</span> <span class="U2">reviewText</span> <span class="U2">View({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">196</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</span> <span class="U2">l:&nbsp;this.mo</span> <span class="U2">del,&nbsp;//&nbsp;ge</span> <span class="U2">nerally&nbsp;wi</span> <span class="U2">ll&nbsp;be&nbsp;the&nbsp;</span> <span class="U2">form's&nbsp;mod</span> <span class="U2">el</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">197</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fiel</span> <span class="U2">d:&nbsp;this.fi</span> <span class="U2">eld&nbsp;//&nbsp;ava</span> <span class="U2">ilable&nbsp;aft</span> <span class="U2">er&nbsp;this.in</span> <span class="U2">itOptions&nbsp;</span> <span class="U2">is&nbsp;called</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">198</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">199</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">200</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on</span> <span class="U2">Show:&nbsp;func</span> <span class="U2">tion()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">201</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.sho</span> <span class="U2">wChildView</span> <span class="U2">('Dropdown</span> <span class="U2">Region',&nbsp;t</span> <span class="U2">his.dropdo</span> <span class="U2">wnView);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">202</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;this.sho</span> <span class="U2">wChildView</span> <span class="U2">('TextRegi</span> <span class="U2">on',&nbsp;this.</span> <span class="U2">previewTex</span> <span class="U2">tView);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">203</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">204</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">205</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;Ne</span> <span class="U2">wExampleCo</span> <span class="U2">ntrol&nbsp;=&nbsp;Pu</span> <span class="U2">ppetForm.N</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol&nbsp;=&nbsp;M</span> <span class="U2">arionette.</span> <span class="U2">LayoutView</span> <span class="U2">.extend(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">206</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">defaults(N</span> <span class="U2">ewExample,</span> <span class="U2">&nbsp;_.default</span> <span class="U2">s(PuppetFo</span> <span class="U2">rm.CommonP</span> <span class="U2">rototype,&nbsp;</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonEve</span> <span class="U2">ntsFunctio</span> <span class="U2">ns))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">207</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">208</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;NewExampl</span> <span class="U2">eControl;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">209</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">210</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">211</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">212</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Finish</span> <span class="U2">ed!**&nbsp;Here</span> <span class="U2">'s&nbsp;newExam</span> <span class="U2">ple&nbsp;contro</span> <span class="U2">l&nbsp;we&nbsp;have&nbsp;</span> <span class="U2">so&nbsp;far.&nbsp;It</span> <span class="U2">&nbsp;should&nbsp;be</span> <span class="U2">&nbsp;working&nbsp;a</span> <span class="U2">nd&nbsp;look&nbsp;so</span> <span class="U2">mewhat&nbsp;lik</span> <span class="U2">e&nbsp;this:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">213</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![</span> <span class="U2">newExample</span> <span class="U2">](assets/n</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol.png</span> <span class="U2">&nbsp;"New&nbsp;Exam</span> <span class="U2">ple&nbsp;Contro</span> <span class="U2">l")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">214</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">215</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Finished&nbsp;</span> <span class="U2">newExample</span> <span class="U2">.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">216</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`JavaScrip</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">217</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//</span> <span class="U2">&nbsp;newExampl</span> <span class="U2">e.js</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">218</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">fine([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">219</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'backbon</span> <span class="U2">e',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">220</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'marione</span> <span class="U2">tte',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">221</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'handleb</span> <span class="U2">ars',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">222</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'undersc</span> <span class="U2">ore',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">223</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'puppetF</span> <span class="U2">orm'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">224</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</span> <span class="U2">&nbsp;function(</span> <span class="U2">Backbone,&nbsp;</span> <span class="U2">Marionette</span> <span class="U2">,&nbsp;Handleba</span> <span class="U2">rs,&nbsp;_,&nbsp;Pup</span> <span class="U2">petForm)&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">225</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;var&nbsp;Prev</span> <span class="U2">iewTextVie</span> <span class="U2">w&nbsp;=&nbsp;Marion</span> <span class="U2">ette.ItemV</span> <span class="U2">iew.extend</span> <span class="U2">({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">226</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temp</span> <span class="U2">late:&nbsp;Hand</span> <span class="U2">lebars.com</span> <span class="U2">pile([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">227</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'{{#if&nbsp;val</span> <span class="U2">ue}}'&nbsp;+</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">228</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'&lt;p&nbsp;class=</span> <span class="U2">"new-examp</span> <span class="U2">le-preview</span> <span class="U2">-text"&gt;{{v</span> <span class="U2">alue}}&nbsp;sel</span> <span class="U2">ected!&lt;/p&gt;</span> <span class="U2">'&nbsp;+</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">229</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'{{/if}}'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">230</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;].jo</span> <span class="U2">in('\n')),</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">231</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</span> <span class="U2">lEvents:&nbsp;f</span> <span class="U2">unction()&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">232</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;mo</span> <span class="U2">delEventsO</span> <span class="U2">bject&nbsp;=&nbsp;{}</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">233</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;modelE</span> <span class="U2">ventsObjec</span> <span class="U2">t['change:</span> <span class="U2">'&nbsp;+&nbsp;this.f</span> <span class="U2">ield.get('</span> <span class="U2">name')]&nbsp;=&nbsp;</span> <span class="U2">'render';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">234</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;modelEven</span> <span class="U2">tsObject;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">235</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">236</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init</span> <span class="U2">ialize:&nbsp;fu</span> <span class="U2">nction(opt</span> <span class="U2">ions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">237</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;this.f</span> <span class="U2">ield&nbsp;=&nbsp;opt</span> <span class="U2">ions.field</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">238</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">239</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seri</span> <span class="U2">alizeModel</span> <span class="U2">:&nbsp;function</span> <span class="U2">(model)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">240</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;da</span> <span class="U2">ta&nbsp;=&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">241</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;value:&nbsp;m</span> <span class="U2">odel.get(t</span> <span class="U2">his.field.</span> <span class="U2">get('name'</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">242</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">243</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="U2">&nbsp;data;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">244</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">245</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">246</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;var&nbsp;NewE</span> <span class="U2">xample&nbsp;=&nbsp;{</span> <span class="U2">&nbsp;//&nbsp;rememe</span> <span class="U2">ber,&nbsp;this&nbsp;</span> <span class="U2">is&nbsp;a&nbsp;layou</span> <span class="U2">t&nbsp;view</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">247</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temp</span> <span class="U2">late:&nbsp;Hand</span> <span class="U2">lebars.com</span> <span class="U2">pile([</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">248</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'&lt;div&nbsp;clas</span> <span class="U2">s="new-exa</span> <span class="U2">mple-dropd</span> <span class="U2">own-region</span> <span class="U2">&nbsp;col-xs-6"</span> <span class="U2">&gt;&lt;/div&gt;',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">249</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'&lt;div&nbsp;clas</span> <span class="U2">s="new-exa</span> <span class="U2">mple-text-</span> <span class="U2">region&nbsp;col</span> <span class="U2">-xs-6"&gt;&lt;/d</span> <span class="U2">iv&gt;'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">250</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;].jo</span> <span class="U2">in('\n')),</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">251</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ui:&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">252</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'DropdownR</span> <span class="U2">egionDiv':</span> <span class="U2">&nbsp;'.new-exa</span> <span class="U2">mple-dropd</span> <span class="U2">own-region</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">253</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'TextRegio</span> <span class="U2">nDiv':&nbsp;'.n</span> <span class="U2">ew-example</span> <span class="U2">-text-regi</span> <span class="U2">on'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">254</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">255</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regi</span> <span class="U2">ons:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">256</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'DropdownR</span> <span class="U2">egion':&nbsp;'@</span> <span class="U2">ui.Dropdow</span> <span class="U2">nRegionDiv</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">257</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'TextRegio</span> <span class="U2">n':&nbsp;'@ui.T</span> <span class="U2">extRegionD</span> <span class="U2">iv'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">258</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">259</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init</span> <span class="U2">ialize:&nbsp;fu</span> <span class="U2">nction(opt</span> <span class="U2">ions)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">260</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">//&nbsp;see&nbsp;Pup</span> <span class="U2">petForm.Co</span> <span class="U2">mmonProtot</span> <span class="U2">ype&nbsp;in&nbsp;_as</span> <span class="U2">sets/libs/</span> <span class="U2">custom/pup</span> <span class="U2">petForm.js</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">261</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">//&nbsp;in&nbsp;orde</span> <span class="U2">r&nbsp;to&nbsp;view&nbsp;</span> <span class="U2">what&nbsp;these</span> <span class="U2">&nbsp;functions</span> <span class="U2">&nbsp;are&nbsp;doing</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">262</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.initO</span> <span class="U2">ptions(opt</span> <span class="U2">ions);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">263</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.setFo</span> <span class="U2">rmatter();</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">264</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.liste</span> <span class="U2">nToFieldOp</span> <span class="U2">tions();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">265</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">//&nbsp;end&nbsp;Com</span> <span class="U2">monPrototy</span> <span class="U2">pe&nbsp;functio</span> <span class="U2">ns</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">266</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">var&nbsp;commen</span> <span class="U2">tInputView</span> <span class="U2">Field&nbsp;=&nbsp;ne</span> <span class="U2">w&nbsp;PuppetFo</span> <span class="U2">rm.Field({</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">267</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;contro</span> <span class="U2">l:&nbsp;"select</span> <span class="U2">",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">268</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;name:&nbsp;</span> <span class="U2">this.field</span> <span class="U2">.get('name</span> <span class="U2">'),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">269</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;label:</span> <span class="U2">&nbsp;this.fiel</span> <span class="U2">d.get('lab</span> <span class="U2">el'),</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">270</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;pickLi</span> <span class="U2">st:&nbsp;this.f</span> <span class="U2">ield.get('</span> <span class="U2">pickList')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">271</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">272</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.dropd</span> <span class="U2">ownView&nbsp;=&nbsp;</span> <span class="U2">new&nbsp;Puppet</span> <span class="U2">Form.Selec</span> <span class="U2">tControl({</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">273</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;field:</span> <span class="U2">&nbsp;commentIn</span> <span class="U2">putViewFie</span> <span class="U2">ld,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">274</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;model:</span> <span class="U2">&nbsp;this.mode</span> <span class="U2">l</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">275</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">276</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.previ</span> <span class="U2">ewTextView</span> <span class="U2">&nbsp;=&nbsp;new&nbsp;Pre</span> <span class="U2">viewTextVi</span> <span class="U2">ew({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">277</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;model:</span> <span class="U2">&nbsp;this.mode</span> <span class="U2">l,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">278</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;field:</span> <span class="U2">&nbsp;this.fiel</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">279</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">280</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">281</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onSh</span> <span class="U2">ow:&nbsp;functi</span> <span class="U2">on()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">282</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.showC</span> <span class="U2">hildView('</span> <span class="U2">DropdownRe</span> <span class="U2">gion',&nbsp;thi</span> <span class="U2">s.dropdown</span> <span class="U2">View);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">283</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">this.showC</span> <span class="U2">hildView('</span> <span class="U2">TextRegion</span> <span class="U2">',&nbsp;this.pr</span> <span class="U2">eviewTextV</span> <span class="U2">iew);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">284</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">285</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">286</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;var&nbsp;NewE</span> <span class="U2">xampleCont</span> <span class="U2">rol&nbsp;=&nbsp;Pupp</span> <span class="U2">etForm.New</span> <span class="U2">ExampleCon</span> <span class="U2">trol&nbsp;=&nbsp;Mar</span> <span class="U2">ionette.La</span> <span class="U2">youtView.e</span> <span class="U2">xtend(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">287</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.de</span> <span class="U2">faults(New</span> <span class="U2">Example,&nbsp;_</span> <span class="U2">.defaults(</span> <span class="U2">PuppetForm</span> <span class="U2">.CommonPro</span> <span class="U2">totype,&nbsp;Pu</span> <span class="U2">ppetForm.C</span> <span class="U2">ommonEvent</span> <span class="U2">sFunctions</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">288</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">289</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;return&nbsp;N</span> <span class="U2">ewExampleC</span> <span class="U2">ontrol;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">290</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">291</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">292</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">293</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">294</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;defini</span> <span class="U2">tion</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">295</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Your&nbsp;new&nbsp;c</span> <span class="U2">ontrol&nbsp;is&nbsp;</span> <span class="U2">now&nbsp;create</span> <span class="U2">d&nbsp;and&nbsp;regi</span> <span class="U2">stered,&nbsp;bu</span> <span class="U2">t&nbsp;nothing&nbsp;</span> <span class="U2">is&nbsp;using&nbsp;i</span> <span class="U2">t&nbsp;yet.&nbsp;If&nbsp;</span> <span class="U2">you&nbsp;haven'</span> <span class="U2">t&nbsp;already,</span> <span class="U2">&nbsp;see&nbsp;the&nbsp;[</span> <span class="U2">Demoing&nbsp;Co</span> <span class="U2">ntrols](#D</span> <span class="U2">emoing-Con</span> <span class="U2">trols)&nbsp;sec</span> <span class="U2">tion&nbsp;to&nbsp;se</span> <span class="U2">t&nbsp;it&nbsp;up&nbsp;fo</span> <span class="U2">r&nbsp;the&nbsp;demo</span> <span class="U2">&nbsp;page.&nbsp;Thi</span> <span class="U2">s&nbsp;was&nbsp;a&nbsp;ve</span> <span class="U2">ry&nbsp;simple&nbsp;</span> <span class="U2">example,&nbsp;f</span> <span class="U2">eel&nbsp;free&nbsp;t</span> <span class="U2">o&nbsp;look&nbsp;at&nbsp;</span> <span class="U2">other&nbsp;[ADK</span> <span class="U2">.UI.Form&nbsp;c</span> <span class="U2">ontrols](f</span> <span class="U2">orm-contro</span> <span class="U2">ls.md)&nbsp;to&nbsp;</span> <span class="U2">get&nbsp;an&nbsp;ide</span> <span class="U2">a&nbsp;of&nbsp;what&nbsp;</span> <span class="U2">can&nbsp;be&nbsp;pro</span> <span class="U2">vided&nbsp;in&nbsp;t</span> <span class="U2">his&nbsp;framew</span> <span class="U2">ork.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">296</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">297</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">298</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">###&nbsp;Demoin</span> <span class="U2">g&nbsp;Controls</span> <span class="U2">&nbsp;###</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">299</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">The&nbsp;demo&nbsp;p</span> <span class="U2">age&nbsp;is&nbsp;ava</span> <span class="U2">ilable&nbsp;at:</span> <span class="U2">&nbsp;[locally&nbsp;</span> <span class="U2">deployed&nbsp;a</span> <span class="U2">pp&nbsp;url]/#u</span> <span class="U2">i-componen</span> <span class="U2">ts-demo&nbsp;&lt;b</span> <span class="U2">r&nbsp;/&gt;(ie.&nbsp;h</span> <span class="U2">ttps://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">/#ui-compo</span> <span class="U2">nents-demo</span> <span class="U2">)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">300</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">301</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">In&nbsp;order&nbsp;f</span> <span class="U2">or&nbsp;your&nbsp;co</span> <span class="U2">ntrol&nbsp;to&nbsp;b</span> <span class="U2">e&nbsp;displaye</span> <span class="U2">d&nbsp;on&nbsp;the&nbsp;d</span> <span class="U2">emo&nbsp;page,&nbsp;</span> <span class="U2">the&nbsp;follow</span> <span class="U2">ing&nbsp;steps&nbsp;</span> <span class="U2">must&nbsp;be&nbsp;fo</span> <span class="U2">llowed:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">302</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Contro</span> <span class="U2">l&nbsp;exists:*</span> <span class="U2">*&nbsp;The&nbsp;cont</span> <span class="U2">rol&nbsp;must&nbsp;b</span> <span class="U2">e&nbsp;set&nbsp;up&nbsp;a</span> <span class="U2">s&nbsp;specifie</span> <span class="U2">d&nbsp;in&nbsp;the&nbsp;[</span> <span class="U2">Developing</span> <span class="U2">&nbsp;Controls]</span> <span class="U2">(#Developi</span> <span class="U2">ng-Control</span> <span class="U2">s)&nbsp;section</span> <span class="U2">.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">303</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Regist</span> <span class="U2">er**&nbsp;the&nbsp;c</span> <span class="U2">ontrol&nbsp;in&nbsp;</span> <span class="U2">the&nbsp;demo&nbsp;p</span> <span class="U2">age's&nbsp;form</span> <span class="U2">&nbsp;control&nbsp;m</span> <span class="U2">anifest:&nbsp;`</span> <span class="U2">product/pr</span> <span class="U2">oduction/d</span> <span class="U2">emo_files/</span> <span class="U2">feature_fo</span> <span class="U2">rms/formCo</span> <span class="U2">ntrols.js`</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">304</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">Add&nbsp;an&nbsp;obj</span> <span class="U2">ect&nbsp;to&nbsp;the</span> <span class="U2">&nbsp;array&nbsp;of&nbsp;</span> <span class="U2">controls&nbsp;w</span> <span class="U2">ith:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">305</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">id**:&nbsp;(str</span> <span class="U2">ing)&nbsp;name&nbsp;</span> <span class="U2">of&nbsp;control</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">306</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">label**:&nbsp;(</span> <span class="U2">string)&nbsp;pr</span> <span class="U2">etty&nbsp;versi</span> <span class="U2">on&nbsp;of&nbsp;name</span> <span class="U2">&nbsp;to&nbsp;be&nbsp;dis</span> <span class="U2">played&nbsp;on&nbsp;</span> <span class="U2">demo&nbsp;page</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">307</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">developmen</span> <span class="U2">tStatus**:</span> <span class="U2">&nbsp;(boolean)</span> <span class="U2">&nbsp;whether&nbsp;o</span> <span class="U2">r&nbsp;not&nbsp;it&nbsp;i</span> <span class="U2">s&nbsp;function</span> <span class="U2">al&nbsp;barring</span> <span class="U2">&nbsp;styling/5</span> <span class="U2">08&nbsp;approva</span> <span class="U2">l</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">308</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">cometStatu</span> <span class="U2">s**:&nbsp;(bool</span> <span class="U2">ean)&nbsp;has&nbsp;b</span> <span class="U2">een&nbsp;vetted</span> <span class="U2">&nbsp;for&nbsp;appro</span> <span class="U2">ved&nbsp;styles</span> <span class="U2">&nbsp;and&nbsp;508&nbsp;c</span> <span class="U2">ompliance</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">309</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">exampleFor</span> <span class="U2">m**:&nbsp;(bool</span> <span class="U2">ean)&nbsp;must&nbsp;</span> <span class="U2">be&nbsp;true&nbsp;to</span> <span class="U2">&nbsp;see&nbsp;a&nbsp;dem</span> <span class="U2">o&nbsp;of&nbsp;the&nbsp;c</span> <span class="U2">ontrol</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">310</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">supportsEr</span> <span class="U2">rorMessage</span> <span class="U2">**:&nbsp;(boole</span> <span class="U2">an)&nbsp;determ</span> <span class="U2">ines&nbsp;if&nbsp;er</span> <span class="U2">rorMessage</span> <span class="U2">&nbsp;functiona</span> <span class="U2">lity&nbsp;is&nbsp;pu</span> <span class="U2">t&nbsp;into&nbsp;con</span> <span class="U2">trol's&nbsp;exa</span> <span class="U2">mple&nbsp;form</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">311</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">storyNumbe</span> <span class="U2">r**:&nbsp;(inte</span> <span class="U2">ger)&nbsp;maps&nbsp;</span> <span class="U2">to&nbsp;Rally&nbsp;s</span> <span class="U2">tory&nbsp;numbe</span> <span class="U2">r&nbsp;(leave&nbsp;t</span> <span class="U2">he&nbsp;'US'&nbsp;OF</span> <span class="U2">F&nbsp;of&nbsp;this&nbsp;</span> <span class="U2">number)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">312</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;**</span> <span class="U2">documentat</span> <span class="U2">ionURL**:&nbsp;</span> <span class="U2">(string)&nbsp;l</span> <span class="U2">ink&nbsp;to&nbsp;con</span> <span class="U2">trol's&nbsp;ADK</span> <span class="U2">&nbsp;documenta</span> <span class="U2">tion.&nbsp;Ensu</span> <span class="U2">re&nbsp;the&nbsp;lin</span> <span class="U2">k&nbsp;works&nbsp;be</span> <span class="U2">fore&nbsp;forge</span> <span class="U2">tting&nbsp;abou</span> <span class="U2">t&nbsp;it.&nbsp;(exa</span> <span class="U2">mple:&nbsp;`"/d</span> <span class="U2">ocumentati</span> <span class="U2">on/#/adk/f</span> <span class="U2">orm-contro</span> <span class="U2">ls#Control</span> <span class="U2">-Name"`)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">313</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">314</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Example&nbsp;c</span> <span class="U2">ontrol&nbsp;con</span> <span class="U2">fig&nbsp;in&nbsp;for</span> <span class="U2">mControls.</span> <span class="U2">js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">315</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">316</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">317</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id</span> <span class="U2">:&nbsp;'newExam</span> <span class="U2">ple',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">318</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la</span> <span class="U2">bel:&nbsp;'New&nbsp;</span> <span class="U2">Example',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">319</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de</span> <span class="U2">velopmentS</span> <span class="U2">tatus:&nbsp;fal</span> <span class="U2">se,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">320</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co</span> <span class="U2">metStatus:</span> <span class="U2">&nbsp;false,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">321</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex</span> <span class="U2">ampleForm:</span> <span class="U2">&nbsp;true,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">322</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;su</span> <span class="U2">pportsErro</span> <span class="U2">rMessage:&nbsp;</span> <span class="U2">false,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">323</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;st</span> <span class="U2">oryNumber:</span> <span class="U2">&nbsp;1111,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">324</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do</span> <span class="U2">cumentatio</span> <span class="U2">nURL:&nbsp;"/do</span> <span class="U2">cumentatio</span> <span class="U2">n/#/adk/fo</span> <span class="U2">rm-control</span> <span class="U2">s#New-Exam</span> <span class="U2">ple"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">325</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">326</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">327</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">328</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Config</span> <span class="U2">ure**&nbsp;the&nbsp;</span> <span class="U2">control's&nbsp;</span> <span class="U2">sample&nbsp;for</span> <span class="U2">m&nbsp;in&nbsp;the&nbsp;d</span> <span class="U2">emo&nbsp;page's</span> <span class="U2">&nbsp;field&nbsp;con</span> <span class="U2">fig&nbsp;manife</span> <span class="U2">st:&nbsp;`produ</span> <span class="U2">ct/product</span> <span class="U2">ion/demo_f</span> <span class="U2">iles/form_</span> <span class="U2">components</span> <span class="U2">_example/f</span> <span class="U2">ields.js`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">329</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">Add&nbsp;an&nbsp;att</span> <span class="U2">ribute&nbsp;to&nbsp;</span> <span class="U2">the&nbsp;field&nbsp;</span> <span class="U2">object&nbsp;(th</span> <span class="U2">e&nbsp;large&nbsp;on</span> <span class="U2">e&nbsp;in&nbsp;the&nbsp;r</span> <span class="U2">eturn&nbsp;stat</span> <span class="U2">ement)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">330</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;th</span> <span class="U2">e&nbsp;attribut</span> <span class="U2">e&nbsp;name&nbsp;sho</span> <span class="U2">uld&nbsp;match&nbsp;</span> <span class="U2">the&nbsp;**id**</span> <span class="U2">&nbsp;attribute</span> <span class="U2">&nbsp;in&nbsp;the&nbsp;co</span> <span class="U2">ntrol's&nbsp;co</span> <span class="U2">nfig&nbsp;in&nbsp;th</span> <span class="U2">e&nbsp;form&nbsp;con</span> <span class="U2">trol&nbsp;manif</span> <span class="U2">est</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">331</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;th</span> <span class="U2">e&nbsp;value&nbsp;of</span> <span class="U2">&nbsp;that&nbsp;attr</span> <span class="U2">ibute&nbsp;is&nbsp;a</span> <span class="U2">n&nbsp;array&nbsp;of</span> <span class="U2">&nbsp;control&nbsp;f</span> <span class="U2">ields</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">332</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">333</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Example&nbsp;s</span> <span class="U2">ample&nbsp;form</span> <span class="U2">&nbsp;config&nbsp;fo</span> <span class="U2">r&nbsp;newExamp</span> <span class="U2">le&nbsp;control</span> <span class="U2">&nbsp;in&nbsp;fields</span> <span class="U2">.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">334</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;JavaScri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">335</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">turn&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">336</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newE</span> <span class="U2">xample:&nbsp;[{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">337</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;contro</span> <span class="U2">l:&nbsp;'newExa</span> <span class="U2">mple',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">338</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;name:&nbsp;'n</span> <span class="U2">ewExampleV</span> <span class="U2">alue',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">339</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;label:&nbsp;'</span> <span class="U2">New&nbsp;Exampl</span> <span class="U2">e&nbsp;control&nbsp;</span> <span class="U2">here!',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">340</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;pickList</span> <span class="U2">:&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">341</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valu</span> <span class="U2">e:&nbsp;'AL',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">342</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labe</span> <span class="U2">l:&nbsp;'Alabam</span> <span class="U2">a'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">343</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">344</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valu</span> <span class="U2">e:&nbsp;'NY',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">345</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labe</span> <span class="U2">l:&nbsp;'New&nbsp;Yo</span> <span class="U2">rk'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">346</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">347</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valu</span> <span class="U2">e:&nbsp;'VA',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">348</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;labe</span> <span class="U2">l:&nbsp;'Virgin</span> <span class="U2">ia'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">349</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;}]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">350</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">351</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">352</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">353</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">354</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Map**&nbsp;</span> <span class="U2">the&nbsp;contro</span> <span class="U2">l&nbsp;to&nbsp;the&nbsp;f</span> <span class="U2">orms&nbsp;that&nbsp;</span> <span class="U2">require&nbsp;it</span> <span class="U2">.&nbsp;This&nbsp;is&nbsp;</span> <span class="U2">done&nbsp;by&nbsp;ad</span> <span class="U2">ding&nbsp;a&nbsp;str</span> <span class="U2">ing&nbsp;(equal</span> <span class="U2">&nbsp;to&nbsp;the&nbsp;co</span> <span class="U2">ntrol's&nbsp;**</span> <span class="U2">id**)&nbsp;to&nbsp;t</span> <span class="U2">he&nbsp;`contro</span> <span class="U2">l`&nbsp;array&nbsp;o</span> <span class="U2">f&nbsp;each&nbsp;fea</span> <span class="U2">ture&nbsp;in&nbsp;`p</span> <span class="U2">roduct/pro</span> <span class="U2">duction/de</span> <span class="U2">mo_files/f</span> <span class="U2">eature_for</span> <span class="U2">ms/feature</span> <span class="U2">Status.js`</span> <span class="U2">.&nbsp;Doing&nbsp;th</span> <span class="U2">is&nbsp;will&nbsp;le</span> <span class="U2">t&nbsp;the&nbsp;feat</span> <span class="U2">ure&nbsp;displa</span> <span class="U2">y&nbsp;the&nbsp;cont</span> <span class="U2">rol&nbsp;as&nbsp;a&nbsp;d</span> <span class="U2">ependency.</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">355</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;callout</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">356</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:&nbsp;showcode</span> <span class="U2">&nbsp;Example&nbsp;o</span> <span class="U2">f&nbsp;adding&nbsp;c</span> <span class="U2">ontrol&nbsp;to&nbsp;</span> <span class="U2">controls&nbsp;a</span> <span class="U2">rray&nbsp;in&nbsp;fe</span> <span class="U2">atureStatu</span> <span class="U2">s.js:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">357</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`&nbsp;Javascri</span> <span class="U2">pt</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">358</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">359</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fe</span> <span class="U2">atureNumbe</span> <span class="U2">r:&nbsp;170,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">360</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ti</span> <span class="U2">tle:&nbsp;"Vita</span> <span class="U2">ls&nbsp;-&nbsp;Enter</span> <span class="U2">ed&nbsp;In&nbsp;Erro</span> <span class="U2">r",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">361</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wi</span> <span class="U2">reframe:&nbsp;"</span> <span class="U2">http://h35</span> <span class="U2">2jh.axshar</span> <span class="U2">e.com/#p=f</span> <span class="U2">170_vitals</span> <span class="U2">_-_entered</span> <span class="U2">_in_error_</span> <span class="U2">v_2",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">362</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">workflowPa</span> <span class="U2">th:&nbsp;"http:</span> <span class="U2">//</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">/ui-compon</span> <span class="U2">ents/docs/</span> <span class="U2">workflow/p</span> <span class="U2">si9/workfl</span> <span class="U2">ow-vital-e</span> <span class="U2">ie.pdf",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">363</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wo</span> <span class="U2">rkflowSize</span> <span class="U2">:&nbsp;"338KB",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">364</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">useCaseSce</span> <span class="U2">narioPath:</span> <span class="U2">&nbsp;"http://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">/ui-compon</span> <span class="U2">ents/docs/</span> <span class="U2">use-case/p</span> <span class="U2">si9/Test-S</span> <span class="U2">cenario-vi</span> <span class="U2">tals-ELE.p</span> <span class="U2">df",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">365</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;us</span> <span class="U2">eCaseScena</span> <span class="U2">rioSize:&nbsp;"</span> <span class="U2">83KB",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">366</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co</span> <span class="U2">ntrols:&nbsp;['</span> <span class="U2">input','ch</span> <span class="U2">ecklist','</span> <span class="U2">radio','bu</span> <span class="U2">tton','con</span> <span class="U2">tainer_sho</span> <span class="U2">wingModelD</span> <span class="U2">ata',&nbsp;'new</span> <span class="U2">Example'],</span> <span class="U2">&nbsp;//&nbsp;here!!</span> <span class="U2">!!!</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">367</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co</span> <span class="U2">mponents:&nbsp;</span> <span class="U2">['workflow</span> <span class="U2">','alert',</span> <span class="U2">'growlNoti</span> <span class="U2">fications'</span> <span class="U2">],</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">368</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no</span> <span class="U2">tes:&nbsp;"",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">369</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex</span> <span class="U2">ampleForm:</span> <span class="U2">&nbsp;true,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">370</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ha</span> <span class="U2">ndOff:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">371</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;trifecta</span> <span class="U2">:&nbsp;true,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">372</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;dev:&nbsp;tru</span> <span class="U2">e</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">373</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">374</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">375</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</span> <span class="U2">`</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">376</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">377</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Finish</span> <span class="U2">ed!**&nbsp;Now&nbsp;</span> <span class="U2">the&nbsp;contro</span> <span class="U2">l&nbsp;will&nbsp;be&nbsp;</span> <span class="U2">mapped&nbsp;to&nbsp;</span> <span class="U2">its&nbsp;featur</span> <span class="U2">es&nbsp;as&nbsp;well</span> <span class="U2">&nbsp;as&nbsp;have&nbsp;a</span> <span class="U2">&nbsp;demo&nbsp;form</span> <span class="U2">.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">378</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">Here&nbsp;is&nbsp;wh</span> <span class="U2">at&nbsp;it&nbsp;woul</span> <span class="U2">d&nbsp;look&nbsp;lik</span> <span class="U2">e&nbsp;in&nbsp;the&nbsp;F</span> <span class="U2">eature&nbsp;Sta</span> <span class="U2">tus&nbsp;sectio</span> <span class="U2">n:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">379</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![</span> <span class="U2">newExample</span> <span class="U2">FeatureSta</span> <span class="U2">tus](asset</span> <span class="U2">s/newExamp</span> <span class="U2">leControlF</span> <span class="U2">eatureStat</span> <span class="U2">us.png&nbsp;"Ne</span> <span class="U2">w&nbsp;Example&nbsp;</span> <span class="U2">Control&nbsp;in</span> <span class="U2">&nbsp;Feature&nbsp;S</span> <span class="U2">tatus")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">380</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">And&nbsp;here&nbsp;i</span> <span class="U2">t&nbsp;is&nbsp;in&nbsp;th</span> <span class="U2">e&nbsp;Form&nbsp;Con</span> <span class="U2">trols&nbsp;Live</span> <span class="U2">&nbsp;Demo&nbsp;tabl</span> <span class="U2">e:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">381</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![</span> <span class="U2">newExample</span> <span class="U2">FormContro</span> <span class="U2">lsTable](a</span> <span class="U2">ssets/newE</span> <span class="U2">xampleCont</span> <span class="U2">rolFormCon</span> <span class="U2">trolsTable</span> <span class="U2">.png&nbsp;"New&nbsp;</span> <span class="U2">Example&nbsp;Co</span> <span class="U2">ntrol&nbsp;in&nbsp;F</span> <span class="U2">orm&nbsp;Contro</span> <span class="U2">ls&nbsp;Table")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">382</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span> <span class="U2">And&nbsp;finall</span> <span class="U2">y,&nbsp;here&nbsp;is</span> <span class="U2">&nbsp;what&nbsp;it&nbsp;w</span> <span class="U2">ould&nbsp;look&nbsp;</span> <span class="U2">like&nbsp;in&nbsp;it</span> <span class="U2">s&nbsp;sample&nbsp;f</span> <span class="U2">orm:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">383</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![</span> <span class="U2">newExample</span> <span class="U2">LiveSample</span> <span class="U2">Form](asse</span> <span class="U2">ts/newExam</span> <span class="U2">pleControl</span> <span class="U2">LiveSample</span> <span class="U2">Form.png&nbsp;"</span> <span class="U2">New&nbsp;Exampl</span> <span class="U2">e&nbsp;Control&nbsp;</span> <span class="U2">in&nbsp;Live&nbsp;Sa</span> <span class="U2">mple&nbsp;Form"</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">384</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">385</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">386</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">###&nbsp;Docume</span> <span class="U2">nting&nbsp;Cont</span> <span class="U2">rols&nbsp;###</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">387</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">The&nbsp;ADK&nbsp;do</span> <span class="U2">cumentatio</span> <span class="U2">n&nbsp;lives&nbsp;in</span> <span class="U2">&nbsp;`product/</span> <span class="U2">production</span> <span class="U2">/documenta</span> <span class="U2">tion/adk/`</span> <span class="U2">.&nbsp;When&nbsp;inc</span> <span class="U2">luding&nbsp;an&nbsp;</span> <span class="U2">image,&nbsp;sim</span> <span class="U2">ply&nbsp;place&nbsp;</span> <span class="U2">the&nbsp;image&nbsp;</span> <span class="U2">in&nbsp;the&nbsp;`as</span> <span class="U2">sets/`&nbsp;dir</span> <span class="U2">ectory.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">388</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">389</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">The&nbsp;import</span> <span class="U2">ant&nbsp;part&nbsp;h</span> <span class="U2">ere&nbsp;is&nbsp;to&nbsp;</span> <span class="U2">accurately</span> <span class="U2">&nbsp;group&nbsp;you</span> <span class="U2">r&nbsp;control&nbsp;</span> <span class="U2">for&nbsp;placem</span> <span class="U2">ent&nbsp;within</span> <span class="U2">&nbsp;the&nbsp;[Form</span> <span class="U2">&nbsp;Controls&nbsp;</span> <span class="U2">documentat</span> <span class="U2">ion](form-</span> <span class="U2">controls.m</span> <span class="U2">d)&nbsp;page.&nbsp;A</span> <span class="U2">fter&nbsp;you&nbsp;h</span> <span class="U2">ave&nbsp;determ</span> <span class="U2">ined&nbsp;which</span> <span class="U2">&nbsp;group&nbsp;to&nbsp;</span> <span class="U2">place&nbsp;your</span> <span class="U2">&nbsp;control,&nbsp;</span> <span class="U2">simply&nbsp;ins</span> <span class="U2">ert&nbsp;its&nbsp;do</span> <span class="U2">cumentatio</span> <span class="U2">n&nbsp;in&nbsp;alpha</span> <span class="U2">betical&nbsp;or</span> <span class="U2">der&nbsp;within</span> <span class="U2">&nbsp;that&nbsp;grou</span> <span class="U2">p.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">390</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;defini</span> <span class="U2">tion</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">391</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Groups:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">392</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Basic*</span> <span class="U2">*:&nbsp;Simple&nbsp;</span> <span class="U2">HTML&nbsp;form&nbsp;</span> <span class="U2">controls.&nbsp;</span> <span class="U2">New&nbsp;contro</span> <span class="U2">ls&nbsp;probabl</span> <span class="U2">y&nbsp;won't&nbsp;go</span> <span class="U2">&nbsp;in&nbsp;this&nbsp;g</span> <span class="U2">roup.&nbsp;(ie.</span> <span class="U2">&nbsp;Input,&nbsp;Se</span> <span class="U2">lect)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">393</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Utilit</span> <span class="U2">y**:&nbsp;These</span> <span class="U2">&nbsp;controls&nbsp;</span> <span class="U2">will&nbsp;have&nbsp;</span> <span class="U2">a&nbsp;specific</span> <span class="U2">&nbsp;function&nbsp;</span> <span class="U2">but&nbsp;are&nbsp;wi</span> <span class="U2">dely&nbsp;used.</span> <span class="U2">&nbsp;(ie.&nbsp;Date</span> <span class="U2">picker,&nbsp;Ch</span> <span class="U2">ecklist)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">394</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Wrappe</span> <span class="U2">rs**:&nbsp;The&nbsp;</span> <span class="U2">primary&nbsp;pu</span> <span class="U2">rpose&nbsp;of&nbsp;t</span> <span class="U2">hese&nbsp;contr</span> <span class="U2">ols&nbsp;are&nbsp;to</span> <span class="U2">&nbsp;be&nbsp;contai</span> <span class="U2">ners&nbsp;for&nbsp;o</span> <span class="U2">ther&nbsp;contr</span> <span class="U2">ols.&nbsp;(ie.&nbsp;</span> <span class="U2">Popover,&nbsp;F</span> <span class="U2">ieldset)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">395</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">-&nbsp;**Specia</span> <span class="U2">l**:&nbsp;These</span> <span class="U2">&nbsp;are&nbsp;highl</span> <span class="U2">y&nbsp;speciali</span> <span class="U2">zed,&nbsp;very&nbsp;</span> <span class="U2">complex,&nbsp;a</span> <span class="U2">nd&nbsp;not&nbsp;ver</span> <span class="U2">y&nbsp;flexible</span> <span class="U2">.&nbsp;(ie.&nbsp;Nes</span> <span class="U2">ted&nbsp;Commen</span> <span class="U2">t&nbsp;Box,&nbsp;Tog</span> <span class="U2">gle&nbsp;Option</span> <span class="U2">s&nbsp;Checklis</span> <span class="U2">t)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">396</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">397</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">398</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;side-n</span> <span class="U2">ote</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">399</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">**Note**:&nbsp;</span> <span class="U2">Make&nbsp;sure&nbsp;</span> <span class="U2">to&nbsp;include</span> <span class="U2">&nbsp;the&nbsp;confi</span> <span class="U2">g&nbsp;options,</span> <span class="U2">&nbsp;a&nbsp;sample&nbsp;</span> <span class="U2">image&nbsp;(or&nbsp;</span> <span class="U2">images),&nbsp;a</span> <span class="U2">vailable&nbsp;t</span> <span class="U2">rigger&nbsp;eve</span> <span class="U2">nts,&nbsp;and&nbsp;s</span> <span class="U2">ample&nbsp;code</span> <span class="U2">&nbsp;configura</span> <span class="U2">tions.</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">400</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">401</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">402</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::&nbsp;callou</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">403</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Once&nbsp;your&nbsp;</span> <span class="U2">documentat</span> <span class="U2">ion&nbsp;for&nbsp;yo</span> <span class="U2">ur&nbsp;control</span> <span class="U2">&nbsp;is&nbsp;comple</span> <span class="U2">te,&nbsp;be&nbsp;sur</span> <span class="U2">e&nbsp;to&nbsp;add&nbsp;a</span> <span class="U2">n&nbsp;entry&nbsp;in</span> <span class="U2">&nbsp;the&nbsp;[What</span> <span class="U2">'s&nbsp;New?&nbsp;Pa</span> <span class="U2">ge](change</span> <span class="U2">log.md)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">404</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">:::</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">405</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">406</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">407</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">###&nbsp;Testin</span> <span class="U2">g&nbsp;Controls</span> <span class="U2">&nbsp;###</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">408</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Coming&nbsp;soo</span> <span class="U2">n.</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

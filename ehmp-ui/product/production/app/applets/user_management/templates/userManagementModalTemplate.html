@@ -33,9 +33,9 @@
     <div class="row">
         <div class="col-xs-3 text-right color-grey-darker">Permission Sets</div>
         <div class="col-xs-5">
-            {{#each permissionSets.val}}
+            {{#each formattedPermissionSets}}
             <div class="row left-padding-md bottom-padding-xs">
-                {{mapping}}
+                {{this}}
             </div>
             {{else}}
             <div class="row left-padding-md bottom-padding-xs">
@@ -44,7 +44,7 @@
             {{/each}}
         </div>
         <div class="col-xs-1">
-            <button type="button" class="btn btn-icon edit-permission-sets-btn" title="Press enter to select new Permission Sets.">
+            <button type="button" class="btn btn-icon edit-permission-sets-btn" title="Select new Permission Sets">
                 <i class="fa fa-pencil"></i>
             </button>
         </div>

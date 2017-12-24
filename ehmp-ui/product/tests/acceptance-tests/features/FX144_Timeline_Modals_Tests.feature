@@ -1,20 +1,16 @@
-@F144_TimelineApplet_Modals  @data_specific  @DE6696 @reg1
+@F144_TimelineApplet_Modals @timeline_applet  @data_specific  @DE6696 @reg3
 
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed) - Modal Tests
-
-# DE6696: Default automated user is unable to see Timeline
-Background:
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
-  Then staff view screen is displayed
 
 @f144_timeline_visit_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Visits
   # Given user is logged into eHMP-UI
-  And user searches for and selects "Zzzretiredonenineteen,Patient"
+  And user searches for and selects "Onehundredsixteen,Patient"
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
-  When the user views the first Timeline event "Visit" detail view
+  #When the user views the first Timeline event "Visit" detail view
+  When the user views the the details of the first row with an Activity of "Visit Event (Historical)" and Type "Visit"
   Then the modal is displayed
   And the modal's title is "Event (Historical)"
   And the Timeline event "Visit" Detail modal displays 
@@ -30,7 +26,7 @@ Scenario: Users will be able to view modal popup for event Visits
 @f144_timeline_admission_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Admissions
   # Given user is logged into eHMP-UI
-  And user searches for and selects "Zzzretiredonenineteen,Patient"
+  And user searches for and selects "Onehundredsixteen,Patient"
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
@@ -52,11 +48,11 @@ Scenario: Users will be able to view modal popup for event Admissions
 @f144_timeline_discharge_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Discharge
   # Given user is logged into eHMP-UI
-  And user searches for and selects "Zzzretiredonenineteen,Patient"
+  And user searches for and selects "Onehundredsixteen,Patient"
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
-  When the user views the first Timeline event "Discharge" detail view
+  When the user views the first Timeline event Discharged Admission detail view
   Then the modal is displayed
   And the modal's title is "Hospitalization"
   And the Timeline event "Discharge" Detail modal displays 
@@ -74,14 +70,13 @@ Scenario: Users will be able to view modal popup for event Discharge
       
 @f144_timeline_immunization_modal_details @F893 @US3313 @DE5248 @DE6519 @DE6761
 Scenario: Users will be able to view modal popup for event Immunization
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOURNINETEEN,Patient"
+  And user searches for and selects "Twenty,Patient"
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
   When the user views the first Timeline event "Immunization" detail view
   Then the modal is displayed
-  And the modal's title is "Vaccine - PNEUMOCOCCAL, UNSPECIFIED FORMULATION"
+  And the modal's title starts with "Vaccine - "
   And the Timeline event Immunization Detail modal displays
       | modal item        |
       | Name              | 
@@ -90,9 +85,8 @@ Scenario: Users will be able to view modal popup for event Immunization
       | Administered by   | 
 
 
-
 @f144_timeline_surgery_modal_details @data_specific @DE2907 @DE3334 @DE4552 @DE6761 @debug @DE6996
-Scenario: Users will be able to view modal popup for event Surgery
+Scenario: Users will be able to view modal popup title for event Surgery
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOUREIGHTY,Patient"
   And the user has selected All within the global date picker
@@ -101,7 +95,17 @@ Scenario: Users will be able to view modal popup for event Surgery
   When the user views the first Timeline event "Surgery" detail view
   Then the modal is displayed
   And the modal's title is "biospy"
-  And the Timeline event "Surgery" Detail modal displays 
+
+@f144_timeline_surgery_modal_details @data_specific @DE2907 @DE3334 @DE4552 @DE6761 @DE6996
+Scenario: Users will be able to view modal popup for event Surgery
+  # Given user is logged into eHMP-UI
+  And user searches for and selects "ZZZRETFOUREIGHTY,Patient"
+  And the user has selected All within the global date picker
+  When user navigates to Timeline Applet
+  Then "Timeline" is active
+  When the user views the first Timeline event "Surgery" detail view
+  Then the modal is displayed
+  And the Timeline event Surgery Detail modal displays 
       | modal item      |
       | Facility        | 
       | Type            | 
@@ -109,7 +113,7 @@ Scenario: Users will be able to view modal popup for event Surgery
       | Date/Time       | 
       | Providers       | 
 
-@f144_timeline_procedure_modal_details @data_specific @DE3334 @DE4552 @DE6761 @debug @DE6996
+@f144_timeline_procedure_modal_details_1 @data_specific @DE3334 @DE4552 @DE6761 @debug @DE6996
 Scenario: Users will be able to view modal popup for event Procedure
   # Given user is logged into eHMP-UI
   And user searches for and selects "Sixhundred,Patient"
@@ -133,7 +137,7 @@ Scenario: Users will be able to view modal popup for event DoD Appointment
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
-  When the user views the first Timeline event "Appointment" detail view
+  When the user views the first Timeline event "DoD Appointment" detail view
   Then the modal is displayed
   And the modal's title is "ROUT"
   And the Timeline event "Appointment" Detail modal displays 
@@ -156,7 +160,7 @@ Scenario: Users will be able to view modal popup for event DoD Encounter
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
-  When the user views the first Timeline event "Encounter" detail view
+  When the user views the first Timeline event "DoD Encounter" detail view
   Then the modal is displayed
   And the modal's title is "OUTPATIENT"
   And the Timeline event "Encounter" Detail modal displays 
@@ -177,8 +181,9 @@ Scenario: Users will be able to view modal popup for event Lab
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then "Timeline" is active
-  When the user views the first Timeline event "Lab" detail view
+  When the user views the first Timeline event "Laboratory" detail view
   Then the modal is displayed
+  Then the numeric lab result modal displays
   And the modal's title is "GLUCOSE (SERUM) 100 MG/DL"
   And the Timeline event "Lab" Detail modal displays 
       | modal item      |

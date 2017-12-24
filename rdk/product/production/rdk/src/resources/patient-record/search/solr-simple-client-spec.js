@@ -70,8 +70,8 @@ describe('escape query chars', function () {
     it('should escape other solr-escapable characters', function () {
         var escapables = '\\+-!():^[]"{}~*?|&;';  // literally \+-!():^[]"{}~*?|&;
         var processedEscapables = escapeQueryChars(escapables);
-        var expectedEscapables = '\\\\\\+\\-\\!\\(\\)\\:\\^\\[\\]\\"\\{\\}\\~\\*\\?\\|\\&\\;';
-        // the above is literally \\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;
+        var expectedEscapables = '\\\\\\+\\-\\!\\(\\)\\:\\^\\[\\]\\"\\{\\}\\~\\|\\&\\;';
+        // the above is literally \\\+\-\!\(\)\:\^\[\]\"\{\}\~\|\&\;
         expect(processedEscapables).to.equal(expectedEscapables);
     });
 });

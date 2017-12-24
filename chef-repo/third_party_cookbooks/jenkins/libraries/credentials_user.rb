@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # HWRP:: credentials_user
 #
 # Author:: Miguel Ferreira <mferreira@schubergphilis.com>
 #
-# Copyright 2015, Schuberg Philis
+# Copyright:: 2015-2016, Schuberg Philis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# This is required to appease Travis-CI
+# https://travis-ci.org/chef-cookbooks/jenkins/builds/197337230
+require_relative 'credentials'
 
 class Chef
   class Resource::JenkinsUserCredentials < Resource::JenkinsCredentials
@@ -74,7 +78,7 @@ class Chef
     def correct_config?
       wanted_credentials = {
         description: new_resource.description,
-        username: new_resource.username
+        username: new_resource.username,
       }
 
       attribute_to_property_map.keys.each do |key|

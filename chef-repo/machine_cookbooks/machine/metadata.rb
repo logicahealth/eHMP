@@ -4,9 +4,9 @@ maintainer_email 'Vistacore@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures machine'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.9"
+version          "2.233.22"
 
-depends "common", "2.1.2"
+depends "common", "2.233.5"
 
-depends "packages", "2.1.1"
-depends "role_cookbook", "2.1.3"
+depends "packages", "2.233.2"
+depends "role_cookbook", "2.233.10"

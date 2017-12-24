@@ -1,0 +1,14 @@
+@mixin context-theme($context-primary, $context-primary-dark, $context-primary-light, $context-primary-light-alt, $context-primary-lighter, $context-primary-lightest, $context-secondary, $context-secondary-light, $context-secondary-dark) {
+    @include calendarColorTheme($context-primary, $context-primary-dark);
+    @include dropdownColorTheme($context-primary, $context-primary-dark, $context-primary-light);
+    @include buttonsColorTheme($context-primary, $context-primary-dark, $context-primary-light, $context-primary-light-alt);
+    @include trayColorTheme($context-primary, $context-primary-dark, $context-primary-light, $context-primary-light-alt);
+    @include colorsAndBackgroundColorsTheme($context-primary, $context-primary-dark, $context-primary-light, $context-primary-light-alt, $context-primary-lighter, $context-primary-lightest, $context-secondary, $context-secondary-light, $context-secondary-dark);
+    @include appletHeadersColorTheme($context-primary-dark);
+    @include tooltipColorTheme($context-primary-dark);
+    @include select2ColorTheme($context-primary);
+    #center-region {
+        background: $context-primary-light;
+        background: linear-gradient(to bottom, #fff 10%, $context-primary-light 25%, $context-primary-light 100%);
+    }
+}

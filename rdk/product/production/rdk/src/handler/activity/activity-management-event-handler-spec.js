@@ -1,7 +1,7 @@
 'use strict';
 var _ = require('lodash');
 var activityHelper = require('./activity-management-event-handler-helper');
-var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
+var clinicalObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var activityEventProcess = require('../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
@@ -13,74 +13,65 @@ var logger = sinon.stub(bunyan.createLogger({
 logger.child.returnsThis();
 
 var handler = require('./activity-management-event-handler');
-var util = require('../common/util');
 
-var env = {};
+var publisherRouter = {};
+publisherRouter.publish = function(job, callback) {
+    return callback();
+};
+
+var env = {publisherRouter: publisherRouter};
 
 var config = {
     'rdk': {
         protocol: 'http',
-        host: 'REDACTED',
+        host: 'IP        ',
         activityPort: PORT,
         writePort: PORT,
         timeout: 60000,
-        accessCode: 'IP    ',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://REDACTED     ',
+        'baseUrl': 'http://IP             ',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://REDACTED     ',
+        'baseUrl': 'http://IP             ',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://REDACTED     ',
+        'baseUrl': 'http://IP             ',
         'apiPath': '/business-central/rest',
         'adminUser': {
-            'username': 'REDACTED',
-            'password': 'REDACTED'
+            'username': 'USER',
+            'password': 'PW'
         },
         'nurseUser': {
-            'username': 'REDACTED',
-            'password': 'REDACTED'
+            'username': 'USER',
+            'password': 'PW'
         },
-        'healthcheckEndpoint': '/history/instances',
+        'healthcheckEndpoint': '/history/instances'
+    },
+    'oracledb': {
         'activityDatabase': {
-            'user': 'activitydbuser',
-            'password': 'REDACTED',
-            'connectString': 'REDACTED     /xe'
-        },
-        'notifsDatabase': {
-            'user': 'REDACTED',
-            'password': 'REDACTED',
-            'connectString': 'REDACTED     /xe'
+            'user': 'USER',
+            'password': 'PW',
+            'connectString': 'IP             /xe'
         }
     },
-    'activityManagementJobRetryLimit': 5,
+    'activityManagementJobRetryLimit': 5
 };
 
-var activityEventProcessResourceRepsonse = {
-    'name': 'host-logger',
-    'hostname': 'rdk-system-master',
-    'pid': 7919,
-    'level': 50,
-    'message': 'No matches',
-    'status': 200,
-    'msg': '',
-    'time': '2016-05-16T13:44:19.270Z',
-    'v': 0
-};
+var activityEventProcessResourceResponse = {};
 
 var mockVprObject = {
     'type': 'activity-management-event',
     'timestamp': '1465499986878',
     'patientIdentifier': {
         'type': 'pid',
-        'value': 'C877;3'
+        'value': 'SITE;3'
     },
     'dataDomain': 'order',
     'record': {
@@ -96,7 +87,8 @@ var mockVprObject = {
         'oiName': 'HEMOGLOBIN A1C',
         'oiPackageRef': '97;99LRT',
         'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
+        'providerUid': 'urn:va:user:SITE:10000000270',
+        'locationUid': 'urn:va:location:SITE:158',
         'service': 'LR',
         'stampTime': '20160609151947',
         'start': '',
@@ -104,8 +96,8 @@ var mockVprObject = {
         'statusName': 'UNRELEASED',
         'statusVuid': 'urn:va:vuid:4501124',
         'stop': '',
-        'uid': 'urn:va:order:C877:3:44243',
-        'pid': 'C877;3',
+        'uid': 'urn:va:order:SITE:3:44243',
+        'pid': 'SITE;3',
         'kind': 'Laboratory',
         'providerDisplayName': 'User,Panorama',
         'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n'
@@ -114,7 +106,7 @@ var mockVprObject = {
 };
 
 var mockVprObjectWithClinicalObject = {
-    'authorUid': 'urn:va:user:C877:10000000270',
+    'authorUid': 'urn:va:user:SITE:10000000270',
     'creationDateTime': '20160614191226+0000',
     'data': {
         'content': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
@@ -129,10 +121,11 @@ var mockVprObjectWithClinicalObject = {
         'oiCode': 'urn:va:oi:213',
         'oiName': 'HEMOGLOBIN A1C',
         'oiPackageRef': '97;99LRT',
-        'pid': 'C877;3',
+        'pid': 'SITE;3',
         'providerDisplayName': 'User,Panorama',
         'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
+        'providerUid': 'urn:va:user:SITE:10000000270',
+        'locationUid': 'urn:va:location:SITE:158',
         'service': 'LR',
         'stampTime': '20160609151947',
         'start': '',
@@ -141,34 +134,34 @@ var mockVprObjectWithClinicalObject = {
         'statusVuid': 'urn:va:vuid:4501124',
         'stop': '',
         'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'uid': 'urn:va:order:C877:3:44243'
+        'uid': 'urn:va:order:SITE:3:44243'
     },
     'displayName': 'HEMOGLOBIN A1C - ROUTINE',
     'domain': 'ehmp-activity',
     'ehmpState': 'active',
-    'patientUid': 'urn:va:patient:C877:3:3',
-    'referenceId': 'urn:va:order:C877:3:44243',
+    'patientUid': 'urn:va:patient:SITE:3:3',
+    'referenceId': 'urn:va:order:SITE:3:44243',
     'subDomain': 'laboratory',
-    'uid': 'urn:va:ehmp-order:C877:3:0c90c33b-6d28-4113-8f9d-598e392e6e82',
+    'uid': 'urn:va:ehmp-order:SITE:3:0c90c33b-6d28-4113-8f9d-598e392e6e82',
     'visit': {
         'dateTime': '20140814130730',
-        'location': 'urn:va:location:C877:158',
+        'location': 'urn:va:location:SITE:158',
         'serviceCategory': 'X'
     }
 };
 
 var mockVprObjectWithFakeClinicalObject = {
-    'patientUid': 'urn:va:patient:C877:3:3',
-    'authorUid': 'urn:va:user:C877:10000000270',
+    'patientUid': 'urn:va:patient:SITE:3:3',
+    'authorUid': 'urn:va:user:SITE:10000000270',
     'domain': 'ehmp-activity',
     'subDomain': 'laboratory',
-    'referenceId': 'urn:va:order:C877:3:44243',
-    'pid': 'C877;3',
+    'referenceId': 'urn:va:order:SITE:3:44243',
+    'pid': 'SITE;3',
     'ehmpState': 'active',
     'visit': {
-        'serviceCategory': null,
+        'serviceCategory': 'LR',
         'dateTime': '20160609151900',
-        'location': null
+        'location': 'urn:va:location:SITE:158'
     },
     'createdDateTime': '20160609151947',
     'data': {
@@ -184,7 +177,8 @@ var mockVprObjectWithFakeClinicalObject = {
         'oiName': 'HEMOGLOBIN A1C',
         'oiPackageRef': '97;99LRT',
         'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
+        'providerUid': 'urn:va:user:SITE:10000000270',
+        'locationUid': 'urn:va:location:SITE:158',
         'service': 'LR',
         'stampTime': '20160609151947',
         'start': '',
@@ -192,8 +186,8 @@ var mockVprObjectWithFakeClinicalObject = {
         'statusName': 'UNRELEASED',
         'statusVuid': 'urn:va:vuid:4501124',
         'stop': '',
-        'uid': 'urn:va:order:C877:3:44243',
-        'pid': 'C877;3',
+        'uid': 'urn:va:order:SITE:3:44243',
+        'pid': 'SITE;3',
         'kind': 'Laboratory',
         'providerDisplayName': 'User,Panorama',
         'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n'
@@ -205,21 +199,21 @@ var mockNonVprObject = {
     'timestamp': '1465500110058',
     'patientIdentifier': {
         'type': 'pid',
-        'value': 'C877;3'
+        'value': 'SITE;3'
     },
     'rootJobId': '3f580ed5-af33-4e67-8326-7f5dee399987',
     'dataDomain': 'ehmp-order',
     'record': {
-        'authorUid': 'urn:va:user:C877:10000000270',
-        'patientUid': 'urn:va:patient:C877:3:3',
+        'authorUid': 'urn:va:user:SITE:10000000270',
+        'patientUid': 'urn:va:patient:SITE:3:3',
         'domain': 'ehmp-order',
         'subDomain': 'laboratory',
         'visit': {
             'serviceCategory': 'X',
             'dateTime': '20140814130730',
-            'location': 'urn:va:location:C877:158'
+            'location': 'urn:va:location:SITE:158'
         },
-        'referenceId': 'urn:va:order:C877:3:44243',
+        'referenceId': 'urn:va:order:SITE:3:44243',
         'data': {
             'availableLabTests': '213',
             'labTestText': 'HEMOGLOBIN A1C',
@@ -257,13 +251,13 @@ var mockNonVprObject = {
         'ehmpState': 'active',
         'displayName': 'HEMOGLOBIN A1C - ROUTINE',
         'creationDateTime': '20160609192149+0000',
-        'uid': 'urn:va:ehmp-order:C877:3:0c1cd1e6-9e24-4825-b020-703f485eedce'
+        'uid': 'urn:va:ehmp-order:SITE:3:0c1cd1e6-9e24-4825-b020-703f485eedce'
     },
     'jobId': '015ac5da-4d6c-4fba-8cfa-818c5c721bec'
 };
 
 var mockResponse = [{
-    'authorUid': 'urn:va:user:C877:10000000270',
+    'authorUid': 'urn:va:user:SITE:10000000270',
     'creationDateTime': '20160614191226+0000',
     'data': {
         'content': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
@@ -278,10 +272,11 @@ var mockResponse = [{
         'oiCode': 'urn:va:oi:213',
         'oiName': 'HEMOGLOBIN A1C',
         'oiPackageRef': '97;99LRT',
-        'pid': 'C877;3',
+        'pid': 'SITE;3',
         'providerDisplayName': 'User,Panorama',
         'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
+        'providerUid': 'urn:va:user:SITE:10000000270',
+        'locationUid': 'urn:va:location:SITE:158',
         'service': 'LR',
         'stampTime': '20160609151947',
         'start': '',
@@ -290,18 +285,18 @@ var mockResponse = [{
         'statusVuid': 'urn:va:vuid:4501124',
         'stop': '',
         'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'uid': 'urn:va:order:C877:3:44243'
+        'uid': 'urn:va:order:SITE:3:44243'
     },
     'displayName': 'HEMOGLOBIN A1C - ROUTINE',
     'domain': 'ehmp-order',
     'ehmpState': 'active',
-    'patientUid': 'urn:va:patient:C877:3:3',
-    'referenceId': 'urn:va:order:C877:3:44243',
+    'patientUid': 'urn:va:patient:SITE:3:3',
+    'referenceId': 'urn:va:order:SITE:3:44243',
     'subDomain': 'laboratory',
-    'uid': 'urn:va:ehmp-order:C877:3:0c90c33b-6d28-4113-8f9d-598e392e6e82',
+    'uid': 'urn:va:ehmp-order:SITE:3:0c90c33b-6d28-4113-8f9d-598e392e6e82',
     'visit': {
         'dateTime': '20140814130730',
-        'location': 'urn:va:location:C877:158',
+        'location': 'urn:va:location:SITE:158',
         'serviceCategory': 'X'
     }
 }];
@@ -352,6 +347,15 @@ function validateJobObject(key, job) {
             });
         });
 
+        it(key + ' should not return an error a value is a number for a required visit field', function() {
+            var numberVisitData = isVpr ? _.cloneDeep(job) : _.cloneDeep(job.record);
+            numberVisitData.visit.dateTime = 201706230000;
+
+            activityHelper.validateJobObject(numberVisitData, logger, function(result) {
+                expect(result).to.eql(null);
+            });
+        });
+
         it(key + ' should return no error', function() {
             var jobObject = isVpr ? job : job.record;
             activityHelper.validateJobObject(jobObject, logger, function(result) {
@@ -364,18 +368,18 @@ function validateJobObject(key, job) {
 describe('activity-management-event-handler-spec.js', function() {
 
     var mockActivityEventProcess;
-    var mockIsSecondarySitePid;
-    var mockClincialObjectsSubsystem;
+    var mockIsSecondarySite;
+    var mockClinicalObjectsSubsystem;
     var mockPidValidator;
     beforeEach(function() {
         logger._level = 50;
-        mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-            return res.status(200).rdkSend(activityEventProcessResourceRepsonse);
+        mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+            return activityEventCallback(null, activityEventProcessResourceResponse);
         });
-        mockIsSecondarySitePid = sinon.stub(util, 'isSecondarySitePid');
-        mockIsSecondarySitePid.returns(false);
+        mockIsSecondarySite = sinon.stub(pidValidator, 'isSecondarySite');
+        mockIsSecondarySite.returns(false);
         var clonedMockResponse = _.cloneDeep(mockResponse);
-        mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+        mockClinicalObjectsSubsystem = sinon.stub(clinicalObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
             return callback(null, {
                 'items': clonedMockResponse
             });
@@ -386,8 +390,8 @@ describe('activity-management-event-handler-spec.js', function() {
 
     afterEach(function() {
         mockActivityEventProcess.restore();
-        mockIsSecondarySitePid.restore();
-        mockClincialObjectsSubsystem.restore();
+        mockIsSecondarySite.restore();
+        mockClinicalObjectsSubsystem.restore();
         mockPidValidator.restore();
         logger._level = 40;
     });
@@ -413,9 +417,9 @@ describe('activity-management-event-handler-spec.js', function() {
         });
 
         it('Should error because the site is not primary', function() {
-            mockIsSecondarySitePid.restore();
-            mockIsSecondarySitePid = sinon.stub(util, 'isSecondarySitePid');
-            mockIsSecondarySitePid.returns(true);
+            mockIsSecondarySite.restore();
+            mockIsSecondarySite = sinon.stub(pidValidator, 'isSecondarySite');
+            mockIsSecondarySite.returns(true);
             handler(logger, config, env, mockVprObject, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql(null);
@@ -424,7 +428,7 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should not error because the site is primary', function() {
             handler(logger, config, env, mockNonVprObject, function(error, result) {
-                expect(false).to.eql(mockIsSecondarySitePid.returnValues[0]);
+                expect(false).to.eql(mockIsSecondarySite.returnValues[0]);
             });
         });
 
@@ -448,8 +452,8 @@ describe('activity-management-event-handler-spec.js', function() {
         });
 
         it('Should error because findClinicalObject returned an error', function() {
-            mockClincialObjectsSubsystem.restore();
-            mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+            mockClinicalObjectsSubsystem.restore();
+            mockClinicalObjectsSubsystem = sinon.stub(clinicalObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback('Failed to read the notes from pJDS.');
             });
             handler(logger, config, env, mockNonVprObject, function(error, result) {
@@ -457,37 +461,113 @@ describe('activity-management-event-handler-spec.js', function() {
             });
         });
 
-        it('Should be a generated clinicalObject', function() {
+        it('Should be a generated clinicalObject', function(done) {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
-            mockClincialObjectsSubsystem.restore();
-            mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+            mockClinicalObjectsSubsystem.restore();
+            mockClinicalObjectsSubsystem = sinon.stub(clinicalObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback(['Clinical object not found']);
             });
             handler(logger, config, env, mockVprObject, function(error, result) {
                 delete result.data.activityRetry;
                 expect(error).to.eql(null);
                 expect(_.omit(result, 'status')).to.eql(mockVprObjectWithFakeClinicalObject);
+                done();
             });
         });
 
-        it('Should change a VPR object domain to ehmp-activity', function() {
+        it('Should change a VPR object domain to ehmp-activity', function(done) {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
             handler(logger, config, env, mockVprObject, function(error, result) {
                 delete result.data.activityRetry;
                 expect(error).to.eql(null);
                 expect(_.omit(result, 'status')).to.eql(mockVprObjectWithClinicalObject);
+                done();
+            });
+        });
+
+        it('Should add the deceased property to VPR object for discharge domain when missing', function(done) {
+            mockActivityEventProcess.restore();
+
+            var noDeceasedVPR = _.cloneDeep(mockVprObject);
+            noDeceasedVPR.dataDomain = 'discharge';
+
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                expect(rawEventRequest.data.deceased).to.be.false();
+                return activityEventCallback(null, rawEventRequest);
+            });
+
+            handler(logger, config, env, noDeceasedVPR, function(error, result) {
+                expect(error).to.eql(null);
+                expect(result.data.deceased).to.be.false();
+                done();
+            });
+        });
+
+        it('Should add the authorUid property to eventRequest object for discharge domain when missing, prioritizing the primaryProvider object', function(done) {
+            mockActivityEventProcess.restore();
+
+            var noAuthorVPR = _.cloneDeep(mockVprObject);
+            noAuthorVPR.dataDomain = 'discharge';
+            delete noAuthorVPR.record.authorUid;
+            noAuthorVPR.record.primaryProvider = {
+                    'primary': 'true',
+                    'providerDisplayName': 'Provider,Eightyfive',
+                    'providerName': 'PROVIDER,EIGHTYFIVE',
+                    'providerUid': 'urn:va:user:SITE:9010',
+                    'role': 'P',
+                    'summary': 'EncounterProvider'
+                };
+
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                expect(rawEventRequest.authorUid).to.equal('urn:va:user:SITE:9010');
+                return activityEventCallback(null, rawEventRequest);
+            });
+
+            handler(logger, config, env, noAuthorVPR, function(error, result) {
+                expect(error).to.eql(null);
+                done();
+            });
+        });
+
+        it('Should add the authorUid property to eventRequest object for discharge domain when missing, defaulting to the providers array', function(done) {
+            mockActivityEventProcess.restore();
+
+            var noAuthorVPR = _.cloneDeep(mockVprObject);
+            noAuthorVPR.dataDomain = 'discharge';
+            delete noAuthorVPR.record.authorUid;
+            noAuthorVPR.record.primaryProvider = {};
+            noAuthorVPR.record.providers = [{
+                'providerName': 'PROVIDER,EIGHTYONE',
+                'providerUid': 'urn:va:user:SITE:9006',
+                'role': 'A'
+            },
+            {
+                'primary': true,
+                'providerName': 'PROVIDER,EIGHTY',
+                'providerUid': 'urn:va:user:SITE:9005',
+                'role': 'P'
+            }];
+
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                expect(rawEventRequest.authorUid).to.equal('urn:va:user:SITE:9005');
+                return activityEventCallback(null, rawEventRequest);
+            });
+
+            handler(logger, config, env, noAuthorVPR, function(error, result) {
+                expect(error).to.eql(null);
+                done();
             });
         });
 
         it('Should return null because the response was empty and it got a Non-VPR object', function() {
-            mockClincialObjectsSubsystem.restore();
-            mockClincialObjectsSubsystem = sinon.stub(clincialObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
+            mockClinicalObjectsSubsystem.restore();
+            mockClinicalObjectsSubsystem = sinon.stub(clinicalObjectsSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 return callback(['Clinical object not found']);
             });
             handler(logger, config, env, mockNonVprObject, function(error, result) {
@@ -498,8 +578,8 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should have the response (VPR) data in the newrecord.data key', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
             handler(logger, config, env, mockVprObject, function(error, result) {
                 expect(error).to.eql(null);
@@ -509,8 +589,8 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should have the record (Non-VPR) data in the newrecord.data key', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
             handler(logger, config, env, mockNonVprObject, function(error, result) {
                 expect(error).to.eql(null);
@@ -518,10 +598,11 @@ describe('activity-management-event-handler-spec.js', function() {
             });
         });
 
-        it('Should return callback', function() {
+        it('Should return callback', function(done) {
             handler(logger, config, env, mockVprObject, function(error, result) {
                 expect(error).to.eql(null);
-                expect(result.message).to.eql('No matches');
+                expect(result).to.eql({});
+                done();
             });
         });
     });
@@ -531,145 +612,37 @@ describe('activity-management-event-handler-spec.js', function() {
         clonedResponse.domain = 'ehmp-activity';
 
         it('Should only return one object with domain of ehmp-order; single response', function() {
-            var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, {});
+            var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger);
             expect(response).to.eql(mockResponse[0]);
         });
 
         it('Should only return one object with domain of ehmp-order; multiple response only one ehmp-order', function() {
-            var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, {});
+            var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger);
             expect(response).to.eql(mockResponse[0]);
         });
 
         it('Should error out because no ehmp-order domain found in responses; single responses', function() {
-            activityHelper.cleanClinicalObjectResponseArray(clonedResponse, logger, function(error, response) {
-                expect(response).to.eql(null);
-                expect(response).to.eql(null);
-            });
+            var response = activityHelper.cleanClinicalObjectResponseArray(clonedResponse, logger);
+            expect(response).to.eql(undefined);
         });
 
         it('Should error out because no ehmp-order domain found in responses; multiple responses', function() {
-            activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, function(error, response) {
-                expect(response).to.eql(null);
-                expect(response).to.eql(null);
-            });
-        });
-    });
-
-    describe('createRequestObject', function() {
-        var body = {
-            'data': {
-                'a': 'b',
-                'x': 'y'
-            },
-            'group': ['one', 2, '3'],
-            'id': 'xxx:xx:xxxx-xxx'
-        };
-        var config = {
-            'database': {
-                'user': 'abcd',
-                'pass': '1234'
-            },
-            'log': 'warn'
-        };
-        var req = activityHelper.createRequestObject(body, config, logger);
-        it('Should have 3 keys, the first key is an object and the second key is an array, and the third is a string', function() {
-            expect(Object.keys(req.body).length).to.eql(3);
-            expect(typeof req.body.data).to.eql('object');
-            expect(req.body.data.a).to.eql('b');
-            expect(_.isArray(req.body.group)).to.eql(true);
-            expect(req.body.group[1]).to.eql(2);
-            expect(typeof req.body.id).to.eql('string');
-            expect(req.body.id).to.eql('xxx:xx:xxxx-xxx');
-        });
-
-        it('Should have 2 keys, the first is an object and the second is a string', function() {
-            expect(Object.keys(req.app.config).length).to.eql(2);
-            expect(typeof req.app.config.database).to.eql('object');
-            expect(req.app.config.database.user).to.eql('abcd');
-            expect(typeof req.app.config.log).to.eql('string');
-            expect(req.app.config.log).to.eql('warn');
-        });
-    });
-
-    describe('createResponseObject', function() {
-        var error, response;
-        var res = activityHelper.createResponseObject(logger, function(err, data) {
-            error = err;
-            response = data;
-        });
-        it('Should set status to 800 and return that with the callback', function() {
-            res.status(800).send(res.statusCode);
-            expect(error).to.eql(800);
-        });
-
-        it('Should return the callback when res.send() is called', function() {
-            res.status(200).send(null, 'Testing callback');
-            expect(response).to.eql('Testing callback');
-        });
-
-        it('Should send back the message as an error', function() {
-            res.status(204).rdkSend('This should come back undefined');
-            expect(error.message).to.eql('This should come back undefined');
-        });
-
-        it('Should send an error that the body is null but the status is 200.', function() {
-            res.status(200).rdkSend(null, null);
-            expect(error.message).to.eql('Error - Activity Event Processor return an empty or null body.');
-        });
-
-        it('Should send an error that the body is undefined but the status is 200.', function() {
-            res.status(200).rdkSend(null, undefined);
-            expect(error.message).to.eql('Error - Activity Event Processor return an empty or null body.');
-        });
-
-        it('Should have the content in the data key', function() {
-            res.status(200).rdkSend({
-                'user': 'pass'
-            });
-            expect(response).to.eql({
-                'data': {
-                    'user': 'pass'
-                }
-            });
-        });
-
-        it('Should get processed into JSON and have the content in the data key', function() {
-            res.status(200).set('Content-Type', 'application/json').rdkSend('{"userString": "passString"}');
-            expect(response).to.eql({
-                'data': {
-                    'userString': 'passString'
-                }
-            });
-        });
-
-        it('Should get passed back as a string because the JSON is invalid', function() {
-            res.status(200).set('Content-Type', 'application/json').rdkSend('{\'userString\': \'passString\'}');
-            expect(response).to.eql({
-                'message': '{\'userString\': \'passString\'}'
-            });
-        });
-
-        it('Should come back in {message: body} format where body is a string', function() {
-            res.status(200).rdkSend('This should come back in the message key');
-            expect(response).to.eql({
-                message: 'This should come back in the message key'
-            });
+            var response = activityHelper.cleanClinicalObjectResponseArray([mockVprObject, mockVprObjectWithClinicalObject, mockVprObjectWithFakeClinicalObject], logger);
+            expect(response).to.eql(undefined);
         });
     });
 
     describe('passOrderToProcessor', function() {
         it('Should pass into req creation as an object', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
             activityHelper.passOrderToProcessor({
                 data: {
                     user: 'pass'
                 }
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            }, mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql({
                     data: {
@@ -681,12 +654,10 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should convert the string to a JSON object', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
-            activityHelper.passOrderToProcessor('{"data": {"user": "pass"}}', mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            activityHelper.passOrderToProcessor('{"data": {"user": "pass"}}', mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql({
                     data: {
@@ -698,29 +669,25 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should error because of bad string JSON', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend('ignored for this test');
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, 'ignored for this test');
             });
-            activityHelper.passOrderToProcessor('{\'data\': {\'user\': \'pass\'}}', mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
-                expect(error.message).to.eql('Unexpected token \'');
+            activityHelper.passOrderToProcessor('{\'data\': {\'user\': \'pass\'}}', mockVprObject, config, logger, env, function(error, result) {
+                expect(error.message).to.match(/Unexpected token/);
                 expect(result).to.eql(null);
             });
         });
 
         it('Should return a working request object', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
             activityHelper.passOrderToProcessor({
                 data: {
                     user: 'pass'
                 }
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            }, mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(Object.keys(result)).to.eql(['data']);
             });
@@ -728,8 +695,8 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should return the input because it is an object', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.send(null, {
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, {
                     data: {
                         user: 'pass'
                     }
@@ -737,9 +704,7 @@ describe('activity-management-event-handler-spec.js', function() {
             });
             activityHelper.passOrderToProcessor({
                 'this': 'is ignored'
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            }, mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql({
                     data: {
@@ -751,14 +716,13 @@ describe('activity-management-event-handler-spec.js', function() {
 
         it('Should try to JSONify the response', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.send(null, '{"data": {"user": "pass"}}');
+
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, '{"data": {"user": "pass"}}');
             });
             activityHelper.passOrderToProcessor({
                 'this': 'is ignored'
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            }, mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql({
                     data: {
@@ -768,56 +732,75 @@ describe('activity-management-event-handler-spec.js', function() {
             });
         });
 
-        it('Should catch the bad JSON and return an error', function() {
+        it('Should catch the bad JSON and return an error', function(done) {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.send(null, '{\'data\': {\'user\': \'pass\'}}');
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, '{da{{ta\': {\'user\': \'pass\'}}');
             });
             activityHelper.passOrderToProcessor({
                 'this': 'is ignored'
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
-                expect(error.message).to.eql('Unexpected token \'');
+            }, mockVprObject, config, logger, env, function(error, result) {
+                expect(error).to.match(/Unexpected token/);
                 expect(result).to.eql(null);
+                done();
             });
         });
 
         it('Should return the body.message if status is not 200', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(204).rdkSend({
-                    message: '245 - Bad response'
-                });
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback('245 - Bad response');
             });
+
             activityHelper.passOrderToProcessor({
                 'this': 'is ignored'
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
-                expect(error.message).to.eql('245 - Bad response');
+            }, mockVprObject, config, logger, env, function(error, result) {
+                expect(error).to.eql('245 - Bad response');
                 expect(result).to.eql(null);
             });
         });
 
         it('Should return success', function() {
             mockActivityEventProcess.restore();
-            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(req, res) {
-                return res.status(200).rdkSend(req.body);
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback(null, rawEventRequest);
             });
+
             activityHelper.passOrderToProcessor({
                 'data': {
                     'this': 'Passed through mockAEP'
                 }
-            }, mockVprObject, config, logger, env, function() {
-                return;
-            }, function(error, result) {
+            }, mockVprObject, config, logger, env, function(error, result) {
                 expect(error).to.eql(null);
                 expect(result).to.eql({
                     'data': {
                         'this': 'Passed through mockAEP'
                     }
                 });
+            });
+        });
+
+        it('Transit error should publish new job (re-try)', function(done) {
+            var publishRouterSpy = sinon.spy(publisherRouter, 'publish');
+
+            mockActivityEventProcess.restore();
+            mockActivityEventProcess = sinon.stub(activityEventProcess, 'startActivityEvent', function(rawEventRequest, logger, config, activityEventCallback) {
+                return activityEventCallback('101 - Error Reason');
+            });
+
+            activityHelper.passOrderToProcessor({
+                'data': {
+                    'this': 'Passed through mockAEP'
+                }
+            }, mockVprObject, config, logger, env, function(error, result) {
+                expect(error).to.eql(null);
+                expect(result).to.eql('Re-queued job');
+
+                publishRouterSpy.restore();
+                expect(publishRouterSpy.calledOnce).to.be.true();
+                expect(publishRouterSpy.calledWithMatch({record: {activityRetry: 0}}, sinon.match.any)).to.be.true();
+
+                done();
             });
         });
     });

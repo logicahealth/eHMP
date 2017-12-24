@@ -7,8 +7,8 @@ Feature: F323  Normalization of Labs (Chem/Hem) Data
 @terminology_labs_ch @FHIR
 Scenario: An authorized user can VA access Laboratory Chem and see standardized LOINC values when defined through VPR API
    Given a patient with "labs" in multiple VistAs
-   And a patient with pid "9E7A;100022" has been synced through RDK API
-   When the client requests labs for the patient "9E7A;100022" in FHIR format
+   And a patient with pid "SITE;100022" has been synced through RDK API
+   When the client requests labs for the patient "SITE;100022" in FHIR format
    Then a successful response is returned 
    And  the FHIR results contain labs terminology from "DOD Ncid and LOINC"
 
@@ -32,8 +32,8 @@ Scenario: An authorized user can VA access Laboratory Chem and see standardized 
 @terminology_labs_ch @FHIR
 Scenario: An authorized user can DoD access Laboratory Chem and see standardized LOINC values when defined through VPR API
 	Given a patient with "labs" in multiple VistAs
-	And a patient with pid "9E7A;8" has been synced through RDK API
-	When the client requests labs for the patient "9E7A;8" in FHIR format
+	And a patient with pid "SITE;8" has been synced through RDK API
+	When the client requests labs for the patient "SITE;8" in FHIR format
 	Then a successful response is returned
 	And the FHIR results contain labs terminology from "DOD Ncid and LOINC"
 
@@ -71,4 +71,4 @@ Scenario: An authorized user can DoD access Laboratory Chem and see standardized
 
 #TestNote: 
 #	* We could not test Lab MI in VPR format because it's not available through VPR.       
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS RE/JLV+Terminology+Handling

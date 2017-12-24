@@ -34,7 +34,8 @@ module.exports = (function() {
         'newsfeed': 'news-feed',
         'document-view': 'ehmp-documents',
         'vlerdocument': 'vlerdocument',
-        'parent-documents': 'parent-documents'
+        'parent-documents': 'parent-documents',
+        'demographics': 'patient-demographics'
     };
     return {
         names: _.map(domains, function(value, key) {

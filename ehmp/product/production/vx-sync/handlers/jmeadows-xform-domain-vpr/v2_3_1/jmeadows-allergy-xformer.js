@@ -15,7 +15,7 @@ var xformUtils = require(global.VX_UTILS + 'xform-utils');
     Returns:
     vprAllergy - a single allergy object in VPR format
 */
-function dodAllergyToVPR(dodAllergy, edipi) {
+function dodAllergyToVPR(logger, dodAllergy, edipi) {
 
     var vprAllergy = {};
 

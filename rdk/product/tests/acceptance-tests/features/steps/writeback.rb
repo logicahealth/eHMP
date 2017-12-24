@@ -5,7 +5,3 @@ When(/^the client requests for the patient param"(.*?)" and pid "(.*?)"$/) do |a
   path = query.path
   @response = HTTPartyRDK.get(path)
 end
-
-Then(/^wait (\d+) seconds$/) do |seconds|
-  sleep seconds.to_i
-end

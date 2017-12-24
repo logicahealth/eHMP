@@ -9,8 +9,10 @@ var argv = require('yargs')
   .demand(['host', 'port'])
   .describe('host', 'IP Address of the VistA host')
   .describe('port', 'Port of the VistA host')
-  .describe('accessCode', 'Value to use for accessCode for validation. Defaults to REDACTED')
-  .describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to REDACTED')
+  .describe('accessCode', 'Value to use for accessCode for validation. Defaults to USER  ')
+  .describe('verifyCode', 'Value to use for verifyCode for validation. Defaults to PW      ')
+  .nargs('accessCode', 1)
+  .nargs('verifyCode', 1)
   .describe('context', 'Context to set for running the RPC. Defaults to HMP SYNCHRONIZATION CONTEXT')
   .describe('rpc', 'Name of rpc to call.')
   .describe('parameters', 'Parameters to pass to rpc client.')
@@ -25,8 +27,8 @@ var logger = require('bunyan').createLogger({
 var config = {
   host: argv.host,
   port: argv.port,
-  accessCode: argv.accessCode || 'REDACTED',
-  verifyCode: argv.verifyCode || 'REDACTED',
+  accessCode: argv.accessCode || 'USER  ',
+  verifyCode: argv.verifyCode || 'PW      ',
   localIP: '127.0.0.1',
   localAddress: 'localhost',
   context: argv.context || 'HMP SYNCHRONIZATION CONTEXT',
@@ -52,7 +54,8 @@ rpcUtil.standardRPCCall(logger, config, rpc, params, null, function(error, respo
   console.log('Response:');
   try {
     console.log(inspect(JSON.parse(response), {
-      depth: null
+      depth: null,
+      maxArrayLength: null
     }));
   } catch (err) {
     console.log(response);

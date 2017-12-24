@@ -21,9 +21,9 @@ Given(/^patients have been synced for FHIR test$/) do
   test_patients_icn.push({ pid: "10108", icn: "10108V420871" }) #Eight,Patient
 
   test_patients_dfn = []
-  test_patients_dfn.push({ pid: "9E7A;100022", dfn: "100022" }) #Bcma,Eight
-  test_patients_dfn.push({ pid: "9E7A;167", dfn: "167" }) #Zzzretiredonefive,Patient
-  test_patients_dfn.push({ pid: "9E7A;230", dfn: "230" }) ##ZZZRETSIXTWENTYEIGHT,PATIENT
+  test_patients_dfn.push({ pid: "SITE;100022", dfn: "100022" }) #Bcma,Eight
+  test_patients_dfn.push({ pid: "SITE;167", dfn: "167" }) #Zzzretiredonefive,Patient
+  test_patients_dfn.push({ pid: "SITE;230", dfn: "230" }) ##ZZZRETSIXTWENTYEIGHT,PATIENT
 
   base_url = DefaultLogin.fhir_url
   test_patients_dfn.each do | pid_dfn |

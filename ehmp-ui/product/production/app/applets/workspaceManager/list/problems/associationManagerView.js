@@ -41,50 +41,68 @@ define([
             problemListRegion: '.problem-list-region',
             statusRegion: '#problemQueryStatusRegion'
         },
+        ui: {
+            screenProblemSearch: '#screenProblemSearch',
+            clearSearchProblem: '.clear-search-problem-btn',
+            problemQueryStatusRegion: '#problemQueryStatusRegion'
+        },
         events: {
-            'keyup #screenProblemSearch': function(event) {
-                if (event.keyCode === 13) {
+            'keyup @ui.screenProblemSearch': function(event) {
+                if (event.keyCode === $.ui.keyCode.ENTER) {
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     return;
                 }
 
-                if ($(event.target).val().length < QUERY_LENGTH_THRESHOLD) {
+                var length = this.$(event.target).val().length;
+                if (length < QUERY_LENGTH_THRESHOLD) {
                     this.hideStatus();
                 }
 
-                if ($(event.target).val().length > 0) {
-                    this.$('.clear-search-problem-btn').show();
+                if (length > 0) {
+                    this.ui.clearSearchProblem.show();
                 } else {
-                    this.$('.clear-search-problem-btn').hide();
+                    this.ui.clearSearchProblem.hide();
                 }
             },
             'keyup .association-manager': function(event) {
-                if (event.keyCode === 13) {
+                if (event.keyCode === $.ui.keyCode.ENTER) {
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                } else if (event.keyCode === 27) { // escape
+                } else if (event.keyCode === $.ui.keyCode.ESCAPE) { // escape
                     this.closeSearchResultDropdown(event);
                 }
             },
-            'click .clear-search-problem-btn': function(event) {
+            'click @ui.clearSearchProblem': function(event) {
                 event.stopImmediatePropagation();
-                this.$('#screenProblemSearch').val('');
-                this.$('#screenProblemSearch').focus();
+                this.ui.screenProblemSearch.val('');
+                this.ui.screenProblemSearch.focus();
                 this.hideStatus();
                 this.closeSearchResultDropdown(event);
-                this.$('.clear-search-problem-btn').hide();
+                this.ui.clearSearchProblem.hide();
             },
             'click .problem-list-region li button': function(event) {
                 event.stopPropagation();
-                var snomed = $(event.currentTarget).attr('data-snomed-ct');
+                var snomed = this.$(event.currentTarget).attr('data-snomed-ct');
                 this.removeProblemAssociation(snomed);
-                this.$('#screenProblemSearch').focus();
+                this.ui.screenProblemSearch.focus();
             }
         },
         initialize: function(options) {
             this.problemListColl = new Backbone.Collection(this.model.get('problems'));
             this.problemResultsColl = new Backbone.Collection();
+        },
+        onRender: function() {
+            // show the list of currently-associated problems
+            this.problemListRegion.show(new ProblemListCollectionView({ collection: this.problemListColl }));
+        },
+        onBeforeDestroy: function() {
+            if (!this.model.get('predefined')) {
+                this.ui.screenProblemSearch.typeahead('destroy');
+            }
+            if (this.dropdownMutationObserver) {
+                this.dropdownMutationObserver.disconnect();
+            }
         },
         addProblemAssociation: function(snomed) {
             var fullProblem = ProblemUtil.findProblemBySnomedCt(this.problemResultsColl, snomed);
@@ -104,12 +122,6 @@ define([
             this.model.set('problems', problems);
             ProblemUtil.removeProblemAssociation(this.problemListColl, problem);
             this.enableProblemResult(snomed);
-        },
-        onRender: function() {
-            var self = this;
-
-            // show the list of currently-associated problems
-            this.problemListRegion.show(new ProblemListCollectionView({ collection: this.problemListColl }));
         },
         queryProblems: function(query, typeaheadCallback) {
             // clear current results
@@ -143,7 +155,7 @@ define([
             var $dropdown = this.$('.twitter-typeahead .tt-dropdown-menu');
             if ($dropdown.is(':visible')) {
                 $dropdown.hide();
-                this.$('#screenProblemSearch').focus();
+                this.ui.screenProblemSearch.focus();
                 event.preventDefault();
                 event.stopImmediatePropagation(); // stop propagation so the parent view won't take any 'close' action
             }
@@ -153,23 +165,23 @@ define([
 
             if (!this.model.get('predefined')) {
                 // initialize twitter typeahead for searching problems
-                var $typeahead = this.$('#screenProblemSearch');
+                var $typeahead = this.ui.screenProblemSearch;
 
                 $typeahead.on('keydown', function(event) {
                     switch(event.keyCode) {
-                        case 27: // escape
+                        case $.ui.keyCode.ESCAPE: // escape
                             // prevent the typeahead plugin from seeing the escape keydown; this prevents the dropdown from closing on keydown
                             event.stopImmediatePropagation();
                             break;
-                        case 38: // up arrow
+                        case $.ui.keyCode.UP: // up arrow
                             event.preventDefault();
                             event.stopImmediatePropagation();
                             break;
-                        case 40: // down arrow
+                        case $.ui.keyCode.DOWN: // down arrow
                             event.preventDefault();
                             event.stopImmediatePropagation();
                             break;
-                        case 13: // return
+                        case $.ui.keyCode.ENTER: // return
                             event.preventDefault();
                             event.stopImmediatePropagation();
                             break;
@@ -221,7 +233,7 @@ define([
                     attributeOldValue: true
                 });
 
-                this.$('#screenProblemSearch').focus(); //focus the search input
+                this.ui.screenProblemSearch.focus(); //focus the search input
             } else {
                 this.$('#associationManagerCloseBtn').focus();
             }
@@ -240,11 +252,11 @@ define([
                 }
             });
             $dropdown.find('.problem-result').each(function(index, item) {
-                var $item = $(item);
+                var $item = self.$(item);
                 $item.on('click', function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                    var target = $(event.currentTarget);
+                    var target = self.$(event.currentTarget);
                     var snomed = target.attr('data-snomed-ct');
                     if (target.hasClass('disabled')) {
                         self.removeProblemAssociation(snomed);
@@ -255,14 +267,16 @@ define([
                     self.$('.clear-search-problem-btn').trigger('click');
                 });
                 $item.on('focus', function(event) {
-                    $(this).closest('.tt-suggestions').find('.tt-cursor').removeClass('tt-cursor');
-                    $(this).parent().addClass('tt-cursor');
+                    var $self = self.$(this);
+                    $self.closest('.tt-suggestions').find('.tt-cursor').removeClass('tt-cursor');
+                    $self.parent().addClass('tt-cursor');
                 });
             });
         },
         onDropdownHidden: function($dropdown) {
+            var self = this;
             $dropdown.find('.problem-result').each(function(index, item) {
-                var $item = $(item);
+                var $item = self.$(item);
                 $item.off('click');
                 $item.off('focus');
             });
@@ -278,25 +292,17 @@ define([
         },
         showLoadingStatus: function() {
             this.$('.tt-dropdown-menu').hide();
-            this.$('#problemQueryStatusRegion').show();
+            this.ui.problemQueryStatusRegion.show();
             this.statusRegion.show(ADK.Views.Loading.create());
         },
         hideStatus: function() {
             this.statusRegion.reset();
-            this.$('#problemQueryStatusRegion').hide();
+            this.ui.problemQueryStatusRegion.hide();
         },
         showErrorStatus: function() {
             this.$('.tt-dropdown-menu').hide();
-            this.$('#problemQueryStatusRegion').show();
+            this.ui.problemQueryStatusRegion.show();
             this.statusRegion.show(ADK.Views.Error.create({ model: this.model }));
-        },
-        onBeforeDestroy: function() {
-            if (!this.model.get('predefined')) {
-                this.$('#screenProblemSearch').typeahead('destroy');
-            }
-            if (this.dropdownMutationObserver) {
-                this.dropdownMutationObserver.disconnect();
-            }
         }
     });
 

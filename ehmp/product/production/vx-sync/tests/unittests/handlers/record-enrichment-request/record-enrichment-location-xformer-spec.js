@@ -27,7 +27,7 @@ var originalVaLocationRecord = {
     'refId': 102,
     'shortName': '',
     'type': 'Z',
-    'uid': 'urn:va:location:9E7A:102'
+    'uid': 'urn:va:location:SITE:102'
 };
 var originalVaLocationJob = {
     record: originalVaLocationRecord

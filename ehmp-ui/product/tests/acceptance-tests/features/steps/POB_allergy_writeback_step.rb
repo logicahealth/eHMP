@@ -4,8 +4,8 @@ Then(/^POB user adds a new allergy$/) do
   refresh_page = true
   begin
     @ehmp = PobAllergiesApplet.new
-    @ehmp.wait_until_btn_add_allergy_visible
-    @ehmp.btn_add_allergy.click
+    expect(@ehmp.wait_for_btn_applet_add).to eq(true)
+    @ehmp.btn_applet_add.click
 
     @ehmp.wait_until_fld_modal_title_visible
   rescue
@@ -25,24 +25,6 @@ Then(/^POB add allergy modal detail title says "(.*?)"$/) do |modal_title|
   @ehmp = PobAllergiesApplet.new
   @ehmp.wait_until_fld_modal_title_visible
   expect(@ehmp.fld_modal_title.text.upcase).to eq(modal_title.upcase)
-end
-
-Then(/^POB add allergy detail modal displays labels$/) do |table|
-  @ehmp = PobAllergiesApplet.new
-  @ehmp.wait_until_fld_modal_titles_visible
-  table.rows.each do |heading|
-    p heading[0]
-    expect(object_exists_in_list(@ehmp.fld_modal_titles, "#{heading[0]}")).to eq(true)
-  end
-end
-
-Then(/^POB add allergy detail modal displays Table rows$/) do |table|
-  @ehmp = PobAllergiesApplet.new
-  @ehmp.wait_for_fld_modal_table_rows
-  table.rows.each do |heading|
-    p heading[0]
-    expect(object_exists_in_list(@ehmp.fld_modal_table_rows, "#{heading[0]}")).to eq(true), "Could not find heading #{heading[0]}"
-  end
 end
 
 Then(/^add allergy detail modal displays allergen search input drop down$/) do
@@ -162,8 +144,7 @@ end
 
 Then(/^the allergy detail modal displays expected elements$/) do
   @ehmp = AllergyWritebackModal.new
-  @ehmp.wait_until_fld_allergen_label_visible
-  @ehmp.wait_until_fld_observed_label_visible
+  @ehmp.wait_for_fld_allergen_label
   expect(@ehmp).to have_fld_allergen_label, "Did not have expected allergen label"
 
   expect(@ehmp).to have_fld_historical_label

@@ -8,16 +8,16 @@
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
       # And a patient with pid "10107V395912" has been synced through the RDK API
-       When the client requests consult for the patient "9E7A;253" in FHIR format
+       When the client requests consult for the patient "SITE;253" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "consult"
        | name                          | value                                                 |
        | resource.resourceType          | ReferralRequest                                       |
        | resource.status                | completed                                             |
-       | resource.patient.reference     | Patient/9E7A;253                                     |
-       | resource.requester.reference   | Provider/urn:va:user:9E7A:11748                                     |
+       | resource.patient.reference     | Patient/SITE;253                                     |
+       | resource.requester.reference   | Provider/urn:va:user:SITE:11748                                     |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233                       |
-       | resource.identifier.value      | urn:va:consult:9E7A:253:379                           |
+       | resource.identifier.value      | urn:va:consult:SITE:253:379                           |
        | resource.type.text             | Consult                                               |
        | resource.specialty.text       | AUDIOLOGY OUTPATIENT                                  |
        | resource.priority.text         | Routine                                               |
@@ -33,11 +33,11 @@
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId            |
        | resource.extension.valueString | 379                                                            |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid           |
-       | resource.extension.valueString | urn:va:order:9E7A:253:15477                                    |
+       | resource.extension.valueString | urn:va:order:SITE:253:15477                                    |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#results[0].summary |
-       | resource.extension.valueString | ProcedureResult{uid='urn:va:document:9E7A:253:3111'}           |
+       | resource.extension.valueString | ProcedureResult{uid='urn:va:document:SITE:253:3111'}           |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#activity[1].resultUid      |
-       | resource.extension.valueString | urn:va:document:9E7A:253:3111                                  |
+       | resource.extension.valueString | urn:va:document:SITE:253:3111                                  |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#results[0].localTitle |
        | resource.extension.valueString | AUDIOLOGY - HEARING LOSS CONSULT                               |
        And the FHIR results contain "consult"
@@ -45,10 +45,10 @@
        | resource.resourceType          | ReferralRequest                                        |
        | resource.status                | draft                                                  |
        | resource.type.text             | Consult                                |
-       | resource.patient.reference     | Patient/9E7A;253                                       |
-       | resource.requester.reference   | Provider/urn:va:user:9E7A:11748                                      |
+       | resource.patient.reference     | Patient/SITE;253                                       |
+       | resource.requester.reference   | Provider/urn:va:user:SITE:11748                                      |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233                        |
-       | resource.identifier.value      | urn:va:consult:9E7A:253:380                            |
+       | resource.identifier.value      | urn:va:consult:SITE:253:380                            |
        | resource.type.text             | Consult                                                |
        | resource.specialty.text       | HEMATOLOGY CONSULT                                     |
        | resource.priority.text         | Routine                                                |
@@ -63,20 +63,20 @@
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId          |
        | resource.extension.valueString | 380                                                          |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid         |
-       | resource.extension.valueString | urn:va:order:9E7A:253:15478                                  |
+       | resource.extension.valueString | urn:va:order:SITE:253:15478                                  |
      And FHIR date and time conver to Zulu format for Consult
 
  @F138_2_fhir_consult @fhir @5000000116V912836 @US8577 @F202-21
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
      #  And a patient with pid "5000000116V912836" has been synced through the RDK API
-       When the client requests consult for the patient "9E7A;100615" in FHIR format
+       When the client requests consult for the patient "SITE;100615" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "consult"
        | name                          | value                             |
        | resource.resourceType          | ReferralRequest                   |
        | resource.status                | active                            |
-       | resource.patient.reference     | Patient/9E7A;100615     |
+       | resource.patient.reference     | Patient/SITE;100615     |
        | resource.requester.reference   | Provider/undefined     |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233   |
        | resource.identifier.value      | urn:va:consult:ABCD:5000000116V912836:82         |
@@ -96,13 +96,13 @@
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
     #   And a patient with pid "5000000217V519385" has been synced through the RDK API
-       When the client requests consult for the patient "9E7A;100716" in FHIR format
+       When the client requests consult for the patient "SITE;100716" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "consult"
        | name                          | value                             |
        | resource.resourceType          | ReferralRequest                   |
        | resource.status                | active                            |
-       | resource.patient.reference     | Patient/9E7A;100716     |
+       | resource.patient.reference     | Patient/SITE;100716     |
        | resource.requester.reference   | Provider/undefined     |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233   |
        | resource.identifier.value      | urn:va:consult:ABCD:5000000217V519385:82         |
@@ -120,16 +120,16 @@
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
     #   And a patient with pid "10104V248233" has been synced through the RDK API
-       When the client requests consult for the patient "9E7A;229" in FHIR format
+       When the client requests consult for the patient "SITE;229" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "consult"
        | name                          | value                                                 |
        | resource.resourceType          | ReferralRequest                                       |
        | resource.status                | completed                                             |
-       | resource.patient.reference     | Patient/9E7A;229                                      |
-       | resource.requester.reference   | Provider/urn:va:user:9E7A:11748                                      |
+       | resource.patient.reference     | Patient/SITE;229                                      |
+       | resource.requester.reference   | Provider/urn:va:user:SITE:11748                                      |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233                       |
-       | resource.identifier.value      | urn:va:consult:9E7A:229:373                           |
+       | resource.identifier.value      | urn:va:consult:SITE:229:373                           |
        | resource.type.text             | Consult                                               |
        | resource.specialty.text       | AUDIOLOGY OUTPATIENT                                  |
        | resource.serviceRequested.text | AUDIOLOGY OUTPATIENT                                  |
@@ -144,11 +144,11 @@
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId            |
        | resource.extension.valueString | 373                                                            |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid           |
-       | resource.extension.valueString | urn:va:order:9E7A:229:15471                                    |
+       | resource.extension.valueString | urn:va:order:SITE:229:15471                                    |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#results[0].summary  |
-       | resource.extension.valueString | ProcedureResult{uid='urn:va:document:9E7A:229:3108'}           |
+       | resource.extension.valueString | ProcedureResult{uid='urn:va:document:SITE:229:3108'}           |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#activity[1].resultUid        |
-       | resource.extension.valueString | urn:va:document:9E7A:229:3108                                  |
+       | resource.extension.valueString | urn:va:document:SITE:229:3108                                  |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#results[0].localTitle |
        | resource.extension.valueString | AUDIOLOGY - HEARING LOSS CONSULT                               |
 
@@ -156,10 +156,10 @@
        | name                          | value                                                  |
        | resource.resourceType          | ReferralRequest                                        |
        | resource.status                | draft                                                  |
-       | resource.patient.reference     | Patient/9E7A;229                                      |
-       | resource.requester.reference   | Provider/urn:va:user:9E7A:11748                        |
+       | resource.patient.reference     | Patient/SITE;229                                      |
+       | resource.requester.reference   | Provider/urn:va:user:SITE:11748                        |
        | resource.identifier.system     | urn:oid:2.16.840.1.113883.6.233                        |
-       | resource.identifier.value      | urn:va:consult:9E7A:229:374                            |
+       | resource.identifier.value      | urn:va:consult:SITE:229:374                            |
        | resource.type.text             | Consult                                                |
        | resource.specialty.text       | HEMATOLOGY CONSULT                                     |
        | resource.serviceRequested.text | HEMATOLOGY CONSULT                                     |
@@ -174,25 +174,25 @@
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#localId          |
        | resource.extension.valueString | 374                                                          |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/referralrequest#orderUid         |
-       | resource.extension.valueString | urn:va:order:9E7A:229:15472                                  |
+       | resource.extension.valueString | urn:va:order:SITE:229:15472                                  |
       
  @F138_5_fhir_consult @fhir @5123456789V027402 @US8577 @F202-21
  Scenario: Client can break the glass when requesting consult in FHIR format for a sensitive patient
        Given a patient with "consult" in multiple VistAs
        #And a patient with pid "5123456789V027402" has been synced through the RDK API
-     When the client requests consult for that sensitive patient "9E7A;18"
+     When the client requests consult for that sensitive patient "SITE;18"
      Then a permanent redirect response is returned
-     When the client breaks glass and repeats a request for consult for that patient "9E7A;18"
+     When the client breaks glass and repeats a request for consult for that patient "SITE;18"
      Then a successful response is returned
      And the FHIR results contain "consult"
        | name                          | value                                                 |
        | resource.resourceType          | ReferralRequest                                       |
        | resource.status                | completed                                             |
 
- @F138_6_fhir_consult @fhir @9E7A100184 @US8577 @F202-21
+ @F138_6_fhir_consult @fhir @SITE100184 @US8577 @F202-21
  Scenario: Negativ scenario. Client can request consult results in FHIR format
    Given a patient with "no consult" in multiple VistAs
-   When the client requests consult for the patient "9E7A;100184" in FHIR format
+   When the client requests consult for the patient "SITE;100184" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "no consult"
        | name                          | value                                                 |
@@ -201,7 +201,7 @@
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
        #And a patient with pid "10110V004877" has been synced through the RDK API
-       When the client requests "10" consult for the patient "9E7A;8" in FHIR format
+       When the client requests "10" consult for the patient "SITE;8" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "consult"
        | name                           | value                              |

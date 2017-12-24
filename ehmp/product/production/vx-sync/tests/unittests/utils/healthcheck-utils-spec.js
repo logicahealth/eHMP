@@ -50,7 +50,7 @@ describe('healthcheck-utils.js', function() {
     });
 
     describe('sendHeartbeat', function() {
-        it('Normal Path', function() {
+        it('Normal Path', function(done) {
             var jds = new JdsClient(dummyLog, dummyConfig);
             jds._setResponseData(null, 200);
             var env = {
@@ -59,11 +59,12 @@ describe('healthcheck-utils.js', function() {
 
             spyOn(dummyLog, 'error');
 
-            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, 'dummy-process', 'dummy-profile', 1234, '20150715014231');
-
-            expect(dummyLog.error).not.toHaveBeenCalled();
+            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, 'dummy-process', 'dummy-profile', 1234, '20150715014231', function(){
+                 expect(dummyLog.error).not.toHaveBeenCalled();
+                 done();
+            });
         });
-        it('Error Path: No process name', function() {
+        it('Error Path: No process name', function(done) {
             var jds = new JdsClient(dummyLog, dummyConfig);
             jds._setResponseData(null, 200);
             var env = {
@@ -72,11 +73,12 @@ describe('healthcheck-utils.js', function() {
 
             spyOn(dummyLog, 'error');
 
-            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, null, 'dummy-profile', 1234, '20150715014231');
-
-            expect(dummyLog.error).toHaveBeenCalled();
+            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, null, 'dummy-profile', 1234, '20150715014231', function(){
+                expect(dummyLog.error).toHaveBeenCalled();
+                done();
+            });
         });
-        it('Error Path: Get error from JDS', function() {
+        it('Error Path: Get error from JDS', function(done) {
             var jds = new JdsClient(dummyLog, dummyConfig);
             jds._setResponseData('error!!!', null);
             var env = {
@@ -85,9 +87,10 @@ describe('healthcheck-utils.js', function() {
 
             spyOn(dummyLog, 'error');
 
-            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, 'dummy-process', 'dummy-profile', 1234, '20150715014231');
-
-            expect(dummyLog.error).toHaveBeenCalled();
+            healthcheck.sendHeartbeat(dummyLog, dummyConfig, env, 'dummy-process', 'dummy-profile', 1234, '20150715014231', function(){
+                expect(dummyLog.error).toHaveBeenCalled();
+                done();
+            });
         });
     });
 

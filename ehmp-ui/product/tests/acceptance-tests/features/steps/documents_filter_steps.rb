@@ -180,3 +180,29 @@ When(/^the user removes all filters on Document applet$/) do
   documents.btn_remove_all.click
   wait.until { tags.fld_udaf_tags.length == 0 }
 end
+
+Given(/^the user creates and views a udw with a summary documents applet$/) do
+  name = "docfilter#{Time.now.strftime('%Y%m%d%H%M%S%L')}a"
+  p name
+  steps %{
+    Given the user creates a user defined workspace named "#{name}"
+    When the user customizes the "#{name}" workspace
+    And the user adds an summary "documents" applet to the user defined workspace
+    And the user selects done to complete customizing the user defined workspace
+    And the "#{name.upcase}" screen is active
+    And the active screen displays 1 applets
+  }
+end
+
+Given(/^the user creates and views a udw with a trend "([^"]*)" applet$/) do |applet|
+  name = "tilesort#{Time.now.strftime('%Y%m%d%H%M%S%L')}a"
+  p "creating unique udw name: #{name}"
+  steps %{
+    Given the user creates a user defined workspace named "#{name}"
+    When the user customizes the "#{name}" workspace
+    And the user adds an trend "#{applet}" applet to the user defined workspace
+    And the user selects done to complete customizing the user defined workspace
+    And the "#{name.upcase}" screen is active
+    And the active screen displays 1 applets
+  }
+end

@@ -24,10 +24,10 @@ describe('request clinical object', function() {
 
             title: 'Post procedure follow-up',
                 request: 'This is my request',
-                submittedByUid: 'urn:va:user:9E7A:123',
+                submittedByUid: 'urn:va:user:SITE:123',
                 submittedTimeStamp: '20160420000000',
                 visit: {
-                    location: 'urn:va:location:9E7A:303',
+                    location: 'urn:va:location:SITE:303',
                     serviceCategory: 'PSB',
                     dateTime: '20160420000000'
                 }
@@ -71,7 +71,7 @@ describe('request clinical object', function() {
             json.assignTo = 'Person';
             json.route = {
                 facility: '500',
-                person: 'C877;5'
+                person: 'SITE;5'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -194,7 +194,7 @@ describe('request clinical object', function() {
             json.assignTo = 'Me';
             json.route = {
                 facility: '500',
-                person: 'C877;5'
+                person: 'SITE;5'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -312,7 +312,7 @@ describe('request clinical object', function() {
             json.assignTo = 'Person';
             json.route = {
                 facility: 'junk',
-                person: 'C877;5'
+                person: 'SITE;5'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -326,7 +326,7 @@ describe('request clinical object', function() {
             json.assignTo = 'Person';
             json.route = {
                 facility: 'junk',
-                person: 'urn:va:person:C877:5'
+                person: 'urn:va:person:SITE:5'
             };
 
             validator._validateRequestModel([], json, null, validator.DRAFT_STATE, function(errorMessages) {
@@ -339,7 +339,7 @@ describe('request clinical object', function() {
             json.assignTo = 'Person';
             json.route = {
                 facility: 'junk',
-                person: 'urn:va:person:C877:5'
+                person: 'urn:va:person:SITE:5'
             };
 
             validator._validateRequestModel([], json, null, validator.DRAFT_STATE, function(errorMessages) {
@@ -355,13 +355,13 @@ describe('request clinical object', function() {
                 'parameter' : {
                     'requestActivity': {
                         'objectType' : 'requestActivity',
-                        'uid': 'urn:va:ehmp-activity:9E7A:100716:0e55ec7b-01a2-44e3-867a-343eb33f035d',
-                        'patientUid' : 'urn:va:patient:9E7A:100716:100716',
-                        'authorUid' : '9E7A;100716',
+                        'uid': 'urn:va:ehmp-activity:SITE:100716:0e55ec7b-01a2-44e3-867a-343eb33f035d',
+                        'patientUid' : 'urn:va:patient:SITE:100716:100716',
+                        'authorUid' : 'SITE;100716',
                         'domain': 'ehmp-activity',
                         'subDomain': 'request',
                         'visit' : {
-                            'location': 'urn:va:location:9E7A:100716',
+                            'location': 'urn:va:location:SITE:100716',
                             'serviceCategory': 'PS',
                             'dateTime': '20160420130729'
                         },
@@ -374,7 +374,7 @@ describe('request clinical object', function() {
                                 'processDefinitionId': 'Order.Request',
                                 'processInstanceId': '',
                                 'state': 'draft',
-                                'initiator': 'REDACTED',
+                                'initiator': 'USER  ',
                                 'timeStamp': '20160420000000',
                                 'urgency': 'Urgent',
                                 'assignTo': 'Me',
@@ -403,8 +403,8 @@ describe('request clinical object', function() {
                             'responses': []
                         }
                     },
-                    'icn' : '9E7A;100716',
-                    'pid' : '9E7A;100716',
+                    'icn' : 'SITE;100716',
+                    'pid' : 'SITE;100716',
                     'formAction':'saved'
                 }
             };
@@ -421,8 +421,8 @@ describe('request clinical object', function() {
 
     describe('pattern matchers', function() {
         it('recognizes valid people', function() {
-            expect(validator._isValidPerson('9E7A;3')).to.be(true);
-            expect(validator._isValidPerson('C877;33334')).to.be(true);
+            expect(validator._isValidPerson('SITE;3')).to.be(true);
+            expect(validator._isValidPerson('SITE;33334')).to.be(true);
         });
 
         it('doesn\'t recognize bad/malformed people', function() {
@@ -431,8 +431,8 @@ describe('request clinical object', function() {
             expect(validator._isValidPerson('urn:va:patient:3:3')).to.be(false);
 
             expect(validator._isValidPerson('9E7;3')).to.be(false);
-            expect(validator._isValidPerson('C877B;33334')).to.be(false);
-            expect(validator._isValidPerson('9E7A;')).to.be(false);
+            expect(validator._isValidPerson('SITEB;33334')).to.be(false);
+            expect(validator._isValidPerson('SITE;')).to.be(false);
             expect(validator._isValidPerson(';100')).to.be(false);
 
             expect(validator._isValidPerson('  ')).to.be(false);

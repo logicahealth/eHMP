@@ -67,7 +67,7 @@ function createConformanceData() {
  *
  * @apiExample {js}  Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/procedure?_count=1
+ *      http://IP           /resource/fhir/patient/SITE;253/procedure?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/procedure.html">Procedure  FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -78,7 +78,7 @@ function createConformanceData() {
  *    "link": [
  *        {
  *            "relation": "self",
- *            "url": "http://127.0.0.1:8888/resource/fhir/patient/C877;100816/procedure"
+ *            "url": "http://127.0.0.1:PORT/resource/fhir/patient/SITE;100816/procedure"
  *        }
  *    ],
  *    "total": 1,
@@ -104,7 +104,7 @@ function createConformanceData() {
  *                "type": {
  *                    "coding": [
  *                        {
- *                            "system": "gov.va.fileman697-2:9E7A",
+ *                            "system": "gov.va.fileman697-2:SITE",
  *                            "display": "LAPARASCOPY",
  *                            "primary": true
  *                        }
@@ -121,7 +121,7 @@ function createConformanceData() {
  *                    },
  *                    {
  *                        "url": "http://vistacore.us/fhir/extensions/procedure#dateTime",
- *                        "valueString": "199811190800"
+ *                        "valueString": "1998111PORT0"
  *                    },
  *                    {
  *                        "url": "http://vistacore.us/fhir/extensions/procedure#facilityCode",

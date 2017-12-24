@@ -2,20 +2,8 @@
 Feature: Implement My Site search tray
 
 Background:
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "DNS    " verifycode as  "DNS    !!"
   Then staff view screen is displayed
-
-@F1142_mysite_1
-Scenario: Verify My Site search display
-   Then the staff view screen displays My Site in the sidebar tray
-   And the staff view screen displays My Site search input box
-   And the staff view My Site search input box placeholder text is "My Site Patient Search (Ex: S1234 or Smith, John...)"
-
-@F1142_mysite_2 @SC_1.3
-Scenario: Verify My Site tray display
-    When the user opens the My Site tray
-    Then the My Site tray displays instruction "Enter either first letter of last name and last four of social security number, or generic name in the search field above."
-    And the My Site tray displays a close x button
 
 @F1142_mysite_3
 Scenario Outline: Verify My Site search requires at least 3 characters
@@ -75,21 +63,5 @@ Scenario: Verify My Site search returns results when search term is First Letter
     Then the My Site Tray displays
     And the My Site Tray contains search results
 
-@F1142_mysite_11_a
-Scenario Outline: Verify My Site results retained and repopulated when tray is reopened
-    When the user searchs My Site with search term Eight,Patient
-    Then the My Site Tray displays
-    And the My Site Tray contains search results
-    When the user opens the <tray> tray
-    Then the My Site search input box is cleared
-    When the user opens the My Site tray
-    Then the My Site Tray displays
-    And the My Site search input box is populated with term Eight,Patient
-    And the My Site Tray contains search results
-Examples:
-    | tray            |
-    | My CPRS list    |
-    | Recent Patients |
-    | Ward            |
-    | Nationwide      |
+
 

@@ -6,6 +6,9 @@ server.tomcat.accept-count=<%= @tomcat[:accept_count] %>
 server.tomcat.max-connections=<%= @tomcat[:max_connections] %>
 server.tomcat.max-threads=<%= @tomcat[:max_threads] %>
 
+# Log Level
+logging.level.root=<%= @log_level %>
+
 # Actuator Settings
 management.port=<%= @management_port %>
 endpoints.enabled=false

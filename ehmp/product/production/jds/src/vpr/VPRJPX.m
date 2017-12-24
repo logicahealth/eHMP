@@ -1,13 +1,18 @@
 VPRJPX ;SLC/KCM -- Index a JSON object
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
-INDEX(PID,KEY,OLDOBJ,NEWOBJ) ; Index this object identified by its KEY
+INDEX(PID,KEY,OLDOBJ,NEWOBJ,INDEX) ; Index this object identified by its KEY
+ ; @param {string} PID - The patient site identifier
+ ; @param {string} KEY - The identifier (UID) of the patient data event
+ ; @param {array} [.OLDOBJ] - Old patient data to remove from index
+ ; @param {array} .NEWOBJ - New patient data to add to index
+ ; @param {string} [INDEX=""] - A list of one or more comma-delimited index names to reindex, or if omitted or empty, reindex all
  N IDXCOLL,IDXNAME
  ; Currently assuming UID is urn:va:type:vistaAccount:localId...
  ; For example:  urn:va:med:93EF:34014
  N VPRCONST D CONST
  S IDXCOLL=$P(KEY,":",3)
  S IDXNAME="" F  S IDXNAME=$O(^VPRMETA("collection",IDXCOLL,"index",IDXNAME)) Q:IDXNAME=""  D
+ . I $G(INDEX)'="",(","_INDEX_",")'[IDXNAME Q
  . N IDXMETA
  . M IDXMETA=^VPRMETA("index",IDXNAME,"collection",IDXCOLL)
  . I IDXMETA("method")="tally" D TALLY Q
@@ -15,12 +20,13 @@ INDEX(PID,KEY,OLDOBJ,NEWOBJ) ; Index this object identified by its KEY
  . I IDXMETA("method")="attr"  D ATTRIB^VPRJPXA Q
  . I IDXMETA("method")="xattr" D XATTR^VPRJPXA Q
  S IDXNAME="" F  S IDXNAME=$O(^VPRMETA("collection",IDXCOLL,"link",IDXNAME)) Q:IDXNAME=""  D
+ . I $G(INDEX)'="",(","_INDEX_",")'[IDXNAME Q
  . N IDXMETA
  . M IDXMETA=^VPRMETA("link",IDXNAME,"collection",IDXCOLL)
  . D REVERSE
  ;D CODES (do this later -- when we add in support for matches)
  D COUNTS
- Q
+ QUIT
  ;
  ; ----- Maintain counts of objects -----
  ;
@@ -77,7 +83,7 @@ KTALLY(OBJECT) ; Decrement a tally index
  I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
  . S TALLY=$I(^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1)),-1)
- . I ^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1))=0 K ^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1))
+ . I $G(^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1)))=0 K ^VPRPTI(JPID,PID,"tally",IDXNAME,VALUES(I,1))
  Q
  ;
  ; ----- Index Logic: time ranges -----
@@ -111,9 +117,9 @@ KTIME(OBJECT) ; Kill a time based index
  S JPID=$$JPID4PID^VPRJPR(PID)
  I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
- . K ^VPRPTI(JPID,PID,"time",IDXNAME,VALUES(I,1),KEY,I)
+ . K:$D(^VPRPTI(JPID,PID,"time",IDXNAME,VALUES(I,1),KEY,I)) ^VPRPTI(JPID,PID,"time",IDXNAME,VALUES(I,1),KEY,I)
  . Q:'$L($G(VALUES(I,2)))
- . K ^VPRPTI(JPID,PID,"stop",IDXNAME,VALUES(I,2),KEY,I)
+ . K:$D(^VPRPTI(JPID,PID,"stop",IDXNAME,VALUES(I,2),KEY,I)) ^VPRPTI(JPID,PID,"stop",IDXNAME,VALUES(I,2),KEY,I)
  Q
  ;
 REVERSE ; REV index
@@ -139,7 +145,7 @@ KREVERSE(OBJECT) ; Kill a relation link index
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
  S JPID=$$JPID4PID^VPRJPR(PID)
  I JPID="" D SETERROR^VPRJRER(222,"Unable to acquire JPID for PID: "_PID) Q
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"rev",VALUES(I,1),IDXNAME,KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTI(JPID,PID,"rev",VALUES(I,1),IDXNAME,KEY,I)) ^VPRPTI(JPID,PID,"rev",VALUES(I,1),IDXNAME,KEY,I)
  Q
 CODES ; code indexes
  D KCODES(.OLDOBJ)
@@ -170,8 +176,8 @@ SETCODE(PID,KEY,CODE,FIELD) ; Set index of all codes
  Q
 KILLCODE(PID,KEY,CODE,FIELD) ; Kill index of all codes
  Q:'$L($G(CODE))
- K ^VPRPTX("allCodes",CODE,FIELD,PID,KEY)
- K ^VPRPTX("pidCodes",PID,FIELD,CODE,KEY)
+ K:$D(^VPRPTX("allCodes",CODE,FIELD,PID,KEY)) ^VPRPTX("allCodes",CODE,FIELD,PID,KEY)
+ K:$D(^VPRPTX("pidCodes",PID,FIELD,CODE,KEY)) ^VPRPTX("pidCodes",PID,FIELD,CODE,KEY)
  Q
 CONST ; Set up constants for use
  S VPRCONST("SCT_MED_STATUS_ACTIVE")="urn:sct:55561003"

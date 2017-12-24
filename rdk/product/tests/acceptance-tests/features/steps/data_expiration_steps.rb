@@ -13,8 +13,8 @@ When(/^the client requests manual expiration time "(.*?)" for patient with pid "
   path.add_parameter("time", time)
   p path.path
   
-  user = "REDACTED;REDACTED"
-  pass = "REDACTED;REDACTED"
+  user = "SITE;500"
+  pass = "USER  ;PW      "
   begin
     @response = HTTPartyRDK.post(path.path)
   rescue Timeout::Error

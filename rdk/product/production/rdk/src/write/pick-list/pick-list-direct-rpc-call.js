@@ -2,11 +2,11 @@
 
 var _ = require('lodash');
 var nullUtil = require('../core/null-utils');
-
+var pickListUtil = require('./pick-list-utils');
+var getDatabaseConfigFromRequest = require('../../resources/activitymanagement/activity-utils').getDatabaseConfigFromRequest;
 
 var pickListRoot = './';
-var pickListConfig = require('./config/pick-list-config-direct-rpc-call').pickListConfig;
-module.exports.config = pickListConfig;
+
 
 /**
  * These RPC's must be called directly rather than being loaded from an in-memory database as they will expect a
@@ -21,6 +21,9 @@ module.exports.config = pickListConfig;
  * @returns {boolean} True if this processed the call, false otherwise.
  */
 module.exports.directRpcCall = function(req, site, type, callback) {
+    var pickListConfig = pickListUtil.directConfig(req.app);
+    module.exports.config = pickListConfig;
+
     var i = _.indexOf(_.pluck(pickListConfig, 'name'), type);
     if (i === -1) {
         return false; //We don't call this RPC directly
@@ -58,7 +61,12 @@ module.exports.directRpcCall = function(req, site, type, callback) {
         _.set(params, 'userId', req.session.user.uid);
     }
     if (pickListConfig[i].needsPcmm) {
-        _.set(params, 'pcmmDbConfig', req.app.config.jbpm.activityDatabase);
+        var dbConfig = getDatabaseConfigFromRequest(req);
+        if (!dbConfig) {
+            return callback('Activity/PCMM database was not found in the configuration');
+        }
+        _.set(params, 'pcmmDbConfig', dbConfig);
+        _.set(params, 'ehmpDatabase', _.get(req, 'app.config.oracledb.ehmpDatabase'));
     }
     if (pickListConfig[i].needsFullConfig) {
         _.set(params, 'fullConfig', req.app.config);

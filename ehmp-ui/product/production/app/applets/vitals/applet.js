@@ -26,8 +26,7 @@ define([
         name: 'resultUnitsMetricResultUnits',
         label: 'Result',
         cell: 'handlebars',
-        template: Handlebars.compile('{{resultUnits}}{{#if metricResult}}<span class="color-grey-darker">({{metricResultUnits}})</span>{{/if}}'),
-        hoverTip: 'vitals_result'
+        template: Handlebars.compile('{{resultUnits}}{{#if metricResult}}<span class="color-grey-darker">({{metricResultUnits}})</span>{{/if}}')
     };
     var observedFormattedCol = {
         name: 'observed',
@@ -50,14 +49,12 @@ define([
         flexWidth: 'flex-width-date',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-date'
-        }),
-        hoverTip: 'vitals_facility'
+        })
     };
     var typeNameCol = {
         name: 'typeName',
         label: 'Type',
-        cell: 'string',
-        hoverTip: 'vitals_type'
+        cell: 'string'
     };
     var resultedDateCol = {
         name: 'resulted',
@@ -72,8 +69,7 @@ define([
     var qualifierCol = {
         name: 'qualifierNames',
         label: 'Qualifiers',
-        cell: 'string',
-        hoverTip: 'vitals_qualifiers'
+        cell: 'string'
     };
 
     var summaryColumns = [displayNameCol, resultCol, observedFormattedCoversheetCol];
@@ -116,13 +112,35 @@ define([
     };
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+        tileOptions: {
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'tilesortbutton',
+                    shouldShow: function() {
+                        return _.get(this, 'appletOptions.appletConfig.viewType') === 'gist' && !ADK.Messaging.request('get:current:screen').config.predefined;
+                    }
+                }, {
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton',
+                    disabled: function() {
+                        return this.model.get('resultUnitsMetricResultUnits') === 'No Records Found';
+                    }
+                }]
+            },
+            primaryAction: {
+                enabled: true,
+                onClick: function(params) {
+                    var triggerElement = this.$el.find('.dropdown--quickmenu > button');
+                    getDetailsModal(this.model, this.model.collection, triggerElement);
+                }
+            }
+        },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {
-                appletId: 'vitals',
-                toolbarOptions: {
-                    buttonTypes: ['infobutton', 'detailsviewbutton'],
-                }
+                appletId: 'vitals'
             };
 
             if (this.columnsViewType === 'expanded' || options.appletConfig.fullScreen) {
@@ -168,19 +186,31 @@ define([
                 this.refresh({});
             });
 
-            if (ADK.UserService.hasPermission('add-vital') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('add-vital') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 this.dataGridOptions.onClickAdd = function(e) {
                     e.preventDefault();
                     onAddVitals();
                 };
             }
 
-            this.dataGridOptions.onClickRow = function(model) {
-                getDetailsModal(model);
-            };
-
             var VitalsItemView = Backbone.Marionette.ItemView.extend({
                 tagName: 'tr',
+                tileOptions: {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'infobutton'
+                        }, {
+                            type: 'detailsviewbutton',
+                            onClick: function(params) {
+                                getDetailsModal(params.model, params.collection, params.$el);
+                            }
+                        }]
+                    },
+                    primaryAction: {
+                        enabled: true
+                    }
+                },
                 initialize: function() {
                     var crsUtil = ADK.utils.crsUtil;
                     this.model.set(crsUtil.crsAttributes.CRSDOMAIN, crsUtil.domain.VITAL);
@@ -195,18 +225,17 @@ define([
                         };
                     } else {
                         return {
-                            'tabindex': '0',
                             'class': 'latestVital clickable',
                             'data-code': this.model.get('dataCode')
                         };
                     }
                 },
-                template: Handlebars.compile(['<td>{{displayName}}{{#if vitalsRecord}}<span class="sr-only"> vital. Press enter to view additional details.</span>{{/if}}</td>',
+                template: Handlebars.compile(['<td>{{displayName}}</td>',
                     '{{#if vitalsRecord}}',
-                    '<td>{{resultUnitsMetricResultUnits}}</td>',
-                    '<td>{{observedFormattedCover}}</td>',
+                    '<td class="flex-width-2">{{resultUnitsMetricResultUnits}}</td>',
+                    '<td class="flex-width-3">{{observedFormattedCover}}</td>',
                     '{{else}}',
-                    '<td colspan="2" class="background-color-grey-lightest">{{resultUnitsMetricResultUnits}}</td>',
+                    '<td colspan="2" class="background-color-grey-lightest flex-width-5">{{resultUnitsMetricResultUnits}}</td>',
                     '{{/if}}'
                 ].join('\n')),
                 templateHelpers: function() {
@@ -232,12 +261,14 @@ define([
                 events: {
                     'click td': function(e) {
                         if(!this.$el.hasClass('no-records')) {
-                            getDetailsModal(this.model);
+                            var targetElement = this.$('.dropdown--quickmenu > button');
+                            getDetailsModal(this.model, this.model.collection, targetElement);
                         }
                     },
                     'keydown': function(e) {
                         if (e.keyCode === 13 && !this.$el.hasClass('no-records')) {
-                            getDetailsModal(this.model);
+                            var targetElement = this.$('.dropdown--quickmenu > button');
+                            getDetailsModal(this.model, this.model.collection, targetElement);
                         }
                     }
                 }
@@ -246,7 +277,15 @@ define([
             var VitalsCompositeView = Backbone.Marionette.CompositeView.extend({
                 template: gridTemplate,
                 childView: VitalsItemView,
-                childViewContainer: 'tbody'
+                childViewContainer: 'tbody',
+                behaviors: {
+                    QuickTile: {
+                        childContainerSelector: function() {
+                            return this.$el;
+                        },
+                        rowTagName: 'td'
+                    }
+                }
             });
 
             var VitalsLayoutView = Backbone.Marionette.LayoutView.extend({
@@ -255,8 +294,8 @@ define([
                     rightTable: '.b-table'
                 },
                 template: Handlebars.compile([
-                    '<div class="a-table"></div>',
-                    '<div class="b-table"></div>'
+                    '<div class="a-table data-grid"></div>',
+                    '<div class="b-table data-grid"></div>'
                 ].join('\n')),
                 onRender: function() {
                     var count = this.collection.length;
@@ -289,18 +328,15 @@ define([
                 this.dataGridOptions.refresh = _.bind(this._refresh, this);
 
                 if (this.dataGridOptions.gistView) {
-                    var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
-                    if (!ADK.Messaging.request('get:current:screen').config.predefined) {
-                        buttonTypes.unshift('tilesortbutton');
-                    }
-
                     this.dataGridOptions.SummaryView = ADK.Views.VitalsGist.getView();
                     this.dataGridOptions.SummaryViewOptions = {
+                        quickLooks: {
+                            enabled: true
+                        },
                         gistModel: gistConfiguration.gistModel,
                         gistHeaders: gistConfiguration.gistHeaders,
                         enableTileSorting: true,
                         tileSortingUniqueId: 'displayName',
-                        buttonTypes: buttonTypes,
                         serializeData: function() {
                             var data = this.model.toJSON();
 
@@ -400,7 +436,7 @@ define([
         }
     });
 
-    var getDetailsModal = function(model, collection) {
+    var getDetailsModal = function(model, collection, triggerElement) {
         var modalCollection = collection || model.collection;
         if (!model.has('vitalLongName')) {
             model.set('vitalLongName', Util.getVitalLongName(model.get('typeName')));
@@ -417,6 +453,7 @@ define([
             'title': model.get('vitalLongName'),
             'size': 'xlarge',
             'nextPreviousCollection': modalCollection,
+            triggerElement: triggerElement,
             footerView: Backbone.Marionette.ItemView.extend({
                 template: detailsFooterTemplate,
                 events: {
@@ -454,7 +491,7 @@ define([
 
     var channel = ADK.Messaging.getChannel('vitals');
     channel.on('detailView', function(params) {
-        getDetailsModal(params.model, params.collection);
+        getDetailsModal(params.model, params.collection, params.$el);
     });
 
     channel.reply('detailView', function(params) {
@@ -538,7 +575,7 @@ define([
         label: 'Vital',
         onClick: onAddVitals,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-vital');
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-vital');
         }
     });
 

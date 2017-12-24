@@ -193,7 +193,7 @@ describe('sync handler unit test', function() {
                     'type': 'sync',
                     'source': 'appointments',
                     'patient': {
-                        'ien': '9E7A;1234'
+                        'ien': 'SITE;1234'
                     }
                 };
                 var osyncConfig = null;
@@ -217,7 +217,7 @@ describe('sync handler unit test', function() {
                     'type': 'sync',
                     'source': 'appointments',
                     'patient': {
-                        'ien': '9E7A;1234'
+                        'ien': 'SITE;1234'
                     }
                 };
                 var osyncConfig = {};
@@ -255,7 +255,7 @@ describe('sync handler unit test', function() {
                 var job = {
                     type: 'sync',
                     source: 'appointments',
-                    siteId: '9E7A',
+                    siteId: 'SITE',
                     patient: {
                         dfn: '1234'
                     }
@@ -274,9 +274,9 @@ describe('sync handler unit test', function() {
                 handler(log, osyncConfig, environment, job, function(error, data) {
                     expect(error).toBeFalsy();
                     expect(data).toBeFalsy();
-                    expect(val(environment, ['resultsLog', 'info', 'calls', '0', 'args', '0'])).toContain('{"siteId":"9E7A","patient":{"dfn":"1234"},"source":"appointments","syncDate"');
+                    expect(val(environment, ['resultsLog', 'info', 'calls', '0', 'args', '0'])).toContain('{"siteId":"SITE","patient":{"dfn":"1234"},"source":"appointments","syncDate"');
                     expect(val(request, ['get', 'calls', '0', 'args', '0', 'url'])).toBe(osyncConfig.syncUrl);
-                    expect(val(request, ['get', 'calls', '0', 'args', '0', 'qs', 'pid'])).toBe('9E7A;1234');
+                    expect(val(request, ['get', 'calls', '0', 'args', '0', 'qs', 'pid'])).toBe('SITE;1234');
                     expect(val(request, ['get', 'calls', '0', 'args', '0', 'qs', 'priority'])).toBe(50);
                     expect(val(environment, ['validPatientsLog', 'info', 'calls', '0', 'args', '0'])).toContain(JSON.stringify({
                         'siteId': job.siteId,
@@ -530,7 +530,7 @@ describe('sync handler unit test', function() {
                 var job = {
                     type: 'sync',
                     source: 'appointments',
-                    siteId: '9E7A',
+                    siteId: 'SITE',
                     patient: {
                         dfn: '1234'
                     }
@@ -540,7 +540,7 @@ describe('sync handler unit test', function() {
                 var environment = createEnvironment(osyncConfig);
                 storePatientInfoToResultsLog(log, environment, job, function(error) {
                     expect(error).toBeFalsy();
-                    expect(environment.resultsLog.info.calls[0].args[0]).toContain('{"siteId":"9E7A","patient":{"dfn":"1234"},"source":"appointments","syncDate"');
+                    expect(environment.resultsLog.info.calls[0].args[0]).toContain('{"siteId":"SITE","patient":{"dfn":"1234"},"source":"appointments","syncDate"');
                     done = true;
                 });
             });
@@ -555,7 +555,7 @@ describe('sync handler unit test', function() {
         var job = {
             type: 'sync',
             source: 'appointments',
-            siteId: '9E7A',
+            siteId: 'SITE',
             patient: {
                 dfn: '1234'
             }
@@ -563,7 +563,7 @@ describe('sync handler unit test', function() {
 
         var patientIdentifier = {
             type: 'pid',
-            value: '9E7A;1234'
+            value: 'SITE;1234'
         };
 
         it('Normal path: sync patient (patient has not been previously synced)', function() {

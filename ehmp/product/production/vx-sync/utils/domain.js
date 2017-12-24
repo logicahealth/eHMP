@@ -6,6 +6,8 @@ var vistaDomainList = require(global.VX_ROOT + 'worker-config').vista.domains;
 var jmeadowsDomainList = require(global.VX_ROOT + 'worker-config').jmeadows.domains;
 var hdrDomainList = require(global.VX_ROOT + 'worker-config').hdr.domains;
 var vlerDomainList = require(global.VX_ROOT + 'worker-config').vler.domains;
+var vlerDasDomainList = require(global.VX_ROOT + 'worker-config').vlerdas.domains;
+var vlerSelector = require(global.VX_ROOT + 'worker-config').vlerSelector;
 var recordEnrichmentDomainList = require(global.VX_ROOT + 'worker-config').recordEnrichment.domains;
 
 var domainList = [
@@ -87,8 +89,30 @@ function getHdrDomainList() {
     return _.clone(hdrDomainList);
 }
 
-function getVlerDomainList() {
-    return _.clone(vlerDomainList);
+/**
+ * Get vler or vlerdas domain list
+ *
+ * Next 3 parameters are passed in as one JavaScript object that uses destructuring to create
+ * parameters using defaults specified if properites don't exist in the object
+ *
+ * Parameters are only used for unit tests
+ *
+ * @param {string} [_vlerSelector=vlerSelector]
+ * @param {array} [_vlerDasDomainList=vlerDasDomainList]
+ * @param {array} [_vlerDomainList=vlerDomainList]
+ *
+ * @return {array} Clone of either passed list depending on _vlerSelector value
+ */
+function getVlerDomainList({
+    _vlerSelector = vlerSelector,
+    _vlerDasDomainList = vlerDasDomainList,
+    _vlerDomainList = vlerDomainList
+} = {}) {
+    if (_vlerSelector == "vlerdas") {
+        return _.clone(_vlerDasDomainList);
+    }
+
+    return _.clone(_vlerDomainList);
 }
 
 function getPjdsDomainList() {

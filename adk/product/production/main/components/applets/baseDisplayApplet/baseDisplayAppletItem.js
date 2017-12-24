@@ -3,95 +3,29 @@ define([
     'underscore',
     'backbone',
     'api/Messaging',
-    'main/components/appletToolbar/appletToolbarView',
     'hbs!main/components/views/appletViews/sharedTemplates/gistPopover',
     'main/adk_utils/crsUtil'
-], function($, _, Backbone, Messaging, ToolbarView, popoverTemplate, CrsUtil) {
+], function($, _, Backbone, Messaging, popoverTemplate, CrsUtil) {
     'use strict';
 
-    var originalDraggedTileAppletId, dragged;
-    var dragDropEvents = {
-        'dragstart': function(event) {
-            var index = $(this.el).parent().find('.gist-item').index(this.el).toString();
-            if (event.originalEvent) {
-                dragged = event.currentTarget;
-                // IE requires the first parameter to be text or URL. You can't give it a custom name.
-                var startTile = {
-                    startIndex: index,
-                    appletID: this.options.AppletID
-                };
-                originalDraggedTileAppletId = this.options.AppletID;
-                event.originalEvent.dataTransfer.setData('text', JSON.stringify(startTile));
-            } else {
-                this.performManualDragStart(index);
-            }
-            this.trigger('after:dragstart');
-        },
-        'dragover': function(event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-
-            var draggingTile = this.options.AppletID;
-            if (draggingTile != originalDraggedTileAppletId)
-                return;
-
-            dragged.style.display = 'none';
-
-            if (event.target.className === 'placeholder') return;
-
-            var placeholder = $(this.el).parent().find('.placeholder');
-            $(placeholder).removeClass('hidden');
-            if ($(this.el).parent().find('.gist-item:first-child').is($(this.el))) {
-                $(placeholder).insertBefore($(this.el));
-            } else {
-                $(placeholder).insertAfter($(this.el));
-            }
-        },
-        'drop': function(event) {
-            // This event will only be called for the 508 version of tile sorting
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            var originalIndex = this.manualOriginalIndex;
-            var targetIndex = $(this.el).parent().find('.gist-item').index(this.el);
-
-            var reorder = {
-                oldIndex: originalIndex,
-                newIndex: targetIndex
-            };
-
-            this.$el.trigger('reorder', reorder);
-            this.trigger('after:drop');
-        },
-        'dragend': function(event) {
-            // Handle when dropped outside of placeholder
-            event.preventDefault();
-            $(this.el).parent().find('.placeholder').addClass('hidden');
-            dragged.style.display = 'block';
-        }
-    };
+    var SCROLL_RATE = 50;
+    var THROTTLE_RATE = 300;
 
     var BaseAppletItem = Backbone.Marionette.LayoutView.extend({
-        className: 'gist-item table-row-toolbar',
-        behaviors: {
-            FloatingToolbar: {
-                triggerSelector: '.selectable:not([data-toggle=popover])',
-                DialogContainer: '.toolbar-container'
-            }
-        },
+        className: 'gist-item',
         attributes: function() {
             var modelJSON = this.serializedData || this.serializeData();
             var rowId = (_.has(modelJSON, 'displayName') ? 'row_' + _.get(modelJSON, 'displayName') : 'row_' + _.get(modelJSON, 'uid'));
-            CrsUtil.applyConceptCodeId(this.model);
 
             return {
                 'role': 'presentation',
-                'tabindex': 0,
                 'data-row-instanceid': rowId,
                 'data-code': _.get(modelJSON, 'dataCode')
             };
         },
-        serializeData: function () {
-            if(this.serializedData) return this.serializedData;
+        serializeData: function() {
+            CrsUtil.applyConceptCodeId(this.model);
+            if (this.serializedData) return this.serializedData;
 
             var serializer = _.get(this, 'appletOptions.serializeData');
             var gistModel = _.get(this, 'appletOptions.gistModel');
@@ -116,150 +50,199 @@ define([
             return modelJSON;
         },
         ui: {
-            popoverEl: '[data-toggle=popover]',
-            toolbarToggler: '.selectable:not([data-toggle=popover])'
+            popoverEl: '[data-toggle=popover]'
         },
         chartPointer: null,
-        events: {
-            'click @ui.popoverEl': function(e) {
-                e.stopPropagation();
-                this.trigger('toggle:quicklook');
-            },
-            'blur @ui.popoverEl': function(e) {
-                if (this.$('[data-toggle=popover]')[0].hasAttribute('aria-describedby')) {
-                    this.trigger('toggle:quicklook');
+
+
+        /**
+         * The arg here is not normal it is passed through the constructor bellow
+         * @param isTileSortEnabled
+         * @return {*}
+         */
+        events: function(isTileSortEnabled) {
+            var defaultEvents = {
+                'click': function(e) {
+                    var tileOptions = this.getOption('tileOptions', {});
+                    var primaryAction = _.result(tileOptions, 'primaryAction', true);
+                    if (primaryAction) {
+                        if (!_.result(primaryAction, 'enabled', true)) return;
+                        var onClick = _.get(primaryAction, 'onClick');
+                        if (onClick) {
+                            return onClick.call(this, e, this.model);
+                        }
+                    } else {
+                        return;
+                    }
+                    var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+                    var channelObject = {
+                        model: this.model,
+                        collection: this.collection || _.get(this, 'model.collection'),
+                        uid: this.model.get('uid'),
+                        patient: {
+                            icn: currentPatient.get('icn'),
+                            pid: currentPatient.get('pid')
+                        },
+                        $el: this.$el
+                    };
+                    if (this.applet) {
+                        channelObject.applet = this.applet;
+                    }
+                    this.$el.trigger('dropdown.hide');
+                    Messaging.getChannel(this.model.get('applet_id')).trigger('detailView', channelObject);
                 }
-            },
-            'keydown @ui.popoverEl': function(e) {
-                var k = e.which || e.keydode;
-                if (!/(13|32)/.test(k)) return;
-                $(e.target).trigger('click');
-                e.preventDefault();
-                e.stopPropagation();
-            },
-            'before:showtoolbar': function() {
-                this.trigger('before:showtoolbar');
-            },
-            'before:hidetoolbar': function() {
-                this.trigger('before:hidetoolbar');
-            },
-            'after:showtoolbar': function() {
-                this.trigger('after:showtoolbar');
-            },
-            'after:hidetoolbar': function() {
-                this.trigger('after:hidetoolbar');
+            };
+
+            if (isTileSortEnabled) {
+                return _.extend(defaultEvents, {
+                    'dragstart': 'dragStart',
+                    'dragover': 'dragOver',
+                    'dragend': 'dragEnd',
+                    'drag': 'drag',
+                    'drop': 'drop'
+                });
             }
+            return defaultEvents;
         },
+
         initialize: function(options) {
             this.appletOptions = options.appletOptions;
             if (this.model) {
                 this.model.set('userWorkspace', this._enableTileSorting);
             }
         },
-        createPopover: function() {
-            var self = this;
-            this.ui.popoverEl.popup({
-                trigger: 'manual',
-                html: 'true',
-                container: 'body',
-                template: popoverTemplate(this.serializedData),
-                referenceEl: this.$el,
-                placement: 'bottom',
-                yoffset: function(placement) {
-                    if (self.isToolbarActive() && placement === 'top') {
-                        return -self.$('.btn-toolbar').height();
-                    }
-                    return 0;
-                },
-                autoHandler: function(e) {
-                    if (e[3] + e[1].bottom > $(window).height()) {
-                        return 'top';
-                    }
-                    return 'bottom';
-                }
-            });
 
-            this.ui.popoverEl.on('shown.bs.popover', _.bind(function() {
-                $(window).one('resize.popover.' + this.cid, _.bind(function() {
-                    this.ui.popoverEl.popup('hide');
-                }, this));
-                this.listenToOnce(Messaging, 'gridster:resize', function() {
-                    this.ui.popoverEl.popup('hide');
-                });
-            }, this));
-            this.ui.popoverEl.on('hidden.bs.popover', _.bind(function() {
-                $(window).off('resize.popover.' + this.cid);
-                this.stopListening(Messaging, 'gridster:resize');
-            }, this));
+        dragStart: function() {
+            this.trigger('start:drag');
+            this.$el.trigger('popover:disable');
+            var $parent = this.$el.parent();
+            var $placeholder = $parent.find('.placeholder');
+            var offset = $parent.offset();
+            var height = $parent.height();
+
+
+            $placeholder.insertAfter(this.$el);
+
+            this.originalIndex = this.$el.index();
+            this.parentBoundries = {
+                top: offset.top,
+                bottom: offset.top + height
+            };
+
         },
-        isToolbarActive: function() {
-            return this.$el.hasClass('toolbar-active');
+
+        drag: _.throttle(function(event) {
+            var y = _.get(event, 'originalEvent.clientY');
+            if (y > this.parentBoundries.top && y < this.parentBoundries.bottom) {
+                return;
+            }
+            var offset = (y < this.parentBoundries.top) ? -SCROLL_RATE : SCROLL_RATE;
+            offset += this.$el.parent().scrollTop();
+
+            // Note: having the animation rate and the throttle rate being the same should
+            // produce the most fluid scrolling
+            this.$el.parent().animate({scrollTop: offset}, THROTTLE_RATE);
+        }, THROTTLE_RATE),
+
+        dragOver: _.throttle(function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var $original = _.get(this, '_parent.childInDrag');
+            if (!$original) {
+                return;
+            }
+
+            if (_.get(event, 'target.className') === 'placeholder') {
+                console.log('a');
+                return;
+            }
+
+            $original.$el.css('display', 'none');
+
+            var $placeholder = this.$el.parent().find('.placeholder');
+            $placeholder.removeClass('hidden');
+
+            if (this.$el.index() === 0) {
+                $placeholder.insertBefore(this.$el);
+            } else {
+                $placeholder.insertAfter(this.$el);
+            }
+        }, THROTTLE_RATE),
+
+        dragEnd: function(event) {
+            event.preventDefault();
+
+            var $placeholder = this.$el.parent().find('.placeholder');
+            $placeholder.addClass('hidden');
+            this.$el.css('display', 'block');
+
+            var endIndex = $placeholder.index();
+            if (this.originalIndex < endIndex) {
+                endIndex -= 1;
+            }
+            this.$el.trigger('popover:enable');
+            this.trigger('end:drag', this.originalIndex, endIndex);
         },
-        performManualDragStart: function(originalIndex) {
-            this.manualOriginalIndex = originalIndex;
+
+        drop: function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var targetIndex = this.$el.index();
+
+            var reorder = {
+                oldIndex: this.originalIndex,
+                newIndex: targetIndex
+            };
+
+            this.$el.trigger('reorder', reorder);
+            this.trigger('after:drop');
         },
-        onDestroy: function() {
-            //likely not required but better safe since we bound the view to the scope
-            this.ui.popoverEl.off('shown.bs.popover');
-            this.ui.popoverEl.off('hidden.bs.popover');
-            this.ui.popoverEl.popup('destroy');
-            $(window).off('resize.popover' + this.cid);
-        },
+
         onBeforeRender: function() {
             delete this.serializedData;
-        },
-        onRender: function() {
-            this.createPopover();
         }
     });
 
-    var Orig = BaseAppletItem, //create a new object structure so that children inherit the render and initialize functions
-        Modified = Orig.extend({
-            constructor: function() {
-                if (!this.options) this.options = {};
-                var args = Array.prototype.slice.call(arguments),
-                    init = this.initialize,
-                    onDestroy = this.onDestroy,
-                    onRender = this.onRender,
-                    currentScreen = Messaging.request('get:current:screen'),
-                    predefined = (currentScreen.config) ? currentScreen.config.predefined | '' : true,
-                    options = (args[0]) ? args[0] : null,
-                    appletOptions = (options && options.appletOptions) ? options.appletOptions : {},
-                    model = (options && options.model) ? options.model : new Backbone.Model(),
-                    enableTileSorting = (appletOptions.enableTileSorting && !predefined) ? true : false,
-                    argEvents = (args[0]) ? _.extend({}, this.options.events || {}, args[0].events) : _.extend({}, this.options.events),
-                    events = (enableTileSorting) ? dragDropEvents : {};
-                this.initialize = function() {
-                    var args = Array.prototype.slice.call(arguments);
-                    this._enableTileSorting = enableTileSorting;
-                    Orig.prototype.initialize.apply(this, args);
-                    if (Orig.prototype.initialize === init) return;
-                    init.apply(this, args);
-                };
-                this.onDestroy = function() {
-                    var args = Array.prototype.slice.call(arguments);
-                    Orig.prototype.onDestroy.apply(this, args);
-                    if (Orig.prototype.onDestroy === onDestroy) return;
-                    onDestroy.apply(this, args);
-                };
-                this.onRender = function() {
-                    var args = Array.prototype.slice.call(arguments);
-                    onRender.apply(this, args);
-                    if (Orig.prototype.onRender === onRender) return;
-                    Orig.prototype.onRender.apply(this, args);
-                };
-                this.events = _.extend({}, (typeof Orig.prototype.events == 'function') ? Orig.prototype.events() : Orig.prototype.events, (typeof this.events == 'function') ? this.events() : this.events, (typeof argEvents == 'function') ? argEvents() : argEvents, events);
-                if (args[0] && args[0].events) {
-                    delete args[0].events; //required or else Backbone will destroy our inherited events
-                }
-                if (this.options.events) {
-                    delete this.options.events; //required or else Backbone will destroy our inherited events
-                }
 
-                Orig.prototype.constructor.apply(this, args);
+    //create a new object structure so that children inherit the render and initialize functions
+    var Orig = BaseAppletItem;
+
+    BaseAppletItem = Orig.extend({
+        constructor: function() {
+            if (!this.options) this.options = {};
+            var args = Array.prototype.slice.call(arguments),
+                init = this.initialize,
+                currentScreen = Messaging.request('get:current:screen'),
+                predefined = _.get(currentScreen, 'config.predefined', true),
+                options = (args[0]) ? args[0] : null,
+                appletOptions = (options && options.appletOptions) ? options.appletOptions : {},
+                enableTileSorting = !!(appletOptions.enableTileSorting && !predefined),
+                argEvents = (args[0]) ? _.extend({}, this.options.events || {}, args[0].events) : _.extend({}, this.options.events);
+            this.initialize = function() {
+                var args = Array.prototype.slice.call(arguments);
+                this._enableTileSorting = enableTileSorting;
+                Orig.prototype.initialize.apply(this, args);
+                if (Orig.prototype.initialize === init) return;
+                init.apply(this, args);
+            };
+            this.events = _.extend({},
+                (_.isFunction(Orig.prototype.events)) ? Orig.prototype.events.call(this, enableTileSorting) : Orig.prototype.events,
+                (_.isFunction(this.events)) ? this.events() : this.events,
+                (_.isFunction(argEvents)) ? argEvents() : argEvents
+            );
+            if (args[0] && args[0].events) {
+                //required or else Backbone will destroy our inherited events
+                delete args[0].events;
             }
-        });
-    BaseAppletItem = Modified;
+            if (this.options.events) {
+                //required or else Backbone will destroy our inherited events
+                delete this.options.events;
+            }
+
+            Orig.prototype.constructor.apply(this, args);
+        }
+    });
 
     return BaseAppletItem;
 });

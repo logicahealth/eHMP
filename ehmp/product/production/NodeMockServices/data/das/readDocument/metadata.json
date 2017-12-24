@@ -1,0 +1,310 @@
+{
+    "CCDA_allScripts_toc.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Allscripts CCDA Example",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140311062218-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/29deea5f-efa3-4d1c-c2de-c567f2d72b22",
+        "identifier": [
+            {
+                "Value": "29deea5f-efa3-4d1c-c2de-c567f2d72b22",
+                "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "29deea5f-efa3-4d1c-c2de-c567f2d72b22",
+            "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "CCDA_cerner_toc.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Cerner CCDA Example",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140517022219-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/29deea5f-efa3-4d1c-c2de-f672de134c11",
+        "identifier": [
+            {
+                "Value": "29deea5f-efa3-4d1c-c2de-f672de134c11",
+                "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "29deea5f-efa3-4d1c-c2de-f672de134c11",
+            "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "CCDA_epic_encounter_level_data.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Epic CCDA Example 2",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20141230011212-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/55ceeacf-dda2-4d1c-c2de-a53fbae2fa65",
+        "identifier": [
+            {
+                "Value": "55ceeacf-dda2-4d1c-c2de-a53fbae2fa65",
+                "system": "1.2.840.114350.1.13.60.3.7.3.789921"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "55ceeacf-dda2-4d1c-c2de-a53fbae2fa65",
+            "system": "1.2.840.114350.1.13.60.3.7.3.789921"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "CCDA_epic_patient_level.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Epic CCDA Example 1",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20141116054218-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/29deea5f-efa3-4d1c-c2de-f53fb2e2fa89",
+        "identifier": [
+            {
+                "Value": "29deea5f-efa3-4d1c-c2de-f53fb2e2fa89",
+                "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "29deea5f-efa3-4d1c-c2de-f53fb2e2fa89",
+            "system": "1.2.840.114350.1.13.58.3.7.2.677780"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "Conemaugh_C32_Deidentified.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Conemaugh Health System",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014116-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/29deea5f-efa3-4d1c-a43d-d64ea4f4de30",
+        "identifier": [
+            {
+                "Value": "29deea5f-efa3-4d1c-a43d-d64ea4f4de30",
+                "system": "1.2.840.114350.1.13.48.3.7.2.688879"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "29deea5f-efa3-4d1c-a43d-d64ea4f4de30",
+            "system": "1.2.840.114350.1.13.48.3.7.2.688879"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "HEALTHELINK_C32_Deidentified.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "HEALTHeLINK",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140616213908-0000",
+        "description": "Summarization of episode note",
+        "id": "DocumentReference/5a31395c-b245-4333-b62f-e94fb0c7ae5d",
+        "identifier": [
+            {
+                "Value": "5a31395c-b245-4333-b62f-e94fb0c7ae5d",
+                "system": "2.16.840.1.113883.3.198"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "5a31395c-b245-4333-b62f-e94fb0c7ae5d",
+            "system": "2.16.840.1.113883.3.198"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "Hawaii_C32_T1_DeIdentified.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "HAWAII PACIFIC HEALTH SA",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014103-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/8315f76c-f58a-4eab-ab92-c77966c4ea21",
+        "identifier": [
+            {
+                "Value": "8315f76c-f58a-4eab-ab92-c77966c4ea21",
+                "system": "1.2.840.114350.1.13.115.3.7.2.688879.121314"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "8315f76c-f58a-4eab-ab92-c77966c4ea21",
+            "system": "1.2.840.114350.1.13.115.3.7.2.688879.121314"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "IHIE_B1_Deidentified.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Regenstrief Institute Clinic",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014056-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/f0c8af6f-a988-49e7-a4c2-581ba7962b77",
+        "identifier": [
+            {
+                "Value": "f0c8af6f-a988-49e7-a4c2-581ba7962b77",
+                "system": "1.2.840.114350.1.13.114.3.7.3.6PORT4.100"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "f0c8af6f-a988-49e7-a4c2-581ba7962b77",
+            "system": "1.2.840.114350.1.13.114.3.7.3.6PORT4.100"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "INHS_C32_Deidentified.b64": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Inland Northwest Health Services",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014050-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/c9e5685b-d5f9-41f3-bcfb-f341010a1b71",
+        "identifier": [
+            {
+                "Value": "c9e5685b-d5f9-41f3-bcfb-f341010a1b71",
+                "system": "1.2.840.114350.1.13.112.3.7.2.688879"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "c9e5685b-d5f9-41f3-bcfb-f341010a1b71",
+            "system": "1.2.840.114350.1.13.112.3.7.2.688879"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "default.b64-1": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Kaiser Permanente Mid-Atlantic STSTMA2",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014043-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/54639790-a2ad-463c-8e7a-9b014eed917b",
+        "identifier": [
+            {
+                "Value": "54639790-a2ad-463c-8e7a-9b014eed917b",
+                "system": "1.2.840.114350.1.13.111.3.7.2.688879"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "54639790-a2ad-463c-8e7a-9b014eed917b",
+            "system": "1.2.840.114350.1.13.111.3.7.2.688879"
+        },
+        "resourceType": "DocumentReference"
+    },
+    "default.b64-2": {
+        "author": [
+            {
+                "reference": "#Organization"
+            }
+        ],
+        "contained": [
+            {
+                "id": "Organization",
+                "name": "Kaiser Permanente Southern California - RESC",
+                "resourceType": "Organization"
+            }
+        ],
+        "created": "20140617014108-0000",
+        "description": "Continuity of Care Document",
+        "id": "DocumentReference/e587bf82-bfae-4499-9ca8-6babf6eea630",
+        "identifier": [
+            {
+                "Value": "e587bf82-bfae-4499-9ca8-6babf6eea630",
+                "system": "1.2.840.114350.1.13.122.3.7.2.688879.121218"
+            }
+        ],
+        "masterIdentifier": {
+            "Value": "e587bf82-bfae-4499-9ca8-6babf6eea630",
+            "system": "1.2.840.114350.1.13.122.3.7.2.688879.121218"
+        },
+        "resourceType": "DocumentReference"
+    }
+}

@@ -150,34 +150,34 @@ function validateParams(params, onSuccess, onError) {
  *
  * @apiExample {js} Request Examples:
  *      // DiagnosticReport limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?_count=1
  *
  *      // DiagnosticReport exact date search
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=2015-01-26T13:45:00
  *
  *      // DiagnosticReport on a day
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=2015-01-26
  *
  *      // DiagnosticReport on a month
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=2015-01
  *
  *      // DiagnosticReport on a year
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=2015
  *
  *      // DiagnosticReport outside a date range (e.g. DiagnosticReports not occuring on January 2015)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=!=2015-01
  *
  *      // DiagnosticReport Explicit date range
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
  *
  *      // DiagnosticReport sorted by date (sorts by DiagnosticReport.appliesDateTime)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?_sort=date
  *
  *      // DiagnosticReport sorted by date in descending order
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?_sort:desc=date
  *
  *      // DiagnosticReport sorted by performer (sorts by DiagnosticReport.performer.display)
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticreport?_sort=performer
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticreport.html">DiagnosticReport FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -189,7 +189,7 @@ function validateParams(params, onSuccess, onError) {
  *  "link": [
  *    {
  *      "relation": "self",
- *      "url": "http://localhost:8888/resource/fhir/patient/9E7A;253/diagnosticreport?domain=lab&_count=1&date=2010&_sort=date"
+ *      "url": "http://localhost:PORT/resource/fhir/patient/SITE;253/diagnosticreport?domain=lab&_count=1&date=2010&_sort=date"
  *    }
  *  ],
  *  "total": 18,
@@ -210,7 +210,7 @@ function validateParams(params, onSuccess, onError) {
  *        "status": "final",
  *        "issued": "2010-03-23T11:04:00+08:00",
  *        "subject": {
- *          "reference": "Patient/9E7A;253"
+ *          "reference": "Patient/SITE;253"
  *        },
  *        "performer": {
  *          "reference": "#737894fd-760e-4ac4-b304-1fbcfefd7674",
@@ -253,7 +253,7 @@ function validateParams(params, onSuccess, onError) {
  *              "text": "SERUM"
  *            },
  *            "subject": {
- *              "reference": "Patient/9E7A;253"
+ *              "reference": "Patient/SITE;253"
  *            },
  *            "collection": {
  *              "collectedDateTime": "2010-03-05T09:00:00+08:00"
@@ -299,7 +299,7 @@ function validateParams(params, onSuccess, onError) {
  *        "identifier": [
  *          {
  *            "system": "urn:oid:2.16.840.1.113883.6.233",
- *            "value": "urn:va:lab:9E7A:253:CH;6899693.909999;6"
+ *            "value": "urn:va:lab:SITE:253:CH;6899693.90PORT;6"
  *          }
  *        ],
  *        "serviceCategory": {
@@ -350,7 +350,7 @@ function validateParams(params, onSuccess, onError) {
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#groupUid",
- *            "valueString": "urn:va:accession:9E7A:253:CH;6899693.909999"
+ *            "valueString": "urn:va:accession:SITE:253:CH;6899693.90PORT"
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#high",
@@ -362,7 +362,7 @@ function validateParams(params, onSuccess, onError) {
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#localId",
- *            "valueString": "CH;6899693.909999;6"
+ *            "valueString": "CH;6899693.90PORT;6"
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#micro",
@@ -370,7 +370,7 @@ function validateParams(params, onSuccess, onError) {
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#pid",
- *            "valueString": "9E7A;253"
+ *            "valueString": "SITE;253"
  *          },
  *          {
  *            "url": "http://vistacore.us/fhir/extensions/lab#qualifiedName",
@@ -425,7 +425,7 @@ function validateParams(params, onSuccess, onError) {
  *        ],
  *        "text": {
  *          "status": "generated",
- *          "div": "<div>Collected: 2010-03-05T09:00:00<br/>Report Released: 2010-03-23T11:04:00<br/>Accession: urn:va:accession:9E7A:253:CH;6899693.909999<br/>Test: POTASSIUM<br/>Result: 4.1 meq/L<br/>Low: 3.8 meq/L<br/>High: 5.3 meq/L<br/>Specimen: SERUM<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\tundefined<br/>\t\tundefined<br/></div>"
+ *          "div": "<div>Collected: 2010-03-05T09:00:00<br/>Report Released: 2010-03-23T11:04:00<br/>Accession: urn:va:accession:SITE:253:CH;6899693.90PORT<br/>Test: POTASSIUM<br/>Result: 4.1 meq/L<br/>Low: 3.8 meq/L<br/>High: 5.3 meq/L<br/>Specimen: SERUM<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\tundefined<br/>\t\tundefined<br/></div>"
  *        }
  *      }
  *    }

@@ -331,7 +331,7 @@ public class WorkProductDaoTest {
         User usr = new User();
         usr.setCodeSystem("VA:ProviderId");
         usr.setType("Provider");
-        usr.setId("9E7A:10000000255");
+        usr.setId("SITE:10000000255");
         usr.setName("Optional");
         wpa.setUser(usr);
         wpa.setPriority(76);

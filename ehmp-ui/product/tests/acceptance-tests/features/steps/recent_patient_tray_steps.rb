@@ -1,16 +1,19 @@
 Then(/^the staff view screen displays Recent Patients in the sidebar tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_recentpatients).to eq(true), "Unselected Recent Patients button is not visible"
-  expect(staff_view.wait_for_btn_open_recentpatients).to eq(true)
-  expect(staff_view.btn_open_recentpatients.text.upcase).to eq("RECENT PATIENTS")
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_recentpatients).to eq(true), "Unselected Recent Patients button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_recentpatients).to eq(true)
+  expect(staff_view.patient_search_tray.btn_open_recentpatients.text.upcase).to eq("RECENT PATIENTS")
 end
 
 When(/^the user opens the Recent Patients tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_recentpatients).to eq(true), "Unselected recent patients button is not visible"
-  expect(staff_view.wait_for_btn_open_recentpatients).to eq(true), "Button to open recent patients tray is not visible"
-  staff_view.btn_open_recentpatients.click
-  expect(staff_view.wait_for_open_recentpatients).to eq(true), "recent patients tray did not open"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_recentpatients).to eq(true), "Unselected recent patients button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_recentpatients).to eq(true), "Button to open recent patients tray is not visible"
+  staff_view.patient_search_tray.btn_open_recentpatients.click
+  expect(staff_view.patient_search_tray.wait_for_open_recentpatients).to eq(true), "recent patients tray did not open"
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray title to display"
 end
 
 When(/^the Recent Patients tray displays a close x button$/) do
@@ -25,14 +28,14 @@ end
 
 When(/^the Recent Patients Tray table headers are$/) do |table|
   rp_tray = PobStaffView.new
-  wait_until { rp_tray.fld_rp_result_headers.length > 0 }
+  wait_until { rp_tray.fld_search_result_headers.length > 0 }
   max_attempt = 2
   begin
     table.rows.each do | expected_header |
       expect(rp_tray.fld_rp_result_headers_text).to include expected_header[0].upcase
     end
   rescue Exception => e
-    p e
+    # p e
     max_attempt -= 1
     retry if max_attempt >= 0
     raise e if max_attempt < 0
@@ -77,13 +80,13 @@ When(/^user chooses to load a patient from the Recent Patients results list$/) d
   expect(wait_until_dom_has_confirmflag_or_patientsearch(120)).to be_true, "Patient selection did not complete successfully"
 end
 
-Then(/^the Global Header displays the selected user name$/) do
+Then(/^the Patient View Current Patient displays the selected patient name$/) do
   expect(@selected_user_name_ssn).to_not be_nil, "expected variable @selected_user_name_ssn to be set in previous step"
   name = @selected_user_name_ssn
   ehmp = PobCoverSheet.new
-  expect(ehmp.global_header.wait_for_fld_patient_name).to eq(true)
+  expect(ehmp.patient_view.wait_for_fld_patient_name).to eq(true)
   # remove spaces so they don't have to be exact and take case out of the equation
-  expect(ehmp.global_header.fld_patient_name.text.gsub(' ', '').upcase).to eq(name.gsub(' ', '').upcase)
+  expect(ehmp.patient_view.fld_patient_name.text.gsub(' ', '').upcase).to eq(name.gsub(' ', '').upcase)
 end
 
 When(/^the Recent Patients Tray date of birth search results are in format Date \(Agey\)$/) do
@@ -110,3 +113,20 @@ When(/^the Recent Patients Tray gender search results are in terms Male, Female 
   end
 end
 
+Given(/^the user selects Patients header button$/) do
+  page = PobHeaderFooter.new
+  expect(page.wait_for_btn_patients).to eq(true), "Expected a Patients button"
+  page.btn_patients.click
+end
+
+Then(/^the Patients header button is highlighted$/) do
+  page = PobHeaderFooter.new
+  active_class = 'ACTIVE'
+  page.wait_for_fld_patients
+  expect(page).to have_fld_patients
+  begin
+    wait_until { page.fld_patients['class'].upcase.include? active_class }
+  rescue
+    expect(page.fld_patients['class'].upcase).to include active_class
+  end
+end

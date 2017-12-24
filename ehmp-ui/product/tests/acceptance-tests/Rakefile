@@ -36,6 +36,7 @@ task :baseTests, [:env] => [:environment_setup]
 task :regressionTest1, [:env] => [:environment_setup]
 task :regressionTest2, [:env] => [:environment_setup]
 task :regressionTest3, [:env] => [:environment_setup]
+task :regressionTest4, [:env] => [:environment_setup]
 task :smokeTests, [:env] => [:environment_setup]
 task :prepopTasks, [:env] => [:environment_setup]
 
@@ -124,7 +125,14 @@ Cucumber::Rake::Task.new(:regressionTest3) do |t|
   p 'running end to end'
   btype = ENV['BTYPE'] || 'PHANTOMJS'
   browser_setup(btype)
-  t.cucumber_opts = 'features --format pretty --tags ~@reg1 --tags ~@reg2 --tags ~@future --tags ~@debug -f json_pretty -o cucumber.json -f html -o cucumber.html --color BROWSERTYPE=' << btype
+  t.cucumber_opts = 'features --format pretty --tags ~@reg1 --tags ~@reg2 --tags ~@reg4 --tags ~@future --tags ~@debug -f json_pretty -o cucumber.json -f html -o cucumber.html --color BROWSERTYPE=' << btype
+end
+
+Cucumber::Rake::Task.new(:regressionTest4) do |t|
+  p 'running end to end'
+  btype = ENV['BTYPE'] || 'PHANTOMJS'
+  browser_setup(btype)
+  t.cucumber_opts = 'features --format pretty --tags @reg4 --tags ~@future --tags ~@debug -f json_pretty -o cucumber.json -f html -o cucumber.html --color BROWSERTYPE=' << btype
 end
 
 ## Placeholder task for executing all Acceptance Tests for all Mobile Applications
@@ -169,18 +177,18 @@ def environment_endpoints(env)
   case env
   when "virtualbox"
     ip = knife_search_for_ip("ehmp-ui")
-    ENV["EHMPUI_IP"] = 'https://' + "#{ip}"
+    ENV["EHMPUI_IP"] = 'https://' + "#{ip}/r2.0/"
     ENV["LOCAL"] = "true"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "services", "fetch_server", "port"], "default")
+    ENV["RDK_IP"] = knife_search_for_ip("fetch_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("fetch_server", ["fetch_server", "service_config", "port"], "default")
 
   when "aws"
     ip = knife_search_for_ip("ehmp-balancer")
     ENV["EHMPUI_IP"] = 'https://' + "#{ip}/r2.0/"
     p "env #{ENV["EHMPUI_IP"]}"
 
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "services", "fetch_server", "port"], "default")
+    ENV["RDK_IP"] = knife_search_for_ip("fetch_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("fetch_server", ["fetch_server", "service_config", "port"], "default")
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end

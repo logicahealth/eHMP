@@ -23,9 +23,14 @@ function doQueryWithParams(dbConfig, query, queryParameters, callback, maxRowsPa
 }
 module.exports.doQueryWithParams = doQueryWithParams;
 
+function doExecuteProcWithParams(dbConfig, query, queryParameters, callback, maxRowsParam) {
+    db.doExecuteProcWithParams(null, dbConfig, query, queryParameters, callback, (maxRowsParam || 1000000));
+}
+module.exports.doExecuteProcWithParams = doExecuteProcWithParams;
+
 function validate(typeJson, instanceJson, appConfig, cb, errors) {
     var abort = false;
-    if (!appConfig || !appConfig.jbpm || !appConfig.jbpm.activityDatabase || !_.isObject(appConfig.jbpm.activityDatabase)) {
+    if (!appConfig || !appConfig.jbpm || !appConfig.oracledb.activityDatabase || !_.isObject(appConfig.oracledb.activityDatabase)) {
         if (errors) {
             errors.push('bad app configuration for pcmm validation');
         }
@@ -69,7 +74,7 @@ function validate(typeJson, instanceJson, appConfig, cb, errors) {
     var MAX_ROWS = 1;
 
     oracledb.getConnection(
-        appConfig.jbpm.activityDatabase,
+        appConfig.oracledb.activityDatabase,
         function(err, connection) {
             if (err) {
                 errors.push('error getting database connection');
@@ -127,3 +132,6 @@ function validate(typeJson, instanceJson, appConfig, cb, errors) {
 }
 
 module.exports.validate = validate;
+
+//for mocking (stub) during testing
+module.exports._db = db;

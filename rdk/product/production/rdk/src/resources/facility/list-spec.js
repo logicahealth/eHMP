@@ -7,27 +7,27 @@ function buildRequest() {
     request.app = {
         config: {
             vistaSites: {
-                '9E7A': {
+                'SITE': {
                     division: [{
                         id: '500',
                         name: 'PANORAMA'
                     }],
-                    host: 'IP',
+                    host: 'IP        ',
                     port: PORT,
                     production: false,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED'
+                    accessCode: 'USER  ',
+                    verifyCode: 'PW      '
                 },
-                'C877': {
+                'SITE': {
                     division: [{
                         id: '507',
                         name: 'KODAK'
                     }],
-                    host: 'IP',
+                    host: 'IP        ',
                     port: PORT,
                     production: false,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED'
+                    accessCode: 'USER  ',
+                    verifyCode: 'PW      '
                 }
             }
         }

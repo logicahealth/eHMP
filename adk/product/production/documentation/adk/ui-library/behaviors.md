@@ -26,69 +26,142 @@ var view = Backbone.Marionette.ItemView.extend({
 });
 ```
 
-## Tooltip ##
+## Action Button ##
 
-The ```Tooltip``` behavior initializes the tooltip when a view is rendered, ensures that the tooltip is destroyed if it's shown when a view is destroyed, and will pull the necessary configuration from the DOM element or a configuration can be specified in the behavior's options.  Views that use Bootstrap tooltips need to use the ```Tooltip``` behavior to ensure the tooltip display container is not left attached to the body if the view is destroyed while the tooltip is still open.
+The Action Button behavior provides a standardized button component that a developer would utilzize for any secondary action that a user is allowed to take to navigate to an actionable task.  This behavior corresponds to the gotoactionbutton QuickMenu option.  The Action Button is the secondary action of a tile, can be enabled or disabled at the component level, may be used for any action configured for the tile (e.g. edit form, completing a task, writing an order, adding a problem), and will be configured to direct users to where the appropriate action takes place (e.g. the tray with a particular form open).
 
+**a template with the .action-container class is needed to add the Action Behavior to a table**
+
+```Javascript
+childView: ChildView.extend({
+     tileOptions: {
+          quickMenu: {
+               enabled: true,
+               buttons: [{
+                    type: 'gotoactionbutton',
+                    actionType: 'task', //defaults to Go To Action
+                    shouldShow: true, //function() {return true;},
+                    onClick: function(model) {
+                         EventHandler.actionButtonHandler.call(model);
+                    },
+                    disabled: true //function() {return true;}
+               }]
+          },
+          actions: {
+               enabled: true,
+               actionType: 'task', //defaults to Go To Action
+               shouldShow: true, //function() {return true;},
+               onClickButton: function(model) {
+                    EventHandler.actionButtonHandler.call(model);
+               },
+               disableAction: true //function() {return true;}
+          }
+     }
+})
 ```
-var view = Backbone.Marionette.ItemView.extend({
-  template: Handlebars.compile(['<div tooltip-data-key="Refresh">',
-                               '<button>Refresh View</button>',
-                               '</div>'].join()),
-  model: resourceModel,
-  modelEvents: {
-    'sync': 'render'
-  },
-  events: {
-    'click button': 'refreshAction'
-  },
-  refreshAction: function(event) {
-    this.model.fetch();
-  },
-  behaviors: {
-    //see Bootstrap documentation for options
-    Tooltip: config || {}
-  }
 
-});
+::: side-note
+***Note:*** The options for the Action Button and the gotoactionbutton QuickMenu option are separated in the event that only one is necessary.
+:::
 
-```
+## ChildBehaviors ##
 
-In the above example, the ```tooltip-data-key``` will be cross referenced with ```_assets/js/tooltipMappings.js``` in the ADK to produce the tooltip contents.  If no contents are found, the default tooltip configuration options will be used, and if ```data-original-title``` or ```title``` cannot be found, then it will set the tooltip contents as the attribute value, in this case, ```Refresh```.  Note that any Bootstrap configuration can be passed in as the behavior options, above shown as ```config```.
+The ChildBehaviors behavior allows a user to apply a behavior configuration to all children of a CollectionView or CompositeView.  This behavior works by overriding `buildChildView` so that it extends the existing behaviors on a child and adds in the ones defined in ChildBehaviors.
 
-Since the attributes are read from the HTML elements in most cases, help tooltips will continue to work as expected so long as this behavior is defined on views which contain help tooltips, and mapping standards are followed.  Note that help tooltips are looked up against ```_assets/js/helpMappings.js```.
-
-
-## Popover ##
-
-Bootstrap popovers are enhanced from tooltips, so the same possible problem can apply, in that the popover can be orphaned if the control element is lost, which happens when a view is destroyed while the popover is opened.  The popover behavior doesn't default any configuration at this time, so it would be advisable to pass in any configuration options necessary into the behavior options.
-
-```
-var view = Backbone.Marionette.ItemView.extend({
-  template: Handlebars.compile('<div data-toggle="popovers">Quicklook</div>'),
-  modelEvents: {
-    'sync': 'render'
-  },
-  events: {
-    'click button': 'refreshAction'
-  },
-  refreshAction: function(event) {
-    this.model.fetch();
-  },
-  behaviors: {
-    //see Bootstrap documentation for options
-    Popover: {
-      title: function() {
-        return this.getTitle();
-      },
-      trigger: 'click',
-      html: 'true'
+```Javascript
+var View = Marionette.CollectionView.extend({
+  childView: SomeView.extend({
+    behaviors: {
+      Tooltip: {}
     }
-  },
-  getTitle: function() {
-    return '<div>Popover Contents</div>';
+  }),
+  behaviors: {
+    ChildBehaviors: {
+      Injectable: {
+        insertMethod: 'append',
+        childView: SomeOtherView,
+        childViewOptions: function() {
+          return {
+            something: this.view.something
+          }
+        },
+        attributes: {} //attributes on the container element
+      }
+    }
   }
 });
+```
+
+## CollectionOptionsList ##
+
+The CollectionOptionsList behavior turns any Marionette Collection or Composite View into a 508 compliant list of items which allows users to use the up and down arrow keys to navigate through the items. This behavior works by adding the proper tabIndex values and aria roles to the view's DOM elements and then dynamically shifting focus between the items based on the rules outlined below.
+- When tabbing to the list (both forward tabbing and reverse tabbing with the shift key), in the case where the user has already started navigating the items of the list, focus will immediately jump to the last list-item or child-view that had focus, otherwise by default, focus will go to the first list-item or child-view. In both cases the top level Collection/Composite View DOM element will be skipped in the tabbing order.
+- When the view is considered empty, meaning there are no children being rendered to the DOM, focus will land on the Collection/Composite View's element, with the next tab proceeding to the next tabbable element in the DOM order.
+```JavaScript
+// Collection or Composite View
+behaviors: {
+  CollectionOptionsList: {} // no options are supported at this time
+}
+```
+
+## ErrorComponents ##
+
+The ErrorComponents shows all custom components (i.e. from [`ADK.Messaging.request('get:component:items')`](application-component-registration.md)) that are registered with `type: 'errorItem'`. This is meant to be used in error views.
+
+```JavaScript
+// parent view
+behaviors: {
+  ErrorComponents: {
+    container: '.error-components-target-container', // defaults to view's $el
+    // used to determine model to pass into components, bound with view
+    // defaults to view's model if not defined
+    getModel: function() {
+      return this.errorModel;
+    },
+    // defaults to true if not defined
+    shouldShow: function() {
+      return _.isEqual(this.model.get('state'), 'error');
+    }
+  }
+}
+```
+
+## ErrorContext ##
+
+The ErrorContext behavior enables smaller, re-usable views to get some context as to where in the application they might be. The behavior is placed on some parent view, and a child view can ask that parent view for it's context. For example, this is useful when the re-usable ADK.UI.Error view is shown due to a resource error. With this behavior attached to ADK.UI.Chrome, which has access to the applet id, etc., the error view can capture meaningful information.
+
+Note that the first ancestor to capture the event will stop propagation.
+
+```JavaScript
+// parent view
+behaviors: {
+  ErrorContext: {
+    // string (or function returning string -- bound with view)
+    // user friendly description (i.e. applet 'title' attribute)
+    title: 'Example applet/view',
+    // object (or function returning object -- bound with view)
+    // any additional context (i.e. full applet config) -- useful for debugging
+    details: {
+      config: {
+        id: 'example-applet',
+        title: 'Example applet/view',
+        //...
+      }
+    }
+  }
+}
+
+// then in descendant view (i.e. error view)
+events: {
+  'my:reply:event': function(event, context) {
+    // do something with context.title and context.details
+  }
+},
+onAttach: function() {
+// onAttach ensures both views are in DOM
+  // pass eventString (required)
+  this.$el.trigger('request:error:context', 'my:reply:event');
+}
 ```
 
 ## FlexContainer ##
@@ -251,62 +324,255 @@ behaviors: {
 }
 ```
 
-## ErrorComponents ##
+## Injectable ##
 
-The ErrorComponents shows all custom components (i.e. from [`ADK.Messaging.request('get:component:items')`](application-component-registration.md)) that are registered with `type: 'errorItem'`. This is meant to be used in error views.
+The Injectable behavior allows any view to be treated as a LayoutView, by applying a RegionManager and allowing a user to specify an existing container in the view's $el.  An attribute, `targetView`, is handed to the childView when it is created, so the childView can reference the view the behavior is applied to using `this.getOption('targetView')`.  In the example below the values given are the defaults, and the only required field is `childView`.
 
-```JavaScript
-// parent view
+```Javascript
 behaviors: {
-  ErrorComponents: {
-    container: '.error-components-target-container', // defaults to view's $el
-    // used to determine model to pass into components, bound with view
-    // defaults to view's model if not defined
-    getModel: function() {
-      return this.errorModel;
-    },
-    // defaults to true if not defined
-    shouldShow: function() {
-      return _.isEqual(this.model.get('state'), 'error');
+  Injectable: {
+    childView: SomeViewDefinition,
+    insertMethod: 'prepend', //'append'
+    shouldShow: true, //function() {return true;}
+    tagName: 'div', //function() {return 'div';}
+    component: 'mainRegion', //used to name the region
+    attributes: {}, //function() {return {disabled: true};}
+    containerSelector: function() { //can be string selector
+      return this.view.$el;
     }
   }
 }
 ```
 
-## ErrorContext ##
+::: side-note
+***Note:*** If a selector is used for `containerSelector`, the element must be inside `this.view.$el`.  The selector won't match against the parent element.
+:::
 
-The ErrorContext behavior enables smaller, re-usable views to get some context as to where in the application they might be. The behavior is placed on some parent view, and a child view can ask that parent view for it's context. For example, this is useful when the re-usable ADK.UI.Error view is shown due to a resource error. With this behavior attached to ADK.UI.Chrome, which has access to the applet id, etc., the error view can capture meaningful information.
+## Notification Icon ##
 
-Note that the first ancestor to capture the event will stop propagation.
+The Notification Icon behavior provides a standard icon which a developer can use to draw attention to certain records.  For the user, a dedicated Notification Indicator space will display a Notification Icon when there is a notification related to the tile.  When no notification exists, the indicator will not appear.  Mouse hovering over the notification icon will give users a tooltip explaining the nature of the notification
 
-```JavaScript
-// parent view
-behaviors: {
-  ErrorContext: {
-    // string (or function returning string -- bound with view)
-    // user friendly description (i.e. applet 'title' attribute)
-    title: 'Example applet/view',
-    // object (or function returning object -- bound with view)
-    // any additional context (i.e. full applet config) -- useful for debugging
-    details: {
-      config: {
-        id: 'example-applet',
-        title: 'Example applet/view',
-        //...
+**a template with the .notification-container class is needed to add the Notification Icon behavior to a table**
+
+```Javascript
+childView: ChildView.extend({
+  tileOptions: {
+    notifications: {
+      enabled: true,
+      container: '.notification-container', // selector in which to input the icon
+      titleAttr: 'NOTIFICATIONTITLE', // the model's attribute that holds the title of the notification. Used as the icon's tool tip
+      shouldShow: function(model) {
+        return model.get('NOTIFICATION');
       }
     }
   }
-}
+})
+```
 
-// then in descendant view (i.e. error view)
-events: {
-  'my:reply:event': function(event, context) {
-    // do something with context.title and context.details
+::: side-note
+***Note:*** The notification icon is not available for pill-styled tiles.
+:::
+
+## Popover ##
+
+Bootstrap popovers are enhanced from tooltips, so the same possible problem can apply, in that the popover can be orphaned if the control element is lost, which happens when a view is destroyed while the popover is opened.  The popover behavior doesn't default any configuration at this time, so it would be advisable to pass in any configuration options necessary into the behavior options.
+
+```
+var view = Backbone.Marionette.ItemView.extend({
+  template: Handlebars.compile('<div data-toggle="popovers">Quicklook</div>'),
+  modelEvents: {
+    'sync': 'render'
+  },
+  events: {
+    'click button': 'refreshAction'
+  },
+  refreshAction: function(event) {
+    this.model.fetch();
+  },
+  behaviors: {
+    //see Bootstrap documentation for options
+    Popover: {
+      title: function() {
+        return this.getTitle();
+      },
+      trigger: 'click',
+      html: 'true'
+    }
+  },
+  getTitle: function() {
+    return '<div>Popover Contents</div>';
+  }
+});
+```
+
+## QuickMenu ##
+
+The QuickMenu behavior allows a developer to apply a menu to a view and any element within a view.  It extends from the Injectable behavior, so many of its options are going to be the same.  In most cases, the only options that will need adjustments on a case by case basis are `tagName` and `containerSelector`.  For a user, the Quick Menu appears as a drop down with both an icon and a label for each menu item.
+
+```Javascript
+var View = Marionette.View.extend({
+  behaviors: {
+    QuickMenu: {
+      childView: QuickMenuView, //don't override unless you need to apply a custom menu
+      tagName: 'td', //will often be td or div
+      containerSelector: function() { //could be a string selector
+        return this.$el;
+      },
+      insertMethod: 'prepend',
+      shouldShow: function() {
+        var tileOptions = this.getOption('tileOptions') || {};
+        return _.result(tileOptions, 'quickMenu.shouldShow', true);
+      },
+      events: {} //applies events to View
+    }
+  }
+})
+```
+
+## QuickTile ##
+
+The QuickTile behavior extends from ChildBehaviors and provides an easy to use and highly configurable component which can be applied to any CollectionView or CompositeView to provide the QuickMenu and QuickLook components to all children.  The QuickTile behavior is applied to a parent view, but each child view can configure each child component for its needs, using the tileOptions attribute.  Each method within tileOptions is scoped to the row view.  One can apply tileOptions using childViewOptions, or simply by setting tileOptions against the child definition.
+
+```Javascript
+behaviors: {
+  QuickTile: {
+    enabled: true, //can be method
+    menuEnabled: true, //can be method
+    rowContainerClassName: 'quickmenu-container', //class applied to the row container, do not alter
+    headerContainerClassName: 'quickmenu-header', //class applied to the header, do not alter
+    rowAttributes: {}, //attributes on the row's container element
+    headerAttributes: {}, //attributes on the header's container element
+    childView: QuickMenuView, //view definition to be applied, do not alter
+    tagName: 'td', //can be a method, will usually be td or div
+    containerSelector: function() { //can also be a string selector or jQuery object
+      return this.$el;
+    },
+    insertMethod: 'prepend' //where to stick the container, at the beginning or end (append),
+    shouldShow: function() { //determines whether entire component will be applied
+      var collection = this.getOption('collection');
+      return !!(collection && collection.length)
+
+    }
   }
 },
-onAttach: function() {
-// onAttach ensures both views are in DOM
-  // pass eventString (required)
-  this.$el.trigger('request:error:context', 'my:reply:event');
-}
+childView: ChildView.extend({
+  tileOptions: {
+    primaryAction: { //what happens when you click the row
+        enabled: true | function() {return true;}, //defaults to enabled
+        onClick: function(options, event) { //often not necessary
+          var $buttonEl = options.$el;
+          var model = options.model = this.model;
+          var collection = options.model.collection = this.model.collection;
+        }
+    },
+    quickMenu: {
+      disabled: false //disables the trigger button,
+      shouldShow: true //determines whether the compopnent is shown on the row
+      //the order of the buttons is fixed and cannot be altered, so the order
+      //they are configured here in the array is irrelevant
+      buttons: [{
+          type: 'infobutton',
+          shouldShow: 'true' //function or boolean, for case by case determination
+        },{
+          type: 'detailsviewbutton',
+          //every button can have onClick and even events set, but this should be left alone if possible
+          //with the exception of some detailsviewbutton events, where onClick may need to be specified.
+          //The method is scoped to the row, and propagation and default behavior are stopped before
+          //onClick is triggered
+          onClick: function(options, event) {
+            var $buttonEl = options.$el;
+            var model = options.model = this.model;
+            var collection = options.model.collection = this.model.collection;
+            if(this.model.has('something')) this.doSomething();
+          }
+        },{
+          type: 'notesobjectbutton'
+        },{
+          type: 'editviewbutton',
+          shouldShow: function() {
+              return ADK.UserService.hasPermission('edit-condition-problem');
+          },
+          disableNonLocal: function() { //specific to editviewbutton
+              return this.getOption('disableNonLocal');
+          }
+        },{
+          type: 'crsbutton'
+        },{
+          type: 'associatedworkspace'
+        },{
+          type: 'deletestackedgraphbutton'
+        },{
+          type: 'tilesortbutton'
+        },{
+          type: 'additembutton',
+          disabled: function() {
+            return patient.hasPermissions();
+          }
+      }]
+    }
+  }
+})
 ```
+
+::: side-note
+***Note:*** No options are required in the QuickTile behavior definition, but to make the entire row the container (remember that `$el.find` does not test against itself), one must `return this.$el`.  In `tileOptions`, on the childView definition, `quickMenu` must contain a list of `buttons`, but no other fields are required.
+:::
+
+## SkipLinks ##
+
+The SkipLinks behavior abstracts the preferred pattern of adding and maintaining [Skip Links](../using-adk.md#Accessibility-Skip-Links--SkipLinks), including adding the links to the ADK.Accessibility.SkipLinks collection on attach, removing the links on destroy, and ensuring a focusable element is provided. This behavior should be used rather than manually adding and removing links from the collection.
+
+```JavaScript
+// example usage
+var MyView = Marionette.LayoutView.extend({
+  template: Handlebars.compile('<div class="example-target-link-region">'),
+  behaviors: {
+    SkipLinks: {
+      items: [{
+        label: 'Example Skip Link Menu Item', // Menu item label
+        element: function() {
+          // element that receives highlighting on hover of menu item and
+          // focus on click of menu item. Function receives view as this binding
+          return this.$('.example-target-link-region');
+        },
+        rank: 0, // position of item relative to other items, lower == higher on list
+        focusFirstTabbable: true // if true, focus will be set to first focusable
+        // element on click of item. If false and 'element' is not focusable,
+        // tabindex of -1 will be set on 'element'
+      }]
+    }
+  }
+});
+```
+
+## Tooltip ##
+
+The ```Tooltip``` behavior initializes the tooltip when a view is rendered, ensures that the tooltip is destroyed if it's shown when a view is destroyed, and will pull the necessary configuration from the DOM element or a configuration can be specified in the behavior's options.  Views that use Bootstrap tooltips need to use the ```Tooltip``` behavior to ensure the tooltip display container is not left attached to the body if the view is destroyed while the tooltip is still open.
+
+```
+var view = Backbone.Marionette.ItemView.extend({
+  template: Handlebars.compile(['<div tooltip-data-key="Refresh">',
+                               '<button>Refresh View</button>',
+                               '</div>'].join()),
+  model: resourceModel,
+  modelEvents: {
+    'sync': 'render'
+  },
+  events: {
+    'click button': 'refreshAction'
+  },
+  refreshAction: function(event) {
+    this.model.fetch();
+  },
+  behaviors: {
+    //see Bootstrap documentation for options
+    Tooltip: config || {}
+  }
+
+});
+
+```
+
+In the above example, the ```tooltip-data-key``` will be cross referenced with ```_assets/js/tooltipMappings.js``` in the ADK to produce the tooltip contents.  If no contents are found, the default tooltip configuration options will be used, and if ```data-original-title``` or ```title``` cannot be found, then it will set the tooltip contents as the attribute value, in this case, ```Refresh```.  Note that any Bootstrap configuration can be passed in as the behavior options, above shown as ```config```.
+
+Since the attributes are read from the HTML elements in most cases, help tooltips will continue to work as expected so long as this behavior is defined on views which contain help tooltips, and mapping standards are followed.  Note that help tooltips are looked up against ```_assets/js/helpMappings.js```.

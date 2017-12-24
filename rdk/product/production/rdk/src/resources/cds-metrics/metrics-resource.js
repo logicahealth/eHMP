@@ -1,5 +1,7 @@
 'use strict';
 
+var metrics = require('./metrics');
+
 var interceptors = {
     audit: true,
     authentication: true,
@@ -12,7 +14,7 @@ exports.getResourceConfig = function(app) {
     return [{
             name: 'cds-metrics-cds-metric-search',
             path: '/metrics',
-            get: require('./metrics').getMetricSearch,
+            get: metrics.getMetricSearch,
             interceptors: interceptors,
             requiredPermissions: ['read-cds-metric'],
             isPatientCentric: false
@@ -20,14 +22,14 @@ exports.getResourceConfig = function(app) {
         {
             name: 'cds-metrics-cds-dashboard-get',
             path: '/dashboard/:dashboardId',
-            get: require('./metrics').getDashBoard,
+            get: metrics.getDashBoard,
             interceptors: interceptors,
             requiredPermissions: ['read-cds-metric-dashboard'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-user-dashboards-get',
             path: '/dashboards/:userIdParam',
-            get: require('./metrics').getUserDashBoards,
+            get: metrics.getUserDashBoards,
             interceptors: interceptors,
             requiredPermissions: ['read-cds-metric-dashboard'],
             isPatientCentric: false
@@ -35,21 +37,21 @@ exports.getResourceConfig = function(app) {
         {
             name: 'cds-metrics-cds-metric-definitions-get',
             path: '/definitions',
-            get: require('./metrics').getMetricDefinitions,
+            get: metrics.getMetricDefinitions,
             interceptors: interceptors,
             requiredPermissions: ['read-cds-metric-definition'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-metric-definitions-post',
             path: '/definitions',
-            post: require('./metrics').createMetricDefinitions,
+            post: metrics.createMetricDefinitions,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-definition'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-metric-definitions-delete',
             path: '/definitions/:definitionId',
-            delete: require('./metrics').deleteMetricDefinition,
+            delete: metrics.deleteMetricDefinition,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-definition'],
             isPatientCentric: false
@@ -57,28 +59,28 @@ exports.getResourceConfig = function(app) {
         {
             name: 'cds-metrics-cds-metric-groups-get',
             path: '/groups',
-            get: require('./metrics').getMetricGroups,
+            get: metrics.getMetricGroups,
             interceptors: interceptors,
             requiredPermissions: ['read-cds-metric-group'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-metric-groups-post',
             path: '/groups',
-            post: require('./metrics').createMetricGroup,
+            post: metrics.createMetricGroup,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metrics-group'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-metric-groups-put',
             path: '/groups',
-            put: require('./metrics').updateMetricGroup,
+            put: metrics.updateMetricGroup,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-group'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-metric-groups-delete',
             path: '/groups/:metricGroupId',
-            delete: require('./metrics').deleteMetricGroup,
+            delete: metrics.deleteMetricGroup,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-group'],
             isPatientCentric: false
@@ -87,14 +89,14 @@ exports.getResourceConfig = function(app) {
         //{
         //    name: 'cds-metrics-cds-roles-get',
         //    path: '/roles',
-        //    get: require('./metrics').getRoles,
+        //    get: metrics.getRoles,
         //    interceptors: interceptors,
         //    requiredPermissions: [],
         //    isPatientCentric: false
         //}, {
         //    name: 'cds-metrics-cds-roles-put',
         //    path: '/roles',
-        //    put: require('./metrics').updateRoles,
+        //    put: metrics.updateRoles,
         //    interceptors: interceptors,
         //    requiredPermissions: [],
         //    isPatientCentric: false
@@ -102,14 +104,14 @@ exports.getResourceConfig = function(app) {
         //{
         //    name: 'cds-metrics-cds-user-roles-get',
         //    path: '/userRoles',
-        //    get: require('./metrics').getUserRoles,
+        //    get: metrics.getUserRoles,
         //    interceptors: interceptors,
         //    requiredPermissions: [],
         //    isPatientCentric: false
         //}, {
         //    name: 'cds-metrics-cds-user-roles-put',
         //    path: '/userRoles',
-        //    put: require('./metrics').updateUserRoles,
+        //    put: metrics.updateUserRoles,
         //    interceptors: interceptors,
         //    requiredPermissions: [],
         //    isPatientCentric: false
@@ -117,21 +119,21 @@ exports.getResourceConfig = function(app) {
         {
             name: 'cds-metrics-cds-dashboard-post',
             path: '/dashboard',
-            post: require('./metrics').createDashboard,
+            post: metrics.createDashboard,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-dashboard'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-dashboard-delete',
             path: '/dashboard/:dashboardId',
-            delete: require('./metrics').deleteDashboard,
+            delete: metrics.deleteDashboard,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-dashboard'],
             isPatientCentric: false
         }, {
             name: 'cds-metrics-cds-dashboard-put',
             path: '/dashboard/:dashboardId',
-            put: require('./metrics').updateDashboard,
+            put: metrics.updateDashboard,
             interceptors: interceptors,
             requiredPermissions: ['manage-cds-metric-dashboard'],
             isPatientCentric: false

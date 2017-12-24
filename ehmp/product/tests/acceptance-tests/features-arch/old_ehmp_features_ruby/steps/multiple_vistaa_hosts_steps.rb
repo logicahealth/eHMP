@@ -42,9 +42,9 @@ Then(/^the data return for "(.*?)" is "(.*?)"$/) do |site_name, ex_value|
   @json_object = JSON.parse(@response.body)
   result_array = @json_object["data"]['items'][0]['syncStatusByVistaSystemId']
   value = 'FALSE'
-  if (site_name == 'KODAK') && (result_array.keys.include? 'C877')
+  if (site_name == 'KODAK') && (result_array.keys.include? 'SITE')
     value = 'TRUE' 
-  elsif (site_name == 'PANORAMA') && (result_array.keys.include? '9E7A')
+  elsif (site_name == 'PANORAMA') && (result_array.keys.include? 'SITE')
     value = 'TRUE'
   elsif (site_name == 'DOD') && (result_array.keys.include? 'DOD')
     value = 'TRUE'

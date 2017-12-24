@@ -272,7 +272,7 @@ var sites = [{
     config: {
         protocol: 'http',
         host: 'hosttwo',
-        port: 9080,
+        port: PORT,
         path: '/page/25',
     }
 }, {
@@ -280,7 +280,7 @@ var sites = [{
     config: {
         protocol: 'http',
         host: 'hostthree',
-        port: 8888,
+        port: PORT,
         path: '/section/5',
     }
 }];
@@ -349,7 +349,7 @@ var mviErrorObj = {
 var beanstalkErrorObj = {
   mvi: {
     lookup: function(job, callback) {
-      callback(null, [{type: 'pid', value: '9E7A;3'}, {type: 'pid', value: 'C877;3'}, {type: 'icn': value: '10110V004877'}]);
+      callback(null, [{type: 'pid', value: 'SITE;3'}, {type: 'pid', value: 'SITE;3'}, {type: 'icn': value: '10110V004877'}]);
     }
   },
   beanstalkClient: function(job, callback) {

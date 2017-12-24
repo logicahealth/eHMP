@@ -1,4 +1,4 @@
-@F1175_activities @reg1
+@F1175_activities @Activities_applet @reg1
 
 Feature: F1175 : Use serializeData instead of collection manipulation
 
@@ -13,10 +13,29 @@ Scenario: Create a consult order and review it in activities applet expanded vie
   And the user takes note of number of existing activities
   And user adds a new consult
   And user selects "Physical Therapy" consult
+  Then the Physical Therapy tray displays
   And user enters a request reason text "Test request reason"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
   Then an activity is added to the applet
   Then user makes sure there is at least one "consult" activity
+
+@F1238 @F1238_Activities @US18302_Activities_details_from_Quick_Menu_summary_view
+Scenario: User can view the details from Quick Menu Icon in Activities applet summary view
+  Then user makes sure there is at least one "consult" activity
+  And the user sorts the Activity applet by column Created On 
+  And user hovers over the Activities applet row
+  And user selects the detail view from Quick Menu Icon of Activities applet
+  Then the detail modal for consult displays 
+
+@F1238 @F1238_Activities @US18302_Activities_details_from_Quick_Menu_expand_view
+Scenario: User can view the details from Quick Menu Icon in Activities applet expanded view
+  And user navigates to expanded activities applet
+  Then user makes sure there is at least one "consult" activity
+  And the user sorts the Activity applet by column Created On 
+  And user hovers over the Activities applet row
+  And user selects the detail view from Quick Menu Icon of Activities applet
+  Then the detail modal for consult displays 
 
 @US17616_add_discontinue_consult_activity
 Scenario: Discontinue a consult to create closed consult
@@ -28,6 +47,8 @@ Scenario: Discontinue a consult to create closed consult
   And user selects consult provider as "EHMP, UATEIGHT (Physician)"
   And user enters a request reason text "Test request reason 2"
   And user accepts the consult
+  And user waits for Action tray to be updated with My Tasks
+  Then an activity is added to the applet
   And user makes sure there is at least one "consult" activity
   And user views the details of the consult activity
   Then the detail modal for consult displays 
@@ -40,6 +61,7 @@ Scenario: F1175 : Create a request and review it in activities applet expanded v
   And user adds a new request titled "Call Patient"
   And user enters a request details text "Status of medication"
   And user accepts the request
+  And user waits for Action tray to be updated with My Tasks
   Then an activity is added to the applet
   And user makes sure there is at least one "Request" activity
 

@@ -1,21 +1,19 @@
 <div class="row pixel-height-20">
-    <div class="col-xs-4 meds-item-innerlist">
-        <div class="row">
-            <div class="col-xs-1 right-padding-lg">
-                <span class="fa {{userSiteIcon}}"></span>
-            </div>
-            <div class="col-xs-10 all-padding-no no-capatilize">
-                {{{sigColumn}}}
-                {{#if ivDosages}}
-                    <span>{{ivDosages}}</span>
-                {{/if}}
-            </div>
+    <div class="cell col-xs-3 meds-item-innerlist">
+        <div class="all-padding-no no-capatilize">
+            {{{sigColumn}}}
+            {{#if ivDosages}}
+                <span>{{ivDosages}}</span>
+            {{/if}}
         </div>
     </div>
-    <div class="col-xs-3 text-center">
+    <div class="cell col-xs-2 meds-item-innerlist">
+        <div class="cell">{{facilityMoniker}}</div>
+    </div>
+    <div class="cell col-xs-3 text-center meds-item-innerlist">
         <p class="{{fillableLabel}}" title="{{fillableDescription}}">
             {{fillableDisplay}} {{fillableDate}}
         </p>
     </div>
-    <div class="col-xs-5 chart no-capatilize right-padding-no"></div>
+    <div class="cell col-xs-4 chart no-capatilize right-padding-no"></div>
 </div>

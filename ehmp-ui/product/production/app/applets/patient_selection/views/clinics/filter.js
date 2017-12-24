@@ -16,7 +16,7 @@ define([
             fromDate: null,
             toDate: null
         },
-        initialize: function() {
+        initialize: function(attributes, options) {
             var today = moment().format(DATE_FORMAT);
             var locations = new ADK.UIResources.Fetch.PatientSelection.Clinics();
             this.set({
@@ -25,7 +25,7 @@ define([
                 'fromDate': today,
                 'toDate': today
             });
-            this.listenToOnce(ADK.Messaging.getChannel('patient-selection-clinics'), 'patientSearchTray.show', this.executeSearch);
+            this.listenToOnce(ADK.Messaging.getChannel(_.get(options, 'eventChannelName', 'patient-selection-clinics')), _.get(options, '_eventPrefix', 'patientSearchTray') + '.show', this.executeSearch);
         },
         validate: function(attributes, options) {
             var clinicLocation = attributes.clinicLocation;
@@ -205,7 +205,7 @@ define([
             this.$('.clinicLocation').trigger('control:disabled', false);
         },
         onSearch: function() {
-            ADK.Messaging.getChannel('patient-selection-clinics').trigger('execute-search', this.model);
+            ADK.Messaging.getChannel(this.getOption('eventChannelName')).trigger('execute-search', this.model);
         },
         setDateRange: function(fromDate, toDate) {
             var now = moment().format(DATE_FORMAT);
@@ -240,7 +240,7 @@ define([
     var ClinicFilterView = Backbone.Marionette.ItemView.extend({
         template: false,
         className: 'bottom-margin-lg',
-        initialize: function() {
+        initialize: function(options) {
             this._regionManager = new Backbone.Marionette.RegionManager();
             var SearchRegion = Backbone.Marionette.Region.extend({
                 el: this.$el
@@ -250,9 +250,9 @@ define([
             });
         },
         onBeforeShow: function() {
-            this._regionManager.get('searchRegion').show(new ClinicsSearchForm({
-                model: new SearchModel()
-            }));
+            this._regionManager.get('searchRegion').show(new ClinicsSearchForm(_.extend({}, this.options, {
+                model: new SearchModel({}, this.options)
+            })));
         },
         onBeforeDestroy: function() {
             this._regionManager.destroy();

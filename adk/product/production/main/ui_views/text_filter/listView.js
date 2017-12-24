@@ -29,8 +29,8 @@ define([
     var FilterListView = Backbone.Marionette.CompositeView.extend({
         className: 'container-fluid right-padding-sm left-padding-sm',
         template: Handlebars.compile(
-            '<ul class="list-inline bottom-margin-no top-margin-xs udaf" data-flex-width="1"></ul>' +
-            '{{#unless isEmpty}}<button class="btn btn-default btn-xs font-size-12 bottom-margin-xs top-margin-xs btn-clear-all remove-all" title="Press enter to remove all filters.">Remove All</button>{{/unless}}'
+            '<ul aria-labelledby="filter-title-{{parentId}}" class="list-inline bottom-margin-no top-margin-xs udaf" data-flex-width="1"></ul>' +
+            '{{#unless isEmpty}}<button type="button" class="btn btn-default btn-xs font-size-12 bottom-margin-xs top-margin-xs btn-clear-all remove-all">Remove All</button>{{/unless}}'
         ),
         modelEvents: {
             'change:isEmpty': 'render'
@@ -38,15 +38,18 @@ define([
         collectionEvents: {
             'update': function() {
                 this.model.set('isEmpty', _.isEmpty(this.collection.where({
-                    removable: true
+                    removable: true,
+                    shouldShow: true
                 })));
             }
         },
         initialize: function() {
             this.model = new Backbone.Model({
                 isEmpty: _.isEmpty(this.collection.where({
-                    removable: true
-                }))
+                    removable: true,
+                    shouldShow: true
+                })),
+                parentId: this.getOption('instanceId')
             });
         },
         childViewContainer: 'ul',
@@ -63,6 +66,9 @@ define([
                     removable: true
                 }));
             }
+        },
+        filter: function(child) {
+            return child.get('shouldShow');
         }
     });
 

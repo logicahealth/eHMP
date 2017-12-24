@@ -18,8 +18,10 @@ define([
     'app/resources/fetch/text_search/resources',
     'app/resources/fetch/narrative_labs/resources',
 	'app/resources/fetch/orders/resources',
+    'app/resources/fetch/medication_review/resources',
     'app/resources/fetch/activeMeds/resources',
-    'app/resources/fetch/permission/resources'
+    'app/resources/fetch/permission/resources',
+    'app/resources/fetch/video_visits/resources'
 ], function(
     PatientSelection,
     Encounters,
@@ -40,8 +42,10 @@ define([
     TextSearch,
     NarrativeLabs,
 	Orders,
+    MedicationReview,
     ActiveMeds,
-    Permission
+    Permission,
+    VideoVisits
 ) {
     'use strict';
 
@@ -67,8 +71,10 @@ define([
             TextSearch: TextSearch,
             NarrativeLabs: NarrativeLabs,
 			Orders: Orders,
+            MedicationReview: MedicationReview,
             ActiveMeds: ActiveMeds,
-            Permission: Permission
+            Permission: Permission,
+            VideoVisits: VideoVisits
         }
     };
 });

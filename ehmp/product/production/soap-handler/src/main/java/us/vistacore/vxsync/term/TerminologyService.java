@@ -19,6 +19,7 @@ import us.vistacore.vxsync.term.hmp.TermLoadException;
 import us.vistacore.vxsync.term.jlv.JLVHddDao;
 import us.vistacore.vxsync.term.jlv.JLVHddDao.MappingType;
 import us.vistacore.vxsync.term.jlv.JLVMappedCode;
+import us.vistacore.vxsync.utility.Utils;
 
 import com.codahale.metrics.annotation.Timed;
 
@@ -46,7 +47,7 @@ public class TerminologyService {
 		if(type == null || code == null || code.equals("")) {
 			return null;
 		}
-		LOG.info("Translating JLV type " + type.toString() + " and code " + code);
+		LOG.info("Translating JLV type " + type.toString() + " and code " + Utils.avoidLogForging(code));
 		try {
 			if(dao != null) {
 				JLVMappedCode mapped = dao.getMappedCode(type, code);
@@ -55,7 +56,7 @@ public class TerminologyService {
 				LOG.warn("Could not translate jlv code because the database is not configured");
 			}
 		} catch (TermLoadException e) {
-			LOG.error("Could not translate JLV " + type.toString() + " and code " + code, e);
+			LOG.error("Could not translate JLV " + type.toString() + " and code " + Utils.avoidLogForging(code), e);
 		}
 		return null;
 	}
@@ -70,7 +71,7 @@ public class TerminologyService {
 		if(type == null || code == null || code.equals("")) {
 			return null;
 		}
-		LOG.info("Translating JLV list type " + type.toString() + " and code " + code);
+		LOG.info("Translating JLV list type " + type.toString() + " and code " + Utils.avoidLogForging(code));
 		try {
 			if(dao != null) {
 				List<JLVMappedCode> mapped = dao.getMappedCodeList(type, code);
@@ -79,7 +80,7 @@ public class TerminologyService {
 				LOG.warn("Could not translate jlv code because the database is not configured");
 			}
 		} catch (TermLoadException e) {
-			LOG.error("Could not translate JLV " + type.toString() + " and code " + code, e);
+			LOG.error("Could not translate JLV " + type.toString() + " and code " + Utils.avoidLogForging(code), e);
 		}
 		return null;
 	}
@@ -93,7 +94,7 @@ public class TerminologyService {
 		if(conceptId == null || conceptId.equals("")) {
 			return null;
 		}
-		LOG.info("Translating lnc concept "+ conceptId);
+		LOG.info("Translating lnc concept "+ Utils.avoidLogForging(conceptId));
 		if(lncdb != null) {
 			return lncdb.getConceptData(conceptId);
 		} else {
@@ -110,13 +111,23 @@ public class TerminologyService {
 		if(conceptId == null || conceptId.equals("")) {
 			return null;
 		}
-		LOG.info("Translating drug concept "+ conceptId);
+		LOG.info("Translating drug concept "+ Utils.avoidLogForging(conceptId));
 		if(drugdb != null) {
 			return drugdb.getConceptData(conceptId);
 		} else {
 			LOG.warn("Could not translate drug because the database is not configured");
 			return null;
 		}
+	}
+
+	@Path("ping")
+	@GET
+	@Produces("application/json")
+	@Timed
+	public PingResponse ping() {
+		PingResponse pingResponse = new PingResponse();
+		pingResponse.setMessage("pong");
+		return pingResponse;
 	}
 
 	public static void setConfiguration(H2Configuration h2Config) {

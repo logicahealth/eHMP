@@ -77,6 +77,11 @@ var buildApp = function(config, argv, defaultConfigFilename) {
     app.logger = app.loggingservice.get('res-server');
     logCrashes(app);
 
+    if (app.config.appDynamicsProfile) {
+        app.logger.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+        require('appdynamics').profile(app.config.appDynamicsProfile);
+    }
+
     metrics.initialize(app);
     pidValidator.initialize(app);
     app.ehmpConfig = rdkEhmpConfigLoader.processEhmpConfig(argv);

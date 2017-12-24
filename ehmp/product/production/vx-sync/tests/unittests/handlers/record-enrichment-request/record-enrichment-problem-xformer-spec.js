@@ -20,18 +20,18 @@ var originalVaProblem = {
     'lastUpdateTime': 20040330000000,
     'localId': 183,
     'locationName': 'PRIMARY CARE',
-    'locationUid': 'urn:va:location:9E7A:32',
+    'locationUid': 'urn:va:location:SITE:32',
     'onset': 19980502,
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'problemText': 'Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)',
     'providerName': 'VEHU,EIGHT',
-    'providerUid': 'urn:va:user:9E7A:20010',
+    'providerUid': 'urn:va:user:SITE:20010',
     'removed': false,
     'serviceConnected': false,
     'stampTime': 20040330000000,
     'statusCode': 'urn:sct:55561003',
     'statusName': 'ACTIVE',
-    'uid': 'urn:va:problem:9E7A:3:183',
+    'uid': 'urn:va:problem:SITE:3:183',
     'unverified': false,
     'recordedOn': 20040207,
     'updated': 20040330
@@ -101,10 +101,10 @@ var originalNonVaDodProblem = {
 };
 
 var removedRecord = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:problem:9E7A:3:183'
+    'uid': 'urn:va:problem:SITE:3:183'
 };
 
 var removedJob = {
@@ -279,8 +279,8 @@ describe('record-enrichment-problem-xformer', function(){
                 xformer(log, config, environment, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:problem:9E7A:3:183');
-                    expect(record.pid).toEqual('9E7A;3');
+                    expect(record.uid).toEqual('urn:va:problem:SITE:3:183');
+                    expect(record.pid).toEqual('SITE;3');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

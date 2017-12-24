@@ -1,19 +1,10 @@
-Then(/^immunization gist is loaded successfully$/) do
-  @ehmp = PobImmunizationsApplet.new
-  @ehmp.wait_until_applet_gist_loaded 
-end
-
 When(/^user opens the first immunization gist item$/) do
   @ehmp = PobImmunizationsApplet.new
-  @ehmp.wait_until_fld_immunization_gist_item_visible
-  expect(@ehmp).to have_fld_immunization_gist_item
-  @ehmp.fld_immunization_gist_item.click
-end
-
-Then(/^immunization info button is displayed$/) do
-  @ehmp = PobImmunizationsApplet.new
-  @ehmp.wait_for_btn_info
-  expect(@ehmp).to have_btn_info
+  @ehmp.wait_until_fld_pills_visible
+  expect(@ehmp).to have_fld_pills
+  rows = @ehmp.fld_pills
+  expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  rows[0].click
 end
 
 Then(/^user navigates to immunization expanded view$/) do
@@ -31,13 +22,6 @@ When(/^user opens the first immunization row$/) do
   expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
   rows[0].click
 end
-
-#When(/^user opens the newly added immunization pill$/) do
-#  @ehmp = PobImmunizationsApplet.new
-#  @ehmp.wait_until_btn_new_immunization_pill_visible
-#  expect(@ehmp).to have_btn_new_immunization_pill
-#  @ehmp.btn_new_immunization_pill.click
-#end
 
 When(/^user refreshes the immunization applet$/) do
   @ehmp = PobImmunizationsApplet.new
@@ -226,3 +210,61 @@ Then(/^the immunization "([^"]*)" is added to the applet$/) do |immunization_typ
   expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
   expect(rows[0].text.upcase).to have_text(immunization_type.upcase)
 end
+
+Given(/^user can view the Quick Menu Icon in immunization applet$/) do
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in immunization applet$/) do
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in immunization applet$/) do
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the immunization applet$/) do |table|
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+Then(/^there exists a quick view popover table in immunization applet$/) do 
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.verify_popover_table ehmp
+end
+
+When(/^user hovers over the immunization pill$/) do
+  ehmp = PobImmunizationsApplet.new
+  ehmp.wait_for_fld_pills
+  expect(ehmp).to have_fld_pills
+  rows = ehmp.fld_pills
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+When(/^user hovers over the immunization row$/) do
+  ehmp = PobImmunizationsApplet.new
+  ehmp.wait_for_tbl_immunization_grid
+  expect(ehmp).to have_tbl_immunization_grid
+  rows = ehmp.tbl_immunization_grid
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+Then(/^immunization detail modal contains fields$/) do |table|
+  ehmp = PobCommonElements.new
+  ehmp.wait_for_fld_detail_modal_content
+  expect(ehmp).to have_fld_detail_modal_content
+  table.rows.each do |field|
+    expect(ehmp.fld_detail_modal_content.text.include? "#{field[0]}").to eq(true), "the field #{field[0]} is not present"
+  end 
+end
+
+Then(/^immunization quick look table contains headers$/) do |table|
+  ehmp = PobImmunizationsApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
+end
+

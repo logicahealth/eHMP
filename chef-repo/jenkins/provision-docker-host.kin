@@ -1,0 +1,7 @@
+"docker-host-provision-%branch%" {
+	template = 'templates/provision-docker-host.tpl'
+	description = "This build updates all AIDK Docker hosts with configuration and software changes."
+
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+}

@@ -200,7 +200,7 @@
                     },
                     {
                         "system": "http://vistacore.us/fhir/id/uid",
-                        "value": "urn:va:patient:9E7A:100716:100716"
+                        "value": "urn:va:patient:SITE:100716:100716"
                     },
                     {
                         "system": "http://vistacore.us/fhir/id/dfn",
@@ -208,7 +208,7 @@
                     },
                     {
                         "system": "http://vistacore.us/fhir/id/pid",
-                        "value": "9E7A;100716"
+                        "value": "SITE;100716"
                     },
                     {
                         "system": "http://vistacore.us/fhir/id/icn",

@@ -17,59 +17,7 @@ define([], function() {
         APPLET_ID: APPLET_ID,
         DATA_VERSION: DATA_VERSION,
         CHANNEL_NAME: CHANNEL_NAME,
-        displayNames: displayNames,
-        getDefaults: function getDefaults(version) {
-            var defaults = [{
-                'description': '',
-                get displayName() {
-                    return displayNames[this.name];
-                },
-                'siteHash': '',
-                'touchedBy': '',
-                'touchedOn': '',
-                'name': 'Branch of Service',
-                'version': DATA_VERSION,
-                'appletId': APPLET_ID
-            }, {
-                'description': '',
-                get displayName() {
-                    return displayNames[this.name];
-                },
-                'siteHash': '',
-                'touchedBy': '',
-                'touchedOn': '',
-                'name': 'Years of Service',
-                'version': DATA_VERSION,
-                'appletId': APPLET_ID
-            }, {
-                'description': '',
-                get displayName() {
-                    return displayNames[this.name];
-                },
-                'siteHash': '',
-                'touchedBy': '',
-                'touchedOn': '',
-                'name': 'Areas of Service',
-                'version': DATA_VERSION,
-                'appletId': APPLET_ID
-            }, {
-                'description': '',
-                get displayName() {
-                    return displayNames[this.name];
-                },
-                'siteHash': '',
-                'touchedBy': '',
-                'touchedOn': '',
-                'name': 'Occupational Specialties',
-                'version': DATA_VERSION,
-                'appletId': APPLET_ID
-            }];
-
-            return _.where(defaults, {
-                'version': version
-            });
-
-        }
+        displayNames: displayNames
     };
     return Config;
 });

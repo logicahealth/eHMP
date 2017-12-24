@@ -5,14 +5,18 @@ define([
     'moment',
     'app/applets/orders/writeback/requests/requestFormFields',
     'app/applets/orders/writeback/requests/requestFormUtils',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/orders/writeback/common/buttons/buttonUtils',
     'app/applets/orders/writeback/common/requiredFields/requiredFieldsUtils',
     'app/applets/orders/behaviors/draftRequest',
     'app/applets/orders/viewUtils',
-    'app/applets/task_forms/activities/requests/requestEventHandler'
-], function(Backbone, Marionette, _, moment, FormFields, FormUtils, AssignmentTypeUtils, ButtonUtils, RequiredFieldsUtils, DraftBehavior, ViewUtils, EventHandler) {
+    'app/applets/task_forms/activities/requests/requestEventHandler',
+    'app/extensions/extensions'
+], function(Backbone, Marionette, _, moment, FormFields, FormUtils, ButtonUtils, RequiredFieldsUtils, DraftBehavior, ViewUtils, EventHandler, Extensions) {
     'use strict';
+
+    var ACTIVE_PENDINGRESPONSE = "Active:PendingResponse";
+    var RETURNED_CLARIFICATIONREQUESTED = "Returned: Clarification Requested";
+    var RETURNED_DECLINED = "Returned: Declined";
 
     var dateErrorMessages = {
         earliest: {
@@ -39,8 +43,11 @@ define([
     };
 
     var formView = ADK.UI.Form.extend({
+        controlClass: {
+            'assignTo': Extensions.UI.Form.Controls.AssignTo
+        },
         fields: FormFields,
-        basicRequiredFields: ['urgency', 'earliest', 'latest', 'title', 'assignment'],
+        basicRequiredFields: ['urgency', 'earliest', 'latest', 'title'],
         events: {
             'request-add-confirm-delete': 'fireDelete',
             'request-add-confirm-cancel': 'fireCancel',
@@ -53,27 +60,14 @@ define([
             'change:urgency': 'updateDates',
             'change:earliest': 'handleEarliestDateChange',
             'change:latest': 'handleLatestDateChange',
-            'change:assignment': 'changeAssignment',
-            'change:facility': 'handleFacilityChange',
-            'change:draft-data': 'processDraftRequest',
-            'change:team': 'handleTeamChange',
-            'change:roles': 'adjustAcceptButtonProperties'
+            'change:draft-data': 'processDraftRequest'
         },
         ui: {
             'urgencyField': '.urgency',
             'earliestField': '.earliest',
             'latestField': '.latest',
             'titleField': '.title',
-            'assignmentField': '.assignment',
             'requestDetailsField': '.requestDetails',
-            'facilityField': '.facility',
-            'personField': '.person',
-            'teamField': '.team',
-            'rolesField': '.roles',
-            'facilityContainer': '.facility-row',
-            'personContainer': '.person-row',
-            'teamContainer': '.team-row',
-            'rolesContainer': '.roles-row',
             'deleteButton': '#requestDeleteButton',
             'cancelButton': '#requestCancelButton',
             'draftButton': '#requestDraftButton',
@@ -82,18 +76,12 @@ define([
             'errorMessage': '.errorMessage'
         },
         onRender: function() {
-            if (_.isEmpty(this.model.get('assignment'))) {
-                this.model.set('assignment', 'opt_me');
-            }
-
             RequiredFieldsUtils.requireFields(this);
-
             this.setupFormStatus();
             this.validateDates();
             this.adjustButtonProperties();
             this.listenTo(this.model, 'change', this.adjustButtonProperties);
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
-
             this.listenTo(this.model.errorModel, 'change:latest', function(e) {
                 if (!this.model.errorModel.get('latest')) {
                     //Double-check in case this was an error model clear triggered by the draft behavior.
@@ -132,13 +120,6 @@ define([
                 id: 'request-activity-writeback-in-progress'
             });
         },
-        handleFacilityChange: function() {
-            AssignmentTypeUtils.handleFacilityChange(this);
-        },
-        handleTeamChange: function() {
-            AssignmentTypeUtils.handleTeamChange(this);
-            this.adjustAcceptButtonProperties();
-        },
         adjustButtonProperties: function() {
             this.adjustDraftButtonProperties();
             this.adjustAcceptButtonProperties();
@@ -154,32 +135,37 @@ define([
         },
         setupFormStatus: function() {
             var requestState = this.model.get('requestState');
+            if (!_.isEmpty(requestState)) {
+                requestState = requestState.trim();
+            }
 
             // set details button visibility
-            if (_.startsWith(requestState, 'Active')) {
+            if (_.startsWith(requestState, 'Active') || _.startsWith(requestState, 'Returned')) {
                 this.ui.activityDetailsContainer.trigger('control:hidden', false);
             } else {
                 this.ui.activityDetailsContainer.trigger('control:hidden', true);
             }
 
             if ((!_.isEmpty(requestState)) &&
-                ((requestState === 'Active:PendingResponse') ||
-                    (requestState === 'Active: Clarification Requested') ||
-                    (requestState === 'Active: Declined'))
+                ((requestState === ACTIVE_PENDINGRESPONSE) ||
+                    (requestState === RETURNED_CLARIFICATIONREQUESTED) ||
+                    (requestState === RETURNED_DECLINED))
             ) {
-                this.model.set('formStatus', 'Active');
+                if (requestState === ACTIVE_PENDINGRESPONSE) {
+                    this.model.set('formStatus', 'Active');
+                } else {
+                    this.model.set('formStatus', 'Returned');
+                }
 
-                if (requestState === 'Active:PendingResponse') {
+                if (requestState === ACTIVE_PENDINGRESPONSE) {
                     this.model.set('formStatusDescription', 'Pending Response');
-                } else if (requestState === 'Active: Clarification Requested') {
+                } else if (requestState === RETURNED_CLARIFICATIONREQUESTED) {
                     this.model.set('formStatusDescription', 'Clarification Requested');
-                } else if (requestState === 'Active: Declined') {
+                } else if (requestState === RETURNED_DECLINED) {
                     this.model.set('formStatusDescription', 'Declined');
                 }
                 this.ui.deleteButton.trigger('control:disabled', true);
                 this.ui.draftButton.trigger('control:hidden', true);
-
-                this.changeAssignment();
             } else if (_.isEmpty(this.model.get('draft-uid'))) {
                 this.ui.deleteButton.trigger('control:disabled', true);
                 this.model.set('formStatus', 'new');
@@ -189,7 +175,7 @@ define([
             }
         },
         adjustDraftButtonProperties: function() {
-            if (_.isEmpty(this.model.get('title'))) {
+            if (_.isEmpty(this.model.get('title')) || this.model.errorModel.get('assignment')) {
                 ButtonUtils.disable(this.ui.draftButton);
             } else {
                 ButtonUtils.enable(this.ui.draftButton);
@@ -204,9 +190,6 @@ define([
                 return (!_.isEmpty(value));
             });
             this.model.set(attributes);
-        },
-        changeAssignment: function() {
-            AssignmentTypeUtils.changeAssignment(this);
         },
         handleTitleInput: function(e) {
             this.model.set('title', e.target.value, {
@@ -247,6 +230,11 @@ define([
                     this.ui.latestField.trigger('control:startDate', moment());
                 }
             }
+
+            //perform datepicker validation when model.errorModel doesn't have latest/earliest errors
+            if (!this.model.errorModel.has('earliest') && !this.model.errorModel.has('latest')) {
+                this.model.isValid();
+            }
         },
         handleLatestDateChange: function(e) {
             this.validateDates(e);
@@ -258,6 +246,11 @@ define([
                     this.ui.earliestField.trigger('control:endDate', moment().add(100, 'y'));
                 }
             }
+
+            //perform datepicker validation when model.errorModel doesn't have latest/earliest errors
+            if (!this.model.errorModel.has('earliest') && !this.model.errorModel.has('latest')) {
+                this.model.isValid();
+            }
         },
         validateDates: function(e) {
             this.model.errorModel.set({
@@ -266,7 +259,6 @@ define([
             }, {
                 unset: true
             });
-            this.model.isValid(); //This function performs the datepicker's standard validation as a side-effect.
             var earliest = this.model.get('earliest');
             var latest = this.model.get('latest');
 
@@ -301,13 +293,6 @@ define([
                     this.model.errorModel.set({
                         'latest': dateErrorMessages.latest.inPast
                     });
-
-                    //This message should supercede earliest.afterLatest (but not earliest.inPast).
-                    if (this.model.errorModel.has('earliest')) {
-                        if (this.model.errorModel.get('earliest') === dateErrorMessages.earliest.afterLatest) {
-                            this.model.errorModel.unset('earliest');
-                        }
-                    }
                 }
 
                 if (moment(latest).isAfter(moment().add(100, 'y'))) {
@@ -315,10 +300,6 @@ define([
                         'latest': 'Date cannot be more than 100 years in the future'
                     });
                 }
-            }
-
-            if (!this.model.isValid()) {
-                return;
             }
         },
         fireDelete: function(e) {
@@ -348,7 +329,7 @@ define([
 
                 var requestState = this.model.get('requestState');
                 if (this.model.get('activity') && this.model.get('activity').processInstanceId && !_.isEmpty(requestState) &&
-                    (requestState === 'Active: Clarification Requested' || requestState === 'Active: Declined')) {
+                    (requestState === RETURNED_CLARIFICATIONREQUESTED || requestState === RETURNED_DECLINED)) {
                     if (ADK.UserService.hasPermissions('edit-coordination-request')) {
                         EventHandler.sendUpdate(e, this.model, 'accepted');
                     } else {

@@ -18,9 +18,9 @@ class PobClinicalRemindersApplet < PobParentApplet
   # *****************  All_Drop_down_Elements  ******************* #
 
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_cds_rows, "#data-grid-cds_advice tr.selectable"
-  elements :tbl_cds_headers, "#data-grid-cds_advice th"
-  elements :tbl_cds_rows_title, "#data-grid-cds_advice tr.selectable td:nth-child(2)"
+  elements :tbl_cds_rows, "[data-appletid=cds_advice] table tr.selectable"
+  elements :tbl_cds_headers, "[data-appletid=cds_advice] th"
+  elements :tbl_cds_rows_title, "[data-appletid=cds_advice] tr.selectable td:nth-child(2)"
    
   def initialize
     super
@@ -31,6 +31,7 @@ class PobClinicalRemindersApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_table_row appletid_css
     add_expanded_applet_fields appletid_css
+    add_toolbar_buttons appletid_css
   end
   
   def applet_grid_loaded

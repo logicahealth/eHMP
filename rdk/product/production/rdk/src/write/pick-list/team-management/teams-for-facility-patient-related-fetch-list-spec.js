@@ -36,13 +36,13 @@ var pcmmData = [{ TEAM_ID: '42', TEAM_NAME: 'Towel', STATIONNUMBER: '1'},
 describe('teams-for-facility-patient-related fetch list', function(){
 
     beforeEach(function(){
-        sinon.stub(pcmm, 'doQueryWithParams', function(dummyConfig, query, queryParams, callback, params){
+        sinon.stub(pcmm, 'doExecuteProcWithParams', function(dummyConfig, query, queryParams, callback, params){
             return callback(null, pcmmData);
         });
     });
 
     afterEach(function(){
-        pcmm.doQueryWithParams.restore();
+        pcmm.doExecuteProcWithParams.restore();
     });
 
     it('returns expected JSON', function() {

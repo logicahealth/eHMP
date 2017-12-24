@@ -6,7 +6,7 @@ var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var inspect = require(global.VX_UTILS + 'inspect');
 
 
-function dodLabToVPR(dodLab, edipi) {
+function dodLabToVPR(logger, dodLab, edipi) {
     var vprLab = {};
 
     if(isChemLab(dodLab) && !dodLab.orderDate) {

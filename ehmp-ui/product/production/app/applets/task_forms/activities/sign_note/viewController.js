@@ -12,11 +12,12 @@ define([
         });
     }
 
-    function workflowSetup(title, showProgress, steps, trayId) {
+    function workflowSetup(title, showProgress, steps, trayId, triggerElement) {
         var workflowOptions = {
             title: title || '',
             showProgress: showProgress || false,
-            steps: steps
+            steps: steps,
+            triggerElement: triggerElement
         };
         var workflowController = new ADK.UI.Workflow(workflowOptions);
 
@@ -45,7 +46,9 @@ define([
                     'false', [{
                         view: NotificationView,
                         viewModel: params.model
-                    }]
+                    }],
+                    '',
+                    params.triggerElement
                 );
             });
 
@@ -55,7 +58,9 @@ define([
                     'false', [{
                         view: NotificationView,
                         viewModel: params.model
-                    }]
+                    }],
+                    '',
+                    params.triggerElement
                 );
             });
         }

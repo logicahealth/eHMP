@@ -8,12 +8,12 @@ Background:
 @perf.radiologyreport_rest 
 Scenario: Client can request Labs
 	Given a patient in multiple VistAs
-	When the client requests Radiology for the patient "B362;44"
+	When the client requests Radiology for the patient "SITE;44"
 	Then eHMP returns "17" in the radiology results
 	And the results contain data group for radiology
 		| field    | value                                  |
      	| summary  | GLUCOSE (BLOOD) 121 MG/DL              |
-      	| uid      | urn:va:lab:B362:71:CH;7028782.924588;2 |
+      	| uid      | urn:va:lab:SITE:71:CH;7028782.924588;2 |
       	| result   | 121		                             |
       	| specimen | BLOOD                                  |
       	| high     | 128                                    |
@@ -22,7 +22,7 @@ Scenario: Client can request Labs
     And the results contain data group
 		| field    | value                                  |
       	| summary  | CHLORIDE (BLOOD) canc                  |
-      	| uid      | urn:va:lab:B362:71:CH;7028783.855185;7 |
+      	| uid      | urn:va:lab:SITE:71:CH;7028783.855185;7 |
       	| result   | canc                                   |
       	| specimen | BLOOD                                  |
     

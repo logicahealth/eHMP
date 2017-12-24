@@ -14,7 +14,7 @@ module.exports.getResourceConfig = function() {
     return [{
         name: 'permission-sets-edit',
         path: '/edit',
-        put: require('./edit'),
+        put: require('./edit-user-permission-sets'),
         interceptors: {
             synchronize: false
         },
@@ -34,14 +34,14 @@ module.exports.getResourceConfig = function() {
     }, {
         name: 'permission-sets-list',
         path: '/list',
-        get: require('./list'),
+        get: require('./get-permission-sets'),
         interceptors: {
             synchronize: false
         },
         requiredPermissions: ['read-user-permission-set'],
         isPatientCentric: false,
         subsystems: []
-    },{
+    }, {
         name: 'permission-sets-bulk-edit',
         path: '/multi-user-edit',
         put: require('./multi-user-edit'),
@@ -49,6 +49,66 @@ module.exports.getResourceConfig = function() {
             synchronize: false
         },
         requiredPermissions: ['edit-user-permission-set'],
+        isPatientCentric: false,
+        subsystems: []
+    }, {
+        name: 'permission-sets-features',
+        path: '/features-list',
+        get: require('./get-permission-sets-features'),
+        interceptors: {
+            synchronize: false
+        },
+        requiredPermissions: ['read-permission-sets'],
+        isPatientCentric: false,
+        subsystems: []
+    }, {
+        name: 'permission-set-add',
+        path: '',
+        post: require('./management/permission-set-add-writer'),
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: ['add-permission-sets'],
+        isPatientCentric: false
+    }, {
+        name: 'permission-set-update',
+        path: '/update',
+        put: require('./management/permission-set-update-writer'),
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: ['edit-permission-sets'],
+        isPatientCentric: false
+    }, {
+        name: 'permission-set-deprecate',
+        path: '/deprecate',
+        put: require('./management/permission-set-update-writer'),
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: ['deprecate-permission-sets'],
+        isPatientCentric: false
+    }, {
+        name: 'permission-set-edit-permissions',
+        path: '/edit-permissions',
+        put: require('./management/permission-set-edit-permissions'),
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: ['edit-permission-sets'],
+        isPatientCentric: false
+    }, {
+        name: 'permission-sets-categories',
+        path: '/categories',
+        get: require('./get-permission-sets-categories'),
+        interceptors: {
+            synchronize: false
+        },
+        requiredPermissions: ['read-user-permission-set'],
         isPatientCentric: false,
         subsystems: []
     }];

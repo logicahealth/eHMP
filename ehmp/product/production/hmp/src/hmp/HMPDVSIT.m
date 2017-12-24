@@ -1,5 +1,5 @@
-HMPDVSIT ;SLC/MKB,ASMR/RRB,BL - Visit/Encounter extract;Aug 29, 2016 20:06:27
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 01, 2011;Build 7
+HMPDVSIT ;SLC/MKB,ASMR/RRB,BL/AFS,PB - Visit/Encounter extract;Aug 29, 2016 20:06:27
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -119,7 +119,7 @@ ICD(IEN) ; -- return code^description for ICD code, or "^" if error
  N X0,HMPX,N,I,X,Y S IEN=+$G(IEN)
  S X0=$$ICDDX^ICDEX(IEN) I X0<0 Q "^"  ;Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
  S Y=$P(X0,U,2)_U_$P(X0,U,4)       ;ICD Code^Dx name
- S N=$$ICDD^ICDEX($P(Y,U),"HMPX") ;ICD Description  Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
+ S N=$$ICDD^ICDEX($P(Y,U),.HMPX) ;ICD Description  Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
  I N>0,$L($G(HMPX(1))) S $P(Y,U,2)=HMPX(1)
  Q Y
  ;
@@ -202,12 +202,19 @@ INPT ; -- return current admission in ADM("attribute")=value [from ADM]
  D TIU(IEN) ;notes/summary
  Q
  ;
-PTF(DFN,PTF) ; -- return ICD code^description for a PTF record
- N HMPPTF,N,HMPX
+PTF(DFN,PTF,SDIAG) ; -- return ICD code^description for a PTF record
+ ;de8171 - If secondary diagnoses exist return them in SDIAG (Passed by reference)
+ N HMPPTF,N,HMPX K SDIAG
  D:$G(PTF) RPC^DGPTFAPI(.HMPPTF,+PTF) I $G(HMPPTF(0))<1 Q "^"
- S Y=$P($G(HMPPTF(1)),U,3)_U
- S N=$$ICDD^ICDEX(Y,"HMPX") ;ICD Description Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
- I N>0,$L($G(HMPX(1))) S Y=Y_HMPX(1)
+ S Y=$P($G(HMPPTF(1)),U,3)
+ S N=$$ICDD^ICDEX(Y,.HMPX) ;ICD Description Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
+ I N>0,$L($G(HMPX(1))) S Y=Y_U_HMPX(1)
+ I $P($G(HMPPTF(2)),U) D
+ . N SDI,X
+ . F SDI=1:1:$L(HMPPTF(2),U) S X=$P(HMPPTF(2),U,SDI) Q:X=""  D
+ ..  K HMPX
+ ..  S N=$$ICDD^ICDEX(X,.HMPX)
+ ..  S SDIAG(SDI)=X_U_$G(HMPX(1))
  Q Y
  ;
 ENC(IEN,ENC) ; -- return an encounter in ENC("attribute")=value

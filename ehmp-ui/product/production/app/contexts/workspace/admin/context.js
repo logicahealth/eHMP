@@ -1,7 +1,9 @@
 define([
-    'handlebars'
+    'handlebars',
+    'app/contexts/workspace/admin/layout'
 ], function(
-    Handlebars
+    Handlebars,
+    Layout
 ) {
     'use strict';
 
@@ -12,13 +14,7 @@ define([
         workspacesRequiredBeforeAppLoad: [],
         userRequired: true,
         layout: function(workspaceModel) {
-            return Backbone.Marionette.LayoutView.extend({
-                className: "container-fluid",
-                template: Handlebars.compile('<div id="content-region" class="row top-padding-xs"></div>'),
-                regions: {
-                    content_region: '#content-region'
-                }
-            });
+            return Layout;
         },
         enter: function () {
         },

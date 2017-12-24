@@ -30,16 +30,14 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
         }),
-        sortType: 'cycle',
-        hoverTip: 'conditions_description'
+        sortType: 'cycle'
     };
     var AcuityName = {
         name: 'acuityName',
         label: 'Acuity',
         cell: 'handlebars',
         sortType: 'cycle',
-        template: Handlebars.compile('<span class="acuityType">{{acuityName}}</span>'),
-        hoverTip: 'conditions_acuity'
+        template: Handlebars.compile('<span class="acuityType">{{acuityName}}</span>')
     };
     var StatusName = {
         name: 'statusName',
@@ -51,8 +49,7 @@ define([
             statusName = statusName.toLowerCase().trim();
             var onset = model.get('onset') || UNICODE_MAX_CHAR;
             return statusName + onset;
-        },
-        hoverTip: 'conditions_status'
+        }
     };
     var OnsetFormatted = {
         name: 'onsetFormatted',
@@ -64,8 +61,7 @@ define([
         sortType: 'cycle',
         sortValue: function(model) {
             return model.get("onset");
-        },
-        hoverTip: 'conditions_onsetdate'
+        }
     };
     var UpdatedFormatted = {
         name: 'updatedFormatted',
@@ -77,8 +73,7 @@ define([
         sortType: 'cycle',
         sortValue: function(model) {
             return model.get("updated");
-        },
-        hoverTip: 'conditions_lastupdated'
+        }
     };
     var ProviderDisplayName = {
         name: 'providerDisplayName',
@@ -87,15 +82,13 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2'
         }),
-        sortType: 'cycle',
-        hoverTip: 'conditions_provider'
+        sortType: 'cycle'
     };
     var FacilityMoniker = {
         name: 'facilityMoniker',
         label: 'Facility',
         cell: 'handlebars',
         sortType: 'cycle',
-        hoverTip: 'conditions_facility',
         template: Handlebars.compile(['<span class="facilityName">{{#if facilityMoniker}}',
             '{{facilityMoniker}}{{else if facilityCode}}{{facilityCode}}',
             '{{else}}{{facNameTruncated}}{{/if}}</span>'
@@ -124,10 +117,9 @@ define([
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-4'
         }),
-        sortType: 'cycle',
-        hoverTip: 'conditions_standardizeddescription'
+        sortType: 'cycle'
     };
-    var summaryColumns = [ProblemName, StatusName, OnsetFormatted , Comments];
+    var summaryColumns = [ProblemName, StatusName, OnsetFormatted, Comments];
     var fullScreenColumns = [ProblemName, StandardizedDescription, AcuityName, StatusName, OnsetFormatted, UpdatedFormatted, ProviderDisplayName, FacilityMoniker, Comments];
 
 
@@ -147,6 +139,30 @@ define([
     }
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+        tileOptions: {
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton'
+                }, {
+                    type: 'editviewbutton',
+                    disableNonLocal: true,
+                    shouldShow: function() {
+                        return ADK.UserService.hasPermission('edit-condition-problem') &&
+                            ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
+                    }
+                }, {
+                    type: 'crsbutton'
+                }, {
+                    type: 'associatedworkspace'
+                }]
+            },
+            primaryAction: {
+                enabled: true
+            }
+        },
         className: '',
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
@@ -169,7 +185,7 @@ define([
             dataGridOptions.toolbarOptions = {
                 buttonTypes: ['infobutton', 'detailsviewbutton']
             };
-            if (ADK.UserService.hasPermission('edit-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('edit-condition-problem') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 dataGridOptions.toolbarOptions.buttonTypes.push('editviewbutton');
                 dataGridOptions.toolbarOptions.disableNonLocal = true;
             }
@@ -209,6 +225,11 @@ define([
             dataGridOptions.collection.comparator = comparator;
 
             this.listenTo(problemChannel, 'detailView', function(channelObject) {
+                if (channelObject.collection !== this.collection) {
+                    // Testers like to stick two of the same applet on the screen at once
+                    return;
+                }
+
                 var model = channelObject.model;
                 model.attributes.exposure = self.exposure;
                 var view = new ModalView({
@@ -216,8 +237,15 @@ define([
                     collection: dataGridOptions.collection
                 });
 
-                var modalOptions;
-                modalOptions = {
+                var $el = channelObject.$el;
+                if (_.get($el, '[0].type') !== 'button') {
+                    var dataRow = channelObject.uid.replace(/\:/g, '-');
+                    $el = this.$('[data-row-instanceid="' + dataRow + '"]');
+                    $el = $el.find('.dropdown--quickmenu > button');
+                }
+
+                var modalOptions = {
+                    triggerElement: $el,
                     'title': Util.getModalTitle(model),
                     'size': 'normal',
                     'headerView': modalHeader.extend({
@@ -236,7 +264,7 @@ define([
                 modal.show();
             });
 
-            if (ADK.UserService.hasPermission('add-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('add-condition-problem') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 dataGridOptions.onClickAdd = function(e) {
                     e.preventDefault();
                     onAddProblems();
@@ -315,9 +343,6 @@ define([
         var fetchOptions = {
             resourceTitle: 'patient-record-problem',
             pageable: false,
-            criteria: {
-                filter: 'ne(removed, true)'
-            },
             cache: true,
             viewModel: {}
         };
@@ -362,7 +387,7 @@ define([
         label: 'Problem',
         onClick: onAddProblems,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-condition-problem');
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-condition-problem');
         }
     });
 

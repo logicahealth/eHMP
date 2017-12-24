@@ -47,8 +47,8 @@ describe "Test cdsdashboard" do
     response = HTTParty.get(
       "#{url}/protected", 
       :basic_auth => {
-          :username =>  'REDACTED',
-          :password => 'REDACTED'
+          :username =>  'USER  ',
+          :password => 'PW    '
       },
       :query => {}, 
       :headers => {
@@ -57,7 +57,7 @@ describe "Test cdsdashboard" do
       }
     )
     expect(response.code).to eq(200)
-    expect(response.parsed_response).to eq('Hey there, FuzzyB. You know the secret!')
+    expect(response.parsed_response).to eq('Hey there, USER  . You know the PW     ')
   end
 
 end

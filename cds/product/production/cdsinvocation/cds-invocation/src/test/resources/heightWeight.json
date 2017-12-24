@@ -5,7 +5,7 @@
   "link": [
     {
       "relation": "self",
-      "url": "http://IP      /fhir/patient/9E7A:149/observation?code=8302-2,29463-7&amp;_sort:dsc=date&amp;_count=1&amp;_tag=vital-signs"
+      "url": "http://IP      /fhir/patient/SITE:149/observation?code=8302-2,29463-7&amp;_sort:dsc=date&amp;_count=1&amp;_tag=vital-signs"
     }
   ],
   "total": 54,
@@ -43,7 +43,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:12521"
+            "value": "urn:va:vital:SITE:149:12521"
           }
         ],
         "subject": {
@@ -103,7 +103,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:12522"
+            "value": "urn:va:vital:SITE:149:12522"
           }
         ],
         "subject": {
@@ -163,7 +163,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:13455"
+            "value": "urn:va:vital:SITE:149:13455"
           }
         ],
         "subject": {
@@ -223,7 +223,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:13456"
+            "value": "urn:va:vital:SITE:149:13456"
           }
         ],
         "subject": {
@@ -283,7 +283,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:15519"
+            "value": "urn:va:vital:SITE:149:15519"
           }
         ],
         "subject": {
@@ -343,7 +343,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:15882"
+            "value": "urn:va:vital:SITE:149:15882"
           }
         ],
         "subject": {
@@ -403,7 +403,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:16245"
+            "value": "urn:va:vital:SITE:149:16245"
           }
         ],
         "subject": {
@@ -463,7 +463,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:16634"
+            "value": "urn:va:vital:SITE:149:16634"
           }
         ],
         "subject": {
@@ -523,7 +523,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:16635"
+            "value": "urn:va:vital:SITE:149:16635"
           }
         ],
         "subject": {
@@ -583,7 +583,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:17341"
+            "value": "urn:va:vital:SITE:149:17341"
           }
         ],
         "subject": {
@@ -643,7 +643,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:17342"
+            "value": "urn:va:vital:SITE:149:17342"
           }
         ],
         "subject": {
@@ -703,7 +703,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:18553"
+            "value": "urn:va:vital:SITE:149:18553"
           }
         ],
         "subject": {
@@ -763,7 +763,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:18554"
+            "value": "urn:va:vital:SITE:149:18554"
           }
         ],
         "subject": {
@@ -823,7 +823,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:19260"
+            "value": "urn:va:vital:SITE:149:19260"
           }
         ],
         "subject": {
@@ -883,7 +883,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:19261"
+            "value": "urn:va:vital:SITE:149:19261"
           }
         ],
         "subject": {
@@ -943,7 +943,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:19967"
+            "value": "urn:va:vital:SITE:149:19967"
           }
         ],
         "subject": {
@@ -1003,7 +1003,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:19968"
+            "value": "urn:va:vital:SITE:149:19968"
           }
         ],
         "subject": {
@@ -1063,7 +1063,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:20675"
+            "value": "urn:va:vital:SITE:149:20675"
           }
         ],
         "subject": {
@@ -1123,7 +1123,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:21382"
+            "value": "urn:va:vital:SITE:149:21382"
           }
         ],
         "subject": {
@@ -1183,7 +1183,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:22095"
+            "value": "urn:va:vital:SITE:149:22095"
           }
         ],
         "subject": {
@@ -1243,7 +1243,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:22096"
+            "value": "urn:va:vital:SITE:149:22096"
           }
         ],
         "subject": {
@@ -1303,7 +1303,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:22890"
+            "value": "urn:va:vital:SITE:149:22890"
           }
         ],
         "subject": {
@@ -1363,7 +1363,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:23490"
+            "value": "urn:va:vital:SITE:149:23490"
           }
         ],
         "subject": {
@@ -1423,7 +1423,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:2357"
+            "value": "urn:va:vital:SITE:149:2357"
           }
         ],
         "subject": {
@@ -1483,7 +1483,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:4538"
+            "value": "urn:va:vital:SITE:149:4538"
           }
         ],
         "subject": {
@@ -1543,7 +1543,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:4539"
+            "value": "urn:va:vital:SITE:149:4539"
           }
         ],
         "subject": {
@@ -1603,7 +1603,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:149:8780"
+            "value": "urn:va:vital:SITE:149:8780"
           }
         ],
         "subject": {
@@ -1663,7 +1663,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:12521"
+            "value": "urn:va:vital:SITE:149:12521"
           }
         ],
         "subject": {
@@ -1723,7 +1723,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:12522"
+            "value": "urn:va:vital:SITE:149:12522"
           }
         ],
         "subject": {
@@ -1783,7 +1783,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:13455"
+            "value": "urn:va:vital:SITE:149:13455"
           }
         ],
         "subject": {
@@ -1843,7 +1843,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:13456"
+            "value": "urn:va:vital:SITE:149:13456"
           }
         ],
         "subject": {
@@ -1903,7 +1903,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:15519"
+            "value": "urn:va:vital:SITE:149:15519"
           }
         ],
         "subject": {
@@ -1963,7 +1963,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:15882"
+            "value": "urn:va:vital:SITE:149:15882"
           }
         ],
         "subject": {
@@ -2023,7 +2023,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:16245"
+            "value": "urn:va:vital:SITE:149:16245"
           }
         ],
         "subject": {
@@ -2083,7 +2083,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:16634"
+            "value": "urn:va:vital:SITE:149:16634"
           }
         ],
         "subject": {
@@ -2143,7 +2143,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:16635"
+            "value": "urn:va:vital:SITE:149:16635"
           }
         ],
         "subject": {
@@ -2203,7 +2203,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:17341"
+            "value": "urn:va:vital:SITE:149:17341"
           }
         ],
         "subject": {
@@ -2263,7 +2263,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:17342"
+            "value": "urn:va:vital:SITE:149:17342"
           }
         ],
         "subject": {
@@ -2323,7 +2323,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:18553"
+            "value": "urn:va:vital:SITE:149:18553"
           }
         ],
         "subject": {
@@ -2383,7 +2383,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:18554"
+            "value": "urn:va:vital:SITE:149:18554"
           }
         ],
         "subject": {
@@ -2443,7 +2443,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:19260"
+            "value": "urn:va:vital:SITE:149:19260"
           }
         ],
         "subject": {
@@ -2503,7 +2503,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:19261"
+            "value": "urn:va:vital:SITE:149:19261"
           }
         ],
         "subject": {
@@ -2563,7 +2563,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:19967"
+            "value": "urn:va:vital:SITE:149:19967"
           }
         ],
         "subject": {
@@ -2623,7 +2623,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:19968"
+            "value": "urn:va:vital:SITE:149:19968"
           }
         ],
         "subject": {
@@ -2683,7 +2683,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:20675"
+            "value": "urn:va:vital:SITE:149:20675"
           }
         ],
         "subject": {
@@ -2743,7 +2743,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:21382"
+            "value": "urn:va:vital:SITE:149:21382"
           }
         ],
         "subject": {
@@ -2803,7 +2803,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:22095"
+            "value": "urn:va:vital:SITE:149:22095"
           }
         ],
         "subject": {
@@ -2863,7 +2863,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:22096"
+            "value": "urn:va:vital:SITE:149:22096"
           }
         ],
         "subject": {
@@ -2923,7 +2923,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:22890"
+            "value": "urn:va:vital:SITE:149:22890"
           }
         ],
         "subject": {
@@ -2983,7 +2983,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:23490"
+            "value": "urn:va:vital:SITE:149:23490"
           }
         ],
         "subject": {
@@ -3043,7 +3043,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:2357"
+            "value": "urn:va:vital:SITE:149:2357"
           }
         ],
         "subject": {
@@ -3103,7 +3103,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:4538"
+            "value": "urn:va:vital:SITE:149:4538"
           }
         ],
         "subject": {
@@ -3163,7 +3163,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:4539"
+            "value": "urn:va:vital:SITE:149:4539"
           }
         ],
         "subject": {
@@ -3223,7 +3223,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:C877:149:8780"
+            "value": "urn:va:vital:SITE:149:8780"
           }
         ],
         "subject": {

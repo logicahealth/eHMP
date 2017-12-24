@@ -7,7 +7,7 @@ Feature: F111  Normalization of Problems Data
 @terminology_problems @VPR
 Scenario: An authorized user can access VA Problem Lists and see standardized SNOMED CT values when defined
 	Given a patient with "problem lists" in multiple VistAs
-	And a patient with pid "10110V004877" has been synced through VX-Sync API for "9E7A" site(s)
+	And a patient with pid "10110V004877" has been synced through VX-Sync API for "SITE" site(s)
   	When the client requests "problem list" for the patient "10110V004877" in VPR format 
   	Then the VPR results contain "problem lists" terminology from "(ICD-9 to SNOMED CT (BOTH))"
   	  | field         | value                                                      |
@@ -130,5 +130,5 @@ Scenario: An authorized user can access DoD Problem List and see standardized SN
       
 #TestNote: 
 #	* We could not test problems in FHIR format because it's not available through FHIR.
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
 	 

@@ -10,7 +10,7 @@ var orderTransformedRecord = {
         'name': 'VEHU,SIXTYONE',
         'role': 'S',
         'signedDateTime': 200005210954,
-        'uid': 'urn:va:user:9E7A:20069'
+        'uid': 'urn:va:user:SITE:20069'
     }],
     'content': 'CARDIOLOGY Cons Consultant\'s Choice\r\n',
     'displayGroup': 'CSLT',
@@ -21,17 +21,17 @@ var orderTransformedRecord = {
     'lastUpdateTime': '20000521095400',
     'localId': '12360',
     'locationName': 'CARDIOLOGY',
-    'locationUid': 'urn:va:location:9E7A:195',
+    'locationUid': 'urn:va:location:SITE:195',
     'name': 'CARDIOLOGY',
     'oiCode': 'urn:va:oi:85',
     'oiName': 'CARDIOLOGY',
     'oiPackageRef': '4;99CON',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'providerDisplayName': 'Vehu,Sixtyone',
     'providerName': 'VEHU,SIXTYONE',
-    'providerUid': 'urn:va:user:9E7A:20069',
+    'providerUid': 'urn:va:user:SITE:20069',
     'results': [{
-        'uid': 'urn:va:consult:9E7A:3:315'
+        'uid': 'urn:va:consult:SITE:3:315'
     }],
     'service': 'GMRC',
     'stampTime': '20000521095400',
@@ -41,7 +41,7 @@ var orderTransformedRecord = {
     'statusVuid': 'urn:va:vuid:4501088',
     'stop': '200712311252',
     'summary': 'CARDIOLOGY Cons Consultant\'s Choice\r\n',
-    'uid': 'urn:va:order:9E7A:3:12360'
+    'uid': 'urn:va:order:SITE:3:12360'
 };
 
 var orderRecord = {
@@ -49,7 +49,7 @@ var orderRecord = {
         'name': 'VEHU,SIXTYONE',
         'role': 'S',
         'signedDateTime': 200005210954,
-        'uid': 'urn:va:user:9E7A:20069'
+        'uid': 'urn:va:user:SITE:20069'
     }],
     'content': 'CARDIOLOGY Cons Consultant\'s Choice\r\n',
     'displayGroup': 'CSLT',
@@ -59,16 +59,16 @@ var orderRecord = {
     'lastUpdateTime': 20000521095400,
     'localId': '12360',
     'locationName': 'CARDIOLOGY',
-    'locationUid': 'urn:va:location:9E7A:195',
+    'locationUid': 'urn:va:location:SITE:195',
     'name': 'CARDIOLOGY',
     'oiCode': 'urn:va:oi:85',
     'oiName': 'CARDIOLOGY',
     'oiPackageRef': '4;99CON',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'providerName': 'VEHU,SIXTYONE',
-    'providerUid': 'urn:va:user:9E7A:20069',
+    'providerUid': 'urn:va:user:SITE:20069',
     'results': [{
-        'uid': 'urn:va:consult:9E7A:3:315'
+        'uid': 'urn:va:consult:SITE:3:315'
     }],
     'service': 'GMRC',
     'stampTime': 20000521095400,
@@ -77,7 +77,7 @@ var orderRecord = {
     'statusName': 'COMPLETE',
     'statusVuid': 'urn:va:vuid:4501088',
     'stop': 200712311252,
-    'uid': 'urn:va:order:9E7A:3:12360'
+    'uid': 'urn:va:order:SITE:3:12360'
 };
 
 var removedRecord = {

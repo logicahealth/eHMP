@@ -17,7 +17,7 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var unenrichedPovRecord = {
     'encounterName': 'PRIMARY CARE May 21, 2000',
-    'encounterUid': 'urn:va:visit:9E7A:3:2462',
+    'encounterUid': 'urn:va:visit:SITE:3:2462',
     'entered': 20000521115440,
     'facilityCode': 998,
     'facilityName': 'ABILENE (CAA)',
@@ -25,12 +25,12 @@ var unenrichedPovRecord = {
     'lastUpdateTime': 20000521115440,
     'localId': 416,
     'locationName': 'PRIMARY CARE',
-    'locationUid': 'urn:va:location:9E7A:32',
+    'locationUid': 'urn:va:location:SITE:32',
     'name': 'DENTAL CARIES',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': 20000521115440,
     'type': 'P',
-    'uid': 'urn:va:pov:9E7A:3:416'
+    'uid': 'urn:va:pov:SITE:3:416'
 };
 
 var unenrichedHdrPovRecord = {

@@ -3,7 +3,7 @@
     <div class="container-fluid {{#if filterCacheCount}} left-margin-sm {{else}} left-margin-lg  {{/if}}">
         {{#if subGroupResult}}
             <div class="row">
-                <div class="col-xs-12">{{{subGroupContent}}}</div>
+                <div class="col-xs-12">{{subGroupContent}}</div>
             </div>
         {{/if}}
         {{#if basicResult}}
@@ -15,7 +15,7 @@
                     <div class="col-xs-11">
                         <div class="row">
                             <div class="col-xs-12">
-                                <span><strong>{{{summary}}}</strong></span>
+                                <span><strong>{{highlightText highlightedSummary}}</strong></span>
                             </div>
                             <div class="col-xs-4">
                                 <span>{{datetime}}</span>
@@ -25,22 +25,24 @@
                                     <i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
                                 {{/if}}
                                 {{#if name}}
-                                    <span>{{{name}}}</span>
+                                    <span>{{highlightText name}}</span>
                                 {{/if}}
                                 {{#if problemStatus}}
-                                    <span>{{{problemStatus}}}</span>
+                                    <span>{{highlightText problemStatus}}</span>
                                 {{else}}
-                                    <span>{{{domain}}}</span>
+                                    {{#if useDomain}}
+										<span>{{highlightText domain}}</span>
+									{{/if}}
                                 {{/if}}
                                 <div>
-                                    <span>{{{highlights}}}</span>
+                                    <span>{{highlightText highlights true}}</span>
                                 </div>
                             </div>
                             <div class="col-xs-4">
                                 {{#if vlerDoc}}
-                                    <span>{{{institution}}}</span>
+                                    <span>{{highlightText institution}}</span>
                                 {{else}}
-                                    <span>{{{facility}}}</span>
+                                    <span>{{highlightText facility}}</span>
                                 {{/if}}
                             </div>
                         </div>
@@ -56,22 +58,22 @@
                             <i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
                         {{/if}}
                         {{#if name}}
-                            <span>{{{name}}}</span>
+                            <span>{{highlightText name}}</span>
                         {{/if}}
                         {{#if problemStatus}}
-                            <span>{{{problemStatus}}}</span>
+                            <span>{{highlightText problemStatus}}</span>
                         {{else}}
-                            <span>{{{domain}}}</span>
+                            <span>{{highlightText domain}}</span>
                         {{/if}}
                         <div>
-                            <span>{{{highlights}}}</span>
+                            <span>{{highlightText highlights true}}</span>
                         </div>
                     </div>
                     <div class="col-xs-4">
                         {{#if vlerDoc}}
-                            <span>{{{institution}}}</span>
+                            <span>{{highlightText institution}}</span>
                         {{else}}
-                            <span>{{{facility}}}</span>
+                            <span>{{highlightText facility}}</span>
                         {{/if}}
                     </div>
                 </div>

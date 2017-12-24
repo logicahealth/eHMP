@@ -37,7 +37,7 @@ updated Apr 05, 2016
 |**bootstrap**                                                      |3.3.5              |bootstrap                             |MIT           |_http://getbootstrap.com/getting-started_
 |**bootstrap-timepicker**                                           |0.2.x              |bootstrap-timepicker                  |MIT           |_http://jdewit.github.io/bootstrap-timepicker/_
 |**bootstrap-datepicker**                                           |1.4.x              |bootstrap-datepicker                  |Apache 2.0    |_http://bootstrap-datepicker.readthedocs.org/en/release/_
-|**font-awesome**                                                   |4.3.x              |                                      |MIT           |_http://fortawesome.github.io/Font-Awesome/examples/_
+|**font-awesome**                                                   |4.7.x              |                                      |MIT           |_http://fortawesome.github.io/Font-Awesome/examples/_
 |**backbone**                                                       |1.2.3              |backbone                              |MIT           |_http://backbonejs.org/_
 |**backbone-sorted-collection**                                     |0.3.8              |backbone-sorted-collection            |MIT           |_https://github.com/jmorrell/backbone-sorted-collection_
 |**backbone.radio**                                                 |0.6.0              |backbone.radio                        |MIT           |_https://github.com/marionettejs/backbone.radio_

@@ -13,10 +13,10 @@ Scenario: Client can request orders
 	Then eHMP returns all orders in the results
 	And the results contain data group
       | field        | value                     |
-      | uid          | urn:va:order:9E7A:3:30564 |
+      | uid          | urn:va:order:SITE:3:30564 |
       | oiCode       | urn:va:oi:293             |
       | facilityCode | 500                       |
-      | providerUid  | urn:va:user:9E7A:20364    |
+      | providerUid  | urn:va:user:SITE:20364    |
       | oiPackageRef | 177;99LRT                 |
       | entered      | 20100323105951            |
       | localId      | 30564                     |
@@ -26,7 +26,7 @@ Scenario: Client can request orders
       | kind         | Lab Order                 |
       | statusCode   | urn:va:order-status:pend  |
       | Status       | PENDING                   |
-      | locationUid  | urn:va:location:9E7A:23   |
+      | locationUid  | urn:va:location:SITE:23   |
       | providerName | Labtech,Seventeen         |
       | start        | 201003231059              |
       | Facility     | CAMP MASTER               |

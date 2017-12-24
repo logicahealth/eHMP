@@ -206,4 +206,13 @@ public class SignalData implements java.io.Serializable
       this.authorUid = authorUid;
    }
 
+	@Override
+	public String toString() {
+		return "SignalData [listenerId=" + listenerId + ", message=" + message + ", orderStatusCode=" + orderStatusCode
+				+ ", clinicalObjectUid=" + clinicalObjectUid + ", noResultNotificationDate=" + noResultNotificationDate
+				+ ", pid=" + pid + ", facilityCode=" + facilityCode + ", labTestText=" + labTestText + ", urgency="
+				+ urgency + ", providerUid=" + providerUid + ", referenceId=" + referenceId + ", ehmpState=" + ehmpState
+				+ ", name=" + name + ", authorUid=" + authorUid + "]";
+	}
+
 }

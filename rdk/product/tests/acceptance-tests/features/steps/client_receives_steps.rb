@@ -8,7 +8,7 @@ require 'VerifyJsonRuntimeValue.rb'
 
 class DefaultInitialize
   def site_initialize
-    define_source_site = { 'VISTA' => 'nosource', 'PANORAMA' => /urn:va:.*:9E7A/, 'KODAK' => /urn:va:.*:C877/, 'DOD' => /urn:va:.*:DOD/ }
+    define_source_site = { 'VISTA' => 'nosource', 'PANORAMA' => /urn:va:.*:SITE/, 'KODAK' => /urn:va:.*:SITE/, 'DOD' => /urn:va:.*:DOD/ }
     define_source_site['HDR'] = /urn:va:.*:ABCD/
     return define_source_site
   end

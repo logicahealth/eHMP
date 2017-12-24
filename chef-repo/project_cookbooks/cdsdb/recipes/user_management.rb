@@ -22,8 +22,8 @@ node.normal['mongodb']['users'] = [{
 	  'database' => 'admin'
 	},
 	{
-	  'username' => mongodb_creds["rdk"]["user"],
-	  'password' => mongodb_creds["rdk"]["password"],
+	  'username' => mongodb_creds["fetch_server"]["user"],
+	  'password' => mongodb_creds["fetch_server"]["password"],
 	  'roles' => [{role:"readWrite",db: "_cds_agenda_"},{role:"readWrite",db:"engine"},{role:"readWrite",db:"intent"},{role:"readWrite",db:"metric"},{role:"readWrite",db:"patientlist"},{role:"readWrite",db:"schedule"},{role:"readWrite",db:"work"}],
 	  'database' => 'admin'
 	}]

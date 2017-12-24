@@ -21,9 +21,10 @@ function getDocumentDetail(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing parameter(s) ' + missingParameters.join(', '));
     }
 
-    var query = req.query.query;
-    var group_value = req.query['group.value'];
-    var group_field = req.query['group.field'];
+    var query = solrSimpleClient.escapeQueryChars(req.query.query, true);
+    var group_value = solrSimpleClient.escapeQueryChars(req.query['group.value']);
+    var group_field = solrSimpleClient.escapeQueryChars(req.query['group.field']);
+    var domain = req.query.domain;
 
     /*
      /solr/select?
@@ -36,10 +37,17 @@ function getDocumentDetail(req, res) {
      sort=visit_date_time+desc&
      */
 
-    var grouping = util.format('%s:"%s"', group_field, group_value);
 
+    var grouping = null;
+    if (group_value !== 'undefined') {
+        grouping = util.format('%s:"%s"', group_field, group_value);
+    } else {
+        //DE8275: Domains that are grouped by optional values end up being grouped by the fact that they lack the attribute.
+        //in such case, we set the grouping to a group that does not have the field defined for that domain.
+        grouping = util.format('-%s:[* TO *]', group_field);
+    }
     var patientPIDList = [];
-    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid) {
         patientPIDList.push(pid);
     });
 
@@ -49,8 +57,9 @@ function getDocumentDetail(req, res) {
         'pid:(' + patientPIDList.join(' OR ') + ')',
         grouping
     ];
-    if (group_field === 'local_title') {
-        fq.push('domain: document');
+
+    if(domain){
+        fq.push('domain: '+ domain);
     }
 
     req.logger.debug('document-details.js fq: %j', fq);
@@ -66,6 +75,8 @@ function getDocumentDetail(req, res) {
             'body',
             'subject'
         ],
+        'hl.simple.pre':'{{addTag "',
+        'hl.simple.post': '" "mark" "cpe-search-term-match"}}',
         defType: 'synonym_edismax',
         synonyms: true,
         qs: 4,

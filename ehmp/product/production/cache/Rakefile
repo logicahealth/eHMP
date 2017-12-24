@@ -11,9 +11,9 @@ require File.expand_path('../../tests/knife-helper.rb', File.dirname(__FILE__))
 task :pull_cache, :driver do |t, args|
   puts "INFO: Pulling the cache.dat zip from vista-kodak-#{ENV['JOB_NAME']}"
   key = knife_search_for_key_name("vista-kodak", args[:driver])
-  user = args[:driver] == "aws" ? "DNS     " : "vagrant"
+  user = args[:driver] == "aws" ? "USER    " : "vagrant"
   ip = knife_search_for_ip("vista-kodak")
-
+  puts "Internal IP for Silver is #{ip}"
   mkdir File.expand_path("vista", File.dirname(__FILE__)) unless Dir.exist? File.expand_path("vista", File.dirname(__FILE__))
   tmp_zip_path = "/tmp/vista.zip"
 	ssh = Net::SSH.start( ip, user, :keys => key )
@@ -57,7 +57,7 @@ def upload_artifact(group_id, artifact_id, artifact_ext, version, repository, ar
 	  }
 	)
 	check_artifact_does_not_exist(nexus_remote,coordinates)
-	nexus_remote.push_artifact(coordinates, artifact_path)
+  nexus_remote.push_artifact(coordinates, artifact_path)
 end
 
 def check_artifact_does_not_exist(nexus_remote, coordinates)

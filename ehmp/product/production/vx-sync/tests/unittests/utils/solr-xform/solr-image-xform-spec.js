@@ -33,17 +33,17 @@ describe('solr-image-xform.js', function() {
                 'lastUpdateTime': '19991216142000',
                 'localId': '7008783.8579-1',
                 'locationName': 'RADIOLOGY MAIN FLOOR',
-                'locationUid': 'urn:va:location:9E7A:40',
+                'locationUid': 'urn:va:location:SITE:40',
                 'name': 'KNEE 2 VIEWS',
                 'orderName': 'KNEE 2 VIEWS',
-                'orderUid': 'urn:va:order:9E7A:8:11088',
-                'pid': '9E7A;8',
+                'orderUid': 'urn:va:order:SITE:8:11088',
+                'pid': 'SITE;8',
                 'reason': '',
                 'stampTime': '19991216142000',
                 'statusName': 'WAITING FOR EXAM',
                 'summary': 'RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS',
                 'typeName': 'RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS',
-                'uid': 'urn:va:image:9E7A:8:7008783.8579-1'
+                'uid': 'urn:va:image:SITE:8:7008783.8579-1'
             };
             var solrRecord = xformer(vprRecord, log);
             //console.log(solrRecord);

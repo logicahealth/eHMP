@@ -7,9 +7,9 @@ define([
     var ResourceModel = Backbone.Model.extend({
         initialize: function() {
             this.user = new Backbone.Model({
-                site: '9E7A',
+                site: 'SITE',
                 duz: {
-                    '9E7A': '55555'
+                    'SITE': 'PORT'
                 }
             });
             this.patient = new Backbone.Model({
@@ -28,9 +28,9 @@ define([
     var ResourceCollection = Backbone.Collection.extend({
         initialize: function() {
             this.user = new Backbone.Model({
-                site: '9E7A',
+                site: 'SITE',
                 duz: {
-                    '9E7A': '55555'
+                    'SITE': 'PORT'
                 }
             });
             this.patient = new Backbone.Model({
@@ -81,7 +81,7 @@ define([
     ADK.UserService = {
         getUserSession: function() {
             return new Backbone.Model({
-                site: '9E7A'
+                site: 'SITE'
             });
         }
     };

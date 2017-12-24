@@ -64,7 +64,7 @@ public class MongoDbTest {
 
 	// Commenting the main test case out due to bootstrapping issue. This test
 	// needs to be run after Mongo has been seeded
-	// @Test
+//	@Test
 	public void testConnection() throws CDSDBConnectionException {
 
 		// Definitions are hard coded. A value should always be present

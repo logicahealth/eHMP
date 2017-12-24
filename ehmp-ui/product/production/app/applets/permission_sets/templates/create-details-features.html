@@ -1,0 +1,24 @@
+<div class="auto-overflow-y max-height-md">
+    <table class='table table-bordered'>
+        <caption class='sr-only'>Permissions</caption>
+        <thead>
+        <tr>
+            <th scope='col'> Permissions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#if permissions}}
+            {{#each permissions}}
+                <tr>
+                    <td> {{ this }} </td>
+                </tr>
+            {{/each}}
+
+        {{else}}
+            <tr>
+                <td> None</td>
+            </tr>
+        {{/if}}
+        </tbody>
+    </table>
+</div>

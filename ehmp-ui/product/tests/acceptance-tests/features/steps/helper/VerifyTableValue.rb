@@ -279,7 +279,7 @@ class VerifyTableValue
     format = "%m/%d/%Y"
     date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
 
-    records = TestSupport.driver.find_element(:css, "##{table_id} tbody tr:nth-of-type(1) > td:nth-of-type(1)").text.strip
+    records = TestSupport.driver.find_element(:css, "##{table_id} tbody tr:nth-of-type(1) td:nth-of-type(1)").text.strip
     return false if records == NO_RECORD_FOUND
     for_error_message = reverse_chronilogical ? "is not greater then" : "is not less then"
     driver = TestSupport.driver

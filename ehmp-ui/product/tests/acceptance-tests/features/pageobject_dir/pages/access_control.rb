@@ -1,73 +1,96 @@
+require_relative 'common_modal_elements'
+class PermissionSetDetails < SitePrism::Section
+  element :detail_title, ".popover-title"
+  elements :table_headers, ".popover-content thead th"
+  elements :table_rows, ".popover-content tbody td"
+end
+
+class SelectPermissionsWindow < ModalElements
+  element :noncommon_title, "[id^=main-workflow-label-view]"
+  element :available_sets_label, "fieldset:nth-of-type(1) .available-region div.header"
+  element :available_sets_filter, '#available-Permission-Sets-modifiers-filter-results'
+  elements :available_sets_rows, "fieldset:nth-of-type(1) .available-region [role='listbox'] .table-row"
+  elements :available_sets_names, "fieldset:nth-of-type(1) .available-region [role='listbox'] div.table-cell:nth-of-type(1)"
+  elements :available_sets_details, "fieldset:nth-of-type(1) .available-region [role='listbox'] div.table-cell:nth-of-type(2) button"
+  elements :available_sets_actions, "fieldset:nth-of-type(1) .available-region [role='listbox'] div.table-cell:nth-of-type(3) button"
+  
+  element :selected_sets_label, "fieldset:nth-of-type(1) .selected-region div.header"
+  elements :selected_sets_rows, "fieldset:nth-of-type(1) .selected-region .body .table-row:not(.all-border-no)"
+  elements :selected_sets_names, "fieldset:nth-of-type(1) .selected-region .body div.table-cell:nth-of-type(1)"
+  elements :selected_sets_details, "fieldset:nth-of-type(1) .selected-region .body div.table-cell:nth-of-type(2) button"
+  elements :selected_sets_actions, "fieldset:nth-of-type(1) .selected-region .body div.table-cell:nth-of-type(3) button"
+  element :total_selected_sets, "fieldset:nth-of-type(1) .total-selected-region span"
+
+  element :available_indperm_label, "fieldset:nth-of-type(2) .available-region div.header"
+  element :available_indperm_filter, '#available-Additional-Individual-Permissions-modifiers-filter-results'
+  elements :available_indperm_rows, "fieldset:nth-of-type(2) .available-region [role='listbox'] .table-row"
+  elements :available_indperm_names, "fieldset:nth-of-type(2) .available-region [role='listbox'] div.table-cell:nth-of-type(1)"
+  elements :available_indperm_details, "fieldset:nth-of-type(2) .available-region [role='listbox'] div.table-cell:nth-of-type(2) button"
+  elements :available_indperm_actions, "fieldset:nth-of-type(2) .available-region [role='listbox'] div.table-cell:nth-of-type(3) button"
+
+  element :selected_indperm_label, "fieldset:nth-of-type(2) .selected-region div.header"
+  element :selected_inderm_empty_message, "fieldset:nth-of-type(2) .selected-region .body .table-row.all-border-no"
+  elements :selected_indperm_rows, "fieldset:nth-of-type(2) .selected-region .body .table-row:not(.all-border-no)"
+  elements :selected_indperm_names, "fieldset:nth-of-type(2) .selected-region .body div.table-cell:nth-of-type(1)"
+  elements :selected_indperm_details, "fieldset:nth-of-type(2) .selected-region .body div.table-cell:nth-of-type(2) button"
+  elements :selected_indperm_actions, "fieldset:nth-of-type(2) .selected-region .body div.table-cell:nth-of-type(3) button"
+  element :total_selected_indperm, "fieldset:nth-of-type(2) .total-selected-region span"
+
+  element :btn_cancel, '.cancel button'
+  element :btn_save, '.save button'
+
+  element :alert_message, '.permissionsSetAlertMessage .alert-content'
+  section :permission_details, PermissionSetDetails, ".popover.fade.in"
+
+  def define_add_remove_role_buttons(role_name)
+    self.class.element :btn_add_role, "[aria-label='Add #{role_name}']"
+    self.class.element :btn_remove_role, ".selected-region [aria-label='Remove #{role_name}']"
+    self.class.element :btn_remove_role_available, ".selected-region [aria-label='Remove #{role_name}']"
+  end
+end
+
+class UserInformationDetailWindow < ModalElements
+  element :full_name, :xpath, "//div[@id='modal-body']/descendant::div[@class='row'][1]/descendant::div[@class='col-xs-6']"
+  element :vista_status, :xpath, "//div[@id='modal-body']/descendant::div[@class='row'][1]/descendant::div[@class='row'][1]"
+  element :ehmp_status, :xpath, "//div[@id='modal-body']/descendant::div[@class='row'][1]/descendant::div[@class='row'][2]"  
+
+  element :first_name_label, :xpath, "//div[@class='row']/div[(string()='First name')]"
+  element :first_name_value, :xpath, "//div[@class='row']/div[(string()='First name')]/following-sibling::div"
+  
+  element :btn_edit_permission_set, ".edit-permission-sets-btn"
+
+  element :alert, ".alert-content"
+
+  def allowable_status
+    %w{ ACTIVE INACTIVE }
+  end
+
+  def build_info_elements(label)
+    self.class.element :label, :xpath, "//div[@class='row']/div[(string()='#{label}')]"
+    self.class.element :value, :xpath, "//div[@class='row']/div[(string()='#{label}')]/following-sibling::div"
+  end
+
+  def build_info_groups(label)
+    self.class.element :label, :xpath, "//div[@class='row']/div[(string()='#{label}')]"
+    self.class.elements :values, :xpath, "//div[@class='row']/div[(string()='#{label}')]/following-sibling::div/div[contains(@class,'row')]"
+  end
+end
+
 class PobAccessControl < SitePrism::Page
   set_url '/#/admin/ehmp-administration'
-  # *****************  All_Form_Elements  ******************* #
-  # *****************  All_Logo_Elements  ******************* #
-  # *****************  All_Field_Elements  ******************* #
   element :fld_access_control_applet, "#current-admin-nav-header-tab"
   element :fld_last_name, "[name='lastNameValue']"
   element :fld_first_name, "[name='firstNameValue']"
   element :fld_error_message, "#errorMessage"
   element :fld_ehmp_check_box, "[name='ehmpCheckboxValue']"
-  element :fld_panel_title_label, "h5.panel-title-label"
-  element :fld_user_information_modal_window, "#mainModalDialog"
-  element :fld_available_permission_filter, "#available-Permission-Sets-modifiers-filter-results"
-  element :fld_popup_detail, "[id^='popover']"
-  element :fld_total_selected_region, "#mainWorkflow .container-fluid .permissionSets .total-selected-region span"
-  element :fld_additional_individual_permissions, ".container-fluid .permissions"
-  element :fld_total_selected_additional_ind_permissions, ".container-fluid .permissions .total-selected-region span"
-  element :fld_available_region, ".available-region"
-  element :fld_selected_region, ".selected-region"
-  element :fld_edit_permission_modal_title, ".modal-title[id^='main-workflow-label-Select-Permissions-']"
-  element :fld_detail_popover_window, ".modal-body .popover.in[id^=popover]"
-  element :fld_error_message_additional_ind, ".container-fluid .permissionsAlert"
-  element :fld_error_message_available_perm, ".workflow-controller .permissionsSetAlert"
+  element :fld_panel_title_label, "[data-appletid='user_management'] h5.panel-title-label"
 
   elements :fld_access_control_modal_labels, ".form-group label"
-  elements :fld_modal_body_rows, ".modal-body .row"
-  element :fld_permission_set_row, :xpath, "//div[@id='modal-body']/descendant::div[contains(string(), 'Permission Sets')]/parent::div[contains(@class, 'row')]"
-  elements :fld_permission_set_items, :xpath, "//div[@id='modal-body']/descendant::div[contains(string(), 'Permission Sets')]/parent::div[contains(@class, 'row')]/descendant::div[contains(@class, 'row')]"
-  elements :fld_user_information_header, "#modal-body div .color-grey-darker"
-  elements :fld_available_permission_sets_data_rows, ".container-fluid .permissionSets .available-region .table-row"
-  elements :fld_selected_permission_sets_data_rows, ".container-fluid .permissionSets .selected-region .table-row"
-  elements :fld_available_additional_permissions_data_rows, ".container-fluid .permissions .available-region .table-row"
-  elements :fld_all_permission_headers, ".col-md-6 div.header.table-row div:nth-child(1)"
-  elements :fld_detail_popup_thead, "[id^=popover] thead th"
-  elements :fld_detail_popup_tbody, "[id^=popover] tbody td"
-
-  # *****************  All_Button_Elements  ******************* #
   element :btn_search, "#search-btn"
   element :btn_access_control_maximize, "[data-appletid='user_management'] .applet-maximize-button"
-  element :btn_edit_role, ".modal-body button:nth-child(1)"
+  element :btn_edit_permission_set, ".edit-permission-sets-btn"
   element :btn_save, "#mainWorkflow .save > button"
-  element :btn_user_info_modal_close, "#modal-close-button"
-  element :btn_edit_perm_modal_close, ".custom-on-close-method > i"
 
-  elements :btn_remove_selected_set, ".selected-region [title^='Press enter to remove']"
-  elements :btn_available_permission_sets_add_remove, ".container-fluid .permissionSets .available-region .auto-overflow-y div:nth-child(3) > button"
-  elements :btn_detail_available_permission_sets, ".container-fluid .permissionSets .available-region .auto-overflow-y > div i"
-  elements :btn_detail_selected_permission_sets, ".container-fluid .permissionSets .selected-region .auto-overflow-y > div i"
-  elements :btn_detail_available_additional_permission_sets, ".container-fluid .permissions .available-region .auto-overflow-y i"
-  elements :btn_selected_permission_sets_add_remove, ".container-fluid .permissionSets .selected-region .auto-overflow-y div:nth-child(3) > button"
-  elements :btn_available_additional_permission_add_remove, ".container-fluid .permissions .available-region .auto-overflow-y div:nth-child(3) > button"
-  elements :btn_selected_additional_permission_add_remove, ".container-fluid .permissions .selected-region .auto-overflow-y div:nth-child(3) > button"
-
-  # *****************  All_table_Elements  ******************* #
   elements :tbl_access_control, "#data-grid-user_management tr"
-    
-  # element :tbl_row_keeley, "[data-row-instanceid='urn-va-user-9E7A-10000000273']"
-  # element :tbl_row_khan, "[data-row-instanceid='urn-va-user-9E7A-10000000272']"
   element :tbl_1st_row_data, "#data-grid-user_management tbody tr:nth-child(1)"
-
-  # *****************  All_Drop_down_Elements  ******************* #
-
-  # *********************  Methods  ***************************#
-
-  def modal_displayed_roles
-    fld_permission_set_items.map { | item | item.text }
-  end
-
-  def define_add_remove_role_buttons(role_name)
-    self.class.element :btn_add_role, "[title='Press enter to add #{role_name}.']"
-    self.class.element :btn_remove_role, ".selected-region [title='Press enter to remove #{role_name}.']"
-  end
 end

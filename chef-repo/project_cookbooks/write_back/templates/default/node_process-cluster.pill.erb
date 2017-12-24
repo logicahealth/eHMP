@@ -1,0 +1,34 @@
+Bluepill.application("<%= @name %>", :log_file => "/var/log/bluepill-<%= @name %>.log") do |app|
+  <% 1.upto(@processes) do |index| %>
+    app.process("<%= @name %>-<%= index %>") do |process|
+      process.working_dir = "<%= @working_directory %>"
+      process.environment = { "NODE_ENV" => "<%= node[:development] ? "development" : "production" %>" }
+      process.environment = {"NODE_TLS_REJECT_UNAUTHORIZED" => "<%= @tls_reject_unauthorized%>"}
+      process.environment = {"UV_THREADPOOL_SIZE" => "<%= @uv_threadpool_size%>"}
+      <% if @apm_deploy %>
+      process.environment = { "COLLECTOR_AGENT_HOST" => "<%= node[:apm][:host] %>" }
+      process.environment = { "COLLECTOR_AGENT_PORT" => "<%= node[:apm][:port] %>" }
+      process.environment = { "CA_APM_PROBENAME" => "<%= node[:write_back][:apm][:probe_name] %>_<%= node[:db_env][:write_back_env].nil? ? 0 : node[:db_env][:write_back_env]%>_<%= @name %>-<%= index %>" }
+      <% end %>
+      <% if @app_dynamics_deploy %>
+      process.environment = { "APPDYNAMICS_AGENT_NODE_NAME" => "<%= node[:write_back][:app_dynamics][:agent_tier_name] %>_<%= node[:db_env][:write_back_env].nil? ? 0 : node[:db_env][:write_back_env]%>_<%= @name %>-<%= index %>" }
+      <% end %>
+      process.pid_file = "<%= @pid_directory %>/<%= @name %>-<%= index %>.pid"
+      process.daemonize = true
+      <% if @dev_deploy %>
+      process.start_command = "/usr/local/bin/node --debug=<%= @debug_port - ( index - 1 ) %> <%= @deploy_path %> <%= "--port #{@port - ( index - 1 )}" if @port %> --config <%= @config_file %>-<%= index %>.json"
+      <% elsif @apm_deploy %>
+      process.start_command = "node_modules/ca-apm-probe/bin/ca-apm-run.js <%= @deploy_path %> <%= "--max-old-space-size=#{@max_old_space}" if @max_old_space %> <%= "--port #{@port - ( index - 1 )}" if @port %> --config <%= @config_file %>-<%= index %>.json"
+      <% else %>
+      process.start_command = "/usr/local/bin/node <%= @deploy_path %> <%= "--max-old-space-size=#{@max_old_space}" if @max_old_space %> <%= "--port #{@port - ( index - 1 )}" if @port %> --config <%= @config_file %>-<%= index %>.json"
+      <% end %>
+      process.stdout = "<%= @log_directory %>/<%= @name %>-<%= index %>_stdout.log"
+      process.stderr = "<%= @log_directory %>/<%= @name %>-<%= index %>_stderr.log"
+      process.uid = "<%= @user %>"
+      process.gid = "<%= @group %>"
+      process.start_grace_time 30.seconds
+      process.stop_grace_time 30.seconds
+      process.restart_grace_time 60.seconds
+    end
+  <% end %>
+end

@@ -1,31 +1,36 @@
-HMPDJFSG ;SLC/KCM,ASMR/RRB,CPC,JD,ASF,CK -- GET for Extract and Freshness Stream;Aug 11, 2016 10:35:07
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;May 15, 2016;Build 11
+HMPDJFSG ;SLC/KCM,ASMR/RRB,CPC,JD,ASF,CK,CPC -- GET for Extract and Freshness Stream;Aug 11, 2016 10:35:07
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;May 15, 2016;Build 13
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; US3907 - Allow for jobId and rootJobId to be retrieved from ^XTMP. JD 1/20/15
  ; DE2818 - SQA findings. Newed ERRCNT in BLDSERR+2. RRB 10/24/2015
  ; DE3869 - Remove the freshness stream entries with undefined DFNs. JD 3/4/16
- ; US18005 - Add passthrough fields 2017-01-12 AFS/CPC 
+ ; US18104 - introduction of allocation mode CPC 1/24/17
+ ; US18005 - Add passthrough fields 2017-01-12 AFS/CPC
  ;
  Q
  ; --- retrieve updates for an HMP server's subscriptions
  ;
 GETSUB(HMPFRSP,ARGS) ; retrieve items from stream
  ; GET from: /hmp/subscription/{hmpSrvId}/{last}?limit={limit}
- ; ARGS("last") : date-seq of last item retrieved (ex. 3131206-27)
+ ; ARGS("lastUpdate") : date-seq of last item retrieved (ex. 3131206-27) - DEPRECATED US18104
  ; ARGS("max")  : maximum number of items to return (default 99999) *S68-JCH*
  ; ARGS("maxSize"): approximate number bytes to return *S68-JCH*
+ ; ARGS("allocationSize") :requested size of allocation
+ ; ARGS("allocationToken") :returned token
+ ; ARGS("allocationStatus") :status of allocation
  ;
  ; HMPFSYS : the id (hash) of the VistA system
  ; HMPFHMP : the name of the HMP server 
  ; HMPFSEQ : final sequence (becomes next LASTSEQ)
  ; HMPFIDX : index to iterate from LASTSEQ to final sequence
  ; HMPFLAST: used to clean up extracts prior to this
- ; HMPFSTRM: the extract/freshness stream (HMPFS~hmpSrvId~fmDate) 
+ ; HMPFSTRM: the freshness stream (HMPFS~hmpSrvId~fmDate) 
  ;
  K ^TMP("HMPF",$J)
  N HMPFSYS,HMPFSTRM,HMPFLAST,HMPFDT,HMPFLIM,HMPFMAX,HMPFSIZE,HMPCLFLG
  N HMPFSEQ,HMPFIDX,HMPFCNT,SNODE,STYPE,HMPFERR,HMPDEL,HMPERR,HMPSTGET,HMPLITEM ;*S68-JCH*,DE3502
+ N HMPALLSZ,HMPALLTK,HMPALLST,HMPRMODE,HMPALEND,HMPALLOQ
  S HMPFRSP=$NA(^TMP("HMPF",$J))
  ;Next line added US6734 - Make sure OPD metastamp data has been completed before fetching.
  I '$$OPD^HMPMETA(HMPFHMP) S @HMPFRSP@(1)="{""warning"":""Staging is not complete yet!""}" Q
@@ -36,38 +41,39 @@ GETSUB(HMPFRSP,ARGS) ; retrieve items from stream
  S HMPFSEQ=+$P($G(ARGS("lastUpdate")),"-",2)
  S HMPSTGET=$G(ARGS("getStatus"))
  S HMPLITEM="" ;DE3502 initialise tracking of last item type
- ;stream goes back a maximum of 8 days
- I HMPFDT<$$FMADD^XLFDT($$DT^XLFDT,-8) S HMPFDT=$$HTFM^XLFDT(+$H-8),HMPFSEQ=0
- S HMPFLAST=HMPFDT_"-"_HMPFSEQ
- D LASTUPD(HMPFHMP,HMPFLAST)
+ S HMPALLOQ="HMPFA~"_HMPFHMP
+ S HMPRMODE=0 I HMPFDT="" S HMPRMODE=1 ;US18104 If in reservation mode last update not passed
+ I HMPFDT'="",$D(^XTMP(HMPALLOQ)) S @HMPFRSP@(.5)=$$APIHDR^HMPDJFS1(0,ARGS("lastUpdate"))_"],""error"":{""message"":""Last update not allowed in multiple mode""}"_"}}" Q  ;US18433
  D SETLIMIT(.ARGS) ; set HMPFLIM, HMPFMAX, HMPFSIZE;*S68-PJH*
  S HMPFLIM=$G(ARGS("max"),99999)
+ D INIT^HMPDJFSR ;set up reservation variables and update lastupdate
  S HMPFSTRM="HMPFS~"_HMPFHMP_"~"_HMPFDT ; stream identifier
+ I HMPRMODE,HMPALLTK="" Q:$D(HMPERR)  D NOOP(HMPFLAST) Q
  I '$D(^XTMP(HMPFSTRM,"job",$J)) S ^XTMP(HMPFSTRM,"job",$J,"start")=$H
  S ^XTMP(HMPFSTRM,"job",$J)=$H ; record connection info
- I '$$VERMATCH(HMPFHMP("ien"),$G(ARGS("extractSchema"))) D NOOP(HMPFLAST) QUIT
+ I '$$VERMATCH^HMPDJFS1(HMPFHMP("ien"),$G(ARGS("extractSchema"))) D NOOP(HMPFLAST) Q
  S HMPFCNT=0,HMPFIDX=HMPFSEQ
- F  D  Q:HMPFSIZE'<HMPFMAX  D NXTSTRM Q:HMPFSTRM=""  ;*S68-JCH*
- . F  S HMPFIDX=$O(^XTMP(HMPFSTRM,HMPFIDX)) Q:'HMPFIDX  D  Q:HMPFCNT'<HMPFLIM
+ ;Loops stream contents and move to the next stream on completion and continue but only if max conditions still unmet
+ ; check size constraint, check number of records constraint and in multi-poller mode (HMPRMODE) check end point for allocation
+ ; after moving to new stream finish if in multi-poller mode as allocation cannot cross streams
+ F  D  Q:HMPFSIZE'<HMPFMAX  Q:HMPFCNT'<HMPFLIM  Q:(HMPRMODE&(+$G(HMPALEND)&(HMPFIDX'<$G(HMPALEND))))  D NXTSTRM Q:HMPFSTRM=""  I HMPRMODE,+$G(HMPALEND) Q:(HMPFIDX=0)  ;*S68-JCH*
+ . F  S HMPFIDX=$O(^XTMP(HMPFSTRM,HMPFIDX)) Q:'HMPFIDX  D  Q:HMPFCNT'<HMPFLIM  I HMPRMODE,+$G(HMPALEND) Q:HMPFIDX'<HMPALEND
  ..  S SNODE=^XTMP(HMPFSTRM,HMPFIDX),STYPE=$P(SNODE,U,2)
  ..  K FILTER("freshnessDateTime")
- ..  ;===JD START===
  ..  K ARGS("hmp-fst") I $P(SNODE,U,4)="@" S ARGS("hmp-fst")=$P(SNODE,U,5)
- ..  ;===JD END===
  ..  S $P(^XTMP(HMPFSTRM,HMPFIDX),U,6)=$P($H,",",2) ;timestamp when sent
  ..  I STYPE="syncNoop" Q  ;skip, patient was unsubscribed
  ..  I STYPE="syncDomain" D DOMITMS Q  ;add multiple extract items
  ..  S HMPFSEQ=HMPFIDX
- ..  I STYPE="syncCommand" D SYNCCMD(SNODE) Q  ; command to middle tier
- ..  I STYPE="syncError" D SYNCERR(SNODE,.HMPERR) Q
+ ..  I STYPE="syncError" D SYNCERR(SNODE,.HMPERR) S HMPLITEM="SYNC" Q  ;US18180 treat errors as sync as they close object
  ..  I STYPE="syncStart" D SYNCSTRT(SNODE) S HMPLITEM="SYNC" Q  ; begin initial extraction ;DE3502
  ..  I STYPE="syncMeta" D SYNCMETA(SNODE) S HMPLITEM="SYNC" Q  ; US11019 - Build replacement syncstart ;DE3502
  ..  I STYPE="syncDone" D SYNCDONE(SNODE) S HMPLITEM="SYNC" Q  ; end of initial extraction ;DE3502
- ..  D FRESHITM(SNODE,.HMPDEL,.HMPERR) S HMPLITEM="FRESH" ; otherwise, freshness item ;DE3502
+ ..  D FRESHITM(SNODE,.HMPDEL,.HMPERR) S:'$D(HMPERR) HMPLITEM="FRESH" ; otherwise, freshness item ;DE3502
  Q:$G(HMPFERR)
  D FINISH(.HMPDEL,.HMPERR)
- ;Check if HMP GLOBAL USAGE MONITOR mail message is required -US8228
- D CHECK^HMPMETA(HMPFHMP) ;US8228
+ ;Check if mail message is required -US8228
+ D CHECK^HMPUTILS(HMPFHMP) ;US8228
  Q
 DOMITMS ;loop thru extract items, OFFSET is last sent
  ;expects HMPFSTRM,HMPFIDX,HMPFHMP,HMPFSYS
@@ -82,23 +88,14 @@ DOMITMS ;loop thru extract items, OFFSET is last sent
  S SECSIZE=$P(X,":",5) ;section size (for operational)
  S BATCH="HMPFX~"_HMPFHMP_"~"_DFN ;extract node in ^XTMP
  S OFFSET=COUNT-(HMPFIDX-HMPFSEQ)
- F  S OFFSET=$O(^XTMP(BATCH,TASK,DOMAIN,OFFSET)) Q:'OFFSET  D  Q:HMPFCNT'<HMPFLIM
- . ;;PJH;;S HMPFCNT=HMPFCNT+1 ;increment the count of returned items
+ F  S OFFSET=$O(^XTMP(BATCH,TASK,DOMAIN,OFFSET)) Q:'OFFSET  D  Q:HMPFCNT'<HMPFLIM  I HMPRMODE,+$G(HMPALEND) Q:HMPFSEQ'<HMPALEND
  . S HMPFSEQ=HMPFSEQ+1 ;increment the sequence number in the stream
  . S HMPFSIZE=$$INCITEM($P(DOMAIN,"#")) ;*S68-JCH*
  . S ITEMNUM=OFFSET+($P(DOMAIN,"#",2)*SECSIZE)
  . M ^TMP("HMPF",$J,HMPFCNT)=^XTMP(BATCH,TASK,DOMAIN,OFFSET)
- . ;S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER(DOMAIN,PIDS,$S('COUNT:0,1:ITEMNUM),+DOMSIZE)
  . S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER(DOMAIN,PIDS,$S('COUNT:0,1:ITEMNUM),+DOMSIZE,1)  ;*S68-JCH*
  . S HMPLITEM="SYNC",HMPCLFLG=0 ;DE3502
  Q
-MIDXTRCT() ; Return true if mid-extract
- ;from GETSUB expects HMPFSTRM,HMPFSEQ
- I 'HMPFSEQ Q 0
- I '$D(^XTMP(HMPFSTRM,HMPFSEQ)) Q 1 ;middle of extract
- I $P(^XTMP(HMPFSTRM,HMPFSEQ),U,2)="syncDomain" Q 1 ;just starting extract
- Q 0
- ;
 NXTSTRM ; Reset variables for next date in this HMP stream
  ; from GETSUB expects HMPFSTRM,HMPFDT,HMPFIDX
  ; HMPFSTRM set to "" if no next stream
@@ -113,8 +110,7 @@ NXTSTRM ; Reset variables for next date in this HMP stream
  . I '+$O(^XTMP(HMPFSTRM,0)) Q  ; nothing here, try next date
  . S HMPFDT=NEXTDT,HMPFIDX=0,HMPFSEQ=0,DONE=1
  Q
- ;
-SETLIMIT(ARGS) ; sets HMPFLIM, HMPFMAX, HMPFSIZE variables  *BEGIN*S68-JCH*
+SETLIMIT(ARGS) ; sets HMPFLIM, HMPFMAX, HMPFSIZE variables *S68-JCH*
  I $G(ARGS("maxSize")) D  Q
  . S HMPFLIM="s"
  . S HMPFMAX=ARGS("maxSize")
@@ -125,40 +121,36 @@ SETLIMIT(ARGS) ; sets HMPFLIM, HMPFMAX, HMPFSIZE variables  *BEGIN*S68-JCH*
  S HMPFMAX=$G(ARGS("max"),99999)
  S HMPFSIZE=0
  Q
- ;
-INCITEM(DOMAIN) ; increment counters as item added *BEGIN*S68-JCH*
+INCITEM(DOMAIN) ; increment counters as item added *S68-JCH*
  S HMPFCNT=HMPFCNT+1
  I HMPFLIM="s" Q HMPFSIZE+$G(HMPFSIZE(DOMAIN),1200)
  I HMPFLIM="c" Q HMPFCNT
  Q 0
- ; *END*S68-JCH*
- ;
 FINISH(HMPDEL,HMPERR) ;reset the FIRST object delimiter, add header and tail
  ; expects HMPFCNT,HMPFDT,HMPFSEQ,HMPFHMP,HMPFLAST
  N CLOSE,I,START,TEXT,UID,X,II
  S X=$G(^TMP("HMPF",$J,1,.3))
  I $E(X,1,2)="}," S X=$E(X,3,$L(X)),^TMP("HMPF",$J,1,.3)=X
- S ^TMP("HMPF",$J,.5)=$$APIHDR(HMPFCNT,HMPFDT_"-"_HMPFSEQ)
+ S ^TMP("HMPF",$J,.5)=$$APIHDR^HMPDJFS1(HMPFCNT,HMPFDT_"-"_HMPFSEQ)
  I $D(HMPERR) D
- .S CLOSE=$S(HMPFCNT:"},",1:""),START=1
+ .S CLOSE=$S(HMPFCNT&($G(HMPLITEM)="SYNC"):"},",HMPFCNT:",",1:""),START=1 ;us18180 don't close if previous was freshness
  .S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)=CLOSE_"{""error"":["
  .S I=0 F  S I=$O(HMPERR(I)) Q:I'>0  D
  ..S TEXT=HMPERR(I)
  ..S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)=$S(START:"",1:",")_TEXT S START=0
- .S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)="]"
+ .S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)="]}" ;US18180 close object
+ .S HMPCLFLG=1 ;US18180 Mark object as closed
  ; operational sync item or patient
  ; Check for closing flag & HMPFCNT and if it doesn't exist add a closing brace, always close array
  S ^TMP("HMPF",$J,HMPFCNT+1)=$S(HMPFCNT&('$G(HMPCLFLG)):"}",1:"")_"]",HMPFCNT=HMPFCNT+1
- ; modified
  I $G(HMPSTGET)="true" D  ; true if "getStatus" argument passed in
  . S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)=",""syncStatii"":[",START=1
  . S I=0 F  S I=$O(^HMP(800000,I)) Q:+I=0  D
- . . I $P($G(^HMP(800000,I,0)),"^",1)=HMPFHMP D
- . . . S II=0 F  S II=$O(^HMP(800000,I,1,II)) Q:+II=0  D
- . . . . S TEXT="{""pid"":"_II_",""status"":"_$P(^HMP(800000,I,1,II,0),"^",2)_"}"
- . . . . S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)=$S(START:"",1:",")_TEXT S START=0
+ .. I $P($G(^HMP(800000,I,0)),"^",1)=HMPFHMP D
+ ... S II=0 F  S II=$O(^HMP(800000,I,1,II)) Q:+II=0  D
+ .... S TEXT="{""pid"":"_II_",""status"":"_$P(^HMP(800000,I,1,II,0),"^",2)_"}"
+ .... S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)=$S(START:"",1:",")_TEXT S START=0
  . S HMPFCNT=HMPFCNT+1,^TMP("HMPF",$J,HMPFCNT)="]"
- ;
  S ^TMP("HMPF",$J,HMPFCNT+1)="}}"
  ; remove any ^XTMP nodes that have been successfully sent based on LAST
  N DATE,SEQ,LASTDT,LASTSEQ,STRM,LSTRM,RSTRM
@@ -169,8 +161,7 @@ FINISH(HMPDEL,HMPERR) ;reset the FIRST object delimiter, add header and tail
  . S SEQ=0 F  S SEQ=$O(^XTMP(STRM,"tidy",SEQ)) Q:'SEQ  Q:(DATE=LASTDT)&(SEQ>LASTSEQ)  D TIDYX(STRM,SEQ)
  Q
 TIDYX(STREAM,SEQ) ; clean up extracts after they have been retrieved
- ; from FINISH
- ;DE6047 make resilient
+ ; from FINISH ;DE6047 make resilient
  N BATCH,DOMAIN,TASK
  Q:$G(STREAM)=""  Q:$G(SEQ)=""
  S BATCH=$G(^XTMP(STREAM,"tidy",SEQ,"batch"))
@@ -182,23 +173,9 @@ TIDYX(STREAM,SEQ) ; clean up extracts after they have been retrieved
  . S C=C+1,TXT(C)=" "  ; blank line following word-processing text, $$NWNTRY^HMPLOG appends to end
  . S J=$$NWNTRY^HMPLOG($$NOW^XLFDT,"M",.TXT)  ; log event as type "missing"
  I BATCH'="" D
- . I DOMAIN="<done>" K ^XTMP(BATCH) Q
+ . I DOMAIN="<done>" I '$O(^XTMP(BATCH,0)) K ^XTMP(BATCH) Q  ;Prevent cleardown if another request already running DE7406
  . I TASK'="",DOMAIN'="" K ^XTMP(BATCH,TASK,DOMAIN)
  K ^XTMP(STREAM,"tidy",SEQ)
- Q
-SYNCCMD(SEQNODE) ; Build syncCommand object and stick in ^TMP
- ; expects: HMPSYS, HMPFCNT
- N DFN,CMD,CMDJSON,ERR
- S DFN=+SEQNODE
- S CMD("command")=$P($P(SEQNODE,U,3),":")
- S CMD("domain")=$P($P(SEQNODE,U,3),":",2)
- S:DFN CMD("pid")=$$PID^HMPDJFS(DFN)
- S CMD("system")=HMPSYS
- D ENCODE^HMPJSON("CMD","CMDJSON","ERR")
- I $D(ERR) S $EC=",UJSON encode error," Q
- S HMPFSIZE=$$INCITEM("syncCommand") ; *S68-JCH*
- M ^TMP("HMPF",$J,HMPFCNT)=CMDJSON
- S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER("syncCommand",$$PIDS^HMPDJFS(DFN),1,1)
  Q
 SYNCSTRT(SEQNODE) ;Build syncStart object with demograhics
  ;expects HMPFSYS, HMPFHMP, HMPFCNT, HMPFSIZE *S68-JCH*
@@ -210,8 +187,7 @@ SYNCSTRT(SEQNODE) ;Build syncStart object with demograhics
  . S FILTER("patientId")=DFN,FILTER("domain")="patient"
  . D GET^HMPDJ(.RSLT,.FILTER)
  . M ^TMP("HMPF",$J,HMPFCNT)=^TMP("HMP",$J,1)
- ; for OPD there is no object, so 4th argument is 0 
- S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER("syncStart",$$PIDS^HMPDJFS(DFN),$S(DFN:1,1:-1),$S(DFN:1,1:-1))
+ S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER("syncStart",$$PIDS^HMPDJFS(DFN),$S(DFN:1,1:-1),$S(DFN:1,1:-1)) ; for OPD there is no object, so 4th argument is 0
  Q
 SYNCDONE(SEQNODE) ; Build syncStatus object and stick in ^TMP
  ;expects: HMPFSYS, HMPFCNT, HMPFHMP, HMPFSIZE  *S68-JCH*
@@ -223,24 +199,19 @@ SYNCDONE(SEQNODE) ; Build syncStatus object and stick in ^TMP
  I DFN S STS("localId")=DFN
  S X="" F  S X=$O(^XTMP(HMPBATCH,0,"count",X)) Q:'$L(X)  D
  . S STS("domainTotals",X)=^XTMP(HMPBATCH,0,"count",X)
- ;===JD START===
  ;If resubscribing a patient, just send demographics
  I DFN'="OPD",$D(^HMP(800000,"AITEM",DFN)) D
  . N HMP99
  . S HMP99=""
- . ;Reset all domain counts to zero except for demographics
- . F  S HMP99=$O(STS("domainTotals",HMP99)) Q:'HMP99  I HMP99'="patient" S STS("domainTotals",HMP99)=0
- ;===JD   END===
+ . F  S HMP99=$O(STS("domainTotals",HMP99)) Q:'HMP99  I HMP99'="patient" S STS("domainTotals",HMP99)=0 ;Reset all domain counts to zero except for demographics
  D ENCODE^HMPJSON("STS","STSJSON","ERR")
  I $D(ERR) S $EC=",UJSON encode error," Q
  S HMPFSIZE=$$INCITEM("syncstatus") ; *S68-JCH*
  M ^TMP("HMPF",$J,HMPFCNT)=STSJSON
  S ^TMP("HMPF",$J,HMPFCNT,.3)=$$WRAPPER("syncStatus",$$PIDS^HMPDJFS(DFN),1,1)
  Q
- ;
 SYNCMETA(SNODE) ;US11019 Build NEW syncStart object
- ;expects HMPFSYS, HMPFHMP, HMPFCNT
- ;need to rebuild SNODE because WRAPPER expects it to fall in
+ ;expects HMPFSYS, HMPFHMP, HMPFCNT ;need to rebuild SNODE because WRAPPER expects it to fall in
  N BATCH,DFN,WRAP,METADOM
  S DFN=$P(SNODE,U,1)
  S METADOM=$P(SNODE,U,3)
@@ -251,7 +222,6 @@ SYNCMETA(SNODE) ;US11019 Build NEW syncStart object
  S ^TMP("HMPF",$J,HMPFCNT,1)="null" ;always null object with this record
  S HMPCLFLG=0 ; DE3502
  Q
- ;
 SYNCERR(SNODE,HMPERR) ;
  N BATCH,CNT,DFN,NUM,OFFSET,PIDS,TASK,TOTAL,X
  S DFN=$P(SNODE,U),X=$P(SNODE,U,3)
@@ -262,23 +232,19 @@ SYNCERR(SNODE,HMPERR) ;
  S NUM=0 F  S NUM=$O(^XTMP(BATCH,TASK,"error",NUM)) Q:NUM'>0  D
  .S CNT=CNT+1 S HMPERR(CNT)=$G(^XTMP(BATCH,TASK,"error",NUM,1))
  Q
- ;
 FRESHITM(SEQNODE,DELETE,ERROR) ;Get freshness item and stick in ^TMP
  ; expects HMPFSYS, HMPFHMP
  N ACT,DFN,DOMAIN,ECNT,FILTER,ID,RSLT,UID,HMP97,HMPI,WRAP,HMPPAT7,HMPPAT8
  S FILTER("noHead")=1
  S DFN=$P(SEQNODE,U),DOMAIN=$P(SEQNODE,U,2),ID=$P(SEQNODE,U,3),ACT=$P(SEQNODE,U,4)
- ;Next 2 IFs added to prevent <UNDEFINED> in LKUP^HMPDJ00. JD - 3/4/16. DE3869
- ;Make sure deletes ('@') are not included.
+ ;Next 2 IFs added to prevent <UNDEF> in LKUP^HMPDJ00. JD - 3/4/16. DE3869
  ;HMPFSTRM and HMPFIDX are defined in the GETSUB section above.
- ;For "pt-select", which is an operational data domain, ID=patient IEN and DFN="OPD"
- ;For ptient domains ID=DFN=patient IEN
+ ;For "pt-select", which is an operational data domain, ID=patient IEN and DFN="OPD". For ptient domains ID=DFN
  ;We want the checks to be for all patient domains and pt-select of the operational data domain
  ;Kill the freshness stream entry with the bad patient IEN
  I ACT'="@",DFN=+DFN,'$D(^DPT(DFN,0)) K ^XTMP(HMPFSTRM,HMPFIDX) Q  ;For patient domains
  I ACT'="@",DOMAIN="pt-select",ID=+ID,'$D(^DPT(ID,0)) K ^XTMP(HMPFSTRM,HMPFIDX) Q
  ;
- ;==JD START
  ;Create a phantom "patient" if visit is the domain
  I DOMAIN="visit" D
  .S HMPPAT7=HMPFIDX_".99",HMPPAT8=^XTMP(HMPFSTRM,HMPFIDX),$P(HMPPAT8,U,2)="patient" ;BL;DE2280
@@ -297,13 +263,13 @@ FRESHITM(SEQNODE,DELETE,ERROR) ;Get freshness item and stick in ^TMP
  . I +DFN>0 D
  ..  S FILTER("patientId")=DFN
  ..  D GET^HMPDJ(.RSLT,.FILTER)
+ I '$D(ACT) S ACT=$P(SEQNODE,U,4)  ;BL;DE7719 ACT becomes undefined
  I ACT'="@",$L($G(^TMP("HMP",$J,"error")))>0 D BLDSERR(DFN,.ERROR)  Q
  I '$D(^TMP("HMP",$J,1)) S ACT="@"
  I ACT="@" D
  . S UID=$$SETUID^HMPUTILS(DOMAIN,$S(+DFN>0:DFN,1:""),ID)
  . S HMP97=UID
  . K ^TMP("HMP",$J) S ^TMP("HMP",$J,1)="" ; Need to dummy this up or it will never get set later
- ;
  ;Add syncstart, data and syncstatus to JSON for unsolicited updates - US4588 & US3682
  I (DOMAIN="pt-select")!(DOMAIN="user")!(DOMAIN["asu-")!(DOMAIN="doc-def")!(DFN=+DFN) D  Q
  .D ADHOC^HMPUTIL1(DOMAIN,.HMPFCNT,DFN)
@@ -317,8 +283,7 @@ FRESHITM(SEQNODE,DELETE,ERROR) ;Get freshness item and stick in ^TMP
  . I HMPLITEM="SYNC" S HMPLITEM="FRESH" I WRAP="," S ^TMP("HMPF",$J,HMPFCNT,.3)="}," Q  ;DE3502 add closing
  . S ^TMP("HMPF",$J,HMPFCNT,.3)=WRAP
  Q
- ;
-BLDSERR(DFN,ERROR) ;Create syncError object in ERRJSON
+BLDSERR(DFN,ERROR,ID,DOMAIN) ;Create syncError object in ERRJSON
  ;expects: HMPBATCH, HMPFSYS, HMPFZTSK
  N COUNT,ERRVAL,ERROBJ,ERR,ERRCNT,ERRMSG,SYNCERR
  M ERRVAL=^TMP("HMP",$J,"error")
@@ -328,16 +293,16 @@ BLDSERR(DFN,ERROR) ;Create syncError object in ERRJSON
  I $D(ERR) S $EC=",UJSON decode error,"
  S ERRMSG=ERROBJ("error","message")
  Q:'$L(ERRMSG)
- S SYNCERR("uid")="urn:va:syncError:"_HMPFSYS_":"_DFN_":FRESHNESS"
- S SYNCERR("collection")=DOMAIN
+ S SYNCERR("uid")="urn:va:"_$S($G(DOMAIN)'="":DOMAIN,1:"syncError")_":"_HMPFSYS_":"_DFN_":"_$S($G(ID)'="":ID,1:"FRESHNESS") ;include proper id if available
+ S SYNCERR("collection")=$G(DOMAIN)
  S SYNCERR("error")=ERRMSG
  D ENCODE^HMPJSON("SYNCERR","ERRJSON","ERR") I $D(ERR) S $EC=",UJSON encode error," Q
  S COUNT=$O(ERROR(""),-1)  ;*BEGIN*S68-JCH*
  S ERRCNT=0 F  S ERRCNT=$O(ERRJSON(ERRCNT)) Q:ERRCNT'>0  D
- .S COUNT=COUNT+1 M ERROR(COUNT)=ERRJSON(COUNT)  ;*END*S68-JCH*
+ . S COUNT=COUNT+1 M ERROR(COUNT)=ERRJSON(ERRCNT)  ;*END*S68-JCH*
  Q
 WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ;return JSON wrapper for each item *S68-JCH*
- ;add object tag if extract total not zero or if total passed as -1
+ ;add object tag if extract total not zero or total passed as -1
  ;seq and total tags only added if non-zero
  ;DOMAIN = "syncStart"_"#"_METADOM if this is being called from syncMeta
  N X,Y,FIRST,THISBTCH,HMPSVERS ;US11019
@@ -364,7 +329,7 @@ WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ;return JSON wrapper for each item *
  . I Y'="" S:'FIRST X=X_"," S X=X_"""jobId"":"""_Y_""""
  . S X=X_"}"
  I '($P(DOMAIN,"#")="syncStart"&(DFN="OPD")) S X=X_",""unsolicitedUpdate"":"_$S($G(FILTER("freshnessDateTime")):"true",1:"false") ;US18245
- I $P(DOMAIN,"#")="syncStart",$O(^XTMP(THISBTCH,0))]"" D  Q X
+ I $P(DOMAIN,"#")="syncStart" D  Q X  ;DE7827 generate metastamp even if no entry
  .;--- Start US3907 ---
  .;Pass JobId and RootJobId back in the response if we were given them
  .;This bridges the gap between Job status and Sync Status (since VistA will be giving the syncStatus)
@@ -374,7 +339,7 @@ WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ;return JSON wrapper for each item *
  .S Y=$G(^XTMP(THISBTCH,"ROOTJOBID"))
  .I Y]"" S X=X_",""rootJobId"":"""_Y_""""
  .;--- End US3907 ---
- .I DFN'="OPD" D METAPT^HMPMETA(SNODE,$S(HMPSVERS:$P(DOMAIN,"#",2),1:"")) Q  ;US11019 extra para ;Collect Patient metastamp data from XTMP - US6734
+ .I DFN'="OPD" D METAPT^HMPMETA(SNODE,$P(DOMAIN,"#",2)) Q  ;US11019 extra para ;Collect Patient metastamp data from XTMP - US6734 - DE7827 piece 2 will have domain or be null
  .D METAOP^HMPMETA(SNODE) ; Collect OPD metastamp data from XTMP - US6734
  ;
  S X=X_","
@@ -383,50 +348,6 @@ WRAPPER(DOMAIN,PIDS,OFFSET,DOMSIZE,FROMXTR) ;return JSON wrapper for each item *
  I $G(DOMSIZE)>-1 S X=X_"""total"":"_DOMSIZE_","
  I $G(OFFSET)>-1 S X=X_"""object"":"
  Q X
- ;
-APIHDR(COUNT,LASTITM) ;return JSON
- ;expects HMPFSYS
- I $P($G(LASTITM),".",2)="99" S LASTITM=$P(LASTITM,".") ;make sure lastUpdate is correct;JD;BL;DE2280
- N X
- S X="{""apiVersion"":1.02,""params"":{""domain"":"""_$$KSP^XUPARAM("WHERE")_""""
- S X=X_",""systemId"":"""_HMPFSYS_"""},""data"":{""updated"":"""_$$HL7NOW^HMPDJ_""""
- S X=X_",""totalItems"":"_COUNT_",""lastUpdate"":"""_LASTITM_""""_$$PROGRESS^HMPDJFS(LASTITM)
- S X=X_",""items"":["
- Q X
 NOOP(LASTITM) ;No-op, don't return any items
- S ^TMP("HMPF",$J,.5)=$$APIHDR(0,LASTITM)_"]}}"
+ S ^TMP("HMPF",$J,.5)=$$APIHDR^HMPDJFS1(0,LASTITM)_"]}}"
  Q
-VERMATCH(HMPIEN,VERSION) ;true if middle tier HMP and VistA version match
- ;versions match, queue any patients waiting for match
- I $P($$GET^XPAR("PKG","HMP JSON SCHEMA"),".")=$P(VERSION,".") D  QUIT 1
- . Q:'$G(^XTMP("HMPFS~"_HMPIEN,"waiting"))  ; no patients awaiting queuing
- . S ^XTMP("HMPFS~"_HMPIEN,"waiting")=0
- . N DOMAINS,BATCH,HMPNAME
- . S HMPNAME=$P(^HMP(800000,HMPIEN,0),U)
- . D PTDOMS^HMPDJFSD(.DOMAINS)
- . S DFN=0 F  S DFN=$O(^XTMP("HMPFS~"_HMPIEN,"waiting",DFN)) Q:'DFN  D
- . . Q:'$D(^HMP(800000,HMPIEN,1,DFN))  ; subscription cancelled while waiting  *S68-JCH*
- . . S BATCH="HMPFX~"_HMPNAME_"~"_DFN
- . . D QUINIT^HMPDJFSP(BATCH,DFN,.DOMAINS)
- . K ^XTMP("HMPFS~"_HMPIEN)
- ;
- ;otherwise, hold things
- D NEWXTMP^HMPDJFS("HMPFS~"_HMPIEN,8,"HMP Awaiting Version Match")
- S ^XTMP("HMPFS~"_HMPIEN,"waiting")=1
- Q 0
- ;
-LASTUPD(HMPSRV,LASTUPD) ;save the last update
- ; TODO: change this to use Fileman call
- N IEN,CURRUPD,REPEAT
- S IEN=$O(^HMP(800000,"B",HMPSRV,0)) Q:'IEN
- Q:LASTUPD["^"
- S CURRUPD=$P(^HMP(800000,IEN,0),"^",2),REPEAT=$P(^HMP(800000,IEN,0),"^",4)
- I LASTUPD=CURRUPD S $P(^HMP(800000,IEN,0),"^",4)=REPEAT+1 QUIT
- S $P(^HMP(800000,IEN,0),"^",2)=LASTUPD,$P(^HMP(800000,IEN,0),"^",4)=0
- Q
-JSONOUT ;Write out JSON in ^TMP
- N X
- S X=$NA(^TMP("HMPF",$J))
- F  S X=$Q(@X) Q:($QS(X,1)'="HMPF")!($QS(X,2)'=$J)  W !,@X
- Q
- ;

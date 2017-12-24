@@ -119,6 +119,12 @@ describe('rdkSend', function() {
         res.rdkSend({ message: 'Hi', status: 303 });
         expect(sentBody).to.eql({ message: 'Hi', status: 200 });
     });
+
+    it('sets res.data to body.data when available', function () {
+        var data = { data: { name: 'Bob' } };
+        res.rdkSend(data);
+        expect(res.data).to.eql(data.data);
+    });
 });
 
 describe('extractSessionId', function() {

@@ -1,6 +1,6 @@
 require 'vistarpc4r'
 
-broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", 9210, "REDACTED", "REDACTED", true)
+broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "USER", "PW", true)
 broker.connect
 broker.setContext('OR CPRS GUI CHART')
 

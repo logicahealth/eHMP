@@ -51,7 +51,54 @@ describe('Patient Record Util ', function() {
     });
 });
 
+describe('patient-record-annotator.getBodyMassStatusCode', function() {
+    var jds;
 
+    beforeEach(function() {
+        jds = {};
+    });
+
+    it('receives both weight and height', function() {
+        var data = [
+            {typeName: 'HEIGHT'},
+            {typeName: 'WEight'}
+        ];
+        _.set(jds, 'data.items', data);
+        var status = patientrecordUtil.getBodyMassStatusCode(jds);
+        expect(status).to.be(patientrecordUtil.BMI_DATA_PRESENT);
+    });
+
+    it('does not receive weight or height', function() {
+        var data = [
+            {typeName: 'apples'},
+            {typeName: 'banana'}
+        ];
+        _.set(jds, 'data.items', data);
+        var status = patientrecordUtil.getBodyMassStatusCode(jds);
+        expect(status).to.be(patientrecordUtil.BMI_NOT_REQUIRED);
+    });
+
+    it('receives weight but not height', function() {
+        var data = [
+            {typeName: 'apples'},
+            {typeName: 'WEIGHT'}
+        ];
+        _.set(jds, 'data.items', data);
+        var status = patientrecordUtil.getBodyMassStatusCode(jds);
+        expect(status).to.be(patientrecordUtil.BMI_MISSING_HEIGHT);
+    });
+
+    it('receives height but not weight', function() {
+        var data = [
+            {typeName: 'apples'},
+            {typeName: 'HEIGHT'}
+        ];
+        _.set(jds, 'data.items', data);
+        var status = patientrecordUtil.getBodyMassStatusCode(jds);
+        expect(status).to.be(patientrecordUtil.BMI_MISSING_WEIGHT);
+    });
+
+});
 
 describe('Patient Record Annotator', function() {
 

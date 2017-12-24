@@ -17,7 +17,7 @@
 				"type": "boolean"
 			},
 			"createdBy": {
-				"description": "User id of creator of the Quick Order (e.g., urn:va:user:9E7A:10000000238)",
+				"description": "User id of creator of the Quick Order (e.g., urn:va:user:SITE:10000000238)",
 				"type": "string"
 			},
 			"formData": {

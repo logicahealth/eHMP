@@ -8,7 +8,7 @@ function check(logger, config, callback) {
     var url = 'http://' + config.jmeadows.defaults.host + ':' + config.jmeadows.defaults.adminPort + '/ping';
 	request(url, function(error, response, body) {
 		if (error) {
-			logger.info('pgd-checker.check() Error attempting to connect to "%s": %s', url, error);
+			logger.error('pgd-checker.check() Error attempting to connect to "%s": %s', url, error);
 			return callback(null, false);
 		}
 

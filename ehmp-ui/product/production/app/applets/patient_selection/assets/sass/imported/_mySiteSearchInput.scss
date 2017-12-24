@@ -1,14 +1,41 @@
 .patient-selection--my-site-search--input {
-	form {
-		min-height: 55px;
-		.help-block {
-			margin-bottom: 0;
-		}
-		.flex-direction-row {
-			margin-top: 10px;
-		}
-		.control.has-error, .control.has-error + .control {
-			margin-top: -10px;
-		}
-	}
+    form {
+        .instructions {
+            color: $pure-white;
+        }
+        min-height: 50px;
+        .help-block {
+            margin-bottom: 0;
+        }
+        .flex-direction-row {
+            margin-top: 20px;
+        }
+        .control.has-error,
+        .control.has-error + .control {
+            margin-top: -20px;
+        }
+        .help-block.error {
+            color: $pure-white;
+        }
+        button[type="submit"] {
+            padding: 1px 8px;
+            width: 30px;
+            font-size: 16px;
+        }
+        .form-group--searchbar {
+            button[type="submit"],
+            .input-group-addon:last-child {
+                -webkit-border-top-right-radius: 20px;
+                border-top-right-radius: 20px;
+                -webkit-border-bottom-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+            }
+            .input-group input.form-control:not(:first-child):not(:last-child) {
+                -webkit-border-top-left-radius: 20px;
+                border-top-left-radius: 20px;
+                -webkit-border-bottom-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+            }
+        }
+    }
 }

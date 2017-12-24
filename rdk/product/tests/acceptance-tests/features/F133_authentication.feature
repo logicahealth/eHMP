@@ -15,10 +15,10 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | lastname    | USER                              |
       | facility    | PANORAMA                          |
       | title       | Clinician                         |
-      | site        | 9E7A                              |
+      | site        | SITE                              |
       Examples:
       | accesscode    | verifycode   | site       | division | contenttype         |
-      | REDACTED      | REDACTED     | 9E7A       | 500      | application/json    |
+      | USER          | PW           | SITE       | 500      | application/json    |
 
   @F133_authentication_api_2 @US2990
   Scenario Outline: Authentication should fail if both CPRS tab settings are false
@@ -29,4 +29,4 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | code         | <code>        |
       Examples:
       | accesscode    | verifycode   | site       | division  | contenttype         | code              |
-      | REDACTED      | REDACTED     | 9E7A       | 500       | application/json    | 100.401.1010      |
+      | USER          | USER  !!     | SITE       | 500       | application/json    | 100.401.1010      |

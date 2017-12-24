@@ -1,8 +1,20 @@
-.radio-inline+.radio-inline {
-    margin-left: 3px;
+.faux-label + fieldset.radio label {
+    font-weight: normal;
 }
-.radio label {
-    padding-right: 3px;
+label.radio-inline {
+    &+.radio-inline {
+        margin-left: 0px;
+    }
+    input[type="radio"] {
+        margin-top: 2px;
+        margin-left: -15px;
+    }
+}
+// Used for both radio control and input control with radio units
+.control {
+    .radio label {
+        padding-left: 18px;
+    }
 }
 .control.radio-control {
     &.radio-col-2 {
@@ -32,9 +44,6 @@
             }
             .radio {
                 float: right;
-                input[type="radio"] {
-                    margin-top: 3px;
-                }
             }
         }
     }

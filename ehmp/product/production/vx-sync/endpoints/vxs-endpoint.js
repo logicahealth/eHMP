@@ -13,14 +13,19 @@ var config = require(global.VX_ROOT + 'worker-config');
 require('http').globalAgent.maxSockets = config.endpointMaxSockets || 5;
 var logUtil = require(global.VX_UTILS + 'log');
 var log = logUtil.initialize(config).get('sync-endpoint');
+if (config.appDynamicsProfile) {
+    log.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+    var appDynamicsProfile = JSON.parse(JSON.stringify(config.appDynamicsProfile));
+    require('appdynamics').profile(appDynamicsProfile); // tier and node names are read from environment variables
+}
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var environment = pollerUtils.buildEnvironment(log, config);
 var registerSyncAPI = require(global.VX_ENDPOINTS + 'sync-request/sync-request-endpoint');
 var registerOPDAPI = require(global.VX_ENDPOINTS + 'operational/operational-sync-endpoint');
 var registerDocAPI = require(global.VX_ENDPOINTS + 'documents/document-retrieval-endpoint');
-var registerErrorAPI = require(global.VX_ENDPOINTS + 'error-handling/error-endpoint');
 var registerAMEAPI = require(global.VX_ENDPOINTS + 'activity-management/activity-management-endpoint');
 var registerClinicalObjectAPI = require(global.VX_ENDPOINTS + 'clinical-object/clinical-object-endpoint');
+const registerVlerDasNotification = require(global.VX_ENDPOINTS + 'vler-das-notification/vler-das-notification-endpoint');
 
 process.on('uncaughtException', function(err){
     console.log(err);
@@ -36,9 +41,9 @@ var app = require('express')().use(bodyParser.json())
 registerSyncAPI(log, config, environment, app);
 registerDocAPI(log,config,environment, app);
 registerOPDAPI(log,config,environment, app);
-registerErrorAPI(log,config,environment, app);
 registerAMEAPI(log, config, environment, app);
 registerClinicalObjectAPI(log, config, environment, app);
+registerVlerDasNotification(log, config, environment, app);
 app.get('/ping', function(req, res) {
         res.send('ACK');
     });

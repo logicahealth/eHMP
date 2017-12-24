@@ -30,10 +30,22 @@ define([
         emptyView: Backbone.Marionette.ItemView.extend({
             template: _.template('<div class="empty-gist-list"><p class="color-grey-darkest" role="gridcell">No Records Found</p></div>'),
             attributes: {
-                "aria-live":"assertive",
-                "role":"row"
+                "aria-live": "assertive",
+                "role": "row"
             }
         }),
+        behaviors: {
+            Tooltip: {},
+            QuickTile: {
+                rowAttributes: {
+                    role: 'gridcell'
+                },
+                headerAttributes: {
+                    'role': 'gridcell',
+                    'aria-label': 'More Options',
+                }
+            }
+        },
         eventString: function() {
             return [
                 'focusin.' + this.cid,
@@ -64,32 +76,37 @@ define([
             }
         },
         childEvents: {
-            'before:showtoolbar': function(e) {
-                this.hidePopovers();
-            },
-            'after:showtoolbar': function(e, view) {
-                this.activeToolbar = view;
-            },
-            'after:hidetoolbar': function(e) {
-                this.activeToolbar = '';
-                this.hidePopovers();
-            },
             //reopens toolbar if open when repositioned
             'after:dragstart': function(e) {
                 if (this.activeToolbar) {
                     this.sortItemModel = e.model;
                 }
             },
+            'start:drag': function(child) {
+                this.childInDrag = child;
+            },
+
+            'end:drag': function(child, startIndex, endIndex) {
+                this.childInDrag = null;
+
+                var reorder = {
+                    oldIndex: startIndex,
+                    newIndex: endIndex,
+                    listElement: this.$('.gist-item-list')
+                };
+
+                this.reorderRows(null, reorder);
+
+                if (this.sortItemModel) {
+                    this.children.findByModel(this.sortItemModel).showToolbar();
+                }
+
+            },
+
             'after:drop': function(e) {
                 if (this.sortItemModel) {
                     this.children.findByModel(this.sortItemModel).showToolbar();
                 }
-            },
-            'toggle:quicklook': function(e) {
-                var el = e.ui.popoverEl;
-                this.setDocHandler();
-                Messaging.getChannel('toolbar').trigger('close:quicklooks', el);
-                el.popup('toggle');
             }
         },
         onAddChild: function(child) {
@@ -125,7 +142,7 @@ define([
             });
 
             this.listenTo(this.collection, 'fetch:success', function(collection) {
-                if(self.manualOrder){
+                if (self.manualOrder) {
                     // Reapply tile sorting
                     self.applyTileSorting(false);
                 }
@@ -155,11 +172,8 @@ define([
                 this.addManualOrder();
             }
 
-
-
             if (this.appletOptions.enableTileSorting) {
                 this.$('.gist-item-list').append('<div class="placeholder hidden"/>');
-                this.registerPlaceholderListeners();
 
                 // It took a while to figure out what this does, so I am documenting it for future readers.
                 // This controls the scroll speed of the manual sort.
@@ -186,7 +200,7 @@ define([
                 });
             }
         },
-        applyTileSorting: function(callParentRender){
+        applyTileSorting: function(callParentRender) {
             var self = this;
             var sortId = this.options.appletConfig.instanceId + '_' + this.options.appletConfig.id;
 
@@ -200,43 +214,8 @@ define([
                     self.collection.comparator = null;
                 }
 
-                if(callParentRender){
+                if (callParentRender) {
                     Backbone.Marionette.CompositeView.prototype.render.apply(self, arguments);
-                }
-            });
-        },
-        registerPlaceholderListeners: function(){
-            var self = this;
-            this.$('.placeholder').on('dragover', function(e) {
-                e.preventDefault();
-            });
-
-            this.$('.placeholder').on('drop', function(e) {
-                var data = e.originalEvent.dataTransfer.getData('text');
-                var startTileObject = JSON.parse(data);
-
-                var originalAppletId = startTileObject.appletID;
-                if (originalAppletId != self.AppletID)
-                    return;
-
-                var originalIndex = Number(startTileObject.startIndex);
-                //targetIndex = this.$el.index();
-                var targetIndex = $(this).index() - 1;
-                $(this).addClass('hidden');
-
-                if (originalIndex > targetIndex)
-                    targetIndex++;
-
-                var reorder = {
-                    oldIndex: originalIndex,
-                    newIndex: targetIndex,
-                    listElement: self.$('.gist-item-list')
-                };
-
-                self.reorderRows(e, reorder);
-
-                if (self.sortItemModel) {
-                    self.children.findByModel(self.sortItemModel).showToolbar();
                 }
             });
         },
@@ -303,8 +282,8 @@ define([
                     collection.trigger('sort', collection);
                     this.collection.trigger('baseGistView:sortNone', this.collection);
                     this.sortedSR(headerElement, "none");
-                    if(this.manualOrder) {
-                       this.reorder();
+                    if (this.manualOrder) {
+                        this.reorder();
                     }
                 } else if (nextSortOrder === 'manual') {
                     collection.reset(this.manualSortModels, {
@@ -326,19 +305,14 @@ define([
                 parentRow.prepend('<div aria-live="polite" aria-atomic="true" class="sr-only applet-sorting"></div>');
             }
             var ariaRegion = parentRow.find('[aria-live]');
-            parentRow.find('.sort-span').text('Press enter to sort');
             if (dir === "asc") {
-                ariaRegion.text('Sorted ascending. Press enter to sort descending');
-                header.find('.sort-span').text('Sorted ascending. Press enter to sort descending');
+                ariaRegion.text('Sorted ascending.');
             } else if (dir === "desc") {
-                ariaRegion.text('Sorted descending. Press enter to reset sort');
-                header.find('.sort-span').text('Sorted descending. Press enter to reset sort');
+                ariaRegion.text('Sorted descending.');
             } else if (dir == "manual") {
-                ariaRegion.text('Sorted manually. Press enter to sort');
-                header.find('.sort-span').text('Sorted descending. Press enter to sort');
+                ariaRegion.text('Sorted manually.');
             } else {
-                ariaRegion.text('Press enter to sort');
-                header.find('.sort-span').text("Press enter to sort");
+                ariaRegion.text('No sort applied.');
             }
         },
         reorderRows: function(target, reorderObj) {
@@ -359,8 +333,8 @@ define([
             this.manualOrder = true;
             this.$('.table-cell a:first').attr("sortDirection", 'manual');
             this.$('.header').find('[sortArrow=headerDirectionalIndicator]').addClass('hide');
-            this.$('.table-cell:first div').append('<span class="tilesort-remove-sort">/Manual ' +
-                '<button class="btn btn-icon btn-sm" data-event="tilesort_remove-sort" title="Press enter to clear your manual sort">' +
+            this.$('.table-cell:first a').append('<span class="tilesort-remove-sort">/Manual ' +
+                '<button class="btn btn-icon btn-sm" data-event="tilesort_remove-sort" title="Clear your manual sort">' +
                 '<i class="fa fa-times-circle"></i></button></span>');
         },
         removeManualOrder: function() {

@@ -18,7 +18,7 @@ var mockData = {
     '21EC2020-3AEA-4069-A2DD-CCCCCCCCCCCC': [
         'ABCD;3',
         'WXYZ;6',
-        '9E7A;42'
+        'SITE;42'
     ],
     'identifierToJpidMap': {}
 };

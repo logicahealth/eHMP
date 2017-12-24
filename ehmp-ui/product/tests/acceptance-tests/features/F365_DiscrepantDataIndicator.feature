@@ -5,7 +5,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 # POC: Team Saturn
 @F365-4.1_DiscrepantDataOutPatientKodak @US4456 @US5587 @US5078 @DE1309 @DE1545 @DE2154
 	Scenario: Discrepancy icon in demographic drop down for Outpatient in Kodak
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,patient"
 	And Cover Sheet is active
@@ -22,7 +22,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-4.2_DiscrepantDataInPatientKodak @US4456 @US5587 @US5078 @DE1309 @DE1601 @DE2154
 	Scenario: Discrepancy icon in demographic drop down for Inpatient in Kodak
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "Twentythree,inpatient"
 	And Cover Sheet is active

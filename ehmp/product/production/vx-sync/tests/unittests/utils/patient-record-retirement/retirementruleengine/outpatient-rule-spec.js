@@ -28,7 +28,7 @@ describe('outpatient-rule', function() {
     it('Normal path: all patients are outpatient ', function() {
         var done = false;
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             'lastAccessed': currentDate
         }, {
@@ -68,7 +68,7 @@ describe('outpatient-rule', function() {
             }
         };
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             inpatient: true,
             'lastAccessed': currentDate,

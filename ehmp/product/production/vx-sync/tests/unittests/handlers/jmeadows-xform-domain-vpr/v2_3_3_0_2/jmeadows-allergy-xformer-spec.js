@@ -1,8 +1,13 @@
 'use strict';
 
 require('../../../../../env-setup');
-var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_3_0_2/jmeadows-allergy-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-allergy-xformer', function() {
     var mockEdipi = '00000099';
@@ -66,7 +71,7 @@ describe('jmeadows-allergy-xformer', function() {
     describe('dodAllergyToVPR', function() {
 
         it('verify transform sample allergy to VPR', function() {
-            var vprData = xformer(sampleDODAllergy, mockEdipi);
+            var vprData = xformer(log, sampleDODAllergy, mockEdipi);
             expect(vprData.products).toEqual(sampleVPRAllergy.products);
             expect(vprData.summary).toEqual(sampleVPRAllergy.summary);
             expect(vprData.codes).toEqual(sampleVPRAllergy.codes);

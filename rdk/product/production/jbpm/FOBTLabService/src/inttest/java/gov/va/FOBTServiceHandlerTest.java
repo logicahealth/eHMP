@@ -8,7 +8,7 @@ public class FOBTServiceHandlerTest {
 	public void validateErrorForBadNotification() {
 		FOBTServiceHandler handler = new FOBTServiceHandler();
 		String result = null;
-		String resourceUrl = FOBTServiceHandler.getRDKurl().concat(FOBTServiceHandler.labResultResource.replace("{pid}", "C877;100022")).concat(FOBTServiceHandler.queryString);
+		String resourceUrl = FOBTServiceHandler.getRDKurl().concat(FOBTServiceHandler.labResultResource.replace("{pid}", "SITE;100022")).concat(FOBTServiceHandler.queryString);
 		result = handler.getRdkResponse(resourceUrl, false);
 	
 		assertFalse(result == null || result.isEmpty());

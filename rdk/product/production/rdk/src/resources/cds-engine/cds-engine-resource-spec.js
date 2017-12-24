@@ -20,64 +20,58 @@ function createTestJson(name, scope) {
         'environment': 'memory: 32,cpus: 8,java_version: 7,webservice: tomcat, webservice_version: 7'
     };
     //making these optional for required parameter testing...
-    if(name) {
+    if (name) {
         testJson.name = name;
     }
     return testJson;
 }
 
-describe('CDS Engine Resource', function () {
+describe('CDS Engine Resource', function() {
+    describe('Test configuration', function() {
+        var resources = cdsengineResource.getResourceConfig(appReference());
+        var interceptors = {
+            audit: true,
+            metrics: true,
+            authentication: true,
+            operationalDataCheck: false,
+            synchronize: false
+        };
 
-    var resources = cdsengineResource.getResourceConfig(appReference());
-    var interceptors = {
-        audit: true,
-        metrics: true,
-        authentication: true,
-        operationalDataCheck: false,
-        synchronize: false
-    };
+        it('has 4 endpoints configured', function() {
+            expect(resources.length).to.equal(4);
+        });
 
-    it('has 4 endpoints configured', function () {
-        expect(resources.length).to.equal(4);
-    });
-
-    it('has correct configuration for CDS Engine get ', function () {
-        var r = resources[0];
-        expect(r.name).to.equal('cds-engine-cds-engine-get');
-        expect(r.path).to.equal('/registry');
-        expect(r.get).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Engine post ', function () {
-        var r = resources[1];
-        expect(r.name).to.equal('cds-engine-cds-engine-post');
-        expect(r.path).to.equal('/registry');
-        expect(r.post).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Engine put ', function () {
-        var r = resources[2];
-        expect(r.name).to.equal('cds-engine-cds-engine-put');
-        expect(r.path).to.equal('/registry');
-        expect(r.put).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-    it('has correct configuration for CDS Engine delete', function () {
-        var r = resources[3];
-        expect(r.name).to.equal('cds-engine-cds-engine-delete');
-        expect(r.path).to.equal('/registry');
-        expect(r.delete).not.to.be.undefined();
-        expect(r.interceptors).to.eql(interceptors);
-    });
-
-    var res = mockReqResUtil.response;
-    beforeEach(function() {
-        sinon.spy(res, 'status');
-        //sinon.spy(res, 'rdkSend');
+        it('has correct configuration for CDS Engine get ', function() {
+            var r = resources[0];
+            expect(r.name).to.equal('cds-engine-cds-engine-get');
+            expect(r.path).to.equal('/registry');
+            expect(r.get).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Engine post ', function() {
+            var r = resources[1];
+            expect(r.name).to.equal('cds-engine-cds-engine-post');
+            expect(r.path).to.equal('/registry');
+            expect(r.post).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Engine put ', function() {
+            var r = resources[2];
+            expect(r.name).to.equal('cds-engine-cds-engine-put');
+            expect(r.path).to.equal('/registry');
+            expect(r.put).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
+        it('has correct configuration for CDS Engine delete', function() {
+            var r = resources[3];
+            expect(r.name).to.equal('cds-engine-cds-engine-delete');
+            expect(r.path).to.equal('/registry');
+            expect(r.delete).not.to.be.undefined();
+            expect(r.interceptors).to.eql(interceptors);
+        });
     });
 
     describe('Engine endpoint HTTP response codes', function() {
-
         //Create the mocked MongoDB functions that are used by the code that we're testing...
         var db = cdsSpecUtil.createMockDb({
             find: function(callback) {
@@ -87,7 +81,7 @@ describe('CDS Engine Resource', function () {
                     }
                 };
             },
-            insert: function(testJson, callback){
+            insert: function(testJson, callback) {
                 var echo = [];
                 testJson._id = 'mongodb12345678';
                 echo.push(testJson);
@@ -102,68 +96,52 @@ describe('CDS Engine Resource', function () {
 
         });
 
-        it('GET responds HTTP Not Found', function() {
+        function buildRes(expectedStatus) {
+            return {
+                status: function(statusCode) {
+                    expect(statusCode === expectedStatus).to.be.true();
+                    return this;
+                },
+                rdkSend: function() {
+                    return this;
+                },
+                send: function() {
+                    return this;
+                },
+                end: function() {
+                    return this;
+                }
+            };
+        }
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+        beforeEach(function() {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            engine.init(appReference());
+        });
 
-            //GET w/name, and return a status 404 (not found)
-            engine.getEngine(mockReqResUtil.createRequestWithParam(null,null), res);
-            expect(res.status.calledWith(rdk.httpstatus.not_found)).to.be.true();
+        it('GET responds HTTP Not Found', function() {
+            engine.getEngine(mockReqResUtil.createRequestWithParam(null, null), buildRes(rdk.httpstatus.not_found));
         });
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
-
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
-                callback(null, db);
-            });
-            engine.init(appReference());
-
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            engine.postEngine(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            engine.postEngine(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
 
         it('POST responds HTTP Created', function() {
-
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
-                callback(null, db);
-            });
-            engine.init(appReference());
-
-            //POST provide required name - this should create one, and return a status 201 (created)
             var testJson = createTestJson('engine1');
-            engine.postEngine(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.created)).to.be.true();
+            engine.postEngine(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.created));
         });
 
         it('PUT responds HTTP Bad Request when required parameter missing', function() {
-
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
-                callback(null, db);
-            });
-            engine.init(appReference());
-
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            engine.putEngine(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            engine.postEngine(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
 
         it('Delete responds HTTP Bad Request when required parameter missing', function() {
-
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
-                callback(null, db);
-            });
-            engine.init(appReference());
-
-            //POST w/o name, required, and returns a 400 (bad request)
             var testJson = createTestJson();
-            engine.deleteEngine(mockReqResUtil.createRequestWithParam(null, testJson), res);
-            expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+            engine.deleteEngine(mockReqResUtil.createRequestWithParam(null, testJson), buildRes(rdk.httpstatus.bad_request));
         });
     });
 

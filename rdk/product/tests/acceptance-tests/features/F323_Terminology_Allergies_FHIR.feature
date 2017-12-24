@@ -8,8 +8,8 @@ Feature: F323  Normalization of Allergens Data
 @terminology_allergies @FHIR @observed_historical
 Scenario: An authorized user can access VA Allergens Data and see standardized UMLS CUI values when defined through FHIR API
  	Given a patient with "allergies" in multiple VistAs
-    And a patient with pid "9E7A;100022" has been synced through the RDK API
-    When the client requests allergies for the patient "9E7A;100022" in FHIR format
+    And a patient with pid "SITE;100022" has been synced through the RDK API
+    When the client requests allergies for the patient "SITE;100022" in FHIR format
     Then a successful response is returned 
     And the FHIR results contain "allergies terminology from (VUID to UMLS CUI (VA), CHCS IEN to UMLS CUI (DoD))"
       | field                                 | value                           |
@@ -40,8 +40,8 @@ Scenario: An authorized user can access VA Allergens Data and see standardized U
 @terminology_allergies @FHIR @observed_historical 
 Scenario: An authorized user can access DoD Allergens Data and see standardized UMLS CUI values when defined through FHIR API
 	Given a patient with "allergies" in multiple VistAs
-	And a patient with pid "9E7A;8" has been synced through the RDK API
-    When the client requests allergies for the patient "9E7A;8" in FHIR format
+	And a patient with pid "SITE;8" has been synced through the RDK API
+    When the client requests allergies for the patient "SITE;8" in FHIR format
 	Then a successful response is returned  
     And the FHIR results contain "allergies terminology from (VUID to UMLS CUI (VA), CHCS IEN to UMLS CUI (DoD))"
       | field                                 | value                          |

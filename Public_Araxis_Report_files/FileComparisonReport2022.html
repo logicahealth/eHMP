@@ -1,0 +1,798 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>2022. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>2022. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:42 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>2022.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\rdk\rdk\product\production\rdk\src\resources\permission-sets</td> 
+     <td>get-user-permission-sets-spec.js</td> 
+     <td>Thu Sep 28 22:12:48 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\rdk\rdk\product\production\rdk\src\resources\permission-sets</td> 
+     <td>get-user-permission-sets-spec.js</td> 
+     <td>Tue Oct 10 18:36:17 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2022.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">6</td> 
+     <td style="text-align: right;">232</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">5</td> 
+     <td style="text-align: right;">10</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2022.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2022.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>2022.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">'use&nbsp;stric</span> <span class="U2">t';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;_&nbsp;=&nbsp;re</span> <span class="U2">quire('lod</span> <span class="U2">ash');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;nock&nbsp;=</span> <span class="U2">&nbsp;require('</span> <span class="U2">nock');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;httpMo</span> <span class="U2">cks&nbsp;=&nbsp;requ</span> <span class="U2">ire('node-</span> <span class="U2">mocks-http</span> <span class="U2">');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;getUse</span> <span class="U2">rPermissio</span> <span class="U2">nSets&nbsp;=&nbsp;re</span> <span class="U2">quire('./g</span> <span class="U2">et-user-pe</span> <span class="U2">rmission-s</span> <span class="U2">ets');</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;logger</span> <span class="U2">&nbsp;=&nbsp;sinon.s</span> <span class="U2">tub(requir</span> <span class="U2">e('bunyan'</span> <span class="U2">).createLo</span> <span class="U2">gger({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;name:&nbsp;</span> <span class="U2">'get-user-</span> <span class="U2">permission</span> <span class="U2">-sets'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">}));</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;subjec</span> <span class="U2">tUser&nbsp;=&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;uid:&nbsp;'</span> <span class="U2">urn:va:use</span> <span class="U2">r:B14H:000</span> <span class="U2">7',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;permis</span> <span class="U2">sionSet:&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ad</span> <span class="U2">ditionalPe</span> <span class="U2">rmissions:</span> <span class="U2">&nbsp;[</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'judo-ch</span> <span class="U2">op',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'can-yod</span> <span class="U2">el'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mo</span> <span class="U2">difiedBy:&nbsp;</span> <span class="U2">'urn:va:us</span> <span class="U2">er:B14H:00</span> <span class="U2">01',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mo</span> <span class="U2">difiedOn:&nbsp;</span> <span class="U2">'2017-03-1</span> <span class="U2">4T13:59:26</span> <span class="U2">Z',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">l:&nbsp;[</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'read-ac</span> <span class="U2">cess',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'sumo-wr</span> <span class="U2">estler',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;'potty-t</span> <span class="U2">rained'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;status</span> <span class="U2">:&nbsp;'active'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;permis</span> <span class="U2">sionSets&nbsp;=</span> <span class="U2">&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;items:</span> <span class="U2">&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'sumo</span> <span class="U2">-wrestler'</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Su</span> <span class="U2">mo&nbsp;Wrestle</span> <span class="U2">r',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'p</span> <span class="U2">ermissions</span> <span class="U2">':&nbsp;['not-t</span> <span class="U2">o-be-trifl</span> <span class="U2">ed-with'],</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'read</span> <span class="U2">-access',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Re</span> <span class="U2">ad&nbsp;Access'</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'p</span> <span class="U2">ermissions</span> <span class="U2">':&nbsp;['i-can</span> <span class="U2">-has-read'</span> <span class="U2">],</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;}]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">var&nbsp;permis</span> <span class="U2">sions&nbsp;=&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;items:</span> <span class="U2">&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'not-</span> <span class="U2">to-be-trif</span> <span class="U2">led-with',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Se</span> <span class="U2">riously,&nbsp;d</span> <span class="U2">on\'t&nbsp;trif</span> <span class="U2">le',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'i-ca</span> <span class="U2">n-has-read</span> <span class="U2">',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Pa</span> <span class="U2">ssed&nbsp;1st&nbsp;g</span> <span class="U2">rade&nbsp;after</span> <span class="U2">&nbsp;3rd&nbsp;try',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'add-</span> <span class="U2">fridge-sti</span> <span class="U2">cker',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Ce</span> <span class="U2">lebrate&nbsp;Po</span> <span class="U2">tty&nbsp;Time&nbsp;w</span> <span class="U2">ith&nbsp;Sticke</span> <span class="U2">rs!',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'u</span> <span class="U2">id':&nbsp;'judo</span> <span class="U2">-chop',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'l</span> <span class="U2">abel':&nbsp;'Ju</span> <span class="U2">do&nbsp;CHOP',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'d</span> <span class="U2">escription</span> <span class="U2">':&nbsp;'Downwa</span> <span class="U2">rd&nbsp;chop&nbsp;to</span> <span class="U2">&nbsp;the&nbsp;upwar</span> <span class="U2">d&nbsp;facing&nbsp;a</span> <span class="U2">ir',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'s</span> <span class="U2">tatus':&nbsp;'a</span> <span class="U2">ctive'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;}]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">describe('</span> <span class="U2">Get&nbsp;User&nbsp;P</span> <span class="U2">ermission&nbsp;</span> <span class="U2">Sets',&nbsp;fun</span> <span class="U2">ction()&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;re</span> <span class="U2">q;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;re</span> <span class="U2">s;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;before</span> <span class="U2">Each(funct</span> <span class="U2">ion(done)&nbsp;</span> <span class="U2">{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">q&nbsp;=&nbsp;httpMo</span> <span class="U2">cks.create</span> <span class="U2">Request({</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;method:&nbsp;</span> <span class="U2">'PUT',</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;url:&nbsp;'re</span> <span class="U2">source/per</span> <span class="U2">mission-se</span> <span class="U2">ts/getUser</span> <span class="U2">Permission</span> <span class="U2">Sets'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">set(req,&nbsp;'</span> <span class="U2">app.config</span> <span class="U2">.generalPu</span> <span class="U2">rposeJdsSe</span> <span class="U2">rver',&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">71</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">baseUrl:&nbsp;'</span> <span class="U2">http://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> <span class="U2">',</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;urlLengt</span> <span class="U2">hLimit:&nbsp;12</span> <span class="U2">0</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">set(req,&nbsp;'</span> <span class="U2">audit',&nbsp;{}</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">set(req,&nbsp;'</span> <span class="U2">logger',&nbsp;l</span> <span class="U2">ogger);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_.</span> <span class="U2">set(req,&nbsp;'</span> <span class="U2">query.uid'</span> <span class="U2">,&nbsp;subjectU</span> <span class="U2">ser.uid);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">s&nbsp;=&nbsp;httpMo</span> <span class="U2">cks.create</span> <span class="U2">Response()</span> <span class="U2">;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">s.rdkSend&nbsp;</span> <span class="U2">=&nbsp;function</span> <span class="U2">&nbsp;(result)&nbsp;</span> <span class="U2">{};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">80</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">nock('http</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> <span class="U2">')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.get('/p</span> <span class="U2">ermset/?fi</span> <span class="U2">lter=eq(%2</span> <span class="U2">2status%22</span> <span class="U2">%2C%22acti</span> <span class="U2">ve%22)')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.reply(2</span> <span class="U2">00,&nbsp;permis</span> <span class="U2">sionSets);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">83</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">nock('http</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> <span class="U2">')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.get('/p</span> <span class="U2">ermission/</span> <span class="U2">?filter=eq</span> <span class="U2">(%22status</span> <span class="U2">%22%2C%22a</span> <span class="U2">ctive%22)'</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.reply(2</span> <span class="U2">00,&nbsp;permis</span> <span class="U2">sions);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do</span> <span class="U2">ne();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;afterE</span> <span class="U2">ach(functi</span> <span class="U2">on(done)&nbsp;{</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no</span> <span class="U2">ck.cleanAl</span> <span class="U2">l();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do</span> <span class="U2">ne();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;it('re</span> <span class="U2">turns&nbsp;the&nbsp;</span> <span class="U2">permission</span> <span class="U2">&nbsp;sets&nbsp;of&nbsp;a</span> <span class="U2">&nbsp;specific&nbsp;</span> <span class="U2">user',&nbsp;fun</span> <span class="U2">ction(done</span> <span class="U2">)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">95</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">nock('http</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> <span class="U2">')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.get('/e</span> <span class="U2">hmpusers/u</span> <span class="U2">rn:va:user</span> <span class="U2">:B14H:0007</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.reply(2</span> <span class="U2">00,&nbsp;subjec</span> <span class="U2">tUser);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">s.rdkSend&nbsp;</span> <span class="U2">=&nbsp;function</span> <span class="U2">(response)</span> <span class="U2">&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(_</span> <span class="U2">.get(respo</span> <span class="U2">nse,&nbsp;'val'</span> <span class="U2">,&nbsp;[]).inde</span> <span class="U2">xOf('sumo-</span> <span class="U2">wrestler')</span> <span class="U2">,&nbsp;'sumo-wr</span> <span class="U2">estler&nbsp;sho</span> <span class="U2">uld&nbsp;be&nbsp;a&nbsp;l</span> <span class="U2">isted&nbsp;valu</span> <span class="U2">e').to.be.</span> <span class="U2">above(-1);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(_</span> <span class="U2">.get(respo</span> <span class="U2">nse,&nbsp;'val'</span> <span class="U2">,&nbsp;[]).inde</span> <span class="U2">xOf('read-</span> <span class="U2">access'),&nbsp;</span> <span class="U2">'read-acce</span> <span class="U2">ss&nbsp;should&nbsp;</span> <span class="U2">be&nbsp;a&nbsp;liste</span> <span class="U2">d&nbsp;value').</span> <span class="U2">to.be.abov</span> <span class="U2">e(-1);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(_</span> <span class="U2">.get(respo</span> <span class="U2">nse,&nbsp;'val'</span> <span class="U2">,&nbsp;[]).inde</span> <span class="U2">xOf('potty</span> <span class="U2">-trained')</span> <span class="U2">,&nbsp;'potty-t</span> <span class="U2">rained&nbsp;is&nbsp;</span> <span class="U2">deprecated</span> <span class="U2">&nbsp;and&nbsp;shoul</span> <span class="U2">d&nbsp;not&nbsp;be&nbsp;l</span> <span class="U2">isted').to</span> <span class="U2">.be(-1);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(_</span> <span class="U2">.get(respo</span> <span class="U2">nse,&nbsp;'addi</span> <span class="U2">tionalPerm</span> <span class="U2">issions',&nbsp;</span> <span class="U2">[]).indexO</span> <span class="U2">f('judo-ch</span> <span class="U2">op'),&nbsp;'jud</span> <span class="U2">o-chop&nbsp;sho</span> <span class="U2">uld&nbsp;be&nbsp;a&nbsp;l</span> <span class="U2">isted&nbsp;addi</span> <span class="U2">tionalPerm</span> <span class="U2">issions').</span> <span class="U2">to.be.abov</span> <span class="U2">e(-1);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(_</span> <span class="U2">.get(respo</span> <span class="U2">nse,&nbsp;'addi</span> <span class="U2">tionalPerm</span> <span class="U2">issions',&nbsp;</span> <span class="U2">[]).indexO</span> <span class="U2">f('can-yod</span> <span class="U2">el'),&nbsp;'can</span> <span class="U2">-yodel&nbsp;is&nbsp;</span> <span class="U2">deprecated</span> <span class="U2">&nbsp;and&nbsp;shoul</span> <span class="U2">d&nbsp;not&nbsp;be&nbsp;l</span> <span class="U2">isted').to</span> <span class="U2">.be(-1);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;done();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ge</span> <span class="U2">tUserPermi</span> <span class="U2">ssionSets(</span> <span class="U2">req,&nbsp;res);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;it('re</span> <span class="U2">turns&nbsp;the&nbsp;</span> <span class="U2">an&nbsp;error&nbsp;m</span> <span class="U2">essage&nbsp;if&nbsp;</span> <span class="U2">a&nbsp;problem&nbsp;</span> <span class="U2">occurs&nbsp;at&nbsp;</span> <span class="U2">the&nbsp;store'</span> <span class="U2">,&nbsp;function</span> <span class="U2">(done)&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">111</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">nock('http</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> <span class="U2">')</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.get('/e</span> <span class="U2">hmpusers/u</span> <span class="U2">rn:va:user</span> <span class="U2">:B14H:0007</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;.reply(4</span> <span class="U2">04,&nbsp;new&nbsp;Er</span> <span class="U2">ror('Nothi</span> <span class="U2">ng&nbsp;there&nbsp;a</span> <span class="U2">t&nbsp;this&nbsp;add</span> <span class="U2">ress'));</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">s.rdkSend&nbsp;</span> <span class="U2">=&nbsp;function</span> <span class="U2">(response)</span> <span class="U2">&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(r</span> <span class="U2">esponse,&nbsp;'</span> <span class="U2">The&nbsp;respon</span> <span class="U2">se&nbsp;should&nbsp;</span> <span class="U2">have&nbsp;an&nbsp;Er</span> <span class="U2">ror&nbsp;messag</span> <span class="U2">e').to.mat</span> <span class="U2">ch(/Error/</span> <span class="U2">);</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;done();</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ge</span> <span class="U2">tUserPermi</span> <span class="U2">ssionSets(</span> <span class="U2">req,&nbsp;res);</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;});</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">});</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

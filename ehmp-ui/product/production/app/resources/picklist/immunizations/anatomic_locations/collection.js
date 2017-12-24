@@ -16,7 +16,7 @@ define([], function () {
 
     var AnatomicLocations = ADK.Resources.Picklist.Collection.extend({
         resource: 'write-pick-list-immunization-admin-site',
-        model: AnatomicLocation,
+        model: AnatomicLocation
     });
 
     return AnatomicLocations;

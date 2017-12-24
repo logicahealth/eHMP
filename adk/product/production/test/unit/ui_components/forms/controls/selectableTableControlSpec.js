@@ -71,18 +71,26 @@ define([
                 expect($form.find('.faux-table-container').attr('id')).toContain(selectableTableControlDefinition.name);
             });
 
-            it('has screen reader text with a default label', function() {
-                expect($form.find('.control span.sr-only:first')).toHaveText('Press enter to select this row.');
+            it('has screen reader label with the text', function() {
+                expect($form.find('.control .body').attr('aria-label')).toEqual('List of selectable options.');
+            });
+
+            it('has screen reader text equivalent for the visual table headers', function() {
+                expect($form.find('.body .table-row:first .table-cell:first span.sr-only')).toHaveText('Date: ');
+                expect($form.find('.body .table-row:first .table-cell:nth-of-type(2) span.sr-only')).toHaveText('Details: ');
+                expect($form.find('.body .table-row:first .table-cell:last span.sr-only')).toHaveText('Location: ');
             });
 
             it('sets value in model when input is changed, and sets correct row to active', function() {
-                // simply selecting first row for simplicity
-                expect($form.find('a.active')).toHaveLength(0);
-                var firstEl = $form.find('a')[0];
+                // selecting first row for simplicity
+                expect($form.find('[role="option"].active')).toHaveLength(0);
+                expect($form.find('[role="option"][aria-selected="true"]')).toHaveLength(0);
+                var firstEl = $form.find('[role="option"]')[0];
                 $(firstEl).trigger('click');
                 $form.find('input').trigger('change');
                 expect($(firstEl)).toHaveClass('active');
-                expect($form.find('a.active')).toHaveLength(1);
+                expect($form.find('[role="option"].active')).toHaveLength(1);
+                expect($form.find('[role="option"]')).toHaveAttr('aria-selected', 'true');
                 // make sure to check the name in field
                 var modelDetailString = form.model.get('selectTableModel').get('details');
                 var stringFromCollection = selectableTableControlDefinition.collection[0].details;
@@ -112,18 +120,20 @@ define([
             });
 
             it('starts with a correct initial model value', function() {
-                expect($form.find('a.active')).toHaveLength(1);
-                expect($form.find('a.active')).toContainText(form.model.get('selectTableModel').get('details'));
+                expect($form.find('[role="option"].active')).toHaveLength(1);
+                expect($form.find('[role="option"].active')).toHaveAttr('aria-selected', 'true');
+                expect($form.find('[role="option"].active')).toContainText(form.model.get('selectTableModel').get('details'));
             });
 
             it('selects a new row and set the model accordingly', function() {
-                expect($form.find('a.active')).toHaveLength(1);
+                expect($form.find('[role="option"].active')).toHaveLength(1);
+                expect($form.find('[role="option"].active')).toHaveAttr('aria-selected', 'true');
 
-                var firstEl = $form.find('a')[0];
+                var firstEl = $form.find('[role="option"]')[0];
                 $(firstEl).trigger('click');
                 $form.find('input').trigger('change');
                 expect($(firstEl)).toHaveClass('active');
-                expect($form.find('a.active')).toHaveLength(1);
+                expect($form.find('[role="option"].active')).toHaveLength(1);
                 // make sure to check the name in field
                 var modelDetailString = form.model.get('selectTableModel').get('details');
                 var stringFromCollection = selectableTableControlDefinition.collection[0].details;
@@ -194,8 +204,8 @@ define([
                 $('body').append($form);
             });
 
-            it('has screen reader text with the label', function() {
-                expect($form.find('.control span.sr-only:first')).toHaveText('Press enter to set this as the encounter location.');
+            it('has screen reader label with the text', function() {
+                expect($form.find('.control .body').attr('aria-label')).toEqual('List of selectable options. Select encounter location');
             });
         });
 

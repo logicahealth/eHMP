@@ -2,7 +2,6 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    'app/applets/workspace_context_navigation/applicationHeaderItems/patientContextLink',
     'app/applets/workspace_context_navigation/applicationHeaderItems/adminContextLink',
     'app/applets/workspace_context_navigation/applicationHeaderItems/staffContextLink'
 ], function(
@@ -19,10 +18,6 @@ define([
     var applet = {
         id: "workspace_context_navigation",
         viewTypes: [{
-            type: 'applicationHeaderItem-patientContext',
-            view: ApplicationHeaderPatientContextLink,
-            chromeEnabled: false
-        }, {
             type: 'applicationHeaderItem-adminContext',
             view: ApplicationHeaderAdminContextLink,
             chromeEnabled: false

@@ -2,6 +2,12 @@
 
 require('../../../../../env-setup');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-vital-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-vitals-xformer', function() {
     var mockEdipi = '0000000003';
@@ -37,7 +43,7 @@ describe('jmeadows-vitals-xformer', function() {
     };
 
     it('verify transform sample appointment to VPR', function() {
-        var vprData = xformer(sampleDODVital, mockEdipi);
+        var vprData = xformer(log, sampleDODVital, mockEdipi);
         expect(vprData.codes).toEqual(sampleVPRVital.codes);
         expect(vprData.observed).toBeDefined();
         expect(vprData.resulted).toBeDefined();

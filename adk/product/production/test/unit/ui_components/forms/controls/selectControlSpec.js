@@ -81,7 +81,6 @@ define(['jquery',
         var filterFetchSelectControlDefinition = {
             control: 'select',
             name: 'select1',
-            title: 'To view the option(s), use the up and down arrow keys, and then press enter to select an option.',
             label: 'select (filter & array & fetch)',
             showFilter: true,
             groupEnabled: true,
@@ -91,7 +90,6 @@ define(['jquery',
         var filterMultipleSelectControlDefinition = {
             control: 'select',
             name: 'select1',
-            title: 'To view the option(s), use the up and down arrow keys, and then press enter to select an option.',
             label: 'select (filter & array & multiple)',
             showFilter: true,
             multiple: true,
@@ -832,6 +830,40 @@ define(['jquery',
                 });
             });
 
+            describe('with help message', function() {
+                beforeEach(function() {
+                    form = new UI.Form({
+                        model: formModel,
+                        fields: [_.extend({ helpMessage: 'Example help message' }, selectControlDefinition)]
+                    });
+                    $form = form.render().$el;
+                    $('body').append($form);
+                    form.children.each(function(controlView) {
+                        controlView.triggerMethod('attach');
+                    });
+                });
+
+                it('contains help message', function() {
+                    expect($form.find('span.help-block')).toExist();
+                    expect($form.find('span.help-block')).toHaveText('Example help message');
+                    var spanId = $form.find('span.help-block').attr('id')
+                    expect(_.isEmpty(spanId)).toBe(false);
+                    expect($form.find('select')).toHaveAttr('aria-describedby', spanId);
+                });
+
+                it('updates help message', function() {
+                    expect($form.find('span.help-block')).toExist();
+                    expect($form.find('span.help-block')).not.toBeEmpty();
+                    expect($form.find('span.help-block')).toHaveText('Example help message');
+                    $form.find('.select-control').trigger('control:helpMessage', '');
+                    expect($form.find('span.help-block')).toExist();
+                    expect($form.find('span.help-block')).toBeEmpty();
+                    $form.find('.select-control').trigger('control:helpMessage', 'New message');
+                    expect($form.find('span.help-block')).toExist();
+                    expect($form.find('span.help-block')).not.toBeEmpty();
+                    expect($form.find('span.help-block')).toHaveText('New message');
+                });
+            });
             describe('with error', function() {
                 beforeEach(function() {
                     form = new UI.Form({

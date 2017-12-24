@@ -77,7 +77,7 @@ define([
             '<select ' +
             'id="{{clean-for-id (id this)}}" ' +
             'name="{{clean-for-id (id this)}}"' +
-            '{{#if title}}title="{{title}}" {{else}}title="Use up and down arrow keys to view options and press enter to select" {{/if}}' +
+            '{{#if title}}title="{{title}}"{{/if}}' +
             '{{#if disabled}}disabled {{else}}{{#if controlDisabled}}disabled {{/if}}{{/if}}' +
             '{{#if required}}required {{else}}{{#if controlRequired}}required {{/if}}{{/if}}' +
             '{{#if multiple}}multiple {{else}}{{#if controlMultiple}}multiple {{/if}}{{/if}}' +

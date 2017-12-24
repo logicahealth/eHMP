@@ -19,7 +19,9 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var hostPort = testConfig.vxsyncPort;
 
 function clearTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -83,7 +85,7 @@ describe('load-patient', function() {
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
-                    port: 8080,
+                    port: hostPort,
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
@@ -91,8 +93,8 @@ describe('load-patient', function() {
                     method: 'POST'
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
@@ -106,7 +108,7 @@ describe('load-patient', function() {
                 jds: new JdsClient(dummyLogger, dummyLogger, config)
             };
 
-            clearTestPatient(config.syncRequestApi, '9E7A;23');
+            clearTestPatient(config.syncRequestApi, 'SITE;23');
         });
 
 
@@ -115,7 +117,7 @@ describe('load-patient', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;23'
+                    value: 'SITE;23'
                 },
                 rootJobId: '1',
                 jobId: '1',

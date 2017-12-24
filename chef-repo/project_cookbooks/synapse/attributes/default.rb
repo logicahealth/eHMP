@@ -6,7 +6,7 @@
 default['synapse']['user'] = 'synapse'
 default['synapse']['home'] = '/opt/synapse'
 default['synapse']['install_dir'] = '/opt/synapse'
-default['synapse']['version'] = '0.13.8'
+default['synapse']['version'] = '0.14.6'
 default['synapse']['haproxy']['version'] = '1.5.4-3.el6'
 default['synapse']['executable'] = "#{node['synapse']['home']}/bin/synapse"
 default['synapse']['config_file'] = "#{node['synapse']['home']}/synapse.conf.json"
@@ -39,3 +39,9 @@ default['synapse']['haproxy'] = {
 		}
 	}
 }
+
+default['synapse']['logrotate']['path'] = "/var/log/synapse.*"
+default['synapse']['logrotate']['rotate'] = 10
+default['synapse']['logrotate']['options'] = %w{missingok compress delaycompress copytruncate notifempty dateext}
+default['synapse']['logrotate']['frequency'] = 'daily'
+default['synapse']['logrotate']['dateformat'] = '-%Y%m%d%s'

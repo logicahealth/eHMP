@@ -115,14 +115,12 @@ define([
                                             type: 'button',
                                             label: 'Cancel',
                                             extraClasses: ['btn-primary', 'btn-sm'],
-                                            title: 'Press enter to cancel.',
                                             id: 'add-other-diagnosis-cancel-btn'
                                         }, {
                                             control: 'button',
                                             type: 'button',
                                             label: 'Add',
                                             extraClasses: ['btn-primary', 'btn-sm'],
-                                            title: 'Press enter to add.',
                                             id: 'add-other-diagnosis-add-btn',
                                             disabled: true
                                         }]
@@ -400,7 +398,7 @@ define([
                                 type: 'button',
                                 label: 'Done',
                                 extraClasses: ['btn-primary', 'btn-sm'],
-                                title: 'Press enter to close.',
+                                title: 'Close',
                                 id: 'add-visit-modifiers-close-btn'
                             }]
                         }]
@@ -528,7 +526,6 @@ define([
                                 label: 'Add Other Procedure Selection',
                                 size: 10,
                                 extraClasses: ['items-shown-md'],
-                                title: 'Press enter to browse through select options.',
                                 pickList: 'addOtherProcedurePicklist'
                             }]
                         }, {
@@ -542,14 +539,12 @@ define([
                                     type: 'button',
                                     label: 'Cancel',
                                     extraClasses: ['btn-primary', 'btn-sm'],
-                                    title: 'Press enter to cancel.',
                                     id: 'add-other-procedure-cancel-btn'
                                 }, {
                                     control: 'button',
                                     type: 'button',
                                     label: 'Add',
                                     extraClasses: ['btn-primary', 'btn-sm'],
-                                    title: 'Press enter to add.',
                                     id: 'add-other-procedure-add-btn',
                                     disabled: true
                                 }]
@@ -645,7 +640,7 @@ define([
                                     type: 'button',
                                     label: 'Done',
                                     extraClasses: ['btn-primary', 'btn-sm'],
-                                    title: 'Press enter to close.',
+                                    title: 'Close',
                                     id: 'add-procedure-modifiers-close-btn'
                                 }]
                             }]
@@ -696,7 +691,6 @@ define([
                     control: 'button',
                     id: 'cancelEncounterBtn',
                     label: 'Cancel',
-                    title: 'Press enter to cancel.',
                     extraClasses: ['btn-default', 'btn-sm'],
                     name: 'cancel',
                     type: 'button'
@@ -704,7 +698,6 @@ define([
                     control: 'button',
                     id: 'ok-btn',
                     label: 'Accept',
-                    title: 'Press enter to confirm.',
                     extraClasses: ['btn-primary', 'btn-sm'],
                     name: 'ok'
                 }]

@@ -470,7 +470,7 @@ Scenario: Client can request procedures from multiple VistAs in VPR format
  	And the VPR results contain:    
       | field          | value                                  |
       | category       | CP                                     |
-      | dateTime       | 199811190800                           |
+      | dateTime       | 1998111PORT0                           |
       | facilityCode   | 561                                    |
       | facilityName   | New Jersey HCS                               |
       | interpretation | NORMAL                                 |
@@ -490,7 +490,7 @@ Scenario: Client can request skins from multiple VistAs in VPR format
       | field         | value                     |
       | encounterName | 0May 19, 1997             |
       | encounterUid  | urn:va:visit:ABCD:262:386 |
-      | entered       | 199705190800              |
+      | entered       | 1997051PORT0              |
       | facilityCode  | 561                       |
       | facilityName  | New Jersey HCS                  |
       | localId       | 1                         |

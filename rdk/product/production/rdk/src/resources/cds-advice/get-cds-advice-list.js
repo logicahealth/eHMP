@@ -40,6 +40,7 @@ var ReminderToAdvicePriorityMap = {
     '3': 40
 };
 
+
 /**
  * Maps a reminder's priority value to match the scale of the advice priority values.
  *
@@ -49,6 +50,7 @@ var ReminderToAdvicePriorityMap = {
 function mapToAdvicePriority(reminderPriority) {
     return ReminderToAdvicePriorityMap[reminderPriority];
 }
+
 
 /*
  * Transform the data returned from rules invocation into a UI usable common form
@@ -73,6 +75,8 @@ function transformAdviceList(adviceList, common) {
         common.push(item);
     });
 }
+
+
 /*
  * Transform the data returned from the Work Products store into a UI usable common form
  *
@@ -99,6 +103,8 @@ function transformWorkProductList(wpList, common) {
         common.push(item);
     });
 }
+
+
 /*
  *  Transform the data returned from clinical reminders into a UI usable common form
  *
@@ -123,6 +129,7 @@ function transformReminders(reminders, common) {
     });
 }
 
+
 /*
  * Merge the advice and reminders lists
  *
@@ -137,6 +144,8 @@ function mergeLists(adviceList, reminders, workProducts) {
     transformWorkProductList(workProducts, merged);
     return merged;
 }
+
+
 /*
  * Make an RPC call to retrieve clinical reminders. Uses the site id that is stored in the request patient identifier interceptor object.
  *
@@ -211,6 +220,7 @@ function getClinicalRemindersList(req, res, callback) {
     });
 }
 
+
 /*
  * Make a REST call into the CDS Invocation service to retrieve advice
  *
@@ -221,7 +231,6 @@ function getClinicalRemindersList(req, res, callback) {
  * @param {callback} The provided callback when complete
  */
 function getRulesResultsList(req, res, pid, use, callback) {
-
     if (!_.result(req, 'app.subsystems.cds.isCDSMongoServerConfigured')) {
         return callback(null, []);
     }
@@ -266,6 +275,7 @@ function getRulesResultsList(req, res, pid, use, callback) {
     });
 }
 
+
 /*
  * Retrieve the status from the invocation result
  *
@@ -276,6 +286,7 @@ function getInvocationError(info) {
         return o.text;
     }).join(' ');
 }
+
 
 /**
  * Make asynchronous calls for cds advice, clinical reminders and cds work products
@@ -397,7 +408,7 @@ function getCDSAdviceList(req, res, next) {
  *
  * @apiDescription Sets the 'read' status of an assigned work product in the database.
  *
- * NOTE: This method calls code in cds-work-product.js, as that is the appropriate place for the business logic
+ * FYI: This method calls code in cds-work-product.js, as that is the appropriate place for the business logic
  * to reside.  For more information, see the method in cdsWorkProduct that has the same name.  This method is secured
  * and the read status is set for the authenticated user.
  *
@@ -426,7 +437,7 @@ function setReadStatus(req, res) {
         req.logger.error('CDS Read Status - ' + error);
         return res.status(rdk.httpstatus.bad_request).rdkSend(error);
     }
-    cdsWorkProduct.setReadStatus(req.logger, id, readStatus, provider, function(body, error) {
+    cdsWorkProduct.setReadStatus(req, id, readStatus, provider, function(body, error) {
         if (error) {
             req.logger.error('CDS Read Status - ' + error);
             return res.status(rdk.httpstatus.not_found).rdkSend(error);
@@ -434,6 +445,7 @@ function setReadStatus(req, res) {
         return res.status(rdk.httpstatus.ok).rdkSend(body);
     });
 }
+
 
 function getKeyValue(obj) {
     var property;
@@ -446,6 +458,8 @@ function getKeyValue(obj) {
     }
     return 'BAD OBJECT';
 }
+
+
 /* For testing */
 module.exports._getClinicalRemindersList = getClinicalRemindersList;
 

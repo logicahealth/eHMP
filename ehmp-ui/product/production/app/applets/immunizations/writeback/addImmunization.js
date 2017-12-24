@@ -58,7 +58,6 @@ define([
             control: 'select',
             name: 'informationSource',
             label: 'Information Source',
-            title: 'Use up and down arrows to view options and then press enter to select.',
             pickList: []
         }]
     };
@@ -69,22 +68,24 @@ define([
 
     var LotNumberFields = {
         control: 'container',
-        extraClasses: ['col-xs-12'],
         items: [{
-            control: 'select',
-            extraClasses: ['col-xs-6', 'left-padding-no'],
-            name: 'lotNumberAdministered',
-            label: 'Lot Number',
-            title: 'Use up and down arrows to view options and then press enter to select.',
-            pickList: []
+            control: 'container',
+            extraClasses: ['col-xs-12'],
+            items: [{
+                control: 'select',
+                extraClasses: ['col-xs-6', 'left-padding-no'],
+                name: 'lotNumberAdministered',
+                label: 'Lot Number',
+                pickList: []
+            }, {
+                control: 'container',
+                extraClasses: [ 'expirationDateAdministered', 'col-xs-6', 'right-padding-no', 'form-group'],
+                modelListeners: ['expirationDateAdministered'],
+                template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey"><span>Not specified</span></div>{{/if}}</div>')
+            }]
         }, {
             control: 'container',
-            extraClasses: [ 'expirationDateAdministered', 'col-xs-6', 'right-padding-no', 'form-group'],
-            modelListeners: ['expirationDateAdministered'],
-            template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey"><span>Not specified</span></div>{{/if}}</div>')
-        }, {
-            control: 'container',
-            extraClasses: ['manufacturerAdministered', 'form-group'],
+            extraClasses: ['col-xs-12', 'manufacturerAdministered', 'form-group'],
             modelListeners: ['manufacturerAdministered'],
             template: Handlebars.compile('<label for="manufacturerAdministered">Manufacturer *</label><div id="manufacturerAdministered">{{#if manufacturerAdministered}}{{manufacturerAdministered}}{{else}}<div class="well well-collapse left-padding-xs right-padding-xs left-margin-no right-margin-no background-color-grey-lighter all-border-grey">Not specified</em></div>{{/if}}</div>')
         }]
@@ -160,7 +161,6 @@ define([
             items: [{
                 control: 'select',
                 name: 'routeOfAdministration',
-                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Route of Administration',
                 pickList: []
             }]
@@ -170,7 +170,6 @@ define([
             items: [{
                 control: 'select',
                 name: 'anatomicLocation',
-                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Anatomic Location',
                 pickList: []
             }]
@@ -190,7 +189,6 @@ define([
             items: [{
                 control: 'select',
                 name: 'series',
-                title: 'Use up and down arrows to view options and then press enter to select.',
                 label: 'Series',
                 pickList: []
             }]
@@ -272,7 +270,6 @@ define([
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "left-margin-sm"],
                     label: "Accept",
-                    title: "Press enter to accept",
                     name: 'addBtn',
                     disabled: true
                 }]
@@ -295,7 +292,7 @@ define([
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
         events: {
             'click .btn-primary': function () {
                 ADK.UI.Alert.hide();
@@ -754,11 +751,12 @@ define([
                 this.model.set('cvxCode', immunization.get('cvxCode'));
                 this.model.set('immunizationNarrative', immunization.get('name'));
                 if(this.lotNumbers){
-                    var associatedFacility = ADK.UserService.getAssociatedFacility();
-                    if (!_.isUndefined(associatedFacility)) {     
+                    var associatedFacility = ADK.UserService.getUserSession() || new Backbone.Model();
+                    var facilityCode = associatedFacility.get('division') || '';
+                    if (!_.isEmpty(facilityCode)) {
                         var lotNumbers = this.lotNumbers.where({
                             vaccine: immunization.get('name'),
-                            associatedFacility: associatedFacility.get('facilityName').toUpperCase()
+                            facilityCode: facilityCode
                         });
     
                         self.ui.lotNumberAdministered.trigger('control:picklist:set', lotNumbers);                            
@@ -854,7 +852,7 @@ define([
     });
 
     var preserveAdmFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Preserve" id="adm-preserve" classes="btn-primary btn-sm" title="Press enter to preserve."}}{{ui-button "Discard" id="adm-discard" classes="btn-default btn-sm" title="Press enter to discard."}}{{ui-button "Cancel" id="adm-cancel" classes="btn-default btn-sm" title="Press enter to go back."}}'),
+        template: Handlebars.compile('{{ui-button "Preserve" id="adm-preserve" classes="btn-primary btn-sm"}}{{ui-button "Discard" id="adm-discard" classes="btn-default btn-sm"}}{{ui-button "Cancel" id="adm-cancel" classes="btn-default btn-sm" title="Go back"}}'),
         events: {
             'click #adm-preserve': function() {
                 ADK.UI.Alert.hide();
@@ -884,7 +882,7 @@ define([
     });
 
     var preserveHistFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Preserve" id="hist-preserve" classes="btn-primary btn-sm" title="Press enter to preserve."}}{{ui-button "Discard" id="hist-discard" classes="btn-default btn-sm" title="Press enter to discard."}}{{ui-button "Cancel" id="hist-cancel" classes="btn-default btn-sm" title="Press enter to go back."}}'),
+        template: Handlebars.compile('{{ui-button "Preserve" id="hist-preserve" classes="btn-primary btn-sm"}}{{ui-button "Discard" id="hist-discard" classes="btn-default btn-sm"}}{{ui-button "Cancel" id="hist-cancel" classes="btn-default btn-sm" title="Go back."}}'),
         events: {
             'click #hist-preserve': function() {
                 ADK.UI.Alert.hide();

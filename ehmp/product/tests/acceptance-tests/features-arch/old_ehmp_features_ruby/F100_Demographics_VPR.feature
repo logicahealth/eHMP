@@ -14,7 +14,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
 	Then the client receives 1 VPR "panorama" result(s)
 	And the VPR results contain:
       | field                           | panorama_value                                                                                   |
-      | uid                             | urn:va:patient:9E7A:100716:100716                                                                |
+      | uid                             | urn:va:patient:SITE:100716:100716                                                                |
       | displayName                     | Eight,Inpatient                                                                                  |
       | serviceConnected                | false                                                                                            |
       | scPercent                       | IS_NOT_SET                                                                                       |
@@ -51,7 +51,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       | last4                           | 0808                                                                                             |
       | last5                           | E0808                                                                                            |
       | pid                             | CONTAINS 100716                                                                                  |
-      #| summary                        | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, 9E7A;100716]} |
+      #| summary                        | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, SITE;100716]} |
       | syncErrorCount                  | IS_SET                                                                                           |
       #| domainUpdated                   | IS_SET                                                                                           |
 #      | lastUpdated                     | IS_SET                                                                                           |
@@ -61,7 +61,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       | facility.code                   | 500                                                                                              |
       | facility.homeSite               | false                                                                                            |
       | facility.name                   | CAMP MASTER                                                                                      |
-      | facility.systemId               | 9E7A                                                                                             |
+      | facility.systemId               | SITE                                                                                             |
 
 
 @f100_2_demographics_vpr_mar @vpr  
@@ -73,7 +73,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
 	Then the client receives 1 VPR "panorama" result(s)
     And the VPR results contain:                                             
       | field                            | panorama_value             |
-      | uid                              | urn:va:patient:9E7A:231:231|
+      | uid                              | urn:va:patient:SITE:231:231|
       | serviceConnected                 | true                       |
       | scPercent                        | 10                         |
       | religionCode                     | urn:va:pat-religion:99     |
@@ -123,7 +123,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
       | facility.homeSite                | true                       |
       | facility.localPatientId          | 231                        |
       | facility.name                    | ABILENE (CAA)              |
-      | facility.systemId                | 9E7A                       |
+      | facility.systemId                | SITE                       |
       | homeFacility.code                | 998                        |
       | homeFacility.homeSite            | true                       |
       | homeFacility.latestDate          | 20010101                   |
@@ -132,8 +132,8 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
 @f100_3_demographics_vpr_sen @vpr
 Scenario: Client can request demographics in VPR format for a sensitive patient
    	Given a patient with "demographics" in multiple VistAs
-      Given a patient with pid "9E7A;167" has been synced through Admin API
-	When the client requests demographics for the patient "9E7A;167" in VPR format
+      Given a patient with pid "SITE;167" has been synced through Admin API
+	When the client requests demographics for the patient "SITE;167" in VPR format
 	Then the client receives 1 VPR "VistA" result(s)
 	Then the client receives 1 VPR "panorama" result(s)
 	And the VPR results contain:                                                   
@@ -151,7 +151,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
 	Then the client receives 1 VPR "kodak" result(s)
 	And the VPR results contain:
       | field                           | kodak_value   |
-      | uid                             | urn:va:patient:C877:100716:100716                                                                |                                                                                
+      | uid                             | urn:va:patient:SITE:100716:100716                                                                |                                                                                
       | displayName                     | Eight,Inpatient                                                                                  |
       | serviceConnected                | false                                                                                            |
       | scPercent                       | IS_NOT_SET                                                                                       |
@@ -185,9 +185,9 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       | fullName                        | EIGHT,INPATIENT                                                                                  |
       | last4                           | 0808                                                                                             |
       | last5                           | E0808                                                                                            |
-#      | pid                             | C877;100716                                                                                       |
+#      | pid                             | SITE;100716                                                                                       |
       | pid                             | CONTAINS 100716                                                                                  |
-      #| summary                         | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, 9E7A;100716]} |
+      #| summary                         | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, SITE;100716]} |
       | syncErrorCount                  | IS_SET                                                                                           |
       #| domainUpdated                   | IS_SET                                                                                           |
       #| lastUpdated                     | IS_SET                                                                                           |
@@ -195,7 +195,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       | facility.code                   | 500                                                                                              |
       | facility.homeSite               | false                                                                                            |
       | facility.name                   | CAMP BEE                                                                                      |
-      | facility.systemId               | C877                                                                                             |
+      | facility.systemId               | SITE                                                                                             |
 
 
 @f100_5_demographics_vpr_mar @vpr
@@ -208,7 +208,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
     And the VPR results contain:                                             
       | field                            | kodak_value                |
       | serviceConnected                 | true                       |
-      | uid								 | urn:va:patient:C877:231:231|
+      | uid								 | urn:va:patient:SITE:231:231|
       | scPercent                        | 10                         |
       | sensitive                        | false                      |
       | religionCode                     | urn:va:pat-religion:99     |
@@ -249,7 +249,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
       | last4                            | 0005                       |
       | last5                            | F0005                      |
 #      | lastUpdated                      | IS_SET                     |
-#      | pid                              | C877;231                   |
+#      | pid                              | SITE;231                   |
       | pid                              | CONTAINS 231               |
       | summary                          | IS_SET                     |
       | syncErrorCount                   | IS_SET                     |
@@ -258,7 +258,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
       | facility.homeSite                | true                       |
       | facility.localPatientId          | 231                        |
       | facility.name                    | ABILENE (CAA)              |
-      | facility.systemId                | C877                       |
+      | facility.systemId                | SITE                       |
       | homeFacility.code                | 998                        |
       | homeFacility.homeSite            | true                       |
       | homeFacility.latestDate          | 20010101                   |

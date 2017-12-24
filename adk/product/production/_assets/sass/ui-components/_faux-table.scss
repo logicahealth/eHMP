@@ -4,12 +4,12 @@
     border-left: none;
     height: 100%;
     position: relative;
-    .body {
-        height: calc(100% - 18px);
-    }
     > .header {
         border-bottom: 2px solid $grey-light;
         font-weight: bold;
+    }
+    .body {
+        height: calc(100% - 18px);
     }
     .table-row {
         box-sizing: border-box;
@@ -27,6 +27,13 @@
         &:last-child {
             border-bottom: none;
         }
+        &:hover, &:focus {
+            background-color: $primary-lighter;
+            color: $grey-darkest;
+        }
+        &.active {
+            background-color: $primary-lighter;
+        }
         &.locked {
             background: $grey-lighter;
             .icon:hover {
@@ -35,10 +42,6 @@
             &:hover {
                 background-color: $primary-lightest;
             }
-        }
-        &.active {
-            background: $primary-lighter;
-            color: $grey-darkest;
         }
         .num-chart {
             width: 2%;
@@ -81,6 +84,9 @@
                 color: transparentize($grey-darkest, .4);
                 cursor: default;
             }
+            &:last-child {
+                padding-right: 15px;
+            }
         }
         .sortable {
             i {
@@ -88,30 +94,16 @@
             }
         }
     }
-    .table-row-toolbar {
-        .table-row > * {
-            display: flex;
-            width: 100%;
-            flex: 1;
-            border: 2px none;
-            min-height: 0;
-            min-width: 0;
-            &.active {
-                background: $primary-lightest;
-            }
-            &:hover, &:focus {
-                cursor: pointer;
-                background: $primary-lightest;
-            }
-
-        }
-    }
     a.table-row {
         text-decoration: none;
         color: $grey-darkest;
-        &:hover, &.active, &:focus {
+        &:hover, &:focus {
             background-color: $primary-lighter;
             color: $grey-darkest;
+        }
+        &.active {
+            background: $primary;
+            color: $pure-white;
         }
     }
     [role="button"], [role="link"] {
@@ -134,8 +126,6 @@
         }
     }
 }
-
-
 // .faux-table-container and main-header styles, ONLY!
 // not all faux-tables will have a main header. those that do should use a 
 // div with a class of .faux-table-container as a wrapper element that will 
@@ -164,7 +154,6 @@
                 border-bottom: 2px solid $grey-light;
                 > * {
                     display: flex;
-                    width: 100%;
                 }
                 a {
                     color: $grey-darkest;
@@ -175,9 +164,6 @@
                     font-weight: bold;
                 }
             }
-        }
-        .table-row-toolbar {
-            border-bottom: 1px solid $grey-light;
         }
     }
 }

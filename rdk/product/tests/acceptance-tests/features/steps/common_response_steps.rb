@@ -100,8 +100,8 @@ Then(/^the client receives( at least)? (\d+) VPR VistA result\(s\)$/) do |at_lea
   json_verify.save_all_values_of_path(0, steps_source, json, output_string, source_allvalues)
 
   num_vista_results = 0
-  source_panorama = /urn:va:.*:9E7A/
-  source_kodak = /urn:va:.*:C877/
+  source_panorama = /urn:va:.*:SITE/
+  source_kodak = /urn:va:.*:SITE/
   source_allvalues.each do |value|
     unless source_panorama.match(value).nil?
       num_vista_results += 1
@@ -119,8 +119,8 @@ Then(/^the client receives( at least)? (\d+) VPR VistA result\(s\)$/) do |at_lea
   json_verify = JsonVerifier.new
   json_verify.save_all_values_of_path(0, steps_source, json, output_string, source_allvalues)
 
-  source_panorama = /9E7A;*/
-  source_kodak = /C877;*/
+  source_panorama = /SITE;*/
+  source_kodak = /SITE;*/
   source_allvalues.each do |value|
     unless source_panorama.match(value).nil?
       num_vista_results += 1

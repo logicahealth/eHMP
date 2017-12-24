@@ -10,8 +10,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -23,6 +23,6 @@ describe('medication-order-defaults resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', ien: 1348, pharmacyType: 'X', pid: '9E7A;100695', needPatientInstructions: true, pkiEnabled: false });
+        }, { site: 'SITE', ien: 1348, pharmacyType: 'X', pid: 'SITE;100695', needPatientInstructions: true, pkiEnabled: false });
     });
 });

@@ -10,6 +10,15 @@
     </listener>
  
     <filter>
+        <filter-name>requestIdServletFilter</filter-name>
+        <filter-class>com.cognitive.cds.utils.log.filter.RequestIdFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>requestIdServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+ 
+    <filter>
         <filter-name>log4jServletFilter</filter-name>
         <filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
     </filter>
@@ -29,7 +38,7 @@
     </context-param>
 	<context-param>
         <param-name>log4jConfiguration</param-name>
-        <param-value>file:${catalina.home}/shared/classes/cds-results-log4j2.xml</param-value>
+        <param-value>cds-results-log4j2.xml</param-value>
     </context-param>
     
 	<context-param>

@@ -8,7 +8,10 @@ var handler = require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-reque
 var realConfig = require(global.VX_ROOT + 'worker-config');
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
+var vx_sync_port = testConfig.vxsyncPort;
 
 describe('jmeadows-pdf-request-handler', function() {
     var environment = {
@@ -82,7 +85,7 @@ describe('jmeadows-pdf-request-handler', function() {
             'referenceDateTime': '201103021444432',
             'documentTypeName': 'Consultation Note (Provider) Document',
             'sensitive': true,
-            'dodComplexNoteUri': 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157584289',
+            'dodComplexNoteUri': 'http://' + vx_sync_ip + ':'+vx_sync_port+'/MockDoDAdaptor/async/complex/note/2157584289',
             'uid': null,
             'pid': 'DOD;00000099',
             'text': null

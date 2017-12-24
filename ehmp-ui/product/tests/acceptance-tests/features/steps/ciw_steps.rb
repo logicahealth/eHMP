@@ -1,70 +1,76 @@
-
-def open_workspace_management_applet
-  navigation = Navigation.instance
-  workspace_manager = WorkspaceManager.instance
-  expect(navigation.perform_action("Workspace Manager")).to be_true, "Error when attempting to click Workspace Manager"
-  workspace_manager.wait_until_action_element_visible('Workspace Manager applet')
-  expect(workspace_manager.am_i_visible? 'Workspace Manager applet').to eq(true)
-end
-
 When(/^the user creates a user defined workspace named "([^"]*)"$/) do |workspace_name|
-  workspace_manager = WorkspaceManager.instance
-  navigation = Navigation.instance
-  screen_manager = ScreenManager.instance
+  manager = PobWorkspaceManager.new
+  expect(manager).to have_btn_add_workspace
+  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
 
-  open_workspace_management_applet unless workspace_manager.am_i_visible? 'Workspace Manager applet'
-  num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
+  WorkspaceActions.open_workspace_management_applet unless manager.has_fld_applet?
+  num_user_defined_workspace = manager.fld_userdefined_screens.length
+  
+  manager.btn_add_workspace.click
+  wait.until { manager.fld_userdefined_screens.length > num_user_defined_workspace }
+  wait_for_screen_clear
+  
 
-  expect(screen_manager.perform_action("Plus Button")).to be_true, "Error when attempting to click Add Workspace"
-
-  workspace_manager.wait_until_xpath_count_greater_than('ud workspace count', num_user_defined_workspace)
-  new_num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
+  new_num_user_defined_workspace = manager.fld_userdefined_screens.length
   expect(num_user_defined_workspace + 1).to eq(new_num_user_defined_workspace), 'New workspace was not added'
 
-  new_ws_id = workspace_manager.get_elements("ud workspace count")[-1].attribute('data-screen-id')
-  
-  workspace_manager.add_action(CucumberLabel.new('workspace title input'), SelectAllSendKeysAndEnterActionNoClear.new, AccessHtmlElement.new(:css, "[data-screen-id='#{new_ws_id}'] input"))
+  new_ws_id = manager.fld_userdefined_screens.last['data-screen-id']
 
-  workspace_manager.add_verify(CucumberLabel.new("#{workspace_name} workspace"), VerifyValue.new, AccessHtmlElement.new(:css, "[data-screen-id='#{workspace_name.downcase}'] .editor-title input"))
-  
-  expect(workspace_manager.perform_action('workspace title input', workspace_name)).to eq(true)
-  expect(workspace_manager.perform_verification("#{workspace_name} workspace", workspace_name)).to eq(true)
-  
-  # take_screenshot("workspace created")
+  manager.add_user_defined_workspace_elements new_ws_id
+  expect(manager).to have_input_title
+  #for phantomJS use this
+  manager.input_title.native.send_keys [:shift, :home], :backspace
+  #for chrome use this 
+  #manager.input_title.native.clear
+  manager.input_title.native.send_keys workspace_name
+  manager.input_title.native.send_keys :enter
+  manager.wait_for_fld_obstruction(2)
+  lowercase_id = workspace_name.downcase
+
+  manager.add_user_defined_workspace_elements lowercase_id
+  wait_for_screen_clear
+  expect(manager.wait_for_input_title(10)).to eq(true)
+  expect(manager).to have_input_title, "did not have input title for #{lowercase_id}, available names: #{manager.screens_with_editable_titles}"
+  screenids = manager.fld_userdefined_screens.map { |element| element['data-screen-id'] }
+  expect(screenids).to include lowercase_id
+
 end
 
 When(/^the user associates user defined workspace "([^"]*)" with "([^"]*)"$/) do |arg1, arg2|
-  workspace_manager = WorkspaceManager.instance
-  workspace_manager.add_action(CucumberLabel.new("#{arg1} associate button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{arg1.downcase}] button.show-associations"))
-  workspace_manager.add_action(CucumberLabel.new("#{arg1} search problems"), SendKeysAndTabAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{arg1.downcase}] #screenProblemSearch"))
-  all_problem_results = AccessHtmlElement.new(:css, '.problem-result')
-  workspace_manager.add_verify(CucumberLabel.new("All Problem Results"), VerifyXpathCount.new(all_problem_results), all_problem_results)
-  workspace_manager.add_action(CucumberLabel.new("#{arg2} problem list"), ClickAction.new, AccessHtmlElement.new(:css, "#problem-result-59621000"))
-  workspace_manager.add_action(CucumberLabel.new("Clear Search Problem Btn"), ClickAction.new, AccessHtmlElement.new(:css, ".clear-search-problem-btn"))
-  workspace_manager.add_verify(CucumberLabel.new("#{arg2} associated problem"), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[contains(@class, 'problem-list-region')]/descendant::div[contains(string(), '#{arg2}')]"))
-  workspace_manager.add_action(CucumberLabel.new("Close Association Manager"), ClickAction.new, AccessHtmlElement.new(:id, 'associationManagerCloseBtn'))
-
+  manager = PobWorkspaceManager.new
+  manager.add_user_defined_workspace_elements arg1.downcase
   # click associate button
-  expect(workspace_manager.perform_action("#{arg1} associate button")).to eq(true)
+  manager.wait_for_btn_associate
+  expect(manager).to have_btn_associate
+  manager.btn_associate.click
 
   # search associated problems
-  expect(workspace_manager.perform_action("#{arg1} search problems", arg2)).to eq(true)
+  manager.wait_for_fld_search_problems
+  expect(manager).to have_fld_search_problems
+  manager.fld_search_problems.native.send_keys arg2, :tab
 
-  workspace_manager.wait_until_xpath_count_greater_than('All Problem Results', 0)
-  
-  PobWorkspaceManager.new.wait_until_fld_all_problem_results_visible
-  
-  workspace_manager.wait_until_action_element_visible("#{arg2} problem list")
+  manager.wait_for_fld_all_problem_results
+  expect(manager.fld_all_problem_results.length).to be > 0
+
+  manager.add_association_suggestion arg2
+  manager.wait_for_fld_suggestion
+  expect(manager).to have_fld_suggestion
 
   # choose the problem from the search result list
-  expect(workspace_manager.perform_action("#{arg2} problem list")).to eq(true)
+  manager.fld_suggestion.click
 
   # make sure the problem has been associated
-  workspace_manager.wait_until_action_element_visible("#{arg2} associated problem")
-  p '5'
-  # clear the search input so close button is visible
-  # expect(workspace_manager.perform_action("Clear Search Problem Btn")).to eq(true)
-
+  manager.wait_for_fld_associated_problem
+  manager.wait_until_fld_associated_problem_visible
+ 
   # close the Association Manager
-  expect(workspace_manager.perform_action("Close Association Manager")).to eq(true)
+  # DE8186: CIW association modal is hiding its close button
+  # expect(manager).to have_btn_close_associations
+  # manager.btn_close_associations.click
+  # manager.wait_until_btn_close_associations_invisible
+  # DE8186: CIW association modal is hiding its close button
+
+  expect(manager).to have_btn_associate
+  manager.btn_associate.click
+  manager.wait_until_fld_search_problems_invisible  
 end

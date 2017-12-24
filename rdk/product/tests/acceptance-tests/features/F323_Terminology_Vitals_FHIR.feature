@@ -7,8 +7,8 @@ Feature: F323  Normalization of Vitals Data
 @terminology_vitals @FHIR 
 Scenario: An authorized user can access VA Vitals and see standardized LOINC values when defined
   Given a patient with "vitals" in multiple VistAs
-  And a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests vitals for the patient "9E7A;100022" in FHIR format
+  And a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests vitals for the patient "SITE;100022" in FHIR format
   Then a successful response is returned  
   And the FHIR results contain "vitals terminology from VUID to LOINC (VA)"
       | field                       | value                   |
@@ -27,8 +27,8 @@ Scenario: An authorized user can access VA Vitals and see standardized LOINC val
 @terminology_vitals1 @FHIR  
 Scenario: An authorized user can access DOD Vitals and see standardized LOINC values when defined
   Given a patient with "vitals" in multiple VistAs
-  And a patient with pid "9E7A;8" has been synced through the RDK API
-  When the client requests vitals for the patient "9E7A;8" in FHIR format
+  And a patient with pid "SITE;8" has been synced through the RDK API
+  When the client requests vitals for the patient "SITE;8" in FHIR format
   Then a successful response is returned  
   And the FHIR results contain "vitals terminology from DOD Ncid, VUID to LOINC (VA)"
       | field                       | value                |
@@ -53,5 +53,5 @@ Scenario: An authorized user can access DOD Vitals and see standardized LOINC va
   
 
     
- #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+ #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS RE/JLV+Terminology+Handling
     

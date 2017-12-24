@@ -1,0 +1,7 @@
+"ehmp-cache-upload-build-%branch%" {
+	template = 'templates/cache-upload.tpl'
+	description = "This job packages and uploads cache.dat file from vista-silver to the project Nexus repository."
+
+  gitUrl = 'https://code.vistacore.us/scm/cac/cache.git'
+	gitBranch = '%branch%'
+}

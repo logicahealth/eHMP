@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('underscore');
+var _ = require('lodash');
 
 // var inspect = require(global.VX_UTILS + 'inspect');
 
@@ -29,8 +29,7 @@ function SourceSyncJobFactory(log, config, job, environment) {
 
     if ((environment) && (environment.jobStatusFunction)) {
         this.jobStatus = environment.jobStatusFunction;
-    }
-    else {
+    } else {
         this.jobStatus = jobMiddleware.getJobHistory.bind(null, {});
     }
 
@@ -53,15 +52,16 @@ SourceSyncJobFactory.prototype.createVerifiedJobs = function(patientIdentifiers,
     var self = this;
     self.log.debug('source-sync-job-factory.createVerifiedJobs: SourceSyncJobFactory.createVerifiedJobs().  patientIdentifiers that we are starting with.  patientIdentifiers: %j', patientIdentifiers);
 
-    self.engine.getSyncPatientIdentifiers(patientIdentifiers, self.job.forceSync, function(err, patientIdentifiers){
-        self.log.debug('source-sync-job-factory.createVerifiedJobs: patientIdentifiers returned from rules engine.  patientIdentifiers: %j, error: %j', patientIdentifiers, err);
-        if (_.isEmpty(err)) {
-            var jobsToPublish = createJobsToPublish(self, patientIdentifiers);
-            self.log.debug('source-sync-job-factory.createVerifiedJobs: jobsToPublish: %j', jobsToPublish);
-            callback(null, jobsToPublish);
-        } else if (err === 'NO_OPDATA') {
-            callback(err);
+    self.engine.getSyncPatientIdentifiers(patientIdentifiers, self.job.forceSync, function(error, patientIdentifiers) {
+        self.log.debug('source-sync-job-factory.createVerifiedJobs: patientIdentifiers returned from rules engine.  patientIdentifiers: %j, error: %j', patientIdentifiers, error);
+        if (error) {
+            // note that enterprise-sync-request-handler.js handles differently when: error === 'NO_OPDATA'
+            return callback(error);
         }
+
+        var jobsToPublish = createJobsToPublish(self, patientIdentifiers);
+        self.log.debug('source-sync-job-factory.createVerifiedJobs: jobsToPublish: %j', jobsToPublish);
+        return callback(null, jobsToPublish);
     });
 };
 
@@ -93,8 +93,7 @@ function createJobsToPublish(self, patientIdentifiers) {
     if (idUtil.isHdrPubSubMode(self.config)) {
         hdrList = removeNonVistaHdrSites(self, pidList);
         self.log.debug('source-sync-job-factory.createJobsToPublish: HDR in PUB/SUB mode: PID identifiers for VistaHdr sites in the list: %j', hdrList);
-    }
-    else {
+    } else {
         hdrList = idUtil.extractPidBySite(patientIdentifiers, 'HDR');
         self.log.debug('source-sync-job-factory.createJobsToPublish: HDR in REQ/RES mode: HDR identifiers in the list: %j', hdrList);
     }
@@ -131,13 +130,13 @@ function createJobsToPublish(self, patientIdentifiers) {
         // if HDR is in REQ/RES mode and we have some hdr  IDs - then eadd them.
         //-----------------------------------------------------------------------
         if ((!idUtil.isHdrPubSubMode(self.config)) && (hdrList) && (hdrList.length >= 1) && !isSecondarySiteDisabled(self.config, 'hdr')) {
-             jobs = jobs.concat(createHdrJob(self, _.first(hdrList)));
+            jobs = jobs.concat(createHdrJob(self, _.first(hdrList)));
         }
 
-         if ((vlerList) && (vlerList.length >= 1) && !isSecondarySiteDisabled(self.config, 'vler')) {
-             self.log.debug('source-sync-job-factory.createJobsToPublish: VLER identifiers in the list: %j', vlerList);
-             jobs = jobs.concat(createVlerJob(self, _.first(vlerList)));
-         }
+        if ((vlerList) && (vlerList.length >= 1) && !isSecondarySiteDisabled(self.config, 'vler')) {
+            self.log.debug('source-sync-job-factory.createJobsToPublish: VLER identifiers in the list: %j', vlerList);
+            jobs = jobs.concat(createVlerJob(self, _.first(vlerList)));
+        }
 
         // PGD no longer exists so this code is obsolete
         // if ((pgdList) && (pgdList.length >= 1)) {
@@ -158,7 +157,7 @@ function createJobsToPublish(self, patientIdentifiers) {
 // patientIdentifiers: An array of patientIdenfifier objects.
 // returns: An array of patientIdentifier objects that are associated with a primary VistA site.
 //-----------------------------------------------------------------------------------------------
-function removeNonPrimaryVistaSites (self, patientIdentifiers) {
+function removeNonPrimaryVistaSites(self, patientIdentifiers) {
     var vistaSites = self.config.vistaSites;
     self.log.debug('enterprise-sync-request-handler.removeNonPrimaryVistaSites: Primary Vista Sites: %j ', vistaSites);
     return _.filter(patientIdentifiers, function(patientIdentifier) {
@@ -174,7 +173,7 @@ function removeNonPrimaryVistaSites (self, patientIdentifiers) {
 // patientIdentifiers: An array of patientIdenfifier objects.
 // returns: An array of patientIdentifier objects that are associated with a primary VistA site.
 //-----------------------------------------------------------------------------------------------
-function removeNonVistaHdrSites (self, patientIdentifiers) {
+function removeNonVistaHdrSites(self, patientIdentifiers) {
     if ((!_.isObject(self.config.hdr)) || (!_.isObject(self.config.hdr.hdrSites))) {
         return null;
     }
@@ -233,8 +232,17 @@ function createVlerJob(self, patientIdentifier) {
     if (self.job) {
         meta = _createMetaForJob(self.job);
     }
-    var vler = jobUtil.createVlerSyncRequest(patientIdentifier, meta);
-    self.log.debug('createVlerJob: sync request: %j with pid: %j', vler, patientIdentifier);
+
+    let vler = null;
+    const vlerSelector = _.get(self.config, 'vlerSelector', '');
+    if (vlerSelector === 'vlerdas') {
+        vler = jobUtil.createVlerDasSyncRequest(patientIdentifier, meta);
+        self.log.debug('createVlerJob: Creating VLER DAS sync request: %j with pid: %j', vler, patientIdentifier);
+    } else {
+        vler = jobUtil.createVlerSyncRequest(patientIdentifier, meta);
+        self.log.debug('createVlerJob: Creating VLER sync request: %j with pid: %j', vler, patientIdentifier);
+    }
+
     return vler;
 }
 
@@ -291,7 +299,7 @@ function createJmeadowsJob(self, patientIdentifier) {
 //
 //-----------------------------------------------------------------------------------------------
 function isSecondarySiteDisabled(config, siteName) {
-    if (! config || ! siteName) {
+    if (!config || !siteName) {
         return false;
     }
     if (config[siteName] && config[siteName].disabled && config[siteName].disabled === true) {

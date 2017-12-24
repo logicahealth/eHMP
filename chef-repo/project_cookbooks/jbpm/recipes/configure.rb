@@ -5,8 +5,14 @@
 
 include_recipe "ehmp_synapse"
 
-cdsinvocation = find_optional_node_by_role("cdsinvocation", node[:stack])
-admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
+admin_username = data_bag_item("credentials", "jbpm_admin_password", node[:data_bag_string])["username"]
+admin_password = data_bag_item("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
+jbpm_username = data_bag_item("credentials", "oracle_user_jbpm", node[:data_bag_string])["username"]
+jbpm_password = data_bag_item("credentials", "oracle_user_jbpm", node[:data_bag_string])["password"]
+oracle_node = find_optional_node_by_role("ehmp_oracle", node[:stack])
+oracle_ip = oracle_node[:ipaddress] if !oracle_node.nil?
+oracle_port = oracle_node[:ehmp_oracle][:oracle_config][:port] if !oracle_node.nil?
+oracle_sid = oracle_node[:ehmp_oracle][:oracle_sid] if !oracle_node.nil?
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/jboss-web.xml" do
   mode "0644"
@@ -16,7 +22,7 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/jboss-w
   notifies :restart, "service[jboss]"
 end
 
-template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkconfig.properties" do
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/rdkconfig.properties" do
   mode "0644"
   owner "jboss"
   group "jboss"
@@ -27,15 +33,17 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdk
   notifies :restart, "service[jboss]"
 end
 
-template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/cdsconfig.properties" do
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/cdsconfig.properties" do
   mode "0644"
   owner "jboss"
   group "jboss"
-  variables(:cdsinvocation => cdsinvocation)
+  variables(
+    :cdsinvocation_port => node[:synapse][:services][:cdsinvocation][:haproxy][:port]
+  )
   notifies :restart, "service[jboss]"
 end
 
-template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkwritebackconfig.properties" do
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/rdkwritebackconfig.properties" do
   mode "0644"
   owner "jboss"
   group "jboss"
@@ -44,6 +52,27 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdk
     :write_back_port => node[:synapse][:services][:write_back][:haproxy][:port]
   )
   notifies :restart, "service[jboss]"
+end
+
+template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes/dischargeconfig.properties" do
+  mode "0644"
+  owner "jboss"
+  group "jboss"
+  variables(:discharge_followup_timeout => node[:jbpm][:configure][:discharge_followup_timeout])
+  notifies :restart, "service[jboss]"
+end
+
+
+file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkconfig.properties" do
+  action :delete
+end
+
+file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkwritebackconfig.properties" do
+  action :delete
+end
+
+file "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/cdsconfig.properties" do
+  action :delete
 end
 
 template "#{node[:jbpm][:home]}/deployments/dashbuilder.war/WEB-INF/jboss-web.xml" do
@@ -107,15 +136,22 @@ execute "Delete work dir in standalone.xml" do
   not_if "grep org.jboss.as.web.deployment.DELETE_WORK_DIR_ONCONTEXTDESTROY #{node[:jbpm][:home]}/configuration/standalone.xml"
 end
 
+# stop sending log messages to console.log
+execute "Delete console log handler in standalone.xml" do
+  cwd "#{node[:jbpm][:home]}/configuration"
+  command "sed -i '/<handler name=\"CONSOLE\"\\/>/d' ./standalone.xml"
+  notifies :restart, "service[jboss]", :delayed
+  only_if "grep '<handler name=\"CONSOLE\"/>' ./standalone.xml"
+end
 
-#  configure jboss-logging for requestId and sessionId 
+#  configure jboss-logging for requestId and sessionId
 execute "Configure jboss-logging for requestId and sessionId in standalone.xml" do
   command "sed -i.orig 's/%d{HH:mm:ss,SSS} %-5p \\[%c\\] (%t)/& hostname:%X{hostname}, requestId:%X{requestId}, sessionId:%X{sid}/' #{node[:jbpm][:home]}/configuration/standalone.xml"
   not_if "grep 'requestId:%X{requestId}' #{node[:jbpm][:home]}/configuration/standalone.xml"
   notifies :restart, "service[jboss]", :delayed
 end
 
-#  Set jboss-logging level from the default attribute value for root logger 
+#  Set jboss-logging level from the default attribute value for root logger
 execute "Set jboss-logging level from chef attribute value for root logger in standalone.xml" do
   command "sed -i.orig '/<root-logger>/{n;s/.*/                <level name=\"#{node[:jbpm][:log_level]}\"\\/>/}' #{node[:jbpm][:home]}/configuration/standalone.xml"
   not_if "cat #{node[:jbpm][:home]}/configuration/standalone.xml | tr -d '\n' | grep \"<root-logger>\\s*<level name=\\\"#{node[:jbpm][:log_level]}\""
@@ -231,56 +267,92 @@ end
 jbpm_check_war_deployment "dashbuilder"
 jbpm_check_war_deployment "business-central"
 
+# indexes are created after jbpm has connected to Oracle and created its own tables
+# and before jbpm_deploy_jar is called
+cookbook_file "#{node[:jbpm][:workdir]}/create_jbpm_indexes.sql"
+execute "Create jbpm indexes" do
+  cwd node[:jbpm][:workdir]
+  command "sqlplus -s /nolog <<-EOF> #{node[:jbpm][:workdir]}/create_jbpm_indexes.log
+    SET FEEDBACK ON SERVEROUTPUT ON
+    WHENEVER OSERROR EXIT 9;
+    WHENEVER SQLERROR EXIT SQL.SQLCODE;
+    connect #{jbpm_username}/#{jbpm_password}@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=#{oracle_ip})(PORT=#{oracle_port}))(CONNECT_DATA=(SERVICE_NAME=#{oracle_sid})))
+    @create_jbpm_indexes.sql
+    EXIT
+  EOF"
+  sensitive true
+  notifies :start, "service[jboss]", :before
+end
+
 jbpm_deploy_jar "deploy_fit_lab_jar" do
+  user admin_username
   password admin_password
   group_id node[:jbpm][:organization]
   artifact_id "FITLabProject"
   version node[:jbpm_fit_artifacts][:version]
   jar_source node[:jbpm_fit_artifacts][:source]
-  undeploy_legacy_jars node[:jbpm][:configure][:undeploy_legacy_jars]
+  remove_legacy_jars node[:jbpm][:configure][:remove_legacy_jars]
   owner 'jboss'
   group 'jboss'
   mode  '0755'
 end
 
 jbpm_deploy_jar "deploy_general_medicine_jar" do
+  user admin_username
   password admin_password
   group_id node[:jbpm][:organization]
   artifact_id "General_Medicine"
   version node[:jbpm_general_medicine_artifacts][:version]
   jar_source node[:jbpm_general_medicine_artifacts][:source]
-  undeploy_legacy_jars node[:jbpm][:configure][:undeploy_legacy_jars]
+  remove_legacy_jars node[:jbpm][:configure][:remove_legacy_jars]
   owner 'jboss'
   group 'jboss'
   mode  '0755'
 end
 
 jbpm_deploy_jar "deploy_order_jar" do
+  user admin_username
   password admin_password
   group_id node[:jbpm][:organization]
   artifact_id "Order"
   version node[:jbpm_order_artifacts][:version]
   jar_source node[:jbpm_order_artifacts][:source]
-  undeploy_legacy_jars node[:jbpm][:configure][:undeploy_legacy_jars]
+  remove_legacy_jars node[:jbpm][:configure][:remove_legacy_jars]
   owner 'jboss'
   group 'jboss'
   mode  '0755'
 end
 
 jbpm_deploy_jar "deploy_activity_jar" do
+  user admin_username
   password admin_password
   group_id node[:jbpm][:organization]
   artifact_id "Activity"
   version node[:jbpm_activity_artifacts][:version]
   jar_source node[:jbpm_activity_artifacts][:source]
-  undeploy_legacy_jars node[:jbpm][:configure][:undeploy_legacy_jars]
+  remove_legacy_jars node[:jbpm][:configure][:remove_legacy_jars]
   owner 'jboss'
   group 'jboss'
   mode  '0755'
 end
 
 jbpm_clean_up_jars "delete_undeployed_jars" do
-  user node[:jbpm][:install][:admin_user]
+  user admin_username
   password admin_password
-  only_if { node[:jbpm][:configure][:delete_legacy_jars] }
+  only_if { node[:jbpm][:configure][:remove_legacy_jars] }
+end
+
+# cleanup activitydb data from the database
+cookbook_file "#{node[:jbpm][:workdir]}/cleanup_activitydb_data.sql"
+execute "cleanup activitydb" do
+  cwd node[:jbpm][:workdir]
+  command "sqlplus -s /nolog <<-EOF>> #{node[:jbpm][:workdir]}/cleanup_activitydb_data.log
+    WHENEVER OSERROR EXIT 9;
+    WHENEVER SQLERROR EXIT SQL.SQLCODE;
+    connect #{jbpm_username}/#{jbpm_password}@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=#{oracle_ip})(PORT=#{oracle_port}))(CONNECT_DATA=(SERVICE_NAME=#{oracle_sid})))
+    @cleanup_activitydb_data.sql
+    EXIT
+  EOF"
+  sensitive true
+  only_if { node[:jbpm][:configure][:cleanup_activitydb_data]  }
 end

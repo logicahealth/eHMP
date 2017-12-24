@@ -51,8 +51,13 @@ Scenario: Verify error message when entering invalid search in clinic location d
 Scenario: Verify user can select any item from the clinic location drop down field by not entering full name and results displays "No results found" 
     When the user opens clinic search tray
     Then clinic location drop down field is displayed
-    And user enters "c" in the drop down field
-    Then user selects camp and pen from the dropdown 
+    And the user selects a clinics without patients
+    And the clinics Tray table headers are 
+      | header           |
+      | Appt Date / Time |
+      | Patient Name     |
+      | Date of Birth    |
+      | Gender           |
     And search results displays "No results found." error message 
 
 

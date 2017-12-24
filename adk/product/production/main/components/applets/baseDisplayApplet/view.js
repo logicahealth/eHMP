@@ -155,14 +155,19 @@ define([
 
             if (this.options.appletConfig.viewType === 'gist') {
                 //set up events to close quicklooks
-                this.listenTo(this, 'show', function() {
-                    this.$('.grid-applet-panel').on('scroll', function() {
-                        self.$('[data-toggle=popover]').popover('hide');
-                        self.$('.dropdown.applet-dropdown.open').trigger('dropdown.hide');
-                    });
-                });
+                var setupScrollBindings = function() {
+                    this.$('.grid-applet-panel,.body').off('scroll');
+                    this.$('.grid-applet-panel,.body').on('scroll', _.bind(function() {
+                        this.$('[data-toggle=popover]').popover('hide');
+                        this.$('.dropdown.applet-dropdown.open').trigger('dropdown.hide');
+                    }, this));
+                };
+
+                this.listenTo(this.appletContainer, 'show', setupScrollBindings);
+                this.listenTo(this, 'show', setupScrollBindings);
+
                 this.listenTo(this, 'destroy', function() {
-                    this.$('.grid-applet-panel').off('scroll');
+                    this.$('.grid-applet-panel,.body').off('scroll');
                 });
             }
 
@@ -190,6 +195,7 @@ define([
             }
             this.displayAppletView = new this.appletOptions.AppletView(this.appletOptions);
         },
+
         onRender: function() {
             this.loading();
             if (this.filterView) {
@@ -281,7 +287,6 @@ define([
                         attrs.title = 'Press enter to expand accordion.';
                         attrs['data-infobutton'] = dataInfoButton.replace('Panel', '').trim();
                     } else {
-                        this.$(row).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
                         attrs['data-infobutton'] = dataInfoButton.trim();
                     }
                     this.$(row).attr(attrs);

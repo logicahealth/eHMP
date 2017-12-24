@@ -1,10 +1,6 @@
-{{#if currentWorkspace}}
-<a href="#{{routeName}}" class="workspace-navigation-link" title="{{title}} workspace is currently active">
-{{else}}
-<a href="#{{routeName}}" class="workspace-navigation-link" title="Press enter to load the {{title}} workspace">
-{{/if}}
+<a href="#{{routeName}}" class="workspace-navigation-link" title="{{title}}.{{#if currentWorkspace}} Currently active.{{/if}}{{#if defaultScreen}} Set as default workspace.{{/if}}" role="menuitem" tabindex="-1">
 {{#if defaultScreen}}
-    <i class="fa fa-star"></i>
+    <i class="fa fa-star" aria-hidden="true"></i><span class="sr-only">Default Workspace</span>
 {{/if}}
 {{title}}
 </a>

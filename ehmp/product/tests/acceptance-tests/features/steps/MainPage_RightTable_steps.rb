@@ -98,10 +98,10 @@ Then(/^eHMP returns "(.*?)" VistA result\(s\)$/) do |number_of_results|
 
   p source_allvalues
   num_vista_results = 0
-  source_panorama = /urn:va:.*:9E7A/
-  source_kodak = /urn:va:.*:C877/
+  source_panorama = /urn:va:.*:SITE/
+  source_kodak = /urn:va:.*:SITE/
   source_allvalues.each do | value |
-    #if value.start_with? "urn:va:allergy:B362" #PANORAMA
+    #if value.start_with? "urn:va:allergy:SITE" #PANORAMA
     unless source_panorama.match(value).nil?
       num_vista_results = num_vista_results + 1
     end

@@ -106,6 +106,32 @@ var minifyBaseConfig = {
     }
 };
 
+// for use with documentation concat tasks
+var documentationProcess = function(src, filepath) {
+    // get options inside html style comment
+    // at start of .md files -- must be first thing in file
+    var options = src.match(/^<\!--(.+?)-->/);
+    var targetObj = {
+        filepath: filepath
+    };
+    if (options) {
+        try {
+            options = options[1].trim();
+            targetObj = _.extend({}, JSON.parse(options), targetObj);
+        } catch (e) {
+            console.log('Invalid JSON for options in: ', filepath);
+        }
+    }
+    return JSON.stringify(targetObj);
+};
+// Yields a .json file with filepaths and options from .md files
+var documentationConcatOpts = {
+    process: documentationProcess,
+    banner: '{ "items": [',
+    footer: ']}',
+    separator: ','
+};
+
 module.exports = function(grunt) {
     'use strict';
     var config = {
@@ -124,6 +150,8 @@ module.exports = function(grunt) {
                 src: [
                     'app/applets/**/*.js',
                     'app/resources/**/*.js',
+                    'app/contexts/**/*.js',
+                    'app/extensions/**/*.js',
                     'app/screens/**.js',
                     '!**/assets/**'
                 ],
@@ -147,7 +175,10 @@ module.exports = function(grunt) {
                     junit: {
                         path: "test/build/junit-reports"
                     },
-                    specs: "app/applets/**/test/unit/**/*.js",
+                    specs: [
+                        "app/applets/**/test/unit/**/*.js",
+                        "app/resources/**/test/unit/**/*.js"
+                    ],
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                         requireConfigFile: ['config.js']
@@ -171,6 +202,27 @@ module.exports = function(grunt) {
                 dest: 'assets/sass/applets.scss',
                 nonull: true,
                 stripBanners: true
+            },
+            workspaceContexts: {
+                src: ['assets/sass/variables.scss', 'app/contexts/workspace/*.scss', 'app/contexts/workspace/**/theme.scss'],
+                dest: 'assets/sass/workspace-contexts.scss',
+                nonull: true,
+                stripBanners: true
+            },
+            extensionDocs: {
+                options: documentationConcatOpts,
+                src: ['app/extensions/**/README.md', '!app/extensions/README.md'],
+                dest: 'app/extensions/documentation.json',
+            },
+            resourcesDocs: {
+                options: documentationConcatOpts,
+                src: ['app/resources/**/README.md', '!app/resources/README.md'],
+                dest: 'app/resources/documentation.json',
+            },
+            contextsDocs: {
+                options: documentationConcatOpts,
+                src: ['app/contexts/**/README.md', '!app/contexts/README.md'],
+                dest: 'app/contexts/documentation.json',
             }
         },
         cssmin: {
@@ -178,7 +230,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'assets/css',
-                    src: ['applets.css'],
+                    src: ['applets.css', 'workspace-contexts.css'],
                     dest: 'assets/css',
                 }]
             }
@@ -186,12 +238,16 @@ module.exports = function(grunt) {
         postcss: {
             options: {
                 processors: [
-                    require('autoprefixer')({browsers: 'Safari >= 4'})
+                    require('autoprefixer')({ browsers: 'Safari >= 4' })
                 ]
             },
             dist: {
                 src: 'assets/css/applets.css',
                 dest: 'assets/css/applets.css'
+            },
+            workspaceContexts: {
+                src: 'assets/css/workspace-contexts.css',
+                dest: 'assets/css/workspace-contexts.css'
             }
         },
         /////////////////////////////////////////////////////////////////////////////////////

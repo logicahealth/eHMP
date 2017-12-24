@@ -110,10 +110,9 @@ describe('CDS Intent Resource', function() {
             };
             db = cdsSpecUtil.createMockDb(collectionFunctions);
 
-            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDb, callback) {
+            sinon.stub(cdsSubsystem, 'getCDSDB').callsFake(function(logger, dbName, initDb, callback) {
                 callback(null, db);
             });
-            intent.init(appReference());
         });
 
         it('postIntent responds HTTP Bad Request when required parameters are missing, and HTTP Created when not missing', function() {
@@ -219,7 +218,11 @@ describe('CDS Intent Resource', function() {
                 };
             };
             collectionFunctions.update = function(match, intent, callback) {
-                callback(null, 1);
+                callback(null, {
+                    result: {
+                        nModified: 1
+                    }
+                });
             };
 
             //both required values, and a record to update - this should be a 200 (ok) if added...

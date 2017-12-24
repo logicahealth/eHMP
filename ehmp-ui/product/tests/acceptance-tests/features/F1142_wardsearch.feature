@@ -1,10 +1,6 @@
 @F1142 @US17412 @reg2
 Feature: Home Page Usability (Staff View) - Implement Ward search tray
 
-# Background:
-#   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
-#   Then staff view screen is displayed
-
 @F1142_ward_1
 Scenario: Verify ward search display
    Then the staff view screen displays Wards in the sidebar tray
@@ -12,6 +8,7 @@ Scenario: Verify ward search display
 @F1142_ward_2
 Scenario: Verify Ward tray display
     When the user opens the Ward tray
+    And the Ward tray title is "WARDS"
     And the Ward tray displays a close x button
     And the Ward tray displays a help button
     And the Ward tray displays a Ward Location selection box

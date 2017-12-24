@@ -28,5 +28,5 @@ Scenario Outline: Attempt login with incorrect credentials
 
     Examples:
     | facility  	| accesscode	| verifycode 	|
-    | HMP SANDBOX 	| badaccesscode | VEHU10		|
-    | HMP SANDBOX 	| 10VEHU 		| badverifycode	|
+    | HMP SANDBOX 	| PW | PW    		|
+    | HMP SANDBOX 	| PW     		| PW	|

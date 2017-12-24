@@ -12,7 +12,7 @@ describe('Last5 Search Resource', function() {
         var res = {};
         var callPatientSearch;
         var getLoc;
-        var TEST_SITE = '9E7A';
+        var TEST_SITE = 'SITE';
         beforeEach(function() {
             req = httpMocks.createRequest();
             req.logger = sinon.stub(require('bunyan').createLogger({

@@ -1,12 +1,24 @@
-@F294_reports_gist  @reg2
-Feature: F294 : Documetns Applet - Summary View
+@F294_reports_gist @reports_applet @reg2
+Feature: F294 : Documents Applet - Summary View
 As a clinician I would like to have a summary view of documents that contains only items 
 that are reports so that I can quickly get to information on reports
+
+@F294-3
+Scenario: Document Summary: Sortable results
+  Given user searches for and selects "EIGHT,PATIENT"
+  Then Overview is active
+  And the user has selected All within the global date picker
+  And the Reports Gist Applet contains data rows
+  When the user sorts the Reports applet on column 2
+  Then the Reports applet is sorted by column 2 asc
+  And the Reports applet is grouped by column 2 data
+  When the user sorts the Reports applet on column 2
+  Then the Reports applet is sorted by column 2 desc
+  And the Reports applet is grouped by column 2 data
 
 #POC: Team Jupiter
 @US4157_modal @DE4549
 Scenario Outline: 
-#  Given user is logged into eHMP-UI
   And user searches for and selects "<patient>"
   Then Overview is active
   And the user has selected All within the global date picker
@@ -43,13 +55,16 @@ Examples:
   | ZZZRETFOURFORTYSEVEN, Patient | Laboratory Report |
 
 
-@F294_1_ReportsGistDisplay @US4157
+@F294_1_ReportsGistDisplay @F294-2 @US4157 @DE1855 @DE5857
 Scenario: View Reports Gist View on the overview screen
   # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"
+  And user searches for and selects "EIGHT,PATIENT"
   Then Overview is active
+  And the user has selected All within the global date picker
+  And the Reports Gist Applet contains data rows
   And the Reports Gist Applet table contains headers
-    | Date | Type |  Entered By |
+    | Date | Type |  Author/Verifier |
+  And the Reports applet will initially be sorted and group by date
   
 @F294_2_ReportsGistDisplay_procedure @US4157
 Scenario: View procedure in reports gist
@@ -111,7 +126,7 @@ Scenario: Reports Gist expand view displays all of the same details after applet
   Then Overview is active
   And user sees Reports Gist
   And the user has selected All within the global date picker
-  When the user clicks the control "Expand View" in the "Reports Gist applet"
+  When the user clicks the control Expand View in the Reports Gist applet
   Then the expanded Reports Applet is displayed
   And the Reports Gist Applet expand view contains data rows
   When user refreshes Reports Gist Applet expand view
@@ -135,8 +150,9 @@ Scenario: From Reports Gist expand view user can view report details
   Then Overview is active
   And user sees Reports Gist
   And the user has selected All within the global date picker
-  When the user clicks the control "Expand View" in the "Reports Gist applet"
+  When the user clicks the control Expand View in the Reports Gist applet
   Then the expanded Reports Applet is displayed
   When the user views the first Report detail view
   Then the modal's title is displayed
   And the modal dialog contains data labels
+

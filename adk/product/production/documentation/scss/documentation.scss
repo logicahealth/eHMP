@@ -138,7 +138,7 @@ a.home-button:hover {
     }
 }
 
-.nav.navbar-nav .dropdown-menu {
+.nav.navbar-nav .dropdown:not(.dropdown--full-width) .dropdown-menu {
     li.divider {
         margin: 2px 0;
     }
@@ -410,6 +410,10 @@ h6 {
         }
         .modal-footer{
             padding: 5px;
+        }
+        .modal-body {
+            max-height: 40vh;
+            overflow: auto;
         }
         .form-inline {
             display: flex;

@@ -17,8 +17,8 @@ Create Order Set
                     {
                         "uid": "507f191e810c19729de860ea",
                         "type": "quickorder",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "HCTZ 50mg PO QD",
                         "scope": "individual",
                         "active": true
@@ -27,8 +27,8 @@ Create Order Set
                         "uid": "512",
                         "type": "orderable",
                         "domain": "lab",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "Lisinopril 5mg PO QD",
                         "scope": "individual",
                         "active": true
@@ -53,8 +53,8 @@ Create Order Set
                     {
                         "uid": "507f191e810c19729de860ea",
                         "type": "quickorder",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "HCTZ 50mg PO QD",
                         "scope": "individual",
                         "active": true
@@ -63,15 +63,15 @@ Create Order Set
                         "uid": "512",
                         "type": "orderable",
                         "domain": "lab",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "Lisinopril 5mg PO QD",
                         "scope": "individual",
                         "active": true
                     }
                 ],
-                "siteId": "9E7A",
-                "createdBy": "urn:va:user:9E7A:10000000270",
+                "siteId": "SITE",
+                "createdBy": "urn:va:user:SITE:10000000270",
                 "active": true
             }
 
@@ -109,8 +109,8 @@ Update Order Set
                     {
                         "uid": "507f191e810c19729de860ea",
                         "type": "quickorder",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "HCTZ 50mg PO QD",
                         "scope": "individual",
                         "active": true
@@ -119,8 +119,8 @@ Update Order Set
                         "uid": "512",
                         "type": "orderable",
                         "domain": "lab",
-                        "siteId": "9E7A",
-                        "createdBy": "urn:va:user:9E7A:10000000270",
+                        "siteId": "SITE",
+                        "createdBy": "urn:va:user:SITE:10000000270",
                         "name": "Lisinopril 5mg PO QD",
                         "scope": "individual",
                         "active": true
@@ -146,8 +146,8 @@ Update Order Set
                         {
                             "uid": "507f191e810c19729de860ea",
                             "type": "quickorder",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000270",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000270",
                             "name": "HCTZ 50mg PO QD",
                             "scope": "individual",
                             "active": true
@@ -156,16 +156,16 @@ Update Order Set
                             "uid": "512",
                             "type": "orderable",
                             "domain": "lab",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000270",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000270",
                             "name": "Lisinopril 5mg PO QD",
                             "scope": "individual",
                             "active": true
                         }
                     ],
                     "active": true,
-                    "siteId": "9E7A",
-                    "createdBy": "urn:va:user:9E7A:10000000270"
+                    "siteId": "SITE",
+                    "createdBy": "urn:va:user:SITE:10000000270"
                 },
                 "status": 201
             }
@@ -213,8 +213,8 @@ Search Order Set by name
                             "uid": "54333f74970fas45d15aaa6f",
                             "name": "Hypertensive Patient",
                             "scope": "individual",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000270",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000270",
                             "active": true
                         }
                     ]
@@ -251,8 +251,8 @@ Get Order Set
                         {
                             "uid": "507f191e810c19729de860ea",
                             "type": "quickorder",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000270",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000270",
                             "name": "HCTZ 50mg PO QD",
                             "scope": "individual",
                             "active": true
@@ -261,15 +261,15 @@ Get Order Set
                             "uid": "512",
                             "type": "orderable",
                             "domain": "lab",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000270",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000270",
                             "name": "Lisinopril 5mg PO QD",
                             "scope": "individual",
                             "active": true
                         }
                     ],
-                    "siteId": "9E7A",
-                    "createdBy": "urn:va:user:9E7A:10000000270",
+                    "siteId": "SITE",
+                    "createdBy": "urn:va:user:SITE:10000000270",
                     "active": true
                 }
             }

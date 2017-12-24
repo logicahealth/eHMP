@@ -7,7 +7,7 @@ var inputValueEducations = require('./procedureAll-resource-spec-data').inputVal
 
 var async = require('async');
 
-var pid = '9E7A;227';
+var pid = 'SITE;227';
 var req;
 var res = {
     status: function() {
@@ -44,7 +44,7 @@ describe('FHIR Procedure DSTU2 Mapping', function() {
                 error: nop
             },
             headers: {
-                host: 'localhost:8888'
+                host: 'localhost:PORT'
             },
             protocol: 'http'
         };
@@ -80,7 +80,7 @@ describe('FHIR Procedure DSTU2 Mapping', function() {
                 error: nop
             },
             headers: {
-                host: 'localhost:8888'
+                host: 'localhost:PORT'
             },
             protocol: 'http'
         };

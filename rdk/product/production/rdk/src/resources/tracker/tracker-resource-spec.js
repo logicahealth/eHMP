@@ -100,13 +100,16 @@ describe('Tracker resource', function() {
             };
             res.rdkSend = function(body) {
                 expect(body.status).to.equal(500);
-                expect(body.error).to.equal('Internal Server Error');
+                expect(body.error.original).to.equal('Tracker Error');
                 expect(logger.info.calledWithMatch({
                     tracker: sinon.match.object
                 })).to.be.true();
                 expect(logger.error.calledWithMatch({
-                    error: 'error'
-                }, 'Could not save tracker information to external server')).to.be.true();
+                    error: {
+                        original: 'Tracker Error',
+                        additionalInfo: 'Could not save tracker information to external server'
+                    }
+                })).to.be.true();
             };
 
             sinon.stub(httpUtil, 'post', function(options, callback) {
@@ -121,7 +124,7 @@ describe('Tracker resource', function() {
                 var response = {
                     statusCode: 500
                 };
-                return callback('error', response);
+                return callback('Tracker Error', response);
             });
 
             trackerResource._postTracker(req, res);

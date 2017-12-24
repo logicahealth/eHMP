@@ -35,7 +35,7 @@ define([
             this.abort();
             var patientFetchOptions = {};
             if (this.options.patientData === true || options.patientData === true) {
-                _.extend(patientFetchOptions, PatientRecordService.setPatientFetchParams(PatientRecordService.getCurrentPatient(), this.options));
+                _.extend(patientFetchOptions, PatientRecordService.getCurrentPatient().setFetchParams(this.options));
             }
             return _.defaultsDeep({}, options, patientFetchOptions, {
                 resourceTitle: this.resourceTitle
@@ -44,7 +44,7 @@ define([
         fetch: function(options) {
             var fetchOptions = this._setupFetchOptions(options);
             if (_.isString(fetchOptions.resourceTitle)) {
-                this.url = fetchOptions.url = UrlBuilder.buildUrl(fetchOptions.resourceTitle, fetchOptions.criteria);
+                this.url = fetchOptions.url = UrlBuilder.buildUrl(fetchOptions.resourceTitle, fetchOptions.criteria, fetchOptions.allowDuplicateParams);
             }
             if(_.get(fetchOptions, 'type') === 'POST') {
                 this.post.call(this, fetchOptions);

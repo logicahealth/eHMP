@@ -12,8 +12,8 @@ var configuration = {
     generalPurposeJdsServer: {
         baseUrl: 'http://IP             '
     },
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -26,6 +26,6 @@ describe('favorite orderable resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {userId: 'urn:va:user:9E7A:10000000270'});
+        }, {userId: 'urn:va:user:SITE:10000000270'});
     });
 });

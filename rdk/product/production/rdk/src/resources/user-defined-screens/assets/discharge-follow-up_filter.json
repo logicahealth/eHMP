@@ -1,0 +1,11 @@
+{
+    "_id": "discharge-follow-up",
+    "userdefinedfilters": {
+        "id": "discharge-follow-up",
+        "applets": [{
+            "filters": ["imaging", "consult", "procedure", "discharge"],
+            "instanceId": "applet-1",
+            "showFilters": false
+        }]
+    }
+}

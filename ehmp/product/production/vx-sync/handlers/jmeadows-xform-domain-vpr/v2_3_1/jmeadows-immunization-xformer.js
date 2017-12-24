@@ -1,11 +1,10 @@
 'use strict';
 
-//var _ = require('underscore');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 
-function dodImmunizationToVPR(dodImmunization, edipi){
+function dodImmunizationToVPR(logger, dodImmunization, edipi){
     var vprImmunization = {};
 
     vprImmunization.codes = xformUtils.transformCodes(dodImmunization.codes);

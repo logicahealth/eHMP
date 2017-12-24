@@ -11,9 +11,9 @@ describe('AdverseReactions FHIR Resource Collection', function() {
             'updated': '20131204154008',
             'totalItems': 1,
             'items': [{
-                'uid': 'urn:va:allergy:B362:1:107',
+                'uid': 'urn:va:allergy:SITE:1:107',
                 'summary': 'CYCLOPHOSPHAMIDE',
-                'pid': 'B362;1',
+                'pid': 'SITE;1',
                 'facilityCode': '500',
                 'facilityName': 'CAMP MASTER',
                 'localId': '107',
@@ -51,7 +51,7 @@ describe('AdverseReactions FHIR Resource Collection', function() {
                     'enteredByName': 'WARDCLERK,FIFTYTHREE',
                     'enteredByDisplayName': 'Wardclerk,Fiftythree',
                     'comment': ' TESTING AN ADVERSE REACTION',
-                    'enteredByUid': 'urn:va:user:B362:10958'
+                    'enteredByUid': 'urn:va:user:SITE:10958'
                 }],
                 'originatorName': 'WARDCLERK,FIFTYTHREE',
                 'verifierName': '<auto-verified>',
@@ -70,16 +70,16 @@ describe('AdverseReactions FHIR Resource Collection', function() {
         }
     };
     var req = {
-        '_pid': '9E7A;253',
+        '_pid': 'SITE;253',
         query: {
-            'subject.identifier': '9E7A;253'
+            'subject.identifier': 'SITE;253'
         },
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http',
         param: function() {
-            return '9E7A;253';
+            return 'SITE;253';
         }
     };
 

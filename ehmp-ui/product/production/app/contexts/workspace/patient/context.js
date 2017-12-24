@@ -19,6 +19,8 @@ define([
         defaultScreen: 'summary',
         requiredPermissions: ['read-patient-record'],
         userRequired: true,
+        showWorkspaceSelector: true,
+        icon: 'fa-user',
         enter: function () {
         },
         exit: function () {

@@ -8,38 +8,39 @@
 
 require('../../../../env-setup');
 
-var fs = require('fs');
-var path = require('path');
-var async = require('async');
-var Processor = require(global.VX_HANDLERS + 'vista-record-processor/VistaRecordProcessor');
-var PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
-var PublisherDummy = require(global.VX_DUMMIES + 'publisherDummy');
-var patIdCompareUtil = require(global.VX_DUMMIES + 'patient-id-comparator-dummy');
-var metricsDummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
-var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
+const fs = require('fs');
+const path = require('path');
+const async = require('async');
+const Processor = require(global.VX_HANDLERS + 'vista-record-processor/VistaRecordProcessor');
+const PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
+const PublisherDummy = require(global.VX_DUMMIES + 'publisherDummy');
+const patIdCompareUtil = require(global.VX_DUMMIES + 'patient-id-comparator-dummy');
+const metricsDummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
+let dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
+const _ = require('lodash');
 
 // MAKE SURE YOU COMMENT OUT THE FOLLOWING BEFORE CHECKING IN
 //------------------------------------------------------------
-// // var logConfig = require('./worker-config');
-// var logConfig = {
+// //let logConfig = require('./worker-config');
+// let logConfig = {
 //     'loggers': [{
 //         'name': 'root',
 //         'streams': [{
 //             'stream': process.stdout,
 //             'level': 'debug'
-//         }]
-//     }],
+//         }],
+//         addChangeCallback: function(){}
+//     }]
 // };
-// var logUtil = require(global.VX_UTILS + 'log');
-// logUtil.initialize(logConfig.loggers);
-// var dummyLogger = logUtil.get('VistaRecordProcessor-spec', 'host');
+// let logUtil = require(global.VX_UTILS + 'log');
+// logUtil.initialize(logConfig.loggers[0]);
+// let dummyLogger = logUtil.get('VistaRecordProcessor-spec', 'host');
 // End of code to comment out.
 
-var publisherRouterDummy = new PublisherRouterDummy(dummyLogger, config, PublisherDummy);
-var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
-var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
+const JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
+const JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 
-var config = {
+const config = {
     jds: {
         protocol: 'http',
         host: 'IP        ',
@@ -55,30 +56,90 @@ var config = {
         pubsubConfig: {
             maxBatchSize: 500
         }
+    },
+    syncNotifications: {
+        discharge: {
+            dataDomain: 'discharge'
+        }
     }
 };
 
-var jdsClientDummy = new JdsClientDummy(dummyLogger, config);
-var lastUpdateTimeValue = '3150106-1624';
-var vistaIdValue = 'C877';
+const lastUpdateTimeValue = '3150106-1624';
+const vistaIdValue = 'SITE';
 
-var environment = {
-    jobStatusUpdater: {},
-    patientIdComparator :{},
-    metrics: metricsDummyLogger,
-    publisherRouter: publisherRouterDummy,
-    jds: jdsClientDummy,
-};
-environment.jobStatusUpdater = new JobStatusUpdater(dummyLogger, config, environment.jds);
-environment.patientIdComparator =  patIdCompareUtil.detectAndResync;
-var processor = new Processor(dummyLogger, config, environment);
+function getEnvironment() {
+    spyOn(dummyLogger, 'child').andCallThrough();
 
-var patientIdentifierValue1 = {
+    let jdsClientDummy = new JdsClientDummy(dummyLogger, config);
+    // Underlying JDS calls to monitor and make sure that they are made.
+    //---------------------------------------------------------------------------
+    // spyOn(jdsClientDummy, 'storeOperationalData').andCallThrough();
+    // spyOn(jdsClientDummy, 'getOperationalDataByUid').andCallThrough();
+
+    spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
+    spyOn(jdsClientDummy, 'getOperationalDataMutable').andCallThrough();
+
+    spyOn(jdsClientDummy, 'saveSyncStatus').andCallThrough();
+    spyOn(jdsClientDummy, 'saveOperationalSyncStatus').andCallThrough();
+    spyOn(jdsClientDummy, 'getPatientIdentifierByPid').andCallThrough();
+    spyOn(jdsClientDummy, 'saveJobState').andCallThrough();
+    spyOn(jdsClientDummy, 'childInstance').andCallThrough();
+
+    let jobStatusUpdater = new JobStatusUpdater(dummyLogger, config, jdsClientDummy);
+    spyOn(jobStatusUpdater, 'childInstance').andCallThrough();
+
+    let errorPublisher = {
+        'publishPollerError': function(site, item, errorMessage, callback) {
+            return setTimeout(callback, 0, null, null);
+        }
+    };
+    spyOn(errorPublisher, 'publishPollerError').andCallThrough();
+
+    let publisherRouter = new PublisherRouterDummy(dummyLogger, config, PublisherDummy);
+    spyOn(publisherRouter, 'publish').andCallThrough();
+    spyOn(publisherRouter, 'childInstance').andCallThrough();
+
+    return {
+        jobStatusUpdater: jobStatusUpdater,
+        patientIdComparator: patIdCompareUtil.detectAndResync,
+        metrics: metricsDummyLogger,
+        publisherRouter: publisherRouter,
+        jds: jdsClientDummy,
+        errorPublisher: errorPublisher
+    };
+}
+
+function getProcessor(environment) {
+    let processor = new Processor(dummyLogger, config, environment);
+
+    spyOn(processor, '_processDataItem').andCallThrough();
+    spyOn(processor, '_buildVistaDataJob').andCallThrough();
+    spyOn(processor, '_handleItemError').andCallThrough();
+    //spyOn(processor, '_processVistaDataJobs').andCallThrough();
+    spyOn(processor, '_processVistaDataJob').andCallThrough();
+    //spyOn(processor, '_processSyncStartJobs').andCallThrough();
+    spyOn(processor, '_processSyncStartJob').andCallThrough();
+    //spyOn(processor, '_processOPDSyncStartJobs').andCallThrough();
+    spyOn(processor, '_processOPDSyncStartJob').andCallThrough();
+    spyOn(processor, '_storeMetaStamp').andCallThrough();
+    spyOn(processor, '_storeOperationalMetaStamp').andCallThrough();
+    spyOn(processor, '_storeCompletedJob').andCallThrough();
+
+    return processor;
+}
+
+function getHdrProcessor(environment) {
+    let hdrprocessor = new Processor(dummyLogger, config, environment);
+    spyOn(hdrprocessor, '_storeCompletedJob').andCallThrough();
+    return hdrprocessor;
+}
+
+const patientIdentifierValue1 = {
     type: 'pid',
     value: vistaIdValue + ';1'
 };
 
-var syncStartJobsValue = [{
+const syncStartJobsValue = [{
     collection: 'syncStart',
     pid: vistaIdValue + ';1',
     referenceInfo: {
@@ -89,7 +150,7 @@ var syncStartJobsValue = [{
     metaStamp: {
         stampTime: '20150114115126',
         sourceMetaStamp: {
-            'C877': {
+            'SITE': {
                 pid: vistaIdValue + ';1',
                 localId: '1',
                 stampTime: '20150114115126',
@@ -98,10 +159,10 @@ var syncStartJobsValue = [{
                         domain: 'allergy',
                         stampTime: '20150114115126',
                         eventMetaStamp: {
-                            'urn:va:allergy:C877:1:751': {
+                            'urn:va:allergy:SITE:1:751': {
                                 stampTime: '20150114115126'
                             },
-                            'urn:va:allergy:C877:1:752': {
+                            'urn:va:allergy:SITE:1:752': {
                                 stampTime: '20150114115126'
                             }
                         }
@@ -121,7 +182,7 @@ var syncStartJobsValue = [{
     metaStamp: {
         stampTime: '20150114115126',
         sourceMetaStamp: {
-            'C877': {
+            'SITE': {
                 pid: vistaIdValue + ';2',
                 localId: '1',
                 stampTime: '20150114115126',
@@ -130,10 +191,10 @@ var syncStartJobsValue = [{
                         domain: 'allergy',
                         stampTime: '20150114115126',
                         eventMetaStamp: {
-                            'urn:va:allergy:C877:2:300': {
+                            'urn:va:allergy:SITE:2:300': {
                                 stampTime: '20150114115126'
                             },
-                            'urn:va:allergy:C877:2:301': {
+                            'urn:va:allergy:SITE:2:301': {
                                 stampTime: '20150114115126'
                             }
                         }
@@ -144,7 +205,7 @@ var syncStartJobsValue = [{
     }
 }];
 
-var syncStartJobEmptyMetastamp = {
+const syncStartJobEmptyMetastamp = {
     collection: 'syncStart',
     rootJobId: '11-111',
     jobId: '11-111',
@@ -159,7 +220,7 @@ var syncStartJobEmptyMetastamp = {
     metaStamp: {
         stampTime: '20150114115126',
         sourceMetaStamp: {
-            'C877': {
+            'SITE': {
                 pid: vistaIdValue + ';1',
                 localId: '1',
                 stampTime: '20150114115126',
@@ -175,26 +236,26 @@ var syncStartJobEmptyMetastamp = {
     }
 };
 
-var OPDsyncStartJobsValue = [{
+const OPDsyncStartJobsValue = [{
     'collection': 'OPDsyncStart',
-    'systemId': '9E7A',
+    'systemId': 'SITE',
     'rootJobId': '1',
     'jobId': '3',
     'metaStamp': {
         'stampTime': 20141031094920,
         'sourceMetaStamp': {
-            '9E7A': {
+            'SITE': {
                 'stampTime': 20141031094920,
                 'domainMetaStamp': {
                     'doc-def': {
                         'domain': 'doc-def',
                         'stampTime': 20141031094920,
                         'itemMetaStamp': {
-                            'urn:va:doc-def:9E7A:1001': {
-                                'stampTime': 20141031094920,
+                            'urn:va:doc-def:SITE:1001': {
+                                'stampTime': 20141031094920
                             },
-                            'urn:va:doc-def:9E7A:1002': {
-                                'stampTime': 20141031094920,
+                            'urn:va:doc-def:SITE:1002': {
+                                'stampTime': 20141031094920
                             }
                         }
                     },
@@ -202,11 +263,11 @@ var OPDsyncStartJobsValue = [{
                         'domain': 'pt-select',
                         'stampTime': 20141031094920,
                         'itemMetaStamp': {
-                            'urn:va:pt-select:9E7A:1001': {
-                                'stampTime': 20141031094920,
+                            'urn:va:pt-select:SITE:1001': {
+                                'stampTime': 20141031094920
                             },
                             'urn:va:pt-select:9E7a:1002': {
-                                'stampTime': 20141031094920,
+                                'stampTime': 20141031094920
                             }
                         }
                     }
@@ -216,11 +277,11 @@ var OPDsyncStartJobsValue = [{
     }
 }];
 
-var vistaDataJobAllergyObjectWithoutPid = {
-    uid: 'urn:va:allergy:9E7A:1:27837'
+const vistaDataJobAllergyObjectWithoutPid = {
+    uid: 'urn:va:allergy:SITE:1:27837'
 };
 
-var vistaDataJobsValue = [{
+const vistaDataJobsValue = [{
     collection: 'allergy',
     pid: vistaIdValue + ';1',
     referenceInfo: {
@@ -251,26 +312,34 @@ var vistaDataJobsValue = [{
     }
 }];
 
-var dataValue = {
+const vistaErrorItem = {
+    'error': [{
+        'collection': 'med',
+        'error': 'A mumps error occurred when extracting patient data. A total of 1 occurred.\n\rAn error occurred on patient: 100296\n\rA problem occurred converting order 39094 for the medication domain\n\r',
+        'uid': 'urn:va:med:SITE:100296:12345'
+    }]
+};
+
+const dataValue = {
     lastUpdate: lastUpdateTimeValue,
     items: []
 };
 dataValue.items = syncStartJobsValue.concat(vistaDataJobsValue);
 
-var rootJobIdValue = '1';
-var jobIdValue = '2';
-var jpidValue = '9a6c3294-fe16-4a91-b10b-19f78656fb8c';
+const rootJobIdValue = '1';
+const jobIdValue = '2';
+const jpidValue = '9a6c3294-fe16-4a91-b10b-19f78656fb8c';
 
 // Configurations related to VistaHdr
-var hdrIdValue = '84F0';
-//var hdrUidValue = 'urn:va:vprupdate:' + hdrIdValue;
-var hdrprocessor = new Processor(dummyLogger, config, environment);
-var hdrPatientIdentifierValue1 = {
+const hdrIdValue = '84F0';
+//const hdrUidValue = 'urn:va:vprupdate:' + hdrIdValue;
+//const hdrprocessor = getProcessor(environment);
+const hdrPatientIdentifierValue1 = {
     type: 'pid',
     value: hdrIdValue + ';1'
 };
 
-var hdrSyncStartJobsValue = [{
+const hdrSyncStartJobsValue = [{
     collection: 'syncStart',
     pid: hdrIdValue + ';1',
     metaStamp: {
@@ -326,96 +395,122 @@ var hdrSyncStartJobsValue = [{
     }
 }];
 
-var hdrDataValue = {
+const dischargeNotification = {
+    collection: 'discharge',
+    pid: 'SITE;3',
+    systemId: 'SITE',
+    localId: '3',
+    icn: '-1^NO ICN',
+    unsolicitedUpdate: true,
+    object: {
+        deceased: true,
+        lastUpdateTime: '20170517094313',
+        facilityCode: '998',
+        facilityName: 'ABILENE (CAA)',
+        kind: 'discharge',
+        reasonName: 'CHEST PAIN',
+        stampTime: '20170517094313',
+        uid: 'urn:va:discharge:SITE:3:H4654'
+    }
+};
+
+const dischargeSyncStart = {
+    collection: 'syncStart',
+    metaStamp: {
+        pid: 'SITE;3',
+        sourceMetaStamp: {
+            'SITE': {
+                domainMetaStamp: {
+                    discharge: {
+                        domain: 'discharge',
+                        eventMetaStamp: {
+                            'urn:va:discharge:SITE:3:H4654': {
+                                stampTime: 20170518092221
+                            }
+                        },
+                        stampTime: 20170518092221
+                    }
+                },
+                pid: 'SITE;3',
+                stampTime: 20170518092221
+            }
+        }
+    },
+    pid: 'SITE;3',
+    unsolicitedUpdate: true
+};
+
+const hdrDataValue = {
     lastUpdate: lastUpdateTimeValue,
     items: []
 };
 
-var vistaHdrDataJobValue = [{
+const vistaHdrDataJobValue = [{
     collection: 'consult',
     pid: '84F0;1',
     localId: '1',
     seq: 1,
     total: 1,
     object: {
-      lastUpdateTime: 20140409083720,
-      category: 'P',
-      uid: 'urn:va:consult:84F0:1:82'
+        lastUpdateTime: 20140409083720,
+        category: 'P',
+        uid: 'urn:va:consult:84F0:1:82'
     }
-  },
-  {
+}, {
     collection: 'cpt',
     pid: '84F0;1',
     localId: '1',
     seq: 1,
     total: 1,
     object: {
-      lastUpdateTime: 20140409083720,
-      type: 'U',
-      uid: 'urn:va:cpt:84F0:1:881'
+        lastUpdateTime: 20140409083720,
+        type: 'U',
+        uid: 'urn:va:cpt:84F0:1:881'
     }
-  }
-];
+}];
 
 hdrDataValue.items = hdrSyncStartJobsValue.concat(vistaHdrDataJobValue);
 
 describe('VistaRecordProcessor', function() {
-    beforeEach(function() {
-        // Underlying JDS calls to monitor and make sure that they are made.
-        //---------------------------------------------------------------------------
-        // spyOn(jdsClientDummy, 'storeOperationalData').andCallThrough();
-        // spyOn(jdsClientDummy, 'getOperationalDataByUid').andCallThrough();
-
-        spyOn(jdsClientDummy, 'storeOperationalDataMutable').andCallThrough();
-        spyOn(jdsClientDummy, 'getOperationalDataMutable').andCallThrough();
-
-        spyOn(jdsClientDummy, 'saveSyncStatus').andCallThrough();
-        spyOn(jdsClientDummy, 'saveOperationalSyncStatus').andCallThrough();
-        spyOn(jdsClientDummy, 'getPatientIdentifierByPid').andCallThrough();
-        spyOn(jdsClientDummy, 'saveJobState').andCallThrough();
-        spyOn(jdsClientDummy, 'childInstance').andCallThrough();
-        spyOn(processor, '_processDataItem').andCallThrough();
-        spyOn(processor, '_buildVistaDataJob').andCallThrough();
-        //spyOn(processor, '_processVistaDataJobs').andCallThrough();
-        spyOn(processor, '_processVistaDataJob').andCallThrough();
-        //spyOn(processor, '_processSyncStartJobs').andCallThrough();
-        spyOn(processor, '_processSyncStartJob').andCallThrough();
-        //spyOn(processor, '_processOPDSyncStartJobs').andCallThrough();
-        spyOn(processor, '_processOPDSyncStartJob').andCallThrough();
-        spyOn(processor, '_storeMetaStamp').andCallThrough();
-        spyOn(processor, '_storeOperationalMetaStamp').andCallThrough();
-        spyOn(processor, '_storeCompletedJob').andCallThrough();
-        spyOn(hdrprocessor, '_storeCompletedJob').andCallThrough();
-        spyOn(publisherRouterDummy, 'publish').andCallThrough();
-        spyOn(publisherRouterDummy, 'childInstance').andCallThrough();
-        spyOn(dummyLogger, 'child').andCallThrough();
-        spyOn(environment.jobStatusUpdater, 'childInstance').andCallThrough();
-    });
-
     describe('operational data', function() {
         it('Null Record', function() {
-            var record = null;
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let record = null;
             expect(processor._isOperationalData(record)).toBeFalsy();
         });
         it('Empty Items', function() {
-            var record = {};
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let record = {};
             expect(processor._isOperationalData(record)).toBeTruthy();
         });
         it('PID Record', function() {
-            var record = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let record = {
                 pid: '1'
             };
             expect(processor._isOperationalData(record)).toBeFalsy();
         });
         it('Good Operational Record', function() {
-            var record = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let record = {
                 collection: 'patient'
             };
             expect(processor._isOperationalData(record)).toBeTruthy();
         });
         it('Development Operational Samples', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
             //iterates over all sample operational data and confirms that isOperational is true
-            var directory = 'tests/data/operational';
+            let directory = 'tests/data/operational';
             directory = path.resolve(directory);
             fs.readdir(directory, function(err, list) {
                 expect(err).toBeFalsy();
@@ -424,15 +519,15 @@ describe('VistaRecordProcessor', function() {
                 }
 
                 async.eachSeries(list, function(file, callback) {
-                    var path = directory + '/' + file;
-                    var contents = fs.readFileSync(path);
+                    let path = directory + '/' + file;
+                    let contents = fs.readFileSync(path);
                     try {
                         contents = JSON.parse(contents);
                         expect(contents).not.toBeUndefined();
                         expect(contents.data).not.toBeUndefined();
                         expect(contents.data.items).not.toBeUndefined();
 
-                        var items = contents.data.items;
+                        let items = contents.data.items;
                         async.eachSeries(items, function(operationalPayload, callback) {
                             expect(processor._isOperationalData(operationalPayload)).toBeTruthy();
                             callback();
@@ -448,40 +543,166 @@ describe('VistaRecordProcessor', function() {
             });
         });
     });
-    describe('_processDataItem', function(){
-        it('Normal path: syncStart', function(){
-            processor._processDataItem(syncStartJobsValue[0], function(){
+
+    describe('_isSyncNotification', function() {
+        it('Null domain', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let domain = null;
+            expect(processor._isSyncNotification(domain)).toBeFalsy();
+        });
+        it('Empty domain', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let domain = '';
+            expect(processor._isOperationalData(domain)).toBeFalsy();
+        });
+        it('not a sync notification domain', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let domain = 'allergy';
+            expect(processor._isSyncNotification(domain)).toBeFalsy();
+        });
+        it('is a sync notification domain', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let domain = 'discharge';
+            expect(processor._isSyncNotification(domain)).toBeTruthy();
+        });
+    });
+
+    describe('_processDataItem', function() {
+        it('Normal path: syncStart', function(done) {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._processDataItem(syncStartJobsValue[0], function() {
                 expect(processor._processSyncStartJob).toHaveBeenCalled();
+                done();
             });
         });
-        it('Normal path: OPDsyncStart', function(){
-            processor._processDataItem(OPDsyncStartJobsValue[0], function(){
+        it('Normal path: OPDsyncStart', function(done) {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._processDataItem(OPDsyncStartJobsValue[0], function() {
                 expect(processor._processOPDSyncStartJob).toHaveBeenCalled();
+                done();
             });
         });
-        it('Normal path: vistaDataJob', function(){
-            processor._processDataItem(vistaDataJobsValue[0], function(){
+        it('Normal path: vistaDataJob', function(done) {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._processDataItem(vistaDataJobsValue[0], function() {
                 expect(processor._processVistaDataJob).toHaveBeenCalled();
+                done();
             });
         });
-        it('Normal path: vistaDataJob (Empty object)', function(){
-            processor._processDataItem({collection: 'allergy', object: null}, function(error, response){
+        it('Normal path: vistaDataJob (Empty object)', function(done) {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._processDataItem({
+                collection: 'allergy',
+                object: null
+            }, function(error, response) {
                 expect(processor._processVistaDataJob).not.toHaveBeenCalled();
                 expect(error).toBeNull();
                 expect(response).toEqual('Item of collection type allergy has no data to process');
+                done();
+            });
+        });
+        it('Normal path: Received item level error', function(done) {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._processDataItem(vistaErrorItem, function(error, response) {
+                expect(processor._processVistaDataJob).not.toHaveBeenCalled();
+                expect(processor._handleItemError).toHaveBeenCalled();
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalled();
+                expect(error).toBeNull();
+                expect(response).toContain('A single item from a Vista Batch had an error');
+                done();
             });
         });
     });
+
+    describe('_handleItemError', function() {
+        it('Normal path:', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._handleItemError(vistaErrorItem, function(error, response) {
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalledWith('SITE', vistaErrorItem, jasmine.any(String), jasmine.any(Function));
+                expect(error).toBeNull();
+                expect(response).toContain('A single item from a Vista Batch had an error');
+            });
+        });
+        it('Error Path: Item was null', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._handleItemError(null, function(error, response) {
+                expect(environment.errorPublisher.publishPollerError).not.toHaveBeenCalled();
+                expect(error).toBeNull();
+                expect(response).toContain('Method called with null or undefined item');
+            });
+        });
+        it('Error path: Item did not contain an error node.', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            processor._handleItemError({}, function(error, response) {
+                expect(environment.errorPublisher.publishPollerError).not.toHaveBeenCalled();
+                expect(error).toBeNull();
+                expect(response).toContain('Method called with item that did not contain an error.');
+            });
+        });
+        it('Error path: Item Error did not have any UID.', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let localItem = JSON.parse(JSON.stringify(vistaErrorItem));
+            delete localItem.error[0].uid;
+            processor._handleItemError(localItem, function(error, response) {
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalledWith(undefined, localItem, jasmine.any(String), jasmine.any(Function));
+                expect(error).toBeNull();
+                expect(response).toContain('A single item from a Vista Batch had an error');
+            });
+        });
+        it('Error path: Item Error contains multiple errors and the second error contains a UID.', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let localItem = JSON.parse(JSON.stringify(vistaErrorItem));
+            delete localItem.error[0].uid;
+            localItem.error[1] = JSON.parse(JSON.stringify(vistaErrorItem.error[0]));
+            processor._handleItemError(localItem, function(error, response) {
+                expect(environment.errorPublisher.publishPollerError).toHaveBeenCalledWith('SITE', localItem, jasmine.any(String), jasmine.any(Function));
+                expect(error).toBeNull();
+                expect(response).toContain('A single item from a Vista Batch had an error');
+            });
+        });
+    });
+
     describe('_processVistaDataJob', function() {
         it('Happy Path', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 201
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processVistaDataJob(vistaDataJobsValue[0], function(error, response) {
                     actualError = error;
@@ -499,23 +720,73 @@ describe('VistaRecordProcessor', function() {
                 expect(actualResponse).toBeTruthy();
                 expect(processor._buildVistaDataJob.calls.length).toEqual(1);
                 expect(processor._buildVistaDataJob).toHaveBeenCalledWith(dummyLogger, jasmine.objectContaining(vistaDataJobsValue[0]));
-                expect(publisherRouterDummy.childInstance.calls.length).toEqual(1);
-                expect(publisherRouterDummy.childInstance).toHaveBeenCalledWith(dummyLogger);
-                expect(publisherRouterDummy.publish.calls.length).toEqual(1);
-                expect(publisherRouterDummy.publish).toHaveBeenCalledWith(
-                        jasmine.objectContaining({
-                            type: 'event-prioritization-request',
-                            patientIdentifier: {
-                                type: 'pid',
-                                value: 'C877;1'
-                            },
-                            // jpid: jasmine.any(String),
-                            dataDomain: 'allergy',
-                            record: {
-                                pid: 'C877;1',
-                                uid: 'urn:va:allergy:9E7A:1:27837'
-                            }
-                        }),
+                expect(environment.publisherRouter.childInstance.calls.length).toEqual(1);
+                expect(environment.publisherRouter.childInstance).toHaveBeenCalledWith(dummyLogger);
+                expect(environment.publisherRouter.publish.calls.length).toEqual(1);
+                expect(environment.publisherRouter.publish).toHaveBeenCalledWith(
+                    jasmine.objectContaining({
+                        type: 'event-prioritization-request',
+                        patientIdentifier: {
+                            type: 'pid',
+                            value: 'SITE;1'
+                        },
+                        dataDomain: 'allergy',
+                        record: {
+                            pid: 'SITE;1',
+                            uid: 'urn:va:allergy:SITE:1:27837'
+                        }
+                    }),
+                    jasmine.any(Function));
+            });
+        });
+        it('Sync Notification Path', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
+
+            runs(function() {
+                processor._processVistaDataJob(dischargeNotification, function(error, response) {
+                    actualError = error;
+                    actualResponse = response;
+                    finished = true;
+                });
+            });
+
+            waitsFor(function() {
+                return finished;
+            }, 'Call to _processVistaDataJobs failed to return in time.', 500);
+
+            runs(function() {
+                expect(actualError).toBeFalsy();
+                expect(actualResponse).toBeTruthy();
+                expect(processor._buildVistaDataJob.calls.length).toEqual(1);
+                expect(processor._buildVistaDataJob).toHaveBeenCalledWith(dummyLogger, jasmine.objectContaining(dischargeNotification));
+                expect(environment.publisherRouter.childInstance.calls.length).toEqual(1);
+                expect(environment.publisherRouter.childInstance).toHaveBeenCalledWith(dummyLogger);
+                expect(environment.publisherRouter.publish.calls.length).toEqual(1);
+                expect(environment.publisherRouter.publish).toHaveBeenCalledWith(
+                    jasmine.objectContaining({
+                        type: 'sync-notification',
+                        patientIdentifier: {
+                            type: 'pid',
+                            value: 'SITE;3'
+                        },
+                        dataDomain: 'discharge',
+                        record: {
+                            deceased: true,
+                            lastUpdateTime: '20170517094313',
+                            facilityCode: '998',
+                            facilityName: 'ABILENE (CAA)',
+                            kind: 'discharge',
+                            reasonName: 'CHEST PAIN',
+                            stampTime: '20170517094313',
+                            uid: 'urn:va:discharge:SITE:3:H4654',
+                            pid: 'SITE;3'
+                        }
+                    }),
                     jasmine.any(Function));
             });
         });
@@ -523,20 +794,22 @@ describe('VistaRecordProcessor', function() {
 
     describe('_buildVistaDataJob', function() {
         it('Patient Data Job', function() {
-            var job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[0]);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[0]);
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
                 type: 'event-prioritization-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: 'C877;1'
+                    value: 'SITE;1'
                 },
-                // jpid: jasmine.any(String),
                 dataDomain: 'allergy',
                 record: {
-                    pid: 'C877;1',
-                    uid: 'urn:va:allergy:9E7A:1:27837'
+                    pid: 'SITE;1',
+                    uid: 'urn:va:allergy:SITE:1:27837'
                 },
                 priority: 1,
                 referenceInfo: {
@@ -552,27 +825,29 @@ describe('VistaRecordProcessor', function() {
             }));
         });
         it('Patient Data Job (Unsolicited Update)', function() {
-            var localVistaDataJobValue = JSON.parse(JSON.stringify(vistaDataJobsValue[0]));
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let localVistaDataJobValue = JSON.parse(JSON.stringify(vistaDataJobsValue[0]));
             delete localVistaDataJobValue.referenceInfo;
             localVistaDataJobValue.unsolicitedUpdate = true;
-            var job = processor._buildVistaDataJob(dummyLogger, localVistaDataJobValue);
+            let job = processor._buildVistaDataJob(dummyLogger, localVistaDataJobValue);
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
                 type: 'event-prioritization-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: 'C877;1'
+                    value: 'SITE;1'
                 },
-                // jpid: jasmine.any(String),
                 dataDomain: 'allergy',
                 record: {
-                    pid: 'C877;1',
-                    uid: 'urn:va:allergy:9E7A:1:27837'
+                    pid: 'SITE;1',
+                    uid: 'urn:va:allergy:SITE:1:27837'
                 },
                 priority: 1,
                 referenceInfo: {
-                    'initialSyncId': 'C877;1'
+                    'initialSyncId': 'SITE;1'
                 }
             }));
             // Make sure that the original job ID did not sneak in the new job.
@@ -582,22 +857,24 @@ describe('VistaRecordProcessor', function() {
             }));
         });
         it('Patient Data Job (Old system - unsolicitedUpdate is undefined)', function() {
-            var localVistaDataJobValue = JSON.parse(JSON.stringify(vistaDataJobsValue[0]));
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let localVistaDataJobValue = JSON.parse(JSON.stringify(vistaDataJobsValue[0]));
             delete localVistaDataJobValue.referenceInfo;
-            var job = processor._buildVistaDataJob(dummyLogger, localVistaDataJobValue);
+            let job = processor._buildVistaDataJob(dummyLogger, localVistaDataJobValue);
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
                 type: 'event-prioritization-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: 'C877;1'
+                    value: 'SITE;1'
                 },
-                // jpid: jasmine.any(String),
                 dataDomain: 'allergy',
                 record: {
-                    pid: 'C877;1',
-                    uid: 'urn:va:allergy:9E7A:1:27837'
+                    pid: 'SITE;1',
+                    uid: 'urn:va:allergy:SITE:1:27837'
                 }
             }));
             // Make sure that the original job ID did not sneak in the new job.
@@ -609,14 +886,16 @@ describe('VistaRecordProcessor', function() {
             expect(job.referenceInfo).toBeUndefined();
         });
         it('Operational Data pt-select', function() {
-            var job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[1]);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[1]);
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
                 type: 'operational-store-record',
-                jpid: jasmine.any(String),
                 record: {
-                    pid: 'C877;2'
+                    pid: 'SITE;2'
                 }
             }));
             expect(job).not.toEqual(jasmine.objectContaining({
@@ -629,14 +908,48 @@ describe('VistaRecordProcessor', function() {
             }));
         });
         it('Operational Data other', function() {
-            var job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[2]);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let job = processor._buildVistaDataJob(dummyLogger, vistaDataJobsValue[2]);
 
             expect(job).toBeTruthy();
             expect(job).toEqual(jasmine.objectContaining({
                 type: 'operational-store-record',
-                jpid: jasmine.any(String),
                 record: {
                     data: 'some operational data'
+                }
+            }));
+        });
+        it('Sync Notification Job', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let job = processor._buildVistaDataJob(dummyLogger, dischargeNotification);
+
+            expect(job).toBeTruthy();
+            expect(job).toEqual(jasmine.objectContaining({
+                type: 'sync-notification',
+                timestamp: jasmine.any(String),
+                patientIdentifier: {
+                    type: 'pid',
+                    value: 'SITE;3'
+                },
+                priority: 1,
+                referenceInfo: {
+                    initialSyncId: 'SITE;3'
+                },
+                dataDomain: 'discharge',
+                record: {
+                    deceased: true,
+                    lastUpdateTime: '20170517094313',
+                    facilityCode: '998',
+                    facilityName: 'ABILENE (CAA)',
+                    kind: 'discharge',
+                    reasonName: 'CHEST PAIN',
+                    stampTime: '20170517094313',
+                    uid: 'urn:va:discharge:SITE:3:H4654',
+                    pid: 'SITE;3'
                 }
             }));
         });
@@ -644,16 +957,19 @@ describe('VistaRecordProcessor', function() {
     describe('processBatch', function() {
         dummyLogger.info('Now starting processBatch test');
         it('Happy Path', function() {
-            var expectedJdsResponse = [{
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = [{
                 statusCode: 200
-            },{
+            }, {
                 statusCode: 200
             }];
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor.processBatch(dataValue, function(error, response) {
                     dummyLogger.debug('arrived in the callback.');
@@ -673,21 +989,24 @@ describe('VistaRecordProcessor', function() {
                 expect(actualResponse).toBeTruthy();
                 expect(processor._processSyncStartJob.calls.length).toEqual(2);
                 expect(processor._processVistaDataJob.calls.length).toEqual(3);
-                expect(publisherRouterDummy.publish.calls.length).toEqual(3);
-                expect(publisherRouterDummy.publish).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(Function));
+                expect(environment.publisherRouter.publish.calls.length).toEqual(3);
+                expect(environment.publisherRouter.publish).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(Function));
             });
         });
     });
     describe('_processSyncStartJob', function() {
         it('Happy Path', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 200
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processSyncStartJob(syncStartJobsValue[0], function(error, response) {
                     actualError = error;
@@ -704,19 +1023,22 @@ describe('VistaRecordProcessor', function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
                 expect(dummyLogger.child).toHaveBeenCalledWith(syncStartJobsValue[0].referenceInfo);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
             });
         });
         it('Happy Path (Empty metaStamp)', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 200
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processSyncStartJob(syncStartJobEmptyMetastamp, function(error, response) {
                     actualError = error;
@@ -733,17 +1055,45 @@ describe('VistaRecordProcessor', function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
                 expect(dummyLogger.child).toHaveBeenCalledWith(syncStartJobEmptyMetastamp.referenceInfo);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(0);
-                //expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(0);
+                //expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+            });
+        });
+        it('Sync Notification Path', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
+            runs(function() {
+                processor._processSyncStartJob(dischargeSyncStart, function(error, response) {
+                    actualError = error;
+                    actualResponse = response;
+                    finished = true;
+                });
+            });
+
+            waitsFor(function() {
+                return finished;
+            }, 'Call to _processSyncStartJobs failed to return in time.', 500);
+
+            runs(function() {
+                expect(actualError).toBeFalsy();
+                expect(actualResponse).toBeFalsy();
+                expect(environment.jds.saveSyncStatus).not.toHaveBeenCalled();
             });
         });
         it('No pid', function() {
-            var syncStartJobNoPid = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let syncStartJobNoPid = {
                 collection: 'syncStart',
                 metaStamp: {
                     stampTime: '20150114115126',
                     sourceMetaStamp: {
-                        '9E7A': {
+                        'SITE': {
                             pid: vistaIdValue + ';1',
                             localId: '1',
                             stampTime: '20150114115126',
@@ -752,10 +1102,10 @@ describe('VistaRecordProcessor', function() {
                                     domain: 'allergy',
                                     stampTime: '20150114115126',
                                     eventMetaStamp: {
-                                        'urn:va:allergy:C877:1:751': {
+                                        'urn:va:allergy:SITE:1:751': {
                                             stampTime: '20150114115126'
                                         },
-                                        'urn:va:allergy:C877:1:752': {
+                                        'urn:va:allergy:SITE:1:752': {
                                             stampTime: '20150114115126'
                                         }
                                     }
@@ -765,9 +1115,9 @@ describe('VistaRecordProcessor', function() {
                     }
                 }
             };
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processSyncStartJob(syncStartJobNoPid, function(error, response) {
                     actualError = error;
@@ -784,17 +1134,20 @@ describe('VistaRecordProcessor', function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedNoPid');
                 expect(dummyLogger.child).not.toHaveBeenCalled();
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(0);
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(0);
             });
         });
         it('No metaStamp', function() {
-            var syncStartJobNoPid = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let syncStartJobNoPid = {
                 collection: 'syncStart',
                 pid: vistaIdValue + ';1'
             };
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processSyncStartJob(syncStartJobNoPid, function(error, response) {
                     actualError = error;
@@ -811,23 +1164,26 @@ describe('VistaRecordProcessor', function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe(null);
                 expect(dummyLogger.child).not.toHaveBeenCalled();
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(0);
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(0);
             });
         });
     });
 
     describe('_processOPDSyncStartJob', function() {
         it('Happy Path', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 200
             };
-            //var jdsClientDummy = new JdsClientDummy(dummyLogger, config);
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
-            //spyOn(jdsClientDummy, 'saveOperationalSyncStatus').andCallThrough();
+            //let environment.jds = new JdsClientDummy(dummyLogger, config);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
+            //spyOn(environment.jds, 'saveOperationalSyncStatus').andCallThrough();
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processOPDSyncStartJob(OPDsyncStartJobsValue[0], function(error, response) {
                     actualError = error;
@@ -843,19 +1199,22 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, '9E7A', jasmine.any(Function));
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, 'SITE', jasmine.any(Function));
             });
         });
 
         it('No metaStamp', function() {
-            var OPDsyncStartJobNoStamp = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let OPDsyncStartJobNoStamp = {
                 collection: 'OPDsyncStart',
-                systemId: '9E7A'
+                systemId: 'SITE'
             };
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._processOPDSyncStartJob(OPDsyncStartJobNoStamp, function(error, response) {
                     actualError = error;
@@ -871,21 +1230,24 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedNoMetaStamp');
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(0);
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(0);
             });
         });
     });
 
     describe('_storeMetaStamp', function() {
         it('Happy Path', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 200
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeMetaStamp(dummyLogger, syncStartJobsValue[0].metaStamp, patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -901,17 +1263,20 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(_.get(environment.jds.childInstance, 'calls', []).length).toEqual(1);
+                expect(_.get(environment.jds.saveSyncStatus, 'calls', []).length).toEqual(1);
+                expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
             });
         });
         it('Error From JDS', function() {
-            jdsClientDummy._setResponseData('Error occurred.', null, undefined);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData('Error occurred.', null, undefined);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeMetaStamp(dummyLogger, syncStartJobsValue[0].metaStamp, patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -927,17 +1292,20 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsError');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(environment.jds.childInstance.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
             });
         });
         it('No response From JDS', function() {
-            jdsClientDummy._setResponseData(null, null, undefined);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData(null, null, undefined);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeMetaStamp(dummyLogger, syncStartJobsValue[0].metaStamp, patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -953,20 +1321,23 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsNoResponse');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(environment.jds.childInstance.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
             });
         });
         it('Incorrect status code response From JDS', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 404
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeMetaStamp(dummyLogger, syncStartJobsValue[0].metaStamp, patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -982,27 +1353,28 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsWrongStatusCode');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
+                expect(environment.jds.childInstance.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveSyncStatus).toHaveBeenCalledWith(syncStartJobsValue[0].metaStamp, patientIdentifierValue1, jasmine.any(Function));
             });
         });
     });
 
-    //_storeOperationalMetastamp
-
     describe('_storeOperationalMetastamp', function() {
         it('Happy Path', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 200
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
-                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, '9E7A', function(error, response) {
+                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, 'SITE', function(error, response) {
                     actualError = error;
                     actualResponse = response;
                     finished = true;
@@ -1016,18 +1388,21 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, '9E7A', jasmine.any(Function));
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, 'SITE', jasmine.any(Function));
             });
         });
         it('Error From JDS', function() {
-            jdsClientDummy._setResponseData('Error occurred.', null, undefined);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData('Error occurred.', null, undefined);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
-                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, '9E7A', function(error, response) {
+                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, 'SITE', function(error, response) {
                     actualError = error;
                     actualResponse = response;
                     finished = true;
@@ -1041,18 +1416,21 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsError');
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, '9E7A', jasmine.any(Function));
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, 'SITE', jasmine.any(Function));
             });
         });
         it('No response From JDS', function() {
-            jdsClientDummy._setResponseData(null, null, undefined);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData(null, null, undefined);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
-                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, '9E7A', function(error, response) {
+                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, 'SITE', function(error, response) {
                     actualError = error;
                     actualResponse = response;
                     finished = true;
@@ -1066,21 +1444,24 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsNoResponse');
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, '9E7A', jasmine.any(Function));
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, 'SITE', jasmine.any(Function));
             });
         });
         it('Incorrect status code response From JDS', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 404
             };
-            jdsClientDummy._setResponseData(null, expectedJdsResponse, undefined);
+            environment.jds._setResponseData(null, expectedJdsResponse, undefined);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
-                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, '9E7A', function(error, response) {
+                processor._storeOperationalMetaStamp(OPDsyncStartJobsValue[0].metaStamp, 'SITE', function(error, response) {
                     actualError = error;
                     actualResponse = response;
                     finished = true;
@@ -1094,29 +1475,33 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsWrongStatusCode');
-                expect(jdsClientDummy.saveOperationalSyncStatus.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, '9E7A', jasmine.any(Function));
+                expect(environment.jds.saveOperationalSyncStatus.calls.length).toEqual(1);
+                expect(environment.jds.saveOperationalSyncStatus).toHaveBeenCalledWith(OPDsyncStartJobsValue[0].metaStamp, 'SITE', jasmine.any(Function));
             });
         });
     });
 
     describe('_storeCompletedJob', function() {
-       it('Happy Path', function() {
+        it('Happy Path', function() {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
             dummyLogger.debug('**************** starting _storeCompletedJob:Happy Path ***************************');
-            var expectedJdsResponses = [{
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, {
                 statusCode: 200
             }];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -1132,13 +1517,13 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
-                        type: 'vista-C877-data-allergy-poller',
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
+                        type: 'vista-SITE-data-allergy-poller',
                         patientIdentifier: patientIdentifierValue1,
                         jpid: jpidValue,
                         rootJobId: rootJobIdValue,
@@ -1151,21 +1536,24 @@ describe('VistaRecordProcessor', function() {
             });
         });
         it('Happy Path for VistaHdr', function() {
+            let environment = getEnvironment();
+            let hdrprocessor = getHdrProcessor(environment);
+
             dummyLogger.debug('**************** starting _storeCompletedJob:Happy Path for VistaHdr ***************************');
-            var expectedJdsResponses = [{
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, {
                 statusCode: 200
             }];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
+            environment.jds._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 hdrprocessor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', hdrPatientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -1181,12 +1569,12 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBeTruthy();
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(hdrPatientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(hdrPatientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
                         type: 'vistahdr-84F0-data-allergy-poller',
                         patientIdentifier: hdrPatientIdentifierValue1,
                         jpid: jpidValue,
@@ -1200,11 +1588,14 @@ describe('VistaRecordProcessor', function() {
             });
         });
         it('Error From JDS on first call.', function() {
-            jdsClientDummy._setResponseData(['Error occurred.'], [null], [undefined]);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData(['Error occurred.'], [null], [undefined]);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -1220,19 +1611,22 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsError');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);       // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(1); // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(0);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(0);
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(0);
             });
         });
         it('No response From JDS on first call', function() {
-            jdsClientDummy._setResponseData([null], [null], [undefined]);
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            environment.jds._setResponseData([null], [null], [undefined]);
+
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -1248,22 +1642,25 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsNoResponse');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);       // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(1); // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(0);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(0);
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(0);
             });
         });
         it('Incorrect status code response From JDS on first call', function() {
-            var expectedJdsResponse = {
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponse = {
                 statusCode: 404
             };
-            jdsClientDummy._setResponseData([null], [expectedJdsResponse], [undefined]);
+            environment.jds._setResponseData([null], [expectedJdsResponse], [undefined]);
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
                     actualError = error;
@@ -1279,29 +1676,32 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeNull();
                 expect(actualResponse).toBe('FailedJdsWrongStatusCode');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(1);       // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(1); // Once within the _storeCompletedJob we skip the one within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(0);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(0);
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(0);
             });
         });
         it('Error from JDS on second call (when storing job)', function() {
-            var expectedJdsResponses = [{
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, {
                 statusCode: 200
             }];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, 'JDSErrorOccurred'], expectedJdsResponses, expectedJdsResults);
+            environment.jds._setResponseData([null, 'JDSErrorOccurred'], expectedJdsResponses, expectedJdsResults);
             dummyLogger.debug('SetResponseData...');
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 dummyLogger.debug('calling _storeCompletedJob...');
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
@@ -1318,13 +1718,13 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBe('FailedJdsError');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
-                        type: 'vista-C877-data-allergy-poller',
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
+                        type: 'vista-SITE-data-allergy-poller',
                         patientIdentifier: patientIdentifierValue1,
                         jpid: jpidValue,
                         rootJobId: rootJobIdValue,
@@ -1336,21 +1736,24 @@ describe('VistaRecordProcessor', function() {
             });
         });
         it('Error from JDS on second call (when storing job) for VistaHdr', function() {
-            var expectedJdsResponses = [{
+            let environment = getEnvironment();
+            let hdrprocessor = getHdrProcessor(environment);
+
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, {
                 statusCode: 200
             }];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, 'JDSErrorOccurred'], expectedJdsResponses, expectedJdsResults);
+            environment.jds._setResponseData([null, 'JDSErrorOccurred'], expectedJdsResponses, expectedJdsResults);
             dummyLogger.debug('SetResponseData...');
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 dummyLogger.debug('calling _storeCompletedJob...');
                 hdrprocessor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', hdrPatientIdentifierValue1, function(error, response) {
@@ -1367,12 +1770,12 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBe('FailedJdsError');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(hdrPatientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(hdrPatientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
                         type: 'vistahdr-84F0-data-allergy-poller',
                         patientIdentifier: hdrPatientIdentifierValue1,
                         jpid: jpidValue,
@@ -1385,19 +1788,22 @@ describe('VistaRecordProcessor', function() {
             });
         });
         it('JDS error no response on second call (when storing job)', function() {
-            var expectedJdsResponses = [{
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, undefined];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
+            environment.jds._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
             dummyLogger.debug('SetResponseData...');
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 dummyLogger.debug('calling _storeCompletedJob...');
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
@@ -1414,13 +1820,13 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBe('FailedJdsNoResponse');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
-                        type: 'vista-C877-data-allergy-poller',
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
+                        type: 'vista-SITE-data-allergy-poller',
                         patientIdentifier: patientIdentifierValue1,
                         jpid: jpidValue,
                         rootJobId: rootJobIdValue,
@@ -1432,21 +1838,24 @@ describe('VistaRecordProcessor', function() {
             });
         });
         it('JDS error incorrect status code on second call (when storing job)', function() {
-            var expectedJdsResponses = [{
+            let environment = getEnvironment();
+            let processor = getProcessor(environment);
+
+            let expectedJdsResponses = [{
                 statusCode: 200
             }, {
                 statusCode: 404
             }];
 
-            var expectedJdsResults = [{
+            let expectedJdsResults = [{
                 jpid: jpidValue
             }, undefined];
-            jdsClientDummy._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
+            environment.jds._setResponseData([null, null], expectedJdsResponses, expectedJdsResults);
             dummyLogger.debug('SetResponseData...');
 
-            var finished = false;
-            var actualError;
-            var actualResponse;
+            let finished = false;
+            let actualError;
+            let actualResponse;
             runs(function() {
                 dummyLogger.debug('calling _storeCompletedJob...');
                 processor._storeCompletedJob(dummyLogger, rootJobIdValue, jobIdValue, 'allergy', patientIdentifierValue1, function(error, response) {
@@ -1463,13 +1872,13 @@ describe('VistaRecordProcessor', function() {
             runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualResponse).toBe('FailedJdsWrongStatusCode');
-                expect(jdsClientDummy.childInstance.calls.length).toEqual(2);       // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
+                expect(environment.jds.childInstance.calls.length).toEqual(2); // Once within the _storeCompletedJob and once within jobStatusUpdater for the jds client.
                 expect(environment.jobStatusUpdater.childInstance.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid.calls.length).toEqual(1);
-                expect(jdsClientDummy.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
-                expect(jdsClientDummy.saveJobState.calls.length).toEqual(1);
-                expect(jdsClientDummy.saveJobState).toHaveBeenCalledWith({
-                        type: 'vista-C877-data-allergy-poller',
+                expect(environment.jds.getPatientIdentifierByPid.calls.length).toEqual(1);
+                expect(environment.jds.getPatientIdentifierByPid).toHaveBeenCalledWith(patientIdentifierValue1.value, jasmine.any(Function));
+                expect(environment.jds.saveJobState.calls.length).toEqual(1);
+                expect(environment.jds.saveJobState).toHaveBeenCalledWith({
+                        type: 'vista-SITE-data-allergy-poller',
                         patientIdentifier: patientIdentifierValue1,
                         jpid: jpidValue,
                         rootJobId: rootJobIdValue,
@@ -1480,6 +1889,5 @@ describe('VistaRecordProcessor', function() {
                     jasmine.any(Function));
             });
         });
-
     });
 });

@@ -329,7 +329,7 @@ Then(/^the "(.*?)" text is correctly set to "(.*?)"$/) do |_checked_text, expect
   # the actual word of "Viewing" is not being tested here, just that "All","Any", etc is being used
   expected_text.sub!(/Viewing /, "")
 
-  verify_elements_equal(expected_text, actual_text)
+  verify_elements_equal(expected_text.upcase, actual_text.upcase)
 end
 
 Then(/^the Custom date field "(.*?)" button should be "(.*?)" (?:on|in) the "(.*?)"$/) do |control_name, enabled_state, parent_name|
@@ -354,10 +354,26 @@ Then(/^the Custom date field "(.*?)" button should be "(.*?)" (?:on|in) the "(.*
 end
 
 Given(/^the user has selected All within the global date picker$/) do
-  expect(@cc.perform_action('Control - Coversheet - Date Filter Toggle')).to be_true, "Was not able to select Control - Coversheet - Date Filter Toggle"
-  @cc.wait_until_action_element_visible 'Trend History Chart'
-
   @ehmp = PobGlobalDateFilter.new
+  expect(@cc.perform_action('Control - Coversheet - Date Filter Toggle')).to be_true, "Was not able to select Control - Coversheet - Date Filter Toggle"
+
+  max_attempt = 2
+  begin
+    @cc.wait_until_action_element_visible 'Trend History Chart'
+  rescue Selenium::WebDriver::Error::TimeOutError => timeout_error
+    max_attempt -= 1
+    raise timeout_error if max_attempt < 0
+    p "timeout error"
+    unless @ehmp.has_btn_all_range?
+      p "All button not visible, click again"
+      @cc.perform_action('Control - Coversheet - Date Filter Toggle')
+      retry
+    end
+    raise timeout_error
+
+    # Test can't find trend history
+  end
+  
   @ehmp.wait_until_btn_all_range_visible
   @ehmp.wait_until_btn_Apply_dates_visible
   @ehmp.btn_all_range.click

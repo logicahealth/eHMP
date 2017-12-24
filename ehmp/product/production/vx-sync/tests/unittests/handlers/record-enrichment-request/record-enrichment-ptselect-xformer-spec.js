@@ -27,10 +27,10 @@ var originalVaPtSelectRecord = {
     'givenNames': 'PATIENT',
     'icn': '10108V420871',
     'localId': 3,
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'sensitive': false,
     'ssn': 666000008,
-    'uid': 'urn:va:pt-select:9E7A:3:3',
+    'uid': 'urn:va:pt-select:SITE:3:3',
     'deceased': 19360407
 };
 var originalVaPtSelectJob = {
@@ -38,10 +38,10 @@ var originalVaPtSelectJob = {
 };
 
 var removedRecord = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:pt-select:9E7A:3:3'
+    'uid': 'urn:va:pt-select:SITE:3:3'
 };
 
 var removedJob = {
@@ -107,8 +107,8 @@ describe('record-enrichment-ptselect-xformer.js', function() {
                 xformer(log, config, environment, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:pt-select:9E7A:3:3');
-                    expect(record.pid).toEqual('9E7A;3');
+                    expect(record.uid).toEqual('urn:va:pt-select:SITE:3:3');
+                    expect(record.pid).toEqual('SITE;3');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

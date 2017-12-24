@@ -8,7 +8,8 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var handler = require(global.VX_HANDLERS + 'vler-sync-request/vler-sync-request-handler');
 
 xdescribe('vler-sync-request-handler.js', function() {

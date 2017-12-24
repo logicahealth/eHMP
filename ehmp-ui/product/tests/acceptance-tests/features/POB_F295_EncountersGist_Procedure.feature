@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_procedure  @reg1
+@F295_encounters_trend_view_procedure @applet_encounters  @reg1
 Feature: F295 - Encounters Applet - Procedure
 
 Background:

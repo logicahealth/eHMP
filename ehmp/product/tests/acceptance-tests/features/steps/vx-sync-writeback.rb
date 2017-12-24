@@ -13,10 +13,10 @@ Given(/^a client connect to VistA using "(.*?)"$/) do |site_name|
   fail "Check you code or the site name #{site_name}! Just PANORAMA and KODAK are define in this code." unless ["PANORAMA", "KODAK"].include? site_name
   # p site_name
   if site_name == "PANORAMA"
-    @site_name = "9E7A"
+    @site_name = "SITE"
     p base_url = DefaultLogin.panorama_url
   else
-    @site_name = "C877"
+    @site_name = "SITE"
     p base_url = DefaultLogin.kodak_url
   end
   
@@ -693,11 +693,11 @@ end
 When(/^the client sign TIU Note record for patient with DFN "(.*?)" enter$/) do |dfn, table|
   ien = @vista_local_id
   p rpc_name = "HMP WRITEBACK SIGN TIU NOTE"
-  access_code = "REDACTED"
-  verify_code = "REDACTED"
+  access_code = "USER  "
+  verify_code = "PW      "
 
   # ien = "11597"
-  esig = "REDACTED"
+  esig = "PW      "
   
   vista_rpc = VistaRPC4r::VistaRPC.new(esig)
   p esig = vista_rpc.encrypt(esig)

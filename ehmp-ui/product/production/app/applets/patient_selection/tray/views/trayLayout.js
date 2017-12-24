@@ -19,7 +19,7 @@ define([
             '<h4 class="panel-title">{{searchType}}</h4>',
             '</div>',
             '<div class="header-help-button-container top-padding-xs flex-width-none"></div>',
-            '<button type="button" class="btn btn-icon btn-xs left-margin-xs close-tray color-pure-white" title="Press enter to close."><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>'
+            '<button type="button" class="btn btn-icon btn-xs left-margin-xs close-tray color-pure-white" title="Close {{searchType}}"><i class="fa fa-times fa-lg" aria-hidden="true"></i></button>'
         ].join('\n')),
         behaviors: function() {
             return {
@@ -38,7 +38,7 @@ define([
         className: 'left-padding-sm right-padding-sm',
         events: {
             'click button.close-tray': function() {
-                this.$el.trigger('patientSearchTray.hide');
+                this.$el.trigger(this.getOption('_eventPrefix') + '.hide', { setFocusToButtonToggle: true });
             }
         }
     });
@@ -61,13 +61,16 @@ define([
         },
         onBeforeShow: function() {
             this.showChildView('headerRegion', new HeaderView({
+                _eventPrefix: this.getOption('_eventPrefix'),
                 model: this.model,
                 helpMapping: this.model.get('helpMapping')
             }));
             var SearchView = this.model.get('view');
             if (SearchView) {
                 this.showChildView('contentRegion', new SearchView({
-                    searchType: this.model.get('searchType')
+                    searchType: this.model.get('searchType'),
+                    eventChannelName: this.getOption('eventChannelName'),
+                    _eventPrefix: this.getOption('_eventPrefix')
                 }));
             }
         }

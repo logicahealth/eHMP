@@ -59,12 +59,13 @@ function postTracker(req, res) {
     rdk.utils.http.post(options, function(error, response, body) {
         if (error) {
             logTrackerInfoToRdk(req);
-            req.logger.error({
-                    error: error
-                },
-                'Could not save tracker information to external server');
             var rdkError = new RdkError({
-                'code': 'rdk.500.1006'
+                code: 'rdk.500.1006',
+                logger: req.logger,
+                error: {
+                    original: error,
+                    additionalInfo: 'Could not save tracker information to external server'
+                }
             });
             return res.status(rdkError.status).rdkSend(rdkError);
         }

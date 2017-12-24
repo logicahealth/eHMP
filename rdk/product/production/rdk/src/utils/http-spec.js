@@ -516,6 +516,46 @@ describe('http', function() {
 
     });
 
+    describe('withMaxSockets', function () {
+        var originalMaxSockets;
+        beforeEach(function () {
+            originalMaxSockets = httpUtil._maxSockets;
+        });
+        afterEach(function () {
+            httpUtil._maxSockets = originalMaxSockets;
+        });
+        it('sets the maxSockets on requests without custom agentOptions', function (done) {
+            httpUtil._maxSockets = 13;
+            var options = {};
+            var callback = sinon.spy();
+            httpUtil._withMaxSockets(next, options, callback);
+            function next(options, callback) {
+                expect(callback.called).to.be.false();
+                expect(options).to.eql({
+                    agentOptions: {maxSockets: 13}
+                });
+                done();
+            }
+        });
+        it('does not set the maxSockets on requests with custom agentOptions', function (done) {
+            httpUtil._maxSockets = 13;
+            var options = {
+                agentOptions: {
+                    maxSockets: 2
+                }
+            };
+            var callback = sinon.spy();
+            httpUtil._withMaxSockets(next, options, callback);
+            function next(options, callback) {
+                expect(callback.called).to.be.false();
+                expect(options).to.eql({
+                    agentOptions: {maxSockets: 2}
+                });
+                done();
+            }
+        });
+    });
+
     describe.skip('caching', function() {
         var config, start, finish;
 

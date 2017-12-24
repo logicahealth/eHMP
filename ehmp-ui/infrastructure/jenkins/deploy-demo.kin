@@ -1,0 +1,7 @@
+"ehmp-ui-deploy-demo-build-%branch%" { 
+  template = 'templates/deploy-demo-build.tpl'
+	description = "ehmp-ui demo deployment build for the branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/ehmp-ui.git'
+	gitBranch = '%branch%'
+}

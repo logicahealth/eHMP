@@ -1,26 +1,30 @@
 VPRJREQ ;SLC/KCM -- Listen for HTTP requests
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ; Listener Process ---------------------------------------
  ;
 START(TCPPORT) ; set up listening for connections
- Q:$G(^VPRHTTP(0,"updating"))        ; don't allow starting during upgrade
- S ^VPRHTTP(0,"listener")="running"
+ Q:$G(^VPRHTTP(0,"updating")) ; don't allow starting during upgrade
  ;
- S TCPPORT=$G(TCPPORT,9080)
+ N FLG
+ S ^VPRHTTP(TCPPORT,"listener")="running"
+ ;
+ S TCPPORT=+$G(TCPPORT)
  S TCPIO="|TCP|"_TCPPORT
- O TCPIO:(:TCPPORT:"ACT"::::1000):15 E  U 0 W !,"error" Q
+ O TCPIO:(/ACCEPT=1:/CRLF=1:/TMODE=1:/PORT=TCPPORT:/NOXY=1:/CONNECTIONS=1000:/IBUFSIZE=$G(^VPRCONFIG("HTTP","inputBuffer"),1048576):/OBUFSIZE=$G(^VPRCONFIG("HTTP","outputBuffer"),1048576)):15 E  U 0 W !,"error" QUIT
  U TCPIO
 LOOP ; wait for connection, spawn process to handle it
- I $E(^VPRHTTP(0,"listener"),1,4)="stop" C TCPIO S ^VPRHTTP(0,"listener")="stopped" Q
+ S FLG=0
+ I $D(^VPRHTTP(TCPPORT,"listener"))#2,$E(^VPRHTTP(TCPPORT,"listener"),1,4)="stop" D
+ . C TCPIO
+ . S ^VPRHTTP(TCPPORT,"listener")="stopped"
+ . S FLG=1
+ I FLG QUIT
  D CHRON
  ;
  R *X:10 I '$T G LOOP
- ; Disable localhost check for eHMP deployment
- ;I '$$LCLHOST^VPRJRUT() W *-2 G LOOP ; reject & close port if not localhost
  ;
  J CHILD:(:4:TCPIO:TCPIO):10
- I $ZA\8196#2=1 W *-2 ;job failed to clear bit
+ I $ZA\8196#2=1 W *-2 ; job failed to clear bit
  ;
  G LOOP
  ;
@@ -57,23 +61,24 @@ ESECS(TS) ; return elapsed seconds since TS (in $H format)
  ; HTTPERR non-zero if there is an error state
  ;
 CHILD ; handle HTTP requests on this connection
- S HTTPLOG("DT")=+$H  ; same timestamp used for log throughout session
+ S HTTPLOG("DT")=+$H ; same timestamp used for log throughout session
  N $ET S $ET="G ETSOCK^VPRJREQ"
  ;
 NEXT ; begin next request
  K HTTPREQ,HTTPRSP,HTTPERR
- K ^||TMP($J),^||TMP("HTTPERR",$J) ; TODO: change the namespace for the error global
+ K:$D(^||TMP($J)) ^||TMP($J)
+ K:$D(^||TMP("HTTPERR",$J)) ^||TMP("HTTPERR",$J)
  S HTTPLOG=$S($D(HTTPLOG("this")):HTTPLOG("this"),1:$G(^VPRHTTP(0,"logging"),0))
  I HTTPLOG=2,'$D(HTTPLOG("path")) S HTTPLOG("path")=$G(^VPRHTTP(0,"logging","path"))
  ;
 WAIT ; wait for request on this connection
- I $E(^VPRHTTP(0,"listener"),1,4)="stop" C $P Q
  U $P:(::"CT")
  R TCPX:10 I '$T G WAIT
  I '$L(TCPX) G WAIT
  ;
  ; -- got a request and have the first line
- D INCRLOG ; set unique request id
+ ; only increment the logger if we have logging enabled
+ D:HTTPLOG INCRLOG ; set unique request id
  I HTTPLOG>3 D LOGRAW(TCPX)
  S HTTPREQ("line1")=TCPX
  S HTTPREQ("method")=$P(TCPX," ")
@@ -107,8 +112,9 @@ WAIT ; wait for request on this connection
  I HTTPLOG D LOGGING
  ;
  ; -- exit on Connection: Close
- I $$LOW^VPRJRUT($G(HTTPREQ("header","connection")))="close" D  Q
- . K ^||TMP($J),^||TMP("HTTPERR",$J)
+ I $$LOW^VPRJRUT($G(HTTPREQ("header","connection")))="close" D  QUIT
+ . K:$D(^||TMP($J)) ^||TMP($J)
+ . K:$D(^||TMP("HTTPERR",$J)) ^||TMP("HTTPERR",$J)
  . C $P
  ;
  ; -- otherwise get ready for the next request
@@ -176,7 +182,8 @@ ETBAIL ; error trap of error traps
  U $P
  W "HTTP/1.1 500 Internal Server Error",$C(13,10),$C(13,10),!
  C $P H 1
- K ^||TMP($J),^||TMP("HTTPERR",$J)
+ K:$D(^||TMP($J)) ^||TMP($J)
+ K:$D(^||TMP("HTTPERR",$J)) ^||TMP("HTTPERR",$J)
  HALT  ; exit because we can't recover
  ;
 INCRLOG ; get unique log id for each request
@@ -217,6 +224,8 @@ LOGRAW(X) ; log raw lines read in
  S ^VPRHTTP("log",DT,$J,ID,"raw",LN,"ZB")=$A($ZB)
  Q
 LOGERR ; log error information
+ ; Always increment the log id for errors
+ D INCRLOG
  N %D,%I
  S %D=HTTPLOG("DT"),%I=HTTPLOG("ID")
  S ^VPRHTTP("log",%D,$J,%I,"error")=$ZERROR_"  ($ECODE:"_$ECODE_")"

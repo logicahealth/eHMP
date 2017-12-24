@@ -2,8 +2,10 @@ define(['backbone',
     'marionette',
     'underscore',
     'handlebars',
-    'app/applets/todo_list/util'
-], function(Backbone, Marionette, _, Handlebars, Util) {
+    'app/applets/todo_list/util',
+    'app/applets/task_forms/common/utils/utils',
+    'app/applets/task_forms/activities/order.dischargefollowup/utils'
+], function(Backbone, Marionette, _, Handlebars, Util, TaskUtils, DischargeFollowUpUtils) {
     "use strict";
 
     var eventHandler = {
@@ -11,14 +13,19 @@ define(['backbone',
             //if navigation node is present trigger using it's content
             var navigation = model.get('NAVIGATION');
             var isStaffView = Util.isStaffView();
+            var isDischargeFollowUp = model.get('DEFINITIONID') === DischargeFollowUpUtils.DISCHARGE_PROCESS_DEFINITION_ID;
 
             if (_.isObject(navigation)) {
                 navigation.parameters.createdBy = {
                     CREATEDBYNAME: model.get('CREATEDBYNAME')
                 };
+                navigation.parameters.triggerElement = this.$('.dropdown--quickmenu > button');
                 ADK.PatientRecordService.setCurrentPatient(model.get('PATIENTICN'), {
-                    reconfirm: isStaffView,
-                    navigation: isStaffView,
+                    confirmationOptions: {
+                        navigateToPatient: isStaffView || isDischargeFollowUp,
+                        reconfirm: isStaffView
+                    },
+                    workspaceId: TaskUtils.getWorkspaceId(navigation),
                     staffnavAction: {
                         channel: navigation.channel,
                         event: navigation.event,
@@ -31,7 +38,8 @@ define(['backbone',
                 ADK.Messaging.getChannel('activity-management').trigger('show:form', {
                     taskId: model.get('TASKID'),
                     taskDefinitionId: model.get('DEFINITIONID'),
-                    clinicalObjectUid: model.get('CLINICALOBJECTUID')
+                    clinicalObjectUid: model.get('CLINICALOBJECTUID'),
+                    triggerElement: this.$('.dropdown--quickmenu > button')
                 });
             }
         }

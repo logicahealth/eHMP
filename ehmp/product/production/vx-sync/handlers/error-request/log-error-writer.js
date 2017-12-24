@@ -19,12 +19,14 @@ function writeErrorRecord(logger, errorRecord, callback) {
     setTimeout(callback);
 }
 
-/*
-Use this function to create an error record writer bound
-to the given configuration.
-
-config should be worker-config.json 'config' object.
-*/
+//---------------------------------------------------------------------------------------------
+// This function creates the error record writer and returns a handle to it.  (note that since
+// environment and logger is not used - those two parameters are omitted from the signature.
+// if they are passed, they will be ignored...)
+//
+// config: The worker-config settings.
+// returns: The error record writer function.
+//----------------------------------------------------------------------------------------------
 function createErrorRecordWriter(config) {
     var loggerConfig = {
         name: 'errors',

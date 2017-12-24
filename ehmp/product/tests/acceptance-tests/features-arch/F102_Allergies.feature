@@ -4,8 +4,8 @@ Feature: F102 Return and Display of Allergies
   Background:
     Given a patient with pid "5000000217" has been synced through FHIR
     Given a patient with pid "10108" has been synced through FHIR
-    Given a patient with pid "9E7A;100022" has been synced through FHIR
-    Given a patient with pid "9E7A;1" has been synced through FHIR
+    Given a patient with pid "SITE;100022" has been synced through FHIR
+    Given a patient with pid "SITE;1" has been synced through FHIR
 
   @allergies_rest @future
   Scenario: Client can request allergies
@@ -15,13 +15,13 @@ Feature: F102 Return and Display of Allergies
     And the results contain data group
       | field            | value                                      |
       | summary          | PENICILLIN                                 |
-      | uid              | urn:va:allergy:9E7A:3:751                  |
+      | uid              | urn:va:allergy:SITE:3:751                  |
       | drugClasses.name | PENICILLINS AND BETA-LACTAM ANTIMICROBIALS |
       | reactions.name   | ITCHING,WATERING EYES                      |
     And the results contain data group
       | field          | value                     |
       | summary        | CHOCOLATE                 |
-      | uid            | urn:va:allergy:9E7A:3:874 |
+      | uid            | urn:va:allergy:SITE:3:874 |
       | reactions.name | DIARRHEA                  |
 
   @allergies_view @UI

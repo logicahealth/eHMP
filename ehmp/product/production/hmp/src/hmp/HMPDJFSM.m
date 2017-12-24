@@ -1,5 +1,5 @@
-HMPDJFSM ;SLC/KCM,ASMR/BL,CK-PROTOCOLS & API's FOR MONITORING ;Sep 23, 2016 10:44:23
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 01, 2011;Build 7
+HMPDJFSM ;SLC/KCM,ASMR/BL,CK,CPC,AFS/PB - PROTOCOLS & API's FOR MONITORING ;Sep 23, 2016 10:44:23
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q  ; no entry at top
@@ -116,7 +116,7 @@ HLTHHDR(COUNT) ; function, domain-progress header (health header) as JSON
  ;   COUNT = total # items
  ;   HMPSYS = system id (in symbol table)
  N X  ; $$KSP^XUPARAM = return kernel system parameter WHERE (domain)
- S X="{""apiVersion"":1.02,""params"":{""domain"":"""_$$KSP^XUPARAM("WHERE")_""""
+ S X="{"_$$APIVERS^HMPDJFS()_",""params"":{""domain"":"""_$$KSP^XUPARAM("WHERE")_""""
  S X=X_",""systemId"":"""_HMPSYS_"""},""data"":{""updated"":"""_$$HL7NOW^HMPDJ_""""
  S X=X_",""totalItems"":"_COUNT
  S X=X_",""items"":["
@@ -295,3 +295,58 @@ EVNTYPS(LIST) ; protocol HMPM EVT QUE CHANGE DOMAIN [Change Domain], LIST passed
  F I=1:1 S X=$P($T(EVNTYPS+I),";;",2,99) Q:X=""  S LIST(I)=X
  Q
  ;
+RES ; DE8313 - PB - Aug 3, 2017 - get slots in use for the HMP EXTRACT RESOURCE
+ N HMPERR,HMPIEN,HMPSLOT,MXSLOTS,SLOTS,RES,CNT,JSON,NODE,X,LST
+ K MSG
+ S HMPIEN=$$FIND1^DIC(3.54,"","MX","HMP EXTRACT RESOURCE","","","HMPERR")
+ I $G(HMPIEN)=0!($G(HMPIEN)="") S ^TMP("HMPF",$J,1)="{"_$$APIVERS^HMPDJFS()_",""removed"":""false"",""msg"":""resource doesn't exist""}" Q
+ D GETS^DIQ(3.54,HMPIEN_",","**","I","HMPSLOT","HMPERR")
+ S MXSLOTS=$G(HMPSLOT(3.54,HMPIEN_",",1,"I"))
+ S (CNT,NODE)=1,(TOTAL,FLAG)=0
+ F SLOTS=1:1:MXSLOTS+1 D
+ . N CDTTM,DIFF,JOB,ST,START,STATUS,ZTSK,ZTCPU,%,CDTTM1,IENS,START1,JSON,RES
+ . S IENS=SLOTS_","_$G(HMPIEN)_","
+ . Q:$G(HMPSLOT(3.542,IENS,.01,"I"))=""
+ . S FLAG=1
+ . S ZTCPU=$G(HMPSLOT(3.542,IENS,1,"I")),JOB=$G(HMPSLOT(3.542,IENS,2,"I")),ZTSK=$G(HMPSLOT(3.542,IENS,3,"I")),START1=$$HTFM^XLFDT($G(HMPSLOT(3.542,IENS,4,"I")))
+ . S START=$P($$FMTHL7^XLFDT($G(START1)),"-")
+ . I $G(ZTSK)'="" D
+ . . D NOW^%DTC S CDTTM1=%,CDTTM=$P($$FMTHL7^XLFDT($G(CDTTM1)),"-")
+ . . S:$G(HMPSLOT(3.542,IENS,4,"I"))'="" ST=$$HTFM^XLFDT($G(HMPSLOT(3.542,IENS,4,"I")))
+ . . D ISQED^%ZTLOAD S STATUS=$S(ZTSK(0)=0:"TASK IS NOT SCHEDULED",ZTSK(0)="":"TASK DOES NOT EXIST",ZTSK(0)=1:"TASK IS SCHEDULED",1:"")
+ . . S:$G(ST)'="" DIFF=$$FMDIFF^XLFDT(CDTTM1,ST,2)
+ . . S RES("cpu")=$G(ZTCPU),RES("job")=$G(JOB),RES("task")=$G(ZTSK)
+ . . S RES("taskStatus")=$G(STATUS),RES("start")=$G(START),RES("runTime")=$G(DIFF),RES("slot")=$G(SLOTS)
+ . . S TOTAL=$G(TOTAL)+1
+ . . D:$G(FLAG)=1 ENCODE^HMPJSON("RES","JSON","HMPERR") ; W !,CNT,"  ",JSON(1)
+ . . S ^TMP("HMPF",$J,CNT)=JSON(1),CNT=CNT+1
+ N J F J=1:1:CNT-2 S ^TMP("HMPF",$J,J)=$G(^TMP("HMPF",$J,J))_","
+ D RES1
+ K FLAG,TOTAL
+ Q
+RES1 ;  DE8313 - PB - Aug 3, 2017 - set header data for the slots in use report
+ S X="{"_$$APIVERS^HMPDJFS()_",""params"":{""domain"":"""_$$KSP^XUPARAM("WHERE")_""""
+ S X=X_",""systemId"":"""_HMPSYS_"""},""data"":{""updated"":"""_$$HL7NOW^HMPDJ_""""
+ S X=X_",""totalItems"":"_TOTAL
+ S:$G(CNT)>0 X=X_",""items"":["
+ S ^TMP("HMPF",$J,.5)=X
+ I $G(FLAG)=1 S ^TMP("HMPF",$J,CNT+1)="]}}"
+ E  S ^TMP("HMPF",$J,CNT+1)="]}}"
+ Q
+CLEAR(SLOT) ; DE8313 - PB - Aug 3, 2017 - clear a resource slot
+ ;Input:
+ ;SLOT - Slot number to clear
+ N HMPERR,HMPIEN,HMPSLOT,MXSLOTS,CLR,NODE
+ K MSG
+ S NODE=1
+ S HMPIEN=$$FIND1^DIC(3.54,"","MX","HMP EXTRACT RESOURCE","","","HMPERR")
+ I $G(HMPIEN)'>0!($G(HMPIEN)="") S ^TMP("HMPF",$J,1)="{"_$$APIVERS^HMPDJFS()_",""removed"":""false"",""msg"":""resource doesn't exist""}" Q
+ N IEN S IEN=$G(SLOT)_","_$G(HMPIEN)
+ S ACTIVE=$$GET1^DIQ(3.542,IEN,.01)
+ I $G(ACTIVE)'>0 S ^TMP("HMPF",$J,1)="{"_$$APIVERS^HMPDJFS()_",""removed"":""false"",""msg"":""slot is not in use""}" Q
+ D KILLRES^%ZISC(HMPIEN,SLOT)
+ S CLR=$$GET1^DIQ(3.542,SLOT_","_HMPIEN_",",.01,"I")
+ I $G(CLR)'>0 S ^TMP("HMPF",$J,1)="{"_$$APIVERS^HMPDJFS()_",""removed"":""true""}"
+ I $G(CLR)>0 S ^TMP("HMPF",$J,1)="{"_$$APIVERS^HMPDJFS()_",""removed"":""false""}"
+ K SLOT,ACTIVE
+ Q

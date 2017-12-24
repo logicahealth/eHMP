@@ -1,0 +1,527 @@
+[{
+	"uid": "active-medications",
+	"description": "Active medications feature category",
+	"label": "Active Medications",
+	"permissions": [
+		"add-active-medication",
+		"discontinue-active-medication",
+		"edit-active-medication",
+		"read-active-medication"
+	],
+	"status": "active"
+},
+{
+	"uid": "admin-screen",
+	"description": "Admin screen feature category",
+	"label": "Admin Screen",
+	"permissions": [
+		"read-admin-screen"
+	],
+	"status": "active"
+},
+{
+	"uid": "allergy",
+	"description": "Allergy feature category",
+	"label": "Allergy",
+	"permissions": [
+		"add-allergy",
+		"edit-allergy",
+		"eie-allergy",
+		"read-allergy"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-engine-library",
+	"description": "CDS engine library feature category",
+	"label": "CDS Engine Library",
+	"permissions": [
+		"manage-cds-engine",
+		"read-cds-engine"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-enterprise-orderables",
+	"description": "CDS enterprise orderables feature category",
+	"label": "CDS Enterprise Orderables",
+	"permissions": [
+		"manage-enterprise-orderable",
+		"read-enterprise-orderable"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-intent-library",
+	"description": "CDS intent library feature category",
+	"label": "CDS Intent Library",
+	"permissions": [
+		"read-cds-intent",
+		"manage-cds-intent"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-metrics",
+	"description": "CDS metrics feature category",
+	"label": "CDS Metrics",
+	"permissions": [
+		"manage-cds-metric-dashboard",
+		"read-cds-metric-dashboard",
+		"manage-cds-metric-definition",
+		"read-cds-metric-definition",
+		"manage-cds-metric-group",
+		"read-cds-metric-group",
+		"read-cds-metric"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-order-selection",
+	"description": "CDS order selection feature category",
+	"label": "CDS Order Selection",
+	"permissions": [
+		"read-orderable"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-order-sets",
+	"description": "CDS order sets feature category",
+	"label": "CDS Order Sets",
+	"permissions": [
+		"add-order-set",
+		"delete-order-set",
+		"read-order-set",
+		"edit-order-set"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-patient-lists",
+	"description": "CDS patient lists feature category",
+	"label": "CDS Patient Lists",
+	"permissions": [
+		"manage-cds-criteria",
+		"read-cds-criteria",
+		"manage-cds-definition",
+		"read-cds-definition",
+		"manage-cds-patientlist",
+		"read-cds-patientlist"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-quick-orders",
+	"description": "CDS quick orders feature category",
+	"label": "CDS Quick Orders",
+	"permissions": [
+		"add-quick-order",
+		"delete-quick-order",
+		"read-quick-order",
+		"edit-quick-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-schedule",
+	"description": "CDS schedule feature category",
+	"label": "CDS Schedule",
+	"permissions": [
+		"manage-cds-schedule",
+		"read-cds-schedule",
+		"read-cds-execute",
+		"manage-cds-execute"
+	],
+	"status": "active"
+},
+{
+	"uid": "cds-work-products",
+	"description": "CDS work products feature category",
+	"label": "CDS Work Products",
+	"permissions": [
+		"read-cds-work-product",
+		"read-cds-work-product-subscription",
+		"read-cds-work-product-inbox",
+		"manage-cds-work-product-subscription",
+		"manage-cds-work-product"
+	],
+	"status": "active"
+},
+{
+	"uid": "crs",
+	"description": "CRS feature category",
+	"label": "CRS",
+	"permissions": [
+		"read-concept-relationship"
+	],
+	"status": "active"
+},
+{
+	"uid": "clinical-reminders",
+	"description": "Clinical reminders feature category",
+	"label": "Clinical Reminders",
+	"permissions": [
+		"read-clinical-reminder"
+	],
+	"status": "active"
+},
+{
+	"uid": "community-health-summaries",
+	"description": "Community health summaries feature category",
+	"label": "Community Health Summaries",
+	"permissions": [
+		"read-community-health-summary"
+	],
+	"status": "active"
+},
+{
+	"uid": "consult-order",
+	"description": "Consult order feature category",
+	"label": "Consult Order",
+	"permissions": [
+		"add-consult-order",
+		"complete-consult-order",
+		"discontinue-consult-order",
+		"edit-consult-order",
+		"review-result-consult-order",
+		"schedule-consult-order",
+		"sign-consult-order",
+		"triage-consult-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "coordination-request",
+	"description": "Coordination request feature category",
+	"label": "Coordination Request",
+	"permissions": [
+		"add-coordination-request",
+		"respond-coordination-request",
+		"edit-coordination-request"
+	],
+	"status": "active"
+},
+{
+	"uid": "discharge-follow-up",
+	"description": "Discharge follow-up feature category",
+	"label": "Discharge Follow-up",
+	"permissions": [
+		"read-discharge-followup",
+		"edit-discharge-followup",
+		"discontinue-discharge-followup"
+	],
+	"status": "active"
+},
+{
+	"uid": "documents",
+	"description": "Documents feature category",
+	"label": "Documents",
+	"permissions": [
+		"read-document"
+	],
+	"status": "active"
+},
+{
+	"uid": "ehmp-general-access",
+	"description": "eHMP general access feature category",
+	"label": "eHMP General Access",
+	"permissions": [
+		"access-general-ehmp"
+	],
+	"status": "active"
+},
+{
+	"uid": "encounter-context",
+	"description": "Encounter context feature category",
+	"label": "Encounter Context",
+	"permissions": [
+		"add-encounter",
+		"read-encounter"
+	],
+	"status": "active"
+},
+{
+	"uid": "encounters",
+	"description": "Encounters feature category",
+	"label": "Encounters",
+	"permissions": [
+		"add-encounter-form",
+		"edit-encounter-form"
+	],
+	"status": "active"
+},
+{
+	"uid": "favorites",
+	"description": "Favorites feature category",
+	"label": "Favorites",
+	"permissions": [
+		"add-favorite",
+		"delete-favorite",
+		"read-favorite"
+	],
+	"status": "active"
+},
+{
+	"uid": "fhir",
+	"description": "FHIR feature category",
+	"label": "FHIR",
+	"permissions": [
+		"read-fhir",
+		"edit-fhir-composition-request",
+		"delete-fhir-composition-request"
+	],
+	"status": "active"
+},
+{
+	"uid": "immunization",
+	"description": "Immunization feature category",
+	"label": "Immunization",
+	"permissions": [
+		"add-immunization",
+		"eie-immunization",
+		"read-immunization"
+	],
+	"status": "active"
+},
+{
+	"uid": "lab-order",
+	"description": "Lab order feature category",
+	"label": "Lab Order",
+	"permissions": [
+		"add-lab-order",
+		"discontinue-lab-order",
+		"edit-lab-order",
+		"enable-lab-order-collect-option",
+		"sign-lab-order",
+		"follow-up-incomplete-lab-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "med-order",
+	"description": "Med order feature category",
+	"label": "Med Order",
+	"permissions": [
+		"add-med-order",
+		"discontinue-med-order",
+		"edit-med-order",
+		"sign-med-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "medications-review",
+	"description": "Medications review feature category",
+	"label": "Medications Review",
+	"permissions": [
+		"read-medication-review"
+	],
+	"status": "active"
+},
+{
+	"uid": "military-histories",
+	"description": "Military histories feature category",
+	"label": "Military Histories",
+	"permissions": [
+		"edit-military-history",
+		"read-military-history"
+	],
+	"status": "active"
+},
+{
+	"uid": "non-va-medications",
+	"description": "Non-VA medications feature category",
+	"label": "Non-VA Medications",
+	"permissions": [
+		"add-non-va-medication",
+		"edit-non-va-medication"
+	],
+	"status": "active"
+},
+{
+	"uid": "notes",
+	"description": "Notes feature category",
+	"label": "Notes",
+	"permissions": [
+		"add-note",
+		"add-note-addendum",
+		"cosign-note",
+		"delete-note",
+		"edit-note",
+		"edit-note-addendum",
+		"retract-note",
+		"sign-note",
+		"sign-note-addendum"
+	],
+	"status": "active"
+},
+{
+	"uid": "operational-data",
+	"description": "Operational data feature category",
+	"label": "Operational Data",
+	"permissions": [
+		"read-operational-data"
+	],
+	"status": "active"
+},
+{
+	"uid": "orders",
+	"description": "Orders feature category",
+	"label": "Orders",
+	"permissions": [
+		"read-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "patient-histories",
+	"description": "Patient histories feature category",
+	"label": "Patient Histories",
+	"permissions": [
+		"add-patient-history",
+		"edit-patient-history",
+		"eie-patient-history",
+		"read-patient-history"
+	],
+	"status": "active"
+},
+{
+	"uid": "patient-sync",
+	"description": "Patient sync feature category",
+	"label": "Patient Sync",
+	"permissions": [
+		"clear-patient-sync",
+		"load-patient-sync"
+	],
+	"status": "active"
+},
+{
+	"uid": "patient-problems",
+	"description": "Patient problems feature category",
+	"label": "Patient Problems",
+	"permissions": [
+		"add-condition-problem",
+		"edit-condition-problem",
+		"read-condition-problem",
+		"remove-condition-problem"
+	],
+	"status": "active"
+},
+{
+	"uid": "patient-search",
+	"description": "Patient search feature category",
+	"label": "Patient Search",
+	"permissions": [
+		"read-patient-record"
+	],
+	"status": "active"
+},
+{
+	"uid": "radiology-order",
+	"description": "Radiology order feature category",
+	"label": "Radiology Order",
+	"permissions": [
+		"add-radiology-order",
+		"discontinue-radiology-order",
+		"edit-radiology-order",
+		"sign-radiology-order"
+	],
+	"status": "active"
+},
+{
+	"uid": "stack-graphs",
+	"description": "Stack graphs feature category",
+	"label": "Stack Graphs",
+	"permissions": [
+		"access-stack-graph"
+	],
+	"status": "active"
+},
+{
+	"uid": "task",
+	"description": "Task feature category",
+	"label": "Task",
+	"permissions": [
+		"add-task",
+		"cancel-task",
+		"edit-task",
+		"read-task"
+	],
+	"status": "active"
+},
+{
+	"uid": "user-permissions",
+	"description": "User permissions feature category",
+	"label": "User Permissions",
+	"permissions": [
+		"add-user-permission-set",
+		"edit-own-permissions",
+		"edit-user-permission-set",
+		"read-user-permission-set",
+		"remove-user-permission-set"
+	],
+	"status": "active"
+},
+{
+	"uid": "user-preferences",
+	"description": "User preferences feature category",
+	"label": "User Preferences",
+	"permissions": [
+		"add-user-preferences",
+		"edit-user-preferences",
+		"read-user-preferences",
+		"delete-user-preferences"
+	],
+	"status": "active"
+},
+{
+	"uid": "vitals",
+	"description": "Vitals feature category",
+	"label": "Vitals",
+	"permissions": [
+		"add-vital",
+		"eie-vital",
+		"read-vital"
+	],
+	"status": "active"
+},
+{
+	"uid": "vista-health-summaries",
+	"description": "Vista health summaries feature category",
+	"label": "Vista Health Summaries",
+	"permissions": [
+		"read-vista-health-summary"
+	],
+	"status": "active"
+},
+{
+	"uid": "vler",
+	"description": "VLER feature category",
+	"label": "VLER",
+	"permissions": [
+		"read-vler-toc"
+	],
+	"status": "active"
+},
+{
+	"uid": "communication",
+	"description": "Communication feature category",
+	"label": "Communication",
+	"permissions": [
+		"read-message"
+	],
+	"status": "active"
+},
+{
+	"uid": "permission-set-management",
+	"description": "Permission set management feature category",
+	"label": "Permission Set Management",
+	"permissions": [
+		"read-permission-sets",
+		"add-permission-sets",
+		"edit-permission-sets",
+		"deprecate-permission-sets"
+	],
+	"status": "active"
+}]

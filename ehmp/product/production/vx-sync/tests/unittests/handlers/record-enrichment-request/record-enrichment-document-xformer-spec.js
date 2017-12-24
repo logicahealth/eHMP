@@ -20,11 +20,11 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var originalVaDocumentRecord = {
     'documentClass': 'PROGRESS NOTES',
-    'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+    'documentDefUid': 'urn:va:doc-def:SITE:1632',
     'documentTypeCode': 'D',
     'documentTypeName': 'Advance Directive',
     'encounterName': '20 MINUTE May 16, 2007',
-    'encounterUid': 'urn:va:visit:9E7A:3:5670',
+    'encounterUid': 'urn:va:visit:SITE:3:5670',
     'amended': 20070516095030,
     'entered': 20070516095030,
     'facilityCode': 500,
@@ -36,7 +36,7 @@ var originalVaDocumentRecord = {
         'name': 'ADVANCE DIRECTIVE',
         'vuid': 'urn:va:vuid:4693421'
     },
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'referenceDateTime': 200705160950,
     'stampTime': 20070516095030,
     'status': 'COMPLETED',
@@ -44,39 +44,39 @@ var originalVaDocumentRecord = {
         'clinicians': [{
             'name': 'LABTECH,FIFTYNINE',
             'role': 'AU',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'LABTECH,FIFTYNINE',
             'role': 'S',
             'signature': 'FIFTYNINE LABTECH',
             'signedDateTime': 20070516095031,
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'LABTECH,SIXTY',
             'role': 'ATT',
-            'uid': 'urn:va:user:9E7A:10000000060'
+            'uid': 'urn:va:user:SITE:10000000060'
         }, {
             'name': 'LABTECH,SIXTYONE',
             'role': 'C',
             'signature': 'SIXTYONE LABTECH',
             'signedDateTime': 20070516095030,
-            'uid': 'urn:va:user:9E7A:10000000061'
+            'uid': 'urn:va:user:SITE:10000000061'
         }, {
             'name': 'LABTECH,FIFTYNINE',
             'role': 'ES',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'MG',
             'role': 'E',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }],
         'content': '   VistA Imaging - Scanned Document\r\n',
         'enteredDateTime': 200705160949,
         'dateTime': 200705160950,
         'status': 'COMPLETED',
-        'uid': 'urn:va:document:9E7A:3:3853'
+        'uid': 'urn:va:document:SITE:3:3853'
     }],
-    'uid': 'urn:va:document:9E7A:3:3853'
+    'uid': 'urn:va:document:SITE:3:3853'
 };
 var originalVaDocumentJob = {
     record: originalVaDocumentRecord
@@ -124,10 +124,10 @@ var originalDodDocumentJob = {
 };
 
 var removedRecord = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:document:9E7A:3:3853'
+    'uid': 'urn:va:document:SITE:3:3853'
 };
 
 var removedJob = {
@@ -219,27 +219,27 @@ describe('record-enrichment-document-xformer.js', function() {
 
                     // Root level author
                     //------------------
-                    expect(record.authorUid).toEqual('urn:va:user:9E7A:10000000049');
+                    expect(record.authorUid).toEqual('urn:va:user:SITE:10000000049');
                     expect(record.author).toEqual('LABTECH,FIFTYNINE');
                     expect(record.authorDisplayName).toEqual('Labtech,Fiftynine');
 
                     // Root Level Signer
                     //-------------------
-                    expect(record.signerUid).toEqual('urn:va:user:9E7A:10000000049');
+                    expect(record.signerUid).toEqual('urn:va:user:SITE:10000000049');
                     expect(record.signer).toEqual('LABTECH,FIFTYNINE');
                     expect(record.signerDisplayName).toEqual('Labtech,Fiftynine');
                     expect(record.signedDateTime).toBe('20070516095031');
 
                     // Root Level Cosigner
                     //---------------------
-                    expect(record.cosignerUid).toEqual('urn:va:user:9E7A:10000000061');
+                    expect(record.cosignerUid).toEqual('urn:va:user:SITE:10000000061');
                     expect(record.cosigner).toEqual('LABTECH,SIXTYONE');
                     expect(record.cosignerDisplayName).toEqual('Labtech,Sixtyone');
                     expect(record.cosignedDateTime).toBe('20070516095030');
 
                     // Root Level Attending
                     //----------------------
-                    expect(record.attendingUid).toEqual('urn:va:user:9E7A:10000000060');
+                    expect(record.attendingUid).toEqual('urn:va:user:SITE:10000000060');
                     expect(record.attending).toEqual('LABTECH,SIXTY');
                     expect(record.attendingDisplayName).toEqual('Labtech,Sixty');
 
@@ -273,25 +273,25 @@ describe('record-enrichment-document-xformer.js', function() {
 
                     // Text Author
                     //------------
-                    expect(text.authorUid).toEqual('urn:va:user:9E7A:10000000049');
+                    expect(text.authorUid).toEqual('urn:va:user:SITE:10000000049');
                     expect(text.author).toEqual('LABTECH,FIFTYNINE');
                     expect(text.authorDisplayName).toEqual('Labtech,Fiftynine');
 
                     // Text Cosigner
                     //---------------
-                    expect(text.cosignerUid).toEqual('urn:va:user:9E7A:10000000061');
+                    expect(text.cosignerUid).toEqual('urn:va:user:SITE:10000000061');
                     expect(text.cosigner).toEqual('LABTECH,SIXTYONE');
                     expect(text.cosignerDisplayName).toEqual('Labtech,Sixtyone');
 
                     // Text Signer
                     //---------------
-                    expect(text.signerUid).toEqual('urn:va:user:9E7A:10000000049');
+                    expect(text.signerUid).toEqual('urn:va:user:SITE:10000000049');
                     expect(text.signer).toEqual('LABTECH,FIFTYNINE');
                     expect(text.signerDisplayName).toEqual('Labtech,Fiftynine');
 
                     // Text Attending
                     //---------------
-                    expect(text.attendingUid).toEqual('urn:va:user:9E7A:10000000060');
+                    expect(text.attendingUid).toEqual('urn:va:user:SITE:10000000060');
                     expect(text.attending).toEqual('LABTECH,SIXTY');
                     expect(text.attendingDisplayName).toEqual('Labtech,Sixty');
 
@@ -408,11 +408,11 @@ describe('record-enrichment-document-xformer.js', function() {
 
             var documentRecord = {
                 'documentClass': 'PROGRESS NOTES',
-                'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+                'documentDefUid': 'urn:va:doc-def:SITE:1632',
                 'documentTypeCode': 'D',
                 'documentTypeName': 'Advance Directive',
                 'encounterName': '20 MINUTE May 16, 2007',
-                'encounterUid': 'urn:va:visit:9E7A:3:5670',
+                'encounterUid': 'urn:va:visit:SITE:3:5670',
                 'entered': 20070516095030,
                 'facilityCode': 500,
                 'facilityName': 'CAMP MASTER',
@@ -423,7 +423,7 @@ describe('record-enrichment-document-xformer.js', function() {
                     'name': 'ADVANCE DIRECTIVE',
                     'vuid': 'urn:va:vuid:4693421'
                 },
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'referenceDateTime': 200705160950,
                 'stampTime': 20070516095030,
                 'status': 'COMPLETED',
@@ -431,40 +431,40 @@ describe('record-enrichment-document-xformer.js', function() {
                     'clinicians': [{
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'AU',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'S',
                         'signature': 'FIFTYNINE LABTECH',
                         'signedDateTime': 20070516095031,
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,SIXTY',
                         'role': 'ATT',
-                        'uid': 'urn:va:user:9E7A:10000000060'
+                        'uid': 'urn:va:user:SITE:10000000060'
                     }, {
                         'name': 'LABTECH,SIXTYONE',
                         'role': 'C',
                         'signature': 'SIXTYONE LABTECH',
                         'signedDateTime': 20070516095030,
-                        'uid': 'urn:va:user:9E7A:10000000061'
+                        'uid': 'urn:va:user:SITE:10000000061'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'ES',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'MG',
                         'role': 'E',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }],
                     'content': '   VistA Imaging - Scanned Document\r\n',
                     'enteredDateTime': 200705160949,
                     'dateTime': 200705160950,
                     'status': 'COMPLETED',
-                    'uid': 'urn:va:document:9E7A:3:3853'
+                    'uid': 'urn:va:document:SITE:3:3853'
                 }],
                 'statusDisplayName': 'IT IS COMPLETED',                     // This will force us to not do a conversion of the status to use for this field
-                'uid': 'urn:va:document:9E7A:3:3853'
+                'uid': 'urn:va:document:SITE:3:3853'
             };
             var documentJob = {
                 record: documentRecord
@@ -502,23 +502,23 @@ describe('record-enrichment-document-xformer.js', function() {
 
             var documentRecord = {
                 'documentClass': 'PROGRESS NOTES',
-                'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+                'documentDefUid': 'urn:va:doc-def:SITE:1632',
                 'documentTypeCode': 'D',
                 'documentTypeName': 'Advance Directive',
                 'encounterName': '20 MINUTE May 16, 2007',
-                'encounterUid': 'urn:va:visit:9E7A:3:5670',
+                'encounterUid': 'urn:va:visit:SITE:3:5670',
                 'entered': 20070516095030,
                 'facilityCode': 500,
                 'facilityName': 'CAMP MASTER',
                 'lastUpdateTime': 20070516095030,
                 'localId': 3853,
                 'localTitle': 'ADVANCE DIRECTIVE Interdisciplinary COMPLETED',          // This will force isInterdisciplinary to be set to true
-                'parentUid': 'urn:va:document:9E7A:3:111',                              // This will force the interdisciplinaryType to be set to child.
+                'parentUid': 'urn:va:document:SITE:3:111',                              // This will force the interdisciplinaryType to be set to child.
                 'nationalTitle': {
                     'name': 'ADVANCE DIRECTIVE',
                     'vuid': 'urn:va:vuid:4693421'
                 },
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'referenceDateTime': 200705160950,
                 'stampTime': 20070516095030,
                 'status': 'COMPLETED',
@@ -526,40 +526,40 @@ describe('record-enrichment-document-xformer.js', function() {
                     'clinicians': [{
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'AU',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'S',
                         'signature': 'FIFTYNINE LABTECH',
                         'signedDateTime': 20070516095031,
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,SIXTY',
                         'role': 'ATT',
-                        'uid': 'urn:va:user:9E7A:10000000060'
+                        'uid': 'urn:va:user:SITE:10000000060'
                     }, {
                         'name': 'LABTECH,SIXTYONE',
                         'role': 'C',
                         'signature': 'SIXTYONE LABTECH',
                         'signedDateTime': 20070516095030,
-                        'uid': 'urn:va:user:9E7A:10000000061'
+                        'uid': 'urn:va:user:SITE:10000000061'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'ES',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'MG',
                         'role': 'E',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }],
                     'content': '   VistA Imaging - Scanned Document\r\n',
                     'enteredDateTime': 200705160949,
                     'dateTime': 200705160950,
                     'status': 'COMPLETED',
                     'statusDisplayName': 'IT IS COMPLETED',                     // This will force us to not do a conversion of the status to use for this field
-                    'uid': 'urn:va:document:9E7A:3:3853'
+                    'uid': 'urn:va:document:SITE:3:3853'
                 }],
-                'uid': 'urn:va:document:9E7A:3:3853'
+                'uid': 'urn:va:document:SITE:3:3853'
             };
             var documentJob = {
                 record: documentRecord
@@ -596,23 +596,23 @@ describe('record-enrichment-document-xformer.js', function() {
 
             var documentRecord = {
                 'documentClass': 'PROGRESS NOTES',
-                'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+                'documentDefUid': 'urn:va:doc-def:SITE:1632',
                 'documentTypeCode': 'D',
                 'documentTypeName': 'Advance Directive',
                 'encounterName': '20 MINUTE May 16, 2007',
-                'encounterUid': 'urn:va:visit:9E7A:3:5670',
+                'encounterUid': 'urn:va:visit:SITE:3:5670',
                 'entered': 20070516095030,
                 'facilityCode': 500,
                 'facilityName': 'CAMP MASTER',
                 'lastUpdateTime': 20070516095030,
                 'localId': 3853,
                 'localTitle': 179,
-                'parentUid': 'urn:va:document:9E7A:3:111',                              // This will force the interdisciplinaryType to be set to child.
+                'parentUid': 'urn:va:document:SITE:3:111',                              // This will force the interdisciplinaryType to be set to child.
                 'nationalTitle': {
                     'name': 'ADVANCE DIRECTIVE',
                     'vuid': 'urn:va:vuid:4693421'
                 },
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'referenceDateTime': 200705160950,
                 'stampTime': 20070516095030,
                 'status': 'COMPLETED',
@@ -620,40 +620,40 @@ describe('record-enrichment-document-xformer.js', function() {
                     'clinicians': [{
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'AU',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'S',
                         'signature': 'FIFTYNINE LABTECH',
                         'signedDateTime': 20070516095031,
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'LABTECH,SIXTY',
                         'role': 'ATT',
-                        'uid': 'urn:va:user:9E7A:10000000060'
+                        'uid': 'urn:va:user:SITE:10000000060'
                     }, {
                         'name': 'LABTECH,SIXTYONE',
                         'role': 'C',
                         'signature': 'SIXTYONE LABTECH',
                         'signedDateTime': 20070516095030,
-                        'uid': 'urn:va:user:9E7A:10000000061'
+                        'uid': 'urn:va:user:SITE:10000000061'
                     }, {
                         'name': 'LABTECH,FIFTYNINE',
                         'role': 'ES',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }, {
                         'name': 'MG',
                         'role': 'E',
-                        'uid': 'urn:va:user:9E7A:10000000049'
+                        'uid': 'urn:va:user:SITE:10000000049'
                     }],
                     'content': '   VistA Imaging - Scanned Document\r\n',
                     'enteredDateTime': 200705160949,
                     'dateTime': 200705160950,
                     'status': 'COMPLETED',
                     'statusDisplayName': 'IT IS COMPLETED',                     // This will force us to not do a conversion of the status to use for this field
-                    'uid': 'urn:va:document:9E7A:3:3853'
+                    'uid': 'urn:va:document:SITE:3:3853'
                 }],
-                'uid': 'urn:va:document:9E7A:3:3853'
+                'uid': 'urn:va:document:SITE:3:3853'
             };
             var documentJob = {
                 record: documentRecord
@@ -698,8 +698,8 @@ describe('record-enrichment-document-xformer.js', function() {
                 xformer(log, config, environment, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:document:9E7A:3:3853');
-                    expect(record.pid).toEqual('9E7A;3');
+                    expect(record.uid).toEqual('urn:va:document:SITE:3:3853');
+                    expect(record.pid).toEqual('SITE;3');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

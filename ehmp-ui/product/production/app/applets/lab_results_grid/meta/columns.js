@@ -40,8 +40,7 @@ define([
                 flexWidth: 'flex-width-date',
                 cell: Backgrid.HandlebarsCell.extend({
                     className: 'handlebars-cell flex-width-date'
-                }),
-                hoverTip: 'labresults_date'
+                })
             };
         },
         testCol: function () {
@@ -52,8 +51,7 @@ define([
                 flexWidth: 'flex-width-3',
                 cell: Backgrid.HandlebarsCell.extend({
                     className: 'handlebars-cell flex-width-3'
-                }),
-                hoverTip: 'labresults_labtest'
+                })
             };
         },
         flagCol: function () {
@@ -74,24 +72,21 @@ define([
                 name: "result",
                 label: "Result",
                 template: Handlebars.compile('{{result}} {{units}}'),
-                cell: "handlebars",
-                hoverTip: 'labresults_result'
+                cell: "handlebars"
             };
         },
         resultNoUnitCol: function () {
             return {
                 name: "result",
                 label: "Result",
-                cell: "string",
-                hoverTip: 'labresults_result'
+                cell: "string"
             };
         },
         unitCol: function () {
             return {
                 name: "units",
                 label: "Unit",
-                cell: "string",
-                hoverTip: 'labresults_unit'
+                cell: "string"
             };
         },
         refCol: function () {
@@ -108,8 +103,7 @@ define([
                 name: "facilityMoniker",
                 label: "Facility",
                 template: Handlebars.compile('{{facilityMoniker}}'),
-                cell: "handlebars",
-                hoverTip: 'labresults_facility'
+                cell: "handlebars"
             };
         }
     };

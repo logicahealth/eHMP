@@ -14,10 +14,10 @@ var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 // });
 
 var invalidIDSampleJob = {
-  type: 'vista-9E7A-subscribe-request',
+  type: 'vista-SITE-subscribe-request',
   patientIdentifier: {
     type: 'pid',
-    value: '9E7A;0' },
+    value: 'SITE;0' },
   jpid: 'b2f63ba4-98dc-4d4a-b46e-df5e73d4c6eb',
   rootJobId: '1',
   jobId: '2'
@@ -35,7 +35,7 @@ describe('vista-subscribe-request-handler', function(){
         environment.jds._setResponseData(['200'],[null],[]);
         var complete = false;
         runs(function(){
-            handler('9E7A', logger, config, environment, invalidIDSampleJob, function(error) {
+            handler('SITE', logger, config, environment, invalidIDSampleJob, function(error) {
 
                 if(!error) {
                     environment.vistaClient.unsubscribe(invalidIDSampleJob.patientIdentifier.value,function(){});

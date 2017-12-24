@@ -1,0 +1,25 @@
+<div class="row">
+	<div class="col-xs-3">
+		<p><strong>Discharged On</strong><br />
+		{{formatDate dischargedOn "MM/DD/YYYY - HH:mm"}}</p>
+	</div>
+	<div class="col-xs-3">
+		<p><strong>From Facility</strong><br />
+		{{fromFacilityName}}</p>
+	</div>
+	<div class="col-xs-3">
+		<p><strong>Admission On</strong><br />
+		{{formatDate admissionOnDate "MM/DD/YYYY"}}</p>
+	</div>
+    <div class="col-xs-3">
+		<p><strong>Disposition To</strong><br />
+		{{disposition}}</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<p><strong>Discharge Diagnoses</strong><br />
+		{{diagnosisDisplayText}}</p>
+	</div>
+</div>

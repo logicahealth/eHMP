@@ -125,7 +125,7 @@ define([], function() {
                     'params': this.params
                 }, options),
                 standardParams = {
-                    pid: this.patient.get('pid'),
+                    pid: ADK.PatientRecordService.getCurrentPatient().getIdentifier(),
                     resourceId: this.get('uid')
                 },
                 params = _.extend({}, standardParams, _.isFunction(opts.params) ? opts.params.apply(this, arguments) : opts.params),

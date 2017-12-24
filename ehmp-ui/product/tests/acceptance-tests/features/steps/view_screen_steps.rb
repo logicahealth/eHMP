@@ -1,13 +1,7 @@
-class ActiveScreen < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("Active Screen"), VerifyText.new, AccessHtmlElement.new(:id, "screenName"))
-  end
-end # 
-
 Then(/^"(.*?)" is active$/) do |screen_name|
-  browser_access = ActiveScreen.instance
-  expect(browser_access.wait_until_element_present("Active Screen", DefaultLogin.wait_time)).to be_true
-  expect(browser_access.perform_verification("Active Screen", screen_name)).to be_true
+  general = PobParentApplet.new
+  general.wait_for_menu
+  expect(general).to have_menu
+  expect(general.menu).to have_fld_screen_name
+  expect(general.menu.fld_screen_name.text.upcase).to eq(screen_name.upcase)
 end

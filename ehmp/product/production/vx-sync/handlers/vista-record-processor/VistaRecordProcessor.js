@@ -10,6 +10,7 @@
 
 require('../../env-setup');
 
+var util = require('util');
 //var inspect = require(global.VX_UTILS + 'inspect');
 var _ = require('underscore');
 var async = require('async');
@@ -17,6 +18,7 @@ var uuid = require('node-uuid');
 //var mapUtil = require(global.VX_UTILS + 'map-utils');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
+var uidUtil = require(global.VX_UTILS + 'uid-utils');
 var format = require('util').format;
 var metaStampUtil = require(global.VX_UTILS + 'metastamp-utils');
 
@@ -86,9 +88,16 @@ VistaRecordProcessor.prototype.processBatch = function (data, callback) {
 VistaRecordProcessor.prototype._processDataItem = function (item, callback) {
     var self = this;
 
-    if (!item || !item.collection) {
-        self.log.debug('VistaRecordProcessor.processBatch: Item or item.collection was nullish.');
-        callback(null, 'Item or item.collection was nullish.');
+    if (!item) {
+        self.log.debug('VistaRecordProcessor.processBatch: Item was nullish.');
+        callback(null, 'Item was nullish.');
+    } else if (item.error) {
+        self._handleItemError(item, function (error, response) {
+            callback(error, response);
+        });
+    } else if (!item.collection) {
+        self.log.debug('VistaRecordProcessor.processBatch: Item.collection was nullish.');
+        callback(null, 'Item.collection was nullish.');
     } else if (item.collection === 'syncStart') {
         self._processSyncStartJob(item, function (error, response) {
             callback(error, response);
@@ -109,6 +118,47 @@ VistaRecordProcessor.prototype._processDataItem = function (item, callback) {
         self.log.debug('VistaRecordProcessor.processBatch: Item of collection type %s doesn\'t need to be processed.', item.collection);
         callback(null, format('Item of collection type %s doesn\'t need to be processed.', item.collection));
     }
+};
+
+//--------------------------------------------------------------------------------------------------------------
+// This method handles the item level error that was received from Vista.   It will log and publish an error
+// message and then call the callback handler.
+//
+// item: The item (chunk) of a batch from Vista that represents one message.
+// callback: The callback handler to call when are done processing the error.
+//--------------------------------------------------------------------------------------------------------------
+VistaRecordProcessor.prototype._handleItemError = function (item, callback) {
+    var self = this;
+
+    // We should never have this situation - but if we do - get out of here.
+    //----------------------------------------------------------------------
+    if (!item) {
+        self.log.error('VistaRecordProcessor.handleItemError: Method called with null or undefined item.');
+        return callback(null, 'Method called with null or undefined item.');
+    }
+
+    if (!item.error) {
+        self.log.error('VistaRecordProcessor.handleItemError: Method called with item that did not contain an error.');
+        return callback(null, 'Method called with item that did not contain an error.');
+    }
+
+    var errorMessage = util.format('A single item from a Vista Batch had an error.  Error Info: %j ', item.error);
+    var uids = _.compact(_.pluck(item.error, 'uid'));
+    var site;
+    if ((uids) && (!_.isEmpty(uids))) {
+        site = uidUtil.extractSiteFromUID(uids[0]);  // Does not really matter which one we pick up - so use the first one.
+    }
+
+    // Write a log message for this error.
+    //-------------------------------------
+    self.log.error('VistaRecordProcessor.handleItemError: ' + errorMessage);
+
+    // Publish an error to JDS
+    //------------------------
+    self.environment.errorPublisher.publishPollerError(site, item, errorMessage, function () {});
+
+    return callback(null, errorMessage);
+
 };
 
 
@@ -150,7 +200,9 @@ VistaRecordProcessor.prototype._processSyncStartJob = function (syncStartJob, ca
     //-------------------------------------------------------------
     if (_.isObject(syncStartJob.metaStamp)) {
         syncStartDomain = metaStampUtil.getDomainFromMetastamp(syncStartJob.metaStamp, vistaId);
-        if (!_.isEmpty(metaStampUtil.getEventMetastampForDomain(syncStartJob.metaStamp, vistaId, syncStartDomain))) {
+        if (self._isSyncNotification(syncStartDomain)) {
+            childLog.debug('VistaRecordProcessor._processSyncStartJob: metaStamp for domain %s is a sync notification job. metaStamp does not need to be stored. pid: %s.', syncStartDomain, syncStartJob.pid);
+        } else if (!_.isEmpty(metaStampUtil.getEventMetastampForDomain(syncStartJob.metaStamp, vistaId, syncStartDomain))) {
             tasks = tasks.concat(self._storeMetaStamp.bind(self, childLog, syncStartJob.metaStamp, patientIdentifier));
         } else {
             childLog.debug('VistaRecordProcessor._processSyncStartJob: metaStamp for domain %s has no events associated with it. Means the patient has no data for this domain on this VistA site. metaStamp does not need to be stored. pid: %s.', syncStartDomain, syncStartJob.pid);
@@ -586,7 +638,12 @@ VistaRecordProcessor.prototype._buildVistaDataJob = function (childLog, vistaDat
         var vistaObjectNode = vistaDataJob.object;
         vistaObjectNode.pid = vistaDataJob.pid;
         self.metrics.trace('vista-record-processor: Build Vista Data', metricObj);
-        return jobUtil.createEventPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, meta);
+
+        if (self._isSyncNotification(vistaDataJob.collection)) {
+            return jobUtil.createSyncNotification(patientIdentifier, vistaDataJob.collection, vistaObjectNode, meta);
+        } else {
+            return jobUtil.createEventPrioritizationRequest(patientIdentifier, vistaDataJob.collection, vistaObjectNode, meta);
+        }
     }
 
     if (vistaDataJob.error) {
@@ -615,6 +672,23 @@ VistaRecordProcessor.prototype._isOperationalData = function (vistaDataJob) {
     var domainName = vistaDataJob.collection || '';
     var pid = vistaDataJob.pid || null;
     return ((domainName.toLowerCase() === 'pt-select') || !pid);
+};
+
+//--------------------------------------------------------------------------------
+// Checks to see if this record is a sync notification.
+//
+// syncDomain: The sync domain for the job.
+//--------------------------------------------------------------------------------
+VistaRecordProcessor.prototype._isSyncNotification = function (syncDomain) {
+    if (!syncDomain || !this.config.syncNotifications) {
+        return false;
+    }
+
+    var foundDataDomain = _.find(_.values(this.config.syncNotifications), function(syncNotification) {
+        return syncNotification.dataDomain === syncDomain;
+    });
+
+    return !_.isUndefined(foundDataDomain);
 };
 
 

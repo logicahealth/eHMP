@@ -30,11 +30,6 @@ class RecordTime
   end
 end
 
-# Before do |_scenario|
-#   RecordTime.record_start_time
-#   TestSupport.increment_counter
-# end
-
 def take_screenshot(screenshot_name)
   screenshot_name = "#{screenshot_name}".gsub! "features/", "#{ENV['SCREENSHOTS_FOLDER']}/" if ENV.keys.include?('SCREENSHOTS_FOLDER')
   screenshot_name_png = "#{screenshot_name}.png"
@@ -43,33 +38,9 @@ def take_screenshot(screenshot_name)
 rescue Timeout::Error
   p "Timeout Rescue"
 end
-#
-# After do |scenario|
-#   RecordTime.record_end_time
-#
-#   temp_location = nil
-#   begin
-#     temp_location = scenario.location
-#   rescue NoMethodError
-#     temp_location = scenario.scenario_outline.location
-#   end
-#
-#   if scenario.failed?
-#     screenshot_name = "#{temp_location}".gsub! ':', '_'
-#     take_screenshot screenshot_name
-#     p "logs through selenium: #{TestSupport.print_logs}"
-#   end #if
-#   p "scenario tags: #{scenario.source_tag_names}"
-#
-#   close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
-#   RecordTime.save_test_duration(scenario.source_tag_names, scenario.failed?, temp_location)
-#
-#   navigate_to_logon_screen unless @skip_login
-# end
 
 def close_any_open_modals
   driver = TestSupport.driver
-  #$('#mainModal').modal('hide');
 
   # if the autolog off dialog is displayed, attempt to close it
   begin
@@ -98,7 +69,6 @@ def close_any_open_modals
     modal_exists = nil
   end
   
-  # driver.execute_script("$('#mainModal').modal('hide');") if modalExists
   wait_until_modal_is_not_displayed
 end
 

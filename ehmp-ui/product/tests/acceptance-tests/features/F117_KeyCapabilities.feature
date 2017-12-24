@@ -13,7 +13,7 @@ Scenario: Verify current patient identifying traits, application version and scr
 		| html 			| value 				|
 		| SSN 			| 666-00-0010			|
         | Gender        | Male                  |
-    And the Global Header displays the user name "Ten,Patient (T0010)"
+    And the Patient View Current Patient displays the user name "Ten,Patient (T0010)"
     And the patient DOB is in correct format
 	And "Bottom Region" contains "eHMP version"
     When the user selects Staff View from navigation bar

@@ -113,7 +113,7 @@ describe('appointment-handler unit test', function() {
             runs(function() {
                 var job = {};
                 job.type = 'appointments';
-                job.siteId = '9E7A';
+                job.siteId = 'SITE';
 
                 var mockConfig = null;
                 var mockEnvironment = {};
@@ -144,7 +144,7 @@ describe('appointment-handler unit test', function() {
             };
 
             var job = osyncJobUtils.createAppointmentsJob(log, meta);
-            job.siteId = '9E7A';
+            job.siteId = 'SITE';
             job.clinic = '123';
 
             var vistaStr = '12345^3170126.15^TEST 1^104^\r\n25^3170126.15^AUDIOLOGY^64^\r\n';
@@ -153,7 +153,7 @@ describe('appointment-handler unit test', function() {
                     daysInFuture: 1
                 },
                 vistaSites: {
-                    '9E7A': {}
+                    'SITE': {}
                 }
             };
             var mockEnvironment = {
@@ -175,7 +175,6 @@ describe('appointment-handler unit test', function() {
                 expect(error).toBeFalsy();
                 expect(resultJobs).toContain(jasmine.objectContaining({
                     'type': 'sync',
-                    'jpid': jasmine.any(String),
                     'referenceInfo': {
                         'sessionId': 'TEST',
                         'utilityType': 'Osync Appointments Handler Unit Test'
@@ -187,11 +186,10 @@ describe('appointment-handler unit test', function() {
                         'locationName': 'TEST 1',
                         'locationIen': '104'
                     },
-                    'siteId': '9E7A'
+                    'siteId': 'SITE'
                 }));
                 expect(resultJobs).toContain(jasmine.objectContaining({
                     'type': 'sync',
-                    'jpid': jasmine.any(String),
                     'referenceInfo': {
                         'sessionId': 'TEST',
                         'utilityType': 'Osync Appointments Handler Unit Test'
@@ -203,7 +201,7 @@ describe('appointment-handler unit test', function() {
                         'locationName': 'AUDIOLOGY',
                         'locationIen': '64'
                     },
-                    'siteId': '9E7A'
+                    'siteId': 'SITE'
                 }));
                 done();
             });

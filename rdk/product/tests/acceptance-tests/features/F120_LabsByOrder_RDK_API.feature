@@ -4,7 +4,7 @@ Feature: F120 JLV GUI Refactoring to use VistA Exchange and request labsbyorder 
 @f120_labsbyorder_rdk_api @US1538 @11016V630869
 Scenario: Client can request labsbyorder in VPR format from RDK API
     #Given a patient with pid "11016V630869" has been synced through the RDK API
-    When the client requests lab orders for the patient "9E7A;227" and order "urn:va:order:9E7A:227:16682" in VPR format from RDK API
+    When the client requests lab orders for the patient "SITE;227" and order "urn:va:order:SITE:227:16682" in VPR format from RDK API
     Then a successful response is returned
     #And the client receives 7 VPR VistA result(s)
     And the VPR results contain
@@ -22,7 +22,7 @@ Scenario: Client can request labsbyorder in VPR format from RDK API
       | statusName         | completed                                            |
       | specimen           | SERUM                                                |
       | groupName          | CH 0317 234                                          |
-      | groupUid           | urn:va:accession:9E7A:227:CH;6949681.966383          |
+      | groupUid           | urn:va:accession:SITE:227:CH;6949681.966383          |
       | labOrderId         | 2790                                                 |
       | localId            | CH;6949681.966383;2                                  |
       | summary            | GLUCOSE (SERUM) 310<em>H*</em> mg/dL                 |
@@ -37,7 +37,7 @@ Scenario: Client can request labsbyorder in VPR format from RDK API
       | specimen           | SERUM                                                |
       | observed           | 20050317033600                                         |
       | resulted           | 20050317033600                                         |
-      | uid                | urn:va:lab:9E7A:227:CH;6949681.966383;2              |
+      | uid                | urn:va:lab:SITE:227:CH;6949681.966383;2              |
       | categoryCode       | urn:va:lab-category:CH                               |
       #| codes.code         | 2344-0                                               |
       #| codes.system       | http://loinc.org                                     |

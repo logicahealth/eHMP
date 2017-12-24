@@ -12,6 +12,8 @@ define([
             paramsForModel.taskStatus = options.formModel.get('status');
         }
 
+        paramsForModel.beforeEarliestDate = _.get(options, 'beforeEarliestDate');
+
         var formModel = new ResponseFormModel(paramsForModel);
 
         var formTitle = 'request - response';

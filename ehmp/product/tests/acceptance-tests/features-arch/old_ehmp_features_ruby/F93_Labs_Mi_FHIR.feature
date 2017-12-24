@@ -50,7 +50,7 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.performer.display                      | CAMP MASTER                                                |
       | content.performer.reference                    | IS_SET                                                     |
       | content.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                            |
-      | content.identifier.value                       | urn:va:lab:9E7A:227:MI;7048982.848075                      |
+      | content.identifier.value                       | urn:va:lab:SITE:227:MI;7048982.848075                      |
       | content.serviceCategory.coding.code            | MB                                                         |
       | content.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                |
       | content.serviceCategory.coding.display         | Microbiology                                               |
@@ -66,9 +66,9 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupName      |
       | content.extension.valueString             | MI 95 27                                               |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
-      | content.extension.valueString             | urn:va:accession:9E7A:227:MI;7048982.848075            |
+      | content.extension.valueString             | urn:va:accession:SITE:227:MI;7048982.848075            |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-      | content.extension.valueResource.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
+      | content.extension.valueResource.reference | Composition/urn:va:document:SITE:227:MI;7048982.848075 |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
       | content.extension.valueString             | MI;7048982.848075                                      |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
@@ -78,8 +78,8 @@ Scenario: Client can request lab (MI) results in FHIR format
 @f93_2_labs_mi_fhir @fhir
 Scenario: Client can request lab (MI) results in FHIR format
 	Given a patient with "lab (MI) results" in multiple VistAs
-      Given a patient with pid "9E7A;737" has been synced through Admin API
-	When the client requests labs for the patient "9E7A;737" in FHIR format
+      Given a patient with pid "SITE;737" has been synced through Admin API
+	When the client requests labs for the patient "SITE;737" in FHIR format
 	Then a successful response is returned
 	Then the client receives 40 FHIR "VistA" result(s)
 	And the client receives 40 FHIR "panorama" result(s)	
@@ -98,9 +98,9 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupName                         |
       | content.extension.valueString             | MI 99 2                                                                   |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid                          |
-      | content.extension.valueString             | urn:va:accession:9E7A:737:MI;7009789.889352                               |
+      | content.extension.valueString             | urn:va:accession:SITE:737:MI;7009789.889352                               |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#report                            |
-      | content.extension.valueResource.reference | Composition/urn:va:document:9E7A:737:MI;7009789.889352 					  |
+      | content.extension.valueResource.reference | Composition/urn:va:document:SITE:737:MI;7009789.889352 					  |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId                           |
       | content.extension.valueString             | MI;7009789.889352                                                         |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen                       |
@@ -111,7 +111,7 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#bactRemarks                       |
       | content.extension.valueString             | CONTAINS NO GROWTH AFTER 2 DAYS                                           |
       
-    And the lab field(s) just contain "Patient/9E7A;737"
+    And the lab field(s) just contain "Patient/SITE;737"
       | field                         		|
 	  | content.subject.reference     		| 
       | content.contained.subject.reference	|  
@@ -176,7 +176,7 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.performer.display                      | CAMP MASTER                                                |
       | content.performer.reference                    | IS_SET                                                     |
 #      | content.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                           |
-#      | content.identifier.value                       | urn:va:lab:C877:227:MI;7048982.848075                     |
+#      | content.identifier.value                       | urn:va:lab:SITE:227:MI;7048982.848075                     |
       | content.serviceCategory.coding.code            | MB                                                         |
       | content.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                |
       | content.serviceCategory.coding.display         | Microbiology                                               |
@@ -192,9 +192,9 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupName      |
       | content.extension.valueString             | MI 95 27                                               |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
-      | content.extension.valueString             | urn:va:accession:C877:227:MI;7048982.848075            |
+      | content.extension.valueString             | urn:va:accession:SITE:227:MI;7048982.848075            |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-      | content.extension.valueResource.reference | Composition/urn:va:document:C877:227:MI;7048982.848075 |
+      | content.extension.valueResource.reference | Composition/urn:va:document:SITE:227:MI;7048982.848075 |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
       | content.extension.valueString             | MI;7048982.848075                                      |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
@@ -202,14 +202,14 @@ Scenario: Client can request lab (MI) results in FHIR format
       
    And the results contain lab "(MI)" results
    		| content.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                            |
-		| content.identifier.value                       | urn:va:lab:C877:227:MI;7048982.848075                      |
+		| content.identifier.value                       | urn:va:lab:SITE:227:MI;7048982.848075                      |
       
  
 @f93_4_labs_mi_fhir @fhir
 Scenario: Client can request lab (MI) results in FHIR format
 	Given a patient with "lab (MI) results" in multiple VistAs
-      Given a patient with pid "C877;737" has been synced through Admin API
-	When the client requests lab "(MI)" results for that patient "C877;737"
+      Given a patient with pid "SITE;737" has been synced through Admin API
+	When the client requests lab "(MI)" results for that patient "SITE;737"
 	Then a successful response is returned
 	Then the client receives 40 FHIR "VistA" result(s)
 	And the client receives 40 FHIR "kodak" result(s)	
@@ -228,9 +228,9 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupName                         |
       | content.extension.valueString             | MI 99 2                                                                   |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid                          |
-      | content.extension.valueString             | urn:va:accession:C877:737:MI;7009789.889352                               |
+      | content.extension.valueString             | urn:va:accession:SITE:737:MI;7009789.889352                               |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#report                            |
-      | content.extension.valueResource.reference | Composition/urn:va:document:C877:737:MI;7009789.889352 					  |
+      | content.extension.valueResource.reference | Composition/urn:va:document:SITE:737:MI;7009789.889352 					  |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId                           |
       | content.extension.valueString             | MI;7009789.889352                                                         |
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen                       |
@@ -241,7 +241,7 @@ Scenario: Client can request lab (MI) results in FHIR format
       | content.extension.url                     | http://vistacore.us/fhir/extensions/lab#bactRemarks                       |
       | content.extension.valueString             | CONTAINS NO GROWTH AFTER 2 DAYS                                           |
       
-    And the lab field(s) just contain "Patient/C877;737"
+    And the lab field(s) just contain "Patient/SITE;737"
       | field                         		|
 	  | content.subject.reference     		| 
       | content.contained.subject.reference	|  
@@ -264,16 +264,16 @@ Scenario: Client can request lab (MI) results in FHIR format
 @f93_5_labs_mi_fhir @fhir
 Scenario: Client can request lab (MI) results in FHIR format
 	Given a patient with "lab (MI) results" in multiple VistAs
-      Given a patient with pid "9E7A;1" has been synced through Admin API
-	When the client requests labs for the patient "9E7A;1" in FHIR format
+      Given a patient with pid "SITE;1" has been synced through Admin API
+	When the client requests labs for the patient "SITE;1" in FHIR format
 	Then a successful response is returned
 	Then the client receives 119 FHIR "VistA" result(s)
 	And the client receives 119 FHIR "panorama" result(s)	
     And the results contain lab "(MI)" results                                                       
       | field                               | values                                    |
-      | content.identifier.value			| CONTAINS urn:va:lab:9E7A:1:MI				|
-      | content.text.div					| CONTAINS urn:va:accession:9E7A:1:MI;		|
-      | content.subject.reference           | Patient/9E7A;1		                    |
+      | content.identifier.value			| CONTAINS urn:va:lab:SITE:1:MI				|
+      | content.text.div					| CONTAINS urn:va:accession:SITE:1:MI;		|
+      | content.subject.reference           | Patient/SITE;1		                    |
       | content.contained.identifier.label  | facility-code                             |
       | content.contained.identifier.value  | 500						 				|
       | content.performer.display           | CAMP MASTER                               |
@@ -285,16 +285,16 @@ Scenario: Client can request lab (MI) results in FHIR format
 @f93_6_labs_mi_fhir @fhir
 Scenario: Client can request lab (MI) results in FHIR format
 	Given a patient with "lab (MI) results" in multiple VistAs
-      Given a patient with pid "C877;1" has been synced through Admin API
-	When the client requests labs for the patient "C877;1" in FHIR format
+      Given a patient with pid "SITE;1" has been synced through Admin API
+	When the client requests labs for the patient "SITE;1" in FHIR format
 	Then a successful response is returned
 	Then the client receives 119 FHIR "VistA" result(s)
 	And the client receives 119 FHIR "kodak" result(s)	
     And the results contain lab "(MI)" results                                                       
       | field                               | values                                    |
-      | content.identifier.value			| CONTAINS urn:va:lab:C877:1:MI				|
-      | content.text.div					| CONTAINS urn:va:accession:C877:1:MI;		|
-      | content.subject.reference           | Patient/C877;1		                    |
+      | content.identifier.value			| CONTAINS urn:va:lab:SITE:1:MI				|
+      | content.text.div					| CONTAINS urn:va:accession:SITE:1:MI;		|
+      | content.subject.reference           | Patient/SITE;1		                    |
       | content.contained.identifier.label  | facility-code                             |
       | content.contained.identifier.value  | 500						 				|
       | content.performer.display           | CAMP BEE		                            |

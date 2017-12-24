@@ -31,12 +31,12 @@ define([
             }
         },
         disableButton: function() {
-            this.model.set('isBusy', true, {silent: true});
+            this.model.set('isBusy', true, { silent: true });
             this.ui.order_previous.attr("disabled", "disabled");
             this.ui.order_next.attr("disabled", "disabled");
         },
         enableButton: function() {
-            this.model.set('isBusy', false, {silent: true});
+            this.model.set('isBusy', false, { silent: true });
             this.ui.order_previous.attr("disabled", false);
             this.ui.order_next.attr("disabled", false);
         },
@@ -66,14 +66,13 @@ define([
                 silent: true
             });
 
-            var detailModel = new ADK.UIResources.Writeback.Orders.Detail({
-                    orderId: this.currentModel.get('orderId')
-            });
+            var detailModel = new ADK.UIResources.Fetch.Orders.Detail(this.currentModel.attributes);
 
             this.listenTo(detailModel, 'read:success', function(model, resp) {
                 this.currentModel.set('detailSummary', model.get('detail'));
                 this.model.clear();
                 this.model.set(this.currentModel.attributes);
+                this.configureNavigationButtons(this.model.get('index'));
             });
 
             this.listenTo(detailModel, 'read:error', function(model, resp) {
@@ -86,6 +85,18 @@ define([
             if (this.model.get('hideNavigation')) {
                 this.ui.order_previous.addClass("hidden");
                 this.ui.order_next.addClass("hidden");
+            } else {
+                this.configureNavigationButtons(this.model.get('modelIndex'));
+            }
+        },
+        configureNavigationButtons: function(modelIndex) {
+            if (modelIndex === 0) {
+                this.ui.order_previous.attr('disabled', true);
+            } else {
+                var fullCollection = _.get(this.collection, 'fullCollection') || this.collection;
+                if (modelIndex === _.size(fullCollection) - 1) {
+                    this.ui.order_next.attr('disabled', true);
+                }
             }
         }
     });

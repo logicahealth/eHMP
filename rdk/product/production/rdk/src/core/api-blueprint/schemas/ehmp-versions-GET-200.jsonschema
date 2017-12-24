@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Get the list of eHMP versions",
+    "description": "",
+    "type": "object",
+    "required": [
+        "data",
+        "status"
+    ],
+    "properties": {
+        "data": {
+            "type": "object",
+            "required": [
+                "versions"
+            ],
+            "properties": {
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "status": {
+            "type": "integer"
+        }
+    }
+}

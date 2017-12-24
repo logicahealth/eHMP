@@ -1,4 +1,4 @@
-@F1211 @reg1
+@F1211 @reg1 @CommunityHealthSummaries_applet
 Feature: Add Community Health information to patient record text search results
 
 #Team Application

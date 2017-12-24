@@ -29,7 +29,7 @@ Then(/^the Problems applet displays$/) do
   wait.until { @active_problems.applet_grid_loaded }
   sleep 2 # addign this because the applet dsplays and then appears to resort...test has already tried to move on and it screws things up
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { infiniate_scroll('#data-grid-problems tbody') }
+  wait.until { infiniate_scroll('[data-appletid=problems] .data-grid table tbody') }
 end
 
 When(/^the user filters the Problems Applet by text "([^"]*)"$/) do |input_text|
@@ -43,7 +43,7 @@ Then(/^the problems table only diplays rows including text "([^"]*)"$/) do |inpu
   upper = input_text.upcase
   lower = input_text.downcase
 
-  path =  "//table[@id='data-grid-problems']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
+  path =  "//div[@data-appletid='problems']//table/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
 
   row_count = TableContainer.instance.get_elements("Rows - Active Problems Applet").size 
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
@@ -70,7 +70,7 @@ When(/^the user clicks the Problems Expand Button$/) do
 end
 
 Then(/^the Problems Applet contains data rows$/) do
-  compare_item_counts("#data-grid-problems tr")
+  compare_item_counts("[data-appletid=problems] .data-grid table tr")
 end
 
 When(/^user refreshes Problems Applet$/) do
@@ -82,11 +82,13 @@ Then(/^the message on the Problems Applet does not say "(.*?)"$/) do |message_te
 end
 
 Given(/^the user navigates to expanded problems applet$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.load
-
+  ehmp = PobProblemsApplet.new
+  navigate_in_ehmp "#/patient/problems-full"
+  
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { applet_grid_loaded('#data-grid-problems tr.empty', @ehmp.fld_all_problems_expanded_view) }
+  wait.until { ehmp.applet_loaded? }
+
+  expect(ehmp.menu.fld_screen_name.text.upcase).to eq('PROBLEMS')
 
   @active_problems.clear_filter('grid-filter-button-problems')
 end

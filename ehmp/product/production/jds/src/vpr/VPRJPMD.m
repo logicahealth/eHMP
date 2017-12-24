@@ -1,8 +1,10 @@
 VPRJPMD ;SLC/KCM -- Set up Meta Data for VPR Indexing
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 SETUP ;
- K ^VPRMETA
+ M ^VPRSAVE("lastAccessTime")=^VPRMETA("JPID") ; save off lastAccessTime data
+ K:$D(^VPRMETA) ^VPRMETA
+ M ^VPRMETA("JPID")=^VPRSAVE("lastAccessTime") ; restore lastAccessTime data
+ K:$D(^VPRSAVE("lastAccessTime")) ^VPRSAVE("lastAccessTime")
  S ^VPRMETA("system")=$$SYSID^VPRJRUT()
  S ^VPRMETA("version")=$P($T(VERSION^VPRJVER),";;",2)
  S ^VPRMETA("version","build")=$P($T(BUILD^VPRJVER),";;",2)
@@ -44,8 +46,8 @@ SETUP ;
  L -^VPRPTJ("JPID")
  Q
 INDEXES ; -- build meta data for all indexes
- K ^VPRMETA("index")
- K ^VPRMETA("collection")
+ K:$D(^VPRMETA("index")) ^VPRMETA("index")
+ K:$D(^VPRMETA("collection")) ^VPRMETA("collection")
  ;
  ; Patient Indexes
  D BLDMETA^VPRJCD("index:attr","IDXLIST","VPRJPMX")

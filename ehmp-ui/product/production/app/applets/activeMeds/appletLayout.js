@@ -1,40 +1,56 @@
 /* global ADK */
 define([
-    "underscore",
-    "backgrid"
-], function (_, Backgrid) {
-    "use strict";
+    'underscore',
+    'backgrid',
+    'handlebars'
+], function(_, Backgrid, Handlebars) {
+    'use strict';
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+
+        tileOptions: {
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton'
+                }]
+            },
+            primaryAction: {
+                enabled: true,
+                onClick: function(params, event) {
+                    ADK.Messaging.getChannel('activeMeds').trigger('detailView', params);
+                }
+            }
+        },
+
         appletOptions: {
             filterFields: ['normalizedName', 'lastAction', 'totalFillsRemaining', 'sig', 'drugClassName', 'facilityMoniker', 'vaStatus'],
             summaryColumns: [{
                 name: 'normalizedName',
                 label: 'Medication',
                 flexWidth: 'flex-width-3',
-                cell: Backgrid.StringCell.extend({
-                    className: 'string-cell flex-width-3'
+                cell: Backgrid.HandlebarsCell.extend({
+                    className: 'handlebars-cell flex-width-3'
                 }),
-                sortable: true,
-                hoverTip: 'medications_medication'
+                template: Handlebars.compile('<strong>{{normalizedName}}</strong><br>{{sig}}'),
+                sortable: true
             }, {
                 name: 'vaStatus',
                 label: 'Status',
                 cell: 'string',
-                sortable: true,
-                hoverTip: 'medications_status'
+                sortable: true
             }, {
                 name: 'facilityMoniker',
                 label: 'Facility',
                 cell: 'string',
-                sortable: true,
-                hoverTip: 'medications_facility'
+                sortable: true
             }],
             enableModal: true
         },
-        initialize: function (options) {
+        initialize: function(options) {
             _.set(this.appletOptions, 'onRowClick', this._onRowClick);
-            _.set(this.appletOptions, 'refresh', this._refresh);
             this._resource = new ADK.UIResources.Fetch.ActiveMeds.ResourceCollection();
             this.collection = this.appletOptions.collection = new ADK.UIResources.Fetch.ActiveMeds.Pageable([], {
                 mode: 'client',
@@ -75,17 +91,17 @@ define([
                 }
             });
         },
-        onCustomFilter: function (search) {
+        onCustomFilter: function(search) {
             var filters = this.appletOptions.filterFields;
             this.appletOptions.collection.customFilter(search, filters);
         },
-        onClearCustomFilter: function (search) {
+        onClearCustomFilter: function(search) {
             var filters = this.appletOptions.filterFields;
             this.appletOptions.collection.clearFilter(search, filters);
         },
-        refresh: function () {
+        refresh: function() {
             this.loading();
-            this.collection.reset({silent: true});
+            this.collection.reset([], {silent: true});
             ADK.ResourceService.clearCacheByResourceTitle('patient-record-med');
             this._resource.fetchCollection();
         }

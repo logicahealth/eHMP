@@ -30,11 +30,11 @@ describe('solr-procedure-xform.js', function() {
                 'lastUpdateTime': '19880805145700',
                 'localId': '1;MCAR(691.6,',
                 'name': 'HOLTER',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'stampTime': '19880805145700',
                 'statusName': 'COMPLETE',
                 'summary': '',
-                'uid': 'urn:va:procedure:9E7A:8:1;MCAR(691.6,'
+                'uid': 'urn:va:procedure:SITE:8:1;MCAR(691.6,'
             };
             var solrRecord = xformer(vprRecord, log);
             //console.log(solrRecord);

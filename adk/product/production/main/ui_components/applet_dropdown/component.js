@@ -103,8 +103,7 @@ define([
         options: defaultOptions,
         attributes: function(e) {
             return {
-                'id': this.dropdown_id,
-                'role': 'group'
+                'id': this.dropdown_id
             };
         },
         className: function() {
@@ -384,7 +383,7 @@ define([
             this.DropdownView = this.DropdownView.extend({
                 collection: (_.isArray(collection)) ? new Backbone.Collection(collection) : collection,
                 options: _.omit(this.options, 'model'),
-                childViewOptions: options.childViewOptions || _.omit(this.options, 'model', 'tagName'),
+                childViewOptions: this.getOption('childViewOptions') || _.omit(this.options, 'model', 'tagName'),
                 'events': {
                     'click [data-dismiss=dropdown]': _.bind(function(e) {
                         this.$el.trigger('dropdown.hide', e, this.$el);

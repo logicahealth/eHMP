@@ -4,6 +4,9 @@ var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
 
+// The endpoints in this resource are *not* patient-centric because they are all
+// about starting, clearing and checking sync status
+
 function getResourceConfig(app) {
     var config = [
         patientLoad(app),
@@ -125,7 +128,9 @@ var operationalStatus = function(app) {
 };
 
 function patientLoadEndpoint(app, req, res) {
-    var pid = req.param('pid') || req.param('dfn') || '';
+    var pid = _.get(req.params, 'pid') || _.get(req.body, 'pid') || _.get(req.query, 'pid');
+    var dfn = _.get(req.params, 'dfn') || _.get(req.body, 'dfn') || _.get(req.query, 'dfn');
+    pid = pid || dfn || '';
     var prioritySite = req.param('prioritySite');
     var forcedSite = req.param('forcedSite');
     var immediate = (req.param('immediate') === 'true');

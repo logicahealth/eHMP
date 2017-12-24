@@ -306,7 +306,7 @@ public class FhirDataRetrieverTest {
             // MAINTAIN SESSION for multi request using same session(cookie)
             WebClient.getConfig(client).getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
 
-            String body = "{" + "\"accessCode\": \"REDACTED\"," + "\"verifyCode\":\"REDACTED\"," + "\"site\":\"9E7A\"," + "\"division\":\"500\"" + "}";
+            String body = "{" + "\"accessCode\": \"USER  \"," + "\"verifyCode\":\"PW      \"," + "\"site\":\"SITE\"," + "\"division\":\"500\"" + "}";
 
             response = client.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(body);
 
@@ -568,7 +568,7 @@ public class FhirDataRetrieverTest {
         // else replace inline for a quickie check
         // ----------------------------------------
         String s = "{\n" + "    \"resourceType\": \"Bundle\",\n" + "    \"id\": \"a4a17e7a-874d-3279-b663-4f47b700f8cf\",\n" + "    \"type\": \"collection\",\n"
-                + "    \"base\": \"http://127.0.0.1:8888/resource/fhir/\",\n" + "    \"entry\": [{\n" + "            \"resource\": {\n" + "                \"resourceType\": \"Observation\",\n"
+                + "    \"base\": \"http://127.0.0.1:PORT/resource/fhir/\",\n" + "    \"entry\": [{\n" + "            \"resource\": {\n" + "                \"resourceType\": \"Observation\",\n"
                 + "                \"modifierExtension\": [{\n" + "                        \"url\": \"http://org.cognitive.cds.invocation.fhir.datanature\",\n"
                 + "                        \"valueCode\": \"Input\"\n" + "                    }, {\n" + "                        \"url\": \"http://org.cognitive.cds.invocation.fhir.parametername\",\n"
                 + "                        \"valueString\": \"Weight\"\n" + "                    }],\n" + "                \"code\": {\n" + "                    \"coding\": [{\n"

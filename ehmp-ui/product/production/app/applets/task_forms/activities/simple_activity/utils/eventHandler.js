@@ -130,7 +130,7 @@ define([
                         tagName: 'h5'
                     });
                     var FooterView = Backbone.Marionette.ItemView.extend({
-                        template: Handlebars.compile('{{ui-button "Continue" classes="btn-primary" title="Press enter to continue."}}'),
+                        template: Handlebars.compile('{{ui-button "Continue" classes="btn-primary"}}'),
                         events: {
                             'click .btn-primary': function() {
                                 ADK.UI.Alert.hide();

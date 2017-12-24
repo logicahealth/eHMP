@@ -15,7 +15,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get available activity definitions',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-instances-available',
         path: 'instances',
@@ -27,7 +27,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get available activity instances',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-single-instance',
         path: 'singleInstance',
@@ -39,7 +39,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get single activity instances',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-start',
         path: 'start',
@@ -51,7 +51,7 @@ function getResourceConfig() {
         requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Start a process instance',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-abort',
         path: 'abort',
@@ -63,7 +63,7 @@ function getResourceConfig() {
         requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Aborts a process instance',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-signal',
         path: 'signal',
@@ -75,7 +75,7 @@ function getResourceConfig() {
         requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Sends signal to activity instance/deployment',
-        subsystems: ['jbpm']
+        subsystems: ['jbpm', 'oracle']
     }, {
         name: 'activities-cds-intent-service',
         path: 'cds-intent-service',
@@ -87,7 +87,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get results from CDS Results Service',
-        subsystems: []
+        subsystems: ['cds']
     }, {
         name: 'activity-instance-byid',
         path: 'activity-instance',
@@ -99,7 +99,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get jbpm instance by instance Id',
-        subsystems: []
+        subsystems: ['jbpm', 'oracle']
     }];
 }
 

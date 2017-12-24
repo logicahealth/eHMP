@@ -4,14 +4,14 @@ var saveDraftOrder = require('./orders-common-save-draft-write');
 
 var createDraft = {
     model: {
-        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-        patientUid: '9E7A;3',
+        uid: 'urn:va:ehmp-order:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: 'SITE;3',
         ehmpState: 'draft',
-        authorUid: 'urn:va:user:9E7A:123',
+        authorUid: 'urn:va:user:SITE:123',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
-            location: 'urn:va:location:9E7A:1',
+            location: 'urn:va:location:SITE:1',
             serviceCategory: 'PSB',
             dateTime: '20160101120000'
         },
@@ -35,14 +35,14 @@ var createDraft = {
 
 var updateDraft = {
     model: {
-        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-        patientUid: '9E7A;3',
+        uid: 'urn:va:ehmp-order:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: 'SITE;3',
         ehmpState: 'draft',
-        authorUid: 'urn:va:user:9E7A:123',
+        authorUid: 'urn:va:user:SITE:123',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
-            location: 'urn:va:location:9E7A:1',
+            location: 'urn:va:location:SITE:1',
             serviceCategory: 'PSB',
             dateTime: '20160101120000'
         },
@@ -66,14 +66,14 @@ var updateDraft = {
 
 var deleteDraft = {
     model: {
-        uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-        patientUid: '9E7A;3',
+        uid: 'urn:va:ehmp-order:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: 'SITE;3',
         ehmpState: 'deleted',
-        authorUid: 'urn:va:user:9E7A:123',
+        authorUid: 'urn:va:user:SITE:123',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
-            location: 'urn:va:location:9E7A:1',
+            location: 'urn:va:location:SITE:1',
             serviceCategory: 'PSB',
             dateTime: '20160101120000'
         },
@@ -97,14 +97,14 @@ var deleteDraft = {
 
 var updateDraftStateError = {
     model: {
-        uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-        patientUid: '9E7A;3',
+        uid: 'urn:va:ehmp:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+        patientUid: 'SITE;3',
         ehmpState: 'error',
-        authorUid: 'urn:va:user:9E7A:123',
+        authorUid: 'urn:va:user:SITE:123',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         visit: {
-            location: 'urn:va:location:9E7A:1',
+            location: 'urn:va:location:SITE:1',
             serviceCategory: 'PSB',
             dateTime: '20160101120000'
         },
@@ -128,14 +128,14 @@ var updateDraftStateError = {
 
 // var updateDraftError = {
 //     model: {
-//         uid: 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+//         uid: 'urn:va:ehmp:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
 //         ehmpState: 'draft',
-//         patientUid: '9E7A;3',
-//         authorUid: 'urn:va:user:9E7A:123',
+//         patientUid: 'SITE;3',
+//         authorUid: 'urn:va:user:SITE:123',
 //         domain: 'ehmp-order',
 //         subDomain: 'laboratory',
 //         visit: {
-//             location: 'urn:va:location:9E7A:1',
+//             location: 'urn:va:location:SITE:1',
 //             serviceCategory: 'PSB',
 //             dateTime: '20160101120000'
 //         },

@@ -1,0 +1,31 @@
+
+subprojects {
+	apply plugin: 'java'
+
+  ext.set('groupId', 'us.vistacore.oracle')
+  ext.set('commitCountDir', projectDir)
+
+  def repoCommitCountClosure = {
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    return proc.text.trim()
+  }
+
+  def repoCommitCount = "${->repoCommitCountClosure()}"
+  def version = "${->repoVersion + '.' + repoCommitCount}"
+
+  repositories {
+    maven {
+      url 'https://store.vistacore.us/nexus/content/groups/public'
+    }
+  }
+
+  uploadArchives {
+    repositories.mavenDeployer {
+      pom.groupId = "${->groupId}"
+      pom.version = "${->version}"
+      repository(url: "${->nexusURL}/nexus/content/repositories/${->uploadRepo}/") {
+        authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
+      }
+    }
+  }
+}

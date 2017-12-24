@@ -30,7 +30,7 @@ var val = require(global.VX_UTILS + 'object-utils').getProperty;
 function createEnvironment(config, solrErrorResponse, publishErrorResponse) {
     var environment = {
         jds: new JdsClientDummy(log, config),
-        pjds: new PjdsClient(log, config),
+        pjdsHttp: new PjdsClient(log, config),
         metrics: log,
         publisherRouter: {
             'publish': jasmine.createSpy().andCallFake(function (job, callback) {
@@ -50,7 +50,7 @@ function createEnvironment(config, solrErrorResponse, publishErrorResponse) {
 
     spyOn(environment.solr, 'add').andCallThrough();
     spyOn(environment.publisherRouter, 'childInstance').andCallThrough();
-    spyOn(environment.pjds, 'createClinicalObject').andCallThrough();
+    spyOn(environment.pjdsHttp, 'createClinicalObject').andCallThrough();
 
     return environment;
 }
@@ -132,7 +132,7 @@ describe('clinical-object-endpoint.js', function () {
         it('Returns an error if unable to store to pJDS (and does not execute anymore functions)', function () {
             var done = false;
             var environment = createEnvironment(config, null);
-            environment.pjds._setResponseData('Error connecting to pJDS');
+            environment.pjdsHttp._setResponseData('Error connecting to pJDS');
             var record = JSON.parse(JSON.stringify(rec));
             record.storeToSolr = true;
             var req = JSON.parse(JSON.stringify(request));
@@ -144,7 +144,7 @@ describe('clinical-object-endpoint.js', function () {
             req.body = record;
             runs(function () {
                 ClinicalObjectAPI._handleClinicalObjectPost(log, config, environment, req, res, function () {
-                    expect(environment.pjds.createClinicalObject).toHaveBeenCalled();
+                    expect(environment.pjdsHttp.createClinicalObject).toHaveBeenCalled();
                     expect(environment.publisherRouter.publish).not.toHaveBeenCalled();
                     expect(environment.solr.add).not.toHaveBeenCalled();
                     expect(res.status).toHaveBeenCalledWith(500);
@@ -225,7 +225,7 @@ describe('clinical-object-endpoint.js', function () {
             runs(function () {
                 ClinicalObjectAPI._storeToPJDS(log, environment, config, record, function (error) {
                     expect(error).toBeFalsy();
-                    expect(environment.pjds.createClinicalObject).toHaveBeenCalled();
+                    expect(environment.pjdsHttp.createClinicalObject).toHaveBeenCalled();
                     done = true;
                 });
 
@@ -237,12 +237,12 @@ describe('clinical-object-endpoint.js', function () {
         it('Returns an error if it is unable to store to pJDS', function () {
             var done = false;
             var environment = createEnvironment(config, null);
-            environment.pjds._setResponseData('Error connecting to pJDS');
+            environment.pjdsHttp._setResponseData('Error connecting to pJDS');
             var record = JSON.parse(JSON.stringify(rec));
             runs(function () {
                 ClinicalObjectAPI._storeToPJDS(log, environment, config, record, function (error) {
                     expect(error).toBeTruthy();
-                    expect(environment.pjds.createClinicalObject).toHaveBeenCalled();
+                    expect(environment.pjdsHttp.createClinicalObject).toHaveBeenCalled();
                     done = true;
                 });
 

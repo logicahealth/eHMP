@@ -5,52 +5,79 @@ var http = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var _ = require('lodash');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 var dbName = 'work';
 var workCollection = 'work';
 var subscriptionCollection = 'subscriptions';
-var thisApp;
-var logger;
-var testId;
+
+
+/**
+ * Specialty Codes (snomed)
+ */
+var SPECIALTY = {
+    ALLERGY: 408439002,
+    CRITICAL_CARE: 408478003,
+    DERMATOLOGY: 394582007,
+    ENDOCRINOLOGY: 394582007,
+    FAMILY_MEDICINE: 419772000,
+    GASTROENTEROLOGY: 394584008,
+    GENERAL_SURGERY: 394294004,
+    HEMATOLOGY_AND_ONCOLOGY: 394916005,
+    INTERNAL_MEDCINE: 419192003,
+    NEONATOLOGY: 408445005,
+    NEUROLOGY: 56397003,
+    OBGYN: 309367003,
+    OPHTHALMOLOGY: 394813003,
+    RHEUMATOLOGY: 394810000
+};
+
+var allSpecialties = _.values(SPECIALTY);
+
+var defaultSubscriptions = {
+    specialty: allSpecialties,
+    priority: 'ALL', // Values can be: ALL (all), CRI (critical), URG (urgent: critical + high priorities)
+    type: [
+        'P', // Proposal
+        'A' // Advice
+    ]
+};
+
 
 //
 // Database Init - dbErrorCallback can be null if an error message is to be returned on failure.
 // Please see retrieveWorkProductsForProvider for a custom error callback
 //
-var initDb = function(db) {
-    db.collection(workCollection).ensureIndex({
-        provider: 1,
-        type: 1,
-        priority: 1
-    }, {}, function(error) {
-        if (error) {
-            logger.error({
-                error: error
-            }, 'error ensuring ' + workCollection + ' index');
-        }
-    });
+function createInitDb(logger) {
+    return function initWorkProduct(db) {
+        db.collection(workCollection).ensureIndex({
+            provider: 1,
+            type: 1,
+            priority: 1
+        }, {}, function(error) {
+            if (error) {
+                logger.error({
+                    error: error
+                }, 'error ensuring ' + workCollection + ' index');
+            }
+        });
 
-    db.collection(subscriptionCollection).ensureIndex({
-        user: 1
-    }, {
-        unique: true
-    }, function(error) {
-        if (error) {
-            logger.error({
-                error: error
-            }, 'error ensuring ' + subscriptionCollection + ' index');
-            return;
-        }
-    });
-};
+        db.collection(subscriptionCollection).ensureIndex({
+            user: 1
+        }, {
+            unique: true
+        }, function(error) {
+            if (error) {
+                logger.error({
+                    error: error
+                }, 'error ensuring ' + subscriptionCollection + ' index');
+                return;
+            }
+        });
+    };
+}
 
-var init = function(app, subsystemLogger) {
-    thisApp = app;
-    logger = subsystemLogger;
-    testId = thisApp.subsystems.cds.testMongoDBId;
-};
-module.exports.init = init;
 
 //
 // Utility Methods
@@ -70,14 +97,12 @@ function getKeyValue(obj) {
     return 'BAD OBJECT';
 }
 
+
 function fetchNames(req, items, fetchcb) {
-
     async.each(
-
         items,
-
         function(item, callback) {
-            //http://IP             /vpr/9E7A;237
+            //http://IP             /vpr/SITE;237
 
             var pid = item.pid;
             var jdsResource = '/vpr';
@@ -124,14 +149,12 @@ function fetchNames(req, items, fetchcb) {
 }
 
 
-
 /*
  *  Transform the data
  *
  * @param {object} List of wrapped work product json objects.
  */
 function formatForRDK(workProductWrapper) {
-
     var items = [];
 
     if (nullchecker.isNullish(workProductWrapper)) {
@@ -163,9 +186,9 @@ function formatForRDK(workProductWrapper) {
     return items;
 }
 
+
 //Gets the actual work product(s) out of the wrapper that is used to denormalize the work product data for MongoDB
 function workProductForClient(workProductWrapper) {
-
     //results here are wrapped work product objects from MongoDB
     if (nullchecker.isNullish(workProductWrapper)) {
         return;
@@ -191,37 +214,6 @@ function workProductForClient(workProductWrapper) {
     //if all else fails, return nothing.
     return '';
 }
-
-/**
- * Specialty Codes (snomed)
- */
-var SPECIALTY = {
-    ALLERGY: 408439002,
-    CRITICAL_CARE: 408478003,
-    DERMATOLOGY: 394582007,
-    ENDOCRINOLOGY: 394582007,
-    FAMILY_MEDICINE: 419772000,
-    GASTROENTEROLOGY: 394584008,
-    GENERAL_SURGERY: 394294004,
-    HEMATOLOGY_AND_ONCOLOGY: 394916005,
-    INTERNAL_MEDCINE: 419192003,
-    NEONATOLOGY: 408445005,
-    NEUROLOGY: 56397003,
-    OBGYN: 309367003,
-    OPHTHALMOLOGY: 394813003,
-    RHEUMATOLOGY: 394810000
-};
-
-var allSpecialties = _.values(SPECIALTY);
-
-var defaultSubscriptions = {
-    'specialty': allSpecialties,
-    'priority': 'ALL', // Values can be: ALL (all), CRI (critical), URG (urgent: critical + high priorities)
-    'type': [
-        'P', // Proposal
-        'A' // Advice
-    ]
-};
 
 
 //
@@ -268,11 +260,14 @@ var defaultSubscriptions = {
  *     "error": ""
  * }
  */
-var retrieveInbox = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function retrieveInbox(req, res) {
+    req.logger.debug('cds-work-product.retrieveInbox()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work-product is unavailable.');
     }
-   thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -309,8 +304,8 @@ var retrieveInbox = function(req, res) {
             });
         });
     });
-};
-module.exports.retrieveInbox = retrieveInbox;
+}
+
 
 /**
  * @apiIgnore This is not used externally.  This method is used by cdsAdviceList.
@@ -360,11 +355,14 @@ module.exports.retrieveInbox = retrieveInbox;
  * }
  *
  */
-var retrieveWorkProductsForProvider = function(req, provider, pid, readStatus, callback) {
-    if (_.isUndefined(thisApp)) {
+function retrieveWorkProductsForProvider(req, provider, pid, readStatus, callback) {
+    req.logger.debug('cds-work-product.retrieveWorkProductsForProvider()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return callback(null, []);
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return callback(null, []);
         }
@@ -383,11 +381,10 @@ var retrieveWorkProductsForProvider = function(req, provider, pid, readStatus, c
             return fetchWorkProduct(dbConnection, req, provider, null, readStatus, callback);
         }
     });
-};
-module.exports.retrieveWorkProductsForProvider = retrieveWorkProductsForProvider;
+}
+
 
 function fetchPids(req, pid, callback) {
-
     var jdsResource = '/vpr/jpid';
     req.logger.info('WorkProducts.fetchPids: jpid search using pid [%s]', pid);
 
@@ -407,8 +404,8 @@ function fetchPids(req, pid, callback) {
     });
 }
 
-function fetchWorkProduct(dbConnection, req, provider, pid, readStatus, callback) {
 
+function fetchWorkProduct(dbConnection, req, provider, pid, readStatus, callback) {
     var workProductQuery = {};
     if (nullchecker.isNotNullish(pid)) {
         workProductQuery['workproduct.context.subject.id'] = {
@@ -452,6 +449,7 @@ function fetchWorkProduct(dbConnection, req, provider, pid, readStatus, callback
             });
         });
 }
+
 
 /**
  * @api {post} /resource/cds/work-product/product Creates a work product.
@@ -558,11 +556,14 @@ function fetchWorkProduct(dbConnection, req, provider, pid, readStatus, callback
  *   "message": ""
  * }
  */
-var createWorkProduct = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function createWorkProduct(req, res) {
+    req.logger.debug('cds-work-product.createWorkProduct()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -589,8 +590,9 @@ var createWorkProduct = function(req, res) {
             return res.status(status).rdkSend(workProductForClient(result));
         });
     });
-};
-module.exports.createWorkProduct = createWorkProduct;
+}
+
+
 /**
  * @api {get} /resource/cds/work-product/product Retrieves work products from the database.
  * @apiName retrieveWorkProduct
@@ -698,11 +700,14 @@ module.exports.createWorkProduct = createWorkProduct;
  *   "message": "Missing or invalid work product id."
  * }
  */
-var retrieveWorkProduct = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function retrieveWorkProduct(req, res) {
+    req.logger.debug('cds-work-product.retrieveWorkProduct()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -735,8 +740,8 @@ var retrieveWorkProduct = function(req, res) {
             return res.status(rdk.httpstatus.ok).rdkSend(workProductForClient(result));
         });
     });
-};
-module.exports.retrieveWorkProduct = retrieveWorkProduct;
+}
+
 
 /**
  * @api {put} /resource/cds/work-product/product Updates a work product in the database.
@@ -771,11 +776,14 @@ module.exports.retrieveWorkProduct = retrieveWorkProduct;
  *   "message": "Work Product with id <id> was not found."
  * }
  */
-var updateWorkProduct = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function updateWorkProduct(req, res) {
+    req.logger.debug('cds-work-product.updateWorkProduct()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -811,8 +819,8 @@ var updateWorkProduct = function(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         });
     });
-};
-module.exports.updateWorkProduct = updateWorkProduct;
+}
+
 
 /**
  * @apiIgnore This is not used externally.  This method is used internally and not exposed via rest.
@@ -826,11 +834,14 @@ module.exports.updateWorkProduct = updateWorkProduct;
  * @apiSuccess {json} data Json object containing a one for successful match and update, zero if there was no record to update.
  *
  */
-var setReadStatus = function(id, readStatus, provider, callback) {
-    if (_.isUndefined(thisApp)) {
+function setReadStatus(req, id, readStatus, provider, callback) {
+    req.logger.debug('cds-work-product.setReadStatus()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return callback(null, []);
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return callback(error, null);
         }
@@ -856,8 +867,8 @@ var setReadStatus = function(id, readStatus, provider, callback) {
             return callback(null, error.message);
         }
     });
-};
-module.exports.setReadStatus = setReadStatus;
+}
+
 
 /**
  * @api {delete} /resource/cds/work-product/product Delete a work product in the database.
@@ -892,11 +903,14 @@ module.exports.setReadStatus = setReadStatus;
  *     "message": ""
  * }
  */
-var deleteWorkProduct = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteWorkProduct(req, res) {
+    req.logger.debug('cds-work-product.deleteWorkProduct()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -926,8 +940,8 @@ var deleteWorkProduct = function(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         });
     });
-};
-module.exports.deleteWorkProduct = deleteWorkProduct;
+}
+
 
 /**
  * @api {get} /resource/cds/work-product/subscriptions Retrieves user subscriptions for the authenticated user.
@@ -982,11 +996,14 @@ module.exports.deleteWorkProduct = deleteWorkProduct;
  *     "message": ""
  * }
  */
-var retrieveSubscriptions = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function retrieveSubscriptions(req, res) {
+    req.logger.debug('cds-work-product.retrieveSubscriptions()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1014,8 +1031,8 @@ var retrieveSubscriptions = function(req, res) {
             return res.status(rdk.httpstatus.not_found).rdkSend(err);
         });
     });
-};
-module.exports.retrieveSubscriptions = retrieveSubscriptions;
+}
+
 
 /**
  * @api {put} /resource/cds/work-product/subscriptions Updates user subscriptions for the authenticated user.
@@ -1047,11 +1064,14 @@ module.exports.retrieveSubscriptions = retrieveSubscriptions;
  *     "message": ""
  * }
  */
-var updateSubscriptions = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function updateSubscriptions(req, res) {
+    req.logger.debug('cds-work-product.updateSubscriptions()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1076,8 +1096,9 @@ var updateSubscriptions = function(req, res) {
             return res.status(rdk.httpstatus.ok).rdkSend(numUpdated);
         });
     });
-};
-module.exports.updateSubscriptions = updateSubscriptions;
+}
+
+
 /**
  * @api {delete} /resource/cds/work-product/subscriptions Deletes user subscriptions for the authenticated user.
  * @apiName deleteSubscriptions
@@ -1102,11 +1123,14 @@ module.exports.updateSubscriptions = updateSubscriptions;
  * }
  *
  */
-var deleteSubscriptions = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteSubscriptions(req, res) {
+    req.logger.debug('cds-work-product.deleteSubscriptions()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, createInitDb(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1128,5 +1152,16 @@ var deleteSubscriptions = function(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         });
     });
-};
+}
+
+
+module.exports.retrieveInbox = retrieveInbox;
+module.exports.retrieveWorkProductsForProvider = retrieveWorkProductsForProvider;
+module.exports.createWorkProduct = createWorkProduct;
+module.exports.retrieveWorkProduct = retrieveWorkProduct;
+module.exports.updateWorkProduct = updateWorkProduct;
+module.exports.setReadStatus = setReadStatus;
+module.exports.deleteWorkProduct = deleteWorkProduct;
+module.exports.retrieveSubscriptions = retrieveSubscriptions;
+module.exports.updateSubscriptions = updateSubscriptions;
 module.exports.deleteSubscriptions = deleteSubscriptions;

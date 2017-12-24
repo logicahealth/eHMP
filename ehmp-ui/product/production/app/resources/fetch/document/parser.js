@@ -4,6 +4,10 @@ define([
 ], function(moment, ThumbnailCollection) {
     'use strict';
     var parse = function(response) {
+
+        //if this collection was retrieved by uid, extract the response from the data array
+        response = _.get(response, 'data[0]', response);
+
         ADK.Enrichment.addFacilityMoniker(response);
 
         if (response.thumbnails) { //in case of DOD images
@@ -16,11 +20,11 @@ define([
             });
             response.thumbnailCollection = new ThumbnailCollection(_thumb);
         } else if (response.hasImages || response.images) {
-            var patient = ADK.PatientRecordService.getCurrentPatient();
+            var pid = ADK.PatientRecordService.getCurrentPatient().getIdentifier();
             response.hasImages = true;
             response.thumbnailCollection = new ThumbnailCollection(null, {
                 urlOptions: {
-                    pid: patient.get('pid'),
+                    pid: pid,
                     siteNumber: response.facilityCode,
                     contextId: response.contextId
                 }

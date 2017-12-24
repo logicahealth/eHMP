@@ -23,8 +23,8 @@ public class FOBTServiceIntegrationTest extends Assert {
 				new CDSInvocationServiceHandler());
 				
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("facility", "9E7A");
-		params.put("icn","9E7A;129");
+		params.put("facility", "SITE");
+		params.put("icn","SITE;129");
 		
 		// start the process
 		// process name was originally misspelled and could not be corrected here without recreating it (FOBTIntgerationTest.testProcess)

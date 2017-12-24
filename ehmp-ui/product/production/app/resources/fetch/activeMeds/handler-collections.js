@@ -56,7 +56,7 @@ define([
             }
 
             if (_.get(this, 'originalModels', false)) {
-                return this._filter(this, search, filterFields);
+                return this._filter(this.originalModels, search, filterFields);
             }
 
             return false;

@@ -1,0 +1,10 @@
+"adk-team-dev-build-%branch%" {
+	template = 'templates/team-dev-build.tpl'
+	description = "adk dev build for the team branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/adk.git'
+	gitBranch = '%branch%'
+	
+  rootDirectory = 'product'
+	gradleTasks = 'generateVersionPropertiesFile upload'
+}

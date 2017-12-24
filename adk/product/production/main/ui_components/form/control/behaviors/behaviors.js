@@ -5,6 +5,7 @@ define([
     'main/ui_components/form/control/behaviors/requiredFieldOptions',
     'main/ui_components/form/control/behaviors/hideEvent',
     'main/ui_components/form/control/behaviors/nestableContainer',
+    'main/ui_components/form/control/behaviors/updateUiElements',
     'main/ui_components/form/control/behaviors/updateConfigBehavior'
 ], function(
     ErrorMessageBehavior,
@@ -13,6 +14,7 @@ define([
     RequiredFieldOptionsBehavior,
     HideEventBehavior,
     NestableContainerBehavior,
+    UpdateUiElements,
     UpdateConfigBehavior
 ) {
     "use strict";
@@ -24,6 +26,7 @@ define([
         RequiredFieldOptions: RequiredFieldOptionsBehavior,
         HideEvent: HideEventBehavior,
         NestableContainer: NestableContainerBehavior,
+        UpdateUiElements: UpdateUiElements,
         UpdateConfig: UpdateConfigBehavior
     };
 });

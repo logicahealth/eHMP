@@ -3,32 +3,32 @@
 var vprOrder = require('./orders-common-vpr-order');
 
 var writebackContext = {
-    pid: '9E7A;3',
-    siteHash:'9E7A',
+    pid: 'SITE;3',
+    siteHash:'SITE',
     appConfig:{
         rpcConfig: {
             context: 'HMP UI CONTEXT'
         },
         vistaSites: {
-            '9E7A': {
+            'SITE': {
                 name: 'PANORAMA',
                 division: '500',
                 host: 'IP        ',
                 port: PORT,
                 production: false,
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             },
-            'C877': {
+            'SITE': {
                 name: 'KODAK',
                 division: '500',
                 host: 'IP        ',
                 port: PORT,
                 production: false,
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             }
@@ -37,7 +37,7 @@ var writebackContext = {
     model: {
         'provider': '10000000231',
         'location': '285',
-        'eSig': 'REDACTED',
+        'eSig': 'PW      ',
         'orderList': [{
             'orderId': '38030;1',
             'orderDetailHash': 'foobar'
@@ -57,7 +57,7 @@ var writebackContext = {
 describe('Checks getVprOrder functionality', function () {
 
     it ('retrieve existing vpr order', function(done) {
-        var uid = 'urn:va:order:9E7A:3:12540';
+        var uid = 'urn:va:order:SITE:3:12540';
 
         this.timeout(8000);
 
@@ -73,7 +73,7 @@ describe('Checks getVprOrder functionality', function () {
 
         this.timeout(8000);
 
-        vprOrder.getVprOrder(writebackContext, 'urn:va:order:9E7A:3:99999999', function(err, result){
+        vprOrder.getVprOrder(writebackContext, 'urn:va:order:SITE:3:PORTPORT', function(err, result){
             expect(result).to.be.falsy();
             expect(err).to.be.truthy();
             expect(err.message).to.equal('Failed to parse order VPR result.');

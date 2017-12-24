@@ -7,7 +7,7 @@ var async = require('async');
 var moment = require('moment');
 
 var config = require(global.VX_ROOT + 'worker-config');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 
 var argv = require('yargs')
     .usage('Usage: $0 --site <site> --id <id> --no-header --log-level <log-level>')
@@ -37,7 +37,7 @@ if (id) {
     filter = {filter: '?filter=eq(site,\"' + site + '\")'};
 }
 
-var pjdsClient = new PjdsClient(log, log, config);
+var pjdsClient = new PjdsClient(log, log, config.pjds);
 
 pjdsClient.getActiveUsers(filter, function(error, response) {
     if (error) {

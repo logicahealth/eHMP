@@ -47,7 +47,7 @@ end
 
 When(/^the user takes note of number of existing requests$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
   @number_existing_requests = PobRequestApplet.new.number_expanded_applet_rows
   p "number existing_requests: #{@number_existing_requests}"
 end
@@ -63,7 +63,7 @@ Then(/^a request is added to the applet$/) do
   ehmp = PobRequestApplet.new
   ehmp.wait_for_tbl_request_rows
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
   wait.until { ehmp.number_expanded_applet_rows == @number_existing_requests + 1 }
 end
 
@@ -72,11 +72,7 @@ Then(/^user accepts the request$/) do
   ehmp.wait_until_btn_request_accept_visible
   expect(ehmp).to have_btn_request_accept
   ehmp.btn_request_accept.click
-  
-  common_element = PobCommonElements.new
-  common_element.wait_until_fld_tray_loader_message_visible
-  expect(common_element).to have_fld_tray_loader_message
-  common_element.wait_until_fld_tray_loader_message_invisible(30)
+  verify_and_close_growl_alert_pop_up("SUCCESSFULLY")
 end
 
 Then(/^user makes sure there exists at least one request$/) do
@@ -97,10 +93,65 @@ Then(/^user views the details of the request$/) do
   rows[0].click
 end
 
+Then(/^user hovers over the first request row$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_created_on_visible
+  expect(ehmp).to have_fld_request_created_on
+  ehmp.fld_request_created_on.click
+  ehmp.wait_until_tbl_request_rows_visible
+  rows = ehmp.tbl_request_rows
+  expect(rows.length > 0).to eq(true), "There needs to be at least one row present, found only '#{rows.length}'"
+  rows[0].hover
+end
+
 Then(/^the detail modal for request displays$/) do
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_modal_detail_fields_visible
   expect(ehmp.fld_modal_detail_fields.length > 0).to eq(true), "Modal Details doesn't display"
+end
+
+Then(/^user clicks on the Edit Request Button from Actions dropdown$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_btn_modal_detail_actions_visible
+  expect(ehmp).to have_btn_modal_detail_actions, "Actions button doesn't display on Activity Details form"
+  ehmp.btn_modal_detail_actions.click
+  ehmp.wait_until_btn_modal_detail_edit_request_visible
+  expect(ehmp).to have_btn_modal_detail_edit_request, "Edit Request button doesn't display"
+  ehmp.btn_modal_detail_edit_request.click
+end
+
+Then(/^the request edit form should be displayed$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_btn_activity_details_visible
+  expect(ehmp).to have_btn_activity_details, "Request Edit form doesn't display"
+end
+
+Then(/^the response task form for request displays$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_response_header_visible(20)
+  expect(ehmp).to have_fld_response_header, "Response task form doesn't display"
+  expect(ehmp.wait_for_fld_list_action_options).to eq(true), "Response form didn't load completely"
+  #user has to cancel out of this form so we can proceed with logout
+  ehmp.wait_until_btn_cancel_visible
+  expect(ehmp).to have_btn_cancel
+  ehmp.btn_cancel.click
+  ehmp.wait_until_btn_confirm_cancel_visible
+  expect(ehmp).to have_btn_confirm_cancel
+   
+  max_attempt = 3
+  begin
+    ehmp.btn_confirm_cancel.click
+    ehmp.wait_until_btn_confirm_cancel_invisible
+  rescue => e
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    p "#{e} reattempt"
+    sleep 0.5
+    retry if max_attempt > 0
+  end
+  
+  ehmp = PobCommonElements.new  
+  expect(ehmp.action_tray.wait_for_fld_my_task_header(20)).to eq(true)
 end
 
 Then(/^the user sorts the Request applet by column Request$/) do
@@ -109,7 +160,7 @@ Then(/^the user sorts the Request applet by column Request$/) do
   expect(ehmp).to have_fld_request_header
   ehmp.fld_request_header.click  
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
 end
 
 Then(/^the Request applet is sorted in alphabetic order based on column Request$/) do
@@ -137,18 +188,20 @@ Then(/^user discontinues the request$/) do
   ehmp.wait_until_btn_discontinue_visible
   expect(ehmp).to have_btn_discontinue
   ehmp.btn_discontinue.click  
-  ehmp.wait_until_fld_request_discontinue_comment_visible
-  ehmp.fld_request_discontinue_comment.set "test discontinue"
-  ehmp.fld_request_discontinue_comment.native.send_keys(:enter)
+  ehmp.wait_until_fld_request_comment_visible
+  ehmp.fld_request_comment.set "test discontinue"
+  ehmp.fld_request_comment.native.send_keys(:enter)
   ehmp.wait_until_btn_submit_accept_visible
   expect(ehmp).to have_btn_submit_accept
   ehmp.btn_submit_accept.click 
+  verify_and_close_growl_alert_pop_up("Request discontinued with no errors")
   max_attempt = 4
   begin
     ehmp.wait_until_btn_request_modal_close_visible
     expect(ehmp).to have_btn_request_modal_close
     ehmp.btn_request_modal_close.click 
     ehmp.wait_until_btn_request_modal_close_invisible 
+    ModalElements.new.wait_until_fld_main_modal_invisible
   rescue Exception => e
     p "Exception received: trying again"
     max_attempt-=1
@@ -157,10 +210,19 @@ Then(/^user discontinues the request$/) do
   end   
 end
 
-Then(/^Reqeust applet shows only requests that have are in "([^"]*)" state$/) do |input_text|
+Then(/^Request applet shows only requests that have are in "([^"]*)" state$/) do |input_text|
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_state_column_data_visible
   expect(only_text_exists_in_list(ehmp.fld_state_column_data, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
+end
+
+Then(/^Request applet shows only requests that are in "([^"]*)" or "([^"]*)" state$/) do |input1, input2|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_state_column_data_visible
+  text_array = Array.new
+  text_array.push("#{input1}")
+  text_array.push("#{input2}")
+  expect(compare_text_in_list(ehmp.fld_state_column_data, "#{text_array}")).to eq(true), "Not all returned results include #{input1} or #{input2}"
 end
 
 Then(/^user selects to show only "([^"]*)" requests$/) do |input|
@@ -169,10 +231,14 @@ Then(/^user selects to show only "([^"]*)" requests$/) do |input|
   ehmp.ddL_display_only.select input
 end
 
-Then(/^Request applet shows either active or completed requests$/) do
+Then(/^Request applet shows all requests that are in "([^"]*)", "([^"]*)" or "([^"]*)" state$/) do |input1, input2, input3|
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_state_column_data_visible
-  expect(compare_text_in_list(ehmp.fld_state_column_data, "Active", "Completed")).to eq(true), "Returned rows doesn't include Active and Closed"
+  text_array = Array.new
+  text_array.push("#{input1}")
+  text_array.push("#{input2}")
+  text_array.push("#{input3}")
+  expect(compare_text_in_list(ehmp.fld_state_column_data, "#{text_array}")).to eq(true), "Not all returned results include #{input1} or #{input2} or #{input3}"
 end
 
 Then(/^request applet in staff view page has headers$/) do |table|
@@ -187,7 +253,7 @@ Then(/^user vrifies the requests applet has following patients listed$/) do |tab
   ehmp = PobRequestApplet.new
   ehmp.wait_until_fld_request_patient_column_data_visible
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
   table.rows.each do |patients|
     expect(object_exists_in_list(ehmp.fld_request_patient_column_data, "#{patients[0]}")).to eq(true), "#{patients[0]} was not found"
   end
@@ -219,13 +285,13 @@ end
 Then(/^user filters the Request applet by text "([^"]*)"$/) do |filter_text|
   ehmp = PobRequestApplet.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
   row_count = ehmp.tbl_request_rows.length
   ehmp.wait_until_fld_applet_text_filter_visible
   expect(ehmp).to have_fld_applet_text_filter
   ehmp.fld_applet_text_filter.set filter_text
   ehmp.fld_applet_text_filter.native.send_keys(:enter)
-  wait.until { infinite_scroll_other("#data-grid-requests tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=requests] tbody") }
   wait.until { row_count != ehmp.tbl_request_rows.length }
 end
 
@@ -241,3 +307,115 @@ Then(/^flagged checkbox is unchecked by default in Request Applet$/) do
   expect(ehmp.chk_flag.checked?).to eq(false), "Flagged checkbox is checked, it should be unchecked by default"
 end
 
+Then(/^user enters a request details text with timestamp "([^"]*)"$/) do |request_details|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_details_visible
+  expect(ehmp).to have_fld_request_details
+  @text_search_term = Time.now.strftime("%m/%d/%Y %H%M")
+  detail = request_details + ' ' + @text_search_term
+  # p detail
+  ehmp.fld_request_details.set detail
+  ehmp.fld_request_details.native.send_keys(:enter)
+end
+
+Then(/^user creates a new Request "([^"]*)" with details "([^"]*)"$/) do |title, detail|  
+  steps %{
+    And user navigates to expanded request applet
+    And the user takes note of number of existing requests
+    And user adds a new request titled "#{title}"
+    And user enters a request details text with timestamp "#{detail}"
+    And user accepts the request
+    Then a request is added to the applet
+  }
+end
+
+Then(/^user sets the earliest date to be a future date$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_btn_calendar_earliest_visible
+  future_date = Date.today + 2
+  ehmp.btn_calendar_earliest.set future_date.strftime('%m/%d/%Y')
+  ehmp.btn_calendar_earliest.native.send_keys(:enter)
+end
+
+Then(/^user selects the option "([^"]*)" from the Action drop down$/) do |action_type|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_action_visible
+  ehmp.fld_action.click
+  ehmp.wait_until_fld_list_action_options_visible
+  expect(ehmp.fld_list_action_options.length > 0).to eq(true)
+  ehmp.fld_action.select action_type 
+end
+
+Then(/^user enters a comment in the request field "([^"]*)"$/) do |request_comment|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_required_visible
+  expect(ehmp).to have_fld_request_required
+  comment = request_comment 
+  # p comment
+  max_attempt = 2
+  begin
+    ehmp.fld_request_required.native.send_keys [:end]
+    ehmp.fld_request_required.native.send_keys [:shift, :home], :backspace
+    ehmp.fld_request_required.set comment
+    ehmp.fld_request_required.native.send_keys(:tab)
+    expect(ehmp.fld_request_required.value.upcase).to eq(comment.upcase)
+  rescue => e
+    max_attempt -=1
+    retry if max_attempt > 0
+    raise e
+  end
+end
+
+Then(/^user accepts the request response$/) do
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_btn_response_accept_visible
+  expect(ehmp).to have_btn_response_accept
+  ehmp.btn_response_accept.click
+end
+
+Then(/^user updates the request title "([^"]*)" with timestamp$/) do |request_title|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_title_visible
+  expect(ehmp).to have_fld_request_title
+  @text_update = Time.now.strftime("%d/%m/%Y %H%M")
+  updated_title = request_title + ' ' + @text_update
+  # p updated_title
+  ehmp.fld_request_title.set updated_title
+  ehmp.fld_request_title.native.send_keys(:enter)
+end
+
+Then(/^user sees the alert message "([^"]*)"$/) do |message|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_alert_message_visible
+  expect(ehmp.fld_alert_message.text.upcase).to have_text(message.upcase)
+end
+
+Then(/^user can't select Mark as Complete from Action drop down$/) do 
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_action_visible
+  ehmp.fld_action.click
+  ehmp.wait_until_fld_list_action_options_visible
+  expect(ehmp.fld_list_action_options.length > 0).to eq(true)
+  expect(ehmp.fld_mark_as_complete['disabled']).to eq('true')
+end
+
+Then(/^the following actions are actionable$/) do |table|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_action_visible
+  ehmp.fld_action.click
+  ehmp.wait_until_fld_list_action_options_visible
+  expect(ehmp.fld_list_action_options.length > 0).to eq(true)
+  table.rows.each do |option|
+    ehmp.action_options(option[0])
+    ehmp.wait_until_fld_action_option_array_visible
+    expect(ehmp.fld_action_option_array['disabled']).to be_nil
+  end
+end
+
+Then(/^user enters a comment in the comment field "([^"]*)"$/) do |comment|
+  ehmp = PobRequestApplet.new
+  ehmp.wait_until_fld_request_comment_visible
+  expect(ehmp).to have_fld_request_comment
+  ehmp.fld_request_comment.set comment
+  ehmp.fld_request_comment.native.send_keys(:enter)
+end

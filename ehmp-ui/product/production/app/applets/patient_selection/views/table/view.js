@@ -32,10 +32,20 @@ define([
      * A different template file will be returned based on the kind of search that is being performed.
      *
      */
+
     var SearchResultsCollectionView = Backbone.Marionette.CompositeView.extend({
         source: '',
         tagName: 'table',
         className: "table-view--patient-selection adjust-table-container percent-height-100",
+        behaviors: {
+            CollectionOptionsList: {}
+        },
+        attributes: function() {
+            return {
+                'aria-label': 'Search results: ' + _.capitalize(this.getOption('searchType')),
+                'aria-describedby': this.cid + 'Caption'
+            };
+        },
         /**
          * Returns the data template file that corresponds to the type of search being performed.
          */
@@ -58,7 +68,8 @@ define([
         },
         templateHelpers: function() {
             return {
-                caption: 'Patient selection ' + this.getOption('searchType') + ' search results. Press enter to select patient.'
+                caption: 'To move through results, press up or down arrow. Enter to select.',
+                captionId: this.cid + 'Caption'
             };
         },
         getLoadingView: function() {
@@ -104,7 +115,7 @@ define([
             }
         },
         hasScrolling: function(scrollElement) {
-            return scrollElement[0].clientHeight !== scrollElement[0].scrollHeight;
+            return _.has(scrollElement, '[0]') && (scrollElement[0].clientHeight + 1) < scrollElement[0].scrollHeight;
         }
     });
 

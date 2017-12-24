@@ -10,18 +10,18 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 class TestClients
   @users = {}
 
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["UnauthorizedUser"] = "REDACTED"
-  @users["AuditLogUser"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users["REDACTED"] = "REDACTED"
-  @users['9E7A;DNS   '] = 'REDACTED'
+  @users["PW         "] = "PW      "
+  @users["SITE;USER  "] = "PW      "
+  @users["SITE;USER   "] = "PW       "
+  @users["UnauthorizedUser"] = "PW      "
+  @users["AuditLogUser"] = "REDACT!!"
+  @users["SITE;USER  "] = "USER  !!"
+  @users["SITE;USER    "] = "PW      "
+  @users["SITE;REDACT"] = "baduser"
+  @users["SITE;USER  "] = "PW      "
+  @users["SITE;USER  "] = "PW      "
+  @users["SITE;USER   "] = "PW      "
+  @users['SITE;USER  '] = 'PW      '
 
   def self.password_for(username)
     return @users[username]
@@ -49,11 +49,11 @@ class HTTPartyRDK
   @time_done = Time.new
   @time_out_time = 300
   @divisions = {}
-  @divisions["9E7A"] = "500"
-  @divisions["C877"] = "507"
+  @divisions["SITE"] = "500"
+  @divisions["SITE"] = "507"
 
   def self.default_credentials
-    return { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "REDACTED", :division => "500" }
+    return { :accessCode => "USER  ", :verifyCode => "PW      ", :site => "SITE", :division => "500" }
   end
 
   def self.time_elapsed_last_call

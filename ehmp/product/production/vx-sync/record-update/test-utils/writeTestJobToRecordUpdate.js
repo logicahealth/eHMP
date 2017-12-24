@@ -39,7 +39,7 @@ var rootJob = {
 
 var record = {
 	'name': 'someRecord',
-	'pid': '9E7A;3',
+	'pid': 'SITE;3',
 	'entered': 20150706152900,
 	'facilityCode': 500,
 	'facilityName': 'CAMP MASTER',
@@ -61,7 +61,7 @@ var record = {
 	'stampTime': 20160405132100,
 	'summary': 'SOY MILK',
 	'typeName': 'DRUG, FOOD',
-	'uid': 'urn:va:allergy:9E7A:3:1111',
+	'uid': 'urn:va:allergy:SITE:3:1111',
 	'verified': 20150706153033,
 	'verifierName': '<auto-verified>'
 };
@@ -70,7 +70,7 @@ var domain = 'allergy';
 
 var patientIdentifier = {
 	'type': 'pid',
-	'value': '9E7A;3'
+	'value': 'SITE;3'
 };
 
 var normalJob1 = jobUtil.createRecordUpdate(patientIdentifier, domain, record, rootJob);

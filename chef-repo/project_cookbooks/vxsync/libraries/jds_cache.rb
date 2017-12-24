@@ -11,8 +11,10 @@ class JDSCache
     # get count of total syncstatus objects
     before_count = get_count(get_syncstatuses(base_uri).body)
 
-    # Clear VPR, ODC, and Error Log
-    ['vpr', 'data', 'error/clear/this'].each do |endpoint|
+      # Clear VPR, ODC, and Error Log
+      clear_list = ['vpr', 'data', 'vxsyncerr/']
+
+      clear_list.each do |endpoint|
       begin
         response = HTTParty.delete("#{base_uri}/#{endpoint}?confirm=true")
       rescue SocketError

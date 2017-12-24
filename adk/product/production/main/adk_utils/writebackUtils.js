@@ -54,7 +54,6 @@ define([
         });
 
         workflow.changeHeaderCloseButtonOptions({
-            title: 'Press enter to cancel',
             onClick: function(){
                 var alertView;
                 if(workflow.model.get('currentIndex') === 0 && workflow.model.get('steps').length > 1){
@@ -63,7 +62,7 @@ define([
                         icon: 'icon-triangle-exclamation',
                         messageView: VisitMessageView,
                         footerView: FooterView.extend({
-                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to delete."}}')
+                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm"}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Yes, delete"}}')
                         })
                     });
                 }else {
@@ -72,7 +71,7 @@ define([
                         icon: 'icon-triangle-exclamation',
                         messageView: WritebackMessageView,
                         footerView: FooterView.extend({
-                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}')
+                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm"}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Yes, cancel"}}')
                         })
                     });
                 }

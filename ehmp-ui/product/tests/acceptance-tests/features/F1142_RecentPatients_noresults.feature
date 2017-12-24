@@ -14,7 +14,3 @@ Scenario: Verify Recent Patients tray display displays message when there are no
     | Date of Birth |
   Then the Recent Patients Tray no results message displays
 
-@F1142_rp_1
-Scenario: Verify Recent Patients dropdown in header displays message when there are no recent patients
-  Given the user opens the recent patient dropdown
-  Then the first record in the list is "No recent patients found"

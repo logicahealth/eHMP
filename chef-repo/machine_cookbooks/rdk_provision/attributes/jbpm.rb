@@ -8,9 +8,9 @@ default[:rdk_provision][:jbpm][:copy_files] = {}
 #######################################################################################################################
 # jbpm specific aws configuration options
 default[:rdk_provision][:jbpm][:aws][:instance_type] = "m3.xlarge"
-default[:rdk_provision][:jbpm][:aws][:subnet] = "subnet-213b2256"
-default[:rdk_provision][:jbpm][:aws][:ssh_username] = "REDACTED"
-default[:rdk_provision][:jbpm][:aws][:ssh_keyname] = "REDACTED"
+default[:rdk_provision][:jbpm][:aws][:subnet] = "DNS"
+default[:rdk_provision][:jbpm][:aws][:ssh_username] = "USER    "
+default[:rdk_provision][:jbpm][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:rdk_provision][:jbpm][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:rdk_provision][:jbpm][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

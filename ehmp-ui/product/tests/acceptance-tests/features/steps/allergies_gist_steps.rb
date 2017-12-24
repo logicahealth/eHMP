@@ -1,74 +1,30 @@
-class AllergiesGist <  AllApplets
-  include Singleton
-  attr_reader :appletid
-  def initialize
-    super
-    @appletid = 'allergy_grid'
-    appletid_css = "[data-appletid=#{@appletid}]"
-    add_verify(CucumberLabel.new("AllergiesGridVisible"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=allergy_grid] div.gridContainer"))
-    add_verify(CucumberLabel.new("Allergy Details"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=allergy_grid] div.gridContainer")) 
-    
-    add_verify(CucumberLabel.new('Empty Allergy Gist'), VerifyContainsText.new, AccessHtmlElement.new(:css, "#{appletid_css} p.color-grey-darkest"))
-    pills = AccessHtmlElement.new(:css, '[data-appletid=allergy_grid] [data-infobutton-class=info-button-pill]')
-    add_verify(CucumberLabel.new('Allergy Pills'), VerifyXpathCount.new(pills), pills)
-    add_action(CucumberLabel.new('first pill'), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@data-appletid='allergy_grid']/descendant::div[@data-infobutton-class='info-button-pill'][1]"))
+class AllergyFunctions
+  extend ::RSpec::Matchers
 
-    # Allergy Gist Applet buttons
-    add_applet_buttons appletid_css
-
-    add_applet_title appletid_css
-
-    add_applet_add_button appletid_css
-
-    add_toolbar_buttons
-
-    add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
+  def self.verify_title(title)
+    allergy_applet = PobAllergiesApplet.new
+    expect(allergy_applet).to have_fld_applet_title
+    expect(allergy_applet.fld_applet_title.text.upcase).to eq(title.upcase)
   end
-
-  def applet_loaded?
-    return true if am_i_visible? 'Empty Allergy Gist'
-    return (TestSupport.driver.find_elements(:css, '[data-appletid=allergy_grid] .grid-container [data-infobutton-class=info-button-pill]').length > 0)
-  rescue => e 
-    # p e
-    false
-  end
-
-  def pills
-    TestSupport.driver.find_elements(:css, '#allergy_grid-pill-gist-items [data-infobutton-class=info-button-pill]')
-  end
-end 
-
-Before do
-  @ag = AllergiesGist.instance
 end
 
 Then(/^user sees Allergies Gist$/) do
-  expect(@ag.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(@ag.perform_verification("Title", "ALLERGIES")).to be_true
-end
-
-Then(/^the Allergies Gist view contains$/) do |table|  
-  expect(@ag.wait_until_action_element_visible("AllergiesGridVisible", DefaultLogin.wait_time)).to be_true    
-  table.rows.each do |row|
-    expect(@ag.perform_verification('Allergy Details', row[0])).to be_true, "The value #{row[0]} is not present in the allergy details"
-  end
+  AllergyFunctions.verify_title 'ALLERGIES'
 end
 
 Then(/^the Allergies Applet title is "(.*?)"$/) do |title|
-  expect(@ag.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(@ag.perform_verification("Title", title)).to be_true
+  AllergyFunctions.verify_title title
 end
 
 Then(/^the Allergies Gist applet is finished loading$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @ag.applet_loaded? }
+  applet = PobAllergiesApplet.new
+  wait.until { applet.applet_gist_loaded? }
 end
 
-Then(/^the Allergies Gist Applet contains buttons$/) do |table|
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(@ag.am_i_visible? cucumber_label).to eq(true), "Could not find button #{button[0]}"
-  end
+Then(/^the Allergies Gist Applet contains an Add Button$/) do
+  allergy_applet = PobAllergiesApplet.new
+  expect(allergy_applet.wait_for_btn_applet_add).to eq(true), "Expected applet to display an Add Button"
 end
 
 Then(/^the Allergies Gist contains at least (\d+) pill$/) do |arg1|
@@ -78,34 +34,21 @@ Then(/^the Allergies Gist contains at least (\d+) pill$/) do |arg1|
   expect(pill_count).to be >= (arg1), "In the Applet, Pill counts are showing: #{pill_count}"
 end
 
-When(/^user clicks an allergy pill$/) do
-  expect(@ag.perform_action('first pill')).to eq(true)
-end
-
-Then(/^a popover displays with icons$/) do |table|
-  expect(@ag.am_i_visible?('Info Button')).to eq(true), "Info icon did not display"
-  expect(@ag.am_i_visible?('Detail View Button')).to eq(true), "Detail icon did not display"
-end
-
 When(/^user views the first allergy details$/) do
-  expect(@ag.perform_action('first pill')).to eq(true)
-  expect(@ag.wait_until_action_element_visible('Popover Toolbar')).to eq(true), "Popover did not display"
-  expect(@ag.perform_action('Detail View Button')).to eq(true)
-end
-
-Then(/^the modal's title matches the first pill$/) do
-  @ehmp = PobAllergiesApplet.new
-  modal = ModalElements.new
-  modal.wait_until_fld_modal_title_visible
-  expect(modal.fld_modal_title.text.upcase).to eq("ALLERGEN - #{@ehmp.first_pill_text.upcase}")
+  ehmp = PobAllergiesApplet.new
+  expect(ehmp.fld_allergy_gist_pills.length).to be > 0
+  @first_allergy_name = ehmp.first_pill_text
+  ehmp.fld_allergy_gist_pills[0].click
 end
 
 When(/^the Allergies Gist Applet contains data rows$/) do
-  compare_item_counts("#grid-panel-allergy_grid [gistviewtype=pills] .gist-item")
+  compare_item_counts("[data-appletid=allergy_grid] [gistviewtype=pills] .gist-item")
 end
 
 When(/^user refreshes Allergies Gist Applet$/) do
-  applet_refresh_action("allergy_grid")
+  applet = PobAllergiesApplet.new
+  expect(applet.wait_for_btn_applet_refresh).to eq(true)
+  applet.btn_applet_refresh.click
 end
 
 Then(/^the message on the Allergies Gist Applet does not say "(.*?)"$/) do |message_text|
@@ -113,16 +56,10 @@ Then(/^the message on the Allergies Gist Applet does not say "(.*?)"$/) do |mess
 end
 
 When(/^the user minimizes the expanded Allergies Applet$/) do
-  @ehmp = PobAllergiesApplet.new
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { applet_grid_loaded(@ehmp.has_fld_empty_row?, @ehmp.expanded_rows) }
-  expect(@ag.perform_action('Control - applet - Minimize View')).to eq(true)
-end
-
-When(/^the user views the first Allergies Gist detail view$/) do 
-  expect(@ag.wait_until_xpath_count_greater_than('Allergy Pills', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(@ag.perform_action('first pill')).to eq(true)
-  expect(@ag.perform_action('Detail View Button')).to eq(true)
+  allergy_applet = PobAllergiesApplet.new
+  expect(allergy_applet.wait_for_btn_applet_minimize).to eq(true), "Expected applet to display a minimize button"
+  allergy_applet.btn_applet_minimize.click
+  expect(allergy_applet.wait_for_btn_applet_expand_view).to eq(true), "Expected applet to display an expand button"
 end
 
 Then(/^the Allergies Gist Applet contains buttons Refresh, Help and Expand$/) do
@@ -138,7 +75,17 @@ end
 
 Then(/^the Allergies Gist Applet does not contain button Filter Toggle$/) do
   ehmp = PobAllergiesApplet.new
-  
   expect(ehmp).to_not have_btn_applet_filter_toggle
+end
+
+Given(/^the user notes the number of allergy pills$/) do
+  ehmp = PobAllergiesApplet.new
+  @num_allergy_pills = ehmp.fld_allergy_gist_pills.length
+end
+
+Then(/^the Allergies Gist displays the expected number of allergy pills$/) do
+  expect(@num_allergy_pills).to_not be_nil, "Expected variable num_allergy_pills to be set in a previous step"
+  ehmp = PobAllergiesApplet.new
+  expect(ehmp.fld_allergy_gist_pills.length).to eq(@num_allergy_pills)
 end
 

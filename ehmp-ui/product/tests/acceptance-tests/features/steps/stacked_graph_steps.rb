@@ -48,26 +48,27 @@ Then(/^the Stacked Graphs applet displays at least (\d+) row$/) do |arg1|
   expect(@stacked_graph_elements.wait_until_xpath_count_greater_than('Rows', arg1.to_i - 1)).to eq(true)
 end
 
-When(/^the user selects the first row in the Stacked Graph applet$/) do
-  expect(@stacked_graph_elements.perform_action('First Row')).to eq(true)
-end
-
-Then(/^a toolbar displays with a quick view icon$/) do
-  expect(@stacked_graph_elements.wait_until_element_present('Quick View Button')).to eq(true)
-end
-
-When(/^the user selects the Stacked Graphs quick view icon$/) do
-  expect(@stacked_graph_elements.perform_action('Quick View Button')).to eq(true)
+When(/^the user hovers over the first row in the Stacked Graph applet$/) do
+  ehmp = PobStackedGraph.new
+  ehmp.wait_for_fld_first_row
+  expect(ehmp).to have_fld_first_row
+  expect(ehmp.fld_first_row.length > 0).to eq(true)
+  ehmp.fld_first_row[0].hover
 end
 
 Then(/^a Stacked Graph quick view table is displayed$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @stacked_graph_elements.am_i_visible? 'Quick View Popover' }
+  ehmp = PobStackedGraph.new
+  QuickMenuActions.verify_popover_table ehmp
 end
 
-def drag_applet_onto_screen(appletid)
+Given(/^user can view the Quick Menu Icon in Stacked Graph applet$/) do
+  ehmp = PobStackedGraph.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+def click_applet_to_screen(appletid)
   driver = TestSupport.driver
-  customize_workspace = CustomizeWorkspace.new
+  customize_workspace = WorkspaceEditor.new
   wait = Selenium::WebDriver::Wait.new(:timeout => 5)
   arg1 = 0
   arg2 = 10
@@ -86,7 +87,45 @@ def drag_applet_onto_screen(appletid)
 
       customize_workspace.fld_applet_carousel_next.click
       # function didn't work when I used paged objects function, not sure why
-      wait.until { driver.find_elements(:css, "div.carousel-inner div.active [data-appletid=#{current_first_applet_id}]").length == 0 }
+      wait.until { driver.find_elements(:css, ".applet-items-container [data-appletid=#{current_first_applet_id}]").length == 0 }
+
+      new_applet_carousel_applets = customize_workspace.fld_applets_in_carousel
+      current_first_applet_id = new_applet_carousel_applets[0]['data-appletid']
+      keep_searching = current_first_applet_id != first_applet_id
+    end
+  end
+
+  if found_applet
+    applet_preview = driver.find_element(:css, ".applet-items-container [data-appletid=#{appletid}]")
+    applet_preview.click
+    return true
+  end
+  p "could not find #{appletid} in the applet carousel"
+  false
+end
+
+def drag_applet_onto_screen(appletid)
+  driver = TestSupport.driver
+  customize_workspace = WorkspaceEditor.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  arg1 = 0
+  arg2 = 10
+
+  all_applets = customize_workspace.fld_applets_in_carousel
+  first_applet = all_applets[0]
+  first_applet_id = first_applet['data-appletid']
+  current_first_applet_id = first_applet['data-appletid']
+  
+  keep_searching = true
+
+  while keep_searching
+    found_applet = customize_workspace.applets_with_id(appletid).length > 0 
+    keep_searching = false if found_applet
+    if keep_searching
+
+      customize_workspace.fld_applet_carousel_next.click
+      # function didn't work when I used paged objects function, not sure why
+      wait.until { driver.find_elements(:css, ".applet-items-container [data-appletid=#{current_first_applet_id}]").length == 0 }
 
       new_applet_carousel_applets = customize_workspace.fld_applets_in_carousel
       current_first_applet_id = new_applet_carousel_applets[0]['data-appletid']
@@ -96,7 +135,7 @@ def drag_applet_onto_screen(appletid)
 
   if found_applet
     # can't change this to page objects, the drag function is expecting a Selenium::WebDriver::Element, not a :Capybara::Node::Element
-    applet_preview = driver.find_element(:css, "div.carousel-inner [data-appletid=#{appletid}] span.applet-thumbnail-title")
+    applet_preview = driver.find_element(:css, ".applet-items-container [data-appletid=#{appletid}] span.applet-thumbnail-title")
     perform_drag(applet_preview, arg1, arg2)
     return true
   end
@@ -105,93 +144,126 @@ def drag_applet_onto_screen(appletid)
 end
 
 When(/^the user adds a "(.*?)" applet to the user defined workspace$/) do |appletid|
-  applet_dragged_sucessfully = drag_applet_onto_screen appletid
+  applet_dragged_sucessfully = click_applet_to_screen appletid
+  # applet_dragged_sucessfully = drag_applet_onto_screen appletid
   expect(applet_dragged_sucessfully).to eq(true)
-  screen = ScreenEditor.instance
-  screen.wait_until_action_element_visible("Applet Swtchboard", 40)
+
+  screen = WorkspaceEditor.new
+  expect(screen.wait_for_fld_applet_switchboard).to eq(true)
+end
+
+def split_view_type(view_type)
+  view_only = view_type.split(' ')[0]
+  check_view = view_only.downcase.eql?('trend') ? 'gist' : view_only.downcase
+  p check_view
+  check_view
 end
 
 Then(/^the user is presented with an option for "(.*?)"$/) do |view_type|
-  screen = ScreenEditor.instance
-  expect(screen.am_i_visible? view_type).to eq(true), "Expected to be presented with an option for #{view_type}"
-  @ehmp = CustomizeWorkspace.new
+  @ehmp = WorkspaceEditor.new
   expect(@ehmp.view_options_text).to include view_type
+  available_view_types = @ehmp.btn_view_types.map { |element| element['data-viewtype'] }
+  expected_view = split_view_type view_type
+  expect(available_view_types).to include expected_view
 end
 
 Then(/^the user is presented with an option to edit view to "([^"]*)"$/) do |view_type|
-  @ehmp = CustomizeWorkspace.new
+  @ehmp = WorkspaceEditor.new
   @ehmp.wait_for_fld_view_options
   expect(@ehmp.view_options_text).to include view_type
 end
 
 Then(/^the user is not presented with an option for "(.*?)"$/) do |view_type|
-  screen = ScreenEditor.instance
-  expect(screen.am_i_visible? view_type).to eq(false), "Expected to NOT be presented with an option for #{view_type}"
+  @ehmp = WorkspaceEditor.new
+  expect(@ehmp.view_options_text).to_not include view_type
+  available_view_types = @ehmp.btn_view_types.map { |element| element['data-viewtype'] }
+  expected_view = split_view_type view_type
+  expect(available_view_types).to_not include expected_view
 end
 
 When(/^the user adds an expanded "(.*?)" applet to the user defined workspace$/) do |appletid|
-  drag_applet_onto_screen appletid
+  click_applet_to_screen appletid
+  #drag_applet_onto_screen appletid
 
-  screen = ScreenEditor.instance
-  html_action_element = 'Expanded View'
-  screen.wait_until_action_element_visible(html_action_element, 40)
-  expect(screen.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
+  page = WorkspaceEditor.new
+  page.wait_for_btn_add_expanded_view
+  expect(page).to have_btn_add_expanded_view
+  page.btn_add_expanded_view.click
+  wait_for_screen_clear
+end
+
+def wait_for_screen_clear
+  wait = Selenium::WebDriver::Wait.new(:timeout => 30)
+  manager = PobWorkspaceManager.new
+  manager.wait_for_fld_obstruction(2)
+  begin
+    wait.until { manager.has_fld_obstruction? == false }
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError
+    retry
+  end
 end
 
 When(/^the user adds an trend "(.*?)" applet to the user defined workspace$/) do |appletid|
-  expect(drag_applet_onto_screen appletid).to eq(true)
+  expect(click_applet_to_screen appletid).to eq(true)
+  # expect(drag_applet_onto_screen appletid).to eq(true)
 
-  screen = ScreenEditor.instance
-  html_action_element = 'Trend View'
-  screen.wait_until_action_element_visible(html_action_element, 40)
-  expect(screen.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
+  page = WorkspaceEditor.new
+  manager = PobWorkspaceManager.new
+  page.wait_for_btn_add_gist_view
+  expect(page).to have_btn_add_gist_view
+  page.btn_add_gist_view.click
+  wait_for_screen_clear
 end
 
 When(/^the user adds an summary "(.*?)" applet to the user defined workspace$/) do |appletid|
-  drag_applet_onto_screen appletid
+  click_applet_to_screen appletid
+  # drag_applet_onto_screen appletid
 
-  screen = ScreenEditor.instance
-  html_action_element = 'Summary View'
-  screen.wait_until_action_element_visible(html_action_element, 60)
-  expect(screen.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
+  page = WorkspaceEditor.new
+  page.wait_for_btn_add_summary_view
+  expect(page).to have_btn_add_summary_view
+  page.btn_add_summary_view.click
+  wait_for_screen_clear
 end
 
-When(/^the user adds an expanded Stacked Graphs applet to the user defined workspace$/) do
-  driver = TestSupport.driver
-  arg1 = 0
-  arg2 = 10
+# When(/^the user adds an expanded Stacked Graphs applet to the user defined workspace$/) do
+#   driver = TestSupport.driver
+#   arg1 = 0
+#   arg2 = 10
 
-  thumbnails = driver.find_elements(:xpath,  "//div[@class='item active']/div").size
-  workspaces = driver.find_elements(:xpath, "//ol[@class='carousel-indicators pagination']/li").size
-  j = 1
-  SG = "Stacked Graphs"
-  while j <= workspaces 
-    i = 1
-    while i <= thumbnails 
-      sleep(3)
-      if driver.find_elements(:css, 'div.carousel-inner div.active [data-appletid=stackedGraph]').length > 0
-        flag = true
-        break
-      else
-        i += 1
-      end
-    end  
-    break if flag
-    driver.find_element(:css, "[data-slide=next]").click
-    j += 1
-  end
+#   thumbnails = driver.find_elements(:xpath,  "//div[@class='item active']/div").size
+#   workspaces = driver.find_elements(:xpath, "//ol[@class='carousel-indicators pagination']/li").size
+#   j = 1
+#   SG = "Stacked Graphs"
+#   while j <= workspaces 
+#     i = 1
+#     while i <= thumbnails 
+#       sleep(3)
+#       if driver.find_elements(:css, 'div.carousel-inner div.active [data-appletid=stackedGraph]').length > 0
+#         flag = true
+#         break
+#       else
+#         i += 1
+#       end
+#     end  
+#     break if flag
+#     driver.find_element(:css, "[data-slide=next]").click
+#     j += 1
+#   end
 
-  applet_preview = driver.find_element(:css, "div.carousel-inner [data-appletid=stackedGraph] p")
-  perform_drag(applet_preview, arg1, arg2)
+#   applet_preview = driver.find_element(:css, "div.carousel-inner [data-appletid=stackedGraph] p")
+#   perform_drag(applet_preview, arg1, arg2)
 
-  screen = ScreenEditor.instance
-  html_action_element = 'Stacked Graph expanded view'
-  screen.wait_until_action_element_visible(html_action_element, 40)
-  expect(screen.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
-end
+#   screen = ScreenEditor.instance
+#   html_action_element = 'Stacked Graph expanded view'
+#   screen.wait_until_action_element_visible(html_action_element, 40)
+#   expect(screen.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
+# end
 
 When(/^the user selects done to complete customizing the user defined workspace$/) do
-  expect(StackedGraph.instance.perform_action('Done')).to eq(true)
+  editor = WorkspaceEditor.new
+  expect(editor.wait_for_btn_accept).to eq(true), "Expected an ACCEPT button"
+  editor.btn_accept.click
 end
 
 Then(/^the User Defined Workspace (\d+) is active$/) do |arg1|
@@ -211,9 +283,11 @@ Then(/^the applets are displayed are$/) do |table|
   end
 end
 
-Then(/^the "(.*?)" screen is active$/) do |arg1|
-  browser_access = Overview.instance
-  expect(browser_access.perform_verification("Overview Screen", arg1)).to be_true
+Then(/^the "(.*?)" screen is active$/) do |screenname|
+  page = UserDefinedWorkspace.new
+  expect(page.wait_for_menu).to eq(true), "Expected screen to display a workspace menu"
+  expect(page.menu.wait_for_fld_screen_name).to eq(true), "Expected workspace menu to display a screen name"
+  expect(page.menu.fld_screen_name.text.upcase).to eq(screenname.upcase)
 end
 
 Then(/^the active screen displays (\d+) applets$/) do |arg1|
@@ -255,6 +329,7 @@ Then(/^the Stacked Graphs applet is empty$/) do
 end
 
 When(/^the user adds BMI Vitals to the graph$/) do
+  close_growl_alert
   search_term = "BMI"
   search_for search_term
   @ehmp.suggestion_element search_term
@@ -276,36 +351,56 @@ When(/^the user clicks the row for BMI$/) do
   index_of_bmi = @ehmp.first_column_text_downcase.index('bmi')
   p index_of_bmi
   @ehmp.fld_row_label[index_of_bmi].click
+end
 
+When(/^the user hovers over the row for BMI$/) do
+  @ehmp = PobStackedGraph.new unless @ehmp.is_a? PobStackedGraph
+  index_of_bmi = @ehmp.first_column_text_downcase.index('bmi')
+  p index_of_bmi
+  @ehmp.fld_row_label[index_of_bmi].hover
 end
 
 When(/^the user clicks the BMI Quick View Button$/) do
-  stackgraph = StackedGraph.instance
-  expect(stackgraph.perform_action('Quick View Button')).to eq(true)
+  stackgraph = PobStackedGraph.new
+  expect(stackgraph.wait_for_btn_quick_view).to eq(true), "Expected a Quick View button"
+  stackgraph.btn_quick_view.click
 end
 
 When(/^the user clicks the BMI Detail View button$/) do
-  stackgraph = StackedGraph.instance
-  expect(stackgraph.perform_action('Detail View Button')).to eq(true)
+  stackgraph = PobStackedGraph.new
+  expect(stackgraph.wait_for_btn_detail_view).to eq(true), "Expected a Detail View button"
+  stackgraph.btn_detail_view.click
+end
+
+def close_growl_alert
+  common = PobCommonElements.new
+  # take_screenshot 'before_growl_close'
+  begin
+    if common.has_btn_growl_close?
+      common.btn_growl_close.click
+      wait_until { !common.has_btn_growl_close? }
+    end
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError
+    retry
+  end
+  # take_screenshot 'after_growl_close'
 end
 
 When(/^the user adds lab troponin to the graph$/) do
   search_term = "Troponin"
+  close_growl_alert
   search_for search_term
   @ehmp.suggestion_element search_term
-
   @ehmp.wait_until_fld_labtest_result_visible
-
   @ehmp.wait_until_fld_search_suggestion_visible
   @ehmp.fld_search_suggestion.click
   @ehmp.wait_until_fld_search_suggestion_invisible
 end
 
-Then(/^a popover toolbar displays with a delete button$/) do
-  @ehmp = PobStackedGraph.new unless @ehmp.is_a? PobStackedGraph
-  stackgraph = StackedGraph.instance
-  stackgraph.wait_until_action_element_visible('Popover Toolbar')
-  expect(@ehmp).to have_btn_delete_graph
+Then(/^a menu option displays with a delete button$/) do
+  ehmp = PobStackedGraph.new 
+  ehmp.wait_for_btn_delete_graph
+  expect(ehmp).to have_btn_delete_graph
 end
 
 When(/^the user chooses to remove the graph$/) do
@@ -324,6 +419,7 @@ end
 
 When(/^the user adds medication Aspirin to the graph$/) do
   @ehmp = PobStackedGraph.new unless @ehmp.is_a? PobStackedGraph
+  close_growl_alert
   search_term = "Aspirin"
   search_for search_term
   @ehmp.suggestion_element search_term
@@ -345,3 +441,24 @@ Then(/^the Stacked Graphs applet displays a row for "([^"]*)"$/) do |row|
   expect(@ehmp.first_column_text_downcase).to include row.downcase
 end
 
+When(/^user selects the detail view from Quick Menu Icon of Stack Graph applet$/) do
+  ehmp = PobStackedGraph.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+
+When(/^Quick Menu Icon is selected in Stack Graph applet$/) do
+  ehmp = PobStackedGraph.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Given(/^the user creates and views a udw with a stackgraph applet$/) do
+  name = "stackgraph#{Time.now.strftime('%Y%m%d%H%M%S%L')}a"
+  p name
+  steps %{
+    Given the user creates a user defined workspace named "#{name}"
+    When the user customizes the "#{name}" workspace
+    And the user adds an expanded "stackedGraph" applet to the user defined workspace
+    And the user selects done to complete customizing the user defined workspace
+    Then the "#{name.upcase}" screen is active
+  }
+end

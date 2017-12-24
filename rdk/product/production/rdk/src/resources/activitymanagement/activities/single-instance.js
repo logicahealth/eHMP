@@ -6,8 +6,10 @@ var rdk = require('../../../core/rdk');
 var clinicalObjectSubsystem = require('../../../subsystems/clinical-objects/clinical-objects-subsystem');
 var filterAsuDocuments = require('../../../subsystems/jds/jds-subsystem').filterAsuDocuments;
 var httpUtil = rdk.utils.http;
+var RdkError = rdk.utils.RdkError;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var actionsJson = require('./activity-instance-actions');
+var getDatabaseConfigFromRequest = require('../activity-utils').getDatabaseConfigFromRequest;
 var resultUtils = rdk.utils.results;
 
 function transformQueryResults(req, instanceId, data, callback) {
@@ -36,13 +38,17 @@ function transformQueryResults(req, instanceId, data, callback) {
     results.state = data.STATE;
     results.processDefinitionId = data.PROCESSDEFINITIONID;
     results.facilityRequestDivisionId = data.FACILITYID;
-
+    results.hasPermissions = data.hasPermissions;
 
     var splitPid = (results.pid || '').split(';');
     if (splitPid.length === 2) {
         var site = _.first(splitPid);
         var vistaSites = req.app.config.vistaSites;
-        results.facilityRequestDivisionId = _.get(vistaSites[site], 'division');
+        var divisionsArray = _.get(vistaSites, [site, 'division']);
+        var facilityObject = _.findWhere(divisionsArray, {
+            division: _.get(data, 'FACILITYID')
+        });
+        _.set(results, 'createdAtFacilityName', _.get(facilityObject, 'name', ''));
     }
     var urgency = data.URGENCY;
 
@@ -75,16 +81,25 @@ function transformHistoryQueryResults(req, results, data, callback) {
         obj.signalAction = item.SIGNALACTION;
         obj.signalStatusTimestamp = item.STATUSTIMESTAMP;
         obj.signalHistory = item.SIGNALHISTORY;
-        pidToNameLookup(req, item.SIGNALOWNERNAME, function(err, owner) {
-            if (err) {
-                req.logger.error(err);
-            } else {
-                obj.signalOwnerName = owner.name;
+        var signalOwner = _.get(item, 'SIGNALOWNERNAME', '');
+        if (_.isEmpty(signalOwner) || signalOwner.indexOf('ACTIVITY') > -1 || signalOwner.indexOf('Process') > -1) {
+            if (signalOwner.indexOf('ACTIVITY') > -1) {
+                obj.signalOwnerName = signalOwner;
             }
-
             temp.push(obj);
             return cb(null);
-        });
+        } else {
+            pidToNameLookup(req, signalOwner, function (err, owner) {
+                if (err) {
+                    req.logger.error(err);
+                } else {
+                    obj.signalOwnerName = owner.name;
+                }
+
+                temp.push(obj);
+                return cb(null);
+            });
+        }
     }, function cb(err) {
         if (err) {
             req.logger.error(err);
@@ -102,13 +117,21 @@ function getTaskDetails(req, callback) {
         return callback('invalid query parameters');
     }
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var procParams = {
         p_process_instance_id: instanceId
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getInstance(:p_process_instance_id, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.activities.getInstance(:p_process_instance_id, :recordset); END;';
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -139,13 +162,21 @@ function getTaskHistory(req, results, callback) {
         return callback('invalid query parameters');
     }
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var procParams = {
         p_process_instance_id: instanceId
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getActivityHistory(:p_process_instance_id, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.activities.getActivityHistory(:p_process_instance_id, :recordset); END;';
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -173,7 +204,7 @@ function _getPatientDemographics(logger, patient, results) {
     }
 
     if (_.isUndefined(_.get(patient, 'genderName')) || _.isUndefined(_.get(patient, 'displayName')) ||
-        _.isUndefined(_.get(patient, 'birthDate')) || _.isUndefined(_.get(patient, 'last4'))) {
+        _.isUndefined(_.get(patient, 'birthDate'))) {
         logger.error('malformed patient');
         return undefined;
     }
@@ -188,7 +219,7 @@ function _getPatientDemographics(logger, patient, results) {
 
     results.gender = (_.isUndefined(genderName) || !_.isString(genderName) ? '?' : genderName[0]);
     results.DOB = patient.birthDate;
-    results.ssn = patient.last4;
+    results.ssn = patient.last4 || _.get(patient, 'ssn', '').substr(-4);
     results.firstName = parts[1];
     results.lastName = parts[0];
 
@@ -261,6 +292,7 @@ function getClinicalObjectDetails(req, results, callback) {
         req.logger.debug('no results');
         return callback(null, '');
     }
+    req.logger.debug('single instance: get clinical object details');
 
     var logger = req.logger;
     var clinicalObjectUID = results.clinicalObjectUID;

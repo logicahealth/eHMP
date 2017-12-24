@@ -7,6 +7,16 @@ class DemographicsActions
     expect(ehmp.wait_for_fld_patient_info_title).to eq(true), "Expected patient information tray to display"
   end
 
+  def self.close_patient_info_tray
+    ehmp = PobDemographicsElements.new
+    expect(ehmp.wait_for_btn_close_demographic).to eq(true), "Expected a button to close patient information tray"
+    ehmp.btn_close_demographic.click
+    ehmp.wait_for_btn_demographic
+    expect(ehmp).to have_btn_demographic
+    expect(ehmp).to_not have_fld_patient_info_title
+    #expect(ehmp.wait_for_fld_patient_info_title).to eq(true), "Expected patient information tray to display"
+  end
+
   def self.open_provider_info_tray
     ehmp = PobDemographicsElements.new
     ehmp.wait_for_fld_patient_information_provider
@@ -16,26 +26,21 @@ class DemographicsActions
   end
 end
 
+Then(/^user closes Patient Demographic$/) do
+  DemographicsActions.close_patient_info_tray
+end
+
 Then(/^user selects Patient Demographic drop down$/) do
   @ehmp = PobDemographicsElements.new
   max_attempt = 2
   begin
-    @ehmp.wait_until_btn_demographic_visible(10)
+    DemographicsActions.open_patient_info_tray
   rescue => e
     p "attempt refresh"
     TestSupport.driver.navigate.refresh
     max_attempt -= 1
     retry if max_attempt > 0
     raise e if max_attempt <= 0
-  end
-
-  @ehmp.wait_until_btn_demographic_visible(30)
-  expect(@ehmp).to have_btn_demographic
-  @ehmp.btn_demographic.click
-  @ehmp.wait_until_btn_demographic_visible(30)
-
-  if @ehmp.btn_demographic['aria-expanded'] == 'false'
-    @ehmp.btn_demographic.click
   end
 end
 
@@ -241,11 +246,20 @@ end
 
 And(/^the Patient Information expanded area contains headers$/) do |table|
   @ehmp = PobDemographicsElements.new
-  @ehmp.wait_for_fld_demographic_group_headers minimum: 5
-  @ehmp.wait_until_fld_demographic_group_headers_visible
-
   table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.fld_demographic_group_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
+    max_attempt = 1
+    begin
+      expect(@ehmp.wait_for_fld_demographic_group_headers).to eq(true)
+      @ehmp.wait_until_fld_demographic_group_headers_visible
+      expect(object_exists_in_list(@ehmp.fld_demographic_group_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
+    rescue Exception => e
+      max_attempt -= 1
+      raise e if max_attempt < 0
+      raise e if @ehmp.has_fld_patient_info_title?
+      p "Tray was closed, reopen"
+      DemographicsActions.open_patient_info_tray
+      retry
+    end
   end
 end
 
@@ -255,6 +269,16 @@ And(/^the Patient Information expanded area contains fields/) do |table|
   @ehmp.wait_until_fld_demographic_group_fields_visible
 
   table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.fld_demographic_group_fields, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
+    max_attempt = 1
+    begin
+      expect(object_exists_in_list(@ehmp.fld_demographic_group_fields, "#{headers[0]}")).to eq(true), "#{headers[0]} >> was not found."
+    rescue Exception => e
+      max_attempt -= 1
+      raise e if max_attempt < 0
+      raise e if @ehmp.has_fld_patient_info_title?
+      p "Tray was closed, reopen"
+      DemographicsActions.open_patient_info_tray
+      retry
+    end
   end
 end

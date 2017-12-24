@@ -13,8 +13,8 @@ def discover_item_id(domain, patient)
   @json_object["data"]["items"].each do |item|
     @discovered_item_uid = item["uid"]
     next if @discovered_item_uid.nil?
-    break if @discovered_item_uid.include? "9E7A" 
-    break if @discovered_item_uid.include? "C877"
+    break if @discovered_item_uid.include? "SITE" 
+    break if @discovered_item_uid.include? "SITE"
   end 
   #@discovered_item_uid = @json_object["data"]["items"][0]["uid"]
   

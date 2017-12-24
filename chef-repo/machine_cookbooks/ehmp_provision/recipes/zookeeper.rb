@@ -24,11 +24,11 @@ node.default[:ehmp_provision][:zookeeper][:copy_files].merge!(node[:machine][:co
 r_list = []
 r_list << "role[zookeeper]"
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 r_list << "recipe[zookeeper@#{ehmp_deps["zookeeper"]}]" unless ENV['INITIAL_DEPLOY']
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -52,6 +52,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -70,6 +71,11 @@ machine machine_name do
     db_item: db_item,
     zookeeper: {
       ident: machine_ident
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
   )
   files lazy { node[:ehmp_provision][:zookeeper][:copy_files] }

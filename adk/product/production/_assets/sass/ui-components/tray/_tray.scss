@@ -113,6 +113,7 @@
         }
         .modal-body {
             background-color: $primary-light;
+            z-index: 1;
         }
         .modal-footer {
             background-color: $primary-light-alt;

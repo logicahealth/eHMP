@@ -5,13 +5,15 @@ require 'workspace_navigation.rb'
 require 'tray_sidebar_section.rb'
 
 class PobOverView < SitePrism::Page
-  set_url '/#/patient/overview'
-  set_url_matcher(/\/#\/patient\/overview$/)
+  set_url '#/patient/overview'
+  #set_url_matcher(/\/#\/patient\/overview$/)
+  set_url_matcher(/#\/patient\/overview/)
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
   section :menu, MenuSection, ".workspace-selector"
   section :traysidebar, TraySidebarSection, "[aria-label='Tray Sidebar']"
+  section :patient_view, PatientViewSection, '#context-header-region'
 
   # element :fld_patient_search_button, "//input[@id='patientSearchInput']"
   element :fld_patient_demographic_patient_info, "#patientDemographic-patientInfo"

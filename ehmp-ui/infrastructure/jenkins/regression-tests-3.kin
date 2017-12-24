@@ -1,0 +1,28 @@
+"ehmp-ui-regression-test-build-3-%branch%" {
+  template = 'templates/regression-test-build.tpl'
+	description = "ehmp-ui regression test build for the branch %branch%"
+
+  gitUrl = 'https://code.vistacore.us/scm/app/ehmp-ui.git'
+	gitBranch = '%branch%'
+
+  regressionTestTask = 'regressionTest3'
+
+  deployBlock = '''if [ \${PREVIOUS_EHMP_COMMIT_HASH} != \${EHMP_COMMIT_HASH} ]; then
+  ######### deploy pjds #########
+  MACHINE_NAME=pjds chef-client -o ehmp_provision@\$EHMP_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+  ######### deploy backend stack #########
+  chef-client -o ehmp_provision@\$EHMP_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+fi
+######### deploy rdk #########
+MACHINE_NAME=rdk chef-client -o rdk_provision@\$RDK_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+######### deploy cdsinvocation stack #########
+MACHINE_NAME=cds chef-client -o cds_provision@\$CDS_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+######### re-deploy rdk (re-deploy is to connect rdk and cdsinvocation) #########
+MACHINE_NAME=rdk chef-client -o rdk_provision@\$RDK_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+######### deploy ehmp-ui #########
+MACHINE_NAME=ehmp-ui chef-client -o ehmp-ui_provision@\$EHMP_UI_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn
+######### deploy ehmp-balancer #########
+MACHINE_NAME=ehmp-balancer chef-client -o ehmp-ui_provision@\$EHMP_UI_PROVISION --environment _default --force-formatter --config /var/lib/jenkins/Projects/vistacore/.chef/knife.rb --log_level warn'''
+
+  prepopBlock = ''
+}

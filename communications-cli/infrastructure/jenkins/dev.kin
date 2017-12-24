@@ -1,0 +1,10 @@
+"communications-cli-dev-build-%branch%" {
+  template = 'templates/gradle-dev-build.tpl'
+  description = "communications-cli build for the branch %branch%"
+
+  gitUrl = 'https://code.vistacore.us/scm/app/communications-cli.git'
+  gitBranch = '%branch%'
+
+  rootDirectory = 'product'
+  gradleTasks = 'generateVersionPropertiesFile test installNpmOracleDB upload'
+}

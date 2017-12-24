@@ -15,7 +15,7 @@ define([
         defaults: function() {
             var ChildCollection = this.Collection.extend({
                 comparator: function(model) {
-                    return model.get('summary');
+                    return model.get('summary').toLowerCase();
                 }
             });
             return {

@@ -19,7 +19,6 @@ var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var util = require('util');
 var async = require('async');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
-var uuid = require('node-uuid');
 
 
 var argv = require('yargs')
@@ -33,21 +32,20 @@ var host = argv.host;
 var port = argv.port;
 
 var rootJob = {
-	'jpid' : uuid.v4(),
 	'rootJobId' : 1,
 	'jobId' : 1
 };
 
 var record = {
 	'name' : 'someRecord',
-	'uid' : 'urn:va:allergy:9E7A:3:1111'
+	'uid' : 'urn:va:allergy:SITE:3:1111'
 };
 
 var domain = 'allergy';
 
 var patientIdentifier = {
 	'type': 'pid',
-	'value': '9E7A;3'
+	'value': 'SITE;3'
 };
 
 var normalJob1 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
@@ -62,6 +60,15 @@ var buriedJob1 = jobUtil.createRecordEnrichment(patientIdentifier, domain, recor
 buriedJob1.jobId = 6;
 var buriedJob2 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
 buriedJob2.jobId = 7;
+var noJobIdJob1 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
+delete noJobIdJob1.jobId;
+var noJobIdJob2 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
+delete noJobIdJob2.jobId;
+var sameJobIdJob1 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
+sameJobIdJob1.jobId = 10;
+var sameJobIdJob2 = jobUtil.createRecordEnrichment(patientIdentifier, domain, record,  rootJob);
+sameJobIdJob2.jobId = 10;
+
 
 //--------------------------------------------------------------------------------
 // This function writes a job to the tube.
@@ -149,6 +156,10 @@ function writeJobsToTube(tubeName, callback) {
     tasks.push(writeJob.bind(null, client,  0, JSON.stringify(createJob(normalJob2, tubeName))));
     tasks.push(writeJob.bind(null, client,  300, JSON.stringify(createJob(delayJob1, tubeName))));
     tasks.push(writeJob.bind(null, client,  300, JSON.stringify(createJob(delayJob2, tubeName))));
+	tasks.push(writeJob.bind(null, client,  0, JSON.stringify(createJob(noJobIdJob1, tubeName))));
+	tasks.push(writeJob.bind(null, client,  0, JSON.stringify(createJob(noJobIdJob2, tubeName))));
+    tasks.push(writeJob.bind(null, client,  0, JSON.stringify(createJob(sameJobIdJob1, tubeName))));
+    tasks.push(writeJob.bind(null, client,  0, JSON.stringify(createJob(sameJobIdJob2, tubeName))));
 
     client.connect(function(error) {
         if (error) {

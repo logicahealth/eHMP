@@ -1,5 +1,5 @@
-HMPDJ ;SLC/MKB,ASMR/RRB,CK -- Serve VistA data as JSON via RPC;Aug 29, 2016 20:06:27
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;May 15, 2016;Build 7
+HMPDJ ;SLC/MKB,ASMR/RRB,CK,CPC -- Serve VistA data as JSON via RPC;Aug 29, 2016 20:06:27
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;May 15, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -71,9 +71,14 @@ GET(HMP,FILTER) ; -- Return search results as JSON in @HMP@(n)
 GTQ ; add item count and terminating characters
  N ERROR I $D(^TMP($J,"HMP ERROR"))>0 D BUILDERR(.ERROR)
  I +$G(FILTER("noHead"))=1 D  Q
- .S @HMP@("total")=+$G(HMPI)
- .I $L($G(ERROR(1)))>1 S @HMP@("error")=ERROR(1)
- S @HMP@(.5)="{""apiVersion"":""1.01"",""params"":{"_$$SYS_"},"
+ . I $L($G(ERROR(1)))>1 D
+ ..  ;HMPMETA existence shows being called from sync request, freshnessDateTime shows it is unsolicited update
+ ..  ;so for freshness or RPC call this goes into TMP
+ ..  I '$D(HMPMETA)!($G(FILTER("freshnessDateTime"))) S @HMP@("error")=ERROR(1) Q
+ ..  ;whereas this goes into HMPFX
+ ..  S HMPI=HMPI+1,@HMP@(HMPI,1)="null,"_ERROR(1)
+ . S @HMP@("total")=+$G(HMPI)
+ S @HMP@(.5)="{"_$$APIVERS^HMPDJFS()_",""params"":{"_$$SYS_"},"
  I $D(HMPERR) S @HMP@(1)="""error"":{""message"":"""_HMPERR_"""}}" Q
  I '$D(@HMP)!'$G(HMPI) D  Q
  . I '$D(ERROR) S @HMP@(1)="""data"":{""totalItems"":0,""items"":[]}}" Q

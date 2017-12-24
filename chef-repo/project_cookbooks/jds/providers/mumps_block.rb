@@ -5,6 +5,8 @@
 # This provider uses greenletters and PTY to automate install prompts. This can cause odd character output to :log.
 #
 
+use_inline_resources
+
 action :nothing do
 end
 
@@ -15,7 +17,7 @@ action :execute do
 
   ruby_block "mumps_block:execute:#{new_resource.command.hash}" do
     block do
-      shell = Greenletters::Process.new(node[:jds][:shell], :transcript => new_resource.log, :timeout => node[:jds][:shell_timeout_seconds])
+      shell = Greenletters::Process.new(node[:jds][:shell], :transcript => new_resource.log, :timeout => new_resource.timeout)
 
       # start the shell
       shell.start!

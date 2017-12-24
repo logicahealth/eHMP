@@ -47,14 +47,14 @@ describe 'f117_patient_search_pid_spec.rb', acceptance: true do
     end
 
     it '. site' do
-      response = rdk_fetch(@command, 'pid' => 'C877;3')
+      response = rdk_fetch(@command, 'pid' => 'SITE;3')
 
       expect(response.code).to eq(200)
       verify_response_contains([%w(totalItems 1)], response.body)
     end
 
     it '. with site' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;100816')
+      response = rdk_fetch(@command, 'pid' => 'SITE;100816')
 
       expect(response.code).to eq(200)
       verify_response_contains([%w(totalItems 1)], response.body)
@@ -68,7 +68,7 @@ describe 'f117_patient_search_pid_spec.rb', acceptance: true do
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command, 'pid' => 'C877;848484')
+      response = rdk_fetch(@command, 'pid' => 'SITE;848484')
 
       expect(response.code).to eq(200)
       verify_response_contains([%w(totalItems 0)], response.body)
@@ -94,35 +94,35 @@ describe 'f117_patient_search_pid_spec.rb', acceptance: true do
     end
 
     it '. same localId, different site' do
-      response = rdk_fetch(@command, 'pid' => 'C877;100599')
+      response = rdk_fetch(@command, 'pid' => 'SITE;100599')
 
       expect(response.code).to eq(200)
       verify_response_contains([%w(totalItems 1)], response.body)
 
       items_hash = get_hash_items(response.body)
       verify_response_contains([%w(localId 100599),
-                                ['pid', 'C877;100599']],
+                                ['pid', 'SITE;100599']],
                                items_hash)
 
-      response = rdk_fetch(@command, 'pid' => '9E7A;100599')
+      response = rdk_fetch(@command, 'pid' => 'SITE;100599')
 
       expect(response.code).to eq(200)
       verify_response_contains([%w(totalItems 1)], response.body)
 
       items_hash = get_hash_items(response.body)
       verify_response_contains([%w(localId 100599),
-                                ['pid', '9E7A;100599']],
+                                ['pid', 'SITE;100599']],
                                items_hash)
     end
 
     it '. just site' do
-      response = rdk_fetch(@command, 'pid' => '9E7A')
+      response = rdk_fetch(@command, 'pid' => 'SITE')
       expect(response.code).to eq(400)
       # verify_response_contains([%w(totalItems 0)], response.body)
     end
 
     it '. site with null localid' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;')
+      response = rdk_fetch(@command, 'pid' => 'SITE;')
       expect(response.code).to eq(400)
       # verify_response_contains([%w(totalItems 0)], response.body)
     end

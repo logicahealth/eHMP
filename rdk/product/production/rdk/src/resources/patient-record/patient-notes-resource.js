@@ -437,7 +437,7 @@ function getDocumentsFromPjds(req, callback) {
     var appConfig = req.app.config;
 
     /*  For a patient with a site identifier, the format isd
-        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:9E7A:3:3")
+        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:SITE:3:3")
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
@@ -523,7 +523,7 @@ function getAddendaFromPjds(req, removeNonAuthorNote, callback) {
     var appConfig = req.app.config;
 
     /*  For a patient with a site identifier, the format isd
-        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:9E7A:3:3")
+        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:SITE:3:3")
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */

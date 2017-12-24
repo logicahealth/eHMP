@@ -1,0 +1,242 @@
+
+configurations{
+    coberturaRuntime {extendsFrom testRuntime}
+}
+
+dependencies {
+    coberturaRuntime "log4j:log4j:1.2.16"
+    coberturaRuntime ('net.sourceforge.cobertura:cobertura:2.0.3-nodtd')
+}
+
+def serFile="${project.buildDir}/cobertura.ser"
+def classes="${project.sourceSets.main.output.classesDir}"
+def classesCopy="${classes}-copy"
+def thresholdsFile=project.file("coverage.thresholds.xml")
+def coverageReportDir="${reporting.baseDir}/coverage"
+
+// coverage instrumentation around test
+test {
+    dependencies {
+        testRuntime "log4j:log4j:1.2.16"
+        testRuntime ('net.sourceforge.cobertura:cobertura:2.0.3-nodtd')
+    }
+    
+    jvmArgs "-XX:-UseSplitVerifier"
+    systemProperties["net.sourceforge.cobertura.datafile"] = serFile
+}
+
+test.doLast {
+    if (new File(classesCopy).exists()) {
+        ant.delete(file: classes)
+        ant.move(file: classesCopy, tofile: classes)
+    }
+}
+
+task coverageInstrument() {
+    inputs.dir classes
+    outputs.file serFile
+
+    doLast {
+        if (new File(classes).exists()) {
+            logger.quiet "Instrumenting classes for Cobertura"
+
+            ant {
+                delete(file:serFile, failonerror:false)
+                delete(dir: classesCopy, failonerror:false)
+                copy(todir: classesCopy) { fileset(dir: classes) }
+
+                taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+                'cobertura-instrument'(datafile: serFile) {
+                    fileset(dir: classes) {
+                        include(name: "**/*.class")
+                        exclude(name: "**/*Test.class")
+                    }
+                }
+                delete(file:"${projectDir}/cobertura.ser", failonerror:false)
+            }
+        }
+    }
+}
+
+test.dependsOn(coverageInstrument)
+
+// internal coverage XML report task
+task coverageXmlReport(dependsOn: test) {
+    inputs.file serFile
+    outputs.file new File(coverageReportDir, "coverage.xml")
+}
+
+coverageXmlReport.doLast {
+    if (new File(serFile).exists()) {
+        ant.taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+        ant.'cobertura-report'(destdir: coverageReportDir, format:'xml', srcdir:"src/main/java", datafile: serFile)
+    }
+}
+
+// coverage check task
+task coverageCheck(dependsOn: coverageXmlReport) {
+    inputs.file serFile
+    outputs.file serFile
+}
+
+coverageCheck.doFirst {
+    if (new File(serFile).exists()) {
+        ant.taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+
+        def thresholds = null
+        try {
+            // if a thresholds file exists, use it
+            if (thresholdsFile.exists())
+                thresholds = new XmlParser().parse(thresholdsFile)
+
+            // run the check, respecting thresholds
+            ant.'cobertura-check'(branchrate: coverageThresholdBranchrate, linerate: coverageThresholdLinerate, datafile: serFile) {
+                if (thresholds)
+                    for (threshold in thresholds) {
+                        def pattern = threshold.@class.replaceAll("\\.", "\\\\.").replaceAll("\\\$", "\\\\\\\$")
+                        def branchrate = (int)Math.max(0, threshold.@branchrate.toDouble() * 100)
+                        def linerate = (int)Math.max(0, threshold.@linerate.toDouble() * 100)
+    
+                        ant.regex(pattern: pattern, branchrate: branchrate, linerate: linerate)
+                    }
+            }
+        } catch (org.apache.tools.ant.BuildException e) {
+            // if we got a coverage failure, auto-bless and/or report it
+            def reported = false
+            def autoblessed = false
+
+            // handle each failure:
+            extractCoverageFailures coverageReportDir, {
+                className, branchcount, branchesexecuted, branchrate, linecount, linesexecuted, linerate ->
+
+                // if a threshold exists and the linecount dropped, auto-bless it
+                def report = true
+                if (thresholds) {
+                    def match = thresholds.threshold.find{ it.@class == className }
+                    if (match) {
+                        if (match.@linecount.toInteger() > linecount) {
+                            autoblessed = true
+                            report = false
+                            match.replaceNode{ node ->
+                                threshold('class':className, 'branchcount':branchcount,
+                                    'branchsexecuted':branchesexecuted, 'branchrate':branchrate,
+                                    'linecount':linecount, 'linesexecuted':linesexecuted, 'linerate':linerate)
+                            }
+                        } else
+                            report = match.@linerate.toDouble() > linerate || match.@branchrate.toDouble() > branchrate
+                    }
+                }
+                // if coverage dropped, report
+                if (report) {
+                    reported = true
+                    logger.error ""
+                    logger.error "Coverage failed for $className:"
+                    if (linerate * 100 < coverageThresholdLinerate.toDouble())
+                        logger.error "  line rate is " + Math.round(linerate * 1000) / 10 + "%"
+                    if (branchrate * 100 < coverageThresholdBranchrate.toDouble())
+                        logger.error "  branch rate is " + Math.round(branchrate * 1000) / 10 + "%"
+                }
+            }
+
+            if (autoblessed) {
+                writeXml thresholds, thresholdsFile
+                logger.quiet "coverage.thresholds.xml was updated; please commit it."
+            }
+
+            if (reported) {
+                logger.error "Please write unit tests to provide the missing coverage."
+                logger.error "The required rate for line coverage is $coverageThresholdLinerate% and the required rate for branch coverage is $coverageThresholdBranchrate%."
+                logger.error "In unusual situations the coverageBless task may be used after approval from your tech lead."
+                throw e;
+            }
+        }
+    }
+}
+
+// coverage report task - must be run explicitly
+task coverageReport(dependsOn: test) {
+    inputs.file serFile
+    outputs.dir coverageReportDir
+}
+
+coverageReport.doLast {
+    if (new File(serFile).exists()) {
+        ant.taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+        ant.'cobertura-report'(destdir: coverageReportDir, format:'html', srcdir:"src/main/java", datafile: serFile)
+
+        // open the report in a browser
+        java.awt.Desktop.getDesktop().browse new File(coverageReportDir, "index.html").toURI()
+    }
+}
+
+// coverage bless task--updates coverage.thresholds.xml with all coverage exceptions
+task coverageBless(dependsOn: coverageXmlReport) {
+    inputs.file serFile
+    outputs.file thresholdsFile
+}
+
+coverageBless.doLast {
+    if (new File(serFile).exists()) {
+        // create thresholds xml
+        def thresholds = new Node(null, "thresholds")
+
+        // extract failures into it
+        extractCoverageFailures coverageReportDir, {
+            className, branchcount, branchesexecuted, branchrate, linecount, linesexecuted, linerate ->
+            thresholds.appendNode("threshold", ['class':className, 'branchcount':branchcount,
+                        'branchsexecuted':branchesexecuted, 'branchrate':branchrate,
+                        'linecount':linecount, 'linesexecuted':linesexecuted, 'linerate':linerate])
+        }
+
+        // if we got any, write the file
+        if (thresholds.children().size() > 0)
+            writeXml thresholds, thresholdsFile
+    }
+}
+
+def writeXml(root, file) {
+    def writer = new PrintWriter(file)
+    def printer = new XmlNodePrinter(writer, "  ")
+    writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+    printer.print(root)
+    writer.flush()
+    writer.close()
+}
+
+def extractCoverageFailures(coverageReportDir, handler) {
+    // parse it
+    def coverage = new XmlParser().parse(new File(coverageReportDir, "coverage.xml"))
+
+    // run through it
+    for (pkg in coverage.get("packages")[0].children())
+        for (cls in pkg.get("classes")[0].children()) {
+            def branchrate = cls.attribute('branch-rate').toDouble() * 100
+            def linerate = cls.attribute('line-rate').toDouble() * 100
+
+            // if hit a failure, handle it
+            if (branchrate < coverageThresholdBranchrate.toDouble()
+                || linerate < coverageThresholdLinerate.toDouble()) {
+                def lines = cls.get("lines")[0].children()
+                def linecount = lines.size();
+                def linesexecuted = 0
+                def branchcount = 0
+                def branchesexecuted = 0
+
+                // count lines and branches
+                for (line in lines) {
+                    if (Integer.parseInt(line.@hits) > 0) {
+                        ++linesexecuted
+                    }
+                    if (line.@branch == "true") {
+                        def cov = line.attribute("condition-coverage")
+                        def tokens = cov.tokenize("% (/)")
+                        branchcount += Integer.parseInt(tokens[2])
+                        branchesexecuted += Integer.parseInt(tokens[1])
+                    }
+                }
+
+                handler(cls.@name, branchcount, branchesexecuted, cls.attribute('branch-rate').toDouble(),
+                    linecount, linesexecuted, cls.attribute('line-rate').toDouble())
+            }
+        }
+}

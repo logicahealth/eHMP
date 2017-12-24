@@ -27,15 +27,15 @@ machine_opts = {
     'vm.boot_timeout' => 600,
     'vm.guest' => :windows,
     'vm.communicator' => "winrm",
-    'winrm.guest_port' => 5985,
+    'winrm.guest_port' => PORT,
     'windows.set_work_network' => true,
     'vm.network' => {
       'private_network' => {
         :ip => "IP      "
       },
       :forwarded_port =>  {
-        guest: 5985,
-        host: 5985,
+        guest: PORT,
+        host: PORT,
         id: "winrm",
         auto_correct: true
       }

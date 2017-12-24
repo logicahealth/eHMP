@@ -14,7 +14,7 @@ esac
 ping -c 3 $IPaddr > /dev/null
 if [ $? -eq 0 ]
 then
-	TCPport=8080
+	TCPport=PORT
 	successSTRING="Status = RUNNING"
 	returnedSTRING=`curl http://$IPaddr:$TCPport/cds-results-service/rest/healthcheck 2> /dev/null`
 

@@ -1,33 +1,32 @@
 require_relative 'parent_applet.rb'
 
 class PobNumericLabApplet < PobParentApplet
-  # *****************  All_Form_Elements  ******************* #
-
-  # *****************  All_Logo_Elements  ******************* #
-
-  # *****************  All_Field_Elements  ******************* #
-  elements :fld_numeric_lab_results_gist, ".gist-item-list .selectable"
+  elements :fld_gist_rows, "[data-appletid='lab_results_grid'] .gist-item-list [role=row]"
+  #elements :fld_numeric_lab_results_gist, "[data-appletid='lab_results_grid'] .gist-item-list .selectable"
+  elements :fld_numeric_lab_results_gist, "[data-appletid='lab_results_grid'] .gist-item"
   elements :fld_lab_names, "[data-appletid='lab_results_grid'] div.border-vertical span:not(.sr-only)"
-  elements :fld_lab_test_column_data, "#grid-panel-lab_results_grid .auto-overflow-y > div span:nth-child(3)"
+  elements :fld_lab_test_column_data, "[data-appletid='lab_results_grid'] [data-cell-instanceid^='problem_name']"
   elements :fld_results, "[data-appletid='lab_results_grid'] [data-cell-instanceid^='time_since']"
-
-  # *****************  All_Button_Elements  ******************* #
-  element :btn_all_range, "#all-range-lab_results_grid"
-  element :btn_2yr_range, "button[id='2yr-range-lab_results_grid']"
-  element :btn_1yr_range, "button[id='1yr-range-lab_results_grid']"
-  element :btn_3mo_range, "button[id='3mo-range-lab_results_grid']"
-  
-  # *****************  All_Drop_down_Elements  ******************* #
-
-  # *****************  All_Table_Elements  ******************* #
-  elements :tbl_coversheet_date_column, "#data-grid-lab_results_grid tr.selectable td:nth-child(1)"
-  elements :tbl_lab_detail_header, "#modal-body .table-responsive th"
-  elements :summary_rows, "[data-appletid='lab_results_grid'] table tbody tr"
-
   element :gist_header_lab_test, "[data-appletid='lab_results_grid'] [data-header-instanceid='name-header']"
+
+  
+  elements :tbl_coversheet_date_column, "[data-appletid=lab_results_grid] tr.selectable td:nth-child(2)"
+  elements :summary_rows, "[data-appletid='lab_results_grid'] table tbody tr"
+  elements :summary_nonpanel_rows, "[data-appletid='lab_results_grid'] table tbody tr[data-code]"
+  elements :summary_panel_rows, "[data-appletid='lab_results_grid'] table tbody tr:not([data-code])"
+  elements :summary_panel_expanded_rows, "[data-appletid='lab_results_grid'] table tbody td tbody tr"
+  #data-code
+
+  # ********************** EXPANDED VIEW ELEMENTS *********************** #
+  section :date_range_filter, ExpandedDateFilter, "#grid-filter-lab_results_grid"
+  elements :expanded_rows, "[data-appletid='lab_results_grid'] table tbody tr"
+  elements :expanded_nonpanel_rows, "[data-appletid='lab_results_grid'] table tbody tr[data-code]"
+  elements :expanded_tbl_headers, "[data-appletid='lab_results_grid'] thead th"
 
   element :fld_quickview_popover, "div.gist-popover"
   elements :quickview_tbl_headers, "div.gist-popover th"
+
+  elements :tbl_lab_detail_header, "#modal-body .table-responsive th"
 
   def range_is_active?(element)
     class_tags = element[:class].split(' ')
@@ -44,8 +43,9 @@ class PobNumericLabApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
     add_tile_sort_elements
+    add_quick_view_popover appletid_css
   end
   
   def applet_gist_loaded?

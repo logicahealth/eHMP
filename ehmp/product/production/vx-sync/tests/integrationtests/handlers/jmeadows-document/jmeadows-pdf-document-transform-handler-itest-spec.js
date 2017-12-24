@@ -12,7 +12,8 @@ var handle = require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-docume
 var path = require('path');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var dummyLogger = require(global.VX_DUMMIES + '/dummy-logger');
 var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');

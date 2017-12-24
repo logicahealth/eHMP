@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Lab order dialog def [/lab-order-dialog-def{?site}]
+## Lab order dialog def [/lab-order-dialog-def{?site}{&location}{&division}]
 
 Gets Lab Order Dialog Definition
 
@@ -11,6 +11,10 @@ ORWDLR32 DEF
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
+
+    + location: `11` (string, required) - The location of the lab order
+
+    + division: `500` (string, optional) - The division of the lab order
 
 ### GET
 

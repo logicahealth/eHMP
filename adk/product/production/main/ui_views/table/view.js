@@ -140,6 +140,23 @@ define([
             '<tbody></tbody>',
             '<tfoot aria-hidden="true"></tfoot>'
         ].join('\n')),
+        behaviors: {
+            QuickTile: {
+                headerContainerSelector: 'thead > tr',
+                childContainerSelector: 'tr:not(.row-header)',
+                headerTagName: 'th',
+                rowTagName: 'td',
+                shouldShow: function() {
+                    if(this.shownItem) return false;
+                    this.shownItem = true;
+                    return !_.result(this, '_isGrouped');
+                },
+                headerAttributes: {
+                    scope: 'col',
+                    'aria-label': 'More Options'
+                }
+            }
+        },
         templateHelpers: function() {
             return {
                 'label': this.getOption('label')
@@ -247,7 +264,9 @@ define([
             });
             var defaultColumnName = this.getOption('initialSortedColumn');
             if (_.isString(defaultColumnName)) {
-                var defaultColumn = _.findWhere(this.getOption('columns'), { name: defaultColumnName });
+                var defaultColumn = _.findWhere(this.getOption('columns'), {
+                    name: defaultColumnName
+                });
                 if (defaultColumn) {
                     var initialSortState = {
                         key: defaultColumnName,

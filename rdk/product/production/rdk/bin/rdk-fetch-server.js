@@ -72,7 +72,9 @@ app.register('/vitals', ROOT + '/src/resources/vitals/vitals-resource');
 app.register('/tasks', ROOT + '/src/resources/activitymanagement/tasks/tasks-resource');
 app.register('/notifications', ROOT + '/src/resources/notifications/notifications-resource');
 app.register('/activities', ROOT + '/src/resources/activitymanagement/activities/activities-resource');
+app.register('/activities-with-details', ROOT + '/src/resources/activities-with-details/activities-with-details-resource');
 app.register('/notes/recent-titles', ROOT + '/src/resources/notes-title-resource');
+app.register('/video-visits', ROOT + '/src/resources/video-visits/video-visits-resource');
 
 //note objects
 app.register('/note-objects', ROOT + '/src/resources/note-objects/note-objects-resource');
@@ -129,7 +131,7 @@ app.register('/operational-data-by-uid', ROOT + '/src/resources/jds-operational-
 //vler
 app.register('/vler/:pid/toc', ROOT + '/src/resources/vler/toc/toc-resource');
 
-// Vista Roles Resource and eHMP Permission Sets
+// eHMP Permissions and Permission Sets
 app.register('/permission-sets', ROOT + '/src/resources/permission-sets/permission-sets-resource');
 app.register('/permissions', ROOT + '/src/resources/permissions/permissions-resource');
 
@@ -145,11 +147,18 @@ app.register('/incident-report', ROOT + '/src/resources/incident-report/incident
 //imaging
 app.register('/vix-image', ROOT + '/src/resources/vix-image/vix-image-resource');
 
+//prefetch patients
+app.register('/prefetch-patients', ROOT + '/src/resources/prefetch-patients/prefetch-patients-resource');
+
+//ehmp versions
+app.register('/ehmp-versions', ROOT + '/src/resources/ehmp-versions-list/ehmp-versions-list-resource');
+
 // TEST RESOURCE for Generic RPC Calls
 // DO NOT ENABLE IN PRODUCTION; IT IS A SECURITY RISK!
 // app.register('/test', '../src/resources/vista-resource');
 
 app.logger.info('app created with ' + app.resourceRegistry.getResources().length + ' mounted endpoints');
+app.logger.info('UV_THREADPOOL_SIZE = %s', process.env.UV_THREADPOOL_SIZE);
 
 // FUTURE-TODO: maybe start listening earlier, asynchronously register resources
 var port = app.config.appServer.port;

@@ -1,8 +1,7 @@
 
 Then(/^the Add Allergy button is not displayed on overview$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @ag.applet_loaded? }
-  expect(@ag.am_i_visible? 'Add').to eq(false)
+  applet = PobAllergiesApplet.new
+  expect(applet).to_not have_btn_applet_add
 end
 
 Then(/^the Add Condition button is not displayed on overview$/) do
@@ -31,10 +30,8 @@ Then(/^the New Observation button button is not displayed$/) do
 end
 
 Then(/^the Add Allergy button is not displayed on cover sheet$/) do
-  aa = AllergiesApplet.instance
-  # wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  # wait.until { aa.applet_grid_loaded } applet_grid_loaded is for grid view not coversheet pill view
-  expect(aa.am_i_visible? 'Add').to eq(false)
+  applet = PobAllergiesApplet.new
+  expect(applet).to_not have_btn_applet_add
 end
 
 Then(/^the Add Condition button is not displayed on cover sheet$/) do

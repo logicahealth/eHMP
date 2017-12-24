@@ -7,6 +7,7 @@ var _ = require('lodash');
 var asuUtils = require('../../resources/patient-record/asu-utils');
 var vix = require('../vix/vix-subsystem');
 var bunyan = require('bunyan');
+var annotator = require('./patient-record-annotator');
 
 describe('jds\'s', function() {
     var pid, req, log, httpExpected, domain, query, vlerQuery, mockAsu;
@@ -92,6 +93,16 @@ describe('jds\'s', function() {
             expect(withoutErr).to.be.false();
         });
 
+        it('formats response body errors correctly', function(){
+            var withBodyErr = jds._isResponseError(req, null, {}, {
+                error: {message: new Error()}
+            });
+
+            var spy = sinon.spy();
+            spy(withBodyErr.toString());
+            sinon.assert.neverCalledWith(spy, sinon.match('[object Object]'));
+        });
+
         it('no data from JDS', function(done) {
             expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/ehmp-documents', 200);
             jds.getPatientDomainData(req, pid, domain, query, vlerQuery, expectError(done, 500));
@@ -145,6 +156,94 @@ describe('jds\'s', function() {
         });
 
     });
+
+    describe('processVitals', function() {
+        var statusStub;
+        var bodyMassStub;
+        var rangesStub;
+
+        var status;
+        var postOptions;
+
+        beforeEach(function() {
+            rdk.utils.http.post.restore();
+            postOptions = {};
+            sinon.stub(rdk.utils.http, 'post', function(options, callback) {
+                var data = {
+                    data: {
+                        items: [{typeName: 'any'}]
+                    }
+                };
+                postOptions = options;
+                return callback(null, {statusCode: 200}, data);
+            });
+
+            status = annotator.BMI_NOT_REQUIRED;
+            statusStub = sinon.stub(annotator, 'getBodyMassStatusCode', function() {
+                return status;
+            });
+
+            bodyMassStub = sinon.stub(annotator, 'addCalculatedBMI', _.noop);
+            rangesStub = sinon.stub(annotator, 'addReferenceRanges', _.noop);
+        });
+
+        it('skips bmi when not needed', function(done) {
+            jds._processVitals(null, {statusCode: 200}, {data: true}, null, function(error, data, status) {
+                expect(bodyMassStub.called).to.be.false();
+                expect(rangesStub.called).to.be.true();
+                expect(error).to.be.null();
+                expect(data).to.eql({data: true});
+                expect(status).to.be(200);
+                done();
+            });
+        });
+
+        it('makes no additional request when all data is present', function(done) {
+            status = annotator.BMI_DATA_PRESENT;
+            jds._processVitals(null, {statusCode: 200}, {data: true}, null, function(error, data, status) {
+                expect(bodyMassStub.called).to.be.true();
+                expect(rangesStub.called).to.be.true();
+                expect(error).to.be.null();
+                expect(data).to.eql({data: true});
+                expect(status).to.be(200);
+                done();
+            });
+        });
+
+        it('makes an additional request when height is missing', function(done){
+            status = annotator.BMI_MISSING_HEIGHT;
+            jds._processVitals(null, {statusCode: 200}, {data: true}, {}, function(error, data, status) {
+                expect(bodyMassStub.called).to.be.true();
+                expect(rangesStub.called).to.be.true();
+                expect(error).to.be.null();
+                expect(data).to.eql({data: true});
+                expect(status).to.be(200);
+                expect(postOptions.body.start).to.be(0);
+                expect(postOptions.body.limit).to.be(1);
+                expect(postOptions.body.order).to.be('observed DESC');
+                expect(postOptions.body.filter).to.include('HEIGHT');
+                done();
+            });
+        });
+
+        it('makes an additional request when weight is missing', function(done) {
+            status = annotator.BMI_MISSING_WEIGHT;
+            jds._processVitals(null, {statusCode: 200}, {data: true}, {}, function(error, data, status) {
+                expect(bodyMassStub.called).to.be.true();
+                expect(rangesStub.called).to.be.true();
+                expect(error).to.be.null();
+                expect(data).to.eql({data: true});
+                expect(status).to.be(200);
+                expect(postOptions.body.start).to.be(0);
+                expect(postOptions.body.limit).to.be(1);
+                expect(postOptions.body.order).to.be('observed DESC');
+                expect(postOptions.body.filter).to.include('WEIGHT');
+                done();
+            });
+        });
+
+    });
+
     describe('filterAsuDocuments', function() {
         it('doesn\'t process a missing result', function (done) {
             var testData = [null, {}, { data: {} }, { data: { items: [] } }];
@@ -237,7 +336,7 @@ describe('jds\'s', function() {
 
         request.session = {
             user: {
-                site: '9E7A'
+                site: 'SITE'
             }
         };
 
@@ -949,7 +1048,7 @@ describe('requestMedications', function() {
                 nextStartIndex: 11
             }
         };
-        jds._requestMedications(req, '9E7A;3', jdsOptions, function(err, filteredBody, statusCode) {
+        jds._requestMedications(req, 'SITE;3', jdsOptions, function(err, filteredBody, statusCode) {
             expect(filteredBody).to.eql(expectedFilteredBody);
             expect(rdk.utils.http.post.calledTwice).to.be.true();
             expect(statusCode).to.equal(200);

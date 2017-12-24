@@ -44,7 +44,7 @@ define([
         onRender: function() {
             this.toggleAddAddendumButton();
         },
-        template: Handlebars.compile('<button type="button" id="btn-note-preview-add-addendum" title="Press enter to add an addendum" class="btn btn-primary">Add Addendum</button> <button type="button" title="Press enter to close" class="btn btn-default" data-dismiss="modal">Close</button> '),
+        template: Handlebars.compile('<button type="button" id="btn-note-preview-add-addendum" class="btn btn-primary">Add Addendum</button> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> '),
         tagName: 'span',
         toggleAddAddendumButton: function () {
             var existingAddendum = _.find(this.model.get('addenda'), {

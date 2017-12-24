@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet_Filter @Lab_Results  @reg1
+@F144_Lab_Results_Base_Applet_Filter @Lab_Results  @reg3
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results - Filtering
 
 # Team: Andromeda
@@ -14,7 +14,6 @@ Scenario: Numeric Lab Results Applet - Filter numeric lab results outside of the
   And the applet displays numeric lab results
   When the user clicks the control "Filter Toggle" in the "Numeric Lab Results applet"
   And the user inputs "LDL" in the "Text Filter" control in the "Numeric Lab Results applet"
- # Then the "Numeric Lab Results Applet" table contains 22 rows
   Then the Lab Test column in the Numeric Lab Results Applet contains "LDL"
 
 @f144_numeric_lab_results_text_filtering_lab_type @US2552 @TA7994a  @DE1226

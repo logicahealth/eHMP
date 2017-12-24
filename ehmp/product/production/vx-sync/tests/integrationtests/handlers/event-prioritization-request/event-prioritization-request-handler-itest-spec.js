@@ -11,7 +11,8 @@ var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var handler = require(global.VX_HANDLERS + 'event-prioritization-request/event-prioritization-request-handler');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
@@ -69,23 +70,23 @@ function getConfiguration() {
             }
         },
         'vistaSites': {
-            'AEDD': _.defaults(wConfig.vistaSites['9E7A'], {
+            'AEDD': _.defaults(wConfig.vistaSites['SITE'], {
                 'name': 'panorama',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
                 'sendTimeout': 10000
             }),
-            'ABCD': _.defaults(wConfig.vistaSites.C877, {
+            'ABCD': _.defaults(wConfig.vistaSites.SITE, {
                 'name': 'kodak',
-                'host': 'REDACTED    ',
+                'host': 'IP        ',
                 'port': PORT,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -95,7 +96,7 @@ function getConfiguration() {
         beanstalkConfig: beanstalkConfig,
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'REDACTED    ',
+            host: 'IP        ',
             port: PORT
         })
     };

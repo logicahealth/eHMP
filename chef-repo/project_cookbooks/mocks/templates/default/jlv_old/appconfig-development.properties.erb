@@ -1,13 +1,13 @@
 grails.jmeadowsURL = <%= jmeadows[:jmeadows][:application][:protocol]%>://<%= jmeadows[:jmeadows][:ipaddress]%><%= jmeadows[:jmeadows][:application][:path]%>?<%= jmeadows[:jmeadows][:application][:path_query]%>
 #http://IP          /jMeadows/JMeadowsDataService?WSDL
-#grails.jmeadowsURL = http://SERVER/jMeadows_accel_mock/JMeadowsDataService?WSDL
-#grails.jmeadowsURL = http://SERVER/jMeadows_accel/JMeadowsDataService?WSDL
-#grails.jmeadowsURL = http://SERVER/jMeadows_POAM/JMeadowsDataService?WSDL
-#grails.jmeadowsURL = http://localhost:8088/mockJMeadowsDataPortBinding?WSDL
-#grails.jmeadowsURL = http://localhost:8282/jMeadows/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://SERVER:PORTjMeadows_accel_mock/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://SERVER:PORTjMeadows_accel/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://SERVER:PORTjMeadows_POAM/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://localhost:PORT/mockJMeadowsDataPortBinding?WSDL
+#grails.jmeadowsURL = http://localhost:PORT/jMeadows/JMeadowsDataService?WSDL
 
-grails.jmeadowsUsername = REDACTED
-grails.jmeadowsPassword = REDACTED
+grails.jmeadowsUsername = USER
+grails.jmeadowsPassword = PW
 
 grails.smartCardBypass = true
 grails.testSmartCard = 987654333

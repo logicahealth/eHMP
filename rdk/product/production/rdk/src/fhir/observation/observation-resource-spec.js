@@ -87,7 +87,7 @@ describe('Vitals FHIR Resource', function() {
                     error: nop
                 },
                 headers: {
-                    host: 'localhost:8888'
+                    host: 'localhost:PORT'
                 },
                 protocol: 'http'
             };
@@ -197,7 +197,7 @@ describe('Vitals FHIR Resource', function() {
             'pid': '10107V395912',
             originalUrl: '/fhir/patient/10107V395912/observation',
             headers: {
-                host: 'localhost:8888'
+                host: 'localhost:PORT'
             },
             protocol: 'http'
         };
@@ -231,7 +231,7 @@ describe('Vitals FHIR Resource', function() {
 //            'pid': '10107V395912',
 //            originalUrl: '/fhir/patient/10107V395912/observation',
 //            headers: {
-//                host: 'localhost:8888'
+//                host: 'localhost:PORT'
 //            },
 //            protocol: 'http'
 //        };

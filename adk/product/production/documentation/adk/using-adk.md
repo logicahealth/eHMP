@@ -573,90 +573,13 @@ returns a Backbone Model of the currently selected patient
 var currentPatientModel = ADK.PatientRecordService.getCurrentPatient();
 ```
 #### .setCurrentPatient(patient, options) {.method .copy-link} ####
-sets the current patient using a given patient pid or model and navigates to patient workspace.  Patient confirmation modal will be displayed if the given patient is different from the current patient. Prior to modal display, it does navigation checking. By default it asks to confirm whether same patient or not, and this can be overwritten by an option.
+Triggers [Messaging](#Messaging) event `'context:patient:change'` and passes through **patient** and **options**. The **patient** parameter should be either a pid string or model with patient data already defined on it. The **options** parameter should be in object format. For more documentation on applicable options, please refer to applet documentation for any applet listening to the `'context:patient:change'` Messaging event.
 ``` JavaScript
-ADK.PatientRecordService.setCurrentPatient('9E7A;149');
+ADK.PatientRecordService.setCurrentPatient('SITE;149');
 ```
 ``` JavaScript
 ADK.PatientRecordService.setCurrentPatient(PATIENT_MODEL);
 ```
-##### Options #####
-
-| Attribute                | Type    | Description                                                                |
-|--------------------------|---------|----------------------------------------------------------------------------|
-| **workspaceId** | string  | optional workspace id to be navigated upon confirmation. <br /> **default**: *patient* context's default workspace id |
-| **callback** | function  | optional callback function to be invoked while patient header is being rendered which implies a target tray view module might have not been loaded yet |
-| **reconfirm** | boolean  | optional flag. If true, always asks to confirm. If false, asks to confirm only if different patient. <br />**default**: true |
-| **navigation** | boolean  | optional flag. If true, navigate to the next workspace upon confirmation. If false, the current screen stays where it is. <br /> **default**: true |
-
-##### More Example(s) #####
-###### Providing a Callback ######
-The following demonstrates a workflow where the application's current patient is being changed and on success of the patient change a form should be opened inside a tray.
-::: showcode Show example
-``` JavaScript
-  // Part 1. In some applet, set up a messaging listener.
-  ADK.Messaging.on('show:exampleForm', function(name) {
-      var ExampleFormModel = Backbone.Model.extend({
-          defaults: {
-              perferredMethodOfContact: '',
-              email: name || '',
-              phoneNumber: ''
-          }
-      });
-      var ExampleFormView = ADK.UI.Form.extend({
-          fields: [{
-              control: 'select',
-              name: 'perferredMethodOfContact',
-              label: 'What is your preferred method of contact?',
-              options: [{
-                  label: 'Email',
-                  value: 'email'
-              }, {
-                  label: 'Phone',
-                  value: 'phone'
-              }],
-              required: true
-          }, {
-              control: 'input',
-              name: 'email',
-              label: 'Email Address',
-              placeholder: 'Enter your email...',
-              type: 'email',
-              required: true
-          }, {
-              control: 'input',
-              name: 'phoneNumber',
-              label: 'Phone Number',
-              placeholder: 'Enter your phone number...',
-              type: 'input',
-              required: true
-          }]
-      });
-      var workflowOptions = {
-          title: 'Example Workflow',
-          showProgress: true,
-          steps: [{
-              view: ExampleFormView,
-              viewModel: new ExampleFormModel(),
-              stepTitle: 'Step 1'
-          }]
-      };
-      // After patient confirmation, this callback function might be invoked BEFORE the
-      // tray view that form get shown in gets loaded. In that case this workflow controller takes
-      // care of showing the workflow with the example form AFTER the tray view module is loaded.
-      var workflowController = new ADK.UI.Workflow(workflowOptions);
-      workflowController.show({
-          inTray: 'TRAY_ID'
-      });
-  });
-  // Part 2. Change patient and trigger new exampleForm to open inside the tray.
-  ADK.PatientRecordService.setCurrentPatient('9E7A;149', {
-      callback: function() {
-             ADK.Messaging.trigger('show:exampleForm', 'billy.joel@acme.com');
-       }
-  });
-```
-:::
 
 #### .refreshCurrentPatient() {.method .copy-link} ####
 updates the current patient model in session with the latest data associated with the current site the user is logged into.
@@ -806,13 +729,13 @@ The Following is an example output of what gets returned by _getUserSession()_:
 ```JavaScript
 // ADK.UserService.getUserSession().attributes returns the following object:
   {
-    "site": "9E7A",
+    "site": "SITE",
     "expires": "2015-02-26T19:53:36.301Z",
     "status": "loggedin",
     "disabled": false,
     "divisionSelect": false,
     "duz": {
-        "9E7A": "10000000227"
+        "SITE": "10000000227"
     },
     "facility": "PANORAMA",
     "firstname": "PANORAMA",
@@ -887,6 +810,9 @@ if (isUserSessionAlive) {
     |--------------------------|---------|----------------------------------------------------------------------------|
     | **id** | string  | workspace id. e.g. 'overview' |
 
+#### ADK.WorkspaceContextRepository.**currentWorkspaceId** ####
+- Returns a String value of current workspace id.
+
 ## Navigation ##
 > **ADK.Navigation** controls the screen change and route/URL update throughout the application.
 
@@ -909,7 +835,8 @@ if (isUserSessionAlive) {
             trigger: true
         },
         extraScreenDisplay: {
-            dontLoadApplets: true // Skip applet loading during screen module loading
+            dontLoadApplets:    true   // Skip applet loading during screen module loading
+            dontReLoadApplets:  true   // Skip update of content region
         },
         callback: function() {  // Run this callback before workspace is displayed on the browser
             console.log('Hi ADK!');
@@ -999,6 +926,21 @@ The table below displays the attributes to define when extending the _PatientCon
 **Note:** Follow same naming standards for **id** attribute as defined above.
 
 :::
+### Navigation Helper Tools ###
+
+#### Obstruction #### 
+
+A obstruction is a way to prevent users from interacting with the application for a short period of time.  It is useful when executing non blocking asynchronous code and you need to prevent the user from interacting with the application.
+
+*Example: Workspace Navigation was converted to run on ticks, because of this the user had an opportunity to load a modal of an applet that is currently being destroyed. To prevent this from happening, the obstruction was placed on the screen before the process of destroying the applets container region, and then removed before the new applets are drawn*
+
+*Note: Navigation between screens will automatically add and remove the obstruction, however it may be advantageous to manually add it before navigation starts, multiple obscure calls have no compounding affect*  
+  
+| Command                                  | Description                                                      |
+|:----------------------------------------:|------------------------------------------------------------------|
+| ADK.Messaging.trigger('obscure:content') | Adds an overlay onto the screen that prevents user interaction   | 
+| ADK.Messaging.trigger('reveal:content')  | Removes the overlay                                              |
+
 
 ## Checks ##
 
@@ -1908,10 +1850,46 @@ To remove the current active CRS highlighting you need to pass the current view 
 
 ```
 
+## Accessibility ##
+### Skip Links ###
+#### .SkipLinks {.method .copy-link} ####
+SkipLinks are the collection of skip links for any given screen. When any are present, the [SkipLinkDropdown view](#Accessibility-Skip-Links--SkipLinkDropdown) will be shown. The pattern of adding a skip link to the collection when shown and removed from the collection when destroyed should be followed. This pattern allows for each screen to define the links while also avoiding any manifest-type lists to maintain. This pattern has been abstracted to the [SkipLinks behavior](ui-library/behaviors.md#SkipLinks). Using the behavior is the preferred manner to add and maintain skip links.
+
+```JavaScript
+// example usage
+var MyView = Marionette.LayoutView.extend({
+  template: Handlebars.compile('<div class="example-target-link-region">'),
+  onRender: function() {
+    ADK.Accessibility.SkipLinks.add({
+      displayText: 'Example Skip Link Menu Item', // text displayed in dropdown, also used as model id
+      focusEl: this.$('.example-target-link-region'), // element on which to set focus on click of menu item
+      rank: 0, // non-negative integers, lower == higher place in collection (i.e. 0 would be first item),
+      hidden: false, // if true, link will be omitted from the SkipLinkDropdown View
+      focusFirstTabbable: true // if true, finds first focusable child element of `focusEl`
+      // `focusFirstTabbable: true` is useful for when `focusEl` is not focusable
+      // if `focusFirstTabbable: false`, ensure the element is focusable
+    });
+  },
+  onDestroy: function() {
+    ADK.Accessibility.SkipLinks.remove('Example Skip Link Menu Item');
+  }
+});
+```
+
+#### .SkipLinkDropdown {.method .copy-link} ####
+Dropdown view that shows list of [skip links](#Accessibility-Skip-Links--SkipLinks). On focus of skip link, the associated `focusEl` will be visually highlighted to help make it clear where the element resides on the screen. On click of skip link, focus is set to the associated element.
+
+```JavaScript
+// example usage
+myView.showChildView('exampleRegion', new Accessibility.SkipLinkDropdown({
+  collection: ADK.Accessibility.SkipLinks
+}));
+```
+
 [adkSourceCode]: https://code.vistacore.us/scm/app/adk.git
 [ehmpuiSourceCode]: https://code.vistacore.us/scm/app/ehmp-ui.git
-[standardizedIdeWikiPage]: https://wiki.vistacore.us/display/VACORE/Team+Standardized+IDE+for+JavaScript+Development
-[workspaceSetupWikiPage]: https://wiki.vistacore.us/display/VACORE/Creating+DevOps+workspace+environment
+[standardizedIdeWikiPage]: https://wiki.vistacore.us/display/DNS RE/Team+Standardized+IDE+for+JavaScript+Development
+[workspaceSetupWikiPage]: https://wiki.vistacore.us/display/DNS RE/Creating+DevOps+workspace+environment
 [sublimeWebsite]: http://www.sublimetext.com/3
 [sublimeSettingsWikiPage]: https://wiki.vistacore.us/x/RZsZ
 [adkBuildJenkins]: https://build.vistacore.us/view/adk/view/Next%20Branch/

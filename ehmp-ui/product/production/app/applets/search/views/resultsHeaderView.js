@@ -76,7 +76,7 @@ define([
         },
         resubmitSearch: function() {
             this.focusRedoTextSearchButton = true;
-            TEXT_SEARCH_CHANNEL.trigger('newSearch');
+            TEXT_SEARCH_CHANNEL.trigger('newSearch', ADK.SessionStorage.getAppletStorageModel('search', 'searchText'));
         },
         handleEnterOrSpaceBar: function(event) {
             var keyCode;
@@ -138,7 +138,7 @@ define([
     });
 
     var SynonymsButtonView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<a role="button" tabindex="0" class="text-search-synonyms btn btn-xs btn-default transform-text-capitalize synonyms-button" data-toggle="popover" data-placement="bottom" data-selector="true" aria-expanded="false" title="Press enter to view synonyms used">View Synonyms Used</a>'),
+        template: Handlebars.compile('<a role="button" tabindex="0" class="text-search-synonyms btn btn-xs btn-default transform-text-capitalize synonyms-button" data-toggle="popover" data-placement="bottom" data-selector="true" aria-expanded="false">View Synonyms Used</a>'),
         ui: {
             synonymsButton: '.synonyms-button'
         },

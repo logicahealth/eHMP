@@ -44,19 +44,20 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 			String notification = WorkItemUtil.extractRequiredStringParam(workItem, "notification");
 			Object notificationId = workItem.getParameter("notificationId");
 			
-			LOGGER.debug("NotificationsWriteHandler.executeWorkItem with notification = " + notification);
+			LOGGER.debug(String.format("NotificationsWriteHandler.executeWorkItem with notification = %s", notification));
 			result = resUtil.invokePostResource(notificationId, notification);
 			
-			LOGGER.debug("NotificationsWriteHandler.executeWorkItem result = " + result);
+			LOGGER.debug(String.format("NotificationsWriteHandler.executeWorkItem result = %s", result));
 			
 			response = transformResult(result);
 			
-			LOGGER.debug("NotificationsWriteHandler.executeWorkItem response = " + response);
+			LOGGER.debug(String.format("NotificationsWriteHandler.executeWorkItem response = %s", response));
 		} catch (EhmpServicesException e) {
-			response = e.toJsonString();
+			LOGGER.error(e.getMessage(), e);
+			response = e.createJsonErrorResponse();
 		} catch (Exception e) {
-			LOGGER.error("NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
-			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
+			LOGGER.error(String.format("NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: %s", e.getMessage()), e);
+			response = ErrorResponseUtil.createJsonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);
@@ -92,7 +93,7 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 				JsonElement notificationElement = dataElement.getAsJsonObject().get("notificationid");
 				if (notificationElement != null && notificationElement.isJsonPrimitive()) {
 					notificationid = notificationElement.getAsString();
-					LOGGER.debug("NotificationsWriteHandler.transformResult notificationid = " + notificationid);
+					LOGGER.debug(String.format("NotificationsWriteHandler.transformResult notificationid = %s", notificationid));
 				}
 			}
 			outputObj.addProperty("notificationid", notificationid);
@@ -100,7 +101,7 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 			Gson gson = new GsonBuilder().create();
 			response = gson.toJson(outputObj);
 		}
-		LOGGER.debug("NotificationsWriteHandler.transformResult response = " + response);
+		LOGGER.debug(String.format("NotificationsWriteHandler.transformResult response = %s", response));
 		return response;
 	}	
 }

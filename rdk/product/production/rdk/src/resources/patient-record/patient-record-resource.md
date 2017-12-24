@@ -17,6 +17,7 @@ This resource can be accessed via POST and the `X-HTTP-Method-Override: GET` req
             + `appointment`
             + `consult`
             + `cpt`
+            + `demographics`
             + `document`
             + `document-view`
             + `education`

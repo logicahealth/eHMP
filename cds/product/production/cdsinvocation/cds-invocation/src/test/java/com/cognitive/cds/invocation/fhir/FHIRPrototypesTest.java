@@ -165,13 +165,13 @@ public class FHIRPrototypesTest {
 
         prescription.setMedication(getContainedResourceRef(med));
         assignIdAndAdd(prescription, theContainedResources);
-        prescription.getPatient().setReference("Patient/9E7A;8");
+        prescription.getPatient().setReference("Patient/SITE;8");
         
         IdentifierDt orderId = prescription.addIdentifier();
         orderId.setSystem("urn:oid:2.16.840.1.113883.6.233");
-        orderId.setValue("urn:va:order:9E7A:8:11129");
+        orderId.setValue("urn:va:order:SITE:8:11129");
         
-        prescription.getPrescriber().setReference("Provider:/urn:va:user:9E7A:923");
+        prescription.getPrescriber().setReference("Provider:/urn:va:user:SITE:923");
         DateTimeDt dateOrdered = new DateTimeDt();
         dateOrdered.setValueAsString("1999-12-22T14:30:00");
         prescription.setDateWritten(dateOrdered );
@@ -188,11 +188,11 @@ public class FHIRPrototypesTest {
         
         //Add some of the extensions
         addStringExtension(prescription, "perscription/orders/location", "5 WEST PSYCH");
-        addStringExtension(prescription, "perscription/orders/locationUID", "urn:va:location:9E7A:66");
+        addStringExtension(prescription, "perscription/orders/locationUID", "urn:va:location:SITE:66");
         //There may be a better mapping for the pharmacist
         addStringExtension(prescription, "perscription/orders/pharmacistName", "RADTECH,SEVENTEEN");
-        addStringExtension(prescription, "perscription/orders/pharmacistUID", "urn:va:user:9E7A:11733");
-        addStringExtension(prescription, "perscription/orders/predecessor", "urn:va:med:9E7A:8:11127");
+        addStringExtension(prescription, "perscription/orders/pharmacistUID", "urn:va:user:SITE:11733");
+        addStringExtension(prescription, "perscription/orders/predecessor", "urn:va:med:SITE:8:11127");
           
         
         medAdmin.setPrescription(getContainedResourceRef(prescription));
@@ -204,11 +204,11 @@ public class FHIRPrototypesTest {
 
         IdentifierDt uid = medAdmin.addIdentifier();
         uid.setSystem("urn:oid:2.16.840.1.113883.6.233");
-        uid.setValue("urn:va:med:9E7A:8:11129");
+        uid.setValue("urn:va:med:SITE:8:11129");
 
         MedicationAdministrationStatusEnum status = MedicationAdministrationStatusEnum.COMPLETED;
         medAdmin.setStatus(status);
-        medAdmin.getPatient().setReference("Patient/9E7A;8");
+        medAdmin.getPatient().setReference("Patient/SITE;8");
 
         // Do we have a mapping to this field or is it just stuffed?
         medAdmin.setWasNotGiven(false);

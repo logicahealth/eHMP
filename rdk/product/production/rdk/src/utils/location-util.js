@@ -6,7 +6,7 @@ var UID_IEN_LOCATION = 4;
  *  Returns the location IEN from  UID 
  *
  *  @param location type
- *  @param location uid example: urn:va:location:C877:158
+ *  @param location uid example: urn:va:location:SITE:158
  *  location uids have a site code and the ien of a 'hospital location' file,
  *  which is not a clinic or ward.
  *  @return The IEN digit or digits
@@ -30,7 +30,7 @@ function getLocationIEN(uid) {
  *
  *  @param Site, location Type and IEN 
  *  @param ien example: 158
- *  @param site example: C877
+ *  @param site example: SITE
  *  @param site example: W  - W stands for wards
  *  @return Location UID
  */

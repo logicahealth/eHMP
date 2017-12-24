@@ -1,4 +1,4 @@
-@documents_summary_and_details @regression @DE1786 @documents_applet @F1135 @reg2
+@documents_summary_and_details @regression @DE1786 @documents_applet @F1135 @reg4
 Feature: F144 - eHMP Viewer GUI - Documents
 
 #POC:Team Jupiter

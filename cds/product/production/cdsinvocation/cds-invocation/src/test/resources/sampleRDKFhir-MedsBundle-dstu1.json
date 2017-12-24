@@ -5,7 +5,7 @@
     "link": [
         {
             "rel": "self",
-            "href": "http://IP             /resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=IP    &verifyCode=IP    !!&site=9E7A&division=500"
+            "href": "http://IP             /resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=USER  &verifyCode=PW      &site=SITE&division=500"
         }
     ],
     "totalResults": 1,
@@ -19,11 +19,11 @@
     "entry": [
         {
             "title": "MedicationDispense for patient [10107V395912]",
-            "id": "Condition/urn:va:med:9E7A:253:27957",
+            "id": "Condition/urn:va:med:SITE:253:27957",
             "link": [
                 {
                     "rel": "self",
-                    "href": "http://IP             /fhir/medicationdispense/urn:va:med:9E7A:253:27957"
+                    "href": "http://IP             /fhir/medicationdispense/urn:va:med:SITE:253:27957"
                 }
             ],
             "updated": "2015-02-09T18:57:10.025+04:00",
@@ -35,12 +35,12 @@
                 }
             ],
             "content": {
-                "_id": "urn:va:med:9E7A:253:27957",
+                "_id": "urn:va:med:SITE:253:27957",
                 "text": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
                 "resourceType": "MedicationDispense",
                 "identifier": {
                     "system": "urn:oid:2.16.840.1.113883.6.233",
-                    "value": "urn:va:med:9E7A:253:27957"
+                    "value": "urn:va:med:SITE:253:27957"
                 },
                 "status": "completed",
                 "contained": [
@@ -59,12 +59,12 @@
                         "_id": "42c85c9d-7df5-4dd1-dc0e-af2d6fd13f49",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "extension": [
                             {
                                 "url": "http://vistacore.us/fhir/extensions/med#locationUid",
-                                "valueString": "urn:va:location:9E7A:23"
+                                "valueString": "urn:va:location:SITE:23"
                             }
                         ],
                         "type": "Outpatient",
@@ -108,13 +108,13 @@
                         },
                         "identifier": {
                             "label": "provider-uid",
-                            "value": "urn:va:user:9E7A:983",
+                            "value": "urn:va:user:SITE:983",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     },
                     {
                         "resourceType": "Medication",
-                        "_id": "Medication/urn:va:med:9E7A:253:27957",
+                        "_id": "Medication/urn:va:med:SITE:253:27957",
                         "name": "METOPROLOL TARTRATE TAB",
                         "code": {
                             "coding": [
@@ -210,7 +210,7 @@
                                 "use": "prescriptionId"
                             },
                             {
-                                "value": "urn:va:med:9E7A:253:27957",
+                                "value": "urn:va:med:SITE:253:27957",
                                 "system": "urn:oid:2.16.840.1.113883.6.233"
                             }
                         ],
@@ -219,7 +219,7 @@
                             "code": "completed"
                         },
                         "patient": {
-                            "reference": "Patient/9E7A;253"
+                            "reference": "Patient/SITE;253"
                         },
                         "text": {
                             "div": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY"
@@ -244,7 +244,7 @@
                         },
                         "medication": {
                             "display": "METOPROLOL TARTRATE TAB",
-                            "reference": "#Medication/urn:va:med:9E7A:253:27957"
+                            "reference": "#Medication/urn:va:med:SITE:253:27957"
                         },
                         "extension": [
                             {
@@ -273,11 +273,11 @@
                             },
                             {
                                 "url": "http://vistacore.us/fhir/extensions/med#orderUid",
-                                "valueString": "urn:va:order:9E7A:253:27957"
+                                "valueString": "urn:va:order:SITE:253:27957"
                             },
                             {
                                 "url": "http://vistacore.us/fhir/extensions/med#pharmacistUid",
-                                "valueString": "urn:va:user:9E7A:10000000056"
+                                "valueString": "urn:va:user:SITE:10000000056"
                             },
                             {
                                 "url": "http://vistacore.us/fhir/extensions/med#pharmacistName",

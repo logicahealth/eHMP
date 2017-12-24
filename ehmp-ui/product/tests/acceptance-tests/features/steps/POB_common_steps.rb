@@ -82,3 +82,13 @@ Then(/^the modal dialog contains data$/) do
   ehmp.wait_until_modal_body_visible
   expect(ehmp).to have_modal_body
 end
+
+Then(/^user waits for Action tray to be updated with My Tasks$/) do
+  ehmp = PobCommonElements.new  
+  time_to_wait = 60 # same as our default time for applets/tables to load
+  expect(ehmp.action_tray.wait_for_fld_my_task_header(time_to_wait)).to eq(true)
+  expect(ehmp.action_tray.wait_for_fld_my_tasks_list(time_to_wait)).to eq(true)
+  wait_until { ehmp.action_tray.fld_my_tasks_list.length > 0 }
+end
+
+

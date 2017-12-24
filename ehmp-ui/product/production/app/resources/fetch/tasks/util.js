@@ -35,40 +35,6 @@ define([
             }
             return ret[index];
         },
-        hasPermissions: function(task) {
-            var isRequestReview = (_.get(task, 'taskName') === 'Review') || (_.get(task, 'TASKNAME') === 'Review');
-            var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
-            if (isRequestReview && !hasEditRequestPermission) {
-                return false;
-            }
-
-            var isResponseReview = (_.get(task, 'taskName') === 'Response') || (_.get(task, 'TASKNAME') === 'Response');
-            var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
-            if (isResponseReview && !hasRespondRequestPermission) {
-                return false;
-            }
-
-            var permission = task.PERMISSION;
-            if (_.isUndefined(permission) || _.isNull(permission)) {
-                return true;
-            }
-            if (_.isEmpty(permission.ehmp) && _.isEmpty(permission.user)) {
-                return true;
-            }
-            var userSession = ADK.UserService.getUserSession();
-            var userId = userSession.get('site') + ';' + userSession.get('duz')[userSession.get('site')];
-            if (ADK.UserService.hasPermissions(permission.ehmp.join('|'))) {
-                if (_.isEmpty(permission.user) || _.contains(permission.user, userId)) {
-                    return true;
-                }
-            }
-            if (_.contains(permission.user, userId)) {
-                if (_.isEmpty(permission.ehmp)) {
-                    return true;
-                }
-            }
-            return false;
-        },
         taskComparator: function(model) {
             var dueDateVal = 0;
             var activeSort = model.get('ACTIVE') ? 0 : 1;
@@ -98,6 +64,9 @@ define([
             8: 'Low',
             9: 'Low',
             10: 'Low'
+        },
+        isActionable: function(isActive, dueTextValue, hasPermissions, beforeEarliestDate) {
+            return isActive && hasPermissions && (dueTextValue !== 1 || beforeEarliestDate);
         }
     };
 });

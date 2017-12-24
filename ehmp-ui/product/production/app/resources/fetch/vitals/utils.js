@@ -106,7 +106,8 @@ define([
 				typeName: 'Blood Pressure Diastolic',
 				units: bpVital.units,
 				resulted: bpVital.resulted,
-				facilityCode: bpVital.facilityCode
+				facilityCode: bpVital.facilityCode,
+                codes: bpVital.codes
 			};
 			var bps = {
 				displayName: 'BPS',
@@ -114,7 +115,8 @@ define([
 				typeName: 'Blood Pressure Systolic',
 				units: bpVital.units,
 				resulted: bpVital.resulted,
-				facilityCode: bpVital.facilityCode
+				facilityCode: bpVital.facilityCode,
+                codes: bpVital.codes
 			};
 
 			bps.qualifiedName = bpVital.qualifiedName + ' Systolic';

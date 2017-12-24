@@ -1,0 +1,571 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>2003. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>2003. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:41 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>2003.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\rdk\rdk\product\production\rdk\src\resources\patient-search</td> 
+     <td>full-name-spec-data.js</td> 
+     <td>Wed Sep 6 17:14:28 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\rdk\rdk\product\production\rdk\src\resources\patient-search</td> 
+     <td>full-name-spec-data.js</td> 
+     <td>Tue Oct 10 18:36:00 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2003.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">4</td> 
+     <td style="text-align: right;">112</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">3</td> 
+     <td style="text-align: right;">28</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2003.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2003.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>2003.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">'use&nbsp;stric</span> <span class="U2">t';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">module.exp</span> <span class="U2">orts.eight</span> <span class="U2">CommaO&nbsp;=&nbsp;{</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">module.exp</span> <span class="U2">orts.eight</span> <span class="U2">CommaO.sea</span> <span class="U2">rchString&nbsp;</span> <span class="U2">=&nbsp;'eight,o</span> <span class="U2">';</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">/*&nbsp;jshint&nbsp;</span> <span class="U2">ignore:sta</span> <span class="U2">rt&nbsp;*/</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">module.exp</span> <span class="U2">orts.eight</span> <span class="U2">CommaO.fil</span> <span class="U2">teredResou</span> <span class="U2">rceRespons</span> <span class="U2">e&nbsp;=&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;"data"</span> <span class="U2">:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"t</span> <span class="U2">otalItems"</span> <span class="U2">:&nbsp;1,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"c</span> <span class="U2">urrentItem</span> <span class="U2">Count":&nbsp;1,</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"i</span> <span class="U2">tems":&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"fullNam</span> <span class="U2">e":&nbsp;"EIGHT</span> <span class="U2">,OUTPATIEN</span> <span class="U2">T",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"familyN</span> <span class="U2">ame":&nbsp;"EIG</span> <span class="U2">HT",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"givenNa</span> <span class="U2">mes":&nbsp;"OUT</span> <span class="U2">PATIENT",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"display</span> <span class="U2">Name":&nbsp;"Ei</span> <span class="U2">ght,Outpat</span> <span class="U2">ient",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"genderC</span> <span class="U2">ode":&nbsp;"M",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"genderN</span> <span class="U2">ame":&nbsp;"Mal</span> <span class="U2">e",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"ssn":&nbsp;"</span> <span class="U2">*****0608"</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"last4":</span> <span class="U2">&nbsp;"0608",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"birthDa</span> <span class="U2">te":&nbsp;"1945</span> <span class="U2">0309",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"sensiti</span> <span class="U2">ve":&nbsp;false</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"localId</span> <span class="U2">":&nbsp;"100615</span> <span class="U2">",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">22</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">"pid":&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100615",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"icn":&nbsp;"</span> <span class="U2">5000000116</span> <span class="U2">V912836",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"summary</span> <span class="U2">":&nbsp;"Eight,</span> <span class="U2">Outpatient</span> <span class="U2">",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"age":&nbsp;7</span> <span class="U2">1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">module.exp</span> <span class="U2">orts.eight</span> <span class="U2">CommaO.fin</span> <span class="U2">alResource</span> <span class="U2">Response&nbsp;=</span> <span class="U2">&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;"apiVe</span> <span class="U2">rsion":&nbsp;"1</span> <span class="U2">.0",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;"data"</span> <span class="U2">:&nbsp;{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"t</span> <span class="U2">otalItems"</span> <span class="U2">:&nbsp;1,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"c</span> <span class="U2">urrentItem</span> <span class="U2">Count":&nbsp;1,</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"i</span> <span class="U2">tems":&nbsp;[{</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"fullNam</span> <span class="U2">e":&nbsp;"EIGHT</span> <span class="U2">,OUTPATIEN</span> <span class="U2">T",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"familyN</span> <span class="U2">ame":&nbsp;"EIG</span> <span class="U2">HT",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"givenNa</span> <span class="U2">mes":&nbsp;"OUT</span> <span class="U2">PATIENT",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"display</span> <span class="U2">Name":&nbsp;"Ei</span> <span class="U2">ght,&nbsp;Outpa</span> <span class="U2">tient",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"genderC</span> <span class="U2">ode":&nbsp;"M",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"genderN</span> <span class="U2">ame":&nbsp;"Mal</span> <span class="U2">e",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"ssn":&nbsp;"</span> <span class="U2">***-**-060</span> <span class="U2">8",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"last4":</span> <span class="U2">&nbsp;"0608",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"birthDa</span> <span class="U2">te":&nbsp;"03/0</span> <span class="U2">9/1945",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"sensiti</span> <span class="U2">ve":&nbsp;false</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"localId</span> <span class="U2">":&nbsp;"100615</span> <span class="U2">",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">46</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">"pid":&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100615",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"icn":&nbsp;"</span> <span class="U2">5000000116</span> <span class="U2">V912836",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"summary</span> <span class="U2">":&nbsp;"Eight,</span> <span class="U2">Outpatient</span> <span class="U2">",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;"age":&nbsp;7</span> <span class="U2">1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]</span> <span class="U2">,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"i</span> <span class="U2">temsPerPag</span> <span class="U2">e":&nbsp;1,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"s</span> <span class="U2">tartIndex"</span> <span class="U2">:&nbsp;0,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"p</span> <span class="U2">ageIndex":</span> <span class="U2">&nbsp;0,</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"t</span> <span class="U2">otalPages"</span> <span class="U2">:&nbsp;1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;},</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;"statu</span> <span class="U2">s":&nbsp;200</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">};</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">58</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">module.exp</span> <span class="U2">orts.eight</span> <span class="U2">CommaO.Rpc</span> <span class="U2">Response&nbsp;=</span> <span class="U2">&nbsp;'&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHT,OUTP</span> <span class="U2">ATIENT^EIG</span> <span class="U2">HT^OUTPATI</span> <span class="U2">ENT^Eight,</span> <span class="U2">Outpatient</span> <span class="U2">^urn:va:pa</span> <span class="U2">t-gender:M</span> <span class="U2">^MALE^****</span> <span class="U2">*0608^0608</span> <span class="U2">^E0608^194</span> <span class="U2">50309^fals</span> <span class="U2">e^100615^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100615^50</span> <span class="U2">00000116V9</span> <span class="U2">12836^Eigh</span> <span class="U2">t,Outpatie</span> <span class="U2">nt\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">59</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTEEN,O</span> <span class="U2">UTPATIENT^</span> <span class="U2">EIGHTEEN^O</span> <span class="U2">UTPATIENT^</span> <span class="U2">Eighteen,O</span> <span class="U2">utpatient^</span> <span class="U2">urn:va:pat</span> <span class="U2">-gender:M^</span> <span class="U2">MALE^*****</span> <span class="U2">0618^0618^</span> <span class="U2">E0618^1945</span> <span class="U2">0309^false</span> <span class="U2">^100625^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100625^50</span> <span class="U2">00000126V4</span> <span class="U2">06128^Eigh</span> <span class="U2">teen,Outpa</span> <span class="U2">tient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">60</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTY,OUT</span> <span class="U2">PATIENT^EI</span> <span class="U2">GHTY^OUTPA</span> <span class="U2">TIENT^Eigh</span> <span class="U2">ty,Outpati</span> <span class="U2">ent^urn:va</span> <span class="U2">:pat-gende</span> <span class="U2">r:M^MALE^*</span> <span class="U2">****0680^0</span> <span class="U2">680^E0680^</span> <span class="U2">19450309^f</span> <span class="U2">alse^10068</span> <span class="U2">7^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100687^50</span> <span class="U2">00000187V9</span> <span class="U2">51630^Eigh</span> <span class="U2">ty,Outpati</span> <span class="U2">ent\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">61</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYEIGH</span> <span class="U2">T,OUTPATIE</span> <span class="U2">NT^EIGHTYE</span> <span class="U2">IGHT^OUTPA</span> <span class="U2">TIENT^Eigh</span> <span class="U2">tyeight,Ou</span> <span class="U2">tpatient^u</span> <span class="U2">rn:va:pat-</span> <span class="U2">gender:M^M</span> <span class="U2">ALE^*****0</span> <span class="U2">688^0688^E</span> <span class="U2">0688^19450</span> <span class="U2">309^false^</span> <span class="U2">100695^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100695^50</span> <span class="U2">00000196V6</span> <span class="U2">87409^Eigh</span> <span class="U2">tyeight,Ou</span> <span class="U2">tpatient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">62</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYFIVE</span> <span class="U2">,OUTPATIEN</span> <span class="U2">T^EIGHTYFI</span> <span class="U2">VE^OUTPATI</span> <span class="U2">ENT^Eighty</span> <span class="U2">five,Outpa</span> <span class="U2">tient^urn:</span> <span class="U2">va:pat-gen</span> <span class="U2">der:M^MALE</span> <span class="U2">^*****0685</span> <span class="U2">^0685^E068</span> <span class="U2">5^19450309</span> <span class="U2">^false^100</span> <span class="U2">692^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100692^50</span> <span class="U2">00000193V1</span> <span class="U2">79752^Eigh</span> <span class="U2">tyfive,Out</span> <span class="U2">patient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">63</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYFOUR</span> <span class="U2">,OUTPATIEN</span> <span class="U2">T^EIGHTYFO</span> <span class="U2">UR^OUTPATI</span> <span class="U2">ENT^Eighty</span> <span class="U2">four,Outpa</span> <span class="U2">tient^urn:</span> <span class="U2">va:pat-gen</span> <span class="U2">der:M^MALE</span> <span class="U2">^*****0684</span> <span class="U2">^0684^E068</span> <span class="U2">4^19450309</span> <span class="U2">^false^100</span> <span class="U2">691^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100691^50</span> <span class="U2">00000192V0</span> <span class="U2">13867^Eigh</span> <span class="U2">tyfour,Out</span> <span class="U2">patient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">64</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYNINE</span> <span class="U2">,OUTPATIEN</span> <span class="U2">T^EIGHTYNI</span> <span class="U2">NE^OUTPATI</span> <span class="U2">ENT^Eighty</span> <span class="U2">nine,Outpa</span> <span class="U2">tient^urn:</span> <span class="U2">va:pat-gen</span> <span class="U2">der:M^MALE</span> <span class="U2">^*****0689</span> <span class="U2">^0689^E068</span> <span class="U2">9^19450309</span> <span class="U2">^false^100</span> <span class="U2">696^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100696^50</span> <span class="U2">00000197V7</span> <span class="U2">95324^Eigh</span> <span class="U2">tynine,Out</span> <span class="U2">patient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">65</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYONE,</span> <span class="U2">OUTPATIENT</span> <span class="U2">^EIGHTYONE</span> <span class="U2">^OUTPATIEN</span> <span class="U2">T^Eightyon</span> <span class="U2">e,Outpatie</span> <span class="U2">nt^urn:va:</span> <span class="U2">pat-gender</span> <span class="U2">:M^MALE^**</span> <span class="U2">***0681^06</span> <span class="U2">81^E0681^1</span> <span class="U2">9450309^fa</span> <span class="U2">lse^100688</span> <span class="U2">^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100688^50</span> <span class="U2">00000189V5</span> <span class="U2">65454^Eigh</span> <span class="U2">tyone,Outp</span> <span class="U2">atient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">66</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYSEVE</span> <span class="U2">N,OUTPATIE</span> <span class="U2">NT^EIGHTYS</span> <span class="U2">EVEN^OUTPA</span> <span class="U2">TIENT^Eigh</span> <span class="U2">tyseven,Ou</span> <span class="U2">tpatient^u</span> <span class="U2">rn:va:pat-</span> <span class="U2">gender:M^M</span> <span class="U2">ALE^*****0</span> <span class="U2">687^0687^E</span> <span class="U2">0687^19450</span> <span class="U2">309^false^</span> <span class="U2">100694^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100694^50</span> <span class="U2">00000195V4</span> <span class="U2">01170^Eigh</span> <span class="U2">tyseven,Ou</span> <span class="U2">tpatient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">67</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYSIX,</span> <span class="U2">OUTPATIENT</span> <span class="U2">^EIGHTYSIX</span> <span class="U2">^OUTPATIEN</span> <span class="U2">T^Eightysi</span> <span class="U2">x,Outpatie</span> <span class="U2">nt^urn:va:</span> <span class="U2">pat-gender</span> <span class="U2">:M^MALE^**</span> <span class="U2">***0686^06</span> <span class="U2">86^E0686^1</span> <span class="U2">9450309^fa</span> <span class="U2">lse^100693</span> <span class="U2">^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100693^50</span> <span class="U2">00000194V3</span> <span class="U2">48611^Eigh</span> <span class="U2">tysix,Outp</span> <span class="U2">atient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">68</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYTHRE</span> <span class="U2">E,OUTPATIE</span> <span class="U2">NT^EIGHTYT</span> <span class="U2">HREE^OUTPA</span> <span class="U2">TIENT^Eigh</span> <span class="U2">tythree,Ou</span> <span class="U2">tpatient^u</span> <span class="U2">rn:va:pat-</span> <span class="U2">gender:M^M</span> <span class="U2">ALE^*****0</span> <span class="U2">683^0683^E</span> <span class="U2">0683^19450</span> <span class="U2">309^false^</span> <span class="U2">100690^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100690^50</span> <span class="U2">00000191V2</span> <span class="U2">64935^Eigh</span> <span class="U2">tythree,Ou</span> <span class="U2">tpatient\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">69</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">EIGHTYTWO,</span> <span class="U2">OUTPATIENT</span> <span class="U2">^EIGHTYTWO</span> <span class="U2">^OUTPATIEN</span> <span class="U2">T^Eightytw</span> <span class="U2">o,Outpatie</span> <span class="U2">nt^urn:va:</span> <span class="U2">pat-gender</span> <span class="U2">:M^MALE^**</span> <span class="U2">***0682^06</span> <span class="U2">82^E0682^1</span> <span class="U2">9450309^fa</span> <span class="U2">lse^100689</span> <span class="U2">^</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;100689^50</span> <span class="U2">00000190V5</span> <span class="U2">36583^Eigh</span> <span class="U2">tytwo,Outp</span> <span class="U2">atient';</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">/*&nbsp;jshint&nbsp;</span> <span class="U2">ignore:end</span> <span class="U2">&nbsp;*/</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

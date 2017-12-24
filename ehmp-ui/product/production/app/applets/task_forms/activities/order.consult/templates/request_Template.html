@@ -3,13 +3,13 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<p><strong>Request</strong><br />
-			{{#if consultOrder.request}}{{consultOrder.request}}{{else}}N/A{{/if}}</p>
+			{{#if consultOrder.request}}{{highlightText consultOrder.request}}{{else}}N/A{{/if}}</p>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
 			<p><strong>Comments (clinical history)</strong><br/>
-			{{#if consultOrder.comment}}{{consultOrder.comment}}{{else}}N/A{{/if}}</p>
+			{{#if consultOrder.comment}}{{highlightText consultOrder.comment}}{{else}}N/A{{/if}}</p>
 		</div>
 	</div>
 </div>

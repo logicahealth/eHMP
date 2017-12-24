@@ -7,59 +7,59 @@ Feature: F144 - eHMP Viewer GUI
 
 @f144_labsByPanel_start_limit_filter @US2523
 Scenario: Limiting the number of results with the 'start', 'limit', 'observedFrom' and 'observedTo' parameters.
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   When the client requests a response in VPR format from RDK API with the labsbypanel parameters
     | pid              | _ack     | observedFrom | observedTo | start | limit |
-    | 9E7A;3     | true     |              |            |       |       |
+    | SITE;3     | true     |              |            |       |       |
     Then a successful response is returned
   When the client requests a response in VPR format from RDK API with the labsbypanel parameters
     | pid              | _ack     | observedFrom | observedTo | start | limit |
-    | 9E7A;3     | true     | 2007         | 2008       | 10    | 14    |
+    | SITE;3     | true     | 2007         | 2008       | 10    | 14    |
     Then a successful response is returned
     And the client receives "453" total items but only "14" current items with a start index of "10"
 
 @US2034 @DE377 @labsByPanel_anatomic_pathology
 Scenario: Show the anatomic pathology results from labs applet
-  Given a patient with pid "9E7A;239" has been synced through the RDK API
+  Given a patient with pid "SITE;239" has been synced through the RDK API
   When the client requests a response in VPR format from RDK API with the labsbypanel parameters
     | pid              | _ack     | observedFrom | observedTo | start | limit |
-    | 9E7A;239     | true     |              |            |       |       |
+    | SITE;239     | true     |              |            |       |       |
   Then a successful response is returned
   And the VPR results contain
       | field           | value              |
-      | pid             | 9E7A;239           |
+      | pid             | SITE;239           |
       | observed        | 19951205           |
       | kind            | Surgical Pathology |
       | specimen        | LYMPH NODES        |
   And the VPR results contain
       | field           | value              |
-      | pid             | C877;239           |
+      | pid             | SITE;239           |
       | observed        | 19951205           |
       | kind            | Surgical Pathology |
       | specimen        | LYMPH NODES        |
   And the VPR results contain
       | field           | value              |
-      | pid             | 9E7A;239           |
+      | pid             | SITE;239           |
       | observed        | 19951116           |
       | kind            | Surgical Pathology |
       | specimen        | BONE MARROW BIOPSY |
   And the VPR results contain
       | field           | value              |
-      | pid             | C877;239           |
+      | pid             | SITE;239           |
       | observed        | 19951116           |
       | kind            | Surgical Pathology |
       | specimen        | BONE MARROW BIOPSY |
 
 @US2034 @DE377 @labsByPanel_microbiology
 Scenario: Show the microbiology results from labs applet
-  Given a patient with pid "9E7A;9" has been synced through the RDK API
+  Given a patient with pid "SITE;9" has been synced through the RDK API
    When the client requests a response in VPR format from RDK API with the labsbypanel parameters
     | pid              | _ack     | observedFrom | observedTo | start | limit |
-    | 9E7A;9           | true     |              |            |       |       |
+    | SITE;9           | true     |              |            |       |       |
   Then a successful response is returned
   And the VPR results contain
       | field           | value        |
-      | pid             | 9E7A;9       |
+      | pid             | SITE;9       |
       | observed        | 19930911231500 |
       | kind            | Microbiology |
       | sample          | URINE        |

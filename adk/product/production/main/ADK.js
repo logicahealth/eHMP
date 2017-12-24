@@ -31,7 +31,6 @@ define([
     'main/components/applets/grid_applet/gridAppletView',
     'main/components/views/loadingView', // remove and use UILibrary.Loading when "create" pattern is removed
     'main/components/views/errorView', // remove and use UILibrary.Error when "create" pattern is removed
-    "main/components/appletToolbar/appletToolbarView",
     'main/components/popup/popup',
     'main/components/views/appletViews/TileSortManager',
     'main/components/behaviors/behaviors',
@@ -71,7 +70,6 @@ define([
     GridAppletView,
     LoadingView,
     ErrorView,
-    AppletToolbarView,
     Popup,
     tileSortManager,
     Behaviors,
@@ -123,14 +121,14 @@ define([
         Error: ErrorView,
         EventGist: UILibrary.EventsGistApplet.prototype.AppletView,
         PillGist: UILibrary.PillsGistApplet.prototype.AppletView,
-        AppletToolbarView: AppletToolbarView,
         InterventionsGist: UILibrary.InterventionsGistApplet.prototype.AppletView,
         VitalsGist: UILibrary.ObservationsGistApplet.prototype.AppletView,
         LabresultsGist: UILibrary.ObservationsGistApplet.prototype.AppletView,
         TrayActionSummaryList: UILibrary.TrayActionSummaryList,
         TraySummaryList: UILibrary.TraySummaryList,
         SubTrayButton: UILibrary.SubTrayButton,
-        ServerPagingView: UILibrary.ServerPagingApplet
+        ServerPagingView: UILibrary.ServerPagingApplet,
+        GridsterView: UILibrary.Gridster
     };
 
     ADK.AppletViews = {
@@ -279,7 +277,7 @@ define([
     };
 
     ADK.hideAllModals = function() {
-        UILibrary.Modal.hide();
+        UILibrary.Modal.hide({ force: 'all' });
         UILibrary.Workflow.hide();
     };
 

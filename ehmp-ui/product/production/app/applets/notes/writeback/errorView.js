@@ -7,7 +7,7 @@ define([
     'use strict';
     return function(params) {
           var errorFooterView = Backbone.Marionette.ItemView.extend({
-              template: Handlebars.compile('<button type="button" class="btn btn-primary ok-button" data-dismiss="modal" title="Press enter to close" id="notesErrorBtn">OK</button>'),
+              template: Handlebars.compile('<button type="button" class="btn btn-primary ok-button" data-dismiss="modal" id="notesErrorBtn">OK</button>'),
               events: {
                'click .ok-button': 'onOk',// params.ok_callback,
               },

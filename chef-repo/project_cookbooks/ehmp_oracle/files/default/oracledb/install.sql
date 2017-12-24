@@ -1,9 +1,0 @@
-@@create_tablespace_communication.sql
-@@create_user_communication.sql
-@@create_user_communicationuser.sql
-@@create_tables.sql
-@@grant_tables.sql
-@@create_types.sql
-@@create_packages.sql
-@@create_triggers.sql
-@@create_sample_data.sql

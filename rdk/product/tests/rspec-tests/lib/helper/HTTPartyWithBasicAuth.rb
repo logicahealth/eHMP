@@ -10,14 +10,14 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @@users = {}
 
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
-  @@users["REDACTED"] = "REDACTED"
+  @@users["PW         "] = "PW      "
+  @@users["SITE;USER  "] = "PW      "
+  @@users["UnauthorizedUser"] = "PW      "
+  @@users["AuditLogUser"] = "PW"
+  @@users["SITE;USER  "] = "PW"
+  @@users["SITE;USER    "] = "PW      "
+  @@users["SITE;REDACT"] = "PW"
+  @@users["SITE;USER  "] = "PW      "
 
   def self.password_for(username)
     return @@users[username]
@@ -26,8 +26,8 @@ end
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  #@@auth = { :username => "REDACTED", :password => "REDACTED" }
-  @@auth = { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "9E7A" }
+  #@@auth = { :username => "PW         ", :password => "PW      " }
+  @@auth = { :accessCode => "USER  ", :verifyCode => "PW      ", :site => "SITE" }
   @@time_start = Time.new
   @@time_done = Time.new
   @@time_out_time = 300

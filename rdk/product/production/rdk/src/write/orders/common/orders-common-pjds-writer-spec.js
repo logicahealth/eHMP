@@ -4,7 +4,7 @@ var pjdsWriter = require('./orders-common-pjds-writer');
 var pjds = require('../../../subsystems/clinical-objects/clinical-objects-subsystem');
 
 var writebackContext = {
-    pid: '9E7A;100615',
+    pid: 'SITE;100615',
     appConfig: {
         generalPurposeJdsServer: {
             baseUrl: 'foo'
@@ -12,9 +12,9 @@ var writebackContext = {
     },
     vistaConfig: {
         host: 'IP        ',
-        port: REDACTED,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        port: PORT,
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
@@ -50,12 +50,12 @@ var writebackContext = {
         }],
         'kind': 'Laboratory',
         'clinicalObject': {
-            'patientUid': 'urn:va:patient:9E7A:100615:100615',
-            'authorUid': 'urn:va:user:9E7A:10000000238',
+            'patientUid': 'urn:va:patient:SITE:100615:100615',
+            'authorUid': 'urn:va:user:SITE:10000000238',
             'domain': 'ehmp-order',
             'subDomain': 'laboratory',
             'visit': {
-                'location': 'urn:va:location:9E7A:285',
+                'location': 'urn:va:location:SITE:285',
                 'serviceCategory': 'PSB',
                 'dateTime': '20160102123040'
             },
@@ -65,7 +65,7 @@ var writebackContext = {
         }
     },
     vprModel: {
-        uid: 'urn:va:order:9E7A:100615:39222'
+        uid: 'urn:va:order:SITE:100615:39222'
     },
     logger: sinon.stub(require('bunyan').createLogger({
         name: 'orders-common-pjds-writer-itest'
@@ -73,19 +73,19 @@ var writebackContext = {
 };
 
 var clinicalObject = {
-    'patientUid': 'urn:va:patient:9E7A:100615:100615',
-    'authorUid': 'urn:va:user:9E7A:10000000238',
+    'patientUid': 'urn:va:patient:SITE:100615:100615',
+    'authorUid': 'urn:va:user:SITE:10000000238',
     'domain': 'ehmp-order',
     'subDomain': 'laboratory',
     'visit': {
-        'location': 'urn:va:location:9E7A:285',
+        'location': 'urn:va:location:SITE:285',
         'serviceCategory': 'PSB',
         'dateTime': '20160102123040'
     },
     'data': {
         'pastDueDate': '20160101',
         'annotation': 'comments',
-        'problemRelationship': 'urn:va:problem:9E7A:100615:183'
+        'problemRelationship': 'urn:va:problem:SITE:100615:183'
     }
 };
 
@@ -107,7 +107,7 @@ describe('orders-common-pjds-writer', function() {
         pjdsWriter(writebackContext, {}, function(err) {
             expect(err).to.be.falsy();
             expect(writebackContext.model.clinicalObject.ehmpState).to.equal('active');
-            expect(writebackContext.model.clinicalObject.referenceId).to.equal('urn:va:order:9E7A:100615:39222');
+            expect(writebackContext.model.clinicalObject.referenceId).to.equal('urn:va:order:SITE:100615:39222');
             expect(writebackContext.model.clinicalObject.data.pastDueDate).to.equal('20160101');
         });
     });
@@ -141,23 +141,23 @@ describe('orders-common-pjds-writer', function() {
 });
 describe('createNoteObject', function() {
     it('tests that create note object returns correct note object', function() {
-        var noteObject = pjdsWriter._createNoteObject(clinicalObject, 'urn:va:ehmp:9E7A;100615:0babd148-3f0d-4a0f-8c1a-c39ce3be48f4');
+        var noteObject = pjdsWriter._createNoteObject(clinicalObject, 'urn:va:ehmp:SITE;100615:0babd148-3f0d-4a0f-8c1a-c39ce3be48f4');
         var expectedNoteObject = {
-            'patientUid': 'urn:va:patient:9E7A:100615:100615',
-            'authorUid': 'urn:va:user:9E7A:10000000238',
+            'patientUid': 'urn:va:patient:SITE:100615:100615',
+            'authorUid': 'urn:va:user:SITE:10000000238',
             'domain': 'ehmp-note',
             'subDomain': 'noteObject',
             'visit': {
-                'location': 'urn:va:location:9E7A:285',
+                'location': 'urn:va:location:SITE:285',
                 'serviceCategory': 'PSB',
                 'dateTime': '20160102123040'
             },
             'ehmpState': 'active',
             'referenceId': null,
             'data': {
-                'sourceUid': 'urn:va:ehmp:9E7A;100615:0babd148-3f0d-4a0f-8c1a-c39ce3be48f4',
+                'sourceUid': 'urn:va:ehmp:SITE;100615:0babd148-3f0d-4a0f-8c1a-c39ce3be48f4',
                 'madlib': '',
-                'problemRelationship': 'urn:va:problem:9E7A:100615:183',
+                'problemRelationship': 'urn:va:problem:SITE:100615:183',
                 'annotation': 'comments'
             }
         };

@@ -4,13 +4,12 @@ define([
     'backgrid',
     'hbs!app/applets/todo_list/templates/dueStatusTemplateSummary',
     'hbs!app/applets/todo_list/templates/dueStatusTemplateExpanded',
-    'hbs!app/applets/todo_list/templates/actionTemplate',
     'hbs!app/applets/todo_list/templates/taskNameSummaryTemplate',
     'hbs!app/applets/todo_list/templates/activityTemplateExpanded',
     'hbs!app/applets/todo_list/templates/actionHeaderTemplate',
     'hbs!app/applets/todo_list/templates/notificationHeaderTemplate',
     'hbs!app/applets/todo_list/templates/notificationTemplate'
-], function(Backbone, _, Backgrid, dueStatusSummary, dueStatusExpanded, actionTemplate, taskNameSummaryTemplate, activityExpanded, actionHeaderTemplate, notificationHeaderTemplate, notificationTemplate) {
+], function(Backbone, _, Backgrid, dueStatusSummary, dueStatusExpanded, taskNameSummaryTemplate, activityExpanded, actionHeaderTemplate, notificationHeaderTemplate, notificationTemplate) {
     'use strict';
 
     var customPrioritySort = function(model) {
@@ -46,20 +45,20 @@ define([
     };
     var customArrowSort = function(model) {
         if (model instanceof Backbone.Model) {
-            return -(model.get("ACTIVE") && model.get("dueTextValue") !== 1 && model.get("hasPermissions"));
+            return !model.get('actionable');
         }
-        return -(model.ACTIVE && model.dueTextValue !== 1 && model.get("hasPermissions"));
+        return !model.actionable;
     };
 
     var actionColumn = {
         name: 'ACTION',
         label: '->',
         headerCellTemplate: actionHeaderTemplate,
-        flexWidth: 'flex-width-comment flex-width-0_5 left-padding-no right-padding-no text-center',
+        flexWidth: 'left-padding-no flex-width-0_5 text-center',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-comment flex-width-0_5 left-padding-no right-padding-no'
+            className: 'handlebars-cell flex-width-0_5 left-padding-no action-container valign-middle'
         }),
-        template: actionTemplate,
+        template: '',
         sortValue: customArrowSort
     };
 
@@ -67,22 +66,14 @@ define([
         name: 'NOTIFICATION',
         label: '',
         headerCellTemplate: notificationHeaderTemplate,
-        flexWidth: 'flex-width-comment flex-width-0_5 left-padding-no right-padding-no',
+        flexWidth: 'flex-width-comment left-padding-no right-padding-no',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-comment flex-width-0_5 left-padding-no right-padding-no',
+            className: 'handlebars-cell flex-width-comment left-padding-no right-padding-no',
             render: function() {
                 this.$el.empty();
                 this.$el.html(this.column.get('template')(this.model.toJSON()));
-                this.$el.tooltip({
-                    container: 'body',
-                    placement: 'auto top',
-                    title: this.model.get('NOTIFICATIONTITLE')
-                });
                 this.delegateEvents();
                 return this;
-            },
-            remove: function() {
-                this.$el.tooltip('destroy');
             }
         }),
         template: notificationTemplate,
@@ -103,26 +94,7 @@ define([
         label: 'Task Name',
         flexWidth: 'flex-width-3',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-3',
-            render: function() {
-                this.$el.empty();
-                this.$el.html(this.column.get('template')(this.model.toJSON()));
-
-                var description = this.model.get('DESCRIPTION');
-                if(!_.isEmpty(description) && !_.isEmpty(description.trim())){
-                    this.$el.tooltip({
-                        container: 'body',
-                        placement: 'auto top',
-                        title: description
-                    });
-                }
-
-                this.delegateEvents();
-                return this;
-            },
-            remove: function() {
-                this.$el.tooltip('destroy');
-            }
+            className: 'handlebars-cell flex-width-3'
         }),
         template: taskNameSummaryTemplate
     };
@@ -130,9 +102,9 @@ define([
     var createdOn = {
         name: 'createdOn',
         label: 'Created On',
-        flexWidth: 'flex-width-2',
+        flexWidth: 'flex-width-4',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-2'
+            className: 'handlebars-cell flex-width-4'
         }),
         template: '{{createdOnDate}}{{#if createdOnTime}}<br>{{createdOnTime}}{{/if}}',
         sortValue: function(model) {
@@ -143,7 +115,7 @@ define([
     var Config = {
         summary: {
             columns: {
-                provider: [notificationColumn, actionColumn, {
+                provider: [notificationColumn, {
                         name: 'priorityFormatted',
                         label: 'Priority',
                         cell: Backgrid.StringCell.extend({
@@ -165,9 +137,10 @@ define([
                             className: 'string-cell'
                         })
                     },
-                    taskNameColumnSummary
+                    taskNameColumnSummary,
+                    actionColumn
                 ],
-                patient: [notificationColumn, actionColumn, {
+                patient: [notificationColumn, {
                         name: 'priorityFormatted',
                         label: 'Priority',
                         cell: Backgrid.StringCell.extend({
@@ -183,13 +156,14 @@ define([
                         template: dueStatusSummary,
                         sortValue: customDueDateSort
                     },
-                    taskNameColumnSummary
+                    taskNameColumnSummary,
+                    actionColumn
                 ]
             }
         },
         expanded: {
             columns: {
-                provider: [notificationColumn, actionColumn, {
+                provider: [notificationColumn, {
                         name: 'priorityFormatted',
                         label: 'Priority',
                         cell: Backgrid.StringCell.extend({
@@ -259,8 +233,9 @@ define([
                     }, createdOn, {
                         name: 'ACTIVITYNAME',
                         label: 'Go to',
+                        flexWidth: 'flex-width-3',
                         cell: Backgrid.HandlebarsCell.extend({
-                            className: 'handlebars-cell',
+                            className: 'handlebars-cell flex-width-3',
                             events: {
                                 'click button': "onClickAction"
                             },
@@ -270,9 +245,10 @@ define([
                             }
                         }),
                         template: activityExpanded
-                    }
+                    },
+                    actionColumn
                 ],
-                patient: [notificationColumn, actionColumn, {
+                patient: [notificationColumn, {
                         name: 'priorityFormatted',
                         label: 'Priority',
                         flexWidth: 'flex-width-2_5',
@@ -351,7 +327,8 @@ define([
                             }
                         }),
                         template: activityExpanded
-                    }
+                    },
+                    actionColumn
                 ]
             }
         }
@@ -369,8 +346,10 @@ define([
             processId: model.get('PROCESSINSTANCEID')
         };
         ADK.PatientRecordService.setCurrentPatient(model.get('PATIENTICN'), {
-            reconfirm: isStaffView(),
-            navigation: false,
+            confirmationOptions: {
+                navigateToPatient: false,
+                reconfirm: isStaffView()
+            },
             callback: function() {
                 ADK.Messaging.getChannel('task_forms').request('activity_detail', params);
             }

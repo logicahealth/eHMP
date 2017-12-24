@@ -1,1 +1,10 @@
-OSYNC_LOG_SUFFIX=<%= @name %> node <%= @endpoint %><% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+#!/bin/bash
+export OSYNC_LOG_SUFFIX=<%= @name %>
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_<%= @name %>"
+node_modules/ca-apm-probe/bin/ca-apm-run.js <%= @endpoint %><% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+<% else %>
+node <%= @endpoint %><% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>
+<% end %>

@@ -1,9 +1,9 @@
-@F144_Orders 
+@F144_Orders @orders_applet
 Feature: F144 - eHMP Viewer GUI - Orders
 
 # Team: Andromeda
 
-@US2338b @DE5482 @DE6912 @debug @DE6997
+@US2338b @DE5482 @DE6912 @debug @DE6997 @DE8094
 Scenario: Verify user can step through the orders using the next button / previous button
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
@@ -11,19 +11,19 @@ Scenario: Verify user can step through the orders using the next button / previo
   Then the "Orders" applet is finished loading
   When the user scrolls to the bottom of the Orders Applet
   Given the user notes the first 10 orders
-  And clicks the first result in the "Orders Applet"
+  And clicks the first result in the Orders Applet
   Then the modal is displayed
   And the user can step through the orders using the next button
   And the user can step through the orders using the previous button
 
 
-@f144_orders_single_page @US2030 @TA5915a
+@f144_orders_single_page @US2030 @TA5915a 
 Scenario: Opening and closing of the Orders single page view.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
   When the user maximizes the Order applet
   Then the Expanded Order applet is displayed
-  When the user clicks the "Minimize" button in the Orders applet
+  When the user minimizes the expanded Orders Applet
   Then the coversheet is displayed
 
 @f144_orders_single_page_headers @US2030 @TA5915b @US2440 @TA6894
@@ -31,7 +31,7 @@ Scenario: Opening and closing of the Orders single page view.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
   When the user navigates to the expanded Orders applet
-  Then the "Orders Applet" table has headers
+  Then the Orders Applet table has headers
     | Order Date | Flag | Status | Order | Type | Provider Name | Start Date | Stop Date | Facility |
 
 
@@ -307,7 +307,7 @@ Scenario: Orders should be sorted by Order Type and then by Order Date after a g
   When the user scrolls to the bottom of the Orders Applet
   Then the Orders should be sorted by "Type" and then "Order Date"
 
-@f144_orders_filter_clearingb @US2497 @TA7853 @DE1237 @DE3819 @testing_scroll
+@f144_orders_filter_clearingb @US2497 @TA7853 @DE1237 @DE3819 @testing_scroll @F144_orders_filter 
 Scenario: Orders - Clear text filters when switching quick filters.
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active
@@ -321,7 +321,7 @@ Scenario: Orders - Clear text filters when switching quick filters.
   When the user scrolls to the bottom of the Orders Applet
   Then the Orders Applet is not filtered by text "Cardiology"
 
-@f144_orders_filter_text_persistence @US2496 @TA7984b @DE1080
+@f144_orders_filter_text_persistence @US2496 @TA7984b @DE1080 
 Scenario: Filter text is persisted when switching Orders applet views.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -333,11 +333,11 @@ Scenario: Filter text is persisted when switching Orders applet views.
   When the user maximizes the Order applet
   Then the Expanded Order applet is displayed
   And the "Text Filter" input should have the value "Cardiology" in the Orders applet
-  When the user clicks the "Minimize" button in the Orders applet
+  When the user minimizes the expanded Orders Applet
   Then the coversheet is displayed
   And the "Text Filter" input should have the value "Cardiology" in the Orders applet
 
-@f144_orders_filter_button_and_text_persistence @US2496 @TA7984c @DE1080 @DE3385
+@f144_orders_filter_button_and_text_persistence @US2496 @TA7984c @DE1080 @DE3385 
 Scenario: Filter text and button are both persisted when switching Orders applet views.
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -352,7 +352,7 @@ Scenario: Filter text and button are both persisted when switching Orders applet
   Then the Expanded Order applet is displayed
   And the selected Order type is "Imaging"
   And the "Text Filter" input should have the value "Cardiology" in the Orders applet
-  When the user clicks the "Minimize" button in the Orders applet
+  When the user minimizes the expanded Orders Applet
   Then the coversheet is displayed
   And the selected Order type is "Imaging"
   And the "Text Filter" input should have the value "Cardiology" in the Orders applet
@@ -437,7 +437,7 @@ Scenario: Ensure order number format is correct.
   And the user has selected All within the global date picker
 
   When the user selects "Consult" in the Orders applet Order Type dropdown
-  And clicks the first result in the "Orders Applet"
+  And clicks the first result in the Orders Applet
   Then the Order num is in the correct format: all digits
   When the user clicks the control "Next Button" in the "Orders modal"
   Then the Order num is in the correct format: all digits
@@ -458,7 +458,7 @@ Scenario: Ensure order number format is correct.
   And the user has selected All within the global date picker
 
   When the user selects "Consult" in the Orders applet Order Type dropdown
-  And clicks the first result in the "Orders Applet"
+  And clicks the first result in the Orders Applet
   Then the modal is displayed
   Then the Start Date/Time is in the correct format: mm/dd/yyyy hh:mm
   And the Stop Date/Time is in the correct format: mm/dd/yyyy hh:mm
@@ -478,7 +478,7 @@ Scenario: Ensure order number format is correct.
   Then the Start Date/Time is in the correct format: mm/dd/yyyy hh:mm
   And the Stop Date/Time is in the correct format: mm/dd/yyyy hh:mm
 
-@f144_order_applet_loads_new_rows @DE510 @DE599 @DE1398 @DE2902 @DE2901 @DE3448 @testing_scroll
+@f144_order_applet_loads_new_rows @DE510 @DE599 @DE1398 @DE2902 @DE2901 @DE3448 @testing_scroll 
   Scenario: Verify scrolling to the bottom of the order applet loads more records
   Given user searches for and selects "Eighteen,Patient"
   Then Cover Sheet is active
@@ -494,7 +494,7 @@ Scenario: Ensure order number format is correct.
   Then the "Orders" applet is finished loading
   When the user scrolls to the bottom of the expanded Orders Applet
   Then the Orders Applet table contains more then 300 rows
-  When the user clicks the "Minimize" button in the Orders applet
+  When the user minimizes the expanded Orders Applet
   Then the coversheet is displayed
   Then the "Orders" applet is finished loading
   When the user scrolls to the bottom of the Orders Applet
@@ -522,7 +522,7 @@ Scenario: Orders expand view applet displays all of the same details after apple
   When user refreshes Orders Applet
   Then the message on the Orders Applet does not say "An error has occurred"
 
-@F144_orders @US2921 @F144_orders_filter
+@F144_orders @US2921 @F144_orders_filter 
 Scenario: User can filter Expanded Orders applet 
   Given user searches for and selects "Seven,Patient"
   And Cover Sheet is active

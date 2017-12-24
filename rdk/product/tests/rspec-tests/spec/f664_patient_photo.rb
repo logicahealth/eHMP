@@ -26,7 +26,7 @@ describe 'f664_patient_photo.rb', acceptance: true do
 
     rdk_sync('10107V395912')
     rdk_sync('10108V420871')
-    rdk_sync('9E7A;100022')
+    rdk_sync('SITE;100022')
 
     @generic_image = \
       '/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQ' \
@@ -98,7 +98,7 @@ describe 'f664_patient_photo.rb', acceptance: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;100022')
+                           'pid' => 'SITE;100022')
 
       # puts response.body
       expect(response.code).to eq(200)
@@ -122,7 +122,7 @@ describe 'f664_patient_photo.rb', acceptance: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;848484')
+                           'pid' => 'SITE;848484')
       expect(response.code).to eq(200)
       expect(response.body).to eq(@generic_image)
     end

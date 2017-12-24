@@ -1,0 +1,15 @@
+Begin
+
+    execute immediate 'TRUNCATE TABLE activitydb.simple_match_value';
+
+    INSERT INTO ACTIVITYDB.SIMPLE_MATCH_VALUE
+    SELECT ID SIMPLE_MATCH_ID, LOWER(REGEXP_SUBSTR(MATCHVALUE, '[^,]+', 1, LEVEL)) MATCHVALUE
+            FROM ACTIVITYDB.SIMPLE_MATCH
+            CONNECT BY LEVEL <= REGEXP_COUNT(MATCHVALUE, '','') + 1 AND
+            PRIOR ID = ID AND
+            PRIOR SYS_GUID() IS NOT NULL;
+
+    COMMIT;
+
+End;
+/

@@ -71,7 +71,7 @@ public class OpenCDSMockEngineInstanceStateManager implements EngineInstanceStat
 		openCDS1.setId("oicu812");
 		openCDS1.setStatus(true);
 		openCDS1.setHost("IP       ");
-		openCDS1.setPort("8080");
+		openCDS1.setPort("PORT");
 
 		openCDSEngines.add(openCDS1);
 
@@ -81,7 +81,7 @@ public class OpenCDSMockEngineInstanceStateManager implements EngineInstanceStat
 		openCDS2.setId("c3p0");
 		openCDS2.setStatus(true);
 		openCDS2.setHost("IP         "); //obviously a bad one...
-		openCDS2.setPort("8080");
+		openCDS2.setPort("PORT");
 
 		openCDSEngines.add(openCDS2);
 	}

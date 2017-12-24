@@ -50,6 +50,12 @@ function mockApp() {
             cdsInvocationServer: {
                 host: 'bar',
                 port: '47'
+            },
+            inMemory: {
+            },
+            direct: {
+            },
+            groups: {
             }
         },
         logger: {

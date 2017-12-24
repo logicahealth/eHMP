@@ -64,7 +64,7 @@
                     {
                         "type": "uid",
                         "system": "http://vistacore.us/fhir/id/uid",
-                        "value": "urn:va:patient:9E7A:253:253"
+                        "value": "urn:va:patient:SITE:253:253"
                     },
                     {
                         "type": "dfn",
@@ -74,7 +74,7 @@
                     {
                         "type": "pid",
                         "system": "http://vistacore.us/fhir/id/pid",
-                        "value": "9E7A;253"
+                        "value": "SITE;253"
                     },
                     {
                         "type": "lrdfn",
@@ -311,7 +311,7 @@
                     {
                         "type": "uid",
                         "system": "http://vistacore.us/fhir/id/uid",
-                        "value": "urn:va:patient:9E7A:253:253"
+                        "value": "urn:va:patient:SITE:253:253"
                     },
                     {
                         "type": "dfn",
@@ -321,7 +321,7 @@
                     {
                         "type": "pid",
                         "system": "http://vistacore.us/fhir/id/pid",
-                        "value": "9E7A;253"
+                        "value": "SITE;253"
                     },
                     {
                         "type": "lrdfn",

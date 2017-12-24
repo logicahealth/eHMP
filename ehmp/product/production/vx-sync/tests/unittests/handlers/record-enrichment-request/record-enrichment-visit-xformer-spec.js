@@ -27,14 +27,14 @@ var originalVaVisitRecord = {
     'localId': 2200,
     'locationName': 'BECKY\'S CLINIC',
     'locationOos': false,
-    'locationUid': 'urn:va:location:9E7A:136',
+    'locationUid': 'urn:va:location:SITE:136',
     'patientClassCode': 'urn:va:patient-class:AMB',
     'patientClassName': 'Ambulatory',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'providers': [{
         'primary': true,
         'providerName': 'VEHU,TWENTYONE',
-        'providerUid': 'urn:va:user:9E7A:20023',
+        'providerUid': 'urn:va:user:SITE:20023',
         'role': 'P'
     }],
     'service': 'PSYCHIATRY',
@@ -43,7 +43,7 @@ var originalVaVisitRecord = {
     'stopCodeName': 'GENERAL SURGERY',
     'stopCodeUid': 'urn:va:stop-code:401',
     'typeName': 'BECKY\'S CLINIC VISIT',
-    'uid': 'urn:va:visit:9E7A:3:2200'
+    'uid': 'urn:va:visit:SITE:3:2200'
 };
 
 var originalVaVisitJob = {

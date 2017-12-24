@@ -6,8 +6,6 @@ define([
 ], function(Backbone, Marionette, _, HeaderTemplate) {
     'use strict';
 
-    var theView;
-
     //Modal Navigation Item View
     return Backbone.Marionette.ItemView.extend({
         events: {
@@ -15,10 +13,13 @@ define([
         },
 
         navigateModal: function(e) {
-            var $target = $(e.currentTarget),
-                id = $target.attr('id');
-
-            id === 'ccdPrevious' ? this.theView.getPrevModal() : this.theView.getNextModal();
+            var $target = this.$(e.currentTarget);
+            var id = $target.attr('id');
+            if (id === 'ccdPrevious') {
+                this.theView.getPrevModal();
+            } else {
+                this.theView.getNextModal();
+            }
         },
 
         template: HeaderTemplate

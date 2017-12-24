@@ -101,11 +101,17 @@ def verify_elements_not_equal(not_expected_element, actual_element)
   expect(actual_element).to_not eq(not_expected_element)
 end
 
-def verify_applet_exists(applet_id_attribute)
+def verify_applet_exists(applet_id_attribute, wait_time_sec = 5)
   driver = TestSupport.driver
-  applets = driver.find_elements(:css, "[data-appletid=#{applet_id_attribute}]")
+  loop_until  = Time.now + wait_time_sec
+  begin
+    applets = driver.find_elements(:css, "[data-appletid=#{applet_id_attribute}]")
 
-  expect(applets.size).to be_eql(1), "The number of found applets matching that id was #{applets.size}."
+    expect(applets.size).to be_eql(1), "The number of found applets matching that id was #{applets.size}."
+  rescue RSpec::Expectations::ExpectationNotMetError => e
+    retry if Time.now < loop_until
+    raise e
+  end
 end
 
 def input_into_control(container, modal_or_applet, control_name, input_text)
@@ -180,11 +186,13 @@ def navigate_in_ehmp(path = "")
   driver = TestSupport.driver  
   url = driver.current_url
   if path.strip.length == 0
-    #p "navigating to base"
     TestSupport.navigate_to_url(DefaultLogin.ehmpui_url) 
   elsif !url.include? path
-    #p "navigating to new url"
-    TestSupport.navigate_to_url(DefaultLogin.ehmpui_url+"/"+path) 
+    base_has_slash = DefaultLogin.ehmpui_url.end_with?('/')
+    path_has_slash = path.start_with?('/')
+    slash = (base_has_slash || path_has_slash) ? '' : '/'
+    full_url = "#{DefaultLogin.ehmpui_url}#{slash}#{path}"
+    TestSupport.navigate_to_url(full_url) 
   end  
   #p "current path #{driver.current_url}"
   TestSupport.wait_for_page_loaded
@@ -221,29 +229,21 @@ def get_container(key)
     container = OrdersContainer.instance
   when "text search"
     container = TextSearchContainer.instance
-  # DELETE WHEN ALL TESTS PASS IN PIPELINE
-  # when "documents"
-  #   container = DocumentsDateFilter.instance
   when "med review"
     container = MedReviewDateFilter.instance
   when "newsfeed"
     container = NewsFeedDateFilter.instance
   when "immunization gist"
     container = ImmunizationGist.instance
-  when "medications gist"
-    container = MedicationGistContainer.instance
-  when "allergies"
-    container = AllergiesGist.instance
   when "documents gist"
     container = DocumentsGistContainer.instance
   when "encounters gist"
     container = EncountersGist.instance
   when "problems gist"
     container = ConditionsGist.instance
-  when "reports gist"
-    container = ReportsGistContainer.instance
-  when "active medications"
-    container = ActiveMedications.instance
+  # delete when all tests pass/run in pipelines
+  # when "reports gist"
+  #   container = ReportsGistContainer.instance
   when "overview"
     container = Overview.instance
   else
@@ -345,16 +345,13 @@ Then(/^the "(.*?)" applet is finished loading$/) do |expected_applet_title|
   wait.until { driver.find_elements(:css, "[data-appletid=#{appletid}] .fa-spinner").size == 0 }
 end
 
-Then(/^the modal's title is "(.*?)"$/) do |expected_title|
-  # modal_title_key = "Modal Title"
-  # #@uc.wait_until_action_element_visible(modal_title_key, 15)
-  # #wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-  # #wait.until {
-  # #  p "expected: #{expected_title}   -- actual: #{@uc.get_element(modal_title_key).text}"
-  # #  @uc.get_element(modal_title_key).text == expected_title
-  # #}
-  # expect(@uc.perform_verification(modal_title_key, expected_title)).to be_true
+Then(/^the modal's title starts with "([^"]*)"$/) do |title|
+  modal = ModalElements.new
+  expect(modal.wait_for_fld_modal_title).to eq(true), "Expected Modal title to display"
+  expect(modal.fld_modal_title.text.upcase).to start_with title.upcase
+end
 
+Then(/^the modal's title is "(.*?)"$/) do |expected_title|
   @ehmp = PobParentApplet.new
   
   max_attempt = 4

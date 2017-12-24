@@ -13,7 +13,7 @@ Router.prototype.publish = function(jobs, options, callback) {
         callback = arguments[1];
     }
 
-    return callback(null, jobs);
+    return setTimeout(callback, 0, null, jobs);
 };
 
 Router.prototype.getPublisherForJob = function(job) {

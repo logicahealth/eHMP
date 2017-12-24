@@ -9,23 +9,34 @@ define([
     'app/applets/user_management/views/userManagementMultiUserEditModalView',
 ], function(Backbone, Marionette, $, Handlebars, appletUtil, eventHandler, UserManagementPermissionSetSelectionView, UserManagementMultiUserEditModalView) {
     "use strict";
+    var UMA_CHANNEL = ADK.Messaging.getChannel('user-management-applet');
     var loadingViewTemplate = '<p><i class="fa fa-spinner fa-spin"></i> Loading...</p>';
     var formView = ADK.UI.Form.extend({
-
+        className: 'auto-overflow-y',
+        parentCollectionEvents: {
+            checkResultsCount: function() {
+                if (this.parentCollection.length !== this.model.get('resultCount')) {
+                    this.setPaging();
+                }
+            },
+            showAlert: function(model) {
+                this.showAlert(model.get('icon'), model.get('type'), model.get('title'), model.get('message'));
+            }
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.parentCollection, this.parentCollectionEvents);
+            if (_.isFunction(ADK.UI.Form.prototype.onDestroy)) {
+                ADK.UI.Form.prototype.onDestroy.apply(this, arguments);
+            }
+        },
         onInitialize: function() {
             this.model = this.options.model;
             this.model.set('alertMessage', '');
             this.parentCollection = this.options.parentCollection;
             this.rootView = this.options.parentView;
-            var self = this;
-            this.parentCollection.on('checkResultsCount', function() {
-                if (self.parentCollection.length !== self.model.get('resultCount')) {
-                    self.setPaging();
-                }
-            });
-            this.parentCollection.on('showAlert', function(model) {
-                self.showAlert(model.get('icon'), model.get('type'), model.get('title'), model.get('message'));
-            });
+
+            this.bindEntityEvents(this.parentCollection, this.parentCollectionEvents);
+            this.sharedModel = ADK.UIResources.Fetch.Permission.SharedModel(this);
         },
         setPaging: function() {
             if (this.parentCollection.models.length > 0) {
@@ -55,23 +66,36 @@ define([
         enablePagingButtons: function() {
             this.footerView.enablePagingButtons();
         },
+        onShow: function() {
+            /** Check shared model in onShow since select component 
+             * checks for the picklist form value on render
+             **/
+            if (this.sharedModel.isReady) {
+                var basePermissionSetsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionSetsCollection(this.sharedModel.get('permissionSets').originalModels, {
+                    parse: true
+                });
+                this.ui.permissionSetsPicklistControl.trigger('control:picklist:set', basePermissionSetsCollection.toPicklist());
+            } else {
+                this.listenToOnce(this.sharedModel, 'fetch:success', function() {
+                    if (this.sharedModel.isReady) {
+                        var basePermissionSetsCollection = new ADK.UIResources.Fetch.Permission.UMAPermissionSetsCollection(this.sharedModel.get('permissionSets').originalModels, {
+                            parse: true
+                        });
+                        this.ui.permissionSetsPicklistControl.trigger('control:picklist:set', basePermissionSetsCollection.toPicklist());
+                    }
+                });
+            }
+        },
         onRender: function() {
             this.footerView.hideFooterContent();
-            var self = this;
-            appletUtil.getPermissionSets(function(permissionSets, errorMessage) {
-                if (errorMessage) {
-                    appletUtil.appletAlert.warning(self.parentCollection, 'Error Retrieving Permissions', errorMessage);
-                } else {
-                    self.ui.permissionSetsPicklistControl.trigger('control:picklist:set', permissionSets);
-                }
-            });
             this.enableSearchForm();
             if (appletUtil.getStorageModel('inResultsView') === true) {
                 this.hideSearchView();
             }
-            this.listenTo(ADK.Messaging, 'users-applet:launch-bulk-edit', function() {
-                self.showMultiEditView();
+            this.listenTo(UMA_CHANNEL, 'users-applet:launch-bulk-edit', function(triggerElement) {
+                this.showMultiEditView(triggerElement);
             });
+            this.clearAlert();
         },
         ui: {
             "searchButton": ".search-btn",
@@ -159,10 +183,9 @@ define([
                     control: "select",
                     name: "permissionSetValue",
                     extraClasses: ["col-xs-6", "permission-sets-picklist"],
-                    pickList: appletUtil.permissionSets,
+                    pickList: [],
                     srOnlyLabel: false,
-                    label: "Select permission set",
-                    title: "Use up and down arrows to view options and then press enter to select",
+                    label: "Select permission set"
                 }, {
                     control: "input",
                     name: "duzValue",
@@ -189,8 +212,7 @@ define([
                             name: "searchreturnlink",
                             label: "Back to Search",
                             disabled: false,
-                            icon: "fa-angle-double-left",
-                            title: "Press enter to return to user search form"
+                            icon: "fa-angle-double-left"
                         }],
                         hidden: true
                     }, {
@@ -235,7 +257,6 @@ define([
                     name: "Search",
                     label: "Search",
                     disabled: true,
-                    title: "Press enter to search",
                     id: "search-btn",
                     type: "submit"
                 }]
@@ -272,13 +293,20 @@ define([
             }
         },
         clearAlert: function() {
-            appletUtil.appletAlert.warning(this.parentCollection, '', '');
+            this.ui.alertBannerControl.trigger('control:hidden', true);
         },
-        showMultiEditView: function() {
-            var resetCollection = new Backbone.Collection(this.parentCollection.originalModels);
-            var deepClonedCollection = new Backbone.Collection(resetCollection.toJSON());
+        showMultiEditView: function(triggerElement) {
+            var initialUsersCollection = new Backbone.Collection();
+            if (appletUtil.getStorageModel('inResultsView') === true) {
+                var resetCollection = new Backbone.Collection(this.parentCollection.originalModels);
+                initialUsersCollection = new Backbone.Collection(resetCollection.toJSON());
+            }
             UserManagementMultiUserEditModalView.showModal({
-                initialUsersCollection: deepClonedCollection
+                initialUsersCollection: initialUsersCollection,
+                basePermissionSetsCollection: new ADK.UIResources.Fetch.Permission.UMAPermissionSetsCollection(this.sharedModel.get('permissionSets').originalModels, {
+                    parse: true
+                }),
+                triggerElement: triggerElement
             });
         },
         enableSearchForm: function() {
@@ -307,7 +335,11 @@ define([
         },
         showAlert: function(icon, type, title, message) {
             this.ui.alertBannerControl.trigger('control:hidden', false);
-            this.ui.alertBannerControl.trigger('control:icon', icon).trigger('control:type', type).trigger('control:title', title);
+            this.ui.alertBannerControl.trigger('control:update:config', {
+                icon: icon,
+                type: type,
+                title: title
+            });
             this.model.set('alertMessage', message);
         },
         disableFormAndSearch: function(startPage, elementTarget) {
@@ -357,12 +389,6 @@ define([
             var query = appletUtil.createUserSearchFilter(filterParameters, page);
             appletUtil.setStorageModel('lastQueryParams', query);
             eventHandler.createUserList(false, query, null, this.parentCollection, this, elementTarget);
-        },
-
-
-        onBeforeDestroy: function() {
-            this.parentCollection.off('reset');
-            this.parentCollection.off('checkResultsCount');
         }
     });
 

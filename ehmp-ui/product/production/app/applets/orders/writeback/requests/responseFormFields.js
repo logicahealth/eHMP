@@ -1,13 +1,8 @@
 define([
     'handlebars',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeFields',
     'app/applets/task_forms/activities/requests/responseEventHandler'
-], function(Handlebars, AssignmentTypeFields, responseEventHandler) {
+], function(Handlebars, responseEventHandler) {
     'use strict';
-    var bodyContents = [];
-    _.each(AssignmentTypeFields.getFields(true /*omitMeAssignmentOption*/ ), function(field) {
-        bodyContents.push(field);
-    });
 
     var FormFields = [{
         control: 'container',
@@ -26,14 +21,24 @@ define([
                         extraClasses: ['btn-primary', 'btn-sm'],
                         id: 'activityDetails',
                         label: 'Activity Details',
-                        type: 'button',
-                        title: 'Press enter for activity details'
+                        type: 'button'
                     }]
                 }]
             }, {
                 control: 'container',
                 extraClasses: ['row', 'background-color-pure-white', 'left-padding-md', 'right-padding-md', 'bottom-padding-sm'],
                 items: [{
+                    control: 'container',
+                    extraClasses: ['row'],
+                    items: [{
+                        control: 'alertBanner',
+                        type: 'info',
+                        name: 'beforeEarliestDateBanner',
+                        extraClasses: ['col-xs-12'],
+                        dismissible: true
+                    }]
+                },
+                {
                     control: 'container',
                     extraClasses: ['col-xs-12', 'all-padding-no'],
                     items: [{
@@ -184,26 +189,18 @@ define([
                         name: 'action',
                         label: 'Action',
                         required: true,
-                        pickList: [{
-                            value: responseEventHandler.REQUEST_COMPLETE,
-                            label: 'Mark as Complete'
-                        }, {
-                            value: responseEventHandler.REQUEST_CLARIFICATION,
-                            label: 'Return for Clarification'
-                        }, {
-                            value: responseEventHandler.REQUEST_DECLINE,
-                            label: 'Decline'
-                        }, {
-                            value: responseEventHandler.REQUEST_REASSIGN,
-                            label: 'Reassign'
-                        }]
+                        pickList: 'actionsPickList'
                     }]
                 }]
             }, {
-                control: 'container',
-                extraClasses: ['assignment-row'],
+                control: 'assignTo',
+                name: 'assignment',
+                options: {
+                    "me": false
+                },
+                extraClasses: ['bottom-padding-sm'],
                 hidden: true,
-                items: bodyContents
+                required: false
             }, {
                 control: 'container',
                 extraClasses: ['row', 'bottom-padding-sm', 'comment-row'],
@@ -258,7 +255,6 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm'],
                     id: 'responseAcceptButton',
                     label: 'Accept',
-                    title: 'Press enter to accept',
                     type: 'button'
                 }]
             }]

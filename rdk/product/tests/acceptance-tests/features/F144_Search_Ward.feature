@@ -8,7 +8,7 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Ward)
 
   @F144_SearchWard_2 @vxsync @enrich
   Scenario: Ward searches for patient using locationUid, filter
-    When the client requests for patients in ward location uid "urn:va:location:9E7A:w38" filtered by 'eq(familyName,"EIGHT")'s
+    When the client requests for patients in ward location uid "urn:va:location:SITE:w38" filtered by 'eq(familyName,"EIGHT")'s
     Then a successful response is returned
     And the client receives 1 VPR VistA result(s)
     And the VPR results contain
@@ -26,7 +26,7 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Ward)
 
     @F144_SearchWard_3 @vxsync @enrich
     Scenario: Ward searches for patient using locationUid, filter and making sure roomBed is in VPR results
-    When the client requests for patients in ward location uid "urn:va:location:9E7A:w8" filtered by 'eq(familyName,"EIGHTY")'
+    When the client requests for patients in ward location uid "urn:va:location:SITE:w8" filtered by 'eq(familyName,"EIGHTY")'
     Then a successful response is returned
     And the client receives 1 VPR VistA result(s)
     And the VPR results contain

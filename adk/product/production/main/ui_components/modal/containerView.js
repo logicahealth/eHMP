@@ -5,8 +5,9 @@ define([
     'jquery-ui/draggable',
     'underscore',
     'handlebars',
-    'main/Utils'
-], function(Backbone, Marionette, $, draggable, _, Handlebars, Utils) {
+    'main/Utils',
+    'api/Messaging'
+], function(Backbone, Marionette, $, draggable, _, Handlebars, Utils, Messaging) {
     "use strict";
 
     var DRAGGABLE_THRESHOLD = 0.75;
@@ -26,7 +27,7 @@ define([
                 eventString: 'show.bs.modal'
             }
         },
-        template: Handlebars.compile('<div id="mainModalDialog" tabindex="-1" class="modal-dialog{{#if extraClasses}} {{extraClasses}}{{/if}} {{sizeClass}} {{draggable}}" aria-live="assertive"></div>'),
+        template: Handlebars.compile('<div id="mainModalDialog" class="modal-dialog{{#if extraClasses}} {{extraClasses}}{{/if}} {{sizeClass}} {{draggable}}"></div>'),
         initialize: function(options) {
             this.resetOptions(options, true);
         },
@@ -89,8 +90,8 @@ define([
         attributes: {
             'id': 'mainModal',
             'role': 'dialog',
-            'aria-label':'', //intentionally left empty so that JAWS doesn't repeat itself
-            'aria-describedby':'modal-content'
+            'tabindex': "-1",
+            'aria-labelledby':'mainModalLabel'
         },
         regions: {
             modalDialogRegion: '#mainModalDialog'
@@ -164,7 +165,14 @@ define([
                         cursor: 'move'
                     });
                 }
-                this.$el.find('#mainModalDialog').focus();
+                if(!!this.model.get('backdrop')){ 
+                    Messaging.trigger('obscure:background:content');
+                }
+            },
+            'hide.bs.modal':function(e) {
+                if(!!this.model.get('backdrop') && _.get(this.$el.data('bs.modal'), '$body', $('body')).find('.modal-backdrop.in').length === 1) {
+                    Messaging.trigger('reveal:background:content');
+                }
             },
             'focusin.bs.modal': function(e) {
                 e.stopPropagation();

@@ -2,6 +2,12 @@
 
 require('../../../../../env-setup');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-radiology-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '00000099';
 
@@ -72,7 +78,7 @@ var sampleVprRadiology = {
 };
 
 describe('jmeadows-radiology-xformer', function() {
-    var result = xformer(sampleDodRadiology, mockEdipi);
+    var result = xformer(log, sampleDodRadiology, mockEdipi);
     it('tansforms sample radiology to vpr', function() {
         expect(result.codes).toEqual(sampleVprRadiology.codes);
         expect(result.facilityCode).toEqual(sampleVprRadiology.facilityCode);

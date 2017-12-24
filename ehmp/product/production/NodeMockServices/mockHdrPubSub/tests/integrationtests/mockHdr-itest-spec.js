@@ -4,7 +4,7 @@ var request = require('request');
 var _ = require('underscore');
 
 var mocksVmIp = 'IP        ';
-var mockHdrPort = '8999';
+var mockHdrPort = 'PORT';
 
 var testPatientLocalId = '0';
 var testPatientStationNumber = '547';
@@ -18,7 +18,7 @@ var moment = require('moment');
 
 var pubsubConfig = {
   "host": "IP        ",
-  "port": 8999,
+  "port": PORT,
   "protocol": "http",
   "path": "repositories.URL       /fpds/vpr/",
   "server": "HMPTest",

@@ -6,7 +6,7 @@ var errors = require('../common/errors');
 
 function getData(req, pid, refferenceDate, callback) {
     var config = req.app.config;
-    var jdsPath = '/vpr/' + pid + '/index/immunization?filter=ne(removed,true)';
+    var jdsPath = '/vpr/' + pid + '/index/immunization';
     var options = _.extend({}, config.jdsServer, {
         url: jdsPath,
         logger: req.logger,

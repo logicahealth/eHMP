@@ -3,6 +3,12 @@
 require('../../../../../env-setup');
 
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-dischargeSummary-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 var mockEdipi = '00001';
 
@@ -29,7 +35,7 @@ var sampleVprDischargeSummary = { referenceDateTime: 1320950895000,
        uid: 'urn:va:document:DOD:00001:3cc445968192d500d5a2ddbf23ab4952605f0b0c_20110502114150' } ],
   dodComplexNoteUri: null };
 
-var result = xformer(sampleDodDischargeSummary[0], mockEdipi);
+var result = xformer(log, sampleDodDischargeSummary[0], mockEdipi);
 
 //console.log(result);
 describe('dodDischargeSummaryToVPR', function(){

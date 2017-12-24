@@ -18,24 +18,24 @@ var mockConfig = {
     delay: 5,
     rpcContext: 'HMP SYNCHRONIZATION CONTEXT',
     vistaSites: _.defaults(wConfig.vistaSites, {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 20000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -64,7 +64,7 @@ describe('appointments-handler integration test', function() {
         var testError = null;
 
         runs(function() {
-            var job = {type: 'appointments', siteId: '9E7A', clinic: '123'};
+            var job = {type: 'appointments', siteId: 'SITE', clinic: '123'};
 
             var mockEnvironment = {};
             var mockPublisher = new Publisher(log, mockConfig, job.type);

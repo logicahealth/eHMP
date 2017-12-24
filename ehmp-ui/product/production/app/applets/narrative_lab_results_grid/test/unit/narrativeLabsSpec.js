@@ -61,20 +61,20 @@ define([
                     'micro': false,
                     'observed': '19971023',
                     'organizerType': 'accession',
-                    'pid': '9E7A;8',
+                    'pid': 'SITE;8',
                     'qualifiedName': '(urine, urine cath. wash)',
                     'resulted': '',
                     'results': [{
                         'localTitle': 'LR ELECTRON MICROSCOPY REPORT',
-                        'resultUid': 'urn:va:document:9E7A:8:EM;7028976',
-                        'uid': 'urn:va:lab:9E7A:8:EM;7028976'
+                        'resultUid': 'urn:va:document:SITE:8:EM;7028976',
+                        'uid': 'urn:va:lab:SITE:8:EM;7028976'
                     }],
                     'specimen': 'urine, urine cath. wash',
                     'stampTime': '19971023000000',
                     'statusCode': 'urn:va:lab-status:completed',
                     'statusName': 'completed',
                     'summary': '(urine, urine cath. wash)',
-                    'uid': 'urn:va:lab:9E7A:8:EM;7028976'
+                    'uid': 'urn:va:lab:SITE:8:EM;7028976'
                 }, {
                     'abnormal': false,
                     'categoryCode': 'urn:va:lab-category:SP',
@@ -88,20 +88,20 @@ define([
                     'micro': false,
                     'observed': '20000126000000',
                     'organizerType': 'accession',
-                    'pid': '9E7A;8',
+                    'pid': 'SITE;8',
                     'qualifiedName': '(ear)',
                     'resulted': '',
                     'results': [{
                         'localTitle': 'LR SURGICAL PATHOLOGY REPORT',
-                        'resultUid': 'urn:va:document:9E7A:8:SP;6999872.99996',
-                        'uid': 'urn:va:lab:9E7A:8:SP;6999872.99996'
+                        'resultUid': 'urn:va:document:SITE:8:SP;6999872.PORT6',
+                        'uid': 'urn:va:lab:SITE:8:SP;6999872.99996'
                     }],
                     'specimen': 'ear',
                     'stampTime': '20000126000000',
                     'statusCode': 'urn:va:lab-status:completed',
                     'statusName': 'completed',
                     'summary': '(ear)',
-                    'uid': 'urn:va:lab:9E7A:8:SP;6999872.99996'
+                    'uid': 'urn:va:lab:SITE:8:SP;6999872.99996'
                 }];
             });
 

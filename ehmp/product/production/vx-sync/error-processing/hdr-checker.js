@@ -8,7 +8,7 @@ function check(logger, config, callback) {
     var url = 'http://' + config.hdr.defaults.host + ':' + config.hdr.defaults.adminPort + '/ping';
 	request(url, function(error, response, body) {
 		if (error) {
-			logger.info('hdr-checker.check() Error attempting to connect to "%s": %s', url, error);
+			logger.error('hdr-checker.check() Error attempting to connect to "%s": %s', url, error);
 			return callback(null, false);
 		}
 

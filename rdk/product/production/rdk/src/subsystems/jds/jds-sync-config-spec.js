@@ -73,8 +73,8 @@ describe('jds-sync-config\'s', function() {
                 hmpServer: {
                     host: 'hmphost',
                     port: 3,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED'
+                    accessCode: 'SITE;500',
+                    verifyCode: 'USER  ;PW      '
                 },
                 jdsSync: {
                     settings: {
@@ -83,8 +83,8 @@ describe('jds-sync-config\'s', function() {
                     }
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 }
             },
             subsystems: {}

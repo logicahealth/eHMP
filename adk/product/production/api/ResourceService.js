@@ -477,30 +477,5 @@ define([
         }
     };
 
-    var setPatientFetchParams = function (inPatient, opts) {
-        var options = _.extend({}, opts);
-        var patient = (options.patient || inPatient);
-        if (!_.isUndefined(patient)) {
-            if (_.isUndefined(options.criteria)) {
-                options.criteria = {};
-            }
-            //Pid will be used if exists unless patientIdentifierType specified to ICN
-            if (options.patientIdentifierType && patient.get(options.patientIdentifierType)) {
-                options.criteria.pid = patient.get(options.patientIdentifierType);
-            } else if (patient.get("pid")) {
-                options.criteria.pid = patient.get("pid");
-            } else if (patient.get("icn")) {
-                options.criteria.pid = patient.get("icn");
-            } else {
-                options.criteria.pid = patient.get("id");
-            }
-
-            if (patient.has("acknowledged")) {
-                options.criteria._ack = 'true';
-            }
-        }
-        return options;
-    };
-
     return resourceService;
 });

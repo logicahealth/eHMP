@@ -1,0 +1,7 @@
+"cds-team-test-build-%branch%" { 
+  template = 'templates/team-test-build.tpl'
+	description = "cds acceptance test build for the team branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/cds.git'
+	gitBranch = '%branch%'
+}

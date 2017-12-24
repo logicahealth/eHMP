@@ -1,0 +1,50 @@
+<div class="detail-modal-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Appointment Details</h5>
+        </div>
+        <p class="col-xs-4">
+            <strong>Date/Time:</strong><br />
+            <span>{{dateTimeFormatted}}</span>
+        </p>
+        <p class="col-xs-4">
+            <strong>Facility/Location:</strong><br />
+            <span>{{facility_clinic}}</span>
+        </p>
+        <p class="col-xs-4">
+            <strong>Provider:</strong><br />
+            <span>{{providerName}}
+        </span>
+        </p>
+    </div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Contact Info</h5>
+        </div>
+        <p class="col-xs-4">
+            <strong>Patient Phone:</strong><br />
+            <span>{{formatPhone phoneNumber}}</span>
+        </p>
+        <p class="col-xs-4">
+            <strong>Patient Email:</strong><br />
+            <span>{{emailAddress}}</span>
+        </p>
+        <p class="col-xs-4">
+            <strong>Emergency Contact:</strong><br />
+            <span>{{emergencyContactFormatted}}</span>
+        </p>
+    </div>
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <h5 class="bottom-border-grey-dark">Comments:</h5>
+            <p>{{comments}}</p>
+        </div>
+    </div>
+    {{#if instruction}}
+    <div class="row top-margin-sm">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-link all-padding-no" data-link="additional-instructions">Additional Instructions to Patient</button>
+        </div>
+    </div>
+    {{/if}}
+</div>

@@ -16,7 +16,7 @@
     <DBEncStartPassphrase>G0MqaVV+Ut5/8/TpQke4wbWPXKP+bzPZdfKiK2bVBLU=</DBEncStartPassphrase>
     <DBEncStartRequired>true</DBEncStartRequired>
     <DBEncStartUsername><%= node[:jds][:cache_key_identifier] %></DBEncStartUsername>
-    <DefaultSecurityDomain><%= node[:hostname] %></DefaultSecurityDomain>
+    <DefaultSecurityDomain><%= node[:jds][:security_domain] %></DefaultSecurityDomain>
     <Description>System security parameters</Description>
     <InactiveLimit>90</InactiveLimit>
     <InvalidLoginLimit>5</InvalidLoginLimit>
@@ -366,9 +366,9 @@
     <TwoFactorEnabled>false</TwoFactorEnabled>
   </Services>
   <Services>
-    <AutheEnabled>0</AutheEnabled>
-    <AutheEnabledCapabilities>0</AutheEnabledCapabilities>
-    <Capabilities>0</Capabilities>
+    <AutheEnabled>1024</AutheEnabled>
+    <AutheEnabledCapabilities>1024</AutheEnabledCapabilities>
+    <Capabilities>921</Capabilities>
     <Description>Controls Enterprise Cache Protocol (ECP)</Description>
     <Enabled>true</Enabled>
     <HttpOnlyCookies>false</HttpOnlyCookies>

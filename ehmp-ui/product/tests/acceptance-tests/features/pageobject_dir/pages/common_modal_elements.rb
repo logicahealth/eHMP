@@ -12,4 +12,9 @@ class ModalElements < SitePrism::Page
   element :btn_yes, ".modal-footer .alert-continue"
   element :btn_no, ".modal-footer .alert-cancel"
   element :fld_modal_body, ".modal-body"
+
+  def add_navigation_btns
+    self.class.element(:btn_next, '#toNext')
+    self.class.element(:btn_previous, '#toPrevious')
+  end
 end

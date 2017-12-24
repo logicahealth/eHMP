@@ -84,8 +84,8 @@ Create Quick Order
                     "button1": "Hello",
                     "listBox": ["med 1", "med 2"]
                 },
-                "siteId": "9E7A",
-                "createdBy": "urn:va:user:9E7A:10000000238",
+                "siteId": "SITE",
+                "createdBy": "urn:va:user:SITE:10000000238",
                 "active": true
             }
 
@@ -151,8 +151,8 @@ Update Quick Order
                     "active": true,
                     "type": "quickorder",
                     "timestamp": "2016-02-18T20:04:53.135Z",
-                    "siteId": "9E7A",
-                    "createdBy": "urn:va:user:9E7A:10000000270"
+                    "siteId": "SITE",
+                    "createdBy": "urn:va:user:SITE:10000000270"
                 },
                 "status": 201
             }
@@ -204,8 +204,8 @@ Search Quick Order by name
                             "uid": "54333f74970fas45d15aaa6f",
                             "name": "Hypertensive Patient",
                             "scope": "individual",
-                            "siteId": "9E7A",
-                            "createdBy": "urn:va:user:9E7A:10000000238",
+                            "siteId": "SITE",
+                            "createdBy": "urn:va:user:SITE:10000000238",
                             "active": true
                         }
                     ]
@@ -243,8 +243,8 @@ Get Quick Order
                         "button1": "Hello",
                         "listBox": ["med 1", "med 2"]
                     },
-                    "siteId": "9E7A",
-                    "createdBy": "urn:va:user:9E7A:10000000238",
+                    "siteId": "SITE",
+                    "createdBy": "urn:va:user:SITE:10000000238",
                     "active": true
                 }
             }

@@ -31,8 +31,8 @@ describe('osync-admission-handler.js', function() {
             'name': "panorama",
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -234,7 +234,7 @@ describe('osync-admission-handler.js', function() {
 
                 mockConfig = {};
                 mockConfig.vistaSites = {};
-                mockConfig.vistaSites['9E7A'] = mockRPCConfig;
+                mockConfig.vistaSites['SITE'] = mockRPCConfig;
 
                 handler(logger, mockConfig, mockEnvironment, job, function(err) {
                     expect(err).toEqual({
@@ -295,8 +295,8 @@ describe('osync-admission-handler.js', function() {
             'name': "panorama",
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -345,9 +345,9 @@ describe('osync-admission-handler.js', function() {
 
             runs(function() {
                 job.type = 'admissions';
-                job.siteId = '9E7A';
+                job.siteId = 'SITE';
 
-                mockConfig.vistaSites['9E7A'] = mockRPCConfig;
+                mockConfig.vistaSites['SITE'] = mockRPCConfig;
                 mockConfig.rpcContext = 'HMP SYNCHRONIZATION CONTEXT';
 
                 var mockPublisher = new Publisher(logger, mockConfig, job.type);
@@ -468,7 +468,6 @@ describe('osync-admission-handler.js', function() {
                     expect(err).toBeFalsy();
                     expect(resultJobs).toContain(jasmine.objectContaining({
                         type: 'sync',
-                        jpid: jasmine.any(String),
                         referenceInfo: {
                             requestId: 'admissions-requestId',
                             sessionId: 'admissions-sessionId'
@@ -485,7 +484,6 @@ describe('osync-admission-handler.js', function() {
                     }));
                     expect(resultJobs).toContain(jasmine.objectContaining({
                         type: 'sync',
-                        jpid: jasmine.any(String),
                         referenceInfo: {
                             requestId: 'admissions-requestId',
                             sessionId: 'admissions-sessionId'

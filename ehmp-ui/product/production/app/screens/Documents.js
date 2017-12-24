@@ -53,6 +53,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "documents",
+            'instanceId': 'applet-1',
             "title": "Documents",
             "region": "center",
             "dataRow": "1",

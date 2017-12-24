@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.EVENT_MATCH_ACTION")
+@Table(name = "EVENT_MATCH_ACTION", schema = "ACTIVITYDB")
 public class EventMatchAction {
 
 	@Id
@@ -28,7 +28,7 @@ public class EventMatchAction {
 		this.id = id;
 	}
 
-	@Column(name = "SIGNAL_CONTENT")
+	@Column(name = "SIGNAL_CONTENT", length=2048)
 	private String signalContent;
 	
 	/**
@@ -112,6 +112,8 @@ public class EventMatchAction {
 	public void setEventMatchInstanceId(long eventMatchInstanceId) {
 		this.eventMatchInstanceId = eventMatchInstanceId;
 	}	
+	
+	public EventMatchAction() { }
 	
 	public EventMatchAction(BigDecimal id, String signalContent, String signalName, String eventMatchDefinitionId, 
 			String eventMatchVersion, long eventMatchInstanceId) {

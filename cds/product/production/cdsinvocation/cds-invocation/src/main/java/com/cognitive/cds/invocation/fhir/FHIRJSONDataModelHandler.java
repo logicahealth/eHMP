@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +85,7 @@ public abstract class FHIRJSONDataModelHandler implements DataModelHandlerIFace 
     // FhirDataRetrievrer to be used.
 
     @Override
-    public String buildDataModel(InvocationMode mode, List<String> queries, Context ctx, Properties parameter, Object inputDataModel, boolean validate)
+    public String buildDataModel(InvocationMode mode, List<String> queries, Context ctx, Map<String, Object> parameter, Object inputDataModel, boolean validate)
             throws DataRetrievalException, DataValidationException {
 
         IFhirDataRetriever retriever = createFhirDataRetriever();
@@ -235,9 +235,7 @@ public abstract class FHIRJSONDataModelHandler implements DataModelHandlerIFace 
         }
 
         if (parameter != null) {
-            Iterator<Object> itr = parameter.keySet().iterator();
-            while (itr.hasNext()) {
-                Object key = itr.next();
+            for (String key : parameter.keySet()) {
                 Object value = parameter.get(key);
                 if (value instanceof BaseResource) {
                     BaseResource br = (BaseResource) value;

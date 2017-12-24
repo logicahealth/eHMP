@@ -5,7 +5,7 @@
   "link": [
     {
       "relation": "self",
-      "url": "http://IP               /resource/fhir/patient/9E7A;129/diagnosticreport?name=urn:va:ien:60:1359:139"
+      "url": "http://IP               /resource/fhir/patient/SITE;129/diagnosticreport?name=urn:va:ien:60:1359:139"
     }
   ],
   "total": 5,
@@ -26,7 +26,7 @@
         "status": "final",
         "issued":  "2016-02-19T13:55:00",
         "subject": {
-          "reference": "Patient/9E7A;129"
+          "reference": "Patient/SITE;129"
         },
         "performer": {
           "reference": "5dac20ed-57d7-477f-8fbf-cc0560957fa2",
@@ -148,7 +148,7 @@
         "identifier": [
           {
             "system": "urn:oid:2.16.840.1.113883.6.233",
-            "value": "urn:va:lab:9E7A:129:CH;7019779.864549;500027"
+            "value": "urn:va:lab:SITE:129:CH;7019779.864549;500027"
           }
         ],
         "serviceCategory": {
@@ -177,7 +177,7 @@
     "resource":{"resourceType":"ValueSet","description": "TEST Description", "identifier": [
           {
             "system": "urn:oid:2.16.840.1.113883.6.233",
-            "value": "urn:va:lab:9E7A:129:CH;7019779.864549;500027"
+            "value": "urn:va:lab:SITE:129:CH;7019779.864549;500027"
           }
         ],"name":"RF","description": "TEST Description","expansion":{"contains":[{"system":"LOINC","code":"46437-0"},{"system":"LOINC","code":"5299-3"},{"system":"LOINC","code":"14034-3"},{"system":"LOINC","code":"15203-3"}]}}
     }

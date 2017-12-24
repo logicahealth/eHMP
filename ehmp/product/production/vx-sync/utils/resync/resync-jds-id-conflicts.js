@@ -150,11 +150,11 @@ function resyncNeeded(patientIdentifier, log, environment, callback) {
 
     environment.jds.getSyncStatus(patientIdentifier, function(error, response, result) {
         if (error) {
-            log.warn('resync-jds-id-conflicts.resyncNeeded: There was an error checking sync status for patient identifier %j.  Error: %s', patientIdentifier, error);
+            log.error('resync-jds-id-conflicts.resyncNeeded: There was an error checking sync status for patient identifier %j.  Error: %s', patientIdentifier, error);
             return callback(null, true);
         }
         if (response.statusCode !== 200) {
-            log.warn('resync-jds-id-conflicts.resyncNeeded: There was an error checking sync status for patient identifier %j.  Error: %j', patientIdentifier, response.body);
+            log.error('resync-jds-id-conflicts.resyncNeeded: There was an error checking sync status for patient identifier %j.  Error: %j', patientIdentifier, response.body);
             return callback(null, true);
         }
 

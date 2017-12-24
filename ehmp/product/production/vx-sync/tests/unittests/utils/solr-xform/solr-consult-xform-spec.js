@@ -42,7 +42,7 @@ describe('solr-consult-xform.js', function() {
                         'enteredBy': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
                         'name': 'COMPLETE/UPDATE',
                         'responsible': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                        'resultUid': 'urn:va:document:9E7A:8:1079'
+                        'resultUid': 'urn:va:document:SITE:8:1079'
                     }
                 ],
                 'category': 'C',
@@ -56,20 +56,20 @@ describe('solr-consult-xform.js', function() {
                 'lastUpdateTime': '19990504151350',
                 'localId': '209',
                 'orderName': 'HEMATOLOGY NEW NAME',
-                'orderUid': 'urn:va:order:9E7A:8:9869',
+                'orderUid': 'urn:va:order:SITE:8:9869',
                 'patientClassCode': 'urn:va:patient-class:IMP',
                 'patientClassName': 'Inpatient',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'place': 'Bedside',
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'reason': 'this is for patient ant,test',
                 'results': [
                     {
                         'localTitle': 'BLEEDING DISORDER',
-                        'summary': 'ProcedureResult{uid=\'urn:va:document:9E7A:8:1079\'}',
-                        'uid': 'urn:va:document:9E7A:8:1079'
+                        'summary': 'ProcedureResult{uid=\'urn:va:document:SITE:8:1079\'}',
+                        'uid': 'urn:va:document:SITE:8:1079'
                     }
                 ],
                 'service': 'HEMATOLOGY NEW NAME',
@@ -77,7 +77,7 @@ describe('solr-consult-xform.js', function() {
                 'statusName': 'COMPLETE',
                 'summary': 'HEMATOLOGY HEMATOLOGY NEW NAME Cons',
                 'typeName': 'HEMATOLOGY HEMATOLOGY NEW NAME Cons',
-                'uid': 'urn:va:consult:9E7A:8:209',
+                'uid': 'urn:va:consult:SITE:8:209',
                 'urgency': 'Routine'
             };
             var solrRecord = xformer(vprRecord, log);

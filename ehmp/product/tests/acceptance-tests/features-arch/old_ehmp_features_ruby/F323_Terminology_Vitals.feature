@@ -6,7 +6,7 @@ Feature: F111  Normalization of Vitals Data
 @terminology_vitals @VPR
 Scenario: An authorized user can access VA Vitals and see standardized LOINC values when defined
 	Given a patient with "vitals" in multiple VistAs
-	And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "9E7A" site(s)
+	And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "SITE" site(s)
 	When the client requests "vitals" for the patient "5000000341V359724" in VPR format  
     Then the VPR results contain "vitals" terminology from "DOD Ncid, VUID to LOINC (VA)"
 	  | field         | value                                 |
@@ -71,5 +71,5 @@ Scenario: An authorized user can access DOD Vitals and see standardized LOINC va
 	    | codes.code    | 2178                 	|
 	      
 
- #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+ #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
     

@@ -3,100 +3,53 @@ define([
     'backbone',
     'marionette',
     'gridster',
-    'hbs!app/applets/workspaceManager/list/previewWorkspaceTemplate',
+    'hbs!app/applets/workspaceManager/list/previewWorkspaceTemplate'
 ], function(_, Backbone, Marionette, gridster, previewWorkspaceTemplate) {
-
     'use strict';
+    
+    var INITIAL_HEIGHT = 260; //corresponds to height of gridster ul in modal body
+    var X = 25; // using X as the best desired max width for applets before horizontal scroll rules apply
+    var Y = (INITIAL_HEIGHT) / 12 - 8;
+    var INITIAL_WIDGET_BASE_DEMENSIONS = [X,Y];
+    
+    var PreviewWorkspaceView = Backbone.Marionette.LayoutView.extend({
 
-    var PreviewWorkspaceView = Backbone.Marionette.ItemView.extend({
         template: previewWorkspaceTemplate,
-        initialize: function() {
-            this.model = new Backbone.Model();
-            this.model.set({
-                'screenId': this.screenId,
-                'screenTitle': this.screenTitle
-            });
-            var template = ADK.UserDefinedScreens.getGridsterTemplateForPreview(ADK.ADKApp.Screens[this.screenId]);
-            if (this.screenId === 'documents-list')
-                template = this.getTemplateForDocumentsList();
-            this.model.set('gridsterTemplate', template);
-        },
-        getTemplateForDocumentsList: function() {
-            //this is a special case for documents-list only
-            return '<div id="gridsterPreview" class="gridster"><ul><li data-row="1" data-col="1" data-sizex="12" data-sizey="12" ><h5 class="applet-title">Documents</h5><p>expanded</p></li></ul></div>';
 
+        regions: {
+            gridster: '.gridsterContainer'
         },
-        setContinerHeight: function() {
-            this.$el.find('.workspaceManagerForms').height($(window).height() + 'px');
-        },
-        onRender: function() {
-            var self = this;
-            this.setContinerHeight();
-            $(window).on("resize.previewworkspaceview",(function() {
-                self.setContinerHeight();
-                self.setGridsterBaseDimension();
-            }));
-        },
-        onShow: function() {
-            // first element to focus for 508
-            // this.$el.find('.closePreview').focus();
-            this.initGridster();
-        },
-        getHighestGridsterCol: function() {
-            return Math.max(12, this.gridster.get_highest_occupied_cell().col);
-        },
-        getGridsterDimension: function() {
-            var $container = this.$el.find('.gridsterContainer');
-            var containerHeight = $container.height();
-            var hightestCol = this.getHighestGridsterCol();
-            var x = 25; // using X as the best desired max width for applets before horizontal scroll rules apply
-            var y = (containerHeight) / 12 - 8;
-            return [x, y];
-        },
-        setGridsterBaseDimension: function() {
-            this.gridster.resize_widget_dimensions({
-                widget_base_dimensions: this.getGridsterDimension()
-            });
-        },
-        initGridster: function() {
-            this.gridster = this.$el.find(".gridsterContainer ul").gridster({
-                namespace: '#gridsterPreview',
-                widget_selector: "li",
-                widget_base_dimensions: [1, 1],
-                widget_margins: [4, 4],
-                helper: 'clone',
-                avoid_overlapped_widgets: true,
-                autogrow_cols: true,
-                min_cols: 100,
-                resize: {
-                    enabled: false
-                },
-                draggable: {
-                    ignore_dragging: function() {
-                        return true;
+
+        onBeforeShow: function() {
+            this.gridsterView = new ADK.Views.GridsterView({
+                screenId: this.screenId,
+                gridsterOptions: {
+                    namespace: '#gridsterPreview',
+                    widget_selector: "li",
+                    widget_base_dimensions: [1, 1],
+                    widget_margins: [4, 4],
+                    helper: 'clone',
+                    avoid_overlapped_widgets: true,
+                    autogrow_cols: true,
+                    min_cols: 100,
+                    resize: {
+                        enabled: false
+                    },
+                    draggable: {
+                        ignore_dragging: function() {
+                            return true;
+                        }
                     }
                 }
-            }).data('gridster');
+            });
 
-            if (this.gridster) {
-                var initialHeight = 260;
-                var initialWidth = 568;
-                var hightestCol = this.getHighestGridsterCol();
-                var x = 25; // using X as the best desired max width for applets before horizontal scroll rules apply
-                var y = (initialHeight) / 12 - 8;
-
-                this.gridster.resize_widget_dimensions({
-                    widget_base_dimensions: [x, y]
-                });
-            }
+            return this.getRegion('gridster').show(this.gridsterView);
         },
-        onBeforeDestroy: function() {
-            $(window).off("resize.previewworkspaceview");
-            if(this.gridster)
-                this.gridster.destroy();
+
+        onShow: function() {
+            this.gridsterView.gridsterModel.set('widget_base_dimensions', INITIAL_WIDGET_BASE_DEMENSIONS);
         }
     });
 
     return PreviewWorkspaceView;
-
 });

@@ -19,10 +19,10 @@ public class ASURules {
     private static final Logger log = LoggerFactory.getLogger(ASURules.class);
 
     // Static instance shared across all threads
-    private static ASURules asuRulesInstance;
+    private volatile static ASURules asuRulesInstance;
 
     // The instance that has been refreshed from JDS and that will become the new asuRulesInstance
-    private static ASURules refreshedAsuRulesInstance;
+    private volatile static ASURules refreshedAsuRulesInstance;
 
     private Map<String, List<AsuRuleDef>> asuRules;
     private Map<String, String> parentDocDefinitions;
@@ -194,7 +194,7 @@ public class ASURules {
     private boolean isMatchRoleName(String documentRoleName, String ruleRoleName) {
         if (NullChecker.isNotNullish(documentRoleName) &&
                 NullChecker.isNotNullish(ruleRoleName) &&
-                documentRoleName.trim().toUpperCase().equals(ruleRoleName.trim().toUpperCase())) {
+                documentRoleName.trim().equalsIgnoreCase(ruleRoleName.trim())) {
             return true;
         }
         return false;
@@ -206,7 +206,7 @@ public class ASURules {
 
 
     private boolean doesActionNameMatch(AsuRuleDef asuRule, String actionName) {
-        return doesRuleExist(asuRule) && NullChecker.isNotNullish(asuRule.getActionName()) && asuRule.getActionName().toUpperCase().equals(actionName);
+        return doesRuleExist(asuRule) && NullChecker.isNotNullish(asuRule.getActionName()) && asuRule.getActionName().equalsIgnoreCase(actionName);
     }
 
 
@@ -227,9 +227,19 @@ public class ASURules {
             return;
         }
 
+        StringBuilder sb = new StringBuilder();
+        appendDetails(failure, documentDetails, actionName, sb);
+        sb.append(successFailureReason);
+        sb.append("\r\n");
+
+        log.info(sb.toString());
+    }
+
+    private void appendDetails(boolean failure, ASUDocumentDetails documentDetails, String actionName, StringBuilder sb)
+    {
         String docDefUid = documentDetails.getDocDefUid();
         String documentName = getDisplayName(docDefUid);
-        StringBuilder sb = new StringBuilder();
+
         sb.append("\r\n \r\n");
 
         if (NullChecker.isNotNullish(documentName)) {
@@ -240,9 +250,9 @@ public class ASURules {
             }
             sb.append(documentName.toUpperCase());
             sb.append(" - Action Name: ");
-            sb.append(actionName);
+            sb.append(avoidLogForging(actionName));
         }
-        sb.append(documentDetails.toString());
+        appendDocumentDetails(documentDetails, sb);
         sb.append(" \r\n PARENT DOCUMENTS: ");
         docDefUid = getParentDoc(docDefUid);
         while (docDefUid != null) {
@@ -255,10 +265,26 @@ public class ASURules {
             }
             docDefUid = getParentDoc(docDefUid);
         }
-        sb.append(successFailureReason);
-        sb.append("\r\n");
+    }
 
-        log.info(sb.toString());
+    private void appendDocumentDetails(ASUDocumentDetails documentDetails, StringBuilder sb) {
+        sb.append(" \r\n docDefUid: ").append(avoidLogForging(documentDetails.getDocDefUid()));
+        sb.append(" \r\n docStatus: ").append(avoidLogForging(documentDetails.getDocStatus()));
+
+        if (NullChecker.isNotNullish(documentDetails.getActionNames())) {
+            sb.append(" \r\n actionNamesList: ").append(avoidLogForging(documentDetails.getActionNames().toString()));
+        }
+        if (NullChecker.isNotNullish(documentDetails.getUserClassUids())) {
+            sb.append(" \r\n userClassUids: ").append(avoidLogForging(documentDetails.getUserClassUids().toString()));
+        } else {
+            sb.append(" \r\n userClassUids: null ");
+        }
+
+        if (NullChecker.isNotNullish(documentDetails.getRoleNames())) {
+            sb.append(" \r\n roleNames: ").append(avoidLogForging(documentDetails.getRoleNames().toString()));
+        } else {
+            sb.append(" \r\n roleNames: null ");
+        }
     }
 
     private void logSuccessfulMatch(boolean isMatchClassUid, boolean isMatchRoleName,
@@ -271,6 +297,9 @@ public class ASURules {
         boolean isAnd = isAnd(asuRule, true);
 
         StringBuilder sb = new StringBuilder();
+
+        appendDetails(false, documentDetails, actionName, sb);
+
         sb.append(" \r\n isAnd: ");
         sb.append(isAnd);
         sb.append(" isMatchClassUid: ");
@@ -283,8 +312,16 @@ public class ASURules {
         sb.append(asuRule.getDescription());
         sb.append(" \r\n ");
         sb.append(reason);
+        sb.append("\r\n");
 
-        logDetails(false, sb.toString(), documentDetails, actionName);
+        log.info(sb.toString());
+    }
+
+    private String avoidLogForging(String s) {
+        if (s != null) {
+            s = s.replace('\n', '_').replace('\r', '_');
+        }
+        return s;
     }
 
     private String getParentDoc(String childDocUid) {

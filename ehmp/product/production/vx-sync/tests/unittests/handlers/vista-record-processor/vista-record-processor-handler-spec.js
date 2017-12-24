@@ -39,7 +39,7 @@ var rootJob = {
 };
 
 var lastUpdateTimeValue = '3150106-1624';
-var vistaIdValue = 'C877';
+var vistaIdValue = 'SITE';
 
 var syncStartJobsValue = [{
 	collection: 'syncStart',
@@ -47,7 +47,7 @@ var syncStartJobsValue = [{
 	metaStamp: {
 		stampTime: '20150114115126',
 		sourceMetaStamp: {
-			'C877': {
+			'SITE': {
 				pid: vistaIdValue + ';1',
 				localId: '1',
 				stampTime: '20150114115126',
@@ -56,10 +56,10 @@ var syncStartJobsValue = [{
 						domain: 'allergy',
 						stampTime: '20150114115126',
 						eventMetaStamp: {
-							'urn:va:allergy:C877:1:751': {
+							'urn:va:allergy:SITE:1:751': {
 								stampTime: '20150114115126'
 							},
-							'urn:va:allergy:C877:1:752': {
+							'urn:va:allergy:SITE:1:752': {
 								stampTime: '20150114115126'
 							}
 						}
@@ -74,7 +74,7 @@ var syncStartJobsValue = [{
 	metaStamp: {
 		stampTime: '20150114115126',
 		sourceMetaStamp: {
-			'C877': {
+			'SITE': {
 				pid: vistaIdValue + ';2',
 				localId: '1',
 				stampTime: '20150114115126',
@@ -83,10 +83,10 @@ var syncStartJobsValue = [{
 						domain: 'allergy',
 						stampTime: '20150114115126',
 						eventMetaStamp: {
-							'urn:va:allergy:C877:2:300': {
+							'urn:va:allergy:SITE:2:300': {
 								stampTime: '20150114115126'
 							},
-							'urn:va:allergy:C877:2:301': {
+							'urn:va:allergy:SITE:2:301': {
 								stampTime: '20150114115126'
 							}
 						}
@@ -98,7 +98,7 @@ var syncStartJobsValue = [{
 }];
 
 var vistaDataJobAllergyObjectWithoutPid = {
-	uid: 'urn:va:allergy:9E7A:1:27837'
+	uid: 'urn:va:allergy:SITE:1:27837'
 };
 
 var vistaDataJobsValue = [{

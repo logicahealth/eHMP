@@ -27,8 +27,16 @@ define([
             sortCaret: '.sort-caret',
             columnHeader: '.header'
         },
+        behaviors: {
+            QuickTile: {
+                childContainerSelector: function() {
+                    return this.$el.find('[data-medication-container=medication-list]');
+                },
+                rowTagName: 'div'
+            }
+        },
         childEvents: {
-            'toolbar': 'onChildClicked'
+            'panelClick': 'onChildClicked'
         },
         onChildClicked: function(child) {
             if (this.mostRecentlyClickedChild !== child) {
@@ -50,7 +58,7 @@ define([
                 }
             },
             'shown.bs.collapse': function() {
-                this.redrawGraph();
+                this.renderHeaderGraph();
                 this.ui.caret.removeClass('fa-chevron-right');
                 this.ui.caret.addClass('fa-chevron-down');
                 this.ui.accordionButton.attr("title", "Press enter to collapse " + this.model.get('medicationDisplayType') + " accordion.");
@@ -103,13 +111,10 @@ define([
             });
         },
         onRender: function() {
-            if (this.model.collection && this.model.collection.indexOf(this.model) !== 0) {
+            if (this.model.collection) {
                 this.ui.caret.addClass('fa fa-chevron-right');
                 this.ui.accordionButton.attr("aria-expanded","false");
                 this.ui.accordionButton.attr("title","Press enter to expand " + this.model.get('medicationType') + " accordion.");
-            } else {
-                this.ui.caret.addClass('fa fa-chevron-down');
-                this.ui.accordionPanel.addClass('in');
             }
 
             if (this.model.get('medications').length > 0) {
@@ -145,7 +150,7 @@ define([
                 }
             });
         },
-        redrawGraph: function() {
+        renderHeaderGraph: function() {
             if (this.hasGraph) {
                 this.setHighChartsOptions(false);
                 this.ui.graphHeader.highcharts().reflow();
@@ -154,10 +159,7 @@ define([
             ADK.Messaging.trigger('medication_review:superAccordionClicked');
         },
         onAttach: function() {
-            if (this.hasGraph) {
-                this.ui.graphHeader.highcharts().reflow();
-                this.setHighChartsOptions(true);
-            }
+            this.renderHeaderGraph();
         },
         onBeforeDestroy: function() {
             if (this.hasGraph) {
@@ -195,7 +197,7 @@ define([
                     this.collection.setUpSortForColumn(this.defaultSortColumnName);
                 } else {
                     this.collection.setUpSortForColumn(currentColumnName);
-                    this.previouslySortedHeader = headerElement[0];                    
+                    this.previouslySortedHeader = headerElement[0];
                 }
 
                 this.collection.sort();

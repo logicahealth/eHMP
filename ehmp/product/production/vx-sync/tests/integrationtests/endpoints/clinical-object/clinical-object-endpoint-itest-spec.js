@@ -4,12 +4,15 @@ require('../../../../env-setup');
 
 var request = require('request');
 var _ = require('underscore');
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
+var vx_sync_port = testConfig.vxsyncPort;
+
 
 var httpConfig = {
     path: '/clinicalObject',
     method: 'POST',
-    port: '8080',
+    port: vx_sync_port,
     host: vx_sync_ip,
     json: true,
     timeout: 60000,

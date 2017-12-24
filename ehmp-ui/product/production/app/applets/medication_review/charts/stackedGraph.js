@@ -17,7 +17,12 @@ define([
         var medicationChartConfig;
         var stackedGraphModel;
         var stackedGraphObject;
-        var medicationGroups = MedsResource.getMedicationGroup(params.collection, params.typeName.toLowerCase());
+        var collection = _.get(params, 'collection');
+        var typeName = _.get(params, 'typeName', '');
+        var graphType = _.get(params, 'graphType', '');
+        var instanceId = _.get(params, 'instanceId');
+
+        var medicationGroups = MedsResource.getMedicationGroup(collection, typeName.toLowerCase());
 
         var stacked = function(medicationGroupType, groupType) {
             var inpatientGroup, outpatientGroup, group;
@@ -35,13 +40,16 @@ define([
             stackedGraphObject = {};
             buildChart = new ChartBuilder(medicationGroupType, true);
             medicationChartConfig = new GraphConfig(buildChart);
+
             stackedGraphModel = new Backbone.Model({
                 resultUnits: buildChart.instructions,
                 observed: undefined,
-                typeName: params.typeName.toUpperCase(),
-                graphType: params.graphType,
+                typeName: typeName.toUpperCase(),
+                qualifiedName: typeName,
+                vaType: medicationGroupType.get('vaType'),
+                graphType: graphType,
                 applet_id: 'medication_review',
-                collection: params.collection,
+                collection: collection,
                 uid: buildChart.uid,
                 subMedsInternalGroupModels: group,
                 medicationGroupType: medicationGroupType,
@@ -51,7 +59,7 @@ define([
             $.extend(true, stackedGraphObject, stackedGraphModel.attributes);
             stackedGraphObject.model = stackedGraphModel;
             stackedGraphObject.chart = medicationChartConfig;
-            stackedGraphObject.requesterInstanceId = params.instanceId;
+            stackedGraphObject.requesterInstanceId = instanceId;
             ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
                 response: stackedGraphObject,
                 requestParams: params
@@ -69,10 +77,10 @@ define([
             stackedGraphModel = new Backbone.Model({
                 resultUnits: '--',
                 observed: undefined,
-                typeName: params.typeName.toUpperCase(),
-                graphType: params.graphType,
+                typeName: typeName.toUpperCase(),
+                graphType: graphType,
                 applet_id: 'medication_review',
-                collection: params.collection,
+                collection: collection,
                 uid: null,
                 noData: true
             });
@@ -80,7 +88,7 @@ define([
             $.extend(true, stackedGraphObject, stackedGraphModel.attributes);
             stackedGraphObject.model = stackedGraphModel;
             stackedGraphObject.chart = AppletHelper.chartOptions;
-            stackedGraphObject.requesterInstanceId = params.instanceId;
+            stackedGraphObject.requesterInstanceId = instanceId;
             ADK.Messaging.getChannel('stackedGraph').trigger('readyToChart', {
                 response: stackedGraphObject,
                 requestParams: params

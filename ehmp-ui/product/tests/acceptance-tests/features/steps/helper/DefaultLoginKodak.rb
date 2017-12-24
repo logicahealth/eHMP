@@ -5,8 +5,8 @@ class DefaultLoginKodak
   @@default_wait_time = 30
 
   @@facility_name = "KODAK"
-  @@accesscode = "REDACTED"
-  @@verifycode = "REDACTED"
+  @@accesscode = "USER  "
+  @@verifycode = "PW      "
 
   @@screenshot_folder = ENV.keys.include?('SCREENSHOT_FOLDER') ? ENV['SCREENSHOT_FOLDER'] : "screenshots"
 

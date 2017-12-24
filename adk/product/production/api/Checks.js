@@ -95,8 +95,8 @@ define([
                         });
                         var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                             template: Handlebars.compile([
-                                '{{ui-button "No" classes="btn-default btn-sm alert-cancel" title="Press enter to cancel"}}',
-                                '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue" title="Press enter to continue"}}'
+                                '{{ui-button "No" classes="btn-default btn-sm alert-cancel"}}',
+                                '{{ui-button "Yes" classes="btn-primary btn-sm alert-continue"}}'
                             ].join('\n')),
                             events: {
                                 'click button.alert-cancel': function() {

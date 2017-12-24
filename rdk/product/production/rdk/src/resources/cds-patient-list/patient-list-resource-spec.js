@@ -49,7 +49,7 @@ function createPatientlistJson(name) {
             'expression': '{eq: [ {or: [\'A.A\',\'B.B\'], {} ]}',
             'date': '2015-03-10T12:54:56.899Z',
             'scope': 'private',
-            'owner': 'REDACTED'
+            'owner': 'PW         '
         }
     };
     //making these optional for required parameter testing...
@@ -219,9 +219,8 @@ describe('CDS Patient List Resource', function() {
             remove: function() {
                 return;
             }
-
         });
-        sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, init, callback) {
+        sinon.stub(cdsSubsystem, 'getCDSDB').callsFake(function(logger, dbName, init, callback) {
             callback(null, db);
         });
     });
@@ -230,10 +229,9 @@ describe('CDS Patient List Resource', function() {
     describe('Criteria endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            criteria.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
             criteria.getCriteria(mockReqResUtil.createRequestWithParam(null, null), res);
@@ -242,10 +240,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            criteria.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createCriteriaJson();
@@ -255,10 +252,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            criteria.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
             mockData.testJson = createCriteriaJson('criteria1');
@@ -269,10 +265,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            criteria.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
             mockData.testJson = createCriteriaJson('criteria1');
@@ -283,10 +278,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            criteria.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createCriteriaJson();
@@ -299,10 +293,9 @@ describe('CDS Patient List Resource', function() {
     describe('Definition endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
             definition.getDefinition(mockReqResUtil.createRequestWithParam(null, null), res);
@@ -311,10 +304,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createDefinitionJson();
@@ -324,10 +316,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
             mockData.testJson = createDefinitionJson('definition1');
@@ -338,10 +329,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
             mockData.testJson = createDefinitionJson('definition1');
@@ -352,10 +342,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createDefinitionJson();
@@ -365,10 +354,9 @@ describe('CDS Patient List Resource', function() {
 
         it('COPY responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createDefinitionJson();
@@ -377,10 +365,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Not Found when source missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST no source, returns a 404 (not found)
             mockData.echo = null;
@@ -392,10 +379,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Conflict when destination exists', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            definition.init(appReference());
 
             //POST no source, returns a 404 (not found)
             mockData.echo = createDefinitionJson();
@@ -411,10 +397,9 @@ describe('CDS Patient List Resource', function() {
     describe('Patient-list endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
             patientlist.getPatientList(mockReqResUtil.createRequestWithParam(null, null), res);
@@ -423,10 +408,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createPatientlistJson();
@@ -436,10 +420,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST provide required name - echo - exists
             mockData.testJson = createPatientlistJson('patientlist1');
@@ -450,10 +433,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
             mockData.testJson = createPatientlistJson('patientlist1');
@@ -464,10 +446,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createPatientlistJson();
@@ -477,10 +458,9 @@ describe('CDS Patient List Resource', function() {
 
         it('COPY responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
             mockData.testJson = createPatientlistJson();
@@ -489,10 +469,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Not Found when source missing', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST no source, returns a 404 (not found)
             mockData.echo = null;
@@ -504,10 +483,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Conflict when destination exists', function() {
 
-            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+            sinon.stub(MongoClient, 'connect').callsFake(function(string, options, callback) {
                 callback(null, db);
             });
-            patientlist.init(appReference());
 
             //POST no source, returns a 404 (not found)
             mockData.echo = createPatientlistJson();

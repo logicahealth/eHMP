@@ -34,7 +34,7 @@ describe('osync-clinic-utils', function() {
             var environment = createEnvironment(log, config);
             var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', undefined, undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', undefined, undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -46,7 +46,7 @@ describe('osync-clinic-utils', function() {
             var environment = createEnvironment(log, config);
             var osyncClinicUtils = new OsyncClinicUtils(log, config, environment);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, true, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, true, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -60,11 +60,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, true, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, true, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error adding UID urn:va:location:9E7A:110 to osynclinic store');
+                expect(error).toEqual('Error adding UID urn:va:location:SITE:110 to osynclinic store');
             });
         });
 
@@ -76,11 +76,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, true, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, true, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error adding UID urn:va:location:9E7A:110 to osynclinic store');
+                expect(error).toEqual('Error adding UID urn:va:location:SITE:110 to osynclinic store');
             });
         });
 
@@ -92,11 +92,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, true, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, true, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 added to osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 added to osynclinic store');
             });
         });
 
@@ -106,11 +106,11 @@ describe('osync-clinic-utils', function() {
 
             environment.jds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving location operational data from JDS for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving location operational data from JDS for UID urn:va:location:SITE:110');
             });
         });
 
@@ -122,11 +122,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving location operational data from JDS for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving location operational data from JDS for UID urn:va:location:SITE:110');
             });
         });
 
@@ -142,11 +142,11 @@ describe('osync-clinic-utils', function() {
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error: UID urn:va:location:9E7A:110 is not stored in JDS');
+                expect(error).toEqual('Error: UID urn:va:location:SITE:110 is not stored in JDS');
             });
         });
 
@@ -165,7 +165,7 @@ describe('osync-clinic-utils', function() {
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', 'C', false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', 'C', false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
@@ -192,11 +192,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [null]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', 'C', false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', 'C', false, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 added to osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 added to osynclinic store');
             });
         });
 
@@ -217,11 +217,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [null]);
 
-            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:9E7A:110', undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd(undefined, undefined, 'urn:va:location:SITE:110', undefined, false, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 added to osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 added to osynclinic store');
             });
         });
 
@@ -231,11 +231,11 @@ describe('osync-clinic-utils', function() {
 
             environment.jds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving location operational data from JDS for clinic 4E NORTH at site 9E7A');
+                expect(error).toEqual('Error retrieving location operational data from JDS for clinic 4E NORTH at site SITE');
             });
         });
 
@@ -248,11 +248,11 @@ describe('osync-clinic-utils', function() {
             }], [undefined]);
 
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving location operational data from JDS for clinic 4E NORTH at site 9E7A');
+                expect(error).toEqual('Error retrieving location operational data from JDS for clinic 4E NORTH at site SITE');
             });
         });
 
@@ -271,11 +271,11 @@ describe('osync-clinic-utils', function() {
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, 'C', false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, 'C', false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error: Clinic 4E NORTH at site 9E7A of type C is not stored in JDS');
+                expect(error).toEqual('Error: Clinic 4E NORTH at site SITE of type C is not stored in JDS');
             });
         });
 
@@ -291,11 +291,11 @@ describe('osync-clinic-utils', function() {
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error: Clinic 4E NORTH at site 9E7A is not stored in JDS');
+                expect(error).toEqual('Error: Clinic 4E NORTH at site SITE is not stored in JDS');
             });
         });
 
@@ -309,7 +309,7 @@ describe('osync-clinic-utils', function() {
                 data: {
                     totalItems: 1,
                     items: [{
-                        uid: 'urn:va:location:9E7A:110',
+                        uid: 'urn:va:location:SITE:110',
                         type: 'C'
                     }]
                 }
@@ -319,11 +319,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 added to osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 added to osynclinic store');
             });
         });
 
@@ -337,7 +337,7 @@ describe('osync-clinic-utils', function() {
                 data: {
                     totalItems: 1,
                     items: [{
-                        uid: 'urn:va:location:9E7A:110'
+                        uid: 'urn:va:location:SITE:110'
                     }]
                 }
             }]);
@@ -346,11 +346,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 added to osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 added to osynclinic store');
             });
         });
 
@@ -391,9 +391,9 @@ describe('osync-clinic-utils', function() {
                 data: {
                     totalItems: 2,
                     items: [{
-                        uid: 'urn:va:location:9E7A:110'
+                        uid: 'urn:va:location:SITE:110'
                     }, {
-                        uid: 'urn:va:location:9E7A:111'
+                        uid: 'urn:va:location:SITE:111'
                     }]
                 }
             }]);
@@ -402,12 +402,12 @@ describe('osync-clinic-utils', function() {
                 statusCode: 201
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicAdd('9E7A', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicAdd('SITE', '4E NORTH', undefined, undefined, false, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('There are 2 clinics to choose from, please rerun with uid');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110', 'urn:va:location:9E7A:111']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110', 'urn:va:location:SITE:111']);
             });
         });
     });
@@ -431,11 +431,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:SITE:110', function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:SITE:110');
             });
         });
 
@@ -447,11 +447,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:SITE:110', function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:SITE:110');
             });
         });
 
@@ -475,11 +475,11 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:SITE:110', function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error removing UID urn:va:location:9E7A:110 from osynclinic store');
+                expect(error).toEqual('Error removing UID urn:va:location:SITE:110 from osynclinic store');
             });
         });
 
@@ -499,11 +499,11 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:9E7A:110', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove(undefined, 'urn:va:location:SITE:110', function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
-                expect(result).toEqual('UID urn:va:location:9E7A:110 removed from osynclinic store');
+                expect(result).toEqual('UID urn:va:location:SITE:110 removed from osynclinic store');
             });
         });
 
@@ -513,11 +513,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRemove('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove('SITE', undefined, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site 9E7A');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site SITE');
             });
         });
 
@@ -531,19 +531,19 @@ describe('osync-clinic-utils', function() {
                 ''
             ], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRemove('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove('SITE', undefined, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
-                expect(error).toEqual('Error removing UID urn:va:location:9E7A:110 from osynclinic store');
+                expect(error).toEqual('Error removing UID urn:va:location:SITE:110 from osynclinic store');
                 expect(result).toEqual('Successfully removed 0 clinic(s)');
                 expect(clinicList).toEqual([]);
             });
@@ -561,22 +561,22 @@ describe('osync-clinic-utils', function() {
                 ''
             ], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined,
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRemove('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove('SITE', undefined, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
-                expect(error).toEqual('Error removing UID urn:va:location:9E7A:111 from osynclinic store');
+                expect(error).toEqual('Error removing UID urn:va:location:SITE:111 from osynclinic store');
                 expect(result).toEqual('Successfully removed 1 clinic(s)');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110']);
             });
         });
 
@@ -592,21 +592,21 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined,
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRemove('9E7A', undefined, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRemove('SITE', undefined, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully removed 2 clinic(s)');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110', 'urn:va:location:9E7A:111']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110', 'urn:va:location:SITE:111']);
             });
         });
 
@@ -648,11 +648,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE', function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site 9E7A');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site SITE');
             });
         });
 
@@ -664,11 +664,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE', function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site 9E7A');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site SITE');
             });
         });
 
@@ -682,18 +682,18 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }]
             },
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE', function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully listed 1 clinic(s)');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110']);
             });
         });
 
@@ -732,24 +732,24 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE', function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully listed 2 clinic(s)');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110', 'urn:va:location:9E7A:111']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110', 'urn:va:location:SITE:111']);
             });
         });
 
-        //Add osyncClinicGet for multiple sites - 9E7A,C877
+        //Add osyncClinicGet for multiple sites - SITE,SITE
         // 2 results
         // >2 results
 
@@ -765,21 +765,21 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 },{
-                    uid: 'urn:va:location:C877:110'
+                    uid: 'urn:va:location:SITE:110'
                 }]
             },
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A,C877', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE,SITE', function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully listed 2 clinic(s)');
-                expect(clinicList).toContain('urn:va:location:9E7A:110');
-                expect(clinicList).toContain('urn:va:location:C877:110');
+                expect(clinicList).toContain('urn:va:location:SITE:110');
+                expect(clinicList).toContain('urn:va:location:SITE:110');
             });
         });
         it('Normal path: Pass more than 1 site, return 1 per site', function(){
@@ -794,27 +794,27 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 },{
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 },{
-                    uid: 'urn:va:location:C877:110'
+                    uid: 'urn:va:location:SITE:110'
                 },{
-                    uid: 'urn:va:location:C877:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicGet('9E7A,C877', function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicGet('SITE,SITE', function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully listed 4 clinic(s)');
-                expect(clinicList).toContain('urn:va:location:9E7A:110');
-                expect(clinicList).toContain('urn:va:location:C877:110');
-                expect(clinicList).toContain('urn:va:location:9E7A:111');
-                expect(clinicList).toContain('urn:va:location:C877:111');
+                expect(clinicList).toContain('urn:va:location:SITE:110');
+                expect(clinicList).toContain('urn:va:location:SITE:110');
+                expect(clinicList).toContain('urn:va:location:SITE:111');
+                expect(clinicList).toContain('urn:va:location:SITE:111');
             });
         });
     });
@@ -838,11 +838,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:SITE:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:SITE:110');
             });
         });
 
@@ -854,11 +854,11 @@ describe('osync-clinic-utils', function() {
                 statusCode: 404
             }], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:SITE:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:SITE:110');
             });
         });
 
@@ -869,15 +869,15 @@ describe('osync-clinic-utils', function() {
             environment.pjds._setResponseData([true], [''], [{
                 data: {
                     totalItems: 1,
-                    items: ['urn:va:location:9E7A:110']
+                    items: ['urn:va:location:SITE:110']
                 }
             }]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:SITE:110', null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:9E7A:110');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for UID urn:va:location:SITE:110');
             });
         });
 
@@ -891,7 +891,7 @@ describe('osync-clinic-utils', function() {
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:9E7A:110', null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun(undefined, 'urn:va:location:SITE:110', null, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeUndefined();
@@ -906,11 +906,11 @@ describe('osync-clinic-utils', function() {
 
             environment.pjds._setResponseData([true], [''], [undefined]);
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('SITE', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
                 expect(clinicList).toBeUndefined();
-                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site 9E7A');
+                expect(error).toEqual('Error retrieving clinics from osynclinic data store for site SITE');
             });
         });
 
@@ -924,9 +924,9 @@ describe('osync-clinic-utils', function() {
                 ''
             ], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined
@@ -936,7 +936,7 @@ describe('osync-clinic-utils', function() {
                 callback('Publisher error');
             });
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('SITE', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
@@ -958,9 +958,9 @@ describe('osync-clinic-utils', function() {
                 ''
             ], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined,
@@ -971,13 +971,13 @@ describe('osync-clinic-utils', function() {
                 callback(job.clinic === '111' ?'Publisher error':null);
             });
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('SITE', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeTruthy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(error).toContain('Error publishing jobId');
                 expect(result).toEqual('Successfully published 1 osync clinic job(s) to osync-appointments tube');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110']);
             });
         });
 
@@ -993,21 +993,21 @@ describe('osync-clinic-utils', function() {
                 statusCode: 200
             }], [{
                 items: [{
-                    uid: 'urn:va:location:9E7A:110'
+                    uid: 'urn:va:location:SITE:110'
                 }, {
-                    uid: 'urn:va:location:9E7A:111'
+                    uid: 'urn:va:location:SITE:111'
                 }]
             },
                 undefined,
                 undefined
             ]);
 
-            osyncClinicUtils.osyncClinicRun('9E7A', undefined, null, function(error, result, clinicList) {
+            osyncClinicUtils.osyncClinicRun('SITE', undefined, null, function(error, result, clinicList) {
                 expect(error).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(clinicList).toBeDefined();
                 expect(result).toEqual('Successfully published 2 osync clinic job(s) to osync-appointments tube');
-                expect(clinicList).toEqual(['urn:va:location:9E7A:110', 'urn:va:location:9E7A:111']);
+                expect(clinicList).toEqual(['urn:va:location:SITE:110', 'urn:va:location:SITE:111']);
             });
         });
 

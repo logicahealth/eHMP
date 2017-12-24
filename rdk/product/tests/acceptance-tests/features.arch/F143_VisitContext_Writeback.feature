@@ -5,16 +5,16 @@ Feature: F143 - Establish Visit Context (Write-back)
 
 @US1970_appointments 
 Scenario: Client requests appointments in VPR format from RDK
-    Given a visit patient with pid "9E7A;229" has been synced through the RDK API
-    When the client requests appointments summary for the patient "9E7A;229" in RDK format 
+    Given a visit patient with pid "SITE;229" has been synced through the RDK API
+    When the client requests appointments summary for the patient "SITE;229" in RDK format 
     Then a successful response is returned
     And the VPR results contain more than 0 records
 
 
 @US1970_admissions 
 Scenario: Client requests admissions in VPR format from RDK
-    Given a visit patient with pid "9E7A;229" has been synced through the RDK API
-    When the client requests admissions for the patient "9E7A;229" in RDK format 
+    Given a visit patient with pid "SITE;229" has been synced through the RDK API
+    When the client requests admissions for the patient "SITE;229" in RDK format 
     Then a successful response is returned
     And the VPR results contain more than 0 records
     And the kind is "Admission" for every record
@@ -22,7 +22,7 @@ Scenario: Client requests admissions in VPR format from RDK
 
 @US1970_provider 
 Scenario: Client requests providers in VPR format from RDK
-    When client requests providers with facility code "9E7A"in RDK format
+    When client requests providers with facility code "SITE"in RDK format
     Then a successful response is returned
     And the VPR results contain more than 0 records
 

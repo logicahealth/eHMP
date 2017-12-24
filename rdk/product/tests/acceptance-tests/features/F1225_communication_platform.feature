@@ -29,7 +29,7 @@ Scenario: Verify input parameter userId is required
 Scenario: Verify input parameter ehmpAppVersion is required
     When client requests communications for
       | parameter        | value                        |
-      | requester.userId | urn:va:user:9E7A:10000000270 |
+      | requester.userId | urn:va:user:SITE:10000000270 |
       | category.code[]  | http://ehmp.DNS   /messageCategories/announcements-terms          |
       | category.code[]  | http://ehmp.DNS   /messageCategories/announcements-system         |
     Then a bad request response is returned
@@ -39,7 +39,7 @@ Scenario: Verify input parameter ehmpAppVersion is required
 Scenario: Verify input parameter category is required
     When client requests communications for
       | parameter                | value                        |
-      | requester.userId         | urn:va:user:9E7A:10000000270 |
+      | requester.userId         | urn:va:user:SITE:10000000270 |
       | requester.ehmpAppVersion | sample.data                  |
 
     Then a bad request response is returned
@@ -49,7 +49,7 @@ Scenario: Verify input parameter category is required
 Scenario: Verify userId must match currently logged on user
     When client requests communications for
       | parameter                | value                        |
-      | requester.userId         | urn:va:user:9E7A:10000000272 |
+      | requester.userId         | urn:va:user:SITE:10000000272 |
       | requester.ehmpAppVersion | sample.data                    |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms          |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system         |
@@ -60,7 +60,7 @@ Scenario: Verify userId must match currently logged on user
 Scenario: Verify client receives only completed messages when does not specify a status
     When client requests communications for
       | parameter                | value                        |
-      | requester.userId         | urn:va:user:9E7A:10000000270 |
+      | requester.userId         | urn:va:user:SITE:10000000270 |
       | requester.ehmpAppVersion | sample.data                    |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms          |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system         |
@@ -71,7 +71,7 @@ Scenario: Verify client receives only completed messages when does not specify a
 Scenario: Verify client recieves only completed messages when specifies a status of completed
     When client requests communications for
       | parameter                | value                                                       |
-      | requester.userId         | urn:va:user:9E7A:10000000270                                |
+      | requester.userId         | urn:va:user:SITE:10000000270                                |
       | requester.ehmpAppVersion | sample.data                                                   |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms                                         |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system                                        |
@@ -83,7 +83,7 @@ Scenario: Verify client recieves only completed messages when specifies a status
 Scenario: Verify client recieves only deleted messages when specifies a status of delete
     When client requests communications for
       | parameter                | value                                    |
-      | requester.userId         | urn:va:user:9E7A:10000000270             |
+      | requester.userId         | urn:va:user:SITE:10000000270             |
       | requester.ehmpAppVersion | sample.data                                |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms                      |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system                     |
@@ -95,7 +95,7 @@ Scenario: Verify client recieves only deleted messages when specifies a status o
 Scenario: Verify client recieves only rquested categories
     When client requests communications for
       | parameter                | value                                    |
-      | requester.userId         | urn:va:user:9E7A:10000000270             |
+      | requester.userId         | urn:va:user:SITE:10000000270             |
       | requester.ehmpAppVersion | sample.data                                |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms                      |
     Then a successful response is returned
@@ -105,7 +105,7 @@ Scenario: Verify client recieves only rquested categories
 Scenario: Verify term announcements are returned in descending order
     When client requests communications for
       | parameter                | value                                                    |
-      | requester.userId         | urn:va:user:9E7A:10000000270                             |
+      | requester.userId         | urn:va:user:SITE:10000000270                             |
       | requester.ehmpAppVersion | sample.data                                              |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms |
     Then a successful response is returned
@@ -115,7 +115,7 @@ Scenario: Verify term announcements are returned in descending order
 Scenario: Verify system announcements are returned in descending order
     When client requests communications for
       | parameter                | value                                    |
-      | requester.userId         | urn:va:user:9E7A:10000000270             |
+      | requester.userId         | urn:va:user:SITE:10000000270             |
       | requester.ehmpAppVersion | sample.data                                |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system                      |
     Then a successful response is returned
@@ -125,7 +125,7 @@ Scenario: Verify system announcements are returned in descending order
 Scenario: Verify client recieves only rquested versions and announcements for all versions
     When client requests communications for
       | parameter                | value                                    |
-      | requester.userId         | urn:va:user:9E7A:10000000270             |
+      | requester.userId         | urn:va:user:SITE:10000000270             |
       | requester.ehmpAppVersion | sample.data                            |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms                      |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-system                     |

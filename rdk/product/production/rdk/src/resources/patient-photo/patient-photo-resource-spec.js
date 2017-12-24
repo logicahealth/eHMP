@@ -48,9 +48,9 @@ describe('Patient Photo Resource Test', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    dfn: '9E7A;8',
+                    dfn: 'SITE;8',
                     vhic: 'VHIC;32758',
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             app: {
@@ -65,21 +65,21 @@ describe('Patient Photo Resource Test', function() {
 
                     },
                     vistaSites: {
-                        '9E7A': {
-                            accessCode: 'REDACTED',
-                            verifyCode: 'REDACTED'
+                        'SITE': {
+                            accessCode: 'USER  ',
+                            verifyCode: 'PW      '
                         }
                     }
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             param: function() {}
         };
-        sinon.mock(request).expects('param').withArgs('pid').twice().returns('9E7A;8');
+        sinon.mock(request).expects('param').withArgs('pid').twice().returns('SITE;8');
         sinon.stub(http, 'post', function(vhicHttpConfig, cb) {
             var response = {
                 statusCode: 200
@@ -127,9 +127,9 @@ describe('Patient Photo Resource Test', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    dfn: '9E7A;8',
+                    dfn: 'SITE;8',
                     vhic: 'VHIC;32758',
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             app: {
@@ -144,22 +144,22 @@ describe('Patient Photo Resource Test', function() {
 
                     },
                     vistaSites: {
-                        '9E7A': {
-                            accessCode: 'REDACTED',
-                            verifyCode: 'REDACTED'
+                        'SITE': {
+                            accessCode: 'USER  ',
+                            verifyCode: 'PW      '
                         }
                     }
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             vistaConfig: {},
             param: function() {}
         };
-        sinon.mock(request).expects('param').withArgs('pid').twice().returns('9E7A;8');
+        sinon.mock(request).expects('param').withArgs('pid').twice().returns('SITE;8');
         sinon.stub(http, 'post', function(vhicHttpConfig, cb) {
             var response = {
                 statusCode: 200
@@ -206,10 +206,10 @@ describe('Patient Photo Resource Test', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    icn: '9E7A;8',
-                    dfn: '9E7A;8',
+                    icn: 'SITE;8',
+                    dfn: 'SITE;8',
                     vhic: 'VHICID;32758',
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             app: {
@@ -224,16 +224,16 @@ describe('Patient Photo Resource Test', function() {
 
                     },
                     vistaSites: {
-                        '9E7A': {
-                            accessCode: 'REDACTED',
-                            verifyCode: 'REDACTED'
+                        'SITE': {
+                            accessCode: 'USER  ',
+                            verifyCode: 'PW      '
                         }
                     }
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             vistaConfig: {},
@@ -258,7 +258,7 @@ describe('Patient Photo Resource Test', function() {
                 }]
             }
         };
-        sinon.mock(request).expects('param').withArgs('pid').twice().returns('9E7A;8');
+        sinon.mock(request).expects('param').withArgs('pid').twice().returns('SITE;8');
         sinon.stub(http, 'get', function(vhicHttpConfig, cb) {
             var response = {
                 statusCode: 200

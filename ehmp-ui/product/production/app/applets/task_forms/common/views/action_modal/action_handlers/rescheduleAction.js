@@ -143,7 +143,7 @@ define([
     function getFacilities(onSuccess, onError) {
         var facilities = new Backbone.Collection();
         var siteOptions = {
-            resourceTitle: 'authentication-list',
+            resourceTitle: 'facility-list',
             cache: true,
             onSuccess: onSuccess,
             onError: onError

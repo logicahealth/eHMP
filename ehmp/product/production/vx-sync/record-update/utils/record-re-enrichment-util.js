@@ -57,7 +57,7 @@ function ReEnrichUtil(logger, jdsClient, updateConfig, tubename) {
 // will be called and the first identifier for each will be appended to the list
 // returned in the callback.
 //
-// pidList: A list of PIDs, e.g. ['9E7A;3', '9E7A;1', '9E7A;8', 'C877;1']
+// pidList: A list of PIDs, e.g. ['SITE;3', 'SITE;1', 'SITE;8', 'SITE;1']
 //
 // callback: The function to call when this method is complete or when an error occurs.
 //---------------------------------------------------------------------------------
@@ -111,16 +111,16 @@ ReEnrichUtil.prototype.retrievePatientList = function(pidList, callback) {
 // with PID keys to the list of domains for that key, e.g.
 //
 //     {
-//         '9E7A;3': ['med', 'allergy', 'consult'],
-//         '9E7A;1': ['med', 'consult'],
-//         'C877;8': ['allergy'],
+//         'SITE;3': ['med', 'allergy', 'consult'],
+//         'SITE;1': ['med', 'consult'],
+//         'SITE;8': ['allergy'],
 //     }
 //
 // updateTime: A timestamp string in YYYYMMDDHHmmss format.
 //
 // filterDomains: An array of domains, e.g. ['med', 'allergy', 'consult']
 //
-// identifiers: An array of patient identifiers, e.g. ['10108V420871', '9E7A;1', '9E7A;8', 'C877;1']
+// identifiers: An array of patient identifiers, e.g. ['10108V420871', 'SITE;1', 'SITE;8', 'SITE;1']
 //      Note that the identifiers can be any patient identifier that is valid in VxSync. This
 //      includes ICNs, PIDs, JPIDs, etc.
 //
@@ -199,9 +199,9 @@ ReEnrichUtil.prototype.retrievePatientSyncDomains = function(updateTime, filterD
 //
 // pidsToResyncDomains: An object containing lists of domains to resync keyed by PIDs, e.g.
 //     {
-//         '9E7A;3': ['med', 'allergy', 'consult'],
-//         '9E7A;1': ['med', 'consult'],
-//         'C877;8': ['allergy'],
+//         'SITE;3': ['med', 'allergy', 'consult'],
+//         'SITE;1': ['med', 'consult'],
+//         'SITE;8': ['allergy'],
 //     }
 //
 // referenceInfo: An object containing info for tracking the flow of a job through

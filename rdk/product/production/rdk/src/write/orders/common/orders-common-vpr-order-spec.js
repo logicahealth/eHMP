@@ -3,15 +3,15 @@
 var vprOrder = require('./orders-common-vpr-order');
 
 var writebackContext = {
-    siteHash: '9E7A',
+    siteHash: 'SITE',
     model: {
         'provider': '10000000238',
         'location': '285',
     },
     interceptorResults: {
         patientIdentifiers: {
-            site: '9E7A',
-            siteDfn: '9E7A;3',
+            site: 'SITE',
+            siteDfn: 'SITE;3',
             dfn: '3'
         }
     }
@@ -24,7 +24,7 @@ describe('vpr order tests', function() {
         var uid = vprOrder.toUid(writebackContext, '39072');
 
         expect(uid).to.be.truthy();
-        expect(uid).to.be.equal('urn:va:order:9E7A:3:39072');
+        expect(uid).to.be.equal('urn:va:order:SITE:3:39072');
         done();
     });
 
@@ -34,7 +34,7 @@ describe('vpr order tests', function() {
         var uid = vprOrder.toUidFromLegacyOrderData(writebackContext, vistaSaveOrderResp);
 
         expect(uid).to.be.truthy();
-        expect(uid).to.be.equal('urn:va:order:9E7A:3:39072');
+        expect(uid).to.be.equal('urn:va:order:SITE:3:39072');
         done();
     });
 });

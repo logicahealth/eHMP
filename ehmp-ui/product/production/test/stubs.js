@@ -110,6 +110,7 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
                 get: Stubs.spies.messagingGet,
                 reply: Stubs.spies.messagingReply,
                 view: Marionette.View,
+                stopReplying: Stubs.spies.messagingStopReplying,
                 title: 'title',
                 channelName: channel,
                 on: function(name, callback) {},
@@ -190,7 +191,12 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
         },
         getUserSession: function() {
             var userSession = new Backbone.Model({
-                site: '9E7A'
+                site: 'SITE',
+                duz: {
+                    'SITE': '12345'
+                },
+                firstname: 'TEST',
+                lastname: 'USER'
             });
 
             return userSession;
@@ -227,7 +233,10 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             return collection;
         },
         addFacilityMoniker: function(response) {
-            response.facilityMoniker = '9E7A';
+            response.facilityMoniker = 'SITE';
+        },
+        getFacility: function(input) {
+            return 'TST';
         },
         formatDate: function(date) {
             return date;
@@ -277,6 +286,9 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
             messagingReply: function(name, callback) {
                 Stubs.messagingChannelsReplyCallbacks[this.channelName] = callback;
                 return name;
+            },
+            messagingStopReplying: function(name) {
+                return;
             },
 			messagingRequest: function(name, object) {
 				return {
@@ -337,6 +349,7 @@ define(['require', 'backbone', 'jquery', 'handlebars', 'moment'], function(requi
     _.set(ADK, 'Applets.BaseGridApplet.DataGrid', Marionette.View);
     _.set(ADK, 'Applets.BaseGridApplet.DataGrid.DataGridRow', Marionette.View);
     _.set(ADK, 'Enrichment.addFacilityMoniker', Stubs.addFacilityMoniker);
+    _.set(ADK, 'Enrichment.getFacility', Stubs.getFacility);
     _.set(ADK, 'AppletViews.PillsGistView', Marionette.View);
     _.set(Backgrid, 'StringCell', Marionette.View);
     _.set(Backgrid, 'HandlebarsCell', Marionette.View);

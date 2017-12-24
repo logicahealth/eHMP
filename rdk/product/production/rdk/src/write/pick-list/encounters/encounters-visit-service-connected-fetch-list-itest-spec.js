@@ -11,8 +11,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -24,7 +24,7 @@ describe('encounters-visit-service-connected resource integration test', functio
             expect(err).to.be.null();
             expect(result).not.to.be.falsy();
             done();
-        }, {dfn: '230', visitDate: '20131001', locationUid: 'urn:va:location:9E7A:195'});
+        }, {dfn: '230', visitDate: '20131001', locationUid: 'urn:va:location:SITE:195'});
     });
     it('will return an error if locationUid is missing', function (done) {
         this.timeout(20000);

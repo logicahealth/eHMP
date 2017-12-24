@@ -33,22 +33,22 @@ class Overview < GlobalDateFilter
       # | Active & Recent MEDICATIONS |
     clinical_reminders_applet = ClinicalReminders.instance
     encounters_gist_applet = EncountersGist.instance 
-    reports_gist_applet = ReportsGistContainer.instance
+    reports_gist_applet = PobReportsApplet.new
     conditions_applet = ConditionsGist.instance
-    allergy_gist_applet = AllergiesGist.instance
+    allergy_gist_applet = PobAllergiesApplet.new
     vitals_applet = VitalsGist.instance
     immunizations_applet = ImmunizationGist.instance
     numeric_results_applet = LabResultsGist.instance
-    active_meds_applet = MedicationGistContainer.instance
+    active_meds_applet = PobActiveRecentMedApplet.new
     return false unless print_applet_loading_outcome("Clinical Reminders", clinical_reminders_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Encounters", encounters_gist_applet.applet_loaded?, print_checks)
-    return false unless print_applet_loading_outcome("Reports", reports_gist_applet.applet_grid_loaded, print_checks)
+    return false unless print_applet_loading_outcome("Reports", reports_gist_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Problems", conditions_applet.applet_loaded?, print_checks)
-    return false unless print_applet_loading_outcome("Allergy", allergy_gist_applet.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Allergy", allergy_gist_applet.applet_gist_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Vitals", vitals_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Immunizations", immunizations_applet.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Numeric Lab Results", numeric_results_applet.applet_grid_loaded, print_checks)
-    return false unless print_applet_loading_outcome("Active Meds", active_meds_applet.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Active Meds", active_meds_applet.applet_gist_loaded?, print_checks)
 
     return true
   end
@@ -77,7 +77,7 @@ def verify_on_overview
   end
 
   applets_screen = sprintf "%.2f", (Time.now - start_verification)
-  timeout = 60 # clinical reminders is taking longer then 30 seconds to load, increase time
+  timeout = 90
   wait = Selenium::WebDriver::Wait.new(:timeout => timeout)
   begin
     wait.until { browser_access.overview_applets_loaded? }
@@ -86,8 +86,6 @@ def verify_on_overview
   end
   applets_loaded = sprintf "%.2f", (Time.now - start_verification)
 
-  # p "applets on screen: #{applets_screen} sec"
-  # p "applets have data: #{applets_loaded} sec"
   @ehmp = PobHeaderFooter.new
   @ehmp.wait_until_header_footer_elements_loaded
 end

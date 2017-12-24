@@ -1,5 +1,5 @@
 var allTestFiles = [];
-var TEST_REGEXP = /(app\/applets).*(test\/unit).*\.js/i;
+var TEST_REGEXP = /(app\/(applets|resources)).*(test\/unit).*\.js/i;
 // var TEST_REGEXP = /.js$/;
 
 // Get a list of all the test files to include

@@ -16,7 +16,7 @@ describe('AllergyIntolerance FHIR Resource', function() {
             'pid': '10107V395912',
             originalUrl: '/fhir/allergyintolerance?subject.identifier=10107V395912',
             headers: {
-                host: 'localhost:8888'
+                host: 'localhost:PORT'
             },
             protocol: 'http'
         };

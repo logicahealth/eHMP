@@ -24,7 +24,27 @@ define([
             };
         }
     });
-
+    var getDetailsView = function(params) {
+        ADK.PatientRecordService.setCurrentPatient(params.model.get('PID'), {
+            confirmationOptions: {
+                navigateToPatient: false,
+                reconfirm: ADK.WorkspaceContextRepository.currentContextId === 'staff'
+            },
+            callback: function() {
+                var channel = ADK.Messaging.getChannel('task_forms');
+                var ConsultUtils = channel.request('get_consult_utils');
+                ConsultUtils.checkTask(params.model, function() {
+                    var activityDetailsParams = {
+                        processId: params.model.get('PROCESSID')
+                    };
+                    if (!_.isUndefined(params.$el)) {
+                        activityDetailsParams.triggerElement = params.$el;
+                    }
+                    channel.request('activity_detail', activityDetailsParams);
+                });
+            }
+        });
+    };
     var AppletLayoutView = ADK.AppletViews.GridView.extend({
         _super: ADK.AppletViews.GridView.prototype,
         initialize: function(options) {
@@ -38,34 +58,24 @@ define([
 
             var dataGridOptions = {
                 body: body,
+                tileOptions: {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: getDetailsView
+                        }]
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: getDetailsView
+                    }
+                },
                 formattedFilterFields: {
                     'createdOn': function(model, key) {
                         var val = model.get(key);
                         val = val.replace(/(\d{4})(\d{2})(\d{2})/, '$2/$3/$1');
                         return val;
-                    }
-                },
-                onClickRow: function(model, event) {
-                    var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                    var channel = ADK.Messaging.getChannel('task_forms');
-                    var ConsultUtils = channel.request('get_consult_utils');
-                    if (ADK.WorkspaceContextRepository.currentContextId === 'staff') {
-                        ADK.PatientRecordService.setCurrentPatient(model.get('PID'), {
-                            navigation: false,
-                            callback: function() {
-                                ConsultUtils.checkTask(model, function() {
-                                    channel.request('activity_detail', {
-                                        processId: model.get('PROCESSID')
-                                    });
-                                });
-                            }
-                        });
-                    } else {
-                        ConsultUtils.checkTask(model, function() {
-                            channel.request('activity_detail', {
-                                processId: model.get('PROCESSID')
-                            });
-                        });
                     }
                 },
                 columns: config.columns,
@@ -86,10 +96,11 @@ define([
                 });
             }
 
-            if (ADK.WorkspaceContextRepository.currentContextId === 'patient' && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            var permissions = new ADK.UIResources.Fetch.Permission.Collection();
+
+            if (ADK.WorkspaceContextRepository.currentContextId === 'patient' && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && permissions.hasActions()) {
                 dataGridOptions.onClickAdd = function() {
                     var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
-                    console.log(TrayView._isAttached);
                     if (TrayView) {
                         TrayView.$el.trigger('tray.show');
                     }

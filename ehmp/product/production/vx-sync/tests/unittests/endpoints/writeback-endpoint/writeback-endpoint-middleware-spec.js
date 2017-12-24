@@ -20,8 +20,8 @@ describe('writeback-endpoint-middleware', function(){
 		it('sends writeback data to jds and solr', function(done){
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 vista: {
                        domainsNoSolrTracking: []
@@ -57,11 +57,11 @@ describe('writeback-endpoint-middleware', function(){
                 null);
             env.publisherRouter.childInstance = function() { return env.publisherRouter; };
 			var req = new DummyRequest({
-                'pid': '9E7A;3'
+                'pid': 'SITE;3'
             });
             req.body = {
-                'pid': '9E7A;3',
-                'uid': 'urn:va:allergy:9E7A:3:12',
+                'pid': 'SITE;3',
+                'uid': 'urn:va:allergy:SITE:3:12',
                 'lastUpdateTime': '20150317200936'
             };
             req.headers = {
@@ -76,7 +76,7 @@ describe('writeback-endpoint-middleware', function(){
             processWriteback(log, config, env, req, res, function() {
                 expect(log.child).toHaveBeenCalledWith(jasmine.objectContaining({sessionId: 'sessionId'}));
                 expect(res.status).toHaveBeenCalledWith(200);
-                expect(res.json).toHaveBeenCalledWith(jasmine.objectContaining({uid: 'urn:va:allergy:9E7A:3:12'}));
+                expect(res.json).toHaveBeenCalledWith(jasmine.objectContaining({uid: 'urn:va:allergy:SITE:3:12'}));
                 done();
             });
 		});

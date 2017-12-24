@@ -1,12 +1,13 @@
 'use strict';
 
 var _ = require('lodash');
-
 var pickListRoot = './';
-var pickListConfig = require('./config/pick-list-config-groups').pickListConfig;
-module.exports.config = pickListConfig;
+var pickListUtil = require('./pick-list-utils');
+
+var pickListConfig;
 
 function getPickListGroup(req, site, type, serverSend) {
+    pickListConfig = pickListUtil.groupsConfig(req.app);
     var i = _.indexOf(_.pluck(pickListConfig, 'name'), type);
     if (i === -1) {
         return false;//This isn't a pick-list group.

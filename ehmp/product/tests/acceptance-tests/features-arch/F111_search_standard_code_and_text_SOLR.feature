@@ -8,7 +8,7 @@ Background:
 @search_standard_code_1 @VPR @debug
 
 Scenario Outline: When a user searches patient's domain by text search total number of records are returned.
-When the client searches for "<text>" for the patient "9E7A;3" in VPR format
+When the client searches for "<text>" for the patient "SITE;3" in VPR format
 Then a successful response is returned
 Then the solar search results contains "<total_items>"
 
@@ -22,7 +22,7 @@ Then the solar search results contains "<total_items>"
  @search_standard_code_2 @VPR @debug
  
 Scenario: When a user searches patient's domain by text search total number of records are returned.
-When the client searches for "rad" for the patient "9E7A;3" in VPR format
+When the client searches for "rad" for the patient "SITE;3" in VPR format
 Then a successful response is returned
 Then the solar search results contains 
 

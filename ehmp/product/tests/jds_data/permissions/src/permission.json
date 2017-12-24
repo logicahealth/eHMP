@@ -62,7 +62,7 @@
     "uid": "add-allergy",
     "value": "add-allergy",
     "label": "Add Allergy",
-    "description": "Ability to add a new allergy to the patients list of allergies",
+    "description": "Ability to add a new allergy to the patient's list of allergies",
     "example": "",
     "note": "",
     "version": {
@@ -203,7 +203,7 @@
         "introduced": "1.3.1",
         "deprecated": null
     },
-    "status": "active"
+    "status": "future"
 }, {
     "uid": "edit-encounter-form",
     "value": "edit-encounter-form",
@@ -215,7 +215,7 @@
         "introduced": "1.3.1",
         "deprecated": null
     },
-    "status": "active"
+    "status": "future"
 }, {
     "uid": "add-consult-order",
     "value": "add-consult-order",
@@ -349,6 +349,42 @@
     },
     "status": "active"
 }, {
+    "uid": "read-discharge-followup",
+    "value": "read-discharge-followup",
+    "label": "Read Discharge Follow-up",
+    "description": "Ability to view (read) the Discharge Follow-up List",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "edit-discharge-followup",
+    "value": "edit-discharge-followup",
+    "label": "Edit Discharge Follow-up",
+    "description": "Ability to act on a discharge follow-up task",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "discontinue-discharge-followup",
+    "value": "discontinue-discharge-followup",
+    "label": "Discontinue Discharge Follow-up",
+    "description": "Ability to discontinue a discharge follow-up",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
     "uid": "add-immunization",
     "value": "add-immunization",
     "label": "Add Immunization",
@@ -389,7 +425,7 @@
     "uid": "read-immunization",
     "value": "read-immunization",
     "label": "Read Immunization",
-    "description": "Read access to a patients immunizations list",
+    "description": "Read access to a patient's immunizations list",
     "example": "",
     "note": "",
     "version": {
@@ -587,7 +623,7 @@
     "uid": "read-medication-review",
     "value": "read-medication-review",
     "label": "Read Medication Review",
-    "description": "Ability to see a patients medications including inpatient, outpatient, and clinic order medications in a timeline view",
+    "description": "Ability to see the patient's medications including inpatient, outpatient, and clinic order medications in a timeline view",
     "example": "",
     "note": "",
     "version": {
@@ -647,7 +683,7 @@
     "uid": "cosign-note",
     "value": "cosign-note",
     "label": "Cosign Note",
-    "description": "Ability to be a cosigner on a note such as an atttending physician cosigning a residents note",
+    "description": "Ability to be a cosigner on a note such as an attending physician cosigning a resident's note",
     "example": "",
     "note": "",
     "version": {
@@ -731,7 +767,7 @@
     "uid": "read-order",
     "value": "read-order",
     "label": "Read Order",
-    "description": "Ability to view a patients order history",
+    "description": "Ability to view a patient's order history",
     "example": "",
     "note": "",
     "version": {
@@ -743,7 +779,7 @@
     "uid": "add-patient-history",
     "value": "add-patient-history",
     "label": "Add Patient History",
-    "description": "Ability to record a patients histories such as family or social history",
+    "description": "Ability to record the patient's history such as family or social history",
     "example": "",
     "note": "",
     "version": {
@@ -755,7 +791,7 @@
     "uid": "edit-patient-history",
     "value": "edit-patient-history",
     "label": "Edit Patient History",
-    "description": "Ability to edit a patients histories such as family or social history",
+    "description": "Ability to edit the patient's history such as family or social history",
     "example": "",
     "note": "",
     "version": {
@@ -767,7 +803,7 @@
     "uid": "eie-patient-history",
     "value": "eie-patient-history",
     "label": "Mark Patient History Entered in Error",
-    "description": "Ability to mark an entry in a patients history as entered in error",
+    "description": "Ability to mark an entry in the patient's history as entered in error",
     "example": "",
     "note": "",
     "version": {
@@ -779,7 +815,7 @@
     "uid": "read-patient-history",
     "value": "read-patient-history",
     "label": "Read Patient History",
-    "description": "Read access to a patients problem list",
+    "description": "Read access to the patient's history",
     "example": "",
     "note": "",
     "version": {
@@ -803,7 +839,7 @@
     "uid": "read-military-history",
     "value": "read-military-history",
     "label": "Read Military History",
-    "description": "Ability to read an entry in a patients history",
+    "description": "Ability to read an entry in a patient's history",
     "example": "",
     "note": "",
     "version": {
@@ -839,7 +875,7 @@
     "uid": "add-condition-problem",
     "value": "add-condition-problem",
     "label": "Add Condition Problem",
-    "description": "Ability to add a new problem to the patients problem list",
+    "description": "Ability to add a new problem to the patient's problem list",
     "example": "",
     "note": "",
     "version": {
@@ -851,7 +887,7 @@
     "uid": "edit-condition-problem",
     "value": "edit-condition-problem",
     "label": "Edit Condition Problem",
-    "description": "Ability to edit a problem on the patients problem list such as changing the severity of the problem",
+    "description": "Ability to edit a problem on the patient's problem list such as changing the severity of the problem",
     "example": "",
     "note": "",
     "version": {
@@ -863,7 +899,7 @@
     "uid": "read-condition-problem",
     "value": "read-condition-problem",
     "label": "Read Condition Problem",
-    "description": "Read access to a patients problem list",
+    "description": "Read access to a patient's problem list",
     "example": "",
     "note": "",
     "version": {
@@ -875,7 +911,7 @@
     "uid": "remove-condition-problem",
     "value": "remove-condition-problem",
     "label": "Remove Condition Problem",
-    "description": "Ability to mark a patients problem list entry as removed",
+    "description": "Ability to mark a patient's problem list entry as removed",
     "example": "",
     "note": "",
     "version": {
@@ -1062,7 +1098,7 @@
     "uid": "read-task",
     "value": "read-task",
     "label": "Read Task",
-    "description": "Ability to view a tasks related to a patient",
+    "description": "Ability to view a task related to a patient",
     "example": "",
     "note": "",
     "version": {
@@ -1086,7 +1122,7 @@
     "uid": "edit-own-permissions",
     "value": "edit-own-permissions",
     "label": "Edit Own Permissions",
-    "description": "Ability to edit permissions related to one self",
+    "description": "Ability to edit permissions related to one's self",
     "example": "",
     "note": "Allows a user to change permissions without fear of being able to edit them back. A user can't add or remove this from themself",
     "version": {
@@ -1219,7 +1255,7 @@
     "uid": "read-vital",
     "value": "read-vital",
     "label": "Read Vital",
-    "description": "Read access to a patients vital signs",
+    "description": "Read access to the patient's vital signs",
     "example": "",
     "note": "",
     "version": {
@@ -1876,4 +1912,56 @@
         "deprecated": null
     },
     "status": "active"
+}, {
+    "uid": "read-permission-sets",
+    "value": "read-permission-sets",
+    "label": "Read Permission Sets",
+    "description": "Read access to the list of permission sets and related permissions. The user can't add, edit or deprecate any permission sets",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active",
+    "nationalAccess": false
+}, {
+    "uid": "add-permission-sets",
+    "value": "add-permission-sets",
+    "label": "Add Permission Sets",
+    "description": "Ability to add a new permission set",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active",
+    "nationalAccess": true
+}, {
+    "uid": "edit-permission-sets",
+    "value": "edit-permission-sets",
+    "label": "Edit Permission Sets",
+    "description": "Ability to edit a permission set and add/remove permissions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active",
+    "nationalAccess": true
+}, {
+    "uid": "deprecate-permission-sets",
+    "value": "deprecate-permission-sets",
+    "label": "Deprecate Permission Sets",
+    "description": "Ability to deprecate a permission set",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0",
+        "deprecated": null
+    },
+    "status": "active",
+    "nationalAccess": true
 }]

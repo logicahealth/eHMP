@@ -1,6 +1,10 @@
 .server-paging-view {
 	display: flex;
 	flex-direction: column;
+	.filter-container {
+		flex-grow: 0;
+	    flex-shrink: 0;
+	}
 	.content-container {
 		height: 100%;
 	    flex-grow: 1;

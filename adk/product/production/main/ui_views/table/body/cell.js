@@ -7,15 +7,18 @@ define([
 
     var TableBodyCell = Backbone.Marionette.ItemView.extend({
         _applyHeaders: function() {
-            var headerString = this.model.get('name') + this.getOption('idSuffix');
+            var headerString;
             if (_.isString(this.getOption('groupId'))) {
-                headerString += ' ' + this.getOption('groupId');
+                headerString = this.model.get('name') + this.getOption('idSuffix') + ' ' + this.getOption('groupId');
             }
             return headerString;
         },
         tagName: 'td',
         behaviors: {
             Tooltip: {}
+        },
+        className: function() {
+            return this.model.get('flexWidth');
         },
         attributes: function() {
             return {

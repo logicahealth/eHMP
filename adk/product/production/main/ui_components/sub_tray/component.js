@@ -12,12 +12,13 @@ define([
     var SubTrayView = TrayComponent.extend({
         _eventPrefix: 'subTray',
         template: Handlebars.compile([
-            '<button type="button" id={{tray_id}} class="btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-subTray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}}</button>',
+            '<button type="button" id={{tray_id}} class="tray-btn-container btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-subTray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}}</button>',
             '<div role="region" class="sidebar-tray sidebar-sub-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1"/>'
         ].join('\r\n')),
         className: 'sidebar inline-display',
         ui: {
-            'ButtonContainer': '[data-toggle=sidebar-subTray]',
+            'ButtonToggle': '[data-toggle=sidebar-subTray]',
+            'ButtonContainer': '.tray-btn-container',
             'TrayContainer': '.sidebar-sub-tray'
         },
         regions: {
@@ -47,7 +48,7 @@ define([
                 //if viewport isn't specified, extend the tray from the bottom of the button to the bottom of the center region
                 this.containerBounds = _.pick($('#center-region')[0].getBoundingClientRect(), ['bottom', 'height', 'left', 'right', 'top', 'width']);
             }
-            var buttonBounds = this.ui.ButtonContainer[0].getBoundingClientRect(),
+            var buttonBounds = this.ui.ButtonToggle[0].getBoundingClientRect(),
                 ext = {
                     top: buttonBounds.top,
                     height: this.containerBounds.bottom - buttonBounds.bottom
@@ -58,6 +59,12 @@ define([
             this.ui.TrayContainer.offset({
                 top: this.containerBounds.top - this._additionalTopPadding
             }).css('max-height', this._maxHeight || this.containerBounds.height + 'px').width();
+        },
+        onBeforeShow: function() {
+            if (this.tray) {
+                this.showChildView('TrayRegion', this.tray);
+            }
+            this.showViewInRegion(this.getOption('buttonView'), 'ButtonRegion');
         }
     });
 

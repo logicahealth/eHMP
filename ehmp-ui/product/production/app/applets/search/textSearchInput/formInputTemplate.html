@@ -1,6 +1,4 @@
-{{#if disabled}}<span class="text-search-input-wrapper" data-original-title="{{title}}" data-toggle="tooltip"> {{/if}}
+<i class="fa fa-text-search font-size-20 input-icon percent-height-100 all-padding-xs" aria-hidden="true"></i>
 <label for="searchText-{{cid}}" class="sr-only">Search Record</label>
-<input type="text" id="searchText-{{cid}}" class="form-control{{#compare errorIcon true operator='==='}} form-control-placeholder-icon {{/compare}}" placeholder="{{#compare errorIcon true operator='==='}}&#xf06a; {{/compare}}{{placeholder}}" autocomplete="off" focus="true" {{#if disabled}} disabled="true" /> {{else}} data-original-title="{{title}}" data-toggle="tooltip" />
-<span class="sr-only">{{title}}</span> {{/if}}
-<i class="fa fa-search font-size-15"></i> 
-{{#if disabled}}<span class="sr-only">{{title}}</span></span> {{/if}}
+<input type="text" id="searchText-{{cid}}" class="percent-height-100 font-size-12 form-control{{#compare errorIcon true operator='==='}} form-control-placeholder-icon {{/compare}}" placeholder="{{#compare errorIcon true operator='==='}}&#xf06a; {{/compare}}{{placeholder}}" autocomplete="off" focus="true" {{#if disabled}} disabled="true" /> {{else}} data-original-title="{{title}}" data-toggle="tooltip" /><span class="sr-only">{{title}}</span> {{/if}}
+<i class="fa fa-search font-size-15" aria-hidden="true"></i>

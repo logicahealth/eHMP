@@ -25,12 +25,12 @@ describe('JobStatusUpdater.js', function(){
         job = {rootJobId: '212', jpid: '123'};
     });
 
-    it('storeMetaStampErrorEvent for solr job', function(){
+    it('storeMetaStampErrorEvent for solr job', function(done){
         var jdsSpy = spyOn(jds, 'setEventStoreStatus').andCallThrough();
 
         job.status = 'error';
         job.type = 'solr-record-storage';
-        job.record = {pid: '9E7A;3', uid: '123', timeStamp: 'now'};
+        job.record = {pid: 'SITE;3', uid: '123', timeStamp: 'now'};
 
         jobStatusUpdater.errorJobStatus(job, {error: 'connection failed'}, function(error, response, result) {
             expect(error).toBeFalsy();
@@ -38,15 +38,16 @@ describe('JobStatusUpdater.js', function(){
 
             var storeEventInfo = jdsSpy.mostRecentCall.args[1];
             expect(storeEventInfo.type).toBe('solrError');
+            done();
         });
     });
 
-    it('storeMetaStampErrorEvent for store record job', function(){
+    it('storeMetaStampErrorEvent for store record job', function(done){
         var jdsSpy = spyOn(jds, 'setEventStoreStatus').andCallThrough();
 
         job.status = 'error';
         job.type = 'store-record';
-        job.record = {pid: '9E7A;3', uid: '123', timeStamp: 'now'};
+        job.record = {pid: 'SITE;3', uid: '123', timeStamp: 'now'};
 
         jobStatusUpdater.errorJobStatus(job, {error: 'connection failed'}, function(error, response, result) {
             expect(error).toBeFalsy();
@@ -54,20 +55,22 @@ describe('JobStatusUpdater.js', function(){
 
             var storeEventInfo = jdsSpy.mostRecentCall.args[1];
             expect(storeEventInfo.type).toBe('syncError');
+            done();
         });
     });
 
-    it('writeStatus fails for invalid jobState', function(){
+    it('writeStatus fails for invalid jobState', function(done){
         spyOn(jds, 'saveJobState').andCallThrough();
         var invalidJob = '';
 
         jobStatusUpdater.writeStatus(invalidJob, function(error, response, result) {
             expect(error).toBe('Invalid job state');
             expect(jds.saveJobState).not.toHaveBeenCalled();
+            done();
         });
     });
 
-    it('writeStatus enterprise-sync-request job pending', function(){
+    it('writeStatus enterprise-sync-request job pending', function(done){
         spyOn(jds, 'saveJobState').andCallThrough();
 
         job.status = 'started';
@@ -80,10 +83,11 @@ describe('JobStatusUpdater.js', function(){
             expect(jds.saveJobState).toHaveBeenCalled();
             expect(result.rootJobId).toBe(result.jobId);
             expect(result.timestamp).toBeDefined();
+            done();
         });
     });
 
-    it('writeStatus does not save metastamp for stated job', function(){
+    it('writeStatus does not save metastamp for stated job', function(done){
         spyOn(jds, 'saveJobState').andCallThrough();
 
         job.status = 'started';
@@ -93,26 +97,28 @@ describe('JobStatusUpdater.js', function(){
         jobStatusUpdater.writeStatus(job, function(error, response, result) {
             expect(error).toBeFalsy();
             expect(jds.saveJobState).not.toHaveBeenCalled();
+            done();
         });
     });
 
-    it('errorJobStatus for solr job', function(){
+    it('errorJobStatus for solr job', function(done){
         spyOn(jobStatusUpdater, 'storeMetaStampErrorEvent').andCallThrough();
         spyOn(jobStatusUpdater, 'writeStatus').andCallThrough();
 
         job.status = 'error';
         job.type = 'solr-record-storage';
-        job.record = {pid: '9E7A;3', uid: '123', timeStamp: 'now'};
+        job.record = {pid: 'SITE;3', uid: '123', timeStamp: 'now'};
 
         jobStatusUpdater.errorJobStatus(job, {error: 'connection failed'}, function(error, response, result) {
             expect(error).toBeFalsy();
             expect(result.status).toBe('error');
             expect(jobStatusUpdater.writeStatus).not.toHaveBeenCalled();
             expect(jobStatusUpdater.storeMetaStampErrorEvent).toHaveBeenCalled();
+            done();
         });
     });
 
-    it('errorJobStatus for job', function(){
+    it('errorJobStatus for job', function(done){
         spyOn(jobStatusUpdater, 'storeMetaStampErrorEvent').andCallThrough();
         spyOn(jobStatusUpdater, 'writeStatus').andCallThrough();
 
@@ -124,10 +130,11 @@ describe('JobStatusUpdater.js', function(){
             expect(result.status).toBe('error');
             expect(jobStatusUpdater.writeStatus).toHaveBeenCalled();
             expect(jobStatusUpdater.storeMetaStampErrorEvent).not.toHaveBeenCalled();
+            done();
         });
     });
 
-    it('createJobStatus is written', function(){
+    it('createJobStatus is written', function(done){
         spyOn(jobStatusUpdater, 'writeStatus').andCallThrough();
 
         job.status = 'created';
@@ -137,10 +144,11 @@ describe('JobStatusUpdater.js', function(){
             expect(error).toBeFalsy();
             expect(result.status).toBe('created');
             expect(jobStatusUpdater.writeStatus).toHaveBeenCalled();
+            done();
         });
     });
 
-    it('startJobStatus is written', function(){
+    it('startJobStatus is written', function(done){
         spyOn(jobStatusUpdater, 'writeStatus').andCallThrough();
 
         job.status = 'started';
@@ -150,10 +158,11 @@ describe('JobStatusUpdater.js', function(){
             expect(error).toBeFalsy();
             expect(result.status).toBe('started');
             expect(jobStatusUpdater.writeStatus).toHaveBeenCalled();
+            done();
         });
     });
 
-    it('completeJobStatus is written', function(){
+    it('completeJobStatus is written', function(done){
         spyOn(jobStatusUpdater, 'writeStatus').andCallThrough();
 
         job.status = 'started';
@@ -163,6 +172,7 @@ describe('JobStatusUpdater.js', function(){
             expect(error).toBeFalsy();
             expect(result.status).toBe('started');
             expect(jobStatusUpdater.writeStatus).toHaveBeenCalled();
+            done();
         });
     });
 });

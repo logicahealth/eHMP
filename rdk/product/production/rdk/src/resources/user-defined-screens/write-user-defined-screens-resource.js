@@ -340,7 +340,7 @@ function updateWorkspaceId(req, res) {
     var newId = req.query.newId;
 
     var screenId = createScreenIdFromRequest(req, USER_SCREENS_CONFIG);
-    //var screenId = '9E7A;10000000237_UserScreensConfig'; //createScreenIdFromRequest(req, USER_SCREENS_CONFIG);
+    //var screenId = 'SITE;10000000237_UserScreensConfig'; //createScreenIdFromRequest(req, USER_SCREENS_CONFIG);
 
     //Get USER_SCREENS_CONFIG for for updating withh new workspace name
     uds.getScreenData(screenId, req, function(err, data) {

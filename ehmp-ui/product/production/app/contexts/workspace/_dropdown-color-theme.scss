@@ -1,0 +1,56 @@
+@mixin dropdownColorTheme($primary, $dark, $light) {
+    .dropdown[class*="dropdown--"] {
+        &.open > button.btn.dropdown-toggle {
+            &,
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $primary
+            }
+        }
+        button.btn.dropdown-toggle {
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $primary
+            }
+        }
+        .dropdown-menu {
+            li.list-group-item {
+                &.active,
+                &.active:hover,
+                &.active:focus {
+                    background-color: $light;
+                    color: $dark;
+                }
+            }
+        }
+    }
+    .dropdown--quickmenu {
+        &.open > .btn.dropdown-toggle {
+            &,
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $primary;
+            }
+        }
+        .btn.dropdown-toggle {
+            background-color: $grey-lighter;
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $dark;
+            }
+        }
+    }
+    .dropdown-menu--quick-menu li.list-group-item a {
+        color: $primary;
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: $light;
+            color: $dark;
+        }
+    }
+}

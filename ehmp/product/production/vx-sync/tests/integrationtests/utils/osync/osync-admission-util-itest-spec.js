@@ -25,7 +25,8 @@ var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
 
 var tubePrefix = 'osync-admission-util-itest';

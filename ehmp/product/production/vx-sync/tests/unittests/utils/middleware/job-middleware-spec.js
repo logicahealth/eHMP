@@ -68,7 +68,7 @@ describe('middleware/job.js', function() {
         var opts = _.clone(options);
         beforeEach(function() {
             opts.jdsClient.getJobStatus = jasmine.createSpy().andCallFake(function(job, filter, callback) {
-                callback(null, {}, { 'items': mockJobData(1)[job.jpid] });
+                callback(null, {statusCode: 200}, { 'items': mockJobData(1)[job.jpid] });
             });
         });
 
@@ -197,6 +197,90 @@ describe('middleware/job.js', function() {
 
             var jdsClientDummy = new JdsClientDummy(log, options.config);
             jdsClientDummy._setResponseData('ERROR', null, null);
+            options.jdsClient = jdsClientDummy;
+
+            response.job = {
+                'type': 'enterprise-sync-request',
+                // job does not have patientIdentifier when getJobHistory is called within sync status retrieval process
+                //'patientIdentifier': request.patientIdentifier,
+                'jpid': request.jpid
+            };
+
+            response.status = jasmine.createSpy().andCallFake(function() {
+                expect(response.jobStates).not.toBeDefined();
+                expect(response.status.calls).toBeDefined();
+                expect(response.status.calls[0]).toBeDefined();
+                expect(response.status.calls[0].args).toBeDefined();
+                expect(response.status.calls[0].args[0]).toEqual(500);
+                return this;
+            });
+
+            runs(function() {
+                getJobHistory.call(options, request, response, function(){});
+            });
+
+            waitsFor(function() {
+                return response.status.callCount > 0;
+            });
+        });
+
+        it('Error path: no response from JDS', function(){
+            var request = new DummyRequest({
+                'pid': 'ABCD;3'
+            });
+            request.jpid = '21EC2020-3AEA-4069-A2DD-CCCCCCCCCCCC';
+            request.patientIdentifier = {
+                'type': 'pid',
+                'value': 'ABCD;3'
+            };
+            var response = new DummyResponse();
+
+            var options = { 'log': log, 'config': {}, 'jdsClient': {}, 'jobStatusUpdater': {} };
+
+            var jdsClientDummy = new JdsClientDummy(log, options.config);
+            jdsClientDummy._setResponseData(null, null, null);
+            options.jdsClient = jdsClientDummy;
+
+            response.job = {
+                'type': 'enterprise-sync-request',
+                // job does not have patientIdentifier when getJobHistory is called within sync status retrieval process
+                //'patientIdentifier': request.patientIdentifier,
+                'jpid': request.jpid
+            };
+
+            response.status = jasmine.createSpy().andCallFake(function() {
+                expect(response.jobStates).not.toBeDefined();
+                expect(response.status.calls).toBeDefined();
+                expect(response.status.calls[0]).toBeDefined();
+                expect(response.status.calls[0].args).toBeDefined();
+                expect(response.status.calls[0].args[0]).toEqual(500);
+                return this;
+            });
+
+            runs(function() {
+                getJobHistory.call(options, request, response, function(){});
+            });
+
+            waitsFor(function() {
+                return response.status.callCount > 0;
+            });
+        });
+
+        it('Error path: non-200 response from JDS', function(){
+            var request = new DummyRequest({
+                'pid': 'ABCD;3'
+            });
+            request.jpid = '21EC2020-3AEA-4069-A2DD-CCCCCCCCCCCC';
+            request.patientIdentifier = {
+                'type': 'pid',
+                'value': 'ABCD;3'
+            };
+            var response = new DummyResponse();
+
+            var options = { 'log': log, 'config': {}, 'jdsClient': {}, 'jobStatusUpdater': {} };
+
+            var jdsClientDummy = new JdsClientDummy(log, options.config);
+            jdsClientDummy._setResponseData(null, {statusCode: 404, body: 'JPID is a required field'}, null);
             options.jdsClient = jdsClientDummy;
 
             response.job = {

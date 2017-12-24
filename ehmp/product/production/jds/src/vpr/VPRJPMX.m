@@ -1,5 +1,4 @@
 VPRJPMX ;SLC/KCM -- Meta data for JSON indexes
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ; Types of collation:
  ;       V: Inverse HL7 Time (appends "=" after complementing time)
@@ -23,6 +22,7 @@ IDXLIST ; list type indexes (sortType defaults to string)
  ;;    collections: allergy
  ;;    fields: <none>
  ;;    sort: <none>
+ ;;    setif: $$NRMVD^VPRJFPS
  ;;consult
  ;;    collections: consult
  ;;    fields: dateTime/V/0
@@ -53,6 +53,7 @@ IDXLIST ; list type indexes (sortType defaults to string)
  ;;    collections: immunization
  ;;    fields: administeredDateTime/V/0
  ;;    sort: administeredDateTime desc
+ ;;    setif: $$NRMVD^VPRJFPS
  ;;laboratory
  ;;    collections: lab
  ;;    fields: observed/V/0
@@ -98,6 +99,7 @@ IDXLIST ; list type indexes (sortType defaults to string)
  ;;    collections: problem
  ;;    fields: <none>
  ;;    sort: <none>
+ ;;    setif: $$NRMVD^VPRJFPS
  ;;problem-active
  ;;    collections: problem
  ;;    fields: onset/V/0
@@ -137,6 +139,11 @@ IDXLIST ; list type indexes (sortType defaults to string)
  ;;    fields: referenceDateTime/V/0
  ;;    sort: referenceDateTime desc
  ;;    setif: $$CWAD^VPRJFPS
+ ;;cwad-kind
+ ;;    collections: document, allergy, alert
+ ;;    fields: kind/s, referenceDateTime/V/0
+ ;;    sort: referenceDateTime desc
+ ;;    setif: $$CWADNRMVD^VPRJFPS
  ;;med-active-inpt
  ;;    collections: med
  ;;    fields: overallStop/V/9
@@ -299,7 +306,7 @@ IDXTIME ; time type indexes
  ; The first collation is the field collation, followed by the sort collation.
  ; The default is s,s (both case-insensitive strings) if no other collation
  ; is defined.
-IDXATTR ;
+IDXATTR ; attribute type indexes
  ;;utest
  ;;    collections: utesta, utestb
  ;;    fields: <none>

@@ -12,7 +12,7 @@ function getPatientsFromOneVista(log, rpcConfig, id, site, callback) {
 
     rpcUtil.standardRPCCall(log, rpcConfig, 'HMP DEFAULT PATIENT LIST', id, null, function (error, data) {
         if (error) {
-            log.warn('patient-list-vista-retrieve.getPatientList: An error occurred retrieving the patient list data for active user ' + id + ' from site ' + rpcConfig.host + ':' + rpcConfig.port + ':' + error + ' -- data contained: ' + data);
+            log.error('patient-list-vista-retrieve.getPatientList: An error occurred retrieving the patient list data for active user ' + id + ' from site ' + rpcConfig.host + ':' + rpcConfig.port + ':' + error + ' -- data contained: ' + data);
             return callback(null, patients); // We don't want to bail completely--we still want to try the other sites, so don't pass the error along to siteCb().
         }
 

@@ -21,7 +21,8 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 //     level: 'debug'
 // });
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
@@ -35,23 +36,23 @@ var originalVaImmunizationRecord = {
     'cptCode': 'urn:cpt:90707',
     'cptName': 'MMR VACCINE SC',
     'encounterName': '00',
-    'encounterUid': 'urn:va:visit:9E7A:8:1797',
+    'encounterUid': 'urn:va:visit:SITE:8:1797',
     'facilityCode': 500,
     'facilityName': 'CAMP MASTER',
     'lastUpdateTime': 19950718091835,
     'localId': 42,
     'name': 'MEASLES,MUMPS,RUBELLA (MMR)',
-    'pid': '9E7A;8',
-    'reactionCode': 'urn:va:reaction:9E7A:8:0',
+    'pid': 'SITE;8',
+    'reactionCode': 'urn:va:reaction:SITE:8:0',
     'reactionName': 'NONE',
-    'seriesCode': 'urn:va:series:9E7A:8:BOOSTER',
+    'seriesCode': 'urn:va:series:SITE:8:BOOSTER',
     'seriesName': 'BOOSTER',
     'stampTime': 19950718091835,
     'summary': 'MMR VACCINE SC',
-    'uid': 'urn:va:immunization:9E7A:8:42',
+    'uid': 'urn:va:immunization:SITE:8:42',
     'performer': {
         'name': 'DOE,JOHN',
-        'uid': 'urn:va:user:9E7A:1111'
+        'uid': 'urn:va:user:SITE:1111'
     }
 };
 var originalVaImmunizationJob = {

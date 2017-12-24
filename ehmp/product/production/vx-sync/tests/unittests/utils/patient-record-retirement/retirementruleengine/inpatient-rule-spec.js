@@ -26,7 +26,7 @@ describe('inpatient-rule', function() {
     it('Normal path: all patients are inpatient and discharge date is more than 1 month ago', function() {
         var done = false;
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             inpatient: true,
             dischargeDate: 'Wed Sep 24 2014 14:58:49 GMT-0600 (MDT)'

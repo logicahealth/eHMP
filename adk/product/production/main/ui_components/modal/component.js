@@ -20,8 +20,7 @@ define([
         attributes: {
             'type': 'button',
             'data-dismiss': 'modal',
-            'id': 'modal-close-button',
-            'title': 'Press enter to close.'
+            'id': 'modal-close-button'
         }
     });
 
@@ -29,7 +28,7 @@ define([
         template: BootstrapModalTemplate,
         resourceEntityEvents: {
             'fetch:success read:success': function(entity, resp) {
-                if(this.showLoading && this.getRegion('loadingRegion')) {
+                if (this.showLoading && this.getRegion('loadingRegion')) {
                     var $loadingRegion = this.$(_.get(this.getRegion('loadingRegion'), '$el.selector', '.modal-loading'));
                     this.removeRegion('loadingRegion');
                     $loadingRegion.remove();
@@ -43,7 +42,7 @@ define([
                 }
             },
             'fetch:error read:error': function(entity, resp) {
-                if(this.showLoading && this.getRegion('loadingRegion')) {
+                if (this.showLoading && this.getRegion('loadingRegion')) {
                     var $loadingRegion = this.$(_.get(this.getRegion('loadingRegion'), '$el.selector', '.modal-loading'));
                     this.removeRegion('loadingRegion');
                     $loadingRegion.remove();
@@ -80,7 +79,8 @@ define([
                 'wrapperClasses': [],
                 'resourceEntity': null,
                 'showLoading': false,
-                'loadingTitle': ''
+                'loadingTitle': '',
+                'blocking': false
             };
             var passInModalOptions = userOptions.options || {};
             this.modalOptions = _.defaults(passInModalOptions, modalOptions);
@@ -134,7 +134,7 @@ define([
             //configure resource events
             var resourceEntity = _.get(this, 'modalOptions.resourceEntity');
             if (!_.isObject(resourceEntity)) { //pick it off view if not supplied
-                resourceEntity =  _.get(userOptions, 'view.collection') || _.get(userOptions, 'view.model') || {};
+                resourceEntity = _.get(userOptions, 'view.collection') || _.get(userOptions, 'view.model') || {};
                 _.set(this, 'modalOptions.resourceEntity', resourceEntity, null);
             }
 
@@ -155,7 +155,7 @@ define([
             }
         },
         onDestroy: function() {
-            if(_.has(this, 'modalOptions.resourceEntity.isEmpty'))
+            if (_.has(this, 'modalOptions.resourceEntity.isEmpty'))
                 this.unbindEntityEvents(_.get(this, 'modalOptions.resourceEntity'), this.resourceEntityEvents);
         },
         events: {
@@ -171,9 +171,9 @@ define([
             modalButtonControlRegion: '#modal-footer'
         },
         onAttach: function() {
-            if(this.nextPreviousCollection) this.checkIfModalIsEnd();
+            if (this.nextPreviousCollection) this.checkIfModalIsEnd();
         },
-        onBeforeShow: function(){
+        onBeforeShow: function() {
             this.showChildView('modalRegion', this.modalRegionView);
 
             if (this.ModalButtonControlView === 'none') {
@@ -187,29 +187,18 @@ define([
         },
         show: function(options) {
             options = options || {};
-            var $triggerElem = options.triggerElement || $(':focus');
+            var $triggerElem = options.triggerElement || _.get(this, 'modalOptions.triggerElement', $(':focus'));
             var ADK_ModalRegion = Messaging.request('get:adkApp:region', 'modalRegion');
-            var modalOptions = {view: this};
+            var modalOptions = { view: this };
 
-            if (!this.draggable || (ADK_ModalRegion.$el && ADK_ModalRegion.$el.children().length === 0)) {
+            if (_.get(this, 'modalOptions.blocking') || ADK_ModalRegion.isCurrentViewBlocking() ||
+                !this.draggable || (ADK_ModalRegion.$el && ADK_ModalRegion.$el.children().length === 0)) {
                 var modalContainerView = new ContainerView(modalOptions);
-                ADK_ModalRegion.show(modalContainerView);
+                ADK_ModalRegion.show(modalContainerView, { triggerElement: $triggerElem });
             } else {
                 ADK_ModalRegion.currentView.resetOptions(modalOptions);
                 ADK_ModalRegion.currentView.modalDialogRegion.show(this);
-                ADK_ModalRegion.currentView.$el.off('hidden.bs.modal');
-            }
-
-            ADK_ModalRegion.currentView.$el.one('hidden.bs.modal', function(e) {
-                ADK_ModalRegion.empty();
-
-                if(_.isFunction($triggerElem.focus)) {
-                    $triggerElem.focus();
-                }
-            });
-
-            if (_.isBoolean(this.modalOptions.callShow) && this.modalOptions.callShow) {
-                ADK_ModalRegion.currentView.$el.modal('show');
+                ADK_ModalRegion.viewUpdated({ triggerElement: $triggerElem });
             }
         },
         checkIfModalIsEnd: function() {
@@ -234,17 +223,33 @@ define([
             this.setNextPrevModal(this.nextPreviousCollection.at(prevIdx));
         },
         setNextPrevModal: function(newModel) {
-            if(this.callbackView) {
-                this.callbackView.getDetailsModal(newModel);
+            var triggerElement = _.get(this, 'modalOptions.triggerElement');
+            if (this.callbackView) {
+                this.callbackView.getDetailsModal(newModel, triggerElement);
             } else {
-                this.callbackFunction(newModel, this.nextPreviousCollection);
+                this.callbackFunction(newModel, this.nextPreviousCollection, triggerElement);
             }
         }
     });
-    ModalLayoutView.hide = function() {
-        var currentView = Messaging.request('get:adkApp:region', 'modalRegion').currentView;
-        if (currentView) {
-            currentView.$el.modal('hide');
+    ModalLayoutView.hide = function(options) {
+        // force options: false (just non blocking), true (just current modal), 'all' (remove all modals both active and in queue)
+        options = _.extend({ force: false }, options);
+        var modalRegion = Messaging.request('get:adkApp:region', 'modalRegion');
+        if (modalRegion.isCurrentViewBlocking()) {
+            switch (options.force) {
+                case false:
+                    modalRegion.clearQueue({ nonBlockingOnly: true });
+                    break;
+                case true:
+                    modalRegion.currentView.$el.modal('hide');
+                    break;
+                case 'all':
+                    modalRegion.clearQueue();
+                    modalRegion.currentView.$el.modal('hide');
+                    break;
+            }
+        } else if (_.get(modalRegion, 'currentView.$el') instanceof $) {
+            modalRegion.currentView.$el.modal('hide');
         }
     };
     return ModalLayoutView;

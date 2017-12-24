@@ -15,14 +15,15 @@ define([
 
                 var fetchOptions = {
                     criteria: {
-                        "uid": params.uid
+                        uid: params.uid
                     },
                     patient: ADK.PatientRecordService.getCurrentPatient(),
+                    resourceTitle: 'uid',
                     onError: function(model, resp) {
                         if (ERROR_LOG) console.log("Documents detail communicator fetch Error");
                     },
                     onSuccess: function(collection) {
-                        collection.trigger('patient-record-document-view:success', collection);
+                        collection.trigger('uid:success', collection);
                     },
                     cache: true
                 };
@@ -39,7 +40,7 @@ define([
                     onSuccess: function(collection) {
                         collection.trigger('uid:success', collection);
                     },
-                    cache: true
+                    cache: false
                 };
 
                 var detailModel = params.model;
@@ -54,7 +55,7 @@ define([
                     response.view = view.extend({
                         collectionEvents: _.extend(view.prototype.collectionEvents, {
                             'patient-record-document-view:success': function(collection) {
-                                if(this.collection.isEmpty()) {
+                                if (this.collection.isEmpty()) {
                                     return ADK.PatientRecordService.fetchCollection(uidFetchOptions, collection);
                                 }
                                 this.collection.trigger('read:success', collection);

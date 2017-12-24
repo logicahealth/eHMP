@@ -22,14 +22,14 @@ var config = {
     'syncRequestApi': {
         'protocol': 'http',
         'host': 'IP      ',
-        'port': '8080',
+        'port': 'PORT',
         'timeout': 300000
     },
     'vistaSites': {
-        'C877': {
+        'SITE': {
             'name': 'KODAK'
         },
-        '9E7A': {
+        'SITE': {
             'name': 'PANORAMA'
         }
     }
@@ -42,7 +42,7 @@ var inpatient = require(global.VX_RETIREMENTRULES + '/inpatient-rule');
 describe('rules-engine.js', function() {
     var engine = new RetirementRulesEngine(log, config, environment);
     var patientIds = [{
-        value: '9E7A;3',
+        value: 'SITE;3',
         type: 'PID'
     }, {
         value: '302394234V323425',

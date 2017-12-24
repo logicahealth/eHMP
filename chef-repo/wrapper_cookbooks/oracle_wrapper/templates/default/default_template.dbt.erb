@@ -1,4 +1,4 @@
-<DatabaseTemplate name="default_template" description="" version="11.1.0.0.0">
+<DatabaseTemplate name="default_template" description="" version="12.1.0.2.0">
    <CommonAttributes>
       <option name="OMS" value="false"/>
       <option name="JSERVER" value="true"/>
@@ -24,7 +24,7 @@
          <initParam name="db_name" value=""/>
          <initParam name="dispatchers" value="(PROTOCOL=TCP) (SERVICE={SID}XDB)"/>
          <initParam name="audit_file_dest" value="{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump"/>
-         <initParam name="compatible" value="11.2.0.0.0"/>
+         <initParam name="compatible" value="12.0.0.0.0"/>
          <initParam name="remote_login_passwordfile" value="EXCLUSIVE"/>
          <initParam name="log_archive_dest_2" value="'LOCATION=<%= node[:oracle][:rdbms][:dbs_root] %>/{DB_UNIQUE_NAME}/arch2'"/>
          <initParam name="log_archive_dest_1" value="'LOCATION=<%= node[:oracle][:rdbms][:dbs_root] %>/{DB_UNIQUE_NAME}/arch1'"/>

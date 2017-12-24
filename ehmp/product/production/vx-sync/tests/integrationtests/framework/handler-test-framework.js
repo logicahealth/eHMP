@@ -223,8 +223,8 @@ function getBeanstalkConfig(config, host, port, defaultTubename) {
                 'vista-operational-subscribe-request': {},
                 'resync-request': {},
 
-                'vista-9E7A-subscribe-request': {},
-                'vista-C877-subscribe-request': {},
+                'vista-SITE-subscribe-request': {},
+                'vista-SITE-subscribe-request': {},
 
                 'vler-sync-request': {},
                 'pgd-sync-request': {},

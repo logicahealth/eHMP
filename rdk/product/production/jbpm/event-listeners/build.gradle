@@ -11,11 +11,18 @@ dependencies {
     compile group: 'org.kie', name: 'kie-internal', version: property('kie-version')
     compile group: 'org.jbpm', name: 'jbpm-flow', version: property('kie-version')
     compile group: 'org.jbpm', name: 'jbpm-human-task-core', version: property('kie-version')
-    compile project(':production:jbpm:JbpmUtils')
-    compile 'javax.persistence:persistence-api:1.0.2'
+    compile group: 'org.jboss.logging', name: 'jboss-logging', version: property('jboss-logging')
+    
+    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '4.2.18.Final'
+    
     exportedLibs group: 'joda-time', name: 'joda-time', version: property('joda-version')
 
     configurations.compile.extendsFrom(configurations.exportedLibs)  
+}
+
+repositories {
+    maven {url "https://store.vistacore.us/nexus/content/groups/public"}
 }
 
 jar {

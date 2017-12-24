@@ -73,7 +73,7 @@ describe 'f117_patient_record_search_text_spec.rb', acceptance: true do
 
     it '. site' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;3',
+                           'pid' => 'SITE;3',
                            'query' => 'blood')
 
       expect(response.code).to eq(200)
@@ -83,7 +83,7 @@ describe 'f117_patient_record_search_text_spec.rb', acceptance: true do
 
     it '. with site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;100816',
+                           'pid' => 'SITE;100816',
                            'query' => 'blood')
 
       expect(response.code).to eq(200)
@@ -101,7 +101,7 @@ describe 'f117_patient_record_search_text_spec.rb', acceptance: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;848484',
+                           'pid' => 'SITE;848484',
                            'query' => 'blood')
 
       expect(response.code).to eq(404)
@@ -280,7 +280,7 @@ describe 'f117_patient_record_search_text_spec.rb', acceptance: true do
         elsif e == 'skin'
           pid = '5000000341V359724'
         elsif e == 'ptf'
-          pid = '9E7A;71'
+          pid = 'SITE;71'
         else
           pid = '10107V395912'
         end

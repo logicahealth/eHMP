@@ -8,7 +8,7 @@
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
        Given a patient with "lab (Chem/Hem) results" in multiple VistAs
       # And a patient with pid "11016V630869" has been synced through the RDK API
-       When the client requests lab "(Chem/Hem)" results for that patient "9E7A;227"
+       When the client requests lab "(Chem/Hem)" results for that patient "SITE;227"
        Then a successful response is returned
        And the results contain lab "(Chem/Hem)" results
        | field                                 | panorama_value      |
@@ -38,13 +38,13 @@
        | resource.contained.address.state                | NY                                                              |
        | resource.contained.address.postalCode           | 12180-0097                                                      |
        | resource.contained.type.text                    | PLASMA                                                          |
-       | resource.contained.subject.reference            | Patient/9E7A;227                                            |
+       | resource.contained.subject.reference            | Patient/SITE;227                                            |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                                            |
        | resource.text.status                            | generated                                                       |
        | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                            |
        | resource.status                                 | final                                                           |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                             |
-       | resource.subject.reference                      | Patient/9E7A;227                                            |
+       | resource.subject.reference                      | Patient/SITE;227                                            |
        | resource.performer.display                      | ALBANY VA MEDICAL CENTER                                        |
        | resource.serviceCategory.coding.code            | CH                                                              |
        | resource.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                     |
@@ -53,23 +53,23 @@
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                                            |
        | resource.specimen.display                       | PLASMA                                                          |
        | resource.result.display                         | PROTIME                                                         |
-       | resource.subject.reference     | Patient/9E7A;227                               |
+       | resource.subject.reference     | Patient/SITE;227                               |
        | resource.contained.type.text   | PLASMA                                             |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#groupName  |
        | resource.extension.valueString | COAG 0317 119                                      |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#groupUid   |
-       | resource.extension.valueString | urn:va:accession:9E7A:227:CH;6949681.966382        |
+       | resource.extension.valueString | urn:va:accession:SITE:227:CH;6949681.966382        |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#localId    |
        | resource.extension.valueString | CH;6949681.966382;430                              |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#orderUid   |
-       | resource.extension.valueString | urn:va:order:9E7A:227:16688                        |
+       | resource.extension.valueString | urn:va:order:SITE:227:16688                        |
   And FHIR date and time conver to Zulu format for Labs Chemistry
 
  @F138_2_Labs_chem_fhir @fhir @11016V630869
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
        Given a patient with "lab (Chem/Hem) results" in multiple VistAs
        #And a patient with pid "11016V630869" has been synced through the RDK API
-       When the client requests lab "(Chem/Hem)" results for that patient "9E7A;227"
+       When the client requests lab "(Chem/Hem)" results for that patient "SITE;227"
        Then a successful response is returned
        And the results contain lab "(Chem/Hem)" results
        | field                                 | kodak_value         |
@@ -100,7 +100,7 @@
        | resource.contained.address.state                | NY                                                              |
        | resource.contained.address.postalCode           | 12180-0097                                                      |
        | resource.contained.type.text                    | PLASMA                                                          |
-       | resource.contained.subject.reference            | Patient/9E7A;227                                            |
+       | resource.contained.subject.reference            | Patient/SITE;227                                            |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                                            |
        | resource.text.status                            | generated                                                       |
        | resource.name.text                              | PROTIME                                                        |
@@ -109,7 +109,7 @@
        | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                            |
        | resource.status                                 | final                                                           |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                          |
-       | resource.subject.reference                      | Patient/9E7A;227                                            |
+       | resource.subject.reference                      | Patient/SITE;227                                            |
        | resource.performer.display                      | ALBANY VA MEDICAL CENTER                                        |
        | resource.serviceCategory.coding.code            | CH                                                              |
        | resource.serviceCategory.coding.system          | http://hl7.org/fhir/v2/0074                                     |
@@ -118,19 +118,19 @@
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                                            |
        | resource.specimen.display                       | PLASMA                                                          |
        | resource.result.display                         | PROTIME                                                        |
-       | resource.subject.reference     | Patient/9E7A;227                               |
+       | resource.subject.reference     | Patient/SITE;227                               |
        | resource.contained.type.text   | PLASMA                                             |
        | resource.extension.url         | http://vistacore.us/fhir/extensions/lab#groupName  |
        | resource.extension.valueString | urn:va:lab-category:CH                                    |
 
- @F138_3_Labs_chem_fhir @fhir @9E7A100184
+ @F138_3_Labs_chem_fhir @fhir @SITE100184
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
        Given a patient with "lab (Chem/Hem) results" in multiple VistAs
-       #And a patient with pid "9E7A;100184" has been synced through the RDK API
-       When the client requests lab "(Chem/Hem)" results for that patient "9E7A;100184"
+       #And a patient with pid "SITE;100184" has been synced through the RDK API
+       When the client requests lab "(Chem/Hem)" results for that patient "SITE;100184"
        And the results contain lab "(Chem/Hem)" results
       | field                                       | value                                                   |
-      | resource.contained.subject.reference         | Patient/9E7A;100184                                     |
+      | resource.contained.subject.reference         | Patient/SITE;100184                                     |
       | resource.extension.url                       | http://vistacore.us/fhir/extensions/lab#groupName       |
       | resource.extension.valueString               | CH 0429 152                                             |
       | resource.contained.identifier.type.text      | facility-code                                           |
@@ -142,17 +142,17 @@
       | resource.contained.referenceRange.high.units | mg/dL                                                   |
       | resource.contained.referenceRange.low.value  | 60                                                      |
       | resource.contained.referenceRange.low.units  | mg/dL                                                   |
-      | resource.text.div                            | CONTAINS urn:va:accession:9E7A:100184:CH;6969569.838468 |
+      | resource.text.div                            | CONTAINS urn:va:accession:SITE:100184:CH;6969569.838468 |
 
- @F138_4_Labs_chem_fhir @fhir @9E7A100184
+ @F138_4_Labs_chem_fhir @fhir @SITE100184
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
        Given a patient with "lab (Chem/Hem) results" in multiple VistAs
-     #  And a patient with pid "9E7A;100184" has been synced through the RDK API
-       When the client requests lab "(Chem/Hem)" results for that patient "9E7A;100184"
+     #  And a patient with pid "SITE;100184" has been synced through the RDK API
+       When the client requests lab "(Chem/Hem)" results for that patient "SITE;100184"
        Then a successful response is returned
        And the results contain lab "(Chem/Hem)" results
       | field                                       | value                                                   |
-      | resource.contained.subject.reference         | Patient/9E7A;100184                                     |
+      | resource.contained.subject.reference         | Patient/SITE;100184                                     |
       | resource.extension.url                       | http://vistacore.us/fhir/extensions/lab#groupName       |
       | resource.extension.valueString               | CH 0429 152                                             |
       | resource.contained.identifier.type.text      | facility-code                                           |
@@ -164,12 +164,12 @@
       | resource.contained.referenceRange.high.units | mg/dL                                                   |
       | resource.contained.referenceRange.low.value  | 60                                                      |
       | resource.contained.referenceRange.low.units  | mg/dL                                                   |
-      | resource.text.div                            | CONTAINS urn:va:accession:9E7A:100184:CH;6969569.838468 |
+      | resource.text.div                            | CONTAINS urn:va:accession:SITE:100184:CH;6969569.838468 |
 
  @F138_5_Labs_ch_neg_fhir @fhir @5000000009V082878
  Scenario: Negative scenario.  Client can request lab (Chem/Hem) results in FHIR format
  Given a patient with "No lab results" in multiple VistAs
- When the client requests lab "(Chem/Hem)" results for that patient "9E7A;100125"
+ When the client requests lab "(Chem/Hem)" results for that patient "SITE;100125"
  Then a successful response is returned
  Then corresponding matching FHIR records totaling "1" are displayed
 
@@ -177,6 +177,6 @@
  Scenario: Client can request lab (Chem/Hem) results in FHIR format
        Given a patient with "lab (Chem/Hem) results" in multiple VistAs
        #And a patient with pid "11016V630869" has been synced through the RDK API
-       When the client requests "10" lab "(Chem/Hem)" results for that patient "9E7A;227" in FHIR format
+       When the client requests "10" lab "(Chem/Hem)" results for that patient "SITE;227" in FHIR format
        Then a successful response is returned
        And total returned resources are "10"

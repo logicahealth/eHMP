@@ -44,8 +44,9 @@ define([
 
                 if(contextViewType === 'staff'){
                     ADK.PatientRecordService.setCurrentPatient(this.model.get('pid'), {
-                        reconfirm: true,
-                        navigation: true,
+                        confirmationOptions: {
+                            reconfirm: false
+                        },
                         staffnavAction: {
                             channel: 'orders',
                             event: 'show:lab-sign',

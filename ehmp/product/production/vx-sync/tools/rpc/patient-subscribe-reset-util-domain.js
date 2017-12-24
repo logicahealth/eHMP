@@ -15,7 +15,7 @@ var rpcClient = require('vista-js').RpcClient;
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 
 
-var pid = '9E7A;3';
+var pid = 'SITE;3';
 
 //-----------------------------------------------------------------------------------
 // Unsubscribe the operational data.

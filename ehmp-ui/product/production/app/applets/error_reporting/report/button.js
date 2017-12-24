@@ -19,7 +19,7 @@ define([
         tagName: 'button',
         className: 'btn btn-xs btn-default font-size-11 left-margin-xs',
         attributes: {
-            title: 'Press enter to report an issue with eHMP.'
+            title: 'Report an issue with eHMP.'
         },
         behaviors: {
             Tooltip: {}
@@ -138,7 +138,7 @@ define([
         }),
         orderIndex: 5,
         shouldShow: function() {
-            return true;
+            return false;
         }
     });
     ADK.Messaging.trigger('register:component', {

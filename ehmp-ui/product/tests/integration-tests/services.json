@@ -3,7 +3,7 @@
     "services": {
       "rest": {
         "ssl": false,
-        "port": 9080
+        "port": PORT
       }
     }
   },
@@ -11,7 +11,7 @@
     "services": {
       "http": {
         "ssl": false,
-        "port": 8983
+        "port": PORT
       }
     }
   },
@@ -19,7 +19,7 @@
     "services": {
       "http": {
         "ssl": false,
-        "port": 80
+        "port": PORT
       }
     }
   },
@@ -27,14 +27,14 @@
     "services": {
       "fmql": {
         "ssl": true,
-        "port": 443
+        "port": PORT
       },
       "m-web": {
         "ssl": false,
-        "port": 9211
+        "port": PORT
       },
       "vista-rpc": {
-        "port": 9210
+        "port": PORT
       }
     }
   },
@@ -42,14 +42,14 @@
     "services": {
       "fmql": {
         "ssl": true,
-        "port": 443
+        "port": PORT
       },
       "m-web": {
         "ssl": false,
-        "port": 9211
+        "port": PORT
       },
       "vista-rpc": {
-        "port": 9210
+        "port": PORT
       }
     }
   },
@@ -57,7 +57,7 @@
     "services": {
       "rest": {
         "ssl": false,
-        "port": 80
+        "port": PORT
       }
     }
   },

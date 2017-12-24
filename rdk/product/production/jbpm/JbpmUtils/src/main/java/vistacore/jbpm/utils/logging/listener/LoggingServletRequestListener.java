@@ -13,7 +13,7 @@ public class LoggingServletRequestListener implements ServletRequestListener {
 	
 	@Override
 	public void requestDestroyed(ServletRequestEvent sre) {
-		LOGGER.info(MDC.get("context").toString() + " " +  RequestMessageType.OUTGOING_RESPONSE + " ENDOF " + MDC.get("requestInfo"));
+		LOGGER.info(String.format("%s %s ENDOF %s", MDC.get("context")+"", RequestMessageType.OUTGOING_RESPONSE, MDC.get("requestInfo")+""));
 	}
 
 	@Override

@@ -1,0 +1,7 @@
+"ehmp-ui-acceptance-test-build-%branch%" { 
+  template = 'templates/acceptance-test-build.tpl'
+	description = "ehmp-ui acceptance test build for the branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/ehmp-ui.git'
+	gitBranch = '%branch%'
+}

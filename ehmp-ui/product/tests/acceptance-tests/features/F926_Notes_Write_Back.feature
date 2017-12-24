@@ -55,7 +55,7 @@ Scenario: Create new note.
 @f926_notes_applet_signs_new_note 
 Scenario: Sign a note.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "USER  " verifycode as  "PW      "
   Then staff view screen is displayed
   When user searches for and selects "eighteen,inpatient"
   Then Overview is active
@@ -63,7 +63,7 @@ Scenario: Sign a note.
   When POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADHC SOCIAL WORK"
-  And POB user signs the note "ADHC SOCIAL WORK" as "REDACTED"
+  And POB user signs the note "ADHC SOCIAL WORK" as "PW      "
   Then POB user sees the new note "ADHC SOCIAL WORK" under recently signed notes header
   
 @f926_notes_applet_edit_and_preview_note

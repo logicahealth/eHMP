@@ -9,19 +9,20 @@ define([
     'main/adk_utils/resizeUtils'
 ], function(Backbone, Marionette, $, _, Handlebars, Messaging, Session, ResizeUtils) {
     'use strict';
-
     var defaultOptions = {
         //if no viewport is specified we are just going to stick it on the bottom of the button, and end it at the #center-region
         //'viewport': '#center-region',
         //'tray': TrayView, //some view definition
         //'buttonLabel': 'This is what my button says',
+        'ariaLabel': '',
         'position': 'right',
         'preventFocusoutClose': false,
         'widthScale': 1 / 3,
         'iconClass': null,
         'buttonClass': null,
         'listenToWindowResize': true,
-        'containerHeightDifference': 0
+        'containerHeightDifference': 0,
+        'toggleable': true
     };
 
     var TRANSITION_SPEED = 200;
@@ -30,7 +31,18 @@ define([
     var TrayView = Backbone.Marionette.LayoutView.extend({
         _eventPrefix: 'tray',
         template: Handlebars.compile([
-            '<button type="button" id={{tray_id}} class="btn btn-default{{#if buttonClass}} {{buttonClass}}{{/if}}" data-toggle="sidebar-tray" title="Press enter to activate menu" aria-expanded="false">{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}} <i class="icon fa fa-angle-double-{{position}}"></i></button>',
+            '{{#if hasToggleView}}',
+            '<div class="tray-btn-container"></div>',
+            '{{else}}',
+            '<button type="button" id={{tray_id}} ' +
+            'class="tray-btn-container btn {{#if buttonClass}} {{buttonClass}}{{else}} btn-default{{/if}}" ' +
+            'data-toggle="sidebar-tray" ' +
+            'aria-expanded="false" ' +
+            '{{#if ariaLabel}} aria-label="{{ariaLabel}}{{/if}}"' +
+            '>',
+            '{{#if iconClass}}<i class="{{iconClass}}" aria-hidden="true"></i> {{/if}}{{buttonLabel}} <i class="icon fa fa-angle-double-{{position}}"></i>',
+            '</button>',
+            '{{/if}}',
             '<div role="region" class="sidebar-tray {{position}}" aria-labelledby="{{tray_id}}" aria-hidden="true" tabindex="-1" data-tray-width-scale="{{widthScale}}"/>'
         ].join('\r\n')),
         options: defaultOptions,
@@ -50,7 +62,8 @@ define([
             ].join(' ');
         },
         ui: {
-            'ButtonContainer': '[data-toggle=sidebar-tray]',
+            'ButtonToggle': '[data-toggle=sidebar-tray]',
+            'ButtonContainer': '.tray-btn-container',
             'TrayContainer': '.sidebar-tray'
         },
         regions: {
@@ -66,11 +79,11 @@ define([
             var prefix = eventPrefix || this._eventPrefix;
             var eventsHash = {
                 //action events
-                'click @ui.ButtonContainer': function(e) {
+                'click @ui.ButtonToggle': function(e) {
                     this.toggle(e);
                 },
-                'keydown @ui.ButtonContainer': function(e) {
-                    this.keyHandler(e, this.ui.ButtonContainer);
+                'keydown @ui.ButtonToggle': function(e) {
+                    this.keyHandler(e, this.ui.ButtonToggle);
                 },
                 'keydown @ui.TrayContainer': function(e) {
                     this.keyHandler(e, this.ui.TrayContainer);
@@ -90,13 +103,23 @@ define([
                     }, this));
                 },
                 'keydown .modal,.select2,.dropdown': function(e) {
-                    if (e.which === 27) {
+                    if (e.which === $.ui.keyCode.ESCAPE) {
                         e.preventDefault();
                     }
                 }
             };
 
             //listen to the dom events and broadcast at the view level
+            eventsHash[prefix + '.update:nextViewOptions'] = function(e, options) {
+                e.stopPropagation();
+                this.nextViewOptions.clear({ silent: true });
+                this.nextViewOptions.set(options);
+            };
+            eventsHash[prefix + ':view:update:bound:ui:elements'] = function(e, options) {
+                e.stopImmediatePropagation();
+                this.bindUIElements();
+                this.$el.trigger(this._eventPrefix + ':view:updated:bound:ui:elements');
+            };
             eventsHash[prefix + '.loaderShow'] = function(thisE, options) {
                 this.loaderShow(thisE, options);
             };
@@ -107,6 +130,11 @@ define([
                 this.trigger(prefix + '.show', e);
                 if (!this.isOpen()) {
                     this.open(e);
+                } else {
+                    this.trigger(prefix + '.shown', e);
+                }
+                if (!this.options.toggleable) {
+                    this.ui.ButtonToggle.attr('disabled', true);
                 }
             };
             eventsHash[prefix + '.shown'] = function(thisE, e) {
@@ -126,7 +154,7 @@ define([
             };
             eventsHash[prefix + '.hidden'] = function(thisE, e) {
                 $(document).off(this.eventString(), 'body');
-                this.ui.ButtonContainer.off('focusin');
+                this.ui.ButtonToggle.off('focusin');
                 this.trigger(prefix + '.hidden', e);
             };
             eventsHash[prefix + '.reset'] = function(e) {
@@ -137,12 +165,13 @@ define([
             eventsHash[prefix + '.swap'] = function(e, View) {
                 e.stopPropagation();
                 if (!(View instanceof this.getOption('tray')) && !_.isUndefined(this.tray)) {
-                    var viewToShow = (View instanceof Backbone.Marionette.View) ||
-                        (View instanceof Backbone.Marionette.ItemView) ||
-                        (View instanceof Backbone.Marionette.CollectionView) ||
-                        (View instanceof Backbone.Marionette.CompositeView) ||
-                        (View instanceof Backbone.Marionette.LayoutView) ? View : (typeof View === 'function') ? new View() : undefined;
-                    if (!_.isUndefined(viewToShow)) {
+                    var viewToShow;
+                    if (View instanceof Backbone.Marionette.View) {
+                        viewToShow = View;
+                    } else if (typeof View === 'function') {
+                        viewToShow = new View({ nextViewOptions: this.nextViewOptions });
+                    }
+                    if (Backbone.Marionette.View.prototype.isPrototypeOf(viewToShow)) {
                         var showOptions = this.TrayRegion.currentView instanceof this.getOption('tray') ? {
                             preventDestroy: true
                         } : {};
@@ -193,7 +222,7 @@ define([
                 // prevent the tray/writeback elements from being focused by tabbing when loader in place
                 trayDiv.on('keydown.trayFocusAction', function(e) {
                     // skip the tray and focus the loader directly if tab goes forward
-                    if (e.keyCode === 9 && !e.shiftKey && !loadingDiv.is(':focus')) {
+                    if (e.keyCode === $.ui.keyCode.TAB && !e.shiftKey && !loadingDiv.is(':focus')) {
                         e.preventDefault();
                         e.stopPropagation();
                         loadingDiv.focus();
@@ -201,7 +230,7 @@ define([
                 });
                 loadingDiv.on('keydown.loaderFocusHolder', function(e) {
                     //skip the tray elements and focus the tray element itself if tabbing backwards
-                    if (e.keyCode === 9 && e.shiftKey) {
+                    if (e.keyCode === $.ui.keyCode.TAB && e.shiftKey) {
                         e.preventDefault();
                         e.stopPropagation();
                         trayDiv.focus();
@@ -272,8 +301,8 @@ define([
             return false;
         },
         isFocusInsideButton: function(view, target) {
-            var isSame = view.ui.ButtonContainer[0] === target,
-                isIn = !!view.ui.ButtonContainer.find(target).length;
+            var isSame = view.ui.ButtonToggle[0] === target,
+                isIn = !!view.ui.ButtonToggle.find(target).length;
             return isSame || isIn;
         },
         isFocusInsideTray: function(view, target) {
@@ -290,7 +319,9 @@ define([
             var view = e.data.view;
             if (view.isFocusInside(view, e.target) || (!view.tabOut && view.getOption('preventFocusoutClose')) || view.isFocusInsideGrowl(e.target)) return;
             view.stopListening(view, this._eventPrefix + '.hidden.' + view.cid);
-            view.$el.trigger(this._eventPrefix + '.hide');
+            if (view.options.toggleable) {
+                view.$el.trigger(this._eventPrefix + '.hide');
+            }
             delete view.tabOut;
         },
         keyHandler: function(e, el) {
@@ -299,6 +330,7 @@ define([
             //This closely copied from the Bootstrap dropdown lib.  It has been very slightly modified to work with Marionette.
             //The original function can't be sourced from document data because the Paypal lib overwrites it.
             //We added the tab key to handle some edge cases and slightly changed some selectors to grab the appropriate elements.
+            //Escape or Tab
             if (!/(27|9)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return;
 
             var $this = el;
@@ -306,7 +338,7 @@ define([
             var isActive = this.isOpen();
             var self = this;
             //edge cases for shift key--not in Bootstrap
-            if (e.which == 9) {
+            if (e.which == $.ui.keyCode.TAB) {
                 if (!isActive && !this.isFocusInsideTray(this, e.target)) return;
                 if (e.shiftKey) {
                     //if it's active, shift key is pressed, and we are inside the tray container, or focused on the tray container itself
@@ -315,7 +347,9 @@ define([
                     }, function(e) {
                         var view = e.data.view;
                         if (view.isFocusInsideButton(view, e.target)) { //focus is in or on our button
-                            view.$el.trigger(self._eventPrefix + '.hide');
+                            if (view.options.toggleable) {
+                                view.$el.trigger(self._eventPrefix + '.hide');
+                            }
                         }
                     });
                 } else {
@@ -329,9 +363,14 @@ define([
 
             if ($this.is('.disabled, :disabled')) return;
 
-            if ((!isActive && e.which != 27) || (isActive && e.which == 27)) {
-                if (e.which == 27)
-                    return this.ui.ButtonContainer.trigger('focus').trigger('click');
+            if ((!isActive && e.which != $.ui.keyCode.ESCAPE) || (isActive && e.which == $.ui.keyCode.ESCAPE)) {
+                if (e.which == $.ui.keyCode.ESCAPE) {
+                    if (!this.options.toggleable) {
+                        this.ui.ButtonToggle.attr('disabled', false);
+                    }
+                    return this.ui.ButtonToggle.trigger('focus').trigger('click', [{ 'tray.toggle': true }]);
+                }
+                // Enter or Space
                 if (/(13|32)/.test(e.which)) return $this.trigger('click');
             }
         },
@@ -344,10 +383,13 @@ define([
                 'buttonLabel': this.options.buttonLabel,
                 'position': this.options.position,
                 'iconClass': this.options.iconClass,
+                'ariaLabel': this.options.ariaLabel,
                 'buttonClass': this.options.buttonClass,
-                'widthScale': _.round(this.options.widthScale, 2)
+                'widthScale': _.round(this.options.widthScale, 2),
+                'hasToggleView': (_.isFunction(this.getOption('toggleView')) && _.has(this.getOption('toggleView'), 'extend'))
             });
-            this.tray = (this.options.tray instanceof Backbone.Marionette.View) ? this.options.tray : (typeof this.options.tray === 'function') ? new this.options.tray() : undefined;
+            this.nextViewOptions = new Backbone.Model();
+            this.tray = (this.options.tray instanceof Backbone.Marionette.View) ? this.options.tray : (typeof this.options.tray === 'function') ? new this.options.tray({ nextViewOptions: this.nextViewOptions }) : undefined;
 
             var self = this;
 
@@ -389,15 +431,18 @@ define([
             if (this.tray) {
                 this.showChildView('TrayRegion', this.tray);
             }
-            var ButtonView = this.getOption('buttonView');
-            if (_.isFunction(ButtonView)) {
-                ButtonView = ButtonView.extend({
-                    templateHelpers: {
-                        buttonLabel: this.getOption('buttonLabel')
-                    }
-                });
-                this.showChildView('ButtonRegion', new ButtonView());
+
+            if (!this.showViewInRegion(this.getOption('toggleView'), 'ButtonRegion')) {
+                this.showViewInRegion(this.getOption('buttonView'), 'ButtonRegion');
             }
+            this.bindUIElements();
+        },
+        showViewInRegion: function(ViewDefinition, regionName) {
+            if (!_.isFunction(ViewDefinition) || !_.has(ViewDefinition, 'extend')) return false;
+            var viewInstance = new ViewDefinition({ model: this.model });
+            if (!Backbone.Marionette.View.prototype.isPrototypeOf(viewInstance)) return false;
+            this.showChildView(regionName, viewInstance);
+            return true;
         },
         onRender: function() {
             this.resetContainerWidth();
@@ -414,7 +459,7 @@ define([
             } else {
                 //if viewport isn't specified, extend the tray from the bottom of the button to the bottom of the center region
                 this.containerBounds = _.pick($('#content-region')[0].getBoundingClientRect(), ['bottom', 'height', 'left', 'right', 'top', 'width']);
-                var buttonBounds = this.ui.ButtonContainer[0].getBoundingClientRect(),
+                var buttonBounds = this.ui.ButtonToggle[0].getBoundingClientRect(),
                     ext = {
                         top: buttonBounds.bottom,
                         height: this.containerBounds.bottom - buttonBounds.bottom
@@ -485,7 +530,8 @@ define([
                 el.trigger(self._eventPrefix + '.shown');
             }).emulateTransitionEnd(TRANSITION_SPEED);
 
-            this.ui.ButtonContainer.attr('aria-expanded', true);
+            this.ui.ButtonToggle.attr('aria-expanded', true);
+
             el.addClass('open');
             Messaging.trigger(this._eventPrefix + '.opened', this.cid);
         },
@@ -494,13 +540,19 @@ define([
                 self = this;
 
             //set focus to the element that opened the tray when the tray is closed, unless it's told to close from another tray
-            if (this.triggerEl && !this.tabOut) {
+            var setFocusToButtonToggle = _.get(e, 'setFocusToButtonToggle', false);
+            if (this.triggerEl && (!this.tabOut || setFocusToButtonToggle)) {
                 this.listenToOnce(this, this._eventPrefix + '.hidden', function() {
-                    this.triggerEl.focus();
+                    if (setFocusToButtonToggle) {
+                        this.ui.ButtonToggle.focus();
+                    } else {
+                        this.triggerEl.focus();
+                    }
                 });
             }
 
             Messaging.trigger(this._eventPrefix + '.closed', this.cid);
+            this.trigger(this._eventPrefix + '.closed', this.cid);
 
             //use the built in bootstrap timer and event to wait for the CSS animation to complete
             this.ui.TrayContainer.off('bsTransitionEnd');
@@ -509,7 +561,10 @@ define([
                 el.trigger(self._eventPrefix + '.hidden');
             }).emulateTransitionEnd(TRANSITION_SPEED);
 
-            this.ui.ButtonContainer.attr('aria-expanded', false);
+            this.ui.ButtonToggle.attr('aria-expanded', false);
+            if (!this.options.toggleable) {
+                this.ui.ButtonToggle.attr('disabled', false);
+            }
             el.removeClass('open');
         },
         setFocusToFirstMenuItem: function() {

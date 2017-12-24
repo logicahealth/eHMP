@@ -13,9 +13,6 @@ define([
         fetchOptions: {
             resourceTitle: 'patient-record-problem',
             pageable: false,
-            criteria: {
-                filter: 'ne(removed, true)'
-            },
             cache: true
         },
         parse: function(response) {

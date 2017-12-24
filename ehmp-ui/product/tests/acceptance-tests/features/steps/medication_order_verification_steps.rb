@@ -17,7 +17,7 @@ class NewOutpatientMedOrderONC < AccessBrowserV2
     add_verify(CucumberLabel.new("SIMVASTATIN_TAB"), VerifyContainsText.new, AccessHtmlElement.new(:link, "SIMVASTATIN TAB"))
     add_verify(CucumberLabel.new("LORAZEPAM_TAB"), VerifyContainsText.new, AccessHtmlElement.new(:link, "LORAZEPAM TAB"))
     add_verify(CucumberLabel.new("LANTUS"), VerifyContainsText.new, AccessHtmlElement.new(:link, "LANTUS <PRAMLINTIDE PEN INJ,SOLN >"))
-    add_action(CucumberLabel.new("Primary Care"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:9E7A:149:A;2940218.1;32"))
+    add_action(CucumberLabel.new("Primary Care"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:SITE:149:A;2940218.1;32"))
     add_action(CucumberLabel.new("Add Med Order"), ClickAction.new, AccessHtmlElement.new(:link, "Add Medication Order"))
   end
 end

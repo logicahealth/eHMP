@@ -253,9 +253,9 @@ define([
                 var errMessage;
                 if (_.isObject(objClinicalObjUid)) {
                     if (objClinicalObjUid.clinicalObjectUid) {
-                        var patientContext = ADK.PatientRecordService.getCurrentPatient();
+                        var pid = ADK.PatientRecordService.getCurrentPatient().getIdentifier();
                         var url = ADK.ResourceService.buildUrl('patient-record-note-by-consult-uid', {
-                            pid: patientContext.get('pid'),
+                            pid: pid,
                             consultUid: objClinicalObjUid.clinicalObjectUid
                         });
                         var urlFetch = new Backbone.Collection();
@@ -360,7 +360,7 @@ define([
         view: TrayView,
         orderIndex: 40,
         shouldShow: function() {
-            return (ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('sign-note'));
+            return (ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('sign-note'));
         }
     });
 

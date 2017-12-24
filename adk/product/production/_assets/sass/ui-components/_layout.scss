@@ -1,28 +1,7 @@
-// element with a id of navigation-region
-#navigation-region {
-    background: $pure-white;
-    min-height: 37px;
-    padding: 5px;
-    .context-navigaton-bar-wrapper {
-        -ms-flex-pack: space-between;
-        justify-content: space-between;
-        .context-navigation-bar {
-            &.right {
-                flex-grow: 1;
-                flex-shrink: 0;
-                > .nav {
-                    margin: 0 0 0 auto;
-                    max-width: 1000px;
-                }
-            }
-        }
-    }
-}
-
 // element with an id of center-region
 #center-region {
-    background: $secondary-light; /* For browsers that do not support gradients */
-    background: linear-gradient(to bottom, $pure-white  10%, $secondary-light 25%, $secondary-light 100%); /* Standard syntax */
+    background: $primary-light; /* For browsers that do not support gradients */
+    background: linear-gradient(to bottom, $pure-white  10%, $primary-light 25%, $primary-light 100%); /* Standard syntax */
     display: block;
     margin: 0;
     min-width: 984px;
@@ -95,16 +74,5 @@ body[data-full-screen="true"] {
     }
     div.sidebar-tray div.panel-body {
         overflow: visible;
-    }
-}
-
-// patient-context
-body.patient-context {
-    .navbar.navbar-default {
-        background-color: $primary-light;
-    }
-    #center-region {
-        background: $primary-light; /* For browsers that do not support gradients */
-        background: linear-gradient(to bottom, $pure-white  10%, $primary-light 25%, $primary-light 100%); /* Standard syntax */
     }
 }

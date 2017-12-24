@@ -3,17 +3,11 @@
 //set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 var dbName = 'schedule';
 var exeCollection = 'cdsjobs';
-var thisApp;
-
-var testId;
-
-function init(app) {
-    thisApp = app;
-}
 
 // Execution Request
 
@@ -119,15 +113,18 @@ function init(app) {
  * { "data": null }
  *
  */
-var getExecute = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getExecute(req, res) {
+    req.logger.debug('cds-execute.getExecute()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS execute resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('ExecutionRequest getCDSExecution called');
+        req.logger.debug('cds-execute.getExecute() ExecutionRequest getCDSExecution called');
 
         var status = rdk.httpstatus.ok; // 200;
         var message = '';
@@ -141,16 +138,19 @@ var getExecute = function(req, res) {
             }
         }
 
-        dbConnection.collection(exeCollection).find(match).toArray(function(err, result) {
-            message = (err === null) ? result : err;
-            if (err === null && _.isEmpty(result)) {
+        dbConnection.collection(exeCollection).find(match).toArray(function(error, result) {
+            req.logger.debug('cds-execute.getExecute() database call: error: %j, result: %j', error, result);
+            message = (error === null) ? result : error;
+            if (error === null && _.isEmpty(result)) {
                 status = rdk.httpstatus.not_found;
             }
+
+            req.logger.debug('cds-execute.getExecute() status: %s, response: %j', status, message);
             return res.status(status).rdkSend(message);
         });
     });
-};
-module.exports.getExecute = getExecute;
+}
+
 
 /*
  * Store ExecutionRequest
@@ -258,15 +258,18 @@ module.exports.getExecute = getExecute;
  *                  ExecutionRequest document 'Name' exists, can not be created" }
  *
  */
-var postExecute = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postExecute(req, res) {
+    req.logger.debug('cds-execute.postExecute()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS execute resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('ExecutionRequest postCDSExecution called');
+        req.logger.debug('cds-execute.getExecute() ExecutionRequest postCDSExecution called');
 
         var status = rdk.httpstatus.created; // 201;
         var message = '';
@@ -294,8 +297,8 @@ var postExecute = function(req, res) {
             });
         });
     });
-};
-module.exports.postExecute = postExecute;
+}
+
 
 /*
  * update ExecutionRequest
@@ -322,15 +325,18 @@ module.exports.postExecute = postExecute;
  * { "error": "CDS
  *                  ExecutionRequest document 'Name' does not " }
  */
-var putExecute = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function putExecute(req, res) {
+    req.logger.debug('cds-execute.putExecute()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS execute resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('ExecutionRequest putCDSExecution called');
+        req.logger.debug('cds-execute.getExecute() ExecutionRequest putCDSExecution called');
 
         var status = rdk.httpstatus.ok; // 200;
         var job = req.body;
@@ -357,8 +363,7 @@ var putExecute = function(req, res) {
             });
         });
     });
-};
-module.exports.putExecute = putExecute;
+}
 
 /*
  * Delete an ExecutionRequest
@@ -382,27 +387,33 @@ module.exports.putExecute = putExecute;
  * { "data": 0 }
  *
  */
-var deleteExecute = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteExecute(req, res) {
+    req.logger.debug('cds-execute.deleteExecute()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS execute resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('Execution Request deleteCDSExecution called');
+        req.logger.debug('cds-execute.getExecute() Execution Request deleteCDSExecution called');
 
         var status = rdk.httpstatus.ok;
         var id = null;
         var name = null;
         var match = {};
         var message = null;
+
         if (req.query.name) {
             name = req.query.name;
         }
+
         if (req.query.id) {
             id = req.query.id;
         }
+
         if (id) {
             message = testId(id);
             if (message) {
@@ -427,7 +438,10 @@ var deleteExecute = function(req, res) {
             res.status(status).rdkSend(message);
         });
     });
-};
-module.exports.deleteExecute = deleteExecute;
+}
 
-module.exports.init = init;
+
+module.exports.getExecute = getExecute;
+module.exports.postExecute = postExecute;
+module.exports.putExecute = putExecute;
+module.exports.deleteExecute = deleteExecute;

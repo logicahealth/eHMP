@@ -1,14 +1,14 @@
-VPRJCONV ;V4W/DLW,KRM/CJE -- Conversion routine to convert the old sync status metastamp to the new one
- ;;1.0;JSON DATA STORE;;Nov 04, 2015
+VPRJCONV ;V4W/DLW,KRM/CJE -- Conversion routine to make conversions to JDS data that has changed
  ;
  QUIT  ; Should not be called from the top
  ;
  ; This routine should be run at every site that was running JDS before the conversion to the new metastamp
  ; This routine makes extensive use of ^TMP. This is used as a temprory work place for conversions to happen
  ; If this process needs to be re-ran (due to a crash, etc). The data stored in ^TMP is important to keep around.
- ; This cannot be move to process private globals.
+ ; This cannot be moved to process private globals.
  ;
 SYNCSTS ; Entry point for sync status metastamp conversion
+ ; Convert the old sync status metastamp to the new one
  N STARTOD,STARTPAT,ENDTIME,TOTALTIME,ODTIME,ODAVG,PATTIME,PATAVG,I,J,PID,SITE,SOURCESTAMP,DOMAIN
  ;
  I $D(^VPRJSAVD) W "^VPRJSAVD is not empty, aborting!",! QUIT
@@ -41,18 +41,18 @@ SYNCSTS ; Entry point for sync status metastamp conversion
  . ;
  . F  S DOMAIN=$O(^VPRSTATUSOD(SITE,SOURCESTAMP,DOMAIN)) Q:DOMAIN=""  D
  . . ; Delete the domain stored node
- . . K ^VPRSTATUSOD(SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")
+ . . K:$D(^VPRSTATUSOD(SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")) ^VPRSTATUSOD(SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")
  . ;
- . ZK ^VPRSTATUSOD(SITE,SOURCESTAMP) ; Delete the data, but not the descendants
+ . ZK:$D(^VPRSTATUSOD(SITE,SOURCESTAMP))#10 ^VPRSTATUSOD(SITE,SOURCESTAMP) ; Delete the data, but not the descendants
  . ; Save off newest metastamp to a temp global
  . M ^VPRJSTMP("VPRSTATUSOD",SITE)=^VPRSTATUSOD(SITE,SOURCESTAMP)
  . S ^VPRJSTMP("VPRSTATUSOD",SITE,"stampTime")=SOURCESTAMP
- . K ^VPRSTATUSOD(SITE)
+ . K:$D(^VPRSTATUSOD(SITE)) ^VPRSTATUSOD(SITE)
  . M ^VPRSTATUSOD(SITE)=^VPRJSTMP("VPRSTATUSOD",SITE)
  . ;
  . TC
  ;
- K ^VPRJSTMP("VPRSTATUSOD")
+ K:$D(^VPRJSTMP("VPRSTATUSOD")) ^VPRJSTMP("VPRSTATUSOD")
  ;
  L -^VPRSTATUSOD
  ;
@@ -80,18 +80,18 @@ SYNCSTS ; Entry point for sync status metastamp conversion
  . ;
  . F  S DOMAIN=$O(^VPRSTATUS(PID,SITE,SOURCESTAMP,DOMAIN)) Q:DOMAIN=""  D
  . . ; Delete the domain stored node
- . . K ^VPRSTATUS(PID,SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")
+ . . K:$D(^VPRSTATUS(PID,SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")) ^VPRSTATUS(PID,SITE,SOURCESTAMP,DOMAIN,SOURCESTAMP,"stored")
  . ;
- . ZK ^VPRSTATUS(PID,SITE,SOURCESTAMP) ; Delete the data, but not the descendants
+ . ZK:$D(^VPRSTATUS(PID,SITE,SOURCESTAMP))#10 ^VPRSTATUS(PID,SITE,SOURCESTAMP) ; Delete the data, but not the descendants
  . ; Save off newest metastamp to a temp global
  . M ^VPRJSTMP("VPRSTATUS",PID,SITE)=^VPRSTATUS(PID,SITE,SOURCESTAMP)
  . S ^VPRJSTMP("VPRSTATUS",PID,SITE,"stampTime")=SOURCESTAMP
- . K ^VPRSTATUS(PID,SITE)
+ . K:$D(^VPRSTATUS(PID,SITE)) ^VPRSTATUS(PID,SITE)
  . M ^VPRSTATUS(PID,SITE)=^VPRJSTMP("VPRSTATUS",PID,SITE)
  . ;
  . TC
  ;
- K ^VPRJSTMP("VPRSTATUS")
+ K:$D(^VPRJSTMP("VPRSTATUS")) ^VPRJSTMP("VPRSTATUS")
  ;
  L -^VPRSTATUS
  ;
@@ -184,13 +184,13 @@ JPIDSHRD(SAVE) ; Entry point for JPID restructure for sharding conversion
  . ; Save to cache mode, back up the original node to a memory-backed global
  . E  I SAVE=2 M ^TMP("VPRJSAVA",PID)=^VPRPT(PID)
  . ; Kill original patient array node
- . K ^VPRPT(PID)
+ . K:$D(^VPRPT(PID)) ^VPRPT(PID)
  . ;
  . TC
  ; Merge all patients back in to ^VPRPT
  W "Merging ^TMP(""VPRJSVPT"",""ARRAY"") back in to ^VPRPT",!
  M ^VPRPT=^TMP("VPRJSVPT","ARRAY")
- K ^TMP("VPRJSVPT","ARRAY")
+ K:$D(^TMP("VPRJSVPT","ARRAY")) ^TMP("VPRJSVPT","ARRAY")
  W "Merged ^TMP(""VPRJSVPT"",""ARRAY"") back in to ^VPRPT",!
  ;
  L -^VPRPT
@@ -226,13 +226,13 @@ JPIDSHRD(SAVE) ; Entry point for JPID restructure for sharding conversion
  . ; Save to cache mode, back up the original node to a memory-backed global
  . E  I SAVE=2 M ^TMP("VPRJSAVJ",PID)=^VPRPTJ("JSON",PID)
  . ; Kill original patient JSON node
- . K ^VPRPTJ("JSON",PID)
+ . K:$D(^VPRPTJ("JSON",PID)) ^VPRPTJ("JSON",PID)
  . ;
  . TC
  ; Merge all patients back in to ^VPRPTJ("JSON")
  W "Merging ^TMP(""VPRJSVPT"",""JSON"") back in to ^VPRPTJ(""JSON"")",!
  M ^VPRPTJ("JSON")=^TMP("VPRJSVPT","JSON")
- K ^TMP("VPRJSVPT","JSON")
+ K:$D(^TMP("VPRJSVPT","JSON")) ^TMP("VPRJSVPT","JSON")
  W "Merged ^TMP(""VPRJSVPT"",""JSON"") back in to ^VPRPTJ(""JSON"")",!
  ;
  L -^VPRPTJ("JSON")
@@ -268,13 +268,13 @@ JPIDSHRD(SAVE) ; Entry point for JPID restructure for sharding conversion
  . ; Save to cache mode, back up the original node to a memory-backed global
  . E  I SAVE=2 M ^TMP("VPRJSAVI",PID)=^VPRPTI(PID)
  . ; Kill original patient index node
- . K ^VPRPTI(PID)
+ . K:$D(^VPRPTI(PID)) ^VPRPTI(PID)
  . ;
  . TC
  ; Merge all patients back in to ^VPRPTI
  W "Merging ^TMP(""VPRJSVPT"",""INDEX"") back in to ^VPRPTI",!
  M ^VPRPTI=^TMP("VPRJSVPT","INDEX")
- K ^TMP("VPRJSVPT","INDEX")
+ K:$D(^TMP("VPRJSVPT","INDEX")) ^TMP("VPRJSVPT","INDEX")
  W "Merged ^TMP(""VPRJSVPT"",""INDEX"") back in to ^VPRPTI",!
  ;
  L -^VPRPTI
@@ -312,13 +312,13 @@ JPIDSHRD(SAVE) ; Entry point for JPID restructure for sharding conversion
  . ; Save to cache mode, back up the original node to a memory-backed global
  . E  I SAVE=2 M ^TMP("VPRJSAVT",PID)=^VPRPTJ("TEMPLATE",PID)
  . ; Kill original patient template node
- . K ^VPRPTJ("TEMPLATE",PID)
+ . K:$D(^VPRPTJ("TEMPLATE",PID)) ^VPRPTJ("TEMPLATE",PID)
  . ;
  . TC
  ; Merge all patients back in to ^VPRPTJ("TEMPLATE")
  W "Merging ^TMP(""VPRJSVPT"",""TEMPLATE"") back in to ^VPRPTJ(""TEMPLATE"")",!
  M ^VPRPTJ("TEMPLATE")=^TMP("VPRJSVPT","TEMPLATE")
- K ^TMP("VPRJSVPT","TEMPLATE")
+ K:$D(^TMP("VPRJSVPT","TEMPLATE")) ^TMP("VPRJSVPT","TEMPLATE")
  W "Merged ^TMP(""VPRJSVPT"",""TEMPLATE"") back in to ^VPRPTJ(""TEMPLATE"")",!
  ;
  L -^VPRPTJ("TEMPLATE")
@@ -354,13 +354,13 @@ JPIDSHRD(SAVE) ; Entry point for JPID restructure for sharding conversion
  . ; Save to cache mode, back up the original node to a memory-backed global
  . E  I SAVE=2 M ^TMP("VPRJSAVS",PID)=^VPRSTATUS(PID)
  . ; Kill original patient sync status node
- . K ^VPRSTATUS(PID)
+ . K:$D(^VPRSTATUS(PID)) ^VPRSTATUS(PID)
  . ;
  . TC
  ; Merge all patients back in to ^VPRSTATUS
  W "Merging ^TMP(""VPRJSVPT"",""STATUS"") back in to ^VPRSTATUS",!
  M ^VPRSTATUS=^TMP("VPRJSVPT","STATUS")
- K ^TMP("VPRJSVPT","STATUS")
+ K:$D(^TMP("VPRJSVPT","STATUS")) ^TMP("VPRJSVPT","STATUS")
  W "Merged ^TMP(""VPRJSVPT"",""STATUS"") back in to ^VPRSTATUS",!
  ;
  L -^VPRSTATUS
@@ -465,5 +465,20 @@ DISPTIME(TIME,MSG) ; Display the elapsed time the conversion routine took to run
  W !,MSG_DAYS_" Day"_$S(DAYS'=1:"s",1:"")_", "_HOURS_" Hour"_$S(HOURS'=1:"s",1:"")
  W ", "_MINUTES_" Minute"_$S(MINUTES'=1:"s",1:"")_", "_SECONDS_" Second"_$S(SECONDS'=1:"s",1:"")
  W !,?$L(MSG),"("_TIME_" Total Seconds)",!
+ ;
+ QUIT
+ ;
+DELERROR ; Delete the old JDS error store data and URL mappings
+ N URL,NUM
+ ;
+ F URL="error/set/this","error/get/{id}","error/get","error/length/this","error/destroy/{id}","error/clear/this" D
+ . S NUM=0
+ . F  S NUM=$O(^VPRCONFIG("urlmap","url-index",URL,NUM)) Q:NUM=""  D
+ . . K:$D(^VPRCONFIG("urlmap",NUM)) ^VPRCONFIG("urlmap",NUM)
+ . K:$D(^VPRCONFIG("urlmap","url-index",URL)) ^VPRCONFIG("urlmap","url-index",URL)
+ K:$D(^VPRJERR) ^VPRJERR
+ ;
+ I ($D(^VPRJERR))!($O(^VPRCONFIG("urlmap","url-index","err"))["error") W "Old JDS error store was not completely deleted..",!
+ E  W "Old JDS error store is successfully deleted..",!
  ;
  QUIT

@@ -27,12 +27,20 @@ default[:machine][:copy_files] = {
 # These are base box comfigurations for aws and vagrant
 default[:machine][:security_groups][:enable_web_access] = ["sg-a06097c6"]
 default[:machine][:security_groups][:disable_web_access] = ["sg-d6dbcbb1"]
-default[:machine][:image_id] = "ami-1732037d"
-default[:machine][:box_name] = "opscode-centos-6.5"
-default[:machine][:box_url] = "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.5/centos-6.5-provisionerless.box"
+default[:machine][:image_id] = ENV['AWS_AMI_ID'] || 'ami-3bb8ad2d'
+default[:machine][:block_device_mappings] = [{
+  device_name: '/dev/sda1',
+  ebs: {
+    volume_size: 30 # 30 GB
+  }
+}]
+default[:machine][:box_name] = "ehmp-centos-6.9"
+default[:machine][:box_url] = "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.9/centos-6.9.box"
 
 # These are production settings used by the ssh provivisioner
 # This is set to an empty hash because it will be overwritten by
 # either the default recipe in this cookbook or the 'boot' lwrp
 default[:machine][:production_settings] = {}
 default[:machine][:logging] = ENV['LOGGING'] || false
+# This attribute controls if staging or production repo will be used for CentOS Base, Updates and Extras
+default[:machine][:staging] = ENV['STAGING_REPO'] || 'centos'

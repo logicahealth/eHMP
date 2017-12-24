@@ -66,5 +66,5 @@ Scenario: Viewing the list of all Meds data for picklist
 #       | data.items.pce            		  | BP                                                     |
 #       | data.items.rate            		  | YES                                                    |
 #       | data.items.status            	  | ACTIVE                                                 |
-#       | data.items.uid            		  | CONTAINS urn:va:vital-type:9E7A:1     		     |
+#       | data.items.uid            		  | CONTAINS urn:va:vital-type:SITE:1     		     |
 #       | data.items.vuid                     | CONTAINS urn:va:vuid                                   |

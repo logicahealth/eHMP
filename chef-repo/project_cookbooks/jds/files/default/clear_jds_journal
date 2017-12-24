@@ -1,2 +1,0 @@
-#remove jds journal files every 5 minutes, only leaving the cache.lck and the 2 newest journal files
-*/5 * * * * root if [ `ls -1 /usr/cachesys/mgr/journal | wc -l` != "3" ]; then cd /usr/cachesys/mgr/journal;rm $(ls -r | grep -v cache.lck | sed -n '1,2 ! p'); fi

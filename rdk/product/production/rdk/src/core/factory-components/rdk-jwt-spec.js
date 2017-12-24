@@ -14,7 +14,7 @@ describe('rdkJwt', function() {
         app = {
             config: {
                 rootPath: '/resource',
-                secret: 'itsasecret'
+                secret: 'PW'
             },
             use: function() {}
         };

@@ -27,7 +27,7 @@ define([
                 }
             };
             if (ADK.WorkspaceContextRepository.currentContextId === 'patient') {
-                this.fetchOptions.criteria.pid = ADK.PatientRecordService.getCurrentPatient().get('pid');
+                this.fetchOptions.criteria.pid = ADK.PatientRecordService.getCurrentPatient().getIdentifier();
             }
             return this.setCriteria(options.criteria);
         },

@@ -181,7 +181,6 @@ define([
                                             title: 'Delete',
                                             eventToTrigger: 'note-confirm-delete',
                                             message:'Are you sure you want to delete?',
-                                            confirmButtonTitle: 'Press enter to delete'
                                         }
                                     },
                                     label: 'Delete',
@@ -197,7 +196,6 @@ define([
                             control: "button",
                             name: "note-preview",
                             id: "preview-form-btn",
-                            title: "Press enter to preview note",
                             extraClasses: ["btn-primary", "btn-sm"]
                         }, {
                             label: "Draft",
@@ -206,14 +204,13 @@ define([
                             name: "note-close",
                             id: "close-form-btn",
                             extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
-                            title: "Press enter to save and close note"
+                            title: "Save and close note"
                         }, {
                             label: "Sign",
                             type: "submit",
                             control: "button",
                             name: "note-sign",
                             id: "sign-form-btn",
-                            title: "Press enter to sign note",
                             extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"]
                         }]
                     }]

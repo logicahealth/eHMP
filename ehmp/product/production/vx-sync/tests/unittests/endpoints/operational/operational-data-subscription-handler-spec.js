@@ -75,13 +75,13 @@ describe('operational-sync-request-endpoint.js', function() {
                 sites: 'invalid'
             };
             response.expectedCode = 400;
-            response.expectedMessage = 'Unknown VistA site invalid';
+            response.expectedMessage = 'Unknown VistA site provided in parameters';
             endpoint(log, stubEnvironment, request, response);
         });
         it('Sites as array', function() {
             spyOn(stubRouter, 'publish').andCallThrough();
             request.body = {
-                sites: ['9E7A']
+                sites: ['SITE']
             };
             response.expectedCode = 201;
             response.expectedMessage = undefined;
@@ -91,7 +91,7 @@ describe('operational-sync-request-endpoint.js', function() {
         it('Sites as string', function() {
             spyOn(stubRouter, 'publish').andCallThrough();
             request.body = {
-                sites: '9E7A'
+                sites: 'SITE'
             };
             response.expectedCode = 201;
             response.expectedMessage = undefined;
@@ -100,16 +100,16 @@ describe('operational-sync-request-endpoint.js', function() {
         });
         it('Some valid some invalid sites', function() {
             request.body = {
-                sites: '9E7A,9999'
+                sites: 'SITE,PORT'
             };
             response.expectedCode = 400;
-            response.expectedMessage = 'Unknown VistA site 9999';
+            response.expectedMessage = 'Unknown VistA site provided in parameters';
             endpoint(log, stubEnvironment, request, response);
         });
         it('Multiple valid sites', function() {
             spyOn(stubRouter, 'publish').andCallThrough();
             request.body = {
-                sites: '9E7A,C877'
+                sites: 'SITE,SITE'
             };
             response.expectedCode = 201;
             response.expectedMessage = undefined;
@@ -119,7 +119,7 @@ describe('operational-sync-request-endpoint.js', function() {
         it('Duplicate valid sites', function() {
             spyOn(stubRouter, 'publish').andCallThrough();
             request.body = {
-                sites: 'C877,C877'
+                sites: 'SITE,SITE'
             };
             response.expectedCode = 201;
             response.expectedMessage = undefined;
@@ -129,7 +129,7 @@ describe('operational-sync-request-endpoint.js', function() {
         it('Error while publishing', function() {
             spyOn(errorRouter, 'publish').andCallThrough();
             request.body = {
-                sites: '9E7A'
+                sites: 'SITE'
             };
             response.expectedCode = 400;
             response.expectedMessage = 'Unable to send operational sync to all sites';

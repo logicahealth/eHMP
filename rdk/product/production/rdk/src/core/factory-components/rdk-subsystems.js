@@ -13,10 +13,12 @@ function registerAppSubsystems(app) {
     app.subsystems.register('jds', require('../../subsystems/jds/jds-subsystem'));
     app.subsystems.register('jdsSync', require('../../subsystems/jds/jds-sync-subsystem'));
     app.subsystems.register('solr', require('../../subsystems/solr-subsystem'));
+    app.subsystems.register('zookeeper', require('../../subsystems/zookeeper-subsystem'));
     app.subsystems.register('patientrecord', require('../../subsystems/patient-record-subsystem'));
     app.subsystems.register('mvi', require('../../subsystems/mvi-subsystem'));
     app.subsystems.register('vxSync', require('../../subsystems/vx-sync-subsystem'));
     app.subsystems.register('asu', require('../../subsystems/asu/asu-subsystem'));
+    app.subsystems.register('authentication', require('../../subsystems/authentication/authentication-subsystem'));
     app.subsystems.register('authorization', require('../../subsystems/pep/pep-subsystem'));
     app.subsystems.register('pjds', require('../../subsystems/pjds/pjds-subsystem'));
     app.subsystems.register('quickorder', require('../../subsystems/orderables/quickorder-subsystem'));
@@ -25,6 +27,7 @@ function registerAppSubsystems(app) {
     app.subsystems.register('enterpriseOrderable', require('../../subsystems/orderables/enterprise-orderable-subsystem'));
     app.subsystems.register('vistaReadOnly', require('../../subsystems/vista-read-only-subsystem'));
     app.subsystems.register('email', require('../../subsystems/email-subsystem'));
+    app.subsystems.register('oracle', require('../../subsystems/oracle/oracle-subsystem'));
     if (_.get(app, 'config.enableMultidivisionProxyHealthcheck')) {
         app.subsystems.register('vistaMultidivision', require('../../subsystems/vista-multidivision-subsystem'));
     }
@@ -37,6 +40,10 @@ function registerAppSubsystems(app) {
     }
     if (_.get(app, 'config.cdsInvocationServer') || _.get(app, 'config.cdsMongoServer')) {
         app.subsystems.register('cds', require('../../subsystems/cds/cds-subsystem'));
+    }
+    if (_.get(app, 'config.videoVisit')) {
+        app.subsystems.register('videoVisitsService', require('../../subsystems/video-visits/video-visits-service-subsystem'));
+        app.subsystems.register('patientProfileService', require('../../subsystems/video-visits/patient-profile-service-subsystem'));
     }
 }
 

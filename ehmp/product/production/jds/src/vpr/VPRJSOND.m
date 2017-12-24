@@ -1,4 +1,4 @@
-VPRJSOND ;SLC/KCM -- Decode JSON
+VPRJSOND ;SLC/KCM,CPC -- Decode JSON
  ;;1.0;VIRTUAL PATIENT RECORD;**2,3**;Sep 01, 2011;Build 50
  ;
 DECODE(VVJSON,VVROOT,VVERR) ; Set JSON object into closed array ref VVROOT
@@ -18,8 +18,8 @@ DIRECT ; TAG for use by DECODE^VPRJSON
  ;
  ; V4W/DLW - Changed VVMAX from 4000 to 100, same as in the encoder
  ; With the change to VVMAX, the following Unit Tests required changes:
- ; SPLITA^VPRJUJD, SPLITB^VPRJUJD, LONG^VPRJUJD, MAXNUM^VPRJUJD 
- N VVMAX S VVMAX=100 ; limit document lines to 100 characters
+ ; SPLITA^VPRJUJD, SPLITB^VPRJUJD, LONG^VPRJUJD, MAXNUM^VPRJUJD
+ N VVMAX S VVMAX=$G(^VPRCONFIG("vvmax","decoder"),100) ; limit document lines to VVMAX
  S VVERR=$G(VVERR,"^TMP(""VPRJERR"",$J)")
  ; If a simple string is passed in, move it to an temp array (VVINPUT)
  ; so that the processing is consistently on an array.
@@ -30,6 +30,7 @@ DIRECT ; TAG for use by DECODE^VPRJSON
  F  S VVTYPE=$$NXTKN() Q:VVTYPE=""  D  I VVERRORS Q
  . I VVTYPE="{" S VVSTACK=VVSTACK+1,VVSTACK(VVSTACK)="",VVPROP=1 D:VVSTACK>64 ERRX("STL{") Q
  . I VVTYPE="}" D  QUIT
+ . . I VVSTACK=0 D ERRX("SUF}") Q  ;DE8232
  . . I +VVSTACK(VVSTACK)=VVSTACK(VVSTACK),VVSTACK(VVSTACK) D ERRX("OBM") ; Numeric and true only
  . . S VVSTACK=VVSTACK-1 D:VVSTACK<0 ERRX("SUF}")
  . I VVTYPE="[" S VVSTACK=VVSTACK+1,VVSTACK(VVSTACK)=1 D:VVSTACK>64 ERRX("STL[") Q

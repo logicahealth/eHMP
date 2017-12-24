@@ -31,12 +31,12 @@ function clinicAddByUid(self, uid, callback) {
     var site = uidUtils.extractSiteFromUID(uid);
     self.environment.pjds.createOSyncClinic(site, uid, function(error, response) {
         if (error) {
-            self.log.debug('osync-clinic-utils.clinicAddByUid: Error: %j', error);
+            self.log.error('osync-clinic-utils.clinicAddByUid: Error: %j', error);
             return callback(util.format('Error adding UID %s to osynclinic store', uid));
         }
 
         if (response.statusCode !== 201) {
-            self.log.debug('osync-clinic-utils.clinicAddByUid: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+            self.log.error('osync-clinic-utils.clinicAddByUid: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error adding UID %s to osynclinic store', uid));
         }
 
@@ -52,23 +52,23 @@ function clinicAddByUidCheck(self, uid, type, callback) {
         var odsType;
 
         if (error) {
-            self.log.debug('osync-clinic-utils.clinicAddByUidCheck: Error: %j', error);
+            self.log.error('osync-clinic-utils.clinicAddByUidCheck: Error: %j', error);
             return callback(util.format('Error retrieving location operational data from JDS for UID %s', uid));
         }
 
         if (response.statusCode !== 200) {
-            self.log.debug('osync-clinic-utils.clinicAddByUidCheck: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+            self.log.error('osync-clinic-utils.clinicAddByUidCheck: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error retrieving location operational data from JDS for UID %s', uid));
         }
 
         if (result.data.totalItems === 0) {
-            self.log.debug('osync-clinic-utils.clinicAddByUidCheck: UID %s is not stored in JDS', uid);
+            self.log.error('osync-clinic-utils.clinicAddByUidCheck: UID %s is not stored in JDS', uid);
             return callback(util.format('Error: UID %s is not stored in JDS', uid));
         }
 
         odsType = result.data.items[0].type;
         if (type && odsType !== type) {
-            self.log.debug('osync-clinic-utils.clinicAddByUidCheck: Type %s does not match JDS operational data type %s for UID %s', type, odsType, uid);
+            self.log.error('osync-clinic-utils.clinicAddByUidCheck: Type %s does not match JDS operational data type %s for UID %s', type, odsType, uid);
             return callback(util.format('Error: Type %s does not match JDS operational data type %s', type, odsType));
         }
 
@@ -83,12 +83,12 @@ function clinicAddBySiteAndClinicCheck(self, site, clinic, type, callback) {
         var count, uid, statusArray = [];
 
         if (error) {
-            self.log.debug('osync-clinic-utils.clinicAddBySiteAndClinic: Error: %j', error);
+            self.log.error('osync-clinic-utils.clinicAddBySiteAndClinic: Error: %j', error);
             return callback(util.format('Error retrieving location operational data from JDS for clinic %s at site %s', clinic, site));
         }
 
         if (response.statusCode !== 200) {
-            self.log.debug('osync-clinic-utils.clinicAddBySiteAndClinic: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+            self.log.error('osync-clinic-utils.clinicAddBySiteAndClinic: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error retrieving location operational data from JDS for clinic %s at site %s', clinic, site));
         }
 
@@ -101,12 +101,12 @@ function clinicAddBySiteAndClinicCheck(self, site, clinic, type, callback) {
         });
 
         if (type && count === 0) {
-            self.log.debug('osync-clinic-utils.clinicAddBySiteAndClinic: Clinic %s at site %s of type %s is not stored in JDS', clinic, site, type);
+            self.log.error('osync-clinic-utils.clinicAddBySiteAndClinic: Clinic %s at site %s of type %s is not stored in JDS', clinic, site, type);
             return callback(util.format('Error: Clinic %s at site %s of type %s is not stored in JDS', clinic, site, type));
         } 
 
         if (count === 0) {
-            self.log.debug('osync-clinic-utils.clinicAddBySiteAndClinic: Clinic %s at site %s is not stored in JDS', clinic, site);
+            self.log.error('osync-clinic-utils.clinicAddBySiteAndClinic: Clinic %s at site %s is not stored in JDS', clinic, site);
             return callback(util.format('Error: Clinic %s at site %s is not stored in JDS', clinic, site));
         } 
 
@@ -125,12 +125,12 @@ function clinicRemoveByUid(self, uid, callback) {
     self.log.debug('osync-clinic-utils.clinicRemoveByUid: Entering function');
     self.environment.pjds.deleteOSyncClinic(uid, function(error, response) {
         if (error) {
-            self.log.debug('osync-clinic-utils.clinicRemoveByUid: Error: %j', error);
+            self.log.error('osync-clinic-utils.clinicRemoveByUid: Error: %j', error);
             return callback(util.format('Error removing UID %s from osynclinic store', uid));
         }
 
         if (response.statusCode !== 200) {
-            self.log.debug('osync-clinic-utils.clinicRemoveByUid: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+            self.log.error('osync-clinic-utils.clinicRemoveByUid: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error removing UID %s from osynclinic store', uid));
         }
 
@@ -154,7 +154,7 @@ function clinicRunByUid(self, uid, referenceInfo, callback) {
 
     self.environment.publisherRouter.publish(job, function(error) {
         if (error) {
-            self.log.debug('osync-clinic-utils.clinicRunByUid: Error: %j', error);
+            self.log.error('osync-clinic-utils.clinicRunByUid: Error: %j', error);
             return callback(util.format('Error publishing jobId %s to osync-appointments tube', job.jobId));
         }
 
@@ -213,12 +213,12 @@ OsyncClinicUtils.prototype.osyncClinicRemove = function(site, uid, callback) {
     if (uid) {
         self.environment.pjds.getOSyncClinicsByUid(uid, function(error, response) {
             if (error) {
-                self.log.debug('osync-clinic-utils.osyncClinicRemove: Error: %j', error);
+                self.log.error('osync-clinic-utils.osyncClinicRemove: Error: %j', error);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for UID %s', uid));
             }
 
             if (response.statusCode !== 200) {
-                self.log.debug('osync-clinic-utils.osyncClinicRemove: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+                self.log.error('osync-clinic-utils.osyncClinicRemove: Error: Status code: %s, Response: %j', response.statusCode, response.body);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for UID %s', uid));
             }
 
@@ -229,7 +229,7 @@ OsyncClinicUtils.prototype.osyncClinicRemove = function(site, uid, callback) {
             var count, statusArray = [];
 
             if (error) {
-                self.log.debug('osync-clinic-utils.clinicClinicRemove: Error: %j', error);
+                self.log.error('osync-clinic-utils.clinicClinicRemove: Error: %j', error);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for site %s', site));
             }
 
@@ -265,12 +265,12 @@ OsyncClinicUtils.prototype.osyncClinicGet = function(site, callback) {
         var count, statusArray = [];
 
         if (error) {
-            self.log.debug('osync-clinic-utils.osyncClinicGet: Error: %j', error);
+            self.log.error('osync-clinic-utils.osyncClinicGet: Error: %j', error);
             return callback(util.format('Error retrieving clinics from osynclinic data store for site %s', site));
         }
 
         if (response.statusCode !== 200) {
-            self.log.debug('osync-clinic-utils.osyncClinicGet: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+            self.log.error('osync-clinic-utils.osyncClinicGet: Error: Status code: %s, Response: %j', response.statusCode, response.body);
             return callback(util.format('Error retrieving clinics from osynclinic data store for site %s', site));
         }
 
@@ -303,12 +303,12 @@ OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, referenceInfo, c
     if (uid) {
         self.environment.pjds.getOSyncClinicsByUid(uid, function(error, response) {
             if (error) {
-                self.log.debug('osync-clinic-utils.osyncClinicRun: Error: %j', error);
+                self.log.error('osync-clinic-utils.osyncClinicRun: Error: %j', error);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for UID %s', uid));
             }
 
             if (response.statusCode !== 200) {
-                self.log.debug('osync-clinic-utils.osyncClinicRun: Error: Status code: %s, Response: %j', response.statusCode, response.body);
+                self.log.error('osync-clinic-utils.osyncClinicRun: Error: Status code: %s, Response: %j', response.statusCode, response.body);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for UID %s', uid));
             }
 
@@ -319,7 +319,7 @@ OsyncClinicUtils.prototype.osyncClinicRun = function(site, uid, referenceInfo, c
             var count, statusArray = [];
 
             if (error) {
-                self.log.debug('osync-clinic-utils.clinicClinicRun: Error: %j', error);
+                self.log.error('osync-clinic-utils.clinicClinicRun: Error: %j', error);
                 return callback(util.format('Error retrieving clinics from osynclinic data store for site %s', site));
             }
 

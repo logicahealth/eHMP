@@ -1,5 +1,5 @@
-apply plugin: 'war'
 apply plugin: 'gwt'
+apply plugin: 'war'
 apply plugin: 'eclipse'
 apply plugin: 'jetty'
 apply plugin: 'java'
@@ -24,6 +24,7 @@ repositories {
 dependencies {
     compile project(':production:cdsdashboard:cds-dashboard-client')
     compile project(':production:cdsdashboard:cds-dashboard-model')
+    compile project(':production:cdsutils')
 
     compile group: 'org.springframework', name: 'spring-web', version: property('springVersion')
     compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
@@ -33,6 +34,10 @@ dependencies {
     compile group: 'com.google.gwt', name: 'gwt-user', version: property('gwtVersion')
     compile group: 'com.googlecode.gwt-charts', name: 'gwt-charts', version:'0.9.10'
     compile group: 'junit', name: 'junit', version: property('junitVersion')
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: property('log4jVersion')
 }
 
 compileJava {
@@ -56,5 +61,7 @@ gwt {
 }
 
 war {
+	rootSpec.exclude('**/log4j2.xml')
 	rootSpec.exclude('**/logging.properties')
+	rootSpec.exclude('**/cds-dashboard.properties')
 }

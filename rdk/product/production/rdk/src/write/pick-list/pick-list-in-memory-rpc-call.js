@@ -1,16 +1,12 @@
 'use strict';
 
-var pickListConfig = require('./config/pick-list-config-in-memory-rpc-call').pickListConfig;
-
-
 var dbList = require('./pick-list-db');
 var async = require('async');
 var nullUtil = require('../core/null-utils');
 var validate = require('./utils/validation-util');
+var pickListUtil = require('./pick-list-utils');
 var _ = require('lodash');
 
-
-module.exports.config = pickListConfig;
 module.exports._getSiteConfig = getSiteConfig;
 
 function getSiteConfig(site, app) {
@@ -27,7 +23,6 @@ function getSiteConfig(site, app) {
     });
 }
 
-
 /**
  * These RPC's will be cached in memory.
  *
@@ -38,7 +33,7 @@ function getSiteConfig(site, app) {
  * @returns {boolean} True if this processed the call, false otherwise.
  */
 module.exports.inMemoryRpcCall = function(req, site, type, callback) {
-
+    var pickListConfig = pickListUtil.inMemoryConfig(req.app);
     if (type.toLowerCase() === 'refresh') {
         if (dbList.refreshInProgress) {
             return callback(null, 'Refresh in progress');
@@ -87,6 +82,9 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
             }
         });
     }
+    if (req.pickListParseStreams) {
+        _.set(params, 'parseStreams', true);
+    }
     if (_.has(pickListConfig[i], 'filterForEntireRecursiveCollection')) {
         if (!validate.isStringNullish(req.param(pickListConfig[i].filterForEntireRecursiveCollection.paramNameForStringToSearchFor))) {
             filters = {};
@@ -107,14 +105,14 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
     }
     siteConfig.context = pickListConfig[i].vistaContext;
 
-    dbList.retrievePickList(req.app, siteConfig, params, filters, pickListConfig[i].modulePath, pickListConfig[i].dataNeedsRefreshAfterMinutes, callback);
+    dbList.retrievePickList(req.app, req.logger, siteConfig, params, filters, pickListConfig[i].modulePath, pickListConfig[i].dataNeedsRefreshAfterMinutes, callback);
 };
 
 
 /**
  * Utility function to make it easy to log what is contained in params.
  */
-function paramsAsString(params) {
+function paramsAsString(params, pickListConfig) {
     var str = 'Site: ' + params.site + ', pick-list: ' + params.pickList + '(';
     if (_.has(pickListConfig[params.index], 'requiredParams')) {
         var first = true;
@@ -135,8 +133,9 @@ function paramsAsString(params) {
  */
 module.exports.loadLargePickLists = function(app) {
     //This queue will populate each pick list.
+    var pickListConfig = pickListUtil.inMemoryConfig(app);
     var q = async.queue(function(params, callback) {
-        app.logger.info('PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params));
+        app.logger.info('PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params, pickListConfig));
 
         var siteConfig = getSiteConfig(params.site, app);
         if (nullUtil.isNullish(siteConfig)) {
@@ -155,7 +154,7 @@ module.exports.loadLargePickLists = function(app) {
                 app.logger.debug('Loaded');
             }
 
-            app.logger.info('FINISHED PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params));
+            app.logger.info('FINISHED PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params, pickListConfig));
             callback();
         });
     }, 1);

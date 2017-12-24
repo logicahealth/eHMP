@@ -7,8 +7,8 @@ var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework').testHandler;
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var handler = require(global.VX_HANDLERS + 'jmeadows-sync-request/jmeadows-sync-request-handler');
 
 describe('jmeadows-sync-request-handler.js', function() {

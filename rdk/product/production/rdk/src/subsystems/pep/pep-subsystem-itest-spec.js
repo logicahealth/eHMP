@@ -71,7 +71,7 @@ describe('When pep subsystem is called', function() {
 
     it('with patientcentric true and requiredPermissions empty the policy handler is run and permissions handler is skipped', function(done) {
         req._resourceConfigItem.isPatientCentric = true;
-        req.interceptorResults.patientIdentifiers.originalID = '9E7A;10';
+        req.interceptorResults.patientIdentifiers.originalID = 'SITE;10';
 
         pepSubsystem.execute(req, res, callback);
 
@@ -96,7 +96,7 @@ describe('When pep subsystem is called', function() {
 
     it('with patientcentric true and requiredPermissions not empty the policy and permissions handlers are run', function(done) {
         req._resourceConfigItem.isPatientCentric = true;
-        req.interceptorResults.patientIdentifiers.originalID = '9E7A;10';
+        req.interceptorResults.patientIdentifiers.originalID = 'SITE;10';
         req._resourceConfigItem.requiredPermissions = ['read-generic-permission'];
 
         pepSubsystem.execute(req, res, callback);
@@ -110,7 +110,7 @@ describe('When pep subsystem is called', function() {
 
     it('with policy and permission handlers and permission handler calls back with an error', function(done) {
         req._resourceConfigItem.isPatientCentric = true;
-        req.interceptorResults.patientIdentifiers.originalID = '9E7A;10';
+        req.interceptorResults.patientIdentifiers.originalID = 'SITE;10';
         req._resourceConfigItem.requiredPermissions = ['read-explicit-permission'];
 
         pepSubsystem.execute(req, res, callback);

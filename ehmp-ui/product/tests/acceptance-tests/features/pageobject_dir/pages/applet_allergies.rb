@@ -5,53 +5,41 @@ class PobAllergiesApplet < PobParentApplet
   set_url '#/patient/allergy-grid-full'
   set_url_matcher(/#\/patient\/allergy-grid-full/)
   
-  # *****************  All_Form_Elements  ******************* #
-  # *****************  All_Logo_Elements  ******************* #
-  # *****************  All_Field_Elements  ******************* #  
-    
-  element :fld_allergen_name, "th[id='allergy_grid-summary'] a"
-  element :fld_modal_title, "[id^='main-workflow-label-']"
+  # ******************* applet *************************** #
 
+  # ******************* gist/trend view specific ******************** #
+  elements :fld_allergy_gist_pills, "[data-appletid=allergy_grid] .grid-container [data-infobutton-class=info-button-pill]"
+  elements :fld_allergy_gist_all_pills, "[data-appletid=allergy_grid] .grid-container li p"
+
+  # ******************* expanded view specific *********************** #
+  elements :expanded_rows, "[data-appletid='allergy_grid'] table tbody tr.selectable"
+  elements :expanded_allegy_names, "[data-appletid='allergy_grid'] table tbody tr.selectable td:nth-child(2)"
+  elements :expanded_allergy_column_allergen_names, "#data-grid-allergy_grid tbody tr.selectable td:nth-child(2)"
+  elements :expanded_allergy_column_s_allergen, "#data-grid-allergy_grid tr > td.string-cell.flex-width-1_5.sortable"
+
+  element :expanded_header_standardized_allergen, "[data-header-instanceid='allergy_grid-standardizedName'] a"
+  element :expanded_header_allergen_name, "[data-header-instanceid='allergy_grid-summary'] a"
+  #elements :tbl_allergy_grid, "table[id='data-grid-allergy_grid'] tr.selectable"
+
+  # ******************* add allergy specific ************************* #
+  element :fld_modal_title, "[id^='main-workflow-label-']"
   element :fld_allergen_drop_down, "[x-is-labelledby='select2-allergen-container']"
-  element :fld_select_allergen, :xpath, "//*[contains(@class, 'select2-results__options--nested')]/descendant::li[contains(string(), 'CHOCOLATE LAXATIVE')]"
 
   element :fld_reaction_date_input, "#reaction-date"
   element :fld_reaction_time_input, "#reaction-time"
   element :fld_severity_drop_down, "#severity"
   element :fld_nature_of_reaction_drop_down, "#nature-of-reaction"
   element :fld_available_signs_input, "#available-Signs-Symptoms-modifiers-filter-results"
-  element :fld_add_anxiety_sign_symptom, "[title='Press enter to add ANXIETY.']"
   element :fld_comments_input, "#moreInfo"
   
   elements :fld_selected_symptom, "[title='Press enter to remove ANXIETY.']"    
-  elements :fld_modal_titles, ".modal-body .row"
-  elements :fld_modal_table_rows, ".modal-body .table-row"
-  elements :fld_allergy_gist_pills, "[data-appletid=allergy_grid] .grid-container [data-infobutton-class=info-button-pill]"
-  elements :fld_allergy_gist_all_pills, "[data-appletid=allergy_grid] .grid-container li p"
-
-  elements :expanded_rows, "[data-appletid='allergy_grid'] table tbody tr.selectable"
-  elements :expanded_allegy_names, "[data-appletid='allergy_grid'] table tbody tr.selectable td:first-of-type"
-  elements :expanded_allegy_names_screenreader_text, "[data-appletid='allergy_grid'] table tbody tr.selectable td:first-of-type span"
-  elements :expanded_allergy_column_allergen_names, "#data-grid-allergy_grid > tbody > tr > td.string-cell.sortable.renderable.toolbar-cell"
-  elements :expanded_allergy_column_s_allergen, "#data-grid-allergy_grid tr > td.string-cell.flex-width-1_5.sortable"
-
-  element :expanded_header_standardized_allergen, "[data-header-instanceid='allergy_grid-standardizedName'] a"
-  element :expanded_header_allergen_name, "[data-header-instanceid='allergy_grid-summary'] a"
-  # *****************  All_Button_Elements  ******************* #
-  element :btn_add_allergy, "[data-appletid=allergy_grid] .applet-add-button"
   element :btn_add_allergy_cancel, ".allergiesConfirmCancel button[data-original-title='Warning']"
   element :btn_confirm_add_allergy, "div.addBtn  [type='submit']"
-  element :btn_next, '#toNext'
-  element :btn_previous, '#toPrevious'
+
   element :btn_anxiety, "[title = 'Press enter to add ANXIETY.']"
-  element :btn_add_remove, ".add-remove-btn"
-  
-  # *****************  All_Drop_down_Elements  ******************* #
   element :fld_historical_check_box, "#allergyType-h"
   element :fld_observed_check_box, "#allergyType-o"
   element :fld_selected_second_symptom, "#patientDemographic-newObservation .allergies-writeback-add .selected-region button"
-  
-  # *****************  All_Table_Elements  ******************* #
 
   def allergy_pill(data_infobutton)
     self.class.element(:fld_allergy_pill, "[data-infobutton='#{data_infobutton}']")
@@ -69,8 +57,6 @@ class PobAllergiesApplet < PobParentApplet
     # remove leading/trailing white space
     title.strip
   end
-
-  elements :tbl_allergy_grid, "table[id='data-grid-allergy_grid'] tr.selectable"
     
   def initialize
     super
@@ -81,13 +67,13 @@ class PobAllergiesApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
     add_modal_elements
   end
   
   def applet_loaded?
     return true if has_fld_empty_row?
-    return tbl_allergy_grid.length > 0
+    return expanded_rows.length > 0
   rescue => exc
     p exc
     return false
@@ -111,13 +97,15 @@ class PobAllergiesApplet < PobParentApplet
 
   def expanded_allergy_names
     names_screenreader_text = expanded_allegy_names
-    screenreader_text = expanded_allegy_names_screenreader_text
     names_only = []
     names_screenreader_text.each_with_index do | td_element, index |
       name = td_element.text
-      name = name.sub(screenreader_text[index].text, '')
       names_only.push(name.strip)
     end
     names_only
+  end
+
+  def appletid
+    'allergy_grid'
   end
 end

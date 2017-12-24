@@ -2,18 +2,9 @@ require_relative 'workspace_navigation.rb'
 
 class PobParentApplet < SitePrism::Page
   section :menu, MenuSection, ".workspace-selector"
-
-  # *****************  All_Form_Elements  ******************* #
-  # *****************  All_Logo_Elements  ******************* #
-  # *****************  All_Field_Elements  ******************* #
-  element :fld_modal_body, "#modal-body"
+  element :fld_modal_body, ".modal-body"
   element :fld_modal_title, ".modal-title"
-  
-  # *****************  All_Button_Elements  ******************* #
-  
-  # *****************  All_Drop_down_Elements  ******************* #
-  
-  # *****************  All_Table_Elements  ******************* #
+
   def add_applet_buttons(appletid_css)
     self.class.element(:btn_applet_filter_toggle, "#{appletid_css} .applet-filter-button")
     self.class.element(:btn_applet_expand_view, "#{appletid_css} .applet-maximize-button")
@@ -66,7 +57,7 @@ class PobParentApplet < SitePrism::Page
   end
   
   def add_empty_gist(appletid_css)
-    self.class.element(:fld_empty_gist, "#{appletid_css} p.color-grey-darkest")
+    self.class.element(:fld_empty_gist, "#{appletid_css} .empty-gist-list")
   end
 
   def add_expanded_applet_fields(appletid_css)
@@ -75,18 +66,25 @@ class PobParentApplet < SitePrism::Page
     self.class.elements(:fld_expanded_applet_table_rows, "#{appletid_css} tr.selectable")
   end
   
-  def add_toolbar_buttons
-    self.class.element(:fld_toolbar, ".btn-toolbar")
-    self.class.element(:btn_detail_view, "[button-type=detailView-button-toolbar]")
-    self.class.element(:btn_info, "[button-type=info-button-toolbar]")
-    self.class.element(:btn_quick_view, "[button-type=quick-look-button-toolbar]")
+  def add_toolbar_buttons(appletid_css)
+    self.class.elements(:fld_toolbar, "#{appletid_css} [id^='menuButton']")
+    self.class.element(:fld_toolbar_visible, "#{appletid_css} .dropdown-hover [id^='menuButton']")
+    self.class.element(:quick_menu_open, ".dropdown--quickmenu.open")
+    self.class.elements(:fld_menu_items, "[id^='menuview'].dropdown-menu .list-group-item")
+    self.class.element(:btn_detail_view, ".details-button-toolbar")
+    self.class.element(:btn_info, ".info-button-toolbar")
+  end
+  
+  def add_quick_view_popover(appletid_css)
+    self.class.elements(:tbl_quick_view, "#{appletid_css} [data-toggle='popover'][aria-describedby]")
+    self.class.elements(:tbl_quick_view_headers, ".table-condensed thead th")
   end
 
   def add_tile_sort_elements
     self.class.element :fld_manual_sort, ".tilesort-remove-sort"
     self.class.element :btn_remove_manual_sort, ".tilesort-remove-sort button"
-    self.class.element :btn_tile_sort, "[button-type=tilesort-button-toolbar]"
-    self.class.element :btn_tile_sort_active, "[button-type=tilesort-button-toolbar].background-color-secondary-dark"
+    self.class.element :btn_tile_sort, ".tilesort-button"
+    self.class.element :btn_tile_sort_active, ".tilesort-button.tilesort-keydown-dragging"
   end
 
   def wait_until(wait_timeout = Capybara.default_wait_time)
@@ -127,5 +125,12 @@ class PobParentApplet < SitePrism::Page
       p "no screen name: try refresh #{max_attempt}"
       retry if max_attempt >= 0
     end
+  end
+
+  protected
+
+  def parent_scroll_maximize_button(appletid_css)
+    applet_max_button = page.find("#{appletid_css} .applet-maximize-button", visible: false)
+    applet_max_button.native.location_once_scrolled_into_view
   end
 end

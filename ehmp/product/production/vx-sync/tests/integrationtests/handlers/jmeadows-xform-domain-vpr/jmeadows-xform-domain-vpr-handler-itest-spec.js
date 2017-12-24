@@ -29,7 +29,8 @@ var config = {
     })
 };
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 var host = vx_sync_ip;
 var port = PORT;

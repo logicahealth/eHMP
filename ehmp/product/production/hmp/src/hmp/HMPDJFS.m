@@ -1,5 +1,5 @@
-HMPDJFS ;SLC/KCM,ASMR/BL,JD,CK,CPC -- Asynchronous Extracts and Freshness via stream;Sep 16, 2016 09:45:43
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;May 15, 2016;Build 7
+HMPDJFS ;SLC/KCM,ASMR/BL,JD,CK,CPC,AFS/PB,CPC -- Asynchronous Extracts and Freshness via stream;Sep 16, 2016 09:45:43
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;May 15, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; JD - 1/14/15 - Removed "+" from "$$GETICN^MPIF001(DFN)" so that the
@@ -7,6 +7,8 @@ HMPDJFS ;SLC/KCM,ASMR/BL,JD,CK,CPC -- Asynchronous Extracts and Freshness via st
  ; JD - 3/16/15 - Added checks to prevent restaging of data if the data has
  ;                already been staged.  US4304
  ; CPC - 3/4/16 - Prevent dual execution. DE3411
+ ; CPC - 3/3/17 - Properly reset server. DE7613
+ ; CPC - 5/31/17- Add ignore flag and posting for unsubscribed patient US18852
  ;
  ; PUT/POST   call $$TAG^ROUTINE(.args,.body)
  ; GET/DELETE call   TAG^ROUTINE(.response,.args)
@@ -28,7 +30,7 @@ API(HMPFRSP,ARGS) ;
  I ARGS("command")="putPtSubscription" D  G XAPI
  . N LOC
  . S LOC=$$PUTSUB^HMPDJFSP(.ARGS) ; Added ELSE for US4304
- . I $L(LOC) S ^TMP("HMPF",$J,1)="{""apiVersion"":""1.0"",""location"":"""_LOC_""""_$$PROGRESS_"}"
+ . I $L(LOC) S ^TMP("HMPF",$J,1)="{"_$$APIVERS()_",""location"":"""_LOC_""""_$$PROGRESS_"}"
  I ARGS("command")="startOperationalDataExtract" D  G XAPI
  . N HMPX2,LOC
  . S ARGS("localId")="OPD"  ; use OPD to indicate "sync operational"
@@ -40,16 +42,22 @@ API(HMPFRSP,ARGS) ;
  ..  S HMPUID=$O(^HMP(800000,"B",HMPFHMP,0))
  ..  I HMPUID,$P($G(^HMP(800000,HMPUID,0)),U,3)=2 S LOC="/hmp/subscription/operational data/" Q
  ..  S LOC=$$PUTSUB^HMPDJFSP(.ARGS)
- . I $L(LOC) S ^TMP("HMPF",$J,1)="{""apiVersion"":""1.0"",""location"":"""_LOC_"""}"
+ . I $L(LOC) S ^TMP("HMPF",$J,1)="{"_$$APIVERS()_",""location"":"""_LOC_"""}"
  I ARGS("command")="getPtUpdates" D  G XAPI
- . L +^TMP("HMPDJFSG "_$G(HMPFHMP)):2 E  D SETERR^HMPDJFS("Only one extract can run for a single server") Q  ;DE3411
  . D GETSUB^HMPDJFSG(HMPFRSP,.ARGS)
- . L -^TMP("HMPDJFSG "_$G(HMPFHMP)) ;DE3411
  I ARGS("command")="resetAllSubscriptions" D  G XAPI
  . D RESETSVR(.ARGS)
- . S ^TMP("HMPF",$J,1)="{""apiVersion"":""1.0"",""removed"":""true""}"
+ . S ^TMP("HMPF",$J,1)="{"_$$APIVERS()_",""removed"":""true""}"
  I ARGS("command")="checkHealth" D  G XAPI
  . D HLTHCHK^HMPDJFSM(.ARGS)
+ I ARGS("command")="resourceSlots" D  G XAPI  ;DE8313 - PB - Aug 3 2017
+ . ;provides a report of the slots in use for the HMP EXTRACT RESOURCE device
+ . D RES^HMPDJFSM
+ I ARGS("command")="clearResourceSlot" D  G XAPI  ;DE8313 - PB - Aug 3 2017
+ . ; inputs ARGS("slotNumber") to be cleared, only one slot will be cleared with each call to this RPC
+ . S SLOT=$G(ARGS("slotNumber"))
+ . D CLEAR^HMPDJFSM(SLOT)
+ . K SLOT
  ; else
  D SETERR("command not recognized")  ; should not get this far
  ;
@@ -57,6 +65,8 @@ XAPI ; end select case
  ;
  I HMPFLOG=2 D LOGRSP(HMPFHMP)
  Q
+ ;
+APIVERS() Q """apiVersion"":""1.04"""
  ;
 LOGREQ(SRV,ARGS) ; Log the request
  I $D(^XTMP("HMPFLOG",0,"start")) D  Q:'$$GET^XPAR("ALL","HMP LOG LEVEL")
@@ -98,7 +108,7 @@ DELSUB(RSP,ARGS) ; cancel a subscription
  K ^XTMP("HMPFP",DFN,HMPSRV)      ; kill subscription
  D DELPT(DFN,HMPSRV)
  L -^XTMP("HMPFP",DFN,HMPSRV)
- S RSP="{""apiVersion"":""1.0"",""success"":""true""}" ; if successful
+ S RSP="{"_$$APIVERS()_",""success"":""true""}" ; if successful
  Q
 DELPT(DFN,SRV) ; delete patient DFN for server SRV
  N DIK,DA
@@ -110,7 +120,7 @@ DELPT(DFN,SRV) ; delete patient DFN for server SRV
  ;
  ; --- post freshness updates (internal to VistA)
  ;
-POST(DFN,TYPE,ID,ACT,SERVER,NODES) ; adds new freshness item, return DT-seq
+POST(DFN,TYPE,ID,ACT,SERVER,NODES,IGNORE) ; adds new freshness item, return DT-seq
  ; if initializing use: ^XTMP("HMPFH-hmpserverid-dfn",seq#)    -hold
  ;       otherwise use: ^XTMP("HMPFS-hmpserverid-date",seq#)   -stream
  ;
@@ -124,22 +134,27 @@ POST(DFN,TYPE,ID,ACT,SERVER,NODES) ; adds new freshness item, return DT-seq
  . I SERVER'="",HMPSRV'=SERVER Q
  . I '$D(^HMP(800000,"AITEM",DFN,HMPSRV)) Q          ; patient not subscribed
  . S INIT=(^HMP(800000,"AITEM",DFN,HMPSRV)=2),CNT=1  ; 2 means patient initialized
- . I $E(TYPE,1,4)="sync" S INIT=1                 ; sync* goes to main stream
- . I TYPE="syncDomain" S CNT=+$P(ID,":",3) S:CNT<1 CNT=1 ; CNT must be >0
- . S STREAM=$S(INIT:"HMPFS~",1:"HMPFH~")_HMPSRV_"~"_$S(INIT:DATE,1:DFN)
- . I '$D(^XTMP(STREAM)) D NEWXTMP(STREAM,8,"HMP Freshness Stream")
- . L +^XTMP(STREAM):5 E  S $EC=",Uno lock obtained," Q  ; throw error
- . S SEQ=$G(^XTMP(STREAM,"last"),0)+CNT
- . S ^XTMP(STREAM,SEQ)=DFN_U_TYPE_U_ID_U_$G(ACT)_U_$P($H,",",2)
- . S ^XTMP(STREAM,"last")=SEQ
- . L -^XTMP(STREAM)
- . ; NODES(hmpserverid)=streamDate^sequence -- optionally returned
- . S NODES($P(STREAM,"~",2))=$S(INIT:DATE,1:0)_U_SEQ
+ . D POST2
+ I $G(SEQ)="",$G(IGNORE) S INIT=1,CNT=1,HMPSRV=$P($G(^HMP(800000,1,0)),U,1) Q:HMPSRV=""  D POST2 ;US18852 if ignore set and not subscribed then post to IEN=1
+ Q
+ ;
+POST2 ;PER SERVER POST - split from POST US18852
+ I $E(TYPE,1,4)="sync" S INIT=1                 ; sync* goes to main stream
+ I TYPE="syncDomain" S CNT=+$P(ID,":",3) S:CNT<1 CNT=1 ; CNT must be >0
+ S STREAM=$S(INIT:"HMPFS~",1:"HMPFH~")_HMPSRV_"~"_$S(INIT:DATE,1:DFN)
+ I '$D(^XTMP(STREAM)) D NEWXTMP(STREAM,8,"HMP Freshness Stream")
+ L +^XTMP(STREAM):5 E  S $EC=",Uno lock obtained," Q  ; throw error
+ S SEQ=$G(^XTMP(STREAM,"last"),0)+CNT
+ S ^XTMP(STREAM,SEQ)=DFN_U_TYPE_U_ID_U_$G(ACT)_U_$P($H,",",2)
+ S ^XTMP(STREAM,"last")=SEQ
+ L -^XTMP(STREAM)
+ ; NODES(hmpserverid)=streamDate^sequence -- optionally returned
+ S NODES($P(STREAM,"~",2))=$S(INIT:DATE,1:0)_U_SEQ
  Q
  ;
 NEWXTMP(NODE,DAYS,DESC) ; Set a new node in ^XTMP
  K ^XTMP(NODE)
- S ^XTMP(NODE,0)=$$HTFM^XLFDT(+$H+DAYS)_U_$$HTFM^XLFDT(+$H)_U_DESC
+ S ^XTMP(NODE,0)=$$HTFM^XLFDT($H+DAYS)_U_$$HTFM^XLFDT(+$H)_U_DESC
  Q
 PIDS(DFN) ; return string containing patient id's ready for JSON
  ; expects HMPFSYS, HMPFHMP
@@ -199,7 +214,7 @@ SETERR(MSG) ; create error object in ^TMP("HMPFERR",$J) and set HMPFERR
  ;DE6856, following line is because we may be here before HMPFRSP is SET since it's an error, 15 Sept 2016
  S:$G(HMPFRSP)="" HMPFRSP=$NA(^TMP("HMPF",$J))
  ; TODO: escape MSG for JSON
- S @HMPFRSP@(1)="{""apiVersion"":""1.0"",""error"":{""message"":"""_MSG_"""}}"
+ S @HMPFRSP@(1)="{"_$$APIVERS()_",""error"":{""message"":"""_MSG_"""}}"
  S ^TMP("HMPFERR",$J,$H)=MSG
  S HMPFERR=1
  Q
@@ -215,6 +230,8 @@ RESETSVR(ARGS) ;
  S DA=$O(^HMP(800000,"B",SRV,"")) I DA'>0 Q
  S SRVIEN=DA
  L +^HMP(800000,SRVIEN):5 E  S $EC=",Uno lock obtained," Q
+ ;reset last update
+ S DIE="^HMP(800000,",DR=".02///"_$$DT^XLFDT_"-0" D ^DIE
  ;delete operational data field
  S DIE="^HMP(800000,",DR=".03///@" D ^DIE
  S DA(1)=DA,DA=0

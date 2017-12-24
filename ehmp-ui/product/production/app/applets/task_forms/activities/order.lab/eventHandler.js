@@ -31,11 +31,6 @@ define([
         return _.trim(value.replace(/\(|\)|\:|\[|\]|\,/g, '-'));
     };
 
-    var getRoleIdfromList = function(name, list) {
-        name = _.trim(name);
-        return (_.isNumber(_.find(list, {name: name}).roleID)) ? _.find(list, {name: name}).roleID : '';
-    };
-
     var buildOutGroupsString = function(model) {
         var groupAttributes = ['facility', 'team', 'roles'];
         var groupAttributesMapping = {
@@ -43,28 +38,26 @@ define([
             team: 'TM',
             roles: 'TR'
         };
-        var group = _.pick(model.get('_labelsForSelectedValues').attributes, groupAttributes);
+        var assignment = model.get('assignment');
+        var group = _.pick(_.get(assignment, '_labelsForSelectedValues'), groupAttributes);
 
         var routeString, facilityRoute, teamRoute, roleRoute;
 
         if (!_.isEmpty(group.facility)) {
-            facilityRoute = groupAttributesMapping.facility + ': ' + sanitizedRouteString(group.facility) + '(' + model.get('facility') + ')';
+            facilityRoute = groupAttributesMapping.facility + ': ' + sanitizedRouteString(group.facility) + '(' + _.get(assignment, 'facility') + ')';
         }
         if (!_.isEmpty(group.team)) {
-            teamRoute = groupAttributesMapping.team + ': ' + sanitizedRouteString(group.team) + '(' + model.get('team') + ')';
+            teamRoute = groupAttributesMapping.team + ': ' + sanitizedRouteString(group.team) + '(' + _.get(assignment, 'team') + ')';
         }
         var groupObj = [];
         if (_.isString(group.roles)) {
-            var roles = group.roles.split(',');
-            if (roles.length > 0) {
-                _.each(roles, function(value) {
-                    if (!_.isEmpty(teamRoute) && !_.isEmpty(facilityRoute)) {
-                        groupObj.push('[' + facilityRoute + '/' + teamRoute + '/' + groupAttributesMapping.roles + ': ' + sanitizedRouteString(value) + '(' + getRoleIdfromList(value, model.get('storedRolesList')) + ')]');
-                    } else if (_.isEmpty(facilityRoute) && !_.isEmpty(teamRoute)) {
-                        groupObj.push('[' + teamRoute + '/' + groupAttributesMapping.roles + ': ' + sanitizedRouteString(value) + '(' + getRoleIdfromList(value, model.get('storedRolesList')) + ')]');
-                    }
-                });
-            }
+            var roles = group.roles.split(', ');
+            _.each(roles, function(value, index) {
+                if (!_.isEmpty(teamRoute)) {
+                    groupObj.push('[' + (facilityRoute ? facilityRoute + '/' : '') + teamRoute + '/' +
+                        groupAttributesMapping.roles + ': ' + sanitizedRouteString(value) + '(' + _.get(assignment, 'roles[' + index + ']') + ')]');
+                }
+            });
         }
 
         routeString = groupObj.join(',');
@@ -80,7 +73,7 @@ define([
         var parameterObject = {
             out_formAction: outFormAction,
             out_userComment: formModel.get('comment'),
-            out_actor: formModel.get('person')
+            out_actor: _.get(formModel.get('assignment'), 'person') // Ensure it must be on the assignment person options
         };
 
         if (outFormAction === 'Remind Me Later') {

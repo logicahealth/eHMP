@@ -62,7 +62,7 @@ describe('error-publisher.js', function() {
     describe('publishPollerError()', function() {
         it('test publish creates ErrorRecord without chunk', function() {
             spyOn(publisher, 'publish');
-            ErrorPublisher.prototype.publishPollerError.call(publisher, '9E7A', {
+            ErrorPublisher.prototype.publishPollerError.call(publisher, 'SITE', {
                 error: 'error'
             }, function() {});
             expect(publisher.publish).toHaveBeenCalledWith(jasmine.objectContaining({
@@ -71,13 +71,13 @@ describe('error-publisher.js', function() {
                 classification: 'poller',
                 timestamp: jasmine.any(String),
                 error: jasmine.any(Object),
-                system: '9E7A'
+                system: 'SITE'
             }), jasmine.any(Function));
         });
 
         it('test publish creates ErrorRecord with chunk', function() {
             spyOn(publisher, 'publish');
-            ErrorPublisher.prototype.publishPollerError.call(publisher, '9E7A', {
+            ErrorPublisher.prototype.publishPollerError.call(publisher, 'SITE', {
                 chunk: {}
             }, {
                 error: 'error'
@@ -88,7 +88,7 @@ describe('error-publisher.js', function() {
                 classification: 'poller',
                 timestamp: jasmine.any(String),
                 error: jasmine.any(Object),
-                system: '9E7A',
+                system: 'SITE',
                 chunk: jasmine.any(Object)
             }), jasmine.any(Function));
         });
@@ -146,7 +146,7 @@ describe('error-publisher.js', function() {
             spyOn(publisher, 'publish');
             ErrorPublisher.prototype.publishSubsystemError.call(publisher, 'MVI', {
                 type: 'pid',
-                value: '9E7A;3'
+                value: 'SITE;3'
             }, {
                 error: 'error'
             }, function() {});

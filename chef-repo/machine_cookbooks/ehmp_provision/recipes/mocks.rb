@@ -5,7 +5,12 @@
 
 require 'chef/provisioning/ssh_driver'
 
-include_solr = find_optional_node_by_criteria(node[:machine][:stack], 'role:solr', 'role:mocks').nil? && node[:machine][:driver] == 'vagrant'
+if ENV['INCLUDE_SOLR'] == 'true'
+  include_solr = true
+else
+  include_solr = find_optional_nodes_by_criteria(node[:machine][:stack], 'role:solr', 'role:mocks').empty? && node[:machine][:driver] == 'vagrant'
+end
+
 include_zk = find_optional_nodes_by_criteria(node[:machine][:stack], 'role:zookeeper', 'role:mocks').empty? && node[:machine][:driver] == 'vagrant'
 
 ############################################## Staging Artifacts #############################################
@@ -83,7 +88,9 @@ node.default[:ehmp_provision][:mocks][:vagrant][:shared_folders].push(
   {
     :host_path => File.expand_path("#{ENV['HOME']}/Projects/vistacore/ehmp/product/production/NodeMockServices/", File.dirname(__FILE__)),
     :guest_path => "/opt/mocks_server",
-    :create => true
+    :create => true,
+    :owner => 'node',
+    :group => 'node'
   }
 )
 ############################################################### Shared Folders #################################################################
@@ -101,8 +108,8 @@ ssoi_check = ssoi_vars.all? { |var| ENV.has_key?("#{var}_VERSION") || ENV.has_ke
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 r_list << "role[mocks]"
 r_list << "role[solr]" if include_solr
 r_list << "role[zookeeper]" if include_zk
@@ -114,7 +121,7 @@ r_list << "recipe[zookeeper@#{ehmp_deps["zookeeper"]}]" if include_zk
 r_list << "recipe[zookeeper::uninstall@#{ehmp_deps["zookeeper"]}]" unless include_zk
 r_list << "recipe[vx_solr@#{ehmp_deps["vx_solr"]}]" if include_solr
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -138,6 +145,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -188,6 +196,11 @@ machine machine_name do
     },
     beats: {
       logging: node[:machine][:logging]
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
   )
   files lazy { node[:ehmp_provision][:mocks][:copy_files] }

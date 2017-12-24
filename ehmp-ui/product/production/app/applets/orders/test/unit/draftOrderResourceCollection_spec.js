@@ -16,9 +16,9 @@ define([
     // Note: This is the mocked ADK Resource object used for all tests: (orders/test/unit/ADK.js)
     //
     // this.user = new Backbone.Model({
-    //     site: '9E7A',
+    //     site: 'SITE',
     //     duz: {
-    //         '9E7A': '55555'
+    //         'SITE': 'PORT'
     //     }
     // });
     // this.patient = new Backbone.Model({
@@ -38,14 +38,14 @@ define([
 
         var drafts = null;
         var testFetchAttributes = null;
-        var testUids = ['urn:va:ehmp:9E7A;8:0049c72c-fa97-4cb6-bff9-a95390958e42', 'urn:va:ehmp:9E7A;8:0079c47d-87ec-49ac-b511-727670b899fb'];
+        var testUids = ['urn:va:ehmp:SITE;8:0049c72c-fa97-4cb6-bff9-a95390958e42', 'urn:va:ehmp:SITE;8:0079c47d-87ec-49ac-b511-727670b899fb'];
 
         var testResponse = {
             status: 200,
             data: {
                 items: [
                     {
-                        authorUid: 'urn:va:user:9E7A:10000000271',
+                        authorUid: 'urn:va:user:SITE:10000000271',
                         data: {
                             activity: '',
                             additionalComments: '',
@@ -76,7 +76,7 @@ define([
                         displayName: '',
                         domain: 'ehmp-order',
                         ehmpState: 'draft',
-                        patientUid: '9E7A;8',
+                        patientUid: 'SITE;8',
                         subDomain: 'laboratory',
                         uid: testUids[0],
                         visit: {
@@ -85,7 +85,7 @@ define([
                             serviceCategory: 'I'
                         }
                     }, {
-                        authorUid: 'urn:va:user:9E7A:10000000271',
+                        authorUid: 'urn:va:user:SITE:10000000271',
                         data: {
                             activity: '',
                             additionalComments: '',
@@ -116,7 +116,7 @@ define([
                         displayName: '',
                         domain: 'ehmp-order',
                         ehmpState: 'draft',
-                        patientUid: '9E7A;8',
+                        patientUid: 'SITE;8',
                         subDomain: 'laboratory',
                         uid: testUids[1],
                         visit: {
@@ -147,7 +147,7 @@ define([
                 subDomain: 'laboratory',
                 ehmpState: 'draft',
                 patientUid: '1234567890',
-                authorUid: 'urn:va:user:9E7A:10000000271'
+                authorUid: 'urn:va:user:SITE:10000000271'
             }
         };
 
@@ -177,7 +177,7 @@ define([
         it('should properly handle selectWhere calls', function() {
             drafts.selectWhere({
                 subDomain: 'laboratory',
-                authorUid: 'urn:va:user:9E7A:10000000271'
+                authorUid: 'urn:va:user:SITE:10000000271'
             });
 
             expect(drafts.length).toBe(2);

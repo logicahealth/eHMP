@@ -28,7 +28,7 @@ define([
                 resourceTitle: 'problems-getProblems',
                 criteria: {
                     query: queryString,
-                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid')
+                    pid: ADK.PatientRecordService.getCurrentPatient().getIdentifier()
                 },
                 collectionConfig: {
                     collectionParse: function(collection) {

@@ -92,13 +92,13 @@ describe('store-record-request-handler.js', function() {
 
         it('handles a store-record-request job', function() {
 
-            var recordUid = 'urn:va:allergy:9E7A:123456:0654321';
+            var recordUid = 'urn:va:allergy:SITE:123456:0654321';
             var allergyMetaStamp = {
-                'icn': '9E7A;123456',
+                'icn': 'SITE;123456',
                 'stampTime': '20150119135618',
                 'sourceMetaStamp': {
-                    '9E7A': {
-                        'pid': '9E7A;123456',
+                    'SITE': {
+                        'pid': 'SITE;123456',
                         'localId': '123456',
                         'stampTime': '20150119135618',
                         'domainMetaStamp': {
@@ -106,7 +106,7 @@ describe('store-record-request-handler.js', function() {
                                 'domain': 'allergy',
                                 'stampTime': '20150119135618',
                                 'eventMetaStamp': {
-                                    'urn:va:allergy:9E7A:123456:0654321': {
+                                    'urn:va:allergy:SITE:123456:0654321': {
                                         'stampTime': '20150119135618'
                                     }
                                 }
@@ -134,7 +134,7 @@ describe('store-record-request-handler.js', function() {
                 uid: recordUid,
                 verified: '20071217151354',
                 verifierName: '<auto-verified>',
-                pid: '9E7A;123456',
+                pid: 'SITE;123456',
                 codesCode: ['C0008299'],
                 codesSystem: ['urn:oid:2.16.840.1.113883.6.86'],
                 codesDisplay: ['Chocolate'],
@@ -144,7 +144,7 @@ describe('store-record-request-handler.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;123456'
+                'value': 'SITE;123456'
             };
 
             var storageJob = {

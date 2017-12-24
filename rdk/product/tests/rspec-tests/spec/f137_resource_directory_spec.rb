@@ -38,7 +38,7 @@ describe 'f137_resource_directory_fetch_spec.rb', acceptance: true do
       'authentication-authentication',
       'authentication-refreshToken',
       'authentication-destroySession',
-      'authentication-list',
+      'facility-list',
       'user-service-userinfo',
       'user-service-userlist',
       # 'synchronization-load',

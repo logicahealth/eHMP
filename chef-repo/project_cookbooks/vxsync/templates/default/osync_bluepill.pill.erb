@@ -1,7 +1,8 @@
 Bluepill.application("<%= @name %>", :log_file => "/var/log/bluepill-<%= @name %>.log") do |app|
     <% @processes.each do |process_name, process_block| %>
     app.process("<%= process_name %>") do |process|
-        process.working_dir = "<%= @working_directory %>" 
+        process.working_dir = "<%= @working_directory %>"
+        process.environment = {"UV_THREADPOOL_SIZE" => "<%= @uv_threadpool_size%>"}
         process.pid_file = "<%= @log_directory %>/<%= process_name %>_pid_file.pid"
         process.daemonize = true
         process.start_command = "sh ./<%= process_name %>.sh"

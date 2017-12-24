@@ -331,5 +331,5 @@ VARCHAR2(%1)=%Library.String(MAXLEN=%1)
 
 [Telnet]
 DNSLookup=ON
-PORT   
+Port=PORT
 

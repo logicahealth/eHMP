@@ -3,17 +3,11 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 
 var dbName = 'engine';
 var engCollection = 'engines';
-var thisApp;
-var testId;
-
-function init(app) {
-    thisApp = app;
-    testId = thisApp.subsystems.cds.testMongoDBId;
-}
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 
 /*
@@ -51,15 +45,18 @@ function init(app) {
  * { "data": null }
  *
  */
-var getEngine = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getEngine(req, res) {
+    req.logger.debug('cds-engine.getEngine()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS engine resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('CDS Engine Registry getEngine called');
+        req.logger.debug('cds-engine.getEngine() CDS Engine Registry getEngine called');
 
         var id = null;
         var name = null;
@@ -103,8 +100,9 @@ var getEngine = function(req, res) {
             res.status(status).rdkSend(message);
         });
     });
-};
-module.exports.getEngine = getEngine;
+}
+
+
 /*
  * Store engine
  */
@@ -140,15 +138,18 @@ module.exports.getEngine = getEngine;
  *                  registry entry exists, can not be created" }
  *
  */
-var postEngine = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postEngine(req, res) {
+    req.logger.debug('cds-engine.postEngine()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS engine resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('Engine Registry postEngine called');
+        req.logger.debug('cds-engine.postEngine() Engine Registry postEngine called');
 
         var status = rdk.httpstatus.created;
         var message = '';
@@ -158,7 +159,9 @@ var postEngine = function(req, res) {
             return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required CDS engine name');
         }
         delete engine._id;
-        dbConnection.collection(engCollection).find({name: engine.name}).toArray(function(err, result) {
+        dbConnection.collection(engCollection).find({
+            name: engine.name
+        }).toArray(function(err, result) {
             if (!err && result.length > 0) {
                 message = 'CDS engine descriptor exists, can not be created';
                 return res.status(rdk.httpstatus.conflict).rdkSend(message);
@@ -172,8 +175,9 @@ var postEngine = function(req, res) {
             });
         });
     });
-};
-module.exports.postEngine = postEngine;
+}
+
+
 /*
  * update engine
  */
@@ -197,15 +201,18 @@ module.exports.postEngine = postEngine;
  * @apiErrorExample Error-Response: HTTP/1.1 404 Not Found
  * { "error": "CDS Engine registry entry not found" }
  */
-var putEngine = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function putEngine(req, res) {
+    req.logger.debug('cds-engine.putEngine()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS engine resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('Engine Registry putEngine called');
+        req.logger.debug('cds-engine.putEngine() Engine Registry putEngine called');
 
         var status = rdk.httpstatus.ok;
         var message = '';
@@ -214,12 +221,16 @@ var putEngine = function(req, res) {
         if (!engine || !engine.name) {
             return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required CDS Engine registration name');
         }
-        dbConnection.collection(engCollection).find({ name: engine.name}).toArray(function (err, result) {
+        dbConnection.collection(engCollection).find({
+            name: engine.name
+        }).toArray(function(err, result) {
             if (err || _.isEmpty(result)) {
                 return res.status(rdk.httpstatus.not_found).rdkSend('CDS Engine registry entry not found');
             }
             delete engine._id;
-            dbConnection.collection(engCollection).update({name: engine.name}, engine, function(err, result) {
+            dbConnection.collection(engCollection).update({
+                name: engine.name
+            }, engine, function(err, result) {
                 message = (err === null) ? result : err;
                 if (err) {
                     status = rdk.httpstatus.bad_request;
@@ -228,8 +239,9 @@ var putEngine = function(req, res) {
             });
         });
     });
-};
-module.exports.putEngine = putEngine;
+}
+
+
 /*
  * Delete a engine
  */
@@ -252,15 +264,18 @@ module.exports.putEngine = putEngine;
  * { "data": 0 }
  *
  */
-var deleteEngine = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteEngine(req, res) {
+    req.logger.debug('cds-engine.deleteEngine()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS engine resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('Engine Registry deleteEngine called');
+        req.logger.debug('cds-engine.deleteEngine() Engine Registry deleteEngine called');
 
         var status = rdk.httpstatus.ok;
         var id = null;
@@ -298,6 +313,10 @@ var deleteEngine = function(req, res) {
             res.status(status).rdkSend(message);
         });
     });
-};
+}
+
+
+module.exports.getEngine = getEngine;
+module.exports.postEngine = postEngine;
+module.exports.putEngine = putEngine;
 module.exports.deleteEngine = deleteEngine;
-module.exports.init = init;

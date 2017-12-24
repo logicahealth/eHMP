@@ -371,12 +371,12 @@ define([
         RowContentTemplate: '<p class="bottom-margin-no"><strong>{{label}}</strong></p><p class="bottom-margin-no">{{notificationStatus}}</p><p class="bottom-margin-no">{{notificationDue}}</p>',
         onBeforeInitialize: function() {
             this.collection = new Backbone.Collection([{
-                'title': 'First Item. Press enter to view notification',
+                'title': 'First Item',
                 'label': 'Eight, Patient (1234)',
                 'notificationStatus': 'Triage - Rheumatology General',
                 'notificationDue': 'Task is more than 7 days Past Due'
             }, {
-                'title': 'Second Item. Press enter to view notification',
+                'title': 'Second Item',
                 'label': 'Smith, John-Henkinheimer (1234)',
                 'notificationStatus': 'Scheduling - Physical Therapy',
                 'notificationDue': 'Task is more than 7 days Past Due'
@@ -386,7 +386,7 @@ define([
 
     ADK.Messaging.trigger('register:component', {
         type: 'applicationHeaderItem',
-        title: 'Press enter to view notifications',
+        title: 'View notifications',
         orderIndex: 1,
         key: 'notification-demo',
         group: 'user-nav-alerts',
@@ -397,7 +397,7 @@ define([
     });
     ADK.Messaging.trigger('register:component', {
         type: 'applicationHeaderItem',
-        title: 'Press enter to view notifications',
+        title: 'View notifications',
         orderIndex: 1,
         key: 'notification-demo-1',
         group: 'patient-nav-alerts',

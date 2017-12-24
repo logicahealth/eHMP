@@ -10,6 +10,19 @@ Background:
   Given the user has selected All within the global date picker
   And the applet displays numeric lab results
 
+@DE2627
+Scenario: Verify able to see details for numeric lab result panels
+  And the user scrolls to the bottom of the Numeric Lab Results Applet
+  Given the Numeric Lab Results applet displays at least 1 panel
+  When the user clicks the first numeric lab result panel row
+  #Then a popover menu is displayed on the first numeric lab result panel row
+  #When the user clicks the details icon in the popover menu 
+  Then the numeric lab result applet displays expanded panel rows
+  When the user clicks a panel row
+  # Then a popover menu is displayed on the first numeric lab result panel row
+  # When the user clicks the details icon in the popover menu 
+  Then the modal is displayed
+
   @f144_2_numeric_lab_results_coversheet_modal @US2034 @TA5012b @DE1392 @debug @reworked_in_firefox
 Scenario: Opening and closing the modal from a coversheet - non-Panel result.
   When the user clicks the first non-Panel result in the Numeric Lab Results applet

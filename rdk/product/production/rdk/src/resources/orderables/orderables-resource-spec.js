@@ -76,7 +76,7 @@ function getMockPickListResponse() {
           },
           {
              'active':true,
-             'createdBy':'urn:va:user:9E7A:10000000270',
+             'createdBy':'urn:va:user:SITE:10000000270',
              'data':{
                 'activity':{
                    'deploymentId':'VistaCore:Order',

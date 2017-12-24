@@ -57,10 +57,10 @@ logfile=<%= @resource.logfile %>
 # Value  : The name and optional login credentials of the proxy server to use
 #          for all communication with the New Relic collector. In its simplest
 #          form this setting is just a hostname[:port] setting. The default
-#          port if none is specified is 1080. If your proxy requires a user
+#          port if none is specified is PORT. If your proxy requires a user
 #          name, use the syntax user@host[:port]. If it also requires a
 #          password use the format user:password@host[:port]. For example:
-#            fred:secret@proxy.mydomain.com:8181
+#            fred:secret@proxy.mydomain.com:PORT
 # Default: none (use a direct connection)
 #
 <% if @resource.proxy.nil? %>

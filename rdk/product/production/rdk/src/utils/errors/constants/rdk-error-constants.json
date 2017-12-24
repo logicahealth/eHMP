@@ -40,7 +40,16 @@
         "1010": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: GET request header",
         "1011": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: PUT request header",
         "1012": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: DELETE request header",
-        "1013": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: PATCH request header"
+        "1013": "This resource must be accessed with a POST request and the X-HTTP-Method-Override: PATCH request header",
+        "1020": "Missing permission sets",
+        "1021": "Invalid JSON: unable to parse string",
+        "1022": "Missing mode parameter",
+        "1023": "Invalid Multi-user edit mode",
+        "1024": "Missing uid",
+        "1025": "Missing user uid",
+        "1026": "Missing user parameter",
+        "1027": "Invalid Pid. Please pass either ICN, Primary Site PID or Secondary Site PID.",
+        "1028": "Bad filter argument passed in"
     },
     "401": {
         "1000": "Unauthorized",
@@ -49,7 +58,8 @@
     },
     "403": {
         "1000": "Forbidden",
-        "1001": "You are not an authorized user of eHMP. Please contact your local access control coordinator (ACC) for assistance."
+        "1001": "You are not an authorized user of eHMP. Please contact your local access control coordinator (ACC) for assistance.",
+        "1002": "Not allowed to edit permission sets on this user"
     },
     "404": {
         "1000": "Not Found"
@@ -89,7 +99,10 @@
         "1016": "Error sending incident notification email. Recipient rejected email. Incident file saved anyway.",
         "1017": "Error sending incident notification email. Incident file saved anyway.",
         "1018": "Error sending incident notification email. Invalid server email configuration: missing \"to\". Incident file saved anyway.",
-        "1019": "Error sending incident notification email. Invalid server email configuration: missing \"from\". Incident file saved anyway."
+        "1019": "Error sending incident notification email. Invalid server email configuration: missing \"from\". Incident file saved anyway.",
+        "1020": "Error retrieving the users given permissions and permission sets.",
+		"1021": "Failed to successfully read the eHMP versions file.",
+        "1022": "Your search is too complex. For better results, please reduce the number of terms and search again."
     },
     "502": {
         "1000": "Bad Gateway"

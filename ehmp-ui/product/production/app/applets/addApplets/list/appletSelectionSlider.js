@@ -1,173 +1,310 @@
 define([
     'underscore',
+    'jquery',
     'backbone',
     'marionette',
-    'hbs!app/applets/addApplets/list/appletSlider'
-], function(_, Backbone, Marionette, appletSlider) {
+    'handlebars',
+    'hbs!app/applets/addApplets/templates/appletSlider'
+], function(_, $, Backbone, Marionette, Handlebars, appletSlider) {
     'use strict';
 
-    var AppletsManifest = ADK.Messaging.request('AppletsManifest');
-    var AppletSliderLayoutView = Backbone.Marionette.LayoutView.extend({
+
+    var ChildView = Backbone.Marionette.ItemView.extend({
+        className: 'applet-thumbnail',
+        attributes: function() {
+            var model = this.getOption('model');
+            var pageModel = this.getOption('pageModel');
+            var title = model.get('title');
+            return {
+                'tabindex': -1,
+                'data-appletid': model.get('id'),
+                'data-flex-width': pageModel.get('isLastPage') ? 0 : 1,
+                'aria-label': title + " applet"
+            };
+        },
+
+        events: {
+            keydown: 'keyDownListener',
+            keyup: 'keyUpListener',
+            focusin: 'focusIn',
+            click: 'addApplet'
+        },
+
+        template: Handlebars.compile('<span class="applet-thumbnail-title item">{{title}}</span>'),
+
+        keyDownListener: function (event) {
+            var which = event.which;
+            if (which === $.ui.keyCode.SPACE || which === $.ui.keyCode.ENTER) {
+                this.$el.click();
+            } else if (which === $.ui.keyCode.LEFT) {
+                this.focusPrevious();
+            } else if (which === $.ui.keyCode.RIGHT) {
+                this.focusNext();
+            } else {
+                this.shiftTabCheck(event, which);
+            }
+        },
+
+        shiftTabCheck: function(event, which) {
+           if (event.shiftKey && which === $.ui.keyCode.TAB) {
+               event.stopPropagation();
+               event.preventDefault();
+               this.trigger('focus:previous:button');
+           }
+        },
+
+        /**
+         * Blocks the parents focus in event from being triggered
+         * @param event
+         */
+        focusIn: function(event) {
+            event.stopPropagation();
+        },
+
+        focusNext: function() {
+            var $next = this.$el.next();
+            if ($next.length) {
+                return $next.focus();
+            }
+            this.trigger('focus:first');
+        },
+
+        focusPrevious: function() {
+            var $previous = this.$el.prev();
+            if ($previous.length) {
+                return $previous.focus();
+            }
+            this.trigger('focus:last');
+        },
+
+        addApplet: function() {
+            var channel = ADK.Messaging.getChannel('addApplets');
+            channel.trigger('addAppletPlaceholder');
+            channel.trigger('addAppletToGridster', {
+                appletId: this.model.get('id'),
+                appletTitle: this.model.get('title')
+            });
+        }
+    });
+
+
+    var EmptyView = Backbone.Marionette.ItemView.extend({
+        tagName: 'p',
+        className: 'empty-applets-message color-pure-white flex-width-1',
+        template: Handlebars.compile('No Applets Found')
+    });
+
+
+    return Backbone.Marionette.CompositeView.extend({
+        behaviors: {
+            FlexContainer: {
+                container: ['.applet-carousel', {
+                    container: '.applet-items-container',
+                    alignItems: 'stretch',
+                    direction: 'row'
+                }],
+                direction: 'row'
+            }
+        },
+
         template: appletSlider,
-        initialize: function(options) {
+        childViewContainer: '@ui.carouselContainer',
+        childView: ChildView,
+        emptyView: EmptyView,
+
+        modelEvents: {
+            'change:currentPage change:pageSize': 'render'
+        },
+
+        childEvents: {
+            'focus:first': 'focusFirst',
+            'focus:last': 'focusLast',
+            'focus:previous:button': 'focusPreviousButton'
+        },
+
+        collectionEvents: {
+            'reset': function() {
+                this.model.set('currentPage', 1);
+            }
+        },
+
+        ui: {
+            carouselContainer: '.applet-items-container',
+            next: 'button.next-carousel-page-button',
+            previous: 'button.previous-carousel-page-button'
+        },
+
+        events: {
+            'click @ui.previous': 'previous',
+            'click @ui.next': 'next',
+            'focusin @ui.carouselContainer': 'focusFirst'
+        },
+
+        focusFirst: function() {
+            var $children = this.ui.carouselContainer.children();
+            var $first = $children.first();
+            $first.focus();
+        },
+
+        focusLast: function() {
+            var $children = this.ui.carouselContainer.children();
+            var $last = $children.last();
+            $last.focus();
+        },
+
+        focusPreviousButton: function() {
+            this.ui.previous.focus();
+        },
+
+        filter: function(model, index, collection) {
+            var numberPerSlide = this.model.get('pageSize');
+            var numberOfPages = Math.ceil(collection.length / numberPerSlide);
+            var currentPage = this.model.get('currentPage'); // 1 based
+            this.model.set('isLastPage', (currentPage === numberOfPages));
+            return Math.ceil((index + 1) / (numberPerSlide)) === currentPage;
+        },
+
+        childViewOptions: function() {
+            return {
+                pageModel: this.model
+            };
+        },
+
+        initialize: function() {
+            var AppletCollection = Backbone.Collection.extend({
+                comparator: 'title'
+            });
+            this.collection = new AppletCollection();
+            this.model = new Backbone.Model({currentPage: 1});
+            this.listenTo(ADK.utils.resize.dimensions.viewport, 'change:width', this.onWindowWidthChange);
+        },
+
+        onAttach: function() {
+            this.setPageSize();
+
+            // avoids initial render. Filter depends on container width
+            var AppletsManifest = ADK.Messaging.request('AppletsManifest');
             var appletsInContext = ADK.utils.contextUtils.filterAppletsGivenContext(AppletsManifest.applets);
-            this.collection = new Backbone.Collection(_.filter(appletsInContext, function(applet) {
-                var permissions = applet.permissions || [];
-                var hasPermission = true;
-                _.each(permissions, function(permission) {
-                    if (!ADK.UserService.hasPermission(permission)) {
-                        hasPermission = false;
-                        return false;
-                    }
-                });
-                return applet.showInUDWSelection && hasPermission;
-            }));
-            this.collection.comparator = 'title';
-            this.collection.sort();
+            var filtered = _.filter(appletsInContext, this._filterPermissions);
+
+            this.collection.set(filtered);
             this.collectionOrig = this.collection.clone();
-            this.model = new Backbone.Model({});
-            this.setModel();
-            var self = this;
-            $(window).on("resize.appletSelectionSlider",(function() {
-                if (self.isDestroyed) return;
-                self.setModel();
-                self.render();
-            }));
         },
 
-        onBeforeDestroy: function(){
-            $(window).off('resize.appletSelectionSlider');
+        _filterPermissions: function(applet) {
+            var permissions = applet.permissions || [];
+            var hasPermission = true;
+            _.each(permissions, function(permission) {
+                if (!ADK.UserService.hasPermission(permission)) {
+                    hasPermission = false;
+                    return false;
+                }
+            });
+            return applet.showInUDWSelection && hasPermission;
         },
 
-        getNumberPerSlides: function() {
-            var windowWidth = $(window).width();
-            return Math.ceil((windowWidth - 400) / 90);
-        },
-        setModel: function() {
-            var appletsPerSlide = this.getNumberPerSlides();
-            var slides = Math.ceil(this.collection.length / appletsPerSlide);
-
-            if (this.collection.length === 0) {
-                this.model.set({
-                    'appletItemsHtml': '<div class="item active"><p class="color-pure-white">No Applets Found</p></div>'
-                });
-            } else {
-                this.model.set({
-                    'appletItemsHtml': this.getAppletItemsHtml(this.collection, appletsPerSlide)
-                });
-            }
-        },
         onRender: function() {
-            var addAppletsChannel = ADK.Messaging.getChannel('addApplets');
+            if (this.dragObj) {
+                this.dragObj.destroy();
+            }
+            this.dragObj = this.ui.carouselContainer.drag(this._dragOptionsFactory());
+        },
 
-            var carousel = this.$el.find('.carousel').carousel({
-                interval: false,
-                wrap: true
-            });
+        onBeforeDestroy: function() {
+            if (this.dragObj) {
+                this.dragObj.destroy();
+            }
+        },
 
-            var $el = this.$el;
-            //add key listening
-            $el.find('.fa-arrow-right').parent().on('keydown', function(evt) {
-                if (evt.which === 13) {
-                    /* after slide, put focus on first item */
-                    carousel.on('slid.bs.carousel', function() {
-                        $el.find('.active').find('.applet-thumbnail').first().focus();
-                        carousel.off('slid.bs.carousel');
-                    });
-                }
-            });
-            $el.find('.fa-arrow-left').parent().on('keydown', function(evt) {
-                if (evt.which === 13) {
-                    /* after slide, put focus on first item */
-                    carousel.on('slid.bs.carousel', function() {
-                        $el.find('.active').find('.applet-thumbnail').first().focus();
-                        carousel.off('slid.bs.carousel');
-                    });
-                }
-            });
-
-            //fix display issue when changing win size
-            this.$el.find('.carousel-inner').width($(window).width() - 300);
-
-            //enable drag
-            var dragObj = this.$el.find('.item').drag({
+        _dragOptionsFactory: function() {
+            var channel = ADK.Messaging.getChannel('addApplets');
+            return {
                 items: '.applet-thumbnail',
                 helper: 'clone',
-                start: function(e) {
-                    var $helper = $el.find('.helper');
-                    $helper.css('position', 'fixed');
-                    $helper.hide();
-                    setTimeout(function() {
-                        $helper.show();
-                    }, 200);
-                },
-                drag: function(e) {
-                    var $helper = $el.find('.helper');
-                    $helper.css('position', 'fixed');
-                    $helper.css('left', e.pageX - $helper.width() / 2 + 'px');
-                    $helper.css('top', e.pageY - $helper.height() / 2 + 'px');
+                start: this.dragStart.bind(this),
+                drag: this.drag.bind(this, channel),
+                stop: _.partial(this.dragStop, channel)
+            };
+        },
 
-                    if ($helper.hover()) {
-                        var y = e.pageY - $('#gridster2').offset().top - 10;
-                        var row = Math.ceil(y / 25);
-                        if (row < 1) row = 1;
-                        addAppletsChannel.request('addAppletPlaceholder', {
-                            hoverOverRow: row
-                        });
-                    }
-                },
-                stop: function(evt, ui) {
-                    var x = evt.pageX - $('#gridster2').offset().left - 50;
-                    var y = evt.pageY - $('#gridster2').offset().top - 10;
+        drag: function(channel, event) {
+            var $helper = this.$el.find('.helper');
 
-                    addAppletsChannel.request('addAppletToGridster', {
-                        appletId: $(this).attr('data-appletid'),
-                        appletTitle: $(this).find('.applet-thumbnail-title').text(),
-                        sizeX: 4,
-                        sizeY: 4,
-                        xPos: x,
-                        yPos: y
-                    });
-
-                }
+            $helper.css({
+                position: 'left',
+                left: event.pageX - $helper.width() / 2,
+                top: event.pageY - $helper.height() / 2
             });
 
-            // cleanup drag object upon view destruction to clear leak
-            this.listenTo(this, 'destroy', function() {
-                dragObj.destroy();
+            if ($helper.hover()) {
+                var $container = this.$el.closest('.workspace-editor-container');
+                var $gridster = $container.find('#gridster2');
+                if ($gridster.length) {
+                    var y = event.pageY - $gridster.offset().top - 10;
+                    var row = Math.ceil(y / 25);
+                    if (row < 1) {
+                        row = 1;
+                    }
+                    channel.trigger('addAppletPlaceholder', {
+                        hoverOverRow: row
+                    });
+                }
+            }
+        },
+
+        dragStop: function(channel) {
+            channel.trigger('addAppletToGridster', {
+                appletId: this.attr('data-appletid'),
+                appletTitle: this.find('.applet-thumbnail-title').text()
             });
         },
-        getAppletItemsHtml: function(collection, numberPerSlide) {
-            var html = '';
-            var i = 1,
-                j = 1;
-            if (collection.length > 0) html = '<div class="item active">';
-            _.each(collection.models, function(model) {
-                if (i % numberPerSlide === 1 && i !== 1) {
-                    html += '<div class="item">';
-                }
-                var left = (j % (numberPerSlide + 1) * 87 - 50) + 'px';
-                html += '<div class="applet-thumbnail" tabindex=0 data-appletid="' + model.get('id') + '" style="left: ' + left + ';"><span class="applet-thumbnail-title">' + model.get('title') + '</span><span class="sr-only">Press enter to add this applet to the workspace.</span></div>';
-                if (i % numberPerSlide === 0 && i !== collection.length) {
-                    html += '</div>';
-                    j = 0;
-                }
-                i++;
-                j++;
-            });
-            html += '</div>';
-            return html;
 
+        next: function() {
+            var appletsPerSlide = this.model.get('pageSize');
+            var currentPage = this.model.get('currentPage');
+            var numberOfPages = Math.ceil(this.collection.length / appletsPerSlide);
+            var nextPage = currentPage + 1;
+            if (nextPage > numberOfPages) {
+                nextPage = 1;
+            }
+            this.model.set('currentPage', nextPage);
+        },
+
+        previous: function() {
+            var appletsPerSlide = this.model.get('pageSize');
+            var currentPage = this.model.get('currentPage');
+            var numberOfPages = Math.ceil(this.collection.length / appletsPerSlide);
+            var previousPage = currentPage - 1;
+            if (previousPage < 1) {
+                previousPage = numberOfPages;
+            }
+            this.model.set('currentPage', previousPage);
+        },
+
+        dragStart: function() {
+            var $helper = this.$el.find('.helper');
+            $helper.css('position', 'fixed');
+            $helper.hide();
+            setTimeout(function() {
+                $helper.show();
+            }, 200);
+        },
+
+        onWindowWidthChange: function(model, value, options) {
+            var currentCollection = this.collection.clone();
+            this.collection.reset();
+            this.setPageSize();
+            this.collection.set(currentCollection.models);
+            this.model.set('currentPage', 1);
         },
         filterApplets: function(filterText) {
             this.collection.reset(_.filter(this.collectionOrig.models, function(model) {
                 return model.get('title').toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
             }));
-            this.setModel();
-            this.render();
+        },
+        setPageSize: function() {
+            this.model.set('pageSize', Math.floor(this.ui.carouselContainer.innerWidth() / 88));
+            // TODO check to see if currentPage should change
         }
-
     });
-
-    return AppletSliderLayoutView;
 });

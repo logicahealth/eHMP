@@ -5,20 +5,23 @@ define([
     "hbs!main/components/views/appletViews/pillsGistView/templates/pillGistChild",
     "hbs!main/components/views/appletViews/sharedTemplates/gistPopover",
     "api/ResourceService",
-    "api/Messaging"
-], function($, _, Backbone, pillGistChildTemplate, popoverTemplate, ResourceService, Messaging) {
+    "api/Messaging",
+    'main/components/applets/baseDisplayApplet/baseDisplayAppletItem'
+], function($, _, Backbone, pillGistChildTemplate, popoverTemplate, ResourceService, Messaging, BaseItem) {
     'use strict';
-    var PillGistItem = Backbone.Marionette.ItemView.extend({
+    var PillGistItem = BaseItem.extend({
         template: pillGistChildTemplate,
         tagName: 'li',
-        behaviors: {
-            FloatingToolbar: {
-                buttonTypes: ['infobutton', 'detailsviewbutton'],
-                triggerSelector: '[data-infobutton]'
+        className: '',
+        attributes: {},
+        tileOptions: {
+            quickMenu: {
+                buttons: [{
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton'
+                }]
             }
-        },
-        ui: {
-            popoverEl: '[data-toggle=popover]'
         },
         events: {
             'click button#closeGist': function(event) {
@@ -29,15 +32,37 @@ define([
                 event.preventDefault();
                 event.stopImmediatePropagation();
             },
-            'hover div.gist-item': function(event) {
-                this.$(event.target).blur();
+            'dropdown.show': function() {
+                this.$el.find('.gist-item').addClass('quickmenu-open');
             },
-            'click div.gist-item': function(event) {
-                this.$('[data-toggle=popover]').popover('hide');
+            'dropdown.hide': function() {
+                this.$el.find('.gist-item').removeClass('quickmenu-open');
             },
-            'after:hidetoolbar': function() {
-                this.trigger('after:hidetoolbar');
-            }
+            'dropdown.hidden': 'manageFocusShift',
+            'focusin button.dropdown-toggle': 'manageFocusShift'
+        },
+        manageFocusShift: function() {
+            if (this.hasFocus) return;
+            this.hasFocus = true;
+            this.setUpDocumentListener();
+            this.$('.gist-item').addClass('quickmenu-hasfocus');
+        },
+        setUpDocumentListener: function() {
+            $(document).on(this.eventString(), 'body', _.bind(function(e) {
+                if (this.$(e.target).length) return;
+                this.$('.gist-item').removeClass('quickmenu-hasfocus');
+                delete this.hasFocus;
+                this.tearDownDocumentListener();
+            }, this));
+        },
+        tearDownDocumentListener: function() {
+            $(document).off(this.eventString(), 'body');
+        },
+        eventString: function() {
+            return [
+                'focusin.pillgist.' + this.getOption('cid'),
+                'click.pillgist.' + this.getOption('cid')
+            ].join(' ');
         },
         initialize: function(options) {
             this.AppletID = options.AppletID;
@@ -46,25 +71,22 @@ define([
                 'qualifiedName': this.model.get('name')
             });
         },
-        setPopover: function() {
-            this.$('[data-toggle=popover]').popover({
-                trigger: 'manual',
-                html: 'true',
-                container: 'body',
-                template: popoverTemplate(this.model),
-                placement: 'bottom'
-            });
-        },
-        onRender: function() {
-            this.setPopover();
-        },
-        onDestroy: function() {
-            this.$('[data-toggle=popover]').popover('destroy');
+        onBeforeDestroy: function() {
+            this.tearDownDocumentListener();
         }
     });
+
     var PillGist = Backbone.Marionette.CollectionView.extend({
-        attributes: {
-            'gistviewtype': 'pills'
+        behaviors: {
+            QuickTile: {
+                childContainerSelector: '.gist-item'
+            }
+        },
+        attributes: function() {
+            return {
+                'gistviewtype': 'pills',
+                'aria-label': this.getOption('appletId')
+            };
         },
         childView: PillGistItem,
         childEvents: {
@@ -72,19 +94,15 @@ define([
                 var el = e.ui.popoverEl;
                 Messaging.getChannel('toolbar').trigger('close:quicklooks', el);
                 el.popup('toggle');
-            },
-            'after:hidetoolbar': function(e){
-                Messaging.getChannel('toolbar').trigger('close:quicklooks');
             }
         },
         tagName: 'ul',
         emptyView: Backbone.Marionette.ItemView.extend({
-            template: _.template('<p class="color-grey-darkest top-padding-xs left-padding-xs" role="gridcell">No Records Found</p>'),
+            template: _.template('<div class="empty-gist-list"><p class="color-grey-darkest">No Records Found</p></div>'),
             attributes: {
-                "aria-live":"assertive",
-                "role":"row"
+                "aria-live": "assertive"
             },
-            className: 'percent-height-100 background-color-grey-lightest'
+            className: 'percent-height-100 gist-item-list'
         }),
         initialize: function(options) {
             var appletID = getAppletId(options);
@@ -93,13 +111,8 @@ define([
                 AppletID: appletID,
                 collection: options.collection
             };
-            if (this.getOption('toolbarOptions')) {
-                this.childView = this.childView.extend({
-                    behaviors: _.extend({}, this.childView.prototype.behaviors, {
-                        FloatingToolbar: this.getOption('toolbarOptions')
-                    })
-                });
-            }
+
+
             this.gistModel = options.gistModel;
             this.collectionParser = options.collectionParser || function(collection) {
                 return collection;
@@ -126,6 +139,11 @@ define([
                     item.set(object.id, item.get(object.field));
                 });
             }, this);
+        },
+        onRender: function() {
+            if (this.collection.isEmpty()) {
+                this.$el.addClass('background-color-grey-lightest');
+            }
         }
     });
 

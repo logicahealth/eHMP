@@ -44,11 +44,11 @@ describe('write-back orders lab validator', function() {
                 'inputValue': '28'
             }],
             'localId': '12519',
-            'uid': 'urn:va:order:9E7A:100615:12519',
+            'uid': 'urn:va:order:SITE:100615:12519',
             'kind': 'Laboratory',
             'clinicalObject': {
-                'patientUid': '9E7A;100615',
-                'authorUid': 'urn:va:user:9E7A:10000000238',
+                'patientUid': 'SITE;100615',
+                'authorUid': 'urn:va:user:SITE:10000000238',
                 'domain': 'ehmp-order',
                 'subDomain': 'laboratory',
                 'visit': {
@@ -100,12 +100,12 @@ describe('write-back orders lab validator', function() {
                 'orderCheck': 'NEW^11^2^Duplicate order: 11-DEOXYCORTISOL BLOOD   SERUM SP *UNSIGNED*  [UNRELEASED]'
             }],
             'localId': '12519',
-            'uid': 'urn:va:order:9E7A:100615:12519',
+            'uid': 'urn:va:order:SITE:100615:12519',
             'kind': 'Laboratory',
             'clinicalObject': {
-                'uid': 'urn:va:ehmp:9E7A:100615:foobar',
-                'patientUid': '9E7A;100615',
-                'authorUid': 'urn:va:user:9E7A:10000000238',
+                'uid': 'urn:va:ehmp:SITE:100615:foobar',
+                'patientUid': 'SITE;100615',
+                'authorUid': 'urn:va:user:SITE:10000000238',
                 'domain': 'ehmp-order',
                 'subDomain': 'laboratory',
                 'visit': {

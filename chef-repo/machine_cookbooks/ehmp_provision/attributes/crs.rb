@@ -8,9 +8,9 @@ default[:ehmp_provision][:crs][:copy_files] = {}
 #######################################################################################################################
 # jena_fuseki specific aws configuration options
 default[:ehmp_provision][:crs][:aws][:instance_type] = "m3.large"
-default[:ehmp_provision][:crs][:aws][:subnet] = "subnet-213b2256"
-default[:ehmp_provision][:crs][:aws][:ssh_username] = "REDACTED"
-default[:ehmp_provision][:crs][:aws][:ssh_keyname] = "REDACTED"
+default[:ehmp_provision][:crs][:aws][:subnet] = "DNS"
+default[:ehmp_provision][:crs][:aws][:ssh_username] = "USER    "
+default[:ehmp_provision][:crs][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:ehmp_provision][:crs][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:ehmp_provision][:crs][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

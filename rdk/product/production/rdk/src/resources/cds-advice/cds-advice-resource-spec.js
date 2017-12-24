@@ -55,22 +55,22 @@ var mockReqResUtil = (function() {
                 config: {
                     rpcConfig: {
                         context: 'HMP UI CONTEXT',
-                        siteHash: '9E7A'
+                        siteHash: 'SITE'
                     },
                     vistaSites: {}
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             interceptorResults: {
                 patientIdentifiers: {
                     dfn: '3',
                     icn: '1000V1065',
-                    siteDfn: '9E7A;3',
-                    site: '9E7A'
+                    siteDfn: 'SITE;3',
+                    site: 'SITE'
                 }
             }
         };
@@ -118,7 +118,7 @@ describe('CDS Advice Resource', function() {
 
     describe('List endpoint HTTP response codes', function() {
         it('responds HTTP Bad Request when required parameters are missing', function() {
-            sinon.stub(async, 'parallel', function(fcnArray, callback) {
+            sinon.stub(async, 'parallel').callsFake(function(fcnArray, callback) {
                 callback(null, [
                     [], // cds advice mock empty results
                     [], // clinical reminders mock empty results
@@ -130,7 +130,7 @@ describe('CDS Advice Resource', function() {
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceList.getCDSAdviceList(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3'
+                pid: 'SITE;3'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
@@ -140,7 +140,7 @@ describe('CDS Advice Resource', function() {
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceList.getCDSAdviceList(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
@@ -173,7 +173,7 @@ describe('CDS Advice Resource', function() {
     describe('Detail endpoint HTTP response codes', function() {
         it('responds HTTP Not Found if DFN is empty', function() {
             var req = mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             });
@@ -184,7 +184,7 @@ describe('CDS Advice Resource', function() {
 
         it('responds HTTP Not Found if Patient Site is empty', function() {
             var req = mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             });
@@ -195,7 +195,7 @@ describe('CDS Advice Resource', function() {
 
         it('responds HTTP Not Found if Patient Identifiers is empty', function() {
             var req = mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             });
@@ -205,12 +205,12 @@ describe('CDS Advice Resource', function() {
         });
 
         it('responds HTTP OK if there are no details for a reminder', function() {
-            sinon.stub(RpcClient, 'callRpc', function(logger, config, rpc, params, callback) {
+            sinon.stub(RpcClient, 'callRpc').callsFake(function(logger, config, rpc, params, callback) {
                 return callback(null /*error*/ , null /*result*/ );
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
@@ -218,12 +218,12 @@ describe('CDS Advice Resource', function() {
         });
 
         it('responds HTTP Not Found if there are errors retrieving details', function() {
-            sinon.stub(RpcClient, 'callRpc', function(logger, config, rpc, params, callback) {
+            sinon.stub(RpcClient, 'callRpc').callsFake(function(logger, config, rpc, params, callback) {
                 return callback(new Error('something bad happened') /*error*/ , null /*result*/ );
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
@@ -231,25 +231,25 @@ describe('CDS Advice Resource', function() {
         });
 
         it('responds HTTP Bad Request when required parameters are missing', function() {
-            sinon.stub(RpcClient, 'callRpc', function(logger, config, rpc, params, callback) {
+            sinon.stub(RpcClient, 'callRpc').callsFake(function(logger, config, rpc, params, callback) {
                 return callback(null /*error*/ , 'some details...' /*result*/ );
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 use: 'someUse'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 id: 'someAdviceId'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
@@ -267,7 +267,7 @@ describe('CDS Advice Resource', function() {
 
     describe('setReadStatus endpoint HTTP response codes', function() {
         it('responds HTTP Not Found if there is no Work Product with that id', function() {
-            sinon.stub(cdsWorkProduct, 'setReadStatus', function(logger, id, readStatus, provider, callback) {
+            sinon.stub(cdsWorkProduct, 'setReadStatus').callsFake(function(logger, id, readStatus, provider, callback) {
                 return callback(null /*body*/ , 'Work Product not found!' /*error*/ );
             });
 
@@ -279,7 +279,7 @@ describe('CDS Advice Resource', function() {
         });
 
         it('responds HTTP Bad Request when required parameters are missing', function() {
-            sinon.stub(cdsWorkProduct, 'setReadStatus', function(logger, id, readStatus, provider, callback) {
+            sinon.stub(cdsWorkProduct, 'setReadStatus').callsFake(function(logger, id, readStatus, provider, callback) {
                 return callback('Read Status updated!' /*body*/ , null /*error*/ );
             });
 

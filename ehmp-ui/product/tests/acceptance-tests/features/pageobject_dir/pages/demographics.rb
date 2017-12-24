@@ -55,7 +55,8 @@ class PobDemographicsElements < SitePrism::Page
   elements :fld_demographic_group_headers, ".group-header>h5"
   elements :fld_demographic_group_fields, ".group-content>dl>dt"
   # *****************  All_Button_Elements  ******************* #
-  element :btn_demographic, ".patient-demographic button[id^='tray']"
+  element :btn_demographic, ".patient-demographic button[id^='tray'][aria-expanded='false']"
+  element :btn_close_demographic, ".patient-demographic button[id^='tray'][aria-expanded='true']"
   element :btn_provider_info, "#patient-header-provider-details button[id^= tray]"
 
   # *****************  All_Drop_down_Elements  ******************* #

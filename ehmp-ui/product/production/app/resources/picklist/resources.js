@@ -8,8 +8,9 @@ define([
     'app/resources/picklist/notes/resources',
     'app/resources/picklist/problems/resources',
     'app/resources/picklist/locations/resources',
-    'app/resources/picklist/team_management/resources'
-], function(Demo, Allergies, Lab_Orders, Immunizations, Encounters, Vitals, Notes, Problems, Locations, Team_Management) {
+    'app/resources/picklist/team_management/resources',
+    'app/resources/picklist/video_visits/resources'
+], function(Demo, Allergies, Lab_Orders, Immunizations, Encounters, Vitals, Notes, Problems, Locations, Team_Management, VideoVisits) {
     'use strict';
 
     return {
@@ -24,7 +25,8 @@ define([
             Notes: Notes,
             Problems: Problems,
             Locations: Locations,
-            Team_Management: Team_Management
+            Team_Management: Team_Management,
+            VideoVisits: VideoVisits
         }
     };
 });

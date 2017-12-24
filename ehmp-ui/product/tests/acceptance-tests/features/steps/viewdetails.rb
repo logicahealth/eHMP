@@ -54,7 +54,15 @@ Then(/^the my site table contain headers$/) do |table|
   @ehmp = PobViewDetails.new
   @ehmp.wait_until_hdr_viewdetail_table_visible
   table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    max_attempt = 3
+    begin
+      expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale
+      max_attempt -= 1
+      raise stale if max_attempt < 0
+      p "stale element, retry"
+      retry
+    end  
   end
 
 end  
@@ -72,7 +80,15 @@ Then(/^the All VA table contain headers$/) do |table|
   @ehmp = PobViewDetails.new
   @ehmp.wait_until_hdr_viewdetail_table_visible
   table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    max_attempt = 3
+    begin
+      expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale
+      max_attempt -= 1
+      raise stale if max_attempt < 0
+      p "stale element, retry"
+      retry
+    end
   end
 
 end
@@ -108,9 +124,16 @@ Then(/^the Communities table contain headers$/) do |table|
   @ehmp = PobViewDetails.new
   @ehmp.wait_until_hdr_viewdetail_table_visible
   table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    max_attempt = 3
+    begin
+      expect(object_exists_in_list(@ehmp.hdr_viewdetail_table, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError => stale
+      max_attempt -= 1
+      raise stale if max_attempt < 0
+      p "stale element, retry"
+      retry
+    end
   end
-
 end
 
 Then(/^user selects close button to close the modal$/) do

@@ -4,9 +4,6 @@ import org.jboss.logging.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,57 +31,6 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 	private static final String noHistoryText = " "; //for signals without a history text, use a space instead of null
 	private static final Logger LOGGER = Logger.getLogger(ConsultSignalProcessing.class);
 	
-	/**
-	 * Creates the consult clinical JSON object and saves it as a process variable to be used by the ClinicalObjectWriteHandler service
-	 * Called internally from multiple methods
-	 * @param workflowProcessInstance	the active workflowProcessInstance 
-	 * @param consultClinicalObject	 	consultClinicalObject that will be serialized to JSON
-	 */
-	public static void saveClinicalObject(WorkflowProcessInstance workflowProcessInstance, ConsultClinicalObject consultClinicalObject) {
-		try {
-			LOGGER.debug("Entering ConsultSignalProcessing.saveClinicalObject");
-			workflowProcessInstance.setVariable("consultClinicalObject",consultClinicalObject);
-			Gson gson = new Gson();
-			String consultClinicalObjectJSON = gson.toJson(consultClinicalObject);
-			
-			JSONObject clinicalObjectJson = null;
-			try {
-				clinicalObjectJson = new JSONObject(consultClinicalObjectJSON);
-				//Convert cdsResultInent and orderable strings into json objects and replace their entries in each consultOrderObject object entry
-				JSONObject dataElement = clinicalObjectJson.getJSONObject("data");
-				JSONArray consultOrdersJson = dataElement.getJSONArray("consultOrders");
-				int consultOrdersJsonSize = consultOrdersJson.length();
-				for (int i=0; i<consultOrdersJsonSize; i++) {
-					JSONObject consultOrderObject = consultOrdersJson.getJSONObject(i);
-					try {
-						String cdsIntentResultString = consultOrderObject.getString("cdsIntentResult");
-						JSONObject cdsIntentResult = new JSONObject(cdsIntentResultString);
-						consultOrderObject.put("cdsIntentResult", cdsIntentResult);
-					} catch (JSONException e) {
-						// ignore, cdsIntentResult may not exists						
-					}
-					try {
-						String orderableString = consultOrderObject.getString("orderable");
-						LOGGER.debug("ConsultSignalProcessing.saveClinicalObject: orderableString: " + orderableString);
-						JSONObject orderable = new JSONObject(orderableString);
-						consultOrderObject.put("orderable", orderable);
-					} catch (JSONException e) {
-						// ignore, orderable may not exists						
-					}
-				}
-			} catch (JSONException e) {
-				// ignore				
-			}
-			
-			if (clinicalObjectJson != null) {
-				workflowProcessInstance.setVariable("consultClinicalObjectJSON", clinicalObjectJson.toString());
-			} else {
-				workflowProcessInstance.setVariable("consultClinicalObjectJSON", consultClinicalObjectJSON);
-			}
-		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.saveClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
-		}
-	}
 
 	/**
 	 * Processes RELEASE.EWL signal
@@ -169,13 +115,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseEWLSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processReleaseEWLSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseEWLSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 
 	}
@@ -294,14 +240,14 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setAppointments(newAppointments);
 			}
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 			workflowProcessInstance.signalEvent("toTriage", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptCanceledSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processApptCanceledSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptCanceledSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -341,12 +287,12 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptInPastTimer: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processApptInPastTimer: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptInPastTimer: An unexpected condition has happened: %s", e.getMessage()) ,e);
 		}
 	}
 
@@ -447,13 +393,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setAppointments(newAppointments);
 			}
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptKeptSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processApptKeptSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processApptKeptSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -625,13 +571,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processRescheduleSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processRescheduleSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processRescheduleSignal: An unexpected condition has happened: %s", e.getMessage()) , e);
 		}
 	}
 
@@ -760,7 +706,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setOrder(order);
 				ccData.setActivity(activity);
 				consultClinicalObject.setData(ccData);
-				saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+				ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 				workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 
@@ -769,9 +715,9 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				LOGGER.debug("ConsultSignalProcessing.processClaimSignal: CLAIM Signal Ignored...");
 			}
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processClaimSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processClaimSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processClaimSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -917,13 +863,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseConsultSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processReleaseConsultSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseConsultSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1055,7 +1001,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setOrder(order);
 				ccData.setActivity(activity);
 				consultClinicalObject.setData(ccData);
-				saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+				ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 				String author = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "initiator");
 				String instanceName = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "instanceName");
@@ -1081,9 +1027,9 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				workflowProcessInstance.setVariable("formAction","ignored");
 			}
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processCompleteSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processCompleteSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processCompleteSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1201,7 +1147,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setOrder(order);
 				ccData.setActivity(activity);
 				consultClinicalObject.setData(ccData);
-				saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+				ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 				workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 				workflowProcessInstance.signalEvent("terminateCompletion", null);
@@ -1209,9 +1155,9 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				workflowProcessInstance.setVariable("formAction","");
 			}
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseEConsultSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processReleaseEConsultSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseEConsultSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1319,13 +1265,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setActivity(activity);
 
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 			
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processReviewSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processReviewSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processReviewSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1436,13 +1382,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				}
 			}
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityPendingSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processCommunityPendingSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityPendingSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1554,13 +1500,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				}
 			}
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityScheduledSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processCommunityScheduledSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityScheduledSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1658,14 +1604,14 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 				ccData.setAppointments(newAppointments);
 			}
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 			workflowProcessInstance.signalEvent("toTriage", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseCommunitySignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processReleaseCommunitySignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processReleaseCommunitySignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1796,14 +1742,14 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 			workflowProcessInstance.signalEvent("completionStarted", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityCompleteSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processCommunityCompleteSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processCommunityCompleteSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1907,12 +1853,12 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processENDSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processENDSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processENDSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -2073,13 +2019,13 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setSignals(newSignals);
 			
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 			
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processENDSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processEditSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processENDSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -2170,12 +2116,12 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processOrderActivateSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processOrderActivateSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processOrderActivateSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -2205,7 +2151,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 					String uid = t_order.getUid();					
 					if (!ConsultHelperUtil.isEmptyString(uid) && uid.equalsIgnoreCase(s_preReqOrder.getUid())) {
 						labStatus = s_preReqOrder.getStatus();
-						LOGGER.debug("ConsultSignalProcessing.processPrereqOrderUpdateSignal: Lab results received for: " + t_order.getOrderName() + " status:" + labStatus);
+						LOGGER.debug(String.format("ConsultSignalProcessing.processPrereqOrderUpdateSignal: Lab results received for: %s", t_order.getOrderName() + " status:" + labStatus));
 						if (labStatus.equals(OrderStatus.ORDER_STATUS_COMPLETE)) {
 							t_order.setStatus(OrderStatus.ORDER_STATUS_COMPLETE);
 						} else {
@@ -2215,7 +2161,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 						t_order.setStatusDate(currentDateString);
 						//the following check for !isEmptyString() is required because if it is empty or null we don't want to wait for a result 
 					} else if (!ConsultHelperUtil.isEmptyString(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_COMPLETE.equalsIgnoreCase(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_OVERRIDE.equalsIgnoreCase(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_SATISFIED.equalsIgnoreCase(t_order.getStatus())) {
-						LOGGER.debug("ConsultSignalProcessing.processPrereqOrderUpdateSignal: Still waiting for Lab results for: " + t_order.getOrderName());
+						LOGGER.debug(String.format("ConsultSignalProcessing.processPrereqOrderUpdateSignal: Still waiting for Lab results for: %s", t_order.getOrderName()));
 						completed = false;
 					}
 				}
@@ -2270,12 +2216,12 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 			ccData.setOrder(order);
 			ccData.setActivity(activity);
 			consultClinicalObject.setData(ccData);
-			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
+			ConsultHelperUtil.saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 			workflowProcessInstance.signalEvent("saveSignalClinObj", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultSignalProcessing.processPrereqOrderUpdateSignal: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultSignalProcessing.processPrereqOrderUpdateSignal: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultSignalProcessing.processPrereqOrderUpdateSignal: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 }

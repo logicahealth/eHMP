@@ -10,13 +10,13 @@ class BuildQueryWithTitle < BuildQuery
   end
 end
 
-When(/^client requests the authentication list without authentication$/) do
-  path = RDClass.resourcedirectory_fetch.get_url('authentication-list')
+When(/^client requests the facility list without authentication$/) do
+  path = RDClass.resourcedirectory_fetch.get_url('facility-list')
   p path
   @response = HTTParty.get(path)
 end
 
-Then(/^the authentication list response contains fields$/) do |table|
+Then(/^the facility list response contains fields$/) do |table|
   @json_object = JSON.parse(@response.body)
   json_verify = JsonVerifier.new
   result_array = @json_object["data"]["items"]

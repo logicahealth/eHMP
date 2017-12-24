@@ -27,15 +27,15 @@ var app = {
             }
         },
         vistaSites: {
-            '9E7A': {
+            'SITE': {
                 division: [{id:'500',name:'PANORAMA'}],
                 host: 'IP        ',
                 localIP: 'IP      ',
                 localAddress: 'localhost',
                 port: PORT,
                 production: false,
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 infoButtonOid: '1.3.6.1.4.1.3768',
                 abbreviation: 'PAN',
                 uatracker: true
@@ -52,7 +52,7 @@ var user = {
     firstname: 'FIRST',
     lastname: 'LAST',
     ssn: '000000000',
-    facility: '9E7A',
+    facility: 'SITE',
     site: 'PANORAMA',
     division: '500',
     duz: {
@@ -63,6 +63,45 @@ var user = {
 };
 
 vixSubsystem._init(app, logger);
+
+describe('vix-subsystem._init', function () {
+    after(function () {
+        vixSubsystem._vixServerConfigured = true;
+    });
+
+    it('Should be disabled if there is no baseUrl in the app config', function () {
+        vixSubsystem._init({}, logger);
+        expect(vixSubsystem._vixServerConfigured).to.be(false);
+    });
+
+    it('Should be enabled if there is a baseUrl in the app config', function () {
+        vixSubsystem._init(app, logger);
+        expect(vixSubsystem._vixServerConfigured).to.be(true);
+    });
+});
+
+describe('vix-subsystem\'s healthcheck', function () {
+    it('Should be skipped if the vix-subsystem is disabled', function (done) {
+        var config = vixSubsystem.getSubsystemConfig(app, logger);
+        vixSubsystem._vixServerConfigured = false;
+        config.healthcheck.check(function (healthy) {
+            expect(healthy).to.be(false);
+            done();
+        });
+        vixSubsystem._vixServerConfigured = true;
+    });
+
+    it('Should ping vix if the vix-subsystem is enabled', function (done) {
+        sinon.stub(http, 'get').callsFake(function(config, callback) {
+            callback(null);
+        });
+        var config = vixSubsystem.getSubsystemConfig(app, logger);
+        config.healthcheck.check(function (healthy) {
+            expect(healthy).to.be(true);
+            done();
+        });
+    });
+});
 
 describe('vix-subsystem.addImagesToDocument', function() {
     var req, jdsResponse;
@@ -88,6 +127,16 @@ describe('vix-subsystem.addImagesToDocument', function() {
                 items: []
             }
         };
+    });
+
+    it('Aborts when vix-subsystem is disabled', function (done) {
+        vixSubsystem._vixServerConfigured = false;
+        _.set(req, 'interceptorResults.patientIdentifiers.siteDfn', 'SITE;3');
+        vixSubsystem.addImagesToDocument(req, jdsResponse, function(error, innerJdsResponse) {
+            vixSubsystem._vixServerConfigured = true;
+            expect(error).to.eql({ error: 'vix is not configured' });
+            done();
+        });
     });
 
     function tryWithPidInQueryAndBody(pid, description, test, skipOrOnly) {
@@ -123,24 +172,27 @@ describe('vix-subsystem.addImagesToDocument', function() {
     tryWithPidInQueryAndBody.only = _.bind(tryWithPidInQueryAndBody, this, _, _, _, 'only');
     tryWithPidInQueryAndBody.skip = _.bind(tryWithPidInQueryAndBody, this, _, _, _, 'skip');
 
-    tryWithPidInQueryAndBody('10108V420871', 'skips enrichment with non-site;dfn pid', function() {
+    tryWithPidInQueryAndBody('1234', 'skips enrichment with invalid icn/pid', function() {
+        _.set(req, 'interceptorResults.patientIdentifiers.icn', '1234');
+        _.set(req, 'interceptorResults.patientIdentifiers.pid', '1234');
         vixSubsystem.addImagesToDocument(req, jdsResponse, function(error, innerJdsResponse) {
-            expect(error).to.eql('pid is not a valid site;dfn');
-            expect(req.logger.info.calledWithMatch({error: 'pid is a not valid site;dfn - returning error'})).to.be.true();
+            expect(error).to.eql('icn and site;dfn are not valid');
+            expect(req.logger.error.calledWithMatch({error: 'icn and site;dfn are not valid - returning error'})).to.be.true();
         });
     });
 
-    tryWithPidInQueryAndBody('9E7A;3', 'does nothing with empty response from VIX', function() {
+    tryWithPidInQueryAndBody('SITE;3', 'does nothing with empty response from VIX', function() {
         sinon.stub(http, 'post').callsFake(function(config, callback) {
             callback(null, {body: {studies: []}});
         });
         vixSubsystem.addImagesToDocument(req, jdsResponse, function(error, innerJdsResponse) {
             expect(innerJdsResponse).to.eql(jdsResponse);
-            expect(req.logger.error.calledWithMatch({error: 'Empty response from VIX'})).to.be.true();
+            expect(error).to.be.null();
+            expect(req.logger.info.calledWithMatch('empty response from VIX')).to.be.true();
         });
     });
 
-    tryWithPidInQueryAndBody('9E7A;3', 'adds properties to records that have associated images', function() {
+    tryWithPidInQueryAndBody('SITE;3', 'adds properties to records that have associated images', function() {
         sinon.stub(http, 'post').callsFake(function(config, callback) {
             callback(null, {body: {studies: [{
                     localId: 1
@@ -222,7 +274,7 @@ describe('vix-subsystem.addImagesToDocument', function() {
         });
     });
 
-    tryWithPidInQueryAndBody('9E7A;3', 'does not add properties to records that have no associated images', function() {
+    tryWithPidInQueryAndBody('SITE;3', 'does not add properties to records that have no associated images', function() {
         var jdsData = _.cloneDeep(jdsResponse);
         jdsData.data.items = [{
                 localId: 1,
@@ -282,12 +334,13 @@ describe('vix-subsystem.addImagesToDocument', function() {
         });
     });
 
-    tryWithPidInQueryAndBody('9E7A;3', 'does nothing when vix is unavailable', function() {
+    tryWithPidInQueryAndBody('SITE;3', 'does nothing when vix is unavailable', function() {
         sinon.stub(vixSubsystem, '_getQueryConfig').callsFake(function(appConfig, logger, query) {
             return null;
         });
         vixSubsystem.addImagesToDocument(req, jdsResponse, function(error, innerJdsResponse) {
-            expect(req.logger.debug.calledWith({error: {error: 'vix is not configured'}}));
+            expect(req.logger.error.calledWithMatch({error: {error: 'vix is not configured'}}));
+            expect(error).to.eql({ error: 'vix is not configured' });
             expect(innerJdsResponse).to.eql(jdsResponse);
         });
     });
@@ -338,7 +391,7 @@ describe('vix-subsystem.getImagesForDocument', function() {
                 'patientIdentifiers': {
                     'icn': '10108V420871',
                     'dfn': '3',
-                    'siteDfn': '9E7A;3'
+                    'siteDfn': 'SITE;3'
                 },
                 'jdsFilter': {}
             },
@@ -351,21 +404,22 @@ describe('vix-subsystem.getImagesForDocument', function() {
         _.set(req, 'session.user', user);
     });
 
-    it('Should return an error with a non-site;dfn as the pid', function() {
-        var reqClone = _.cloneDeep(req);
-        reqClone.interceptorResults.patientIdentifiers.siteDfn = '10108V420871';
-        vixSubsystem.getImagesForDocument(reqClone, function(error, response) {
-            expect(error).to.eql('pid is not a valid site;dfn');
-            expect(reqClone.logger.info.calledWithMatch({error: 'pid is a not valid site;dfn - returning error'})).to.be.true();
+    it('Aborts when vix-subsystem is disabled', function (done) {
+        vixSubsystem._vixServerConfigured = false;
+        vixSubsystem.getImagesForDocument(req, function(error, response) {
+            vixSubsystem._vixServerConfigured = true;
+            expect(error).to.eql({ error: 'vix is not configured' });
+            done();
         });
     });
 
-    it('Should return an error with an invalid icn', function() {
+    it('Should return an error with an invalid icn or pid', function() {
         var reqClone = _.cloneDeep(req);
         reqClone.interceptorResults.patientIdentifiers.icn = 'bad';
+        reqClone.interceptorResults.patientIdentifiers.siteDfn = 'bad';
         vixSubsystem.getImagesForDocument(reqClone, function(error, response) {
-            expect(error).to.eql('icn is not valid');
-            expect(reqClone.logger.info.calledWithMatch({error: 'icn is not valid - returning error'})).to.be.true();
+            expect(error).to.eql('icn and site;dfn are not valid');
+            expect(reqClone.logger.error.calledWithMatch({error: 'icn and site;dfn are not valid - returning error'})).to.be.true();
         });
     });
 
@@ -374,7 +428,7 @@ describe('vix-subsystem.getImagesForDocument', function() {
         reqClone.query.siteNumber = '';
         vixSubsystem.getImagesForDocument(reqClone, function(error, response) {
             expect(error).to.eql('siteNumber is nullish');
-            expect(reqClone.logger.info.calledWithMatch({error: 'siteNumber is nullish - returning error'})).to.be.true();
+            expect(reqClone.logger.error.calledWithMatch({error: 'siteNumber is nullish - returning error'})).to.be.true();
         });
     });
 
@@ -383,7 +437,7 @@ describe('vix-subsystem.getImagesForDocument', function() {
         reqClone.query.contextId = '';
         vixSubsystem.getImagesForDocument(reqClone, function(error, response) {
             expect(error).to.eql('contextId is nullish');
-            expect(reqClone.logger.info.calledWithMatch({error: 'contextId is nullish - returning error'})).to.be.true();
+            expect(reqClone.logger.error.calledWithMatch({error: 'contextId is nullish - returning error'})).to.be.true();
         });
     });
 
@@ -392,20 +446,45 @@ describe('vix-subsystem.getImagesForDocument', function() {
             return null;
         });
         vixSubsystem.getImagesForDocument(req, function(error, response) {
-            expect(req.logger.debug.calledWithMatch({error: {error: 'vix is not configured'}})).to.true();
+            expect(error).to.eql({ error: 'vix is not configured' });
+        });
+    });
+
+    it('Should return an error if there is no VIX body', function() {
+        sinon.stub(vixSubsystem, '_getStudyQuery').callsFake(function(req, bseToken, query, callback) {
+            return callback(null, null);
+        });
+        vixSubsystem.getImagesForDocument(req, function(error, response) {
+            expect(error).not.to.be.undefined();
+            expect(response).to.be.undefined();
+            expect(req.logger.error.calledWithMatch({error: 'Empty response from VIX'})).to.be.true();
         });
     });
 
     it('Should return an error if the VIX Body is empty', function() {
         sinon.stub(vixSubsystem, '_getStudyQuery').callsFake(function(req, bseToken, query, callback) {
-            return callback(null, {studies: []});
+            return callback(null, {});
         });
         vixSubsystem.getImagesForDocument(req, function(error, response) {
-            expect(req.logger.debug.calledWithMatch({error: 'Empty response from VIX'})).to.true();
+            expect(error).not.to.be.undefined();
+            expect(response).to.be.undefined();
+            expect(req.logger.error.calledWithMatch({error: 'Empty response from VIX'})).to.be.true();
         });
     });
 
-    it('Should return the studies in then items array and not have a studies array', function() {
+    it('Should return an empty items array if the VIX Body.studies property is empty', function() {
+        sinon.stub(vixSubsystem, '_getStudyQuery').callsFake(function(req, bseToken, query, callback) {
+            return callback(null, {studies: []});
+        });
+        vixSubsystem.getImagesForDocument(req, function(error, response) {
+            expect(error).to.be.null();
+            expect(response).not.to.be.undefined();
+            expect(response.studies).to.eql(undefined);
+            expect(response.items).to.eql([]);
+        });
+    });
+
+    it('Should return the studies in the items array and not have a studies array', function() {
         sinon.stub(http, 'post').callsFake(function(config, callback) {
             return callback(null, singleVixResponse);
         });
@@ -658,10 +737,10 @@ describe('vix-subsystem._getBseToken', function() {
         logger: logger,
         session: {
             user: {
-                accessCode: app.config.vistaSites['9E7A'].accessCode,
-                verifyCode: app.config.vistaSites['9E7A'].verifyCode,
+                accessCode: app.config.vistaSites['SITE'].accessCode,
+                verifyCode: app.config.vistaSites['SITE'].verifyCode,
                 division: '500',
-                site: '9E7A'
+                site: 'SITE'
             }
         }
     };
@@ -698,7 +777,7 @@ describe('vix-subsystem._saveBseToken', function() {
         logger: logger,
         session: {
             user: {
-                uid: 'urn:va:user:9E7A:10000000270'
+                uid: 'urn:va:user:SITE:10000000270'
             }
         }
     };

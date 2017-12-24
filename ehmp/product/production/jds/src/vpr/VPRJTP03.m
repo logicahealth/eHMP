@@ -49,7 +49,7 @@ DATA5 ;; sample entry for item that references others (collection utestc)
  ;;zzzzz
  ;
 SRV6 ;; sample entry #1
- ;;{"patient":"-7","facility":"Camp Other","uid":"urn:va:utesta:9999:-7:6","localId":"a6","stampTime":"76"}
+ ;;{"patient":"-7","facility":"Camp Other","uid":"urn:va:utesta:PORT:-7:6","localId":"a6","stampTime":"76"}
  ;;zzzzz
 SRV7 ;; sample entry #2
  ;;{"patient":"-7","facility":"Camp Master","uid":"urn:va:utesta:93EF:-7:7","localId":"a7","stampTime":"77"}

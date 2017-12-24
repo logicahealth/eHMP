@@ -10,7 +10,7 @@ var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var activeUserUserScreenRetriever = require(global.OSYNC_UTILS + 'active-user-userscreen-retriever');
 
-var config = {'9E7A': {}};
+var config = {'SITE': {}};
 var pjds = new PjdsClient(log, log, config);
 var jds = new JdsClient(log, log, config);
 
@@ -25,7 +25,7 @@ describe('active user handler', function() {
     beforeEach(function () {
         user1 = {
             'duz': {
-                '9E7A': 'user1'
+                'SITE': 'user1'
             },
             'lastlogin': moment().format(),
             'patientList': [{
@@ -40,7 +40,7 @@ describe('active user handler', function() {
         };
         user2 = {
             'duz': {
-                'C877': 'user2'
+                'SITE': 'user2'
             },
             'lastlogin': '2014-01-11',
             'patientList': [{

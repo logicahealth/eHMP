@@ -18,6 +18,10 @@ define([
             if (!activityDateTime) {
                 activityDateTime = response.resulted;
             }
+
+            // The referenceDateTime comparator is hardcode in the ADK
+            response.referenceDateTime = activityDateTime;
+
             var activityDateTimeMoment = moment(activityDateTime, "YYYYMMDDHHmmss");
             response.activityDateTimeByIso = activityDateTimeMoment.format("YYYY-MM-DD HH:mm");
             response.activityDateTimeByIsoWithSlashes = activityDateTimeMoment.format("YYYY/MM/DD HH:mm");

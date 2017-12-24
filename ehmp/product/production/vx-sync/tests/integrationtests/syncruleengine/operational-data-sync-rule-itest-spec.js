@@ -475,15 +475,7 @@ describe('operational-data-sync-rule integration test', function() {
             });
             environment.jds._markOperationalItemAsStored(storePtSelectMetadataABBB, function(error, response) {
                 expect(error).toBeFalsy();
-                //Store new operational data metastamp to JDS to simulate pt-select update
-                //Must retrieve sync status now to signal syncCompleteAsOf Flag
-                environment.jds.getOperationalSyncStatus('ABBB', function(error, response) {
-                    expect(error).toBeFalsy();
-                    environment.jds.saveOperationalSyncStatus(opdStampABBBnewPatient, 'ABBB', function(error, response) {
-                        expect(error).toBeFalsy();
-                        done4 = true;
-                    });
-                });
+                done4 = true;
             });
             environment.jds._markOperationalItemAsStored(storePtSelectMetadataBCCC, function(error, response) {
                 expect(error).toBeFalsy();
@@ -493,6 +485,24 @@ describe('operational-data-sync-rule integration test', function() {
         waitsFor(function() {
             return done3 && done4 && done5;
         });
+
+        var storeNewABBBoperationalMetastampDone = false;
+
+        runs(function() {
+            //Store new operational data metastamp to JDS to simulate pt-select update
+            //Must retrieve sync status now to signal syncCompleteAsOf Flag
+            environment.jds.getOperationalSyncStatus('ABBB', function(error, response) {
+                expect(error).toBeFalsy();
+                environment.jds.saveOperationalSyncStatus(opdStampABBBnewPatient, 'ABBB', function(error, response) {
+                    expect(error).toBeFalsy();
+                    storeNewABBBoperationalMetastampDone = true;
+                });
+            });
+        });
+        waitsFor(function() {
+            return storeNewABBBoperationalMetastampDone;
+        });
+
 
         var engine = new SyncRulesEngine(log, config, environment);
         // engine.rules = [rule];

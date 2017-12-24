@@ -18,15 +18,15 @@ describe('writeback workflow', function() {
         req.app.config = {};
         req.session = {};
         req.session.user = {};
-        req.session.user.site = '9E7A';
+        req.session.user.site = 'SITE';
         req.headers = {};
         req.session.cookie = {};
         req.body = {};
         req.param = _.identity;
         req.interceptorResults = {
             patientIdentifiers: {
-                site: '9E7A',
-                siteDfn: '9E7A;100',
+                site: 'SITE',
+                siteDfn: 'SITE;100',
                 dfn: '100'
             }
         };
@@ -36,13 +36,13 @@ describe('writeback workflow', function() {
         it('gets the vista config for a request', function() {
             var appConfig = {};
             appConfig.vistaSites = {};
-            appConfig.vistaSites.C877 = {
+            appConfig.vistaSites.SITE = {
                 name: 'My Vista Site'
             };
             appConfig.rpcConfig = {};
             appConfig.rpcConfig.context = 'rpcContext';
             var user = {};
-            user.site = 'C877';
+            user.site = 'SITE';
             user.accessCode = 'accessCode';
             user.verifyCode = 'verifyCode';
             user.division = '500';
@@ -61,7 +61,7 @@ describe('writeback workflow', function() {
             appConfig.rpcConfig = {};
             appConfig.rpcConfig.context = 'rpcContext';
             var user = {};
-            user.site = 'C877';
+            user.site = 'SITE';
             user.accessCode = 'accessCode';
             user.verifyCode = 'verifyCode';
             user.division = '500';
@@ -77,7 +77,7 @@ describe('writeback workflow', function() {
         it('handles an invalid user', function() {
             var appConfig = {};
             appConfig.vistaSites = {};
-            appConfig.vistaSites.C877 = {
+            appConfig.vistaSites.SITE = {
                 name: 'My Vista Site'
             };
             appConfig.rpcConfig = {};

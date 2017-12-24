@@ -28,14 +28,14 @@ var config = {
     'syncRequestApi': {
         'protocol': 'http',
         'host': 'IP      ',
-        'port': '8080',
+        'port': 'PORT',
         'timeout': 300000
     },
     'vistaSites': {
-        'C877': {
+        'SITE': {
             'name': 'KODAK'
         },
-        '9E7A': {
+        'SITE': {
             'name': 'PANORAMA'
         }
     }
@@ -51,17 +51,17 @@ describe('large-patient-record-rule', function() {
         nock.cleanAll();
         nock.disableNetConnect();
         nock('http://IP           ')
-            .get('/sync/status?pid=9E7A;10&docStatus=true')
+            .get('/sync/status?pid=SITE;10&docStatus=true')
             .reply(200, JSON.stringify({
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
                 'identifierDocSizes': {
                     'totalSize': 10,
-                    '9E7A;10': 'NO_DOCUMENTS'
+                    'SITE;10': 'NO_DOCUMENTS'
                 },
                 'syncStatus': {
                     'completedStamp': {
                         'sourceMetaStamp': {
-                            '9E7A': {
+                            'SITE': {
                                 'domainMetaStamp': {
                                     'allergy': {
                                         'domain': 'allergy',
@@ -79,12 +79,12 @@ describe('large-patient-record-rule', function() {
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
                 'identifierDocSizes': {
                     'totalSize': 100,
-                    '9E7A;3': 'NO_DOCUMENTS'
+                    'SITE;3': 'NO_DOCUMENTS'
                 },
                 'syncStatus': {
                     'completedStamp': {
                         'sourceMetaStamp': {
-                            '9E7A': {
+                            'SITE': {
                                 'domainMetaStamp': {
                                     'allergy': {
                                         'domain': 'allergy',
@@ -103,12 +103,12 @@ describe('large-patient-record-rule', function() {
                 'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
                 'identifierDocSizes': {
                     'totalSize': 200,
-                    '9E7A:8': 'NO_DOCUMENTS'
+                    'SITE:8': 'NO_DOCUMENTS'
                 },
                 'syncStatus': {
                     'completedStamp': {
                         'sourceMetaStamp': {
-                            '9E7A': {
+                            'SITE': {
                                 'domainMetaStamp': {
                                     'allergy': {
                                         'domain': 'allergy',
@@ -193,15 +193,15 @@ describe('large-patient-record-rule', function() {
         var items = [{
             'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
             'lastAccessTime': date,
-            'patientIdentifiers': ['9E7A;10']
+            'patientIdentifiers': ['SITE;10']
         }, {
             'jpid': '516c44cc-a87a-4822-b2eb-979e8324505e',
             'lastAccessTime': date,
-            'patientIdentifiers': ['10108V420871', '9E7A;3', 'C877;3', 'DOD;0000000003', 'HDR;10108V420871', 'VLER;10108V420871']
+            'patientIdentifiers': ['10108V420871', 'SITE;3', 'SITE;3', 'DOD;0000000003', 'HDR;10108V420871', 'VLER;10108V420871']
         }, {
             'jpid': '5888e969-110c-4d97-8f56-10652ffee070',
             'lastAccessTime': date,
-            'patientIdentifiers': ['10110V004877', '9E7A;8', 'C877;8', 'DOD;0000000008', 'HDR;10110V004877', 'VLER;10110V004877']
+            'patientIdentifiers': ['10110V004877', 'SITE;8', 'SITE;8', 'DOD;0000000008', 'HDR;10110V004877', 'VLER;10110V004877']
         }];
         var engine = new RetirementRulesEngine(log, config, environment);
         runs(function() {
@@ -229,14 +229,14 @@ describe('large-patient-record-rule', function() {
             'syncRequestApi': {
                 'protocol': 'http',
                 'host': 'IP      ',
-                'port': '8080',
+                'port': 'PORT',
                 'timeout': 300000
             },
             'vistaSites': {
-                'C877': {
+                'SITE': {
                     'name': 'KODAK'
                 },
-                '9E7A': {
+                'SITE': {
                     'name': 'PANORAMA'
                 }
             }
@@ -246,15 +246,15 @@ describe('large-patient-record-rule', function() {
         var items = [{
             'jpid': '215c2ab2-cfe2-4702-9395-949e32f6d3e4',
             'lastAccessTime': date,
-            'patientIdentifiers': ['9E7A;10']
+            'patientIdentifiers': ['SITE;10']
         }, {
             'jpid': '516c44cc-a87a-4822-b2eb-979e8324505e',
             'lastAccessTime': date,
-            'patientIdentifiers': ['10108V420871', '9E7A;3', 'C877;3', 'DOD;0000000003', 'HDR;10108V420871', 'VLER;10108V420871']
+            'patientIdentifiers': ['10108V420871', 'SITE;3', 'SITE;3', 'DOD;0000000003', 'HDR;10108V420871', 'VLER;10108V420871']
         }, {
             'jpid': '5888e969-110c-4d97-8f56-10652ffee070',
             'lastAccessTime': date,
-            'patientIdentifiers': ['10110V004877', '9E7A;8', 'C877;8', 'DOD;0000000008', 'HDR;10110V004877', 'VLER;10110V004877']
+            'patientIdentifiers': ['10110V004877', 'SITE;8', 'SITE;8', 'DOD;0000000008', 'HDR;10110V004877', 'VLER;10110V004877']
         }];
 
 

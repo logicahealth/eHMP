@@ -4,8 +4,8 @@
 	"systemDesignator": "internal",
     "permissionSet": {
         "val": ["read-access"],
-        "modifiedBy": "urn:va:user:C877:10000000270",
-        "modifiedOn": "2015-08-19T19:31:41Z",
+        "modifiedBy": "",
+        "modifiedOn": "",
         "additionalPermissions": [
             "access-general-ehmp",
             "add-task",
@@ -25,8 +25,8 @@
 	"systemDesignator": "internal",
     "permissionSet": {
         "val": ["read-access"],
-        "modifiedBy": "urn:va:user:C877:10000000270",
-        "modifiedOn": "2015-08-19T19:31:41Z",
+        "modifiedBy": "",
+        "modifiedOn": "",
         "additionalPermissions": [
             "access-general-ehmp",
             "read-operational-data",
@@ -49,5 +49,15 @@
             "read-concept-relationship",
             "read-fhir"
         ]
+    }
+}, {
+    "uid": "DAS",
+    "name": "DAS",
+    "systemDesignator": "external",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "",
+        "modifiedOn": "",
+        "additionalPermissions": []
     }
 }]

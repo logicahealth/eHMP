@@ -20,7 +20,7 @@ class Chef
           # Determine contents of vm file
           vm_file_content = "Vagrant.configure('2') do |outer_config|\n outer_config.ssh.insert_key = false\n"
           vm_file_content << "  outer_config.vm.define #{vm_name.inspect} do |config|\n"
-          merged_vagrant_options = { 'vm.hostname' => vm_name }
+          merged_vagrant_options = { 'vm.hostname' => vm_name.gsub('.','-') }
           if machine_options[:vagrant_options]
             merged_vagrant_options = Cheffish::MergedConfig.new(machine_options[:vagrant_options], merged_vagrant_options)
           end
@@ -40,7 +40,9 @@ class Chef
               }
             when 'vm.synced_folder'
               value.each { |options|
-                vm_file_content << "    config.#{key.to_s}(#{options[:host_path].inspect}, #{options[:guest_path].inspect}, #{options.inspect})\n"
+                config=""
+                options.each{|key,value| unless ['host_path', 'guest_path'].include?(key) then config<<", #{key}: \"#{value}\"" end}
+                vm_file_content << "    config.#{key.to_s}(#{options[:host_path].inspect}, #{options[:guest_path].inspect}#{config})\n"
               }
             else
               vm_file_content << "    config.#{key.to_s} = #{value.inspect}\n"

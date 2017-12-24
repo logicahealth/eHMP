@@ -7,17 +7,7 @@ define([
     'app/applets/user_management/views/userManagementView'
 ], function(Backbone, Marionette, Handlebars, _, appletUtil, userManagementView) {
     'use strict';
-
-    var map = appletUtil.getPermissionSetsMap();
-
-    var mapping = function(context) {
-        if (map) {
-            return map[this];
-        }
-        return this;
-    };
-    Handlebars.registerHelper('mapping', mapping);
-
+    var UMA_CHANNEL = ADK.Messaging.getChannel('user-management-applet');
     var BulkEditButtonView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('<button type="button" class="applet-bulk-user-edit-button btn btn-sm btn-icon" tooltip-data-key="Bulk Edit" title="" data-original-title="Bulk Edit"><i class="fa fa-user"></i><i class="fa fa-user"></i><i class="fa fa-pencil"></i><span class="sr-only">Press enter to open bulk user edit workflow</span></i></button>'),
         tagName: 'span',
@@ -27,9 +17,11 @@ define([
         behaviors: {
             Tooltip: {}
         },
-        onClickBulkEditButton: function() {
-            ADK.Messaging.trigger('users-applet:launch-bulk-edit');
-            appletUtil.elementTarget = '.applet-bulk-user-edit-button';
+        ui:{
+            BulkEditButton: '.applet-bulk-user-edit-button'
+        },
+        onClickBulkEditButton: function(event) {
+            UMA_CHANNEL.trigger('users-applet:launch-bulk-edit', this.ui.BulkEditButton);
         }
     });
     var applet = {

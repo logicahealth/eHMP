@@ -10,66 +10,61 @@ var definitionList = configImport.definedMetricDefinitions;
 var groupList = configImport.definedMetricGroups;
 
 // Database
-var ObjectID = require('mongoskin').ObjectID;
-var thisApp;
+var ObjectID = require('mongodb').ObjectID;
 
 var definitionName = [];
 var definitionId = [];
-var logger;
 
 var messageBodyError = 'Message body cannot be empty and must contain valid JSON';
 var idParameterError = 'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters';
 var notFoundError = 'Not Found';
 
 
-function init(app, subsystemLogger) {
-    thisApp = app;
-    logger = subsystemLogger;
+function createInitDefinitions(logger) {
+    return function initDefinitions(dbConnection) {
+
+        //Clear out the existing definitions and re-seed them
+        dbConnection.collection('definitions').remove({}, function(error, result) {
+            if (error) {
+                logger.warn({
+                    error: error,
+                    result: result
+                });
+            }
+        });
+
+        _.each(definitionList, function(definition, index) {
+            dbConnection.collection('definitions').update({
+                _id: definition._id
+            }, definition, {
+                upsert: true
+            }, function(error, result) {
+                if (error) {
+                    logger.error({
+                        error: error
+                    });
+                }
+            });
+            definitionName[definition.name] = index;
+            definitionId[definition._id] = index;
+        });
+
+        _.each(groupList, function(group) {
+            dbConnection.collection('groups').update({
+                name: group.name
+            }, group, {
+                upsert: true
+            }, function(error, result) {
+                if (error) {
+                    logger.error({
+                        error: error
+                    });
+                }
+            });
+        });
+    };
 }
 
-var initDefinitions = function(dbConnection) {
-
-    //Clear out the existing definitions and re-seed them
-    dbConnection.collection('definitions').remove({}, function(error, result) {
-        if (error) {
-            logger.debug({
-                error: error,
-                result: result
-            });
-        }
-    });
-
-    _.each(definitionList, function(definition, index) {
-        dbConnection.collection('definitions').update({
-            _id: definition._id
-        }, definition, {
-            upsert: true
-        }, function(error, result) {
-            if (error) {
-                logger.error({
-                    error: error
-                });
-            }
-        });
-        definitionName[definition.name] = index;
-        definitionId[definition._id] = index;
-    });
-
-    _.each(groupList, function(group) {
-        dbConnection.collection('groups').update({
-            name: group.name
-        }, group, {
-            upsert: true
-        }, function(error, result) {
-            if (error) {
-                logger.error({
-                    error: error
-                });
-            }
-        });
-    });
-};
-module.exports.initDefinitions = initDefinitions;
 
 // Checks if a string, such as a message body, is a valid JSON object
 function isJsonString(inputString) {
@@ -80,6 +75,7 @@ function isJsonString(inputString) {
     }
     return true;
 }
+
 
 /*
  * Validate the the required parameters are passed and that the parameters passed are correct
@@ -122,14 +118,12 @@ function invalidMetricSearchParameters(req) {
     return false;
 }
 
+
 /*
  * Creates an aggregating query pipeline for MongoDB. Granularity is a required
  * value for this type of query.
  */
 function createAggregatedQuery(query) {
-
-    //    req.logger.debug({query:query}, 'Create Aggregated Query');
-
     var match = {
         $match: {
             'time': {
@@ -219,13 +213,11 @@ function createAggregatedQuery(query) {
     return [match, group, sort, limit, project];
 }
 
+
 /*
  * Creates an count query pipeline for MongoDB
  */
 function createQuery(query) {
-
-    //    req.logger.debug({query:query}, 'Create Event Query');
-
     var match = {
         $match: {
             'time': {
@@ -297,7 +289,7 @@ function createQuery(query) {
 }
 
 
-var getMetricDefinition = function (metricId) {
+function getMetricDefinition(metricId) {
     try {
         if (isNaN(metricId)) {
             return definitionList[definitionName[metricId]];
@@ -306,7 +298,8 @@ var getMetricDefinition = function (metricId) {
     } catch (e) {
         return null;
     }
-};
+}
+
 
 /**
  * Adds the missing time interval metrics results with null values for a given time range.
@@ -366,6 +359,7 @@ function roundToGranularity(epoch, granularity) {
     return epoch - (epoch % granularity);
 }
 
+
 /**
  * Converts an epoch time to its corresponding UTC ISO 8601 string.
  *
@@ -375,6 +369,7 @@ function roundToGranularity(epoch, granularity) {
 function toISOString(epoch) {
     return (new Date(epoch)).toISOString();
 }
+
 
 /**
  * @api {get} /resource/cds/metrics/metrics Get Metrics
@@ -411,11 +406,14 @@ function toISOString(epoch) {
  *   ]
  * }
  */
-var getMetricSearch = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getMetricSearch(req, res) {
+    req.logger.debug('metrics.getMetricSearch()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -473,7 +471,7 @@ var getMetricSearch = function(req, res) {
 
         dbConnection.collection(query.collection).aggregate(pipeline, function(error, result) {
             if (error) {
-               req.logger.debug({
+                req.logger.warn({
                     error: error
                 });
                 return res.status(404).send({
@@ -488,8 +486,8 @@ var getMetricSearch = function(req, res) {
             });
         });
     });
-};
-module.exports.getMetricSearch = getMetricSearch;
+}
+
 
 // DASHBOARD ....
 
@@ -525,17 +523,20 @@ module.exports.getMetricSearch = getMetricSearch;
  *  }
  * }
  */
-var getUserDashBoards = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getUserDashBoards(req, res) {
+    req.logger.debug('metrics.getUserDashBoards()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics GET getDashboards called');
 
-        //FUTURE-TODO - get the authenticated user
+        // TODO: get the authenticated user
         //    var uid = req.param('userIdParam');
         //    var uid = req.session.user.username; //getKeyValue(req.session.user.duz);
         //    if (req.query.userId !== undefined) {
@@ -555,8 +556,8 @@ var getUserDashBoards = function(req, res) {
             });
         }
     });
-};
-module.exports.getUserDashBoards = getUserDashBoards;
+}
+
 
 function handleToArrayResult(req, res, error, result) {
     var responseObject;
@@ -583,6 +584,7 @@ function handleToArrayResult(req, res, error, result) {
     req.logger.debug(responseObject);
     return res.status(200).rdkSend(responseObject);
 }
+
 
 /**
  * @api {get} /resource/cds/metrics/dashboard/:dashboardId Get Dashboard
@@ -655,11 +657,14 @@ function handleToArrayResult(req, res, error, result) {
  *]
  *}
  */
-var getDashBoard = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getDashBoard(req, res) {
+    req.logger.debug('metrics.getDashBoard()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -697,8 +702,8 @@ var getDashBoard = function(req, res) {
             });
         });
     });
-};
-module.exports.getDashBoard = getDashBoard;
+}
+
 
 /**
  * @api {post} /resource/cds/metrics/dashboard Create Dashboard
@@ -731,11 +736,14 @@ module.exports.getDashBoard = getDashBoard;
  *       "error": "Message body cannot be empty and must contain valid JSON"
  *     }
  */
-var createDashboard = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function createDashboard(req, res) {
+    req.logger.debug('metrics.createDashboard()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -762,8 +770,8 @@ var createDashboard = function(req, res) {
             });
         });
     });
-};
-module.exports.createDashboard = createDashboard;
+}
+
 
 /**
  * @api {put} /resource/cds/metrics/dashboard/:dashboardId Update Dashboard
@@ -843,11 +851,14 @@ module.exports.createDashboard = createDashboard;
  *  "status": "200"
  *}
  */
-var updateDashboard = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function updateDashboard(req, res) {
+    req.logger.debug('metrics.updateDashboard()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -894,8 +905,8 @@ var updateDashboard = function(req, res) {
             });
         });
     });
-};
-module.exports.updateDashboard = updateDashboard;
+}
+
 
 /**
  * @api {delete} /resource/cds/metrics/dashboard/:dashboardId Delete Dashboard
@@ -924,11 +935,14 @@ module.exports.updateDashboard = updateDashboard;
  *  "status": "200"
  *}
  */
-var deleteDashboard = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteDashboard(req, res) {
+    req.logger.debug('metrics.deleteDashboard()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -965,8 +979,8 @@ var deleteDashboard = function(req, res) {
             });
         });
     });
-};
-module.exports.deleteDashboard = deleteDashboard;
+}
+
 
 // GROUPS ...
 
@@ -995,11 +1009,14 @@ module.exports.deleteDashboard = deleteDashboard;
  *  ]
  *}
  */
-var getMetricGroups = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getMetricGroups(req, res) {
+    req.logger.debug('metrics.getMetricGroups()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1009,8 +1026,8 @@ var getMetricGroups = function(req, res) {
             handleToArrayResult(req, res, error, result);
         });
     });
-};
-module.exports.getMetricGroups = getMetricGroups;
+}
+
 
 /**
  * @api {post} /resource/cds/metrics/groups Create Group
@@ -1053,17 +1070,20 @@ module.exports.getMetricGroups = getMetricGroups;
  *    ]
  *}
  */
-var createMetricGroup = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function createMetricGroup(req, res) {
+    req.logger.debug('metrics.createMetricGroup()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics POST createMetricGroup called');
 
-        // FUTURE-TODO:  ADMIN FUNCTION ONLY - check user using auth
+        // TODO:  ADMIN FUNCTION ONLY - check user using auth
         // req.session.user.vistaKeys[]
 
         var group = req.body;
@@ -1092,8 +1112,8 @@ var createMetricGroup = function(req, res) {
             });
         });
     });
-};
-module.exports.createMetricGroup = createMetricGroup;
+}
+
 
 /**
  * @apiIgnore 1) this is an admin function 2) the implementation is missing on CDSInvocation 3) as a workaround a group can be deleted and recreated
@@ -1130,14 +1150,14 @@ module.exports.createMetricGroup = createMetricGroup;
  *  "status": "200"
  *}
  */
-var updateMetricGroup = function(req, res) {
+function updateMetricGroup(req, res) {
     req.logger.debug('updateMetricGroup PUT updateMetricGroup called - method not implemented');
     res.status(501).send({
         status: 501,
         error: 'Method not implemented'
     });
-};
-module.exports.updateMetricGroup = updateMetricGroup;
+}
+
 
 /**
  * @api {delete} /resource/cds/metrics/groups/:metricGroupId Delete Group
@@ -1156,17 +1176,20 @@ module.exports.updateMetricGroup = updateMetricGroup;
  *  "status": "200"
  *}
  */
-var deleteMetricGroup = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteMetricGroup(req, res) {
+    req.logger.debug('metrics.deleteMetricGroup()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics DELETE deleteMetricGroup called');
 
-        // FUTURE-TODO:  ADMIN FUNCTION ONLY - check user using auth
+        // TODO:  ADMIN FUNCTION ONLY - check user using auth
         // req.session.user.???
 
         var id = req.param('metricGroupId');
@@ -1202,8 +1225,8 @@ var deleteMetricGroup = function(req, res) {
             });
         });
     });
-};
-module.exports.deleteMetricGroup = deleteMetricGroup;
+}
+
 
 // DEFINITIONS ...
 
@@ -1248,11 +1271,14 @@ module.exports.deleteMetricGroup = deleteMetricGroup;
  *  ]
  *}
  */
-var getMetricDefinitions = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getMetricDefinitions(req, res) {
+    req.logger.debug('metrics.getMetricDefinitions()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1262,11 +1288,11 @@ var getMetricDefinitions = function(req, res) {
             handleToArrayResult(req, res, error, result);
         });
     });
-};
-module.exports.getMetricDefinitions = getMetricDefinitions;
+}
+
 
 /**
- * @apiIgnore - FUTURE-TODO - restrict method access to some sort of admin role
+ * @apiIgnore - TODO: restrict method access to some sort of admin role
  * @api {post} /resource/cds/metrics/definitions Create Definition
  * @apiName CreateDefinitions
  * @apiGroup Definitions
@@ -1288,11 +1314,14 @@ module.exports.getMetricDefinitions = getMetricDefinitions;
  *       "error": "Not Found"
  *     }
  */
-var createMetricDefinitions = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function createMetricDefinitions(req, res) {
+    req.logger.debug('metrics.createMetricDefinitions()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1320,11 +1349,11 @@ var createMetricDefinitions = function(req, res) {
             });
         });
     });
-};
-module.exports.createMetricDefinitions = createMetricDefinitions;
+}
+
 
 /**
- * @apiIgnore - FUTURE-TODO - restrict method access to some sort of admin role
+ * @apiIgnore - TODO: restrict method access to some sort of admin role
  * @api {delete} /resource/cds/metrics/definitions/:definitionId Delete Definition
  * @apiName DeleteDefinitions
  * @apiGroup Definitions
@@ -1349,11 +1378,14 @@ module.exports.createMetricDefinitions = createMetricDefinitions;
  *  "status": "200"
  *}
  */
-var deleteMetricDefinition = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteMetricDefinition(req, res) {
+    req.logger.debug('metrics.deleteMetricDefinition()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1392,8 +1424,8 @@ var deleteMetricDefinition = function(req, res) {
             });
         });
     });
-};
-module.exports.deleteMetricDefinition = deleteMetricDefinition;
+}
+
 
 // ROLES ...
 
@@ -1415,11 +1447,14 @@ module.exports.deleteMetricDefinition = deleteMetricDefinition;
  *  ]
  * }
  */
-var getRoles = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getRoles(req, res) {
+    req.logger.debug('metrics.getRoles()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -1429,8 +1464,8 @@ var getRoles = function(req, res) {
             handleToArrayResult(req, res, error, result);
         });
     });
-};
-module.exports.getRoles = getRoles;
+}
+
 
 /**
  * @apiIgnore Has not been fully scoped and implemented
@@ -1461,18 +1496,21 @@ module.exports.getRoles = getRoles;
  *  ]
  * }
  */
-var updateRoles = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function updateRoles(req, res) {
+    req.logger.debug('metrics.updateRoles()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics GET getRoles called');
 
-        //FUTURE-TODO - CDS Invocation did not have an updateRoles method, this method appears to insert a list of roles instead.
-        //This will need to be tested if a requirement for dashboard roles emerges
+        // TODO: CDS Invocation did not have an updateRoles method, this method appears to insert a list of roles instead.
+        // This will need to be tested if a requirement for dashboard roles emerges
         var roles = req.body;
         if (roles === null || Object.keys(roles).length === 0) {
             return res.status(400).send({
@@ -1494,8 +1532,8 @@ var updateRoles = function(req, res) {
             });
         });
     });
-};
-module.exports.updateRoles = updateRoles;
+}
+
 
 // USER ROLES ...
 
@@ -1513,16 +1551,19 @@ module.exports.updateRoles = updateRoles;
  *       "error": "Not Found"
  *     }
  */
-var getUserRoles = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getUserRoles(req, res) {
+    req.logger.debug('metrics.getUserRoles()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics GET getRoles called');
-        //FUTURE-TODO - this method will also need to be tested / examined more closely should requirements for user based roles emerge
+        // TODO: this method will also need to be tested / examined more closely should requirements for user based roles emerge
 
         var id = req.param('userId');
         dbConnection.collection('userRoles').findOne({
@@ -1546,8 +1587,8 @@ var getUserRoles = function(req, res) {
             });
         });
     });
-};
-module.exports.getUserRoles = getUserRoles;
+}
+
 
 /**
  * @apiIgnore Has not been fully scoped and implemented
@@ -1568,19 +1609,20 @@ module.exports.getUserRoles = getUserRoles;
  *     }
  * @apiSuccess {json} data Json object containing a list of all roles
  */
-var updateUserRoles = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function updateUserRoles(req, res) {
+    req.logger.debug('metrics.updateUserRoles()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS metrics resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(metricDbName, initDefinitions, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, metricDbName, createInitDefinitions(req.logger), function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
         req.logger.debug('Metrics GET updateRoles called');
 
-        // var id = req.param('userId');
-
-        //FUTURE-TODO - this method will also need to be tested / examined more closely should requirements for user based roles emerge
+        // TODO: this method will also need to be tested / examined more closely should requirements for user based roles emerge
         var userRole = req.body;
         if (userRole === null || Object.keys(userRole).length === 0) {
             return res.status(400).send({
@@ -1612,6 +1654,24 @@ var updateUserRoles = function(req, res) {
             });
         });
     });
-};
+}
+
+
+module.exports.createInitDefinitions = createInitDefinitions;
+module.exports.getMetricSearch = getMetricSearch;
+module.exports.getUserDashBoards = getUserDashBoards;
+module.exports.getDashBoard = getDashBoard;
+module.exports.createDashboard = createDashboard;
+module.exports.updateDashboard = updateDashboard;
+module.exports.deleteDashboard = deleteDashboard;
+module.exports.getMetricGroups = getMetricGroups;
+module.exports.createMetricGroup = createMetricGroup;
+module.exports.updateMetricGroup = updateMetricGroup;
+module.exports.deleteMetricGroup = deleteMetricGroup;
+module.exports.getMetricDefinitions = getMetricDefinitions;
+module.exports.createMetricDefinitions = createMetricDefinitions;
+module.exports.deleteMetricDefinition = deleteMetricDefinition;
+module.exports.getRoles = getRoles;
+module.exports.updateRoles = updateRoles;
+module.exports.getUserRoles = getUserRoles;
 module.exports.updateUserRoles = updateUserRoles;
-module.exports.init = init;

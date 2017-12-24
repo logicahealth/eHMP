@@ -30,6 +30,7 @@ Then(/^POB log me out$/) do
   begin
     @ehmp = PobStaffView.new
     @ehmp.load
+    wait_for_staff_view_loaded_ignore_errors
     log_out_steps
     p 'POB Logging out ---'
   rescue
@@ -47,16 +48,17 @@ Given(/^Navigate to Staff View screen ignore errors$/) do
 end
 
 def log_out_steps
-  @ehmp = PobStaffView.new
-  @ehmp.global_header.wait_for_btn_logout
-  expect(@ehmp.global_header).to have_btn_logout
-  @ehmp.global_header.btn_logout.click
+  @ehmp = PobHeaderFooter.new
+  @ehmp.wait_for_btn_logout
+  expect(@ehmp).to have_btn_logout
+  @ehmp.btn_logout.click
   @ehmp = ModalElements.new
   @ehmp.wait_for_btn_yes
   expect(@ehmp).to have_btn_yes
   @ehmp.btn_yes.click
+  @ehmp.wait_until_btn_yes_invisible
   @ehmp = PobLoginPage.new
-  @ehmp.wait_for_ddl_facility
+  expect(@ehmp.wait_for_ddl_facility(20)).to eq(true)
   expect(@ehmp).to have_ddl_facility
   DefaultLogin.logged_in = false 
 rescue Exception => e
@@ -70,10 +72,10 @@ Then(/^user logs out$/) do
 end
 
 Given(/^user attempts logout$/) do
-  @ehmp = PobPatientSearch.new
-  @ehmp.global_header.wait_for_btn_logout
-  expect(@ehmp.global_header).to have_btn_logout
-  @ehmp.global_header.btn_logout.click
+  @ehmp = PobHeaderFooter.new
+  @ehmp.wait_for_btn_logout
+  expect(@ehmp).to have_btn_logout
+  @ehmp.btn_logout.click
 end
 
 Then(/^user presented with modal dialog$/) do

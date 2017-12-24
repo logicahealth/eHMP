@@ -71,7 +71,7 @@ describe('Immunizations write-back', function () {
                 encounterPatientDFN: 3,
                 contraindicated: 1,
                 hasCptCodes: 2,
-                encounterLocation: 'urn:va:location:9E7A:349',
+                encounterLocation: 'urn:va:location:SITE:349',
                 encounterInpatient: 32,
                 reaction: 'FEVER',
                 series: ''
@@ -142,7 +142,7 @@ describe('Immunizations write-back', function () {
             var model = {
                 'encounterPatientDFN': '100013',
                 'encounterInpatient': '1',
-                'encounterLocation': 'urn:va:location:9E7A:349',
+                'encounterLocation': 'urn:va:location:SITE:349',
                 'encounterDateTime': '20150411004050',
                 'encounterServiceCategory': 'A',
                 'encounterProviderIEN': '991',
@@ -179,7 +179,7 @@ describe('Immunizations write-back', function () {
             var model = {
                 'encounterPatientDFN': '3',
                 'encounterInpatient': '1',
-                'encounterLocation': 'urn:va:location:9E7A:349',
+                'encounterLocation': 'urn:va:location:SITE:349',
                 'encounterDateTime': '20150411004050',
                 'encounterServiceCategory': 'E',
                 'series': '0',

@@ -10,6 +10,8 @@ var moment = require('moment');
 var querystring = require('querystring');
 var async = require('async');
 var clinicalObjectsValidator = require('./clinical-objects-validator');
+var nullchecker = rdk.utils.nullchecker;
+var RdkError = rdk.utils.RdkError;
 
 module.exports.create = createClinicalObject;
 module.exports.read = readClinicalObject;
@@ -64,6 +66,16 @@ function createClinicalObject(logger, appConfig, model, callback) {
                     err: err
                 }, 'Failed to create clinical object.');
                 return callback(err);
+            }
+            if (response.statusCode >= 300) {
+                // Log the actual response
+                logger.error('Failed to create clinical object through vx-sync endpoint. Received statusCode ' + response.statusCode);
+                // Return RdkError with HTTP 500 status to the caller
+                var postError = new RdkError({
+                    code: 'vxsync.500.1000',
+                    logger: logger
+                });
+                return callback(postError);
             }
             return callback(null, response);
         });
@@ -124,6 +136,16 @@ function updateClinicalObject(logger, appConfig, uid, model, callback) {
                 }, 'Failed to update clinical object.');
                 return callback(err);
             }
+            if (response.statusCode >= 300) {
+                // Log the actual response
+                logger.error('Failed to update clinical object through vx-sync endpoint. Received statusCode ' + response.statusCode);
+                // Return RdkError with HTTP 500 status to the caller
+                var postError = new RdkError({
+                    code: 'vxsync.500.1000',
+                    logger: logger
+                });
+                return callback(postError);
+            }
             return callback(null, response);
         });
     });
@@ -145,7 +167,13 @@ function findClinicalObject(logger, appConfig, model, loadReference, callback) {
     transformPatientUid(model);
 
     var jdsQuery = {};
+    if (!nullchecker.isNullish(model.referenceId)) {
+        jdsQuery.referenceId = model.referenceId;
+    }
+
     jdsQuery.filter = createFindQueryString(model);
+    logger.debug('clinical object subsystem: raw query string: ' + jdsQuery.filter);
+
 
     getAndDereferenceClinicalObjects(logger, appConfig, jdsQuery, loadReference, callback);
 }
@@ -153,9 +181,20 @@ function findClinicalObject(logger, appConfig, model, loadReference, callback) {
 function getClinicalObjectsFromPjds(logger, appConfig, jdsQuery, callback) {
     var errorMessages = [];
 
+    var queryUrl = '';
+    if (!nullchecker.isNullish(jdsQuery.referenceId)) {
+        logger.debug('clinical object subsystem: fetching by reference id');
+        queryUrl = '/clinicobj/index/clinicobj-referenceId?range=' + jdsQuery.referenceId;
+    }
+    else {
+        // the forward slash before the ? looks misplaced, but is necessary for this call to work properly
+        logger.debug('clinical object subsystem: no reference id, fetching using other parameters');
+        queryUrl = '/clinicobj/?'+ querystring.stringify(jdsQuery);
+    }
+
     var requestConfig = _.extend({}, appConfig.generalPurposeJdsServer, {
         logger: logger,
-        url: '/clinicobj/?' + querystring.stringify(jdsQuery),
+        url: queryUrl,
         json: true
     });
 

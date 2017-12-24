@@ -5,7 +5,7 @@ require('../../../../env-setup');
 var _ = require('underscore');
 var handler = require(global.VX_HANDLERS + 'vler-to-vpr-xform/vler-to-vpr-xform-handler');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
-// NOTE: be sure next line is commented out before pushing
+// Be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
 //     name: 'vler-sync-request-handler-spec',
 //     level: 'debug'
@@ -37,7 +37,7 @@ var vlerRecord1 = {
 };
 
 describe('vler-to-vpr-xform-handler.js', function() {
-    describe('getFullHtml', function() {
+    describe('getFullHtml()', function() {
         it('Test compress required getFullHtml()', function() {
             var done = false;
             var error;
@@ -79,7 +79,64 @@ describe('vler-to-vpr-xform-handler.js', function() {
         });
     });
 
-    describe('handler', function() {
+    describe('compressionRequired()', function() {
+        it('Skip compression (size < minSize)', function() {
+            let config = {
+                vler: {
+                    compression: {
+                        minSize: 100000
+                    }
+                }
+            };
+
+            let jsonBody = {
+                compressRequired: true,
+                vlerDocHtml: 'test'
+            };
+
+            expect(handler._compressionRequired(config, jsonBody)).toBe(false);
+        });
+
+        it('Skip compression (config is NaN, null, or undefined)', function() {
+            let config = {
+                vler: {
+                    compression: {}
+                }
+            };
+
+            let jsonBody = {
+                compressRequired: false,
+                vlerDocHtml: 'test'
+            };
+
+            expect(handler._compressionRequired(config, jsonBody)).toBe(false);
+
+            config.vler.compression.minSize = null;
+            expect(handler._compressionRequired(config, jsonBody)).toBe(false);
+
+            config.vler.compression.minSize = 'a';
+            expect(handler._compressionRequired(config, jsonBody)).toBe(false);
+        });
+
+        it('Compress (size >= minSize)', function() {
+            let config = {
+                vler: {
+                    compression: {
+                        minSize: 2
+                    }
+                }
+            };
+
+            let jsonBody = {
+                compressRequired: false,
+                vlerDocHtml: 'test'
+            };
+
+            expect(handler._compressionRequired(config, jsonBody)).toBe(true);
+        });
+    });
+
+    describe('handler()', function() {
         var referenceInfo = {
             requestId: 'vler-to-vpr-xform-requestId',
             sessionId: 'vler-to-vpr-xform-sessionId'
@@ -133,6 +190,7 @@ describe('vler-to-vpr-xform-handler.js', function() {
                 done();
             });
         });
+
         it('Error path: null response from vler', function(done) {
             nock(vlerHostAndPort)
                 .get(vlerQueryString)
@@ -144,6 +202,7 @@ describe('vler-to-vpr-xform-handler.js', function() {
                 done();
             });
         });
+
         it('Error path: non-200 response from vler', function(done) {
             nock(vlerHostAndPort)
                 .get(vlerQueryString)
@@ -155,6 +214,7 @@ describe('vler-to-vpr-xform-handler.js', function() {
                 done();
             });
         });
+
         it('Error path: publisher error', function(done) {
             spyOn(environment.publisherRouter, 'publish').andCallFake(function(job, callback) {
                 callback('Publisher Error');
@@ -174,6 +234,7 @@ describe('vler-to-vpr-xform-handler.js', function() {
                 done();
             });
         });
+
         it('Normal path', function(done) {
             spyOn(environment.publisherRouter, 'publish').andCallThrough();
 
@@ -195,7 +256,12 @@ describe('vler-to-vpr-xform-handler.js', function() {
                     jpid: 'aaaa-bbbb-cccc',
                     referenceInfo: referenceInfo,
                     dataDomain: 'vlerdocument',
-                    record: _.defaults({kind: 'bar', fullHtml: 'foo', stampTime: jasmine.any(String), summary: vlerRecord1.document.name}, _.omit(vlerRecord1.document, 'localId')),
+                    record: _.defaults({
+                        kind: 'bar',
+                        fullHtml: 'foo',
+                        stampTime: jasmine.any(String),
+                        summary: vlerRecord1.document.name
+                    }, _.omit(vlerRecord1.document, 'localId')),
                     jobId: jasmine.any(String)
                 }), jasmine.any(Function));
                 done();

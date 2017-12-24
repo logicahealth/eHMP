@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="eHMP.ShardAutomation">
+<Super>%Persistent,%XML.Adaptor</Super>
+<TimeCreated>64464,50735.269334</TimeCreated>
+
+<Method name="Run">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Servers:%Integer,Ordinality:%Integer,Shards:%Integer,ShardsperServer:%Integer</FormalSpec>
+<Implementation><![CDATA[
+               ;Create DATABASES (one per DAT file, one DAT per directory) - must have directories in place in /usr/jdsdbs/
+               ;create and input variable for the number of database servers and the total number of DAT files or DAT files per server
+               set $NAMESPACE="%SYS"
+               ;Read !,"Number of Shard Servers? (2 for Perf)", Servers ; total number of servers in this deployment
+               ;Read !,"This Servers orrdinality? (1 or 2 for Perf)", ThisServer ; Integer from OS/Chef script - 1, 2,.. based on the number of iterations and this particular iteration
+               ;Read !,"Total number of Shards? (224)", Shards ; - total number of shards in storage model for this deployment
+               ;Read !,"How many Shards per Server? (112)",ShardsperServer ; number of shards for each server in this deployment
+               set Calc1=ShardsperServer * (Ordinality-1)
+               D ..Loop(Calc1,ShardsperServer,Shards)
+]]></Implementation>
+</Method>
+
+<Method name="Loop">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>n:%Integer,ShardsperServer:%Integer,Shards:%Integer</FormalSpec>
+<Implementation><![CDATA[
+               kill offset
+               for i=n:1:n+ShardsperServer-1 {
+                              w !,i
+                             set offset=i
+                             Do ..CreateDatabase(Shards,offset)
+               }
+]]></Implementation>
+</Method>
+
+<Method name="CreateDatabase">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Shards:%Integer,offset:%Integer</FormalSpec>
+<Implementation><![CDATA[
+               //create startValue to name database an directory
+               set startValue=$REPLACE($JUSTIFY($ZHEX($PIECE(($ZHEX("FFFFFFFF") + 1)/Shards, ".", 1)*offset),8), " ", "0")
+               set name="DAT"_startValue
+               set dir = "/usr/jdsdbs/"_name w "- Creating DB in: "_dir_", "
+
+               //must create directory first in /usr/jdsdbs directory
+               set st=##class(%Library.File).DirectoryExists("/usr/jdsdbs")
+               if st=0 do ##class(%Library.File).CreateDirectory("/usr/jdsdbs") w "/usr/jdsdbs/ created, "
+
+               //must create directory first in /usr/jdsdbs directory
+               set st1=##class(%Library.File).DirectoryExists(dir)
+               if st1=0 d ##class(%Library.File).CreateDirectory(dir)
+
+
+               //then create database file
+               ;set status=##Class(SYS.Database).CreateDatabase(dir,,,,,1) ;for PROD we will create these at 500,000,000 KB
+               set db=##class(SYS.Database).%New()
+               set db.Directory=dir
+               set db.EncryptedDB=1
+               set db.EncryptionKeyID="FB925728-1114-11E4-956B-00274DB37D00"
+               set db.Size=<%= @db_size %>
+               set db.GlobalJournalState=1
+               set db.ExpansionSize=<%= @expansion_size %>
+               set status=db.%Save()
+               write $System.Status.GetErrorText(status)
+               if status=1 w "db created, "
+
+               //create entry in CPF
+               set Properties("Directory")= dir
+               set Status=##Class(Config.Databases).Create(name,.Properties)
+               write $System.Status.GetErrorText(Status)
+               if Status=1 write "Config entered.",!
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^eHMP.ShardAutomationD</DataLocation>
+<DefaultData>ShardAutomationDefaultData</DefaultData>
+<IdLocation>^eHMP.ShardAutomationD</IdLocation>
+<IndexLocation>^eHMP.ShardAutomationI</IndexLocation>
+<StreamLocation>^eHMP.ShardAutomationS</StreamLocation>
+<Data name="ShardAutomationDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>

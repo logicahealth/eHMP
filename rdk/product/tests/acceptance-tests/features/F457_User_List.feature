@@ -4,7 +4,7 @@ Feature: F457 - View Listing of Users
 
 @F457_Get_User_List_1
 Scenario: View listing of Active Users
-When the client requests authentication with accessCode "REDACTED" and verifyCode "REDACTED" and site "9E7A" and division "500" and contentType "application/json"
+When the client requests authentication with accessCode "USER  " and verifyCode "PW      " and site "SITE" and division "500" and contentType "application/json"
 When the client requests to view list Active users with name search criteria "eight","provider"
 Then a successful response is returned
 Then the results contains all required fields
@@ -17,6 +17,6 @@ Then the results contains all required fields
 
 @F457_Get_User_List_3
 Scenario: View listing of Active Standard Doctor Users
-When the client requests to view list Active users with name and role search criteria "eight","provider","standard-doctor"
+When the client requests to view list Active users with name and permissionSet search criteria "eight","provider","standard-doctor"
 Then a successful response is returned
 Then the results contains all required fields

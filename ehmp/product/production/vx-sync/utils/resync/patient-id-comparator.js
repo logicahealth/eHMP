@@ -115,11 +115,11 @@ function detectUnstablePatIds(jdsPids, mviPids, patientIdentifier, log, environm
 
     environment.jds.getSyncStatus(patientIdentifier, function(error, response, result) {
         if (error) {
-            log.warn('There was an error checking sync status for patient identifier %j.  Error: %s', patientIdentifier, error);
+            log.error('patient-id-comparator.js.detectUnstablePatIds: There was an error checking sync status for patient identifier %j.  Error: %s', patientIdentifier, error);
             return callback(null, true);
         }
         if (response.statusCode !== 200) {
-            log.warn('There was an error checking sync status for patient identifier %j.  Error: %j', patientIdentifier, response.body);
+            log.error('patient-id-comparator.js.detectUnstablePatIds: There was an error checking sync status for patient identifier %j.  Error: %j', patientIdentifier, response.body);
             return callback(null, true);
         }
 

@@ -40,6 +40,11 @@ $arrow-color:   #626262;
         }
     }
 }
-#content-region .jspVerticalBar {
-    display: none;
+#content-region {
+    .jspPane {
+        top: 0px!important;
+    }
+    .jspVerticalBar {
+        display: none;
+    }
 }

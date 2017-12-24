@@ -35,6 +35,9 @@ define([
                 // Additional flex properties can be applied here as needed
                 var flexWidth = $item.attr('data-flex-width') || 'none';
                 $item.addClass('flex-width-' + flexWidth.replace('.', '_'));
+
+                var flexOrder = $item.attr('data-flex-order') || '0';
+                $item.addClass('flex-order-' + flexOrder.replace('.', '_'));
             }, this);
         },
         getValidContainer: function(container) {

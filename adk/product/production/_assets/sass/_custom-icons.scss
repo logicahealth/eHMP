@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'CustomIcons';
+    src: url('../fonts/custom-icons.eot?zfuezy');
+    src: url('../fonts/custom-icons.eot?zfuezy#iefix') format('embedded-opentype'), url('../fonts/custom-icons.ttf?zfuezy') format('truetype'), url('../fonts/custom-icons.woff?zfuezy') format('woff'), url('../fonts/custom-icons.svg?zfuezy#custom-icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fa-text-search:before {
+    content: "\e900";
+    font-family: 'CustomIcons' !important;
+}
+
+.fa-address-book {
+    vertical-align: -10%;
+    &:before {
+        content: "\e901";
+        font-family: 'CustomIcons' !important;
+    }
+}

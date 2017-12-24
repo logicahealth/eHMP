@@ -8,43 +8,6 @@ define([
 ], function(Backbone, Marionette, _, modalFullHtmlTemplate, ModalHeader, Util) {
     'use strict';
 
-    function writeCcdIframe(fullHtml) {
-        var ccdContent = $('.ccd-content');
-        if (ccdContent.size() > 0) {
-            var iframeCcd = ccdContent[0].contentWindow.document;
-            var content = fullHtml;
-            iframeCcd.open();
-            iframeCcd.write(content);
-            iframeCcd.close();
-        }
-    }
-
-    function showCcdContent(modalModel) {
-        var fullHtml = modalModel.get('fullHtml') ? modalModel.get('fullHtml') : '';
-
-        var $iframe = $('iframe.dodContent');
-        if ($iframe.size() === 0) {
-            var observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    for (var i = 0; i < mutation.addedNodes.length; i++) {
-
-                        $iframe = $(mutation.addedNodes[i]).find('iframe.ccd-content');
-                        if ($iframe.size() > 0) {
-                            observer.disconnect();
-                            writeCcdIframe(fullHtml);
-                        }
-                    }
-                });
-            });
-            observer.observe($('#modal-region')[0], {
-                childList: true,
-                attributes: false,
-                characterData: true,
-                subtree: true
-            });
-        }
-    }
-
     var ModalView = Backbone.Marionette.ItemView.extend({
         getTemplate: function() {
                 return modalFullHtmlTemplate;
@@ -89,10 +52,6 @@ define([
                 })
             };
 
-            if (modalModel.get('fullHtml')) {
-                showCcdContent.call(this, modalModel);
-            }
-
             var modal = new ADK.UI.Modal({
                 view: view,
                 options: modalOptions
@@ -127,6 +86,11 @@ define([
 
             modal.show();
         },
+        onShow: function() {
+            if (this.model.get('fullHtml')) {
+                this.showCcdContent(this.model);
+            }
+        },
         onAttach: function() {
             this.checkIfModalIsEnd();
         },
@@ -150,7 +114,7 @@ define([
             };
 
             var modalCollection = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
-            
+
             this.listenToOnce(modalCollection, 'fetch:success', function() {
                 var modalModel = _.find(modalCollection.models, function(model) {
                     return model.get('uid') === modelUid;
@@ -194,6 +158,45 @@ define([
                     this.modelUids.push(m.get('uid'));
                 }
             }, this));
+        },
+        writeCcdIframe: function(fullHtml) {
+            var ccdContent = this.$('.ccd-content');
+            if (ccdContent.size() > 0) {
+                var iframeCcd = _.get(ccdContent[0], 'contentWindow.document');
+                var content = fullHtml;
+                iframeCcd.open();
+                iframeCcd.write(content);
+                iframeCcd.close();
+            }
+        },
+        showCcdContent: function(modalModel) {
+            var self = this;
+            var fullHtml = modalModel.get('fullHtml') ? modalModel.get('fullHtml') : '';
+
+            var $iframe = this.$('iframe.dodContent');
+            if ($iframe.size() === 0) {
+                var observer = new MutationObserver(function(mutations) {
+                    _.each(mutations, function(mutation) {
+                        for (var i = 0; i < mutation.addedNodes.length; i++) {
+                            if (mutation.addedNodes[i].id === 'mainModal') {
+                                $iframe = self.$el.find('iframe.ccd-content');
+                            }
+
+                            if ($iframe.size() > 0) {
+                                observer.disconnect();
+                                self.writeCcdIframe(fullHtml);
+                                return false;
+                            }
+                        }
+                    });
+                });
+                observer.observe(ADK.Messaging.request('get:adkApp:region', 'modalRegion').$el[0], {
+                    childList: true,
+                    attributes: false,
+                    characterData: true,
+                    subtree: true
+                });
+            }
         }
     });
 

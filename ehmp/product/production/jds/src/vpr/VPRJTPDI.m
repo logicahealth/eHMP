@@ -70,6 +70,3 @@ EHMPDOCS ;; @TEST integration test ehmp-documents
  D ASSERT(1,MATCH,"ehmp-documents return does not match docs-view return with filter")
  Q
  ;
-1 ; do one test
- D STARTUP,SORTSTOP,SHUTDOWN
- Q

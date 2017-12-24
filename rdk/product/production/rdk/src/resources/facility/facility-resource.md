@@ -20,12 +20,12 @@ Is a readonly resource that returns an array.
                         {
                             "name": "KODAK",
                             "division": "500",
-                            "siteCode": "C877"
+                            "siteCode": "SITE"
                         },
                         {
                             "name": "PANORAMA",
                             "division": "500",
-                            "siteCode": "9E7A"
+                            "siteCode": "SITE"
                         }
                     ]
                 },

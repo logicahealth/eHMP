@@ -5,8 +5,8 @@ Feature: F323 syncing data to check the domains
 
 @count_pan
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "9E7A;3" has been synced through VX-Sync API for "9E7A" site(s)
-	Then the sync status results for "9E7A" site(s) contain
+	When a patient with pid "SITE;3" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain      | SyncComplete |
       | Allergy     | true         |
       | Lab         | true         |
@@ -26,8 +26,8 @@ Scenario: Client request sync for patient and get all domain records in Panorama
         
 @count_pan
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "9E7A;8" has been synced through VX-Sync API for "9E7A" site(s)
-	Then the sync status results for "9E7A" site(s) contain
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain       | SyncComplete |
       | Image        | true         |
       | Procedure    | true         |
@@ -36,16 +36,16 @@ Scenario: Client request sync for patient and get all domain records in Panorama
 
 @count_pan
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "9E7A;253" has been synced through VX-Sync API for "9E7A" site(s)
-	Then the sync status results for "9E7A" site(s) contain
+	When a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 		|Domain      | Count | 
 	    | Education  | true         |
 
 
 @count_kod
 Scenario: Client request sync for patient and get all domain records in Kodak
-	When a patient with pid "C877;3" has been synced through VX-Sync API for "C877" site(s)
-	Then the sync status results for "C877" site(s) contain
+	When a patient with pid "SITE;3" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain      | SyncComplete |
       | Allergy     | true         |
       | Lab         | true         |
@@ -64,8 +64,8 @@ Scenario: Client request sync for patient and get all domain records in Kodak
         
 @count_kod
 Scenario: Client request sync for patient and get all domain records in Kodak
-	When a patient with pid "C877;8" has been synced through VX-Sync API for "C877" site(s)
-	Then the sync status results for "C877" site(s) contain
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain       | SyncComplete |
       | Image        | true         |
       | Procedure    | true         |
@@ -74,15 +74,15 @@ Scenario: Client request sync for patient and get all domain records in Kodak
 
 @count_kod
 Scenario: Client request sync for patient and get all domain records in Kodak
-	When a patient with pid "C877;253" has been synced through VX-Sync API for "C877" site(s)
-	Then the sync status results for "C877" site(s) contain
+	When a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 		|Domain      | SyncComplete |
 	    | Education  | true         |
 
   
 @count_dod
 Scenario: Client request sync for patient and get all domain records in DoD
-	When a patient with pid "9E7A;3" has been synced through VX-Sync API for "DOD" site(s)
+	When a patient with pid "SITE;3" has been synced through VX-Sync API for "DOD" site(s)
 	Then the sync status results for "DoD" site(s) contain
 	  | Domain       | SyncComplete |
 	  | Allergy      | true         |
@@ -98,7 +98,7 @@ Scenario: Client request sync for patient and get all domain records in DoD
 	   
 @count_dod
 Scenario: Client request sync for patient and get all domain records in DoD
-	When a patient with pid "9E7A;8" has been synced through VX-Sync API for "DoD" site(s)
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "DoD" site(s)
 	Then the sync status results for "DoD" site(s) contain
 		| Domain    | SyncComplete |
 		| Order     | true         |
@@ -108,8 +108,8 @@ Scenario: Client request sync for patient and get all domain records in DoD
 
 @count_pan
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "9E7A" site(s)
-	Then the sync status results for "9E7A" site(s) contain
+	When a patient with pid "SITE;227" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain      | SyncComplete |
       | Allergy     | true         |
       | Lab         | true         |
@@ -129,8 +129,8 @@ Scenario: Client request sync for patient and get all domain records in Panorama
 
 @count_pan
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "9E7A;8" has been synced through VX-Sync API for "9E7A" site(s)
-	Then the sync status results for "9E7A" site(s) contain
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain       | SyncComplete |
 	  | Surgery      | true         |
       | Image        | true         |
@@ -140,8 +140,8 @@ Scenario: Client request sync for patient and get all domain records in Panorama
 
 @count_kod
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "C877;227" has been synced through VX-Sync API for "C877" site(s)
-	Then the sync status results for "C877" site(s) contain
+	When a patient with pid "SITE;227" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain      | SyncComplete |
       | Allergy     | true         |
       | Lab         | true         |
@@ -161,8 +161,8 @@ Scenario: Client request sync for patient and get all domain records in Panorama
 
 @count_kod
 Scenario: Client request sync for patient and get all domain records in Panorama
-	When a patient with pid "C877;8" has been synced through VX-Sync API for "C877" site(s)
-	Then the sync status results for "C877" site(s) contain
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
+	Then the sync status results for "SITE" site(s) contain
 	  | Domain       | SyncComplete |
 	  | Surgery      | true         |
       | Image        | true         |
@@ -172,7 +172,7 @@ Scenario: Client request sync for patient and get all domain records in Panorama
             
 @count_dod
 Scenario: Client request sync for patient and get all domain records in DoD
-	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "DOD" site(s)
+	When a patient with pid "SITE;227" has been synced through VX-Sync API for "DOD" site(s)
 	Then the sync status results for "DoD" site(s) contain
 	  | Domain       | SyncComplete |
 	  | Lab          | true         |
@@ -184,7 +184,7 @@ Scenario: Client request sync for patient and get all domain records in DoD
 	  
 @count_dod
 Scenario: Client request sync for patient and get all domain records in DoD
-	When a patient with pid "9E7A;8" has been synced through VX-Sync API for "DoD" site(s)
+	When a patient with pid "SITE;8" has been synced through VX-Sync API for "DoD" site(s)
 	Then the sync status results for "DoD" site(s) contain
 		| Domain    	| SyncComplete |
 		| Allergy       | true         |

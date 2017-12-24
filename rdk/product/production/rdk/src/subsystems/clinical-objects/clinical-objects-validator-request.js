@@ -136,6 +136,15 @@ function parseDate(dateTime) {
         var hour = dateTime.substr(8, 2);
         var minute = dateTime.substr(10, 2);
         var second = dateTime.substr(12, 2);
+        if (hour === '24' && minute === '00' && second === '00') {
+            // % nvm exec v0.10.40 node -p "new Date('2016-01-04 24:00:00')"
+            // Running node v0.10.40 (npm v1.4.28)
+            // Invalid Date
+            // % nvm exec v6 node -p "new Date('2016-01-04 24:00:00')"
+            // Running node v6.9.5 (npm v3.10.10)
+            // 2016-01-05T05:00:00.000Z
+            return null;
+        }
         // Date.parse will give back NaN if we didn't give it a correct format, use this to validate:
         var dateTimeCast = new Date(year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second);
         if (!isNaN(Date.parse(dateTimeCast))) {

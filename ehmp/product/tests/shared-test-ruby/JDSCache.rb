@@ -33,11 +33,11 @@ class JDSCache
 
     # Clear JDS
     p "Clearing the JDS cache"
-    response = HTTParty.delete("http://#{@jds_ip}:9080/vpr?confirm=true", {:timeout => 20})
+    response = HTTParty.delete("http://#{@jds_ip}:PORT/vpr?confirm=true", {:timeout => 20})
     unless response.code == 200 then
       fail "Incorrect response received: #{response.code} #{response.body}"
     end
-    response = HTTParty.delete("http://#{@jds_ip}:9080/data?confirm=true", {:timeout => 20})
+    response = HTTParty.delete("http://#{@jds_ip}:PORT/data?confirm=true", {:timeout => 20})
     unless response.code == 200 then 
       fail "Incorrect response received: #{response.code} #{response.body}"
     end

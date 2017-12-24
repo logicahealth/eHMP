@@ -88,7 +88,7 @@ module.exports = function(req, res, next) {
             if (pidValidator.isIcn(pid)) {
                 req.interceptorResults.patientIdentifiers.icn = pid;
                 uid = 'urn:va:patient:icn:' + pid + ':' + pid;
-            } else if (pidValidator.isSiteDfn(pid) && pidValidator.isCurrentSite(_.result(req, 'session.user.site', ''), pid)) {
+            } else if (pidValidator.isSiteDfn(pid) && pidValidator.isCurrentSite(req, pid)) {
                 req.interceptorResults.patientIdentifiers.siteDfn = pid;
                 req.interceptorResults.patientIdentifiers.dfn = dfn;
             } else if (pidValidator.isVhic(pid)) {

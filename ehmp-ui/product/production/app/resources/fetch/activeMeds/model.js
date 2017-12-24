@@ -108,6 +108,16 @@ define([
             return "Fillable for";
         },
 
+        getFullFillableStatus: function (fillableData) {
+            var display = _.get(fillableData, 'display');
+            var date = _.get(fillableData, 'date');
+            if (!_.isEmpty(date)) {
+                return display + ' ' + date;
+            } else {
+                return display;
+            }
+        },
+
         /**
          * Converts data from the Model into information on how to display it
          *

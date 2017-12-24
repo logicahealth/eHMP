@@ -2,10 +2,9 @@ define([
     'underscore',
     'backbone',
     'marionette',
-    'app/applets/addApplets/appletLayoutView',
-    'app/applets/addApplets/navigationButton'
-], function(_, Backbone, Marionette, AppletLayoutView, NavigationButton) {
-
+    'app/applets/addApplets/navigationButton',
+    'app/applets/addApplets/appletListener'
+], function(_, Backbone, Marionette, NavigationButton, AppletListener) {
     'use strict';
 
     var RootView = Backbone.Marionette.LayoutView.extend({
@@ -13,7 +12,9 @@ define([
         }
     });
 
-    var applet = {
+    AppletListener.start();
+
+    return {
         id: 'addApplets',
         viewTypes: [{
             type: 'expanded',
@@ -26,21 +27,4 @@ define([
         }],
         defaultViewType: 'expanded'
     };
-
-    (function initMessaging() {
-        var channel = ADK.Messaging.getChannel('addAppletsChannel');
-        channel.on('addApplets', function() {
-            var view = new ADK.UI.FullScreenOverlay({
-                view: new AppletLayoutView(),
-                options: {
-                    'callShow': true,
-                    'keyboard': false
-                }
-            });
-            view.show();
-            view.overlayView.setBoundaryIndicator();
-        });
-    })();
-
-    return applet;
 });

@@ -4,7 +4,7 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures adk"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.2"
+version          "2.233.4"
 
 supports "windows"
 supports "mac_os_x"
@@ -18,4 +18,4 @@ depends "apache2", "=3.0.1"
 #############################
 # wrapper_cookbook
 #############################
-depends "apache2_wrapper", "=2.1.2"
+depends "apache2_wrapper", "=2.233.3"

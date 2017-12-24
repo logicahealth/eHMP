@@ -1,4 +1,7 @@
 define([
+    '_assets/templates/helpers/addTag',
+    '_assets/templates/helpers/appendCID',
+    '_assets/templates/helpers/breakLines',
     '_assets/templates/helpers/commaSeparateValues',
     '_assets/templates/helpers/compare',
     '_assets/templates/helpers/convertStringToInteger',
@@ -16,6 +19,7 @@ define([
     '_assets/templates/helpers/getSum',
     '_assets/templates/helpers/hasPermission',
     '_assets/templates/helpers/helpIconLink',
+    '_assets/templates/helpers/highlightText',
     '_assets/templates/helpers/ifExp',
     '_assets/templates/helpers/ifnull',
     '_assets/templates/helpers/isInArray',
@@ -26,6 +30,5 @@ define([
     '_assets/templates/helpers/toLowerCase',
     '_assets/templates/helpers/toTitleCase',
     '_assets/templates/helpers/usePartial',
-    '_assets/templates/helpers/appendCID',
     '_assets/templates/helpers/yeller'
 ], function() {});

@@ -1,4 +1,4 @@
-@F1230_problems @reg2
+@F1230_problems @problems_applet @reg2
 
 Feature: F1230 - Problems Domain Improvements
 

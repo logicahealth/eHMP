@@ -18,4 +18,8 @@ describe('Testing requests-picklists-utils Functionality', function() {
         expect(utils.getSiteAbbreviation(testVistaSitesConfig, 100)).to.be('DCBA');
         done();
     });
+     it('getSiteAbbreviation returns station number when getSiteCode returns undefined', function(done) {
+        expect(utils.getSiteAbbreviation(testVistaSitesConfig, 422)).to.be(422);
+        done();
+    });
 });

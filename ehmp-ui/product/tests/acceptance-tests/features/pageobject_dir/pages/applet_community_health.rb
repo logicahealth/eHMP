@@ -10,12 +10,12 @@ class PobCommunityHealthApplet < PobParentApplet
   element :tbl_header_description, "[data-appletid='ccd_grid'] th[data-header-instanceid='ccd_grid-summary'] a"
   element :tbl_header_authoringinstitution, "[data-appletid='ccd_grid'] th[data-header-instanceid='ccd_grid-authorDisplayName'] a"
 
-  elements :tbl_date_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(1)"
-  elements :tbl_date_column_sr, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(1) .sr-only"
-  elements :tbl_expanded_description, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(2)"
-  elements :tbl_expanded_authoring_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(3)"
+  elements :tbl_date_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(2)"
+  elements :tbl_date_column_sr, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(2) .sr-only"
+  elements :tbl_expanded_description, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(3)"
+  elements :tbl_expanded_authoring_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(4)"
 
-  elements :tbl_summary_authoring_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(2)"
+  elements :tbl_summary_authoring_column, "[data-appletid='ccd_grid'] table tbody tr td:nth-of-type(3)"
 
   # ------- DETAIL VIEW ------- #
   element :btn_next, '#ccdNext'
@@ -34,7 +34,7 @@ class PobCommunityHealthApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
     add_text_filter appletid_css
   end
 
@@ -42,7 +42,7 @@ class PobCommunityHealthApplet < PobParentApplet
     dates_only = []
     tbl_date_column.each_with_index do | td_element, index |
       text = td_element.text
-      text = text.sub(tbl_date_column_sr[index].text, '')
+      #text = text.sub(tbl_date_column_sr[index].text, '')
       dates_only.push(text.strip)
     end
     dates_only

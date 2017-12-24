@@ -1,39 +1,27 @@
 define([
+    'jquery',
     'underscore',
     'backbone',
     'marionette',
     'handlebars',
     'hbs!app/applets/workspaceManager/list/screenEditor',
     'app/applets/workspaceManager/list/WorkspaceCollectionView',
-    'gridster',
-    'app/applets/workspaceManager/list/PreviewWorkspaceView'
-], function(_, Backbone, Marionette, Handlebars, screenEditor, WorkspaceCollectionView, gridster, PreviewWorkspaceView) {
+    'app/applets/workspaceManager/list/errorRegion'
+], function(
+    $,
+    _,
+    Backbone,
+    Marionette,
+    Handlebars,
+    screenEditor,
+    WorkspaceCollectionView,
+    ErrorView
+) {
     'use strict';
 
-    var deleteMessageItemView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile([
-            '<p>Are you sure you want to delete <strong>{{screenTitle}}?</strong></p>'
-        ].join('\n')),
-    });
-    var deleteFooterItemView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile([
-            '{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back"}}',
-            '{{ui-button "Yes" classes="btn-danger btn-sm" title="Press enter to delete"}}'
-        ].join('\n')),
-        events: {
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-                this.model.get('buttonEl').focus();
-            },
-            'click .btn-danger': function() {
-                ADK.ADKApp.ScreenPassthrough.deleteUserScreen(this.model.get('tableRow').attr('data-screen-id'));
-                ADK.UI.Alert.hide();
-                ADK.UI.FullScreenOverlay.hide();
-                var channel = ADK.Messaging.getChannel('workspaceManagerChannel');
-                channel.trigger('workspaceManager');
-            }
-        }
-    });
+    var QUARTER = 0.25;
+
+    var screenManagerChannel = ADK.Messaging.getChannel('managerAddScreen');
 
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
         behaviors: {
@@ -42,128 +30,132 @@ define([
                 mapping: 'workspace_manager'
             }
         },
+        templateHelpers: function() {
+            return {
+                getContext: ADK.WorkspaceContextRepository.currentContextId
+            };
+        },
         template: screenEditor,
         className: 'workspaceManager-applet percent-height-100',
-        initialize: function() {
-            var self = this;
-            this.model = new Backbone.Model();
-            var screenModule = ADK.ADKApp[Backbone.history.fragment];
-            var screenManagerChannel = ADK.Messaging.getChannel('managerAddScreen');
+        ui: {
+            inputFilter: '.workspace-filter-input',
+            searchScreens: '#searchScreens',
+            clearSearch: '.clearSearch'
         },
         regions: {
-            managerRegion: '#list-group'
+            managerRegion: '#list-group',
+            errorRegion: '#workspace-growler-region'
         },
         events: {
-            'keyup #searchScreens': 'filterScreens',
-            'keydown #searchScreens': function(evt) {
-                if (evt.which == 13) {
+            'keyup @ui.searchScreens': 'filterScreens',
+            'keydown @ui.searchScreens': function(evt) {
+                if (evt.which === $.ui.keyCode.ENTER) {
                     evt.preventDefault();
                     this.filterScreens();
                 }
             },
-            'click #gridFilterButtonWorkspaceManager': function(e){
-                var filterContainer = $(e.currentTarget).closest('.percent-height-100');
-                filterContainer.one('shown.bs.collapse', function() {
-                    filterContainer.find('input[type=search]').focus();
-                });
-            },
-            'click .clearSearch': 'clearSearch',
+            'shown.bs.collapse #workspaceFilter': function(e) {
+                this.ui.inputFilter.focus();
+            },
+            'click @ui.clearSearch': 'clearSearch',
             'click .done-editing': 'hideOverlay',
-            'click .addScreen': 'triggerAddNew',
-            'click .delete-worksheet': 'removeScreen',
-            'click .previewWorkspace': 'showPreview',
-            'keydown [tabindex]:not(input)': 'handleSpacebarOrEnter'
+            'click .addScreen': 'triggerAddNew'
         },
+
+        childEvents: {
+            'show:error': 'onShowError',
+            'clear:error': 'onClearError',
+            'saving': 'onSaving',
+            'saved': 'onSaved'
+        },
+
+        onSaving: function() {
+            this.$('.help-icon-link').attr('disabled', true);
+            this.$('.addScreen').attr('disabled', true);
+            this.$('#gridFilterButtonWorkspaceManager').attr('disabled', true);
+            this.$('.done-editing').attr('disabled', true);
+        },
+
+        onSaved: function() {
+            this.$('.help-icon-link').removeAttr('disabled');
+            this.$('.addScreen').removeAttr('disabled');
+            this.$('#gridFilterButtonWorkspaceManager').removeAttr('disabled');
+            this.$('.done-editing').removeAttr('disabled');
+        },
+
+        onClearError: function () {
+            this.errorRegion.empty();
+        },
+
+        onShowError: function () {
+            this.errorRegion.show(new ErrorView());
+        },
+
+        isCurrentWorkspaceDestroyed: function() {
+            var currentScreenId = ADK.ADKApp.currentScreen.id;
+            return !_.has(ADK, ['ADKApp', 'Screens', currentScreenId]);
+        },
+
         hideOverlay: function() {
-            ADK.UI.FullScreenOverlay.hide();
-            ADK.Messaging.trigger('close:workspaceManager');
+            if (this.isCurrentWorkspaceDestroyed()) {
+                ADK.Navigation.goToDefault();
+            } else {
+                ADK.UI.FullScreenOverlay.hide();
+                ADK.Messaging.trigger('close:workspaceManager');
+            }
             $('#workspaceManagerButton').focus();
         },
+        initialize: function() {
+            var screenModel = ADK.UserDefinedScreens.model;
+
+            this.model = new Backbone.Model();
+            this.listenTo(screenManagerChannel, 'show:error', this.onShowError);
+            this.listenTo(screenModel, 'save:error', this.onShowError);
+        },
+
         onBeforeAttach: function() {
             this.managerRegion.show(new WorkspaceCollectionView());
         },
-        handleSpacebarOrEnter: function(e) {
-            if (e.which === 13 || e.which === 32) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(e.target).click();
-                return false;
-            }
-        },
         filterScreens: function() {
-            var filterText = this.$el.find('#searchScreens').val();
+            var filterText = this.ui.searchScreens.val();
             this.managerRegion.currentView.filterScreens(filterText);
             if (filterText) {
-                this.$el.find('.clearSearch').removeClass('hidden');
+                this.ui.clearSearch.removeClass('hidden');
             } else {
-                this.$el.find('.clearSearch').addClass('hidden');
+                this.ui.clearSearch.addClass('hidden');
             }
         },
         clearSearch: function() {
-            this.$el.find('#searchScreens').val('');
+            this.ui.searchScreens.val('');
             this.filterScreens();
-            this.$el.find('#searchScreens').focus();
-        },
-        removeScreen: function(e) {
-            var deleteButton = $(e.currentTarget);
+            this.ui.searchScreens.focus();
 
-            var deleteMessageModel = new Backbone.Model({
-                screenTitle: deleteButton.closest('.tableRow').find('input')[0].value,
-            });
-            var deleteFooterModel = new Backbone.Model({
-                tableRow: deleteButton.closest('.tableRow'),
-                buttonEl: deleteButton
-            });
-            var deleteAlertView = new ADK.UI.Alert({
-                title: 'Delete',
-                icon:'icon-triangle-exclamation',
-                messageView: deleteMessageItemView.extend({
-                    model: deleteMessageModel
-                }),
-                footerView: deleteFooterItemView.extend({
-                    model: deleteFooterModel
-                })
-            });
-            deleteAlertView.show();
         },
         triggerAddNew: function() {
             screenManagerChannel.command('addNewScreen');
         },
-        showPreview: function(e) {
-            var tableRow = $(e.target).closest('.tableRow');
-            var title = tableRow.find('.editor-input-element').val();
-            title = (_.isUndefined(title) ? tableRow.find('.editor-title').text() : title);
-            var previewView = PreviewWorkspaceView.extend({
-                screenId: tableRow.attr('data-screen-id'),
-                screenTitle: title
-            });
+        checkScroll: function(child, player) {
+            var listGroup = this.getRegion('managerRegion').$el;
 
-            var PreviewFooterItemView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile([
-                    '{{ui-button "Close" classes="btn-primary btn-sm" title="Press enter to close."}}'
-                ].join('\n')),
-                events: {
-                    'click button': function() {
-                        ADK.UI.Alert.hide();
-                    }
-                }
-            });
-            var alertView = new ADK.UI.Alert({
-                title: title,
-                icon: "",
-                messageView: previewView,
-                footerView: PreviewFooterItemView
-            });
-            alertView.show();
-            alertView.$el.find('button').focus();
-        },
-        onBeforeDestroy: function(){
-            screenManagerChannel.stopComplying('deleteScreen', this.removeScreenActive, self);
+            var listGroupHeight = listGroup.height();
+                var playerHeight = player.height();
+                    var playerPosition = player.offset();
+
+                //Adjust the player position using the offset provided by the
+                    playerPosition.top = playerPosition.top - listGroup.position().top;
+                        playerPosition.bottom = playerPosition.top + playerHeight;
+                    var playerPosMargin = playerHeight * QUARTER;
+
+            //Just check to see if we've just managed to bump the workspace to the edges of the screen and adjust the scroll position accordingly.
+            var isScrollRequired = (playerPosition.top < (playerHeight + playerPosMargin)) ||
+                (playerPosition.bottom > (listGroupHeight - playerPosMargin));
+
+                if (isScrollRequired) {
+                listGroup.scrollTop(listGroup.scrollTop() - player.outerHeight());
+            }
         }
 
     });
-
-    var screenManagerChannel = ADK.Messaging.getChannel('managerAddScreen');
 
     return AppletLayoutView;
 });

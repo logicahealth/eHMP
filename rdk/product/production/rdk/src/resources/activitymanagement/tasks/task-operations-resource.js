@@ -5,6 +5,7 @@ var uriBuilder = rdk.utils.uriBuilder;
 var httpUtil = rdk.utils.http;
 var pidValidator = rdk.utils.pidValidator;
 var nullchecker = rdk.utils.nullchecker;
+var RdkError = rdk.utils.RdkError;
 var _ = require('lodash');
 var async = require('async');
 var parseString = require('xml2js').parseString;
@@ -17,6 +18,7 @@ var getJbpmUser = activityUtils.getJbpmUser;
 var getFormattedRoutesString = activityUtils.getFormattedRoutesString;
 var parseAssignedTo = activityUtils.parseAssignedTo;
 var filterIdentifiers = activityUtils.filterIdentifiers;
+var getDatabaseConfigFromRequest = activityUtils.getDatabaseConfigFromRequest;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var navMapping = require('./navigation-mapping');
 var patientRelatedTeams = require('../../../write/pick-list/team-management/teams-for-user-patient-related-fetch-list');
@@ -25,6 +27,7 @@ var oracledb = require('oracledb');
 var facilitiesList = require('../../facility-moniker/vha-sites').data.items;
 var resultUtils = rdk.utils.results;
 var xmlTemplates = activityUtils.xmlTemplates;
+var pepSubsystem = require('../../../subsystems/pep/pep-subsystem');
 
 var dbSchema = 'activitydb';
 module.exports.dbSchema = dbSchema;
@@ -76,31 +79,47 @@ module.exports.getIcn = function(req, pid, patientIdentifiers, next) {
 };
 
 module.exports.getTeams = function(req, staffIEN, patientID, next) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return next(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var patientRelatedTeamsCallback = function(error, result) {
         if (error) {
             next(error);
             return;
         }
-        next(null, nullchecker.isNullish(result));
+        next(null, _.get(result, 'length') === 0);
     };
 
-    patientRelatedTeams.fetch(req.logger, req.app.config.activityDatabase, patientRelatedTeamsCallback, {
+    patientRelatedTeams.fetch(req.logger, dbConfig, patientRelatedTeamsCallback, {
         staffIEN: staffIEN,
-        patientID: patientID,
+        pid: patientID,
         site: _.get(req, 'session.user.site'),
-        pcmmDbConfig: req.app.config.jbpm.activityDatabase,
-        fullConfig: req.app.config.pickListServer
+        pcmmDbConfig: dbConfig,
+        fullConfig: req.app.config
     });
 };
 
 function getFacilityCorrespondingToTeam(req, teamID, next) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return next(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var procParams = {
         p_team_id: teamID
     };
 
-    var procQuery = 'BEGIN PCMMDATA.getFacilityCorrespondingToTeam(:p_team_id, :recordset); END;';
+    var procQuery = 'BEGIN activitydb.pcmmdata.getFacilityCorrespondingToTeam(:p_team_id, :recordset); END;';
 
-    return activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, next);
+    return activityDb.doExecuteProcWithParams(req, dbConfig, procQuery, procParams, next);
 }
 
 module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parameters, patientIdentifiers, tasksCallback, next) {
@@ -112,22 +131,22 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
     };
     async.waterfall([
 
-        function(next) {
+        function(callback) {
             if (!tasksRoutesList) {
-                next();
+                callback();
                 return;
             }
 
-            async.each(tasksRoutesList, function(po, cb) {
+            async.each(tasksRoutesList, function(po, callback) {
                 var taskInstanceId = po.TASKINSTANCEID;
-                if (nullchecker.isNotNullish(po.USERID)) {
-                    setImmediate(cb);
+                if (nullchecker.isNotNullish(po.USERID) || nullchecker.isNotNullish(parameters.processInstanceId)) {
+                    setImmediate(callback);
                     return;
                 } else {
                     async.waterfall([
 
-                        function(next) {
-                            if (po.PATIENTASSIGNMENT === 1) {
+                        function(callback) {
+                            if (po.PATIENTASSIGNMENT === 1 && !(req.body.context === 'patient' && req.body.subContext === 'any')) {
                                 //if patient is on the team then dont delete the task
                                 var thisTask = _.find(tasks, {
                                     'TASKID': taskInstanceId
@@ -147,36 +166,36 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
                                             taskInstanceIdsToRemove.push(taskInstanceId);
                                         }
 
-                                        next();
+                                        callback();
                                     });
                                 } else {
                                     //Is this an error/exception condition?
-                                    next();
+                                    callback();
                                     return;
                                 }
                             } else {
-                                next();
+                                callback();
                                 return;
                             }
                         },
-                        function(next) {
+                        function(callback) {
                             if (nullchecker.isNotNullish(po.TEAM)) {
                                 async.waterfall([
                                     getFacilityCorrespondingToTeam.bind(null, req, po.TEAM),
-                                    function(result, nextStep) {
+                                    function(result, callback) {
                                         if (_.isArray(result) && (result.length > 0) && (_.isUndefined(parameters.removeTask) || parameters.removeTask)) {
-                                            var stationNumber = req.session.user.division;
+                                            var stationNumberResult = _.get(result, '[0].STATIONNUMBER');
 
-                                            //screen for teams at the wrong facility
-                                            var ind = _.findIndex(result, function(o) {
-                                                return o.STATIONNUMBER === stationNumber;
+                                            var facilityEntry = _.find(facilitiesList, {
+                                                'facilityCode': stationNumberResult
                                             });
 
-                                            if (ind !== -1) {
-                                                //have the task remember the facility name
-                                                var facilityName = _.find(facilitiesList, {
-                                                    'facilityCode': result[ind].STATIONNUMBER
-                                                }).facilityName;
+                                            if (!facilityEntry) {
+                                                return callback('Facility code matching the station number ' + stationNumberResult + ' cannot be found.');
+                                            }
+
+                                            var facilityName = _.get(facilityEntry, 'facilityName');
+                                            if (facilityName) {
                                                 tasks = _.map(tasks, function(task) {
                                                     if (task.TASKID === taskInstanceId) {
                                                         task.assignedFacilityName = facilityName;
@@ -185,10 +204,10 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
                                                 });
                                             }
 
-                                            nextStep(null, ind === -1);
+                                            callback(null, false);
                                             return;
                                         }
-                                        nextStep(null, false);
+                                        callback(null, false);
                                     }
                                 ], function(err, removeTask) {
                                     if (err) {
@@ -200,10 +219,10 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
                                         taskInstanceIdsToRemove.push(taskInstanceId);
                                     }
 
-                                    next();
+                                    callback();
                                 });
                             } else {
-                                next();
+                                callback();
                             }
                         }
                     ], function(err) {
@@ -213,21 +232,21 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
                             }
                         }
 
-                        setImmediate(cb);
+                        setImmediate(callback);
                     });
                 }
             }, function(err) {
                 if (err) {
-                    next(err);
+                    callback(err);
                     return;
                 }
 
-                next();
+                callback();
             });
         },
-        function(next) {
+        function(callback) {
             if (!tasks) {
-                next();
+                callback();
                 return;
             }
             if (!_.isEmpty(taskInstanceIdsToRemove)) {
@@ -240,178 +259,208 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
             var icnToNameMap = [];
             var creatorOwnerIds = [];
 
-            _.each(tasks, function(row) {
-                if (row.hasOwnProperty('PATIENTICN')) {
-                    if (!_.any(icnToNameMap, 'PATIENTICN', row.PATIENTICN)) {
-                        icnToNameMap.push({
-                            'PATIENTICN': row.PATIENTICN,
-                            'PATIENTNAME': '',
-                            'LAST4': ''
-                        });
+            var addDataToTasks = function(callback) {
+                async.each(tasks, function processTask(row, callback) {
+                    if (row.hasOwnProperty('PATIENTICN')) {
+                        if (!_.any(icnToNameMap, 'PATIENTICN', row.PATIENTICN)) {
+                            icnToNameMap.push({
+                                'PATIENTICN': row.PATIENTICN,
+                                'PATIENTNAME': '',
+                                'LAST4': ''
+                            });
+                        }
                     }
-                }
 
-                if (row.hasOwnProperty('CREATEDBYID')) {
-                    if (!_.any(creatorOwnerIds, 'ID', row.CREATEDBYID)) {
-                        creatorOwnerIds.push({
-                            'ID': row.CREATEDBYID,
-                            'NAME': ''
-                        });
-                    }
-                }
-                if (row.hasOwnProperty('ACTUALOWNERID')) {
-                    if (!_.any(creatorOwnerIds, 'ID', row.ACTUALOWNERID)) {
-                        creatorOwnerIds.push({
-                            'ID': row.ACTUALOWNERID,
-                            'NAME': ''
-                        });
-                    }
-                }
-                if (row.hasOwnProperty('ASSIGNEDTO') && nullchecker.isNotNullish(row.ASSIGNEDTO)) {
-                    row.assignedToRoutes = parseAssignedTo(row.ASSIGNEDTO);
-                    _.each(row.assignedToRoutes, function(parsedRoute) {
-                        if (!_.isUndefined(parsedRoute.user) && !_.any(creatorOwnerIds, 'ID', parsedRoute.user)) {
+                    if (row.hasOwnProperty('CREATEDBYID')) {
+                        if (!_.any(creatorOwnerIds, 'ID', row.CREATEDBYID)) {
                             creatorOwnerIds.push({
-                                'ID': parsedRoute.user,
+                                'ID': row.CREATEDBYID,
                                 'NAME': ''
                             });
                         }
-                    });
-                }
-                if (row.hasOwnProperty('NAVIGATION') && nullchecker.isNotNullish(row.NAVIGATION)) {
-                    //parse navigation to a valid JSON
-                    try {
-                        row.NAVIGATION = JSON.parse(row.NAVIGATION);
-                        //add parameters
-                        if (_.isObject(row.NAVIGATION)) {
-                            if (row.NAVIGATION.hasOwnProperty('channel') && row.NAVIGATION.hasOwnProperty('event')) {
-                                row.NAVIGATION.parameters = navMapping.getParameters(row);
-                            }
+                    }
+
+                    if (row.hasOwnProperty('ACTUALOWNERID')) {
+                        if (!_.any(creatorOwnerIds, 'ID', row.ACTUALOWNERID)) {
+                            creatorOwnerIds.push({
+                                'ID': row.ACTUALOWNERID,
+                                'NAME': ''
+                            });
                         }
-                    } catch (e) {
-                        req.logger.error('Unable to parse task navigation data from task: ' + row);
                     }
-                } else {
-                    req.logger.info('Missing navigation information for task: ' + row);
-                }
 
-                if (row.hasOwnProperty('PERMISSION') && nullchecker.isNotNullish(row.PERMISSION)) {
-                    //parse navigation to a valid JSON
-                    try {
-                        row.PERMISSION = JSON.parse(row.PERMISSION);
-                    } catch (e) {
-                        req.logger.error('Unable to parse task permission data from task: ' + row);
-                    }
-                } else {
-                    req.logger.info('Missing permission information for task: ' + row);
-                }
-            });
-
-            _.each(tasks, function(row) {
-                row.TASKTYPE = 'Human';
-
-                if (row.hasOwnProperty('DEPLOYMENTID')) {
-                    var service = row.DEPLOYMENTID.split(':', 2);
-                    if (service.length > 1) {
-                        row.SERVICE = service[1].replace('_', ' ');
-                    }
-                }
-            });
-
-            // Unescape special characters for DESCRIPTION and INSTANCENAME fields
-            if (_.size(tasks) > 0) {
-                _.set(formattedResponse, 'data.items', resultUtils.unescapeSpecialCharacters(tasks, ['DESCRIPTION', 'INSTANCENAME']));
-            }
-
-            async.parallel([
-
-                function(parallelCb) {
-                    exports.getNamesFromIcns(icnToNameMap, req, function(resultedMap) {
-                        _.each(tasks, function(row) {
-                            if (row.hasOwnProperty('PATIENTICN')) {
-                                var name = _.pluck(_.where(resultedMap, {
-                                    'PATIENTICN': row.PATIENTICN
-                                }), 'PATIENTNAME');
-
-                                var last4 = _.pluck(_.where(resultedMap, {
-                                    'PATIENTICN': row.PATIENTICN
-                                }), 'LAST4');
-
-                                if (Array.isArray(name) && name.length > 0) {
-                                    row.PATIENTNAME = name[0];
-                                } else {
-                                    row.PATIENTNAME = '';
-                                }
-
-                                if (Array.isArray(last4) && last4.length > 0) {
-                                    row.LAST4 = last4[0];
-                                } else {
-                                    row.LAST4 = '';
-                                }
+                    if (row.hasOwnProperty('ASSIGNEDTO') && nullchecker.isNotNullish(row.ASSIGNEDTO)) {
+                        row.assignedToRoutes = parseAssignedTo(row.ASSIGNEDTO);
+                        _.each(row.assignedToRoutes, function(parsedRoute) {
+                            if (!_.isUndefined(parsedRoute.user) && !_.any(creatorOwnerIds, 'ID', parsedRoute.user)) {
+                                creatorOwnerIds.push({
+                                    'ID': parsedRoute.user,
+                                    'NAME': ''
+                                });
                             }
                         });
-                        //getNamesFromIcns does not return an error - it will either fill in values
-                        // into the resultant map or not - proceed in either case
-                        parallelCb(null);
-                    });
-                },
-                function(parallelCb) {
-                    getProvidersFromIds(creatorOwnerIds, req, function(providerMap) {
-                        _.each(tasks, function(row) {
-                            var name;
-                            if (row.hasOwnProperty('CREATEDBYID')) {
-                                name = _.pluck(_.where(providerMap, {
-                                    'ID': row.CREATEDBYID
-                                }), 'NAME');
-                                if (Array.isArray(name) && name.length > 0) {
-                                    row.CREATEDBYNAME = name[0];
-                                } else {
-                                    row.CREATEDBYNAME = '';
-                                }
-                            }
-                            if (row.hasOwnProperty('ACTUALOWNERID')) {
-                                name = _.pluck(_.where(providerMap, {
-                                    'ID': row.ACTUALOWNERID
-                                }), 'NAME');
+                    }
 
-                                if (Array.isArray(name) && name.length > 0) {
-                                    row.ACTUALOWNERNAME = name[0];
-                                } else {
-                                    row.ACTUALOWNERNAME = '';
+                    if (row.hasOwnProperty('NAVIGATION') && nullchecker.isNotNullish(row.NAVIGATION)) {
+                        //parse navigation to a valid JSON
+                        try {
+                            row.NAVIGATION = JSON.parse(row.NAVIGATION);
+                            //add parameters
+                            if (_.isObject(row.NAVIGATION)) {
+                                if (row.NAVIGATION.hasOwnProperty('channel') && row.NAVIGATION.hasOwnProperty('event')) {
+                                    row.NAVIGATION.parameters = navMapping.getParameters(row);
                                 }
                             }
-                            if (row.hasOwnProperty('assignedToRoutes') && nullchecker.isNotNullish(row.assignedToRoutes)) {
-                                var userList = _.pluck(row.assignedToRoutes, 'user');
-                                var users = {};
-                                _.each(userList, function(user) {
+                        } catch (e) {
+                            req.logger.error('Unable to parse task navigation data from task: ' + row);
+                        }
+                    } else {
+                        req.logger.info('Missing navigation information for task: ' + row);
+                    }
+
+                    row.TASKTYPE = 'Human';
+                    if (row.hasOwnProperty('DEPLOYMENTID')) {
+                        var service = row.DEPLOYMENTID.split(':', 2);
+                        if (service.length > 1) {
+                            row.SERVICE = service[1].replace('_', ' ');
+                        }
+                    }
+
+                    if (row.hasOwnProperty('PERMISSION') && nullchecker.isNotNullish(row.PERMISSION)) {
+                        row.PERMISSION = parsePermissions(row, req);
+                        //Check if the user has the permissions required by the task
+                        hasPermissions(row, req, function() {
+                            return callback();
+                        });
+                    } else {
+                        req.logger.info('Missing permission information for task: ' + row);
+                        callback();
+                    }
+
+                    row.BEFOREEARLIESTDATE = Boolean(_.get(row, 'BEFOREEARLIESTDATE'));
+
+                }, function eachComplete(row, err) {
+                    if (err) {
+                        req.logger.debug('addDataToTasks: ', err);
+                        return callback();
+                    }
+
+                    // Unescape special characters for DESCRIPTION and INSTANCENAME fields
+                    if (_.size(tasks) > 0) {
+                        _.set(formattedResponse, 'data.items', resultUtils.unescapeSpecialCharacters(tasks, ['DESCRIPTION', 'INSTANCENAME']));
+                    }
+
+                    return callback(null);
+                });
+            };
+
+            var getNamesAndProviders = function(callback) {
+                async.parallel([
+                    function(parallelCb) {
+                        exports.getNamesFromIcns(icnToNameMap, req, function(resultedMap) {
+                            _.each(tasks, function(row) {
+                                if (row.hasOwnProperty('PATIENTICN')) {
+                                    var name = _.pluck(_.where(resultedMap, {
+                                        'PATIENTICN': row.PATIENTICN
+                                    }), 'PATIENTNAME');
+
+                                    var last4 = _.pluck(_.where(resultedMap, {
+                                        'PATIENTICN': row.PATIENTICN
+                                    }), 'LAST4');
+
+                                    if (Array.isArray(name) && name.length > 0) {
+                                        row.PATIENTNAME = name[0];
+                                    } else {
+                                        row.PATIENTNAME = '';
+                                    }
+
+                                    if (Array.isArray(last4) && last4.length > 0) {
+                                        row.LAST4 = last4[0];
+                                    } else {
+                                        row.LAST4 = '';
+                                    }
+                                }
+                            });
+                            //getNamesFromIcns does not return an error - it will either fill in values
+                            // into the resultant map or not - proceed in either case
+                            parallelCb(null);
+                        });
+                    },
+                    function(parallelCb) {
+                        getProvidersFromIds(creatorOwnerIds, req, function(providerMap) {
+                            _.each(tasks, function(row) {
+                                var name;
+                                if (row.hasOwnProperty('CREATEDBYID')) {
                                     name = _.pluck(_.where(providerMap, {
-                                        'ID': user
+                                        'ID': row.CREATEDBYID
                                     }), 'NAME');
                                     if (Array.isArray(name) && name.length > 0) {
-                                        users[user] = name[0];
+                                        row.CREATEDBYNAME = name[0];
                                     } else {
-                                        users[user] = user; // if name not found , display the user id
+                                        row.CREATEDBYNAME = '';
                                     }
-                                });
-
-                                row.INTENDEDFOR = getFormattedRoutesString(row.assignedToRoutes, users, true);
-                                delete row.assignedToRoutes;
-
-                                if (row.hasOwnProperty('assignedFacilityName') && nullchecker.isNotNullish(row.assignedFacilityName)) {
-                                    row.INTENDEDFOR = row.assignedFacilityName + ' - ' + row.INTENDEDFOR;
-                                    delete row.assignedFacilityName;
                                 }
-                            } else {
-                                row.INTENDEDFOR = '';
-                            }
+                                if (row.hasOwnProperty('ACTUALOWNERID')) {
+                                    name = _.pluck(_.where(providerMap, {
+                                        'ID': row.ACTUALOWNERID
+                                    }), 'NAME');
+
+                                    if (Array.isArray(name) && name.length > 0) {
+                                        row.ACTUALOWNERNAME = name[0];
+                                    } else {
+                                        row.ACTUALOWNERNAME = '';
+                                    }
+                                }
+                                if (row.hasOwnProperty('assignedToRoutes') && nullchecker.isNotNullish(row.assignedToRoutes)) {
+                                    var userList = _.pluck(row.assignedToRoutes, 'user');
+                                    var users = {};
+                                    _.each(userList, function(user) {
+                                        name = _.pluck(_.where(providerMap, {
+                                            'ID': user
+                                        }), 'NAME');
+                                        if (Array.isArray(name) && name.length > 0) {
+                                            users[user] = name[0];
+                                        } else {
+                                            users[user] = user; // if name not found , display the user id
+                                        }
+                                    });
+
+                                    row.INTENDEDFOR = getFormattedRoutesString(row.assignedToRoutes, users, true);
+                                    delete row.assignedToRoutes;
+
+                                    if (row.hasOwnProperty('assignedFacilityName') && nullchecker.isNotNullish(row.assignedFacilityName)) {
+                                        row.INTENDEDFOR = row.assignedFacilityName + ' - ' + row.INTENDEDFOR;
+                                        delete row.assignedFacilityName;
+                                    }
+                                } else {
+                                    row.INTENDEDFOR = '';
+                                }
+                            });
+                            //getProvidersFromIds does not return an error - it will either fill in values
+                            // into the resultant map or not - proceed in either case
+                            parallelCb(null);
                         });
-                        //getProvidersFromIds does not return an error - it will either fill in values
-                        // into the resultant map or not - proceed in either case
-                        parallelCb(null);
-                    });
+                    }
+                ], function(err, results) {
+                    if (err) {
+                        req.logger.debug('getNamesAndProviders: ', err);
+                        return callback();
+                    }
+
+                    tasksCallback(formattedResponse);
+                    return callback(null);
+                });
+            };
+
+            async.series([
+                addDataToTasks,
+                getNamesAndProviders
+            ], function(err) {
+                if (err) {
+                    req.logger.error(err);
+                    return callback(err);
                 }
-            ], function(err, results) {
-                tasksCallback(formattedResponse);
+                callback();
             });
         }
     ], function(err) {
@@ -430,7 +479,7 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
 };
 
 function getProvidersFromIds(creatorOwnerIds, req, cb) {
-    // /data/index/user-uid?range=urn:va:user:9E7A:10000000272,urn:va:user:9E7A:10000000270
+    // /data/index/user-uid?range=urn:va:user:SITE:10000000272,urn:va:user:SITE:10000000270
     var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit', 120);
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/user-uid?range=';
@@ -529,7 +578,7 @@ function getProvidersFromIds(creatorOwnerIds, req, cb) {
 }
 
 module.exports.getNamesFromIcns = function(icnToNameMap, req, cb) {
-    //http://IP             /data/index/pt-select-pid?range=9E7A;3,9E7A;8
+    //http://IP             /data/index/pt-select-pid?range=SITE;3,SITE;8
     var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit') || 120;
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/pt-select-pid?range=';
@@ -646,13 +695,22 @@ module.exports.queryTasksRoutes = function(req, res, tasks, parameters, patientI
 module.exports.getTasksRoutes = function(req, taskInstanceIds, routesCallback) {
     var subQueryMax = 990;
     var data = [];
-    var routeQuery = 'BEGIN TASKS.getTaskRoutes(:p_task_instance_ids, :recordset); END;';
+    var routeQuery = 'BEGIN activitydb.tasks.getTaskRoutes(:p_task_instance_ids, :recordset); END;';
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
 
     async.whilst(
         function() {
             return taskInstanceIds.length > 0;
         },
         function(callback) {
+            if (!dbConfig) {
+                return callback(new RdkError({
+                    code: 'oracledb.503.1001',
+                    logger: req.logger
+                }));
+            }
+
             var inQueryArr = taskInstanceIds.splice(0, subQueryMax);
             var procParams = {
                 p_task_instance_ids: inQueryArr.join()
@@ -666,7 +724,7 @@ module.exports.getTasksRoutes = function(req, taskInstanceIds, routesCallback) {
                 data = _.union(data, rows);
                 return callback(null);
             };
-            return activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, routeQuery, procParams, cb);
+            return activityDb.doExecuteProcWithParams(req, dbConfig, routeQuery, procParams, cb);
         },
         function(err) {
             if (err) {
@@ -719,7 +777,7 @@ module.exports.queryTasks = function(req, res) {
 
     if (context === 'user') {
         //req.session.facility is eg. PANORAMA
-        var facility = req.session.user.site; //eg 9E7A
+        var facility = req.session.user.site; //eg SITE
         if (nullchecker.isNullish(facility)) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend('Missing required parameter: facility');
         }
@@ -788,6 +846,15 @@ function buildQueryParameterObjectFromRequest(req, userTeams, facility) {
 }
 
 module.exports.buildTaskQuery = function(req, res, parameters) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        var configError = new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        });
+        return res.status(configError.status).rdkSend(configError);
+    }
+
     var patientIdentifiers = null;
     var prepFunctions = [];
 
@@ -865,19 +932,19 @@ module.exports.buildTaskQuery = function(req, res, parameters) {
 
         };
 
-        var taskQuery = 'BEGIN TASKS.getAllTasks(:p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
+        var taskQuery = 'BEGIN activitydb.tasks.getAllTasks(:p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
 
         if (parameters.subContext === 'teams' || parameters.subContext === 'teamroles') {
             procParams.p_staff_id = staff_id;
             procParams.p_station_number = stationNumber;
             if (parameters.subContext === 'teams') {
-                taskQuery = 'BEGIN TASKS.getTasksForTeams(:p_staff_id, :p_station_number, :p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
+                taskQuery = 'BEGIN activitydb.tasks.getTasksForTeams(:p_staff_id, :p_station_number, :p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
                 //patient:teams -- Show me tasks that are routed to my teams
             } else if (parameters.subContext === 'teamroles') {
                 //patient:me -- Show me tasks that are routed to me (either directly to me or via team/role routing)
                 procParams.p_user_id = user_id;
                 procParams.p_facility = null;
-                taskQuery = 'BEGIN TASKS.getTasksForTeamRoles(:p_user_id, :p_staff_id, :p_station_number, :p_facility, :p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
+                taskQuery = 'BEGIN activitydb.tasks.getTasksForTeamRoles(:p_user_id, :p_staff_id, :p_station_number, :p_facility, :p_task_statuses, :p_process_instance_id, :p_priority, :p_task_instance_id, :p_start_date, :p_end_date, :p_patient_identifiers, :p_resolution_state, :p_max_salience, :p_ntf_user_id, :recordset, :recordset2); END;';
             }
         }
 
@@ -904,7 +971,7 @@ module.exports.buildTaskQuery = function(req, res, parameters) {
                 procParams.p_ntf_user_id = user.site + ';' + userId;
             }
         }
-        return activityDb.doExecuteProcMultipleRecordSets(req, req.app.config.jbpm.activityDatabase, taskQuery, procParams, cb);
+        return activityDb.doExecuteProcMultipleRecordSets(req, dbConfig, taskQuery, procParams, cb);
 
     });
 };
@@ -1088,22 +1155,112 @@ function changeTaskState(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
     }
 
-    if (newState.toLowerCase() === 'complete') {
-        return handleComplete(req, res);
+    //fetch task by taskId and validate the attempted state change
+    return validateChangeStateAttempt(req, taskId, function(err, isValid) {
+        if (err) {
+            req.logger.error({
+                error: err
+            }, 'task-operations-resource:changeTaskState error executing validateChangeStateAttempt');
+            var changeError = new RdkError({
+                code: 'oracledb.400.1001',
+                logger: req.logger
+            });
+            return res.status(changeError.status).rdkSend(changeError);
+        }
+
+        if (!isValid) {
+            var validationError = new RdkError({
+                code: 'jbpm.403.1001',
+                logger: req.logger
+            });
+            return res.status(validationError.status).rdkSend(validationError);
+        }
+
+        if (newState.toLowerCase() === 'complete') {
+            return handleComplete(req, res);
+        }
+
+        var config = getGenericJbpmConfig(req);
+
+        var builder = uriBuilder.fromUri(config.url)
+            .path('/task/' + taskId + '/' + newState);
+
+        var uri = builder.build();
+        config.url = uri;
+        config.json = false;
+
+        httpUtil.post(config, function(err, response, result) {
+            return buildChangeTaskStateResponse(req, res, err, result);
+        });
+    });
+}
+
+/**
+ * Perform logic to validate a task state change
+ *
+ * @param {any} req The request object
+ * @param {number} taskId The ID of the task attempting to change state
+ * @param {function} callback Returns error or boolean value indicating whether task can change state
+ */
+function validateChangeStateAttempt(req, taskId, callback) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
     }
 
-    var config = getGenericJbpmConfig(req);
+    var procParams = {
+        p_task_definition_id: null,
+        p_task_instance_id: taskId,
+        p_patient_identifiers: null,
+        p_task_statuses: null
+    };
 
-    var builder = uriBuilder.fromUri(config.url)
-        .path('/task/' + taskId + '/' + newState);
+    var query = 'BEGIN activitydb.tasks.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;';
+    req.logger.trace({
+        query: query,
+        params: procParams
+    }, 'task-operations-resource:validateChangeStateAttempt querying for task');
+    activityDb.doExecuteProcWithParams(req, dbConfig, query, procParams, function(err, results) {
+        if (err) {
+            return callback(err);
+        }
 
-    var uri = builder.build();
-    config.url = uri;
-    config.json = false;
+        var beforeEarliestDate = _.get(results, '[0].BEFOREEARLIESTDATE', undefined);
+        var earliestDate = _.get(results, '[0].DUE', undefined);
 
-    httpUtil.post(config, function(err, response, result) {
-        return buildChangeTaskStateResponse(req, res, err, result);
+        if (_.isUndefined(beforeEarliestDate) || !(earliestDate instanceof Date)) {
+            var definitionError = Error('Unable to retrieve required values to execute validateChangeStateAttempt');
+            return callback(definitionError);
+        }
+
+        var isValid = checkEarliestDate(Boolean(beforeEarliestDate), earliestDate);
+        if (!isValid) {
+            req.logger.warn({
+                earliestDate: earliestDate,
+                beforeEarliestDate: beforeEarliestDate
+            }, 'task-operations-resource:validateChangeStateAttempt disallowing task state change due to beforeEarliestDate');
+        }
+
+        return callback(null, isValid);
     });
+}
+
+function checkEarliestDate(beforeEarliestDate, earliestDate) {
+    if (beforeEarliestDate) {
+        return true;
+    }
+
+    //task should not be changed before earliestDate
+    var today = new Date();
+    var impreciseToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+    if (earliestDate.getTime() > impreciseToday.getTime()) {
+        return false;
+    }
+
+    return true;
 }
 
 module.exports.getCurrentTask = function(req, res) {
@@ -1140,6 +1297,15 @@ function getTask(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
     }
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        var configError = new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        });
+        return res.status(configError.status).rdkSend(configError);
+    }
+
     var config = getGenericJbpmConfig(req);
 
     var uri = uriBuilder.fromUri('/tasksservice').path('/task/' + taskId);
@@ -1151,10 +1317,10 @@ function getTask(req, res) {
                 if (err) {
                     return callback(err);
                 }
-                if (returnedData && returnedData.data && returnedData.data.items && returnedData.data.items.length > 0 && returnedData.data.items[0].hasOwnProperty('actualOwnerId') && !nullchecker.isNullish(returnedData.data.items[0].actualOwnerId)) {
+                if (returnedData && returnedData.data && returnedData.data.items && returnedData.data.items.length > 0 && returnedData.data.items[0].hasOwnProperty('actual-owner') && !nullchecker.isNullish(returnedData.data.items[0]['actual-owner'])) {
                     returnedData.data.items[0].actualOwnerName = undefined;
                     var jdsPath = '/data/urn:va:user:';
-                    jdsPath += returnedData.data.items[0].actualOwnerId.replace(';', ':');
+                    jdsPath += returnedData.data.items[0]['actual-owner'].replace(';', ':');
 
                     var options = _.extend({}, req.app.config.jdsServer, {
                         url: jdsPath,
@@ -1163,7 +1329,10 @@ function getTask(req, res) {
                     });
 
                     httpUtil.get(options, function(err, response, data) {
-                        if (nullchecker.isNullish(err) && !nullchecker.isNullish(data.data.items) && data.data.items.length > 0 && !nullchecker.isNullish(data.data.items[0].name)) {
+                        if (err) {
+                            return callback(err);
+                        }
+                        if (!nullchecker.isNullish(_.get(data, 'data.items[0].name'))) {
                             returnedData.data.items[0].actualOwnerName = data.data.items[0].name;
                         }
                         return callback(null, returnedData);
@@ -1181,56 +1350,98 @@ function getTask(req, res) {
                 p_task_statuses: null
             };
 
-            var query = 'BEGIN TASKS.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;';
-            activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, query, procParams, callback);
+            var query = 'BEGIN activitydb.tasks.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;';
+            activityDb.doExecuteProcWithParams(req, dbConfig, query, procParams, callback);
         }
     }, function(err, results) {
         if (err) {
             req.logger.error(err);
             return res.status(rdk.httpstatus.not_found).rdkSend(err);
         }
+
         if (_.size(_.get(results, 'jbpmTask.data.items')) < 1 || _.size(_.get(results, 'dbTask')) < 1 ||
             _.isUndefined(results.dbTask[0].STATUSTIMESTAMP) || _.isNull(results.dbTask[0].STATUSTIMESTAMP)) {
-                return res.status(rdk.httpstatus.not_found).rdkSend(err);
+            return res.status(rdk.httpstatus.not_found).rdkSend(err);
         }
-        results.jbpmTask.data.items[0].statusTimeStamp = results.dbTask[0].STATUSTIMESTAMP.getTime();
-        //the following mappings were added to keep the UI backward compatible
-        if (results.jbpmTask.data.items[0].hasOwnProperty('actual-owner')) {
-            results.jbpmTask.data.items[0].actualOwnerId = results.jbpmTask.data.items[0]['actual-owner'];
+
+        if (_.size(_.get(results, 'jbpmTask.data.items')) > 0 && _.size(_.get(results, 'dbTask')) > 0 &&
+            nullchecker.isNotNullish(results.dbTask[0].STATUSTIMESTAMP)) {
+            var task = results.dbTask[0];
+            task.PERMISSION = parsePermissions(task, req) || {};
+
+            //Check if the user has the permissions required by the task
+            return hasPermissions(task, req, function taskOpCallback(task) {
+                results.jbpmTask.data.items[0].hasPermissions = task.hasPermissions;
+                results.jbpmTask.data.items[0].statusTimeStamp = results.dbTask[0].STATUSTIMESTAMP.getTime();
+                results.jbpmTask.data.items[0].beforeEarliestDate = Boolean(_.get(results, 'dbTask[0].BEFOREEARLIESTDATE'));
+
+                //the following mappings were added to keep the UI backward compatible
+                var extraAttributes = {
+                    'actual-owner': 'actualOwnerId',
+                    'created-by': 'createdById',
+                    'created-on': 'createdOn',
+                    'activation-time': 'activationTime',
+                    'expiration-time': 'expirationTime',
+                    'process-instance-id': 'processInstanceId',
+                    'process-id': 'processId',
+                    'process-session-id': 'processSessionId',
+                    'deployment-id': 'deploymentId',
+                    'quick-task-summary': 'quickTaskSummary',
+                    'parentId': 'parent-id'
+                };
+                var items = _.get(results, 'jbpmTask.data.items[0]');
+                _.each(extraAttributes, function(value, key) {
+                    if (_.has(items, key)) {
+                        items[value] = items[key];
+                    }
+                });
+                items.navigation = parseNavigation(_.get(task, 'NAVIGATION'));
+
+                return res.rdkSend(results.jbpmTask.data);
+            });
         }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('created-by')) {
-            results.jbpmTask.data.items[0].createdById = results.jbpmTask.data.items[0]['created-by'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('created-on')) {
-            results.jbpmTask.data.items[0].createdOn = results.jbpmTask.data.items[0]['created-on'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('activation-time')) {
-            results.jbpmTask.data.items[0].activationTime = results.jbpmTask.data.items[0]['activation-time'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('expiration-time')) {
-            results.jbpmTask.data.items[0].expirationTime = results.jbpmTask.data.items[0]['expiration-time'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('process-instance-id')) {
-            results.jbpmTask.data.items[0].processInstanceId = results.jbpmTask.data.items[0]['process-instance-id'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('process-id')) {
-            results.jbpmTask.data.items[0].processId = results.jbpmTask.data.items[0]['process-id'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('process-session-id')) {
-            results.jbpmTask.data.items[0].processSessionId = results.jbpmTask.data.items[0]['process-session-id'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('deployment-id')) {
-            results.jbpmTask.data.items[0].deploymentId = results.jbpmTask.data.items[0]['deployment-id'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('quick-task-summary')) {
-            results.jbpmTask.data.items[0].quickTaskSummary = results.jbpmTask.data.items[0]['quick-task-summary'];
-        }
-        if (results.jbpmTask.data.items[0].hasOwnProperty('parent-id')) {
-            results.jbpmTask.data.items[0].parentId = results.jbpmTask.data.items[0]['parent-id'];
-        }
-        return res.rdkSend(results.jbpmTask.data);
+
+        return res.status(rdk.httpstatus.not_found).rdkSend(err);
     });
 }
 
+function parseNavigation(navigation) {
+    try {
+        return JSON.parse(navigation);
+    } catch (e) {
+        return null;
+    }
+}
+
+function parsePermissions(task, req) {
+    try {
+        return JSON.parse(task.PERMISSION);
+    } catch (e) {
+        req.logger.error('Error while parsing the permissions for a task: ' + e + '\n' + task);
+        return false;
+    }
+}
+
+function hasPermissions(task, req, callback) {
+    task.hasPermissions = false;
+
+    var mockRequest = {
+        _resourceConfigItem: {
+            requiredPermissions: _.get(task, 'PERMISSION.ehmp')
+        },
+        logger: _.get(req, 'logger'),
+        session: {
+            user: _.get(req, 'session.user')
+        }
+    };
+
+    pepSubsystem.execute(mockRequest, {}, function taskOpCallback(err) {
+        task.hasPermissions = !err;
+        return callback(task);
+    });
+}
+
+module.exports.hasPermissions = hasPermissions;
 module.exports.changeTaskState = changeTaskState;
 module.exports.getTask = getTask;
+module.exports.checkEarliestDate = checkEarliestDate;

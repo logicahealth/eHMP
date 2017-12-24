@@ -5,7 +5,7 @@ Feature: F102 Access and Verify the vitals in the hmp system
 
 Background:
     Given a patient with pid "10108" has been synced through FHIR
-    Given a patient with pid "9E7A;100022" has been synced through FHIR
+    Given a patient with pid "SITE;100022" has been synced through FHIR
 
 @vitals_rest
 Scenario: Client can request vitals
@@ -15,47 +15,47 @@ Scenario: Client can request vitals
 	And the results contain data group
 	  | field    | value                     |
       | typeName | BLOOD PRESSURE            |
-      | uid      | urn:va:vital:9E7A:3:24038 |
+      | uid      | urn:va:vital:SITE:3:24038 |
       | result   | 80/30                     |
       | observed | 20131015095502            |
       | units    | mm[Hg]                    |
 	And the results contain data group
       | field    | value                     |
       | typeName | PULSE                     |
-      | uid      | urn:va:vital:9E7A:3:24023 |
+      | uid      | urn:va:vital:SITE:3:24023 |
       | result   | Pass                      |
       | observed | 201310060900              |
       | units    | /min                      |
 	And the results contain data group
       | field    | value                     |
       | typeName | RESPIRATION               |
-      | uid      | urn:va:vital:9E7A:3:24024 |
+      | uid      | urn:va:vital:SITE:3:24024 |
       | result   | Pass                      |
       | observed | 201310060900              |
       | units    | /min                      |
 	And the results contain data group
       | field    | value                     |
       | typeName | TEMPERATURE               |
-      | uid      | urn:va:vital:9E7A:3:24025 |
+      | uid      | urn:va:vital:SITE:3:24025 |
       | units    | F                         |
 	And the results contain data group
       | field    | value                     |
       | typeName | PULSE OXIMETRY            |
-      | uid      | urn:va:vital:9E7A:3:24026 |
+      | uid      | urn:va:vital:SITE:3:24026 |
       | units    | %                         |
 	And the results contain data group
       | field    | value                     |
       | typeName | HEIGHT                    |
-      | uid      | urn:va:vital:9E7A:3:24027 |
+      | uid      | urn:va:vital:SITE:3:24027 |
       | units    | in                        |
 	And the results contain data group
       | field    | value                     |
       | typeName | PAIN                      |
-      | uid      | urn:va:vital:9E7A:3:24028 |
+      | uid      | urn:va:vital:SITE:3:24028 |
 	And the results contain data group
       | field    | value                     |
       | typeName | WEIGHT                    |
-      | uid      | urn:va:vital:9E7A:3:24029 |
+      | uid      | urn:va:vital:SITE:3:24029 |
       | units    | lb                        |
 
 	

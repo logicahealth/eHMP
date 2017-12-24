@@ -1,5 +1,4 @@
 VPRJRUT ;SLC/KCM -- Utilities for HTTP communications
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 LOW(X) Q $TR(X,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")
  ;
@@ -59,10 +58,10 @@ VARSIZE(V) ; return the size of a variable
  I $D(V)>1 S I="" F  S I=$O(V(I)) Q:'I  S SIZE=SIZE+$L(V(I))
  Q SIZE
  ;
-PAGE(ROOT,START,LIMIT,SIZE,PREAMBLE) ; create the size and preamble for a page of data
- Q:'$D(ROOT)  Q:'$L(ROOT)
- N I,J,KEY,KINST,COUNT,TEMPLATE,PID
- K @ROOT@($J)
+PAGE(ROOT,START,LIMIT,SIZE,PREAMBLE,RETCNTS) ; create the size and preamble for a page of data
+ QUIT:'$D(ROOT)  QUIT:'$L(ROOT)
+ N I,J,KEY,KINST,COUNT,TEMPLATE,PID,HASDATA
+ K:$D(@ROOT@($J)) @ROOT@($J)
  S SIZE=0,COUNT=0,TEMPLATE=$G(@ROOT@("template"),0) ;,PID=$G(@ROOT@("pid"))
  I $L(TEMPLATE) D LOADSPEC^VPRJCT1(.TEMPLATE)
  F I=START:1:(START+LIMIT-1) Q:'$D(@ROOT@("data",I))  S COUNT=COUNT+1 D
@@ -71,11 +70,14 @@ PAGE(ROOT,START,LIMIT,SIZE,PREAMBLE) ; create the size and preamble for a page o
  . . . S PID=^(KINST)  ; null if non-pt data
  . . . D TMPLT(ROOT,.TEMPLATE,I,KEY,KINST,PID)
  . . . S J="" F  S J=$O(@ROOT@($J,I,J)) Q:'J  S SIZE=SIZE+$L(@ROOT@($J,I,J))
- S PREAMBLE=$S('$D(^VPRCONFIG("store",$G(HTTPREQ("store")),"global")):$$BLDHEAD(@ROOT@("total"),COUNT,START,LIMIT),1:"{""items"":[")
+ S HASDATA=$D(@ROOT@($J))
+ S RETCNTS=$G(RETCNTS,0)
+ S PREAMBLE=$S('$D(^VPRCONFIG("store",$G(HTTPREQ("store")),"global")):$$BLDHEAD(@ROOT@("total"),COUNT,START,LIMIT),1:$$GDSHEAD(HASDATA,RETCNTS,@ROOT@("total"),COUNT))
  ; for vpr or data stores add 3 for "]}}", add COUNT-1 for commas
- ; for other data stores add 2 for "]}", add COUNT-1 for commas
- S SIZE=$S('$D(^VPRCONFIG("store",$G(HTTPREQ("store")),"global")):SIZE+$L(PREAMBLE)+3+COUNT-$S('COUNT:0,1:1),1:SIZE+$L(PREAMBLE)+2+COUNT-$S('COUNT:0,1:1))
- Q
+ ; for other data stores add 1 for "}" if no data, 2 for "]}" if data present, add COUNT-1 for commas
+ S SIZE=$S('$D(^VPRCONFIG("store",$G(HTTPREQ("store")),"global")):SIZE+$L(PREAMBLE)+3+COUNT-$S('COUNT:0,1:1),1:SIZE+$L(PREAMBLE)+$S(HASDATA:2,1:1)+COUNT-$S('COUNT:0,1:1))
+ QUIT
+ ;
 TMPLT(ROOT,TEMPLATE,ITEM,KEY,KINST,PID) ; set template
  I HTTPREQ("store")="vpr"  G TLT4VPR
  I HTTPREQ("store")="data" G TLT4DATA
@@ -130,17 +132,28 @@ TLT4GDS ; Apply templates for GDS data stores to returned data
  ; Raw JSON
  S GLOBALJ="^"_$G(^VPRCONFIG("store",$G(HTTPREQ("store")),"global"))_"J"
  ;
- I $G(TEMPLATE)="uid" S @ROOT@($J,ITEM,1)="{""uid"":"""_KEY_"""}" Q
- I $E(TEMPLATE,1,4)="rel;" D RELTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) Q
- I $E(TEMPLATE,1,4)="rev;" D REVTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) Q
+ I $G(TEMPLATE)="uid" S @ROOT@($J,ITEM,1)="{""uid"":"""_KEY_"""}" QUIT
+ I $E(TEMPLATE,1,4)="rel;" D RELTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) QUIT
+ I $E(TEMPLATE,1,4)="rev;" D REVTLTD^VPRJCT1($NA(@ROOT@($J,ITEM)),KEY,.TEMPLATE) QUIT
+ ;
  ; query time template
  ; not supported
  ;I $D(TEMPLATE)>1 D APPLYTLT Q
- ; other template
- I $L(TEMPLATE),$D(@GLOBALJ@("TEMPLATE",KEY,TEMPLATE)) M @ROOT@($J,ITEM)=^(TEMPLATE) Q
- ; else full object
+ ;
+ ; If there is a template apply it
+ I $L(TEMPLATE),$D(@GLOBALJ@("TEMPLATE",KEY,TEMPLATE)) D  QUIT
+ . ; GDS data stores require a lock on each data item before it is added to the result
+ . L +@GLOBAL@(KEY):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q
+ . M @ROOT@($J,ITEM)=@GLOBALJ@("TEMPLATE",KEY,TEMPLATE)
+ . L -@GLOBAL@(KEY)
+ ;
+ ; Else return the full object
+ ; GDS data stores require a lock on each data item before it is added to the result
+ L +@GLOBAL@(KEY):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) QUIT
  M @ROOT@($J,ITEM)=@GLOBALJ@("JSON",KEY)
- Q
+ L -@GLOBAL@(KEY)
+ QUIT
+ ;
 APPLYTLT ; apply query time template
  ; called from TLT4VPR, TLT4XVPR, TLT4DATA
  ; expects TEMPLATE, KEY, KINST, PID, ROOT, ITEM
@@ -159,6 +172,15 @@ APPLYTLT ; apply query time template
  D APPLY^VPRJCT(.SPEC,.OBJECT,.JSON,KINST)
  M @ROOT@($J,ITEM)=JSON
  Q
+ ;
+GDSHEAD(HASDATA,RETCNTS,TOTAL,COUNT) ; Build object header for generic data stores
+ N X
+ S X="{"
+ I RETCNTS S X=X_"""totalItems"":"_TOTAL_",""currentItemCount"":"_COUNT
+ I RETCNTS,HASDATA S X=X_","
+ I HASDATA S X=X_"""items"":["
+ QUIT X
+ ;
 BLDHEAD(TOTAL,COUNT,START,LIMIT) ; Build the object header
  N X,UPDATED
  S UPDATED=$$CURRTIME
@@ -204,7 +226,7 @@ GMT() ; return HTTP date string (this is really using UTC instead of GMT)
  ;
 SYSID() ; return a likely unique system ID
  N X
- S X=$ZUTIL(110)_":"_$G(^VPRHTTP("port"),9080)
+ S X=$ZUTIL(110)_":"_$G(^VPRHTTP("port"),PORT)
  Q $ZHEX($ZCRC(X,6))
  ;
 DEC2HEX(NUM) ; return a decimal number as hex

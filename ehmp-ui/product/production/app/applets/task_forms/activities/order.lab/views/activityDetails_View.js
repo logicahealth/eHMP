@@ -26,7 +26,7 @@ define([
                         'uid': this.model.get('clinicalObject').data.uid
                     });
                 }
-                this.labDetailsModel = new ADK.UIResources.Writeback.Orders.Detail(params);
+                this.labDetailsModel = new ADK.UIResources.Fetch.Orders.Detail(params);
                 this.bindEntityEvents(this.labDetailsModel, this.labDetailsEvents);
             },
             collectionSuccess: function(){

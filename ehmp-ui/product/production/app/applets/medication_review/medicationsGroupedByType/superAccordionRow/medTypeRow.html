@@ -1,41 +1,49 @@
 <div class="panel-heading bottom-margin-xs" role="tab">
-    <button type="button" class="all-padding-xs btn btn-accordion" data-toggle="collapse" data-parent="#accordion-{{appletInstanceId}}" data-target="#{{medicationType}}-{{appletInstanceId}}" aria-expanded="true" title="Press enter to collapse {{medicationDisplayType}} accordion." data-type-row="{{medicationType}}">
+    <button type="button" class="all-padding-xs btn btn-accordion" data-toggle="collapse" data-target="#{{medicationType}}-{{appletInstanceId}}" aria-expanded="true" title="Press enter to collapse {{medicationDisplayType}} accordion." data-type-row="{{medicationType}}">
         <i class="left-padding-sm right-padding-sm" data-type-row="{{medicationType}}"></i>
         <span class="badge background-color-primary right-margin-xs" aria-hidden="true">{{medications.length}}</span>
         <span class="sr-only">{{medications.length}} results in</span>
-        <span class="text-uppercase">{{medicationDisplayType}}</span>
+        <span class="no-capatilize">{{medicationDisplayType}}</span>
     </button>
 </div>
 <div id="{{medicationType}}-{{appletInstanceId}}" class="panel-body all-padding-no collapse" role="tabpanel">
     <div role="grid">
         {{#if hasMeds}}
-            <div class="row header-bar left-margin-no right-margin-no" aria-label="{{medicationType}} Meds Grid" role="row">
+            <div class="row header-bar left-margin-no right-margin-no left-padding-sm" aria-label="{{medicationType}} Meds Grid" role="row">
                 <div class="col-xs-3 left-padding-no right-padding-no" role="gridcell">
                     <div class="col-xs-12" role="columnheader" aria-sort="none">
                         <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipMedicationName}}" sortType="alphabetical" sortKey="medicationName" role="button">Name
                             <i class="sort-caret fa pull-right"></i>
-                            <span class="sr-only">Press enter to sort.</span>
+                            <span class="sr-only">Sortable column</span>
                         </button>
                     </div>
                 </div>
                 <div class="col-xs-9">
                     <div role="gridcell">
-                        <div class="col-xs-4" role="columnheader" aria-sort="none">
+                        <div class="col-xs-3" role="columnheader" aria-sort="none">
                             <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipSig}}" sortType="alphabetical" sortKey="sig" role="button">Sig
                                 <i class="sort-caret fa pull-right"></i>
-                                <span class="sr-only">Press enter to sort.</span>
+                                <span class="sr-only">Sortable column</span>
                             </button>
                         </div>
                     </div>
                     <div role="gridcell">
-                        <div class="col-xs-3 text-center" role="columnheader" aria-sort="none">
-                            <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipFillable}}" sortType="custom" sortKey="status" role="button">{{fillableHeader}}
+                        <div class="col-xs-2 left-padding-lg" role="columnheader" aria-sort="none">
+                            <button type="button" class="selectable header btn btn-link left-padding-no" sortable="true" tooltip-data-key="{{tooltipFacility}}" sortType="alphabetical" sortKey="facilityMoniker" role="button">Facility
                                 <i class="sort-caret fa pull-right"></i>
-                                <span class="sr-only">Press enter to sort.</span>
+                                <span class="sr-only">Sortable column</span>
                             </button>
                         </div>
                     </div>
-                    <div class="col-xs-5 graph-header left-padding-sm"></div>
+                    <div role="gridcell">
+                        <div class="col-xs-3 text-center left-padding-lg" role="columnheader" aria-sort="none">
+                            <button type="button" class="selectable header btn btn-link" sortable="true" tooltip-data-key="{{tooltipFillable}}" sortType="custom" sortKey="status" role="button">{{fillableHeader}}
+                                <i class="sort-caret fa pull-right"></i>
+                                <span class="sr-only">Sortable column</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 graph-header left-padding-lg right-padding-no"></div>
                 </div>
             </div>
         {{/if}}

@@ -28,10 +28,10 @@ var originalVaConsultRecord = {
         'enteredBy': 'PATHOLOGY,ONE',
         'name': 'COMPLETE/UPDATE',
         'responsible': 'PATHOLOGY,ONE',
-        'resultUid': 'urn:va:document:9E7A:3:3112'
+        'resultUid': 'urn:va:document:SITE:3:3112'
     }],
     'providers': [{
-        'providerUid': 'urn:va:user:9E7A:111',
+        'providerUid': 'urn:va:user:SITE:111',
         'providerName': 'BHIE, USERONE'
     }],
     'modifiers': [{
@@ -48,23 +48,23 @@ var originalVaConsultRecord = {
     'lastUpdateTime': 20040401225801,
     'localId': 381,
     'orderName': 'AUDIOLOGY OUTPATIENT',
-    'orderUid': 'urn:va:order:9E7A:3:15479',
+    'orderUid': 'urn:va:order:SITE:3:15479',
     'patientClassCode': 'urn:va:patient-class:AMB',
     'patientClassName': 'Ambulatory',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'place': 'Consultant\'s choice',
     'providerName': 'PATHOLOGY,ONE',
-    'providerUid': 'urn:va:user:9E7A:11748',
+    'providerUid': 'urn:va:user:SITE:11748',
     'reason': '86 year old MALE referred for suspected hearing loss.',
     'results': [{
         'localTitle': 'AUDIOLOGY - HEARING LOSS CONSULT',
-        'uid': 'urn:va:document:9E7A:3:3112'
+        'uid': 'urn:va:document:SITE:3:3112'
     }],
     'service': 'AUDIOLOGY OUTPATIENT',
     'stampTime': 20040401225801,
     'statusName': 'COMPLETE',
     'typeName': 'AUDIOLOGY OUTPATIENT Cons',
-    'uid': 'urn:va:consult:9E7A:3:381',
+    'uid': 'urn:va:consult:SITE:3:381',
     'urgency': 'Routine'
 };
 
@@ -75,7 +75,7 @@ var originalVaConsultJob = {
 var originalDodConsultRecord = {
     'content': 'This is a test for clinical note.',
     'documentTypeName': 'Consultation Note (Provider) Document',
-    'dodComplexNoteUri': 'http://localhost:8082/documents?dir=444f443b30303030303030303033/1000000649&file=7e5050a76ad637c9bc268983cbd757a9861171f5.html',
+    'dodComplexNoteUri': 'http://localhost:8082/documents?dir=444f443b30303030303030303033/1000000649&file=7e5050a76ad637c9bc26PORTcbd757a9861171f5.html',
     'facilityCode': 'DOD',
     'facilityName': 'DOD',
     'localTitle': 'Consultation Note (Provider) Document',
@@ -194,10 +194,10 @@ describe('record-enrichment-consult-xformer.js', function() {
                     'enteredBy': 'PATHOLOGY,ONE',
                     'name': 'COMPLETE/UPDATE',
                     'responsible': 'PATHOLOGY,ONE',
-                    'resultUid': 'urn:va:document:9E7A:3:3112'
+                    'resultUid': 'urn:va:document:SITE:3:3112'
                 }],
                 'providers': [{
-                    'providerUid': 'urn:va:user:9E7A:111',
+                    'providerUid': 'urn:va:user:SITE:111',
                     'providerName': 'BHIE, USERONE'
                 }],
                 'modifiers': [{
@@ -214,23 +214,23 @@ describe('record-enrichment-consult-xformer.js', function() {
                 'lastUpdateTime': 20040401225801,
                 'localId': 381,
                 'orderName': 'AUDIOLOGY OUTPATIENT',
-                'orderUid': 'urn:va:order:9E7A:3:15479',
+                'orderUid': 'urn:va:order:SITE:3:15479',
                 'patientClassCode': 'urn:va:patient-class:AMB',
                 'patientClassName': 'Ambulatory',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'place': 'Consultant\'s choice',
                 // 'providerName': 'PATHOLOGY,ONE',             // force to get these from the provider array
-                // 'providerUid': 'urn:va:user:9E7A:11748',
+                // 'providerUid': 'urn:va:user:SITE:11748',
                 'reason': '86 year old MALE referred for suspected hearing loss.',
                 'results': [{
                     'localTitle': 'AUDIOLOGY - HEARING LOSS CONSULT',
-                    'uid': 'urn:va:document:9E7A:3:3112'
+                    'uid': 'urn:va:document:SITE:3:3112'
                 }],
                 'service': 'AUDIOLOGY OUTPATIENT',
                 'stampTime': 20040401225801,
                 'statusName': 'COMPLETE',
                 //'typeName': 'AUDIOLOGY OUTPATIENT Cons',      // Will cause summary to be empty
-                'uid': 'urn:va:consult:9E7A:3:381',
+                'uid': 'urn:va:consult:SITE:3:381',
                 'urgency': 'Routine'
             };
 
@@ -301,10 +301,10 @@ describe('record-enrichment-consult-xformer.js', function() {
                     'enteredBy': 'PATHOLOGY,ONE',
                     'name': 'COMPLETE/UPDATE',
                     'responsible': 'PATHOLOGY,ONE',
-                    'resultUid': 'urn:va:document:9E7A:3:3112'
+                    'resultUid': 'urn:va:document:SITE:3:3112'
                 }],
                 'providers': [{
-                    'providerUid': 'urn:va:user:9E7A:111',
+                    'providerUid': 'urn:va:user:SITE:111',
                     'providerName': 'BHIE, USERONE'
                 }],
                 'modifiers': [{
@@ -321,23 +321,23 @@ describe('record-enrichment-consult-xformer.js', function() {
                 'lastUpdateTime': 20040401225801,
                 'localId': 381,
                 'orderName': 'AUDIOLOGY OUTPATIENT',
-                'orderUid': 'urn:va:order:9E7A:3:15479',
+                'orderUid': 'urn:va:order:SITE:3:15479',
                 'patientClassCode': 'urn:va:patient-class:AMB',
                 'patientClassName': 'Ambulatory',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'place': 'Consultant\'s choice',
                 // 'providerName': 'PATHOLOGY,ONE',             // force to get these from the provider array
-                // 'providerUid': 'urn:va:user:9E7A:11748',
+                // 'providerUid': 'urn:va:user:SITE:11748',
                 'reason': '86 year old MALE referred for suspected hearing loss.',
                 'results': [{
                     'localTitle': 'AUDIOLOGY - HEARING LOSS CONSULT',
-                    'uid': 'urn:va:document:9E7A:3:3112'
+                    'uid': 'urn:va:document:SITE:3:3112'
                 }],
                 'service': 'AUDIOLOGY OUTPATIENT',
                 'stampTime': 20040401225801,
                 'statusName': 'COMPLETE',
                 //'typeName': 'AUDIOLOGY OUTPATIENT Cons',      // Will cause summary to be empty
-                'uid': 'urn:va:consult:9E7A:3:381',
+                'uid': 'urn:va:consult:SITE:3:381',
                 'urgency': 'Routine'
             };
 

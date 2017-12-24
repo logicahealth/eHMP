@@ -23,14 +23,14 @@
 # # Info here ---> https://medsphere.org/docs/DOC-1003
 # 
 # 
-  # # broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'REDACTED', 'REDACTED')
+  # # broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'USER  ', 'PW      ')
   # # broker.connect
 #   
   # # p "The RPC Broker Connection status is #{broker.isConnected}"
 # 
   # # broker.setContext('OR CPRS GUI CHART')
 #   
-  # # patient_ien = "9E7A;3"
+  # # patient_ien = "SITE;3"
 #   
 #   
 # # def patients_list(broker)

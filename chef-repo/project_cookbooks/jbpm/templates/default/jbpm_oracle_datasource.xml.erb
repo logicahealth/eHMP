@@ -7,13 +7,15 @@
                         <prefill>true</prefill>
                     </pool>
                     <security>
-                            <user-name>jbpm</user-name>
-                            <password><%= @jbpm_schema_password %></password>
+                            <user-name><%= @jbpm_username %></user-name>
+                            <password><%= @jbpm_password %></password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>select 1 from dual</check-valid-connection-sql>
                         <validate-on-match>false</validate-on-match>
                         <background-validation>true</background-validation>
+                        <background-validation-millis><%= @background_validation_millis %></background-validation-millis>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
                     </validation>
                 </datasource>
                 <datasource jta="true" jndi-name="java:jboss/datasources/<%= node['jbpm']['configure']['activitydb_datasource'] %>" pool-name="<%= node['jbpm']['configure']['activitydb_datasource'] %>_Pool" enabled="true" use-java-context="true" use-ccm="true">
@@ -25,12 +27,14 @@
                         <prefill>true</prefill>
                     </pool>
                     <security>
-                            <user-name>activitydb</user-name>
-                            <password><%= @activitydb_schema_password %></password>
+                            <user-name><%= @activitydb_username %></user-name>
+                            <password><%= @activitydb_password %></password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>select 1 from dual</check-valid-connection-sql>
                         <validate-on-match>false</validate-on-match>
                         <background-validation>true</background-validation>
+                        <background-validation-millis><%= @background_validation_millis %></background-validation-millis>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
                     </validation>
                 </datasource>

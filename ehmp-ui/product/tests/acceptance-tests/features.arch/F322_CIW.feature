@@ -8,8 +8,8 @@ Background:
     When user attempts login
         | field      | value       	|
         | Facility   | PANORAMA    	|
-        | AccessCode | REDACTED   	|
-        | VerifyCode | REDACTED 	|
+        | AccessCode | USER       	|
+        | VerifyCode | PW       	|
         | SignIn     |          	|
     Then the patient search screen is displayed  
   	And user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"

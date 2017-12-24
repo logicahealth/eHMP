@@ -15,7 +15,7 @@
 # require "httparty"
 # ppp
 # 
-# broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'REDACTED', 'REDACTED', false)
+# broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'USER  ', 'PW      ', false)
 # 
 # broker.connect
 # p "The RPC Broker Connection status is #{broker.isConnected}"

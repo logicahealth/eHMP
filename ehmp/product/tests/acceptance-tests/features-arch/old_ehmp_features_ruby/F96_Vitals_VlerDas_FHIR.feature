@@ -39,7 +39,7 @@ Scenario: Client can request vitals in VPR format for a patient with data in VLE
 	| content.identifier.use				| official								|
 	| content.subject.reference				| Patient/11016V630869				    		|
 	And the FHIR results contain "vler das vital results"
-	| content.identifier.value				| urn:va:vital:9E7A:11016V630869:11016-3	        |
+	| content.identifier.value				| urn:va:vital:SITE:11016V630869:11016-3	        |
 	| content.referenceRange.low.units		| mm[Hg]								|
 	| content.referenceRange.high.units		| mm[Hg]								|
 	And the FHIR results contain "vler das vital results"

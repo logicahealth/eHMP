@@ -18,9 +18,11 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 // });
 
 describe('solr-allergy-xform.js', function() {
-    describe('Transformer', function() {
-        it('Happy Path', function() {
-            var vprRecord = {
+    describe('Transformer', function () {
+        var vprRecord;
+
+        beforeEach(function () {
+            vprRecord = {
                 'codes': [
                     {
                         'code': 'C0008299',
@@ -33,8 +35,8 @@ describe('solr-allergy-xform.js', function() {
                     'name': 'CHOCOLATE'
                 }],
                 'entered': '200712171515',
-                'enteredByUid': 'urn:va:user:9E7A:100',
-                'verifiedByUid': 'urn:va:user:9E7A:101',
+                'enteredByUid': 'urn:va:user:SITE:100',
+                'verifiedByUid': 'urn:va:user:SITE:101',
                 'facilityCode': '500',
                 'facilityName': 'CAMP MASTER',
                 'historical': true,
@@ -43,7 +45,7 @@ describe('solr-allergy-xform.js', function() {
                 'localId': '876',
                 'mechanism': 'ALLERGY',
                 'originatorName': 'PROVIDER,ONE',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'products': [
                     {
                         'name': 'CHOCOLATE',
@@ -62,7 +64,7 @@ describe('solr-allergy-xform.js', function() {
                 'stampTime': '20071217151553',
                 'summary': 'CHOCOLATE',
                 'typeName': 'DRUG, FOOD',
-                'uid': 'urn:va:allergy:9E7A:8:876',
+                'uid': 'urn:va:allergy:SITE:8:876',
                 'verified': '20071217151553',
                 'verifierName': '<auto-verified>',
                 'comments': [{
@@ -76,6 +78,9 @@ describe('solr-allergy-xform.js', function() {
                 'severityName': 'SEVERE'
 
             };
+        });
+
+        it('Happy Path', function() {
             var solrRecord = xformer(vprRecord, log);
 
             // Verify Common Fields
@@ -109,6 +114,13 @@ describe('solr-allergy-xform.js', function() {
             expect(solrRecord.drug_class).toEqual([vprRecord.drugClasses[0].name]);
             expect(solrRecord.comment).toEqual([vprRecord.comments[0].comment]);
             expect(solrRecord.observation).toEqual([vprRecord.observations[0].severity]);
+            expect(solrRecord.removed).toBeUndefined();
+        });
+
+        it('Removed', function () {
+            vprRecord.removed = true;
+            var solrRecord = xformer(vprRecord, log);
+            expect(solrRecord.removed).toBe('true');
         });
     });
 });

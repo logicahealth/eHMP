@@ -37,9 +37,17 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 		this.runtimeManager = runtimeManager;
 	}
 
-// -----------------------------------------------------------------------------
+
+	// -----------------------------------------------------------------------------
 // --------------------------Unused Overrides-----------------------------------
 // -----------------------------------------------------------------------------
+	public RuntimeManager getRuntimeManager() {
+		return runtimeManager;
+	}
+	public void setRuntimeManager(RuntimeManager runtimeManager) {
+		this.runtimeManager = runtimeManager;
+	}
+
 	@Override
 	public void beforeTaskActivatedEvent(TaskEvent event) {
 	}
@@ -214,15 +222,16 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 				}
 			}
 			WorkflowProcessInstanceImpl processInstance = TaskInstanceImplUtil.getWorkflowProcessInstanceImpl(runtimeManager, event.getTask().getTaskData().getProcessInstanceId());
-			if (processInstance == null)
+			if (processInstance == null) {
 				throw new EventListenerException("Invalid state, processInstance cannot be null");
+			}
 			processInstance.signalEvent(SIGNAL_TASKCREATED, null); //send a signal to notify the process that the task has been created.
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(),e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomTaskEventListener.afterTaskAddedEvent: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomTaskEventListener.afterTaskAddedEvent: An unexpected condition has happened: %s", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -268,11 +277,11 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 
 			persistenceContext.merge(taskInstanceImpl);
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(),e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: %s", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}

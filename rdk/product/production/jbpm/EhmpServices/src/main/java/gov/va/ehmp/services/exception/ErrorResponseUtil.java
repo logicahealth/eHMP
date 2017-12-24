@@ -1,5 +1,6 @@
 package gov.va.ehmp.services.exception;
 
+import org.jboss.logging.Logger;
 import org.springframework.http.HttpStatus;
 
 import com.google.gson.Gson;
@@ -8,6 +9,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ErrorResponseUtil {
+	
+	private static final Logger LOGGER = Logger.getLogger(ErrorResponseUtil.class);
+
 	/**
 	 * Takes any message and creates a json string containing error and status as the two fields.
 	 * 
@@ -15,7 +19,8 @@ public class ErrorResponseUtil {
 	 * @param message the error message
 	 * @param serverResponse the response that came from the server - can be null
 	 */
-	public static String create(HttpStatus httpStatus, String message, String serverResponse) {
+	public static String createJsonErrorResponse(HttpStatus httpStatus, String message, String serverResponse) {
+				
 		JsonObject outputObj = new JsonObject();
 		
 		//status
@@ -46,6 +51,7 @@ public class ErrorResponseUtil {
 				outputObj.add("serverResponse", obj);
 			}
 			catch(Exception e) {
+				LOGGER.error(e.getMessage(), e);
 				outputObj.addProperty("serverResponse", serverResponse);
 			}
 		}

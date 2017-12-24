@@ -59,36 +59,4 @@ public class ASUDocumentDetails {
     public void setUserClassUids(ArrayList<String> userClassUids) {
         this.userClassUids = userClassUids;
     }
-
-
-    public String toString()
-    {
-        StringBuilder sb=new StringBuilder();
-        sb.append(" \n\r docDefUid: ").append(getDocDefUid());
-        sb.append(" \n\r docStatus: ").append(getDocStatus());
-
-        if(NullChecker.isNotNullish(getActionNames()))
-        {
-            sb.append(" \n\r actionNamesList: ").append(getActionNames().toString());
-        }
-        if(NullChecker.isNotNullish(getUserClassUids()))
-        {
-            sb.append(" \n\r userClassUids: ").append(getUserClassUids().toString());
-        }
-        else
-        {
-            sb.append(" \n\r userClassUids: null ");
-        }
-
-        if(NullChecker.isNotNullish(getRoleNames()))
-        {
-            sb.append(" \n\r roleNames: ").append(getRoleNames().toString());
-        }
-        else
-        {
-            sb.append(" \n\r roleNames: null ");
-        }
-
-        return sb.toString();
-    }
 }

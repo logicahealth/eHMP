@@ -1,0 +1,14 @@
+"ehmp-dev-build-%branch%" {
+	template = 'templates/gradle-dev-build.tpl'
+	description = "ehmp dev build for the branch %branch%"
+	
+   gitUrl = 'https://code.vistacore.us/scm/app/ehmp.git'
+	gitBranch = '%branch%'
+	
+  rootDirectory = 'product'
+	gradleTasks = 'build generateVersionPropertiesFile test upload'
+
+  rootDirectoryInfrastructure = 'infrastructure'
+	gradleTasksInfrastructure = 'packageEHMPInfrastructure upload'
+
+}

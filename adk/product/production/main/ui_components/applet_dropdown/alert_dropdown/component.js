@@ -77,8 +77,7 @@ define([
             }
         },
         attributes: {
-            'role': 'menu',
-            'aria-live': 'assertive'
+            'role': 'menu'
         },
         template: Handlebars.compile([
             '{{#if dropdownTitle}}<div class="dropdown-header">',
@@ -167,8 +166,6 @@ define([
                 });
             }
             _.extend(this.options, {
-//                getSalience: this.getSalience || _.noop,
-//                getAlertCount: this.getAlertCount || _.noop,
                 collection: this.getOption('collection'),
                 RowContentTemplate: this.getOption('RowContentTemplate')
             });

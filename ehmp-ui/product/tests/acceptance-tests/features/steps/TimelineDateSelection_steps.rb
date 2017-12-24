@@ -88,14 +88,6 @@ Then(/^the from tooltip contains text "(.*?)"$/) do |arg1|
   expect(driver.find_element(:css, "#filterFromDateGlobal").attribute("data-original-title")).to include(arg1)
 end
 
-Then(/^the to tooltip contains text "(.*?)"$/) do |arg1|
-  con = GTDate.instance
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) 
-  wait.until { con.get_element("ToTooltip") }
-  expect(driver.find_element(:css, "#filterToDateGlobal").attribute("data-original-title")).to include(arg1)
-end
-
 Then(/^the Date Filter displays "(.*?)" months in the past and "(.*?)" months in the future$/) do |months_past, months_future|
   con = GTDate.instance
   date_format_template = "%m/%d/%Y"

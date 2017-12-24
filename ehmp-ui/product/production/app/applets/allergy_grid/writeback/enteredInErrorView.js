@@ -70,7 +70,7 @@ define([
             });
 
             var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
+                template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
                 events: {
                     'click .btn-primary': function() {
                         ADK.Checks.unregister('allergy-eie-form-id');
@@ -103,8 +103,7 @@ define([
                             id: 'form-cancel-btn',
                             extraClasses: ["btn-primary", "btn-sm", "pull-left"],
                             type: 'button',
-                            label: 'Cancel',
-                            title: 'Press enter to cancel'
+                            label: 'Cancel'
                         }, {
                             control: 'button',
                             disabled: false,
@@ -112,7 +111,7 @@ define([
                             label: 'Enter in Error',
                             name: 'submit-entered-in-error',
                             id: 'submit-entered-in-error',
-                            title: 'Press enter to submit entered in error form'
+                            title: 'Submit entered in error form'
                         }]
                     }]
                 }]
@@ -124,7 +123,7 @@ define([
             });
 
             var FooterView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
+                template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm""}}{{ui-button "Yes" classes="btn-primary btn-sm"}}'),
                 events: {
                     'click .btn-primary': function() {
                         ADK.UI.Alert.hide();

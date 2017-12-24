@@ -96,7 +96,7 @@ def build_data(title, parameter_hash, visit)
   # can be changed
   urgency = variable_or_default(parameter_hash['urgency'], ADD_ACTIVITY_URGENCY_CODE)
   assigned_to = parameter_hash['full_assignedTo']
-  tomorrow = Date.today.strftime("%Y%m%d040000")
+  earliest_date = variable_or_default(parameter_hash['earliestDate'], Date.today.strftime("%Y%m%d040000"))
   nextmonth = Date.today.next_month.strftime("%Y%m%d035959")
   timestamp = Time.now.strftime "%Y-%m-%dT%H:%M:%S.%LZ" # 2016-08-04T18:58:58.624Z
   facility = variable_or_default(parameter_hash['facility'], ADD_ACTIVITY_FACILITY_CODE)
@@ -127,7 +127,7 @@ def build_data(title, parameter_hash, visit)
   requests['objectType'] = 'request'
   requests['taskinstanceId'] = ''
   requests['urgency'] = variable_or_default(parameter_hash['urgency text'], ADD_ACTIVITY_URGENCY_TEXT)
-  requests['earliestDate'] = tomorrow
+  requests['earliestDate'] = earliest_date
   requests['latestDate'] = nextmonth
   requests['title'] = title
   

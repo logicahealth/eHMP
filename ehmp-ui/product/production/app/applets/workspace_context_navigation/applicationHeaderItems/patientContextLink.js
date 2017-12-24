@@ -16,14 +16,14 @@ define([
 
     var CurrentPatientLabelView = Backbone.Marionette.ItemView.extend({
         tagName: 'li',
-        template: Handlebars.compile('<div class="current-patient-label--divider"></div><p class="current-patient-label arrow-right-after background-color-pure-white color-primary">Current Patient: </p>'),
+        template: Handlebars.compile('<div class="current-patient-label--divider"></div><p class="current-patient-label arrow-right-after background-color-pure-white color-primary right-padding-xs">Current Patient: </p>'),
     });
 
     var PatientContextLinkView = Backbone.Marionette.ItemView.extend({
         tagName: 'li',
         template: Handlebars.compile([
             '{{#if shouldShow}}',
-            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the patient centric workspaces for {{toTitleCase fullName}}." {{/if}}id="current-patient-nav-header-tab" class="context-navigation-link inline-block-display{{#if isActive}} active{{else}}  right-padding-no{{/if}}">',
+            '{{#if isActive}}<p {{else}}<a href="#" title="Navigate to the patient centric workspaces for {{toTitleCase fullName}}." {{/if}}id="current-patient-nav-header-tab" class="context-navigation-link inline-block-display{{#if isActive}} active{{else}}  right-padding-no{{/if}}">',
             '<span class="nav-ccow {{ccowBg}}"><strong>{{toTitleCase fullName}}</strong> ({{last5}})</span>',
             '{{#unless isActive}}</a>{{/unless}}',
             '<button type="button" id="ccowHeaderBarBtn" class="btn btn-icon inline-block-display {{ccowClass}} {{vaultAvailable}} {{ccowIconBg}} font-size-15" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-container="body">',
@@ -148,6 +148,9 @@ define([
                 var currentpatient = ADK.PatientRecordService.getCurrentPatient();
                 if (currentpatient.has('pid')) {
                     ADK.PatientRecordService.setCurrentPatient(currentpatient, {
+                        confirmationOptions: {
+                            reconfirm: true
+                        },
                         workspaceId: patientDefaultWorkspace
                     });
                 } else {
@@ -166,7 +169,7 @@ define([
         group: "left",
         key: "currentPatientLabel",
         view: CurrentPatientLabelView,
-        orderIndex: 2,
+        orderIndex: 10,
         shouldShow: function() {
             return (ADK.UserService.hasPermissions('read-patient-record'));
         }
@@ -177,7 +180,7 @@ define([
         group: "left",
         key: "patientContextLink",
         view: PatientContextLinkView,
-        orderIndex: 3,
+        orderIndex: 15,
         shouldShow: function() {
             return (ADK.UserService.hasPermissions('read-patient-record'));
         }

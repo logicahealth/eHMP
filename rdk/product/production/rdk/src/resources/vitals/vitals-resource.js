@@ -334,7 +334,7 @@ function getClosestVital(req, res) {
             res.rdkSend((response));
             return;
         } else {
-            res.status(rdk.httpstatus.bad_gateway).rdkSend('RPC error: ' + error);
+            res.status(rdk.httpstatus.internal_server_error).rdkSend('RPC error: ' + error);
             return;
         }
     });
@@ -382,7 +382,7 @@ function getAllVitals(req, res) {
         if (!error) {
             RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', [''], function(err, msg) {
                 if (err) {
-                    res.status(rdk.httpstatus.bad_gateway).rdkSend('RPC error: ' + error);
+                    res.status(rdk.httpstatus.internal_server_error).rdkSend('RPC error: ' + error);
                     return;
                 }
                 var qualifiersArray = formatQualifierInformationOutput(msg);
@@ -392,7 +392,7 @@ function getAllVitals(req, res) {
             });
         }
 
-        res.status(rdk.httpstatus.bad_gateway).rdkSend('RPC error: ' + error);
+        res.status(rdk.httpstatus.internal_server_error).rdkSend('RPC error: ' + error);
     });
 }
 

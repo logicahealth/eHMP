@@ -8,7 +8,7 @@ var _ = require('lodash');
  * @param {Object} res - the general express response
  * @return {Array} - a list of Vista sites
  */
-function listResource(req, res) {
+function listResource(req) {
     var vistaSites = _.clone(req.app.config.vistaSites || {});
     var result = {};
     result.data = {};
@@ -24,7 +24,12 @@ function listResource(req, res) {
         });
     });
     result.data.items = _.sortBy(result.data.items, 'name');
-    return res.status(200).rdkSend(result);
+    return result;
 }
 
-module.exports.get = listResource;
+function get(req, res){
+    return res.status(200).rdkSend(listResource(req));
+}
+
+module.exports.list = listResource;
+module.exports.get = get;

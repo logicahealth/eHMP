@@ -6,10 +6,10 @@ define([
     'jquery',
     'app/applets/lab_results_grid/appletHelpers',
     'app/applets/lab_results_grid/details/detailsView',
-    'hbs!app/applets/lab_results_grid/templates/tooltip',
     'app/applets/orders/tray/labs/trayUtils',
-    'app/applets/lab_results_grid/gridView'
-], function (Backbone, Marionette, _, $, AppletHelper, DetailsView, tooltip, LabOrderTrayUtils, GridView) {
+    'app/applets/lab_results_grid/gridView',
+    'hbs!app/applets/lab_results_grid/templates/tooltip'
+], function(Backbone, Marionette, _, $, AppletHelper, DetailsView, LabOrderTrayUtils, GridView, tooltip) {
     'use strict';
 
     // NOTE: This file was split out from  app/applets/lab_results_grid/applet.js during f1175 refactoring.
@@ -18,9 +18,35 @@ define([
     var AppletID = 'lab_results_grid';
 
     var GistView = ADK.Applets.BaseGridApplet.extend({
+        tileOptions: {
+            quickLooks: {
+                enabled: true
+            },
+            quickMenu: function() {
+                return {
+                    buttons: [{
+                        type: 'tilesortbutton',
+                        shouldShow: function() {
+                            return _.get(this, 'appletOptions.appletConfig.viewType') === 'gist' &&
+                                !ADK.Messaging.request('get:current:screen').config.predefined;
+                        }
+                    }, {
+                        type: 'detailsviewbutton'
+                    }, {
+                        type: 'infobutton'
+                    }, {
+                        type: 'notesobjectbutton',
+                        shouldShow: function() {
+                            return ADK.UserService.hasPermissions('add-lab-order') &&
+                                ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
+                        }
+                    }]
+                };
+            }
+        },
         dataGridOptions: {
             formattedFilterFields: {
-                'observed': function (model, key) {
+                'observed': function(model, key) {
                     var val = model.get(key);
                     val = val.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5');
                     return val;
@@ -85,15 +111,13 @@ define([
                     title: 'Lab Test',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'shortName',
-                    hoverTip: 'labresults_description'
+                    key: 'shortName'
                 },
                 header2: {
                     title: 'Result',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'result',
-                    hoverTip: 'labresults_results'
+                    key: 'result'
                 },
                 header3: {
                     title: '',
@@ -122,20 +146,19 @@ define([
             addLab: ADK.Messaging.getChannel('addALabOrdersRequestChannel'),
             labResults: ADK.Messaging.getChannel('lab_results')
         },
-        initialize: function (options) {
+
+        initialize: function(options) {
             var addPermission = 'add-lab-order';
-            var onClickRow = _.partial(this.onClickRow, this.isFullscreen);
             var filterFields = _.get(this.gistConfiguration, 'filterFields', []);
 
             filterFields.push(this.getLoincValues);
             this.collection = new ADK.UIResources.Fetch.Labs.TrendCollection();
 
-            _.set(this.dataGridOptions, 'onClickRow', onClickRow);
             _.set(this.dataGridOptions, 'appletConfiguration', this.gistConfiguration);
             _.set(this.dataGridOptions, 'filterFields', filterFields);
             _.set(this.dataGridOptions, 'collection', this.collection);
 
-            if (ADK.UserService.hasPermissions(addPermission) && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermissions(addPermission) && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 _.set(this.dataGridOptions, 'onClickAdd', LabOrderTrayUtils.launchLabForm);
             }
 
@@ -153,22 +176,25 @@ define([
 
             GistView.__super__.initialize.apply(this, arguments);
         },
+
         startListeners: function startListeners() {
             var self = this;
             this.listenTo(this.channels.global, 'globalDate:selected', this.onGlobalDate);
             this.listenTo(this.channels.applet, 'detailView', this.expandOrOpenDetails);
             this.listenTo(this.channels.applet, 'addItem', this.addItem);
-            this.channels.labResults.reply('gridCollection', function () {
+            this.channels.labResults.reply('gridCollection', function() {
                 return self.gridCollection;
             });
         },
+
         addItem: function addItem(event) {
             this.channels.addLab.trigger('addLabOrdersModal', event);
         },
+
         onGlobalDate: function onGlobalDate() {
             var selectedId = ADK.SessionStorage.getModel('globalDate').get('selectedId');
             if (selectedId !== 'allRangeGlobal') {
-                this.collection.fetchOptions.criteria.filter = this.buildJdsDateFilter('observed', options);
+                this.collection.fetchOptions.criteria.filter = this.buildJdsDateFilter('observed');
             } else {
                 delete this.collection.fetchOptions.criteria.filter;
             }
@@ -177,13 +203,15 @@ define([
             this.createDataGridView();
             this.collection.fetchCollection(this.dataGridOptions.collection.fetchOptions);
         },
+
         setupSummaryView: function setupSummaryView() {
             this.dataGridOptions.SummaryView = ADK.Views.LabresultsGist.getView();
             var originalChildView = this.dataGridOptions.SummaryView.prototype.childView;
             this.dataGridOptions.SummaryView = this.dataGridOptions.SummaryView.extend({
                 childView: originalChildView.extend({
-                    serializeModel: function (model) {
-                        var data = model.toJSON();
+                    serializeData: function() {
+                        var data = AppletHelper.prepareNonPanelForRender(this.model);
+                        AppletHelper.parseLabResponse(data);
                         var limit = 4;
                         if (data.oldValues) {
                             data.limitedoldValues = data.oldValues.splice(0, limit - 1);
@@ -191,6 +219,15 @@ define([
                                 data.moreresultsCount = data.oldValues.length - data.limitedoldValues.length;
                             }
                         }
+                        data.limitedoldValues = _.map(data.limitedoldValues, function(item) {
+                            var _data = AppletHelper.parseLabResponse(item);
+                            if (_data.observed) {
+                                _data.observedFormatted = AppletHelper.getObservedFormatted(_data.observed);
+                            }
+                            ADK.Enrichment.addFacilityMoniker(_data);
+                            return AppletHelper.prepareNonPanelForRender(new Backbone.Model(_data));
+                        });
+
                         data.tooltip = tooltip(data);
                         return data;
                     }
@@ -203,12 +240,14 @@ define([
             this.dataGridOptions.SummaryViewOptions = {
                 gistHeaders: this.gistConfiguration.gistHeaders,
                 enableTileSorting: true,
-                buttonTypes: buttonTypes
+                buttonTypes: buttonTypes,
+                quickLooks: {
+                    enabled: true
+                }
             };
         },
 
-        onClickRow: GridView.prototype.onClickRow,
-        expandOrOpenDetails: function (channelObj) {
+        expandOrOpenDetails: function(channelObj) {
             var model = channelObj.model;
             var target = channelObj.$el;
 
@@ -225,19 +264,22 @@ define([
                 this.onClickRow(false, model, event, view);
             }
         },
-        onBeforeDestroy: function () {
+
+        onBeforeDestroy: function() {
             this.channels.labResults.stopReplying('gridCollection');
         },
-        getLoincValues: function (json) {
+
+        getLoincValues: function(json) {
             if (json.codes === undefined) return '';
             var codesWithLoincString = '';
-            _.each(json.codes, function (item) {
+            _.each(json.codes, function(item) {
                 if (item.system === 'http://loinc.org') {
                     codesWithLoincString += ' ' + item.code;
                 }
             });
             return codesWithLoincString;
         }
+
     });
 
     return GistView;

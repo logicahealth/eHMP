@@ -7,26 +7,26 @@ Feature: F337 - CCB Enhancements
 Scenario: Client can request vital results in VPR format
 	Given a patient with "vitals" in multiple VistAs
     #And a patient with pid "10107V395912" has been synced through the RDK API
-	When the client requests vitals data for the patient "9E7A;253"
+	When the client requests vitals data for the patient "SITE;253"
 	Then a successful response is returned
 	#Pulse oximetry
 	And the results contain
 	| name                | value                       |
-	| data.items.uid      | urn:va:vital:C877:253:22975 |
+	| data.items.uid      | urn:va:vital:SITE:253:22975 |
 	| data.items.typeName | PULSE OXIMETRY              |
 	| data.items.low      | 95                          |
 	| data.items.high     | 100                         |
 	#blood pressure
 	And the results contain
 	| name                | value                       |
-	| data.items.uid      | urn:va:vital:9E7A:253:22203 |
+	| data.items.uid      | urn:va:vital:SITE:253:22203 |
 	| data.items.typeName | BLOOD PRESSURE              |
 	| data.items.low      | 100/60                      |
 	| data.items.high     | 210/110                     |
 	#pain
 	And the results contain
 	| name                | value                       |
-	| data.items.uid      | urn:va:vital:9E7A:253:22210 |
+	| data.items.uid      | urn:va:vital:SITE:253:22210 |
 	| data.items.typeName | PAIN                        |
 	| data.items.low      | 0                           |
 	| data.items.high     | 2                           |
@@ -39,14 +39,14 @@ Scenario: Client can request vital results in VPR format
 	#pulse
 	And the results contain
 	| name                | value                       |
-	| data.items.uid      | urn:va:vital:9E7A:253:23559 |
+	| data.items.uid      | urn:va:vital:SITE:253:23559 |
 	| data.items.typeName | PULSE                       |
 	| data.items.low      | 60                          |
 	| data.items.high     | 120                         |
 	#respiration
 	And the results contain
 	| name                | value                       |
-	| data.items.uid      | urn:va:vital:9E7A:253:22205 |
+	| data.items.uid      | urn:va:vital:SITE:253:22205 |
 	| data.items.typeName | RESPIRATION                 |
 	| data.items.low      | 8                           |
 	| data.items.high     | 30                          |

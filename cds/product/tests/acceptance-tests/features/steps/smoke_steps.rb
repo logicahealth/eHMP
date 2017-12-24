@@ -58,7 +58,7 @@ Then(/^successful message returned from MongoDB server with "(.*?)"$/) do |text|
 end
 
 When(/^sending a get request for a advice$/) do
-  path = "http://#{ENV['RDK_IP']}:#{ENV['RDK_PORT']}/resource/cds/advice/list?use=providerInteractiveAdvice&pid=9E7A;140"
+  path = "http://#{ENV['RDK_IP']}:#{ENV['RDK_PORT']}/resource/cds/advice/list?use=providerInteractiveAdvice&pid=SITE;140"
   @response = HTTPartyWithBasicAuth.get_json_with_authorization(path)
   puts @response
 end
@@ -74,6 +74,6 @@ Then(/^Open CDS server is running with (?:"(.*?)")?$/) do |text|
 end
 
 When(/^sending a get request to FHIR server$/) do
-  path = "http://#{ENV['RDK_IP']}:#{ENV['RDK_PORT']}/resource/fhir/patient/9E7A;253/observation"
+  path = "http://#{ENV['RDK_IP']}:#{ENV['RDK_PORT']}/resource/fhir/patient/SITE;253/observation"
   @response = HTTPartyWithBasicAuth.get_json_with_authorization(path)
 end

@@ -66,7 +66,7 @@ define([
             _.defaults(options, {});
             var loadingModal = new ADK.UI.Modal(getLoadingModalOptions(model));
             var showOptions = {
-                triggerElement: $(document.activeElement),
+                triggerElement: options.triggerElement,
                 hideNavigation: _.has(options, 'hideNavigation') ? options.hideNavigation : true
             };
             loadingModal.show(showOptions);
@@ -82,7 +82,7 @@ define([
                 }
             } else {
 
-                var detailModel = new ADK.UIResources.Writeback.Orders.Detail(getDetailModelOptions(model, options));
+                var detailModel = new ADK.UIResources.Fetch.Orders.Detail(getDetailModelOptions(model, options));
 
                 loadingModal.listenTo(detailModel, 'read:success', function(model) {
                     var orderDetailModal = new ADK.UI.Modal(getOrderDetailModalOptions(model, showOptions));

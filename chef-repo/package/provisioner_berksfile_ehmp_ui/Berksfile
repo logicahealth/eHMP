@@ -1,0 +1,5 @@
+source :chef_server
+
+solver :ruby, :required
+
+cookbook 'ehmp-ui_provision', "=#{ENV['EHMP_UI_PROVISION']}"

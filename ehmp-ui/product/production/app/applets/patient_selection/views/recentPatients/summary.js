@@ -26,7 +26,7 @@ define([
         onSync: function(collection, response) {
             if (collection.isEmpty()) {
                 this.$('#noRecentPatients').removeClass('hidden');
-                this.$('.loading').append('<span class="sr-only">'+ response.message || 'No results found.' + '</span>');
+                this.$('.loading').append('<span class="sr-only">' + response.message || 'No results found.' + '</span>');
             }
             this.$('.loading').addClass('hidden');
             this.$('.dropdown-body').removeClass('hidden');
@@ -50,7 +50,7 @@ define([
             },
             events: {
                 'click': function() {
-                    ADK.PatientRecordService.setCurrentPatient(this.model);
+                    ADK.PatientRecordService.setCurrentPatient(this.model, { confirmationOptions: { reconfirm: true } });
                 }
             },
             serializeModel: function() {
@@ -91,7 +91,7 @@ define([
             type: 'applicationHeaderItem',
             group: 'left',
             title: 'Recent patients. Press enter to access and then use the up and down arrows to view options.',
-            orderIndex: 0,
+            orderIndex: 5,
             key: 'RecentPatientApplicationHeaderIcon',
             view: AlertDropdown,
             shouldShow: function() {

@@ -697,6 +697,7 @@ The following are methods available to call upon the ADK.UI.Notification constru
 |----------|-------------------|-----------------------------------------------------------------------|
 | hide     |                   | hides and destroys any currently open notifications.<br />**Example**: `ADK.UI.Notification.hide()`   |
 
+
 ## Popup ##
 
 A popup is an extension of a Bootstrap popover which allows extra options to define placement and alignment to the trigger element.  This element can be used anytime a developer wishes to place a floating element in relation to another element that isn't explicitly a drop-down.  The trigger element must be visible.  All rules of Bootstrap popover apply, including event triggering, and the Bootstrap pattern should be used.  Be sure to keep event triggering within the scope of a view and don't use global selectors to apply or trigger events.
@@ -847,16 +848,19 @@ var trayView = ADK.UI.Tray.extend({
 ### Options ###
 | Required                          | Option                  | Type            | Description                                                       |
 |:---------------------------------:|-------------------------|-----------------|-------------------------------------------------------------------|
-|<i class="fa fa-check-circle"></i> | **buttonLabel**         | string          | The title or name of the button (only required if `buttonView` isn't defined) |
+|<i class="fa fa-check-circle"></i> | **buttonLabel**         | string          | The title or name of the button (only required if `buttonView` or `toggleView` isn't defined) |
+|                                   | **ariaLabel**           | string          | Aria-label value to set on the button element (is applied if `toggleView` isn't defined) |
 |                                   | **iconClass**           | string          | Sets classes in icon.  No icon will be rendered if option not provided |
 |                                   | **buttonView**          | Marionette View | Contents of button container.  Will override `iconClass` and `buttonLabel` |
+|                                   | **toggleView**          | Marionette View | Replacement view for the tray's button view.  You can not use this option in conjunction with `iconClass`, `buttonLabel`, or `ariaLabel`. This option will always take precedence.<br/><br/>**Note:** To ensure the tray functions correctly, this view must: <br/>- contain an actionable element that has the attribute of `[data-toggle=sidebar-tray]` <br/>- correctly re-bind the tray's UI elements on render/update of the actionable element. [(Updating the tray's UI binding)](#Tray-Events-Updating-the-tray-s-UI-binding)|
 |                                   | **buttonClass**         | string          | CSS classes to add to the button |
 |                                   | **tray**                | Marionette View | Contents of tray; can be set after invocation but should usually be set in options |
 |                                   | **position**            | string          | Valid options are "left" or "right"; defaults to "right" |
 |                                   | **preventFocusoutClose**| boolean         | Prevents the tray from closing if an object in the DOM outside of the view takes focus. |
-|                                   | **viewport**            | string          | A selector for the DOM object which will determine the position and height of the tray.  If not defined, the tray will extend from the buttom of the trigger button to the bottom of #center-region |
+|                                   | **viewport**            | string          | A selector for the DOM object which will determine the position and height of the tray.  If not defined, the tray will extend from the bottom of the trigger button to the bottom of the application's #center-region |
 |                                   | **eventChannelName**    | string          | A unique identifier in which the will be used to define a Messaging Channel that all the tray events will be broadcasted on.|
 |                                   | **widthScale**          | Number          | is used to scale the width of the tray based off of it's viewport. Value must be between 0 and 1. |
+|                                   | **toggleable**          | Boolean         | is used to determine if the tray's button can be used to toggle the tray close when it appears open. This option also ensures that the tray remains open when you forward or reverse tab out of the tray's content. |
 
 In most cases, it is best to avoid setting **preventFocusoutClose** in the options.  In the cases where an external object needs to be loaded, eventing can be used to allow focus to leave the tray container temporarily.
 
@@ -954,7 +958,7 @@ var NewView = Backbone.Marionette.ItemView.extend({
 this.$el.trigger('tray.swap', NewView);
 ```
 
-#### Reseting the tray's contents ####
+#### Resetting the tray's contents ####
 A listener is configured to look for **tray.reset** on the tray's element.  The event listener when captured, replaces the current tray's contents with the tray's main view [(view passed into `tray` option)](#Tray-Options).
 
 Below is expanding on the example from above.
@@ -980,8 +984,23 @@ var NewView = Backbone.Marionette.ItemView.extend({
 this.$el.trigger('tray.swap', NewView);
 ```
 
-### Interactive Content ###
+#### Passing options to any subsequent views shown in the tray ####
+A listener is configured to look for **tray.update:nextViewOptions** on the tray's element.  The event listener takes in a object that gets passed along during instantiation of any subsequent views that are shown inside the tray.
 
+**Note:** These options are only cleared/reset when the tray is destroyed or in the case where the event is fired and captured again with new options.
+
+Below is an example of passing along a set of options between views from a region inside a tray:
+```JavaScript
+// This is going to trigger an event in the DOM that will propagate up to the tray component.
+// The tray component will catch the event and use the passed in object value to pass along
+// to the next view.
+this.$el.trigger('tray.update:nextViewOptions', {....});
+```
+
+#### Updating the tray's UI binding ####
+A listener is configured to listen for the **tray:view:update:bound:ui:elements** DOM event on the tray's element.  The event listener when captured, re-binds the tray view's UI hash of selectors using Marionette's _bindUIElements_ method. When complete the tray will fire off a similar event of **tray:view:updated:bound:ui:elements** to allow parent views to capture the change. This pattern is mainly used in conjunction with the tray's _toggleView_ option which allows for the possibility of the tray's ui selectors to become stale in the event of the _toggleView_ rendering.
+
+### Interactive Content ###
 Interactive content can be a form or display data.  This type of content is not meant to provide navigation, but is used for data display or form input.  Content markup can be arranged in any manner, but container elements should not have **tabindex** set to avoid 508 issues.
 
 Interactive content will act similarly to menus except that keyboard arrow navigation will not be applied, and when the tray is opened, the entire container will initially get focus to allow **accessibility technologies** to read the entire contents of the now-visible tray container.

@@ -57,10 +57,6 @@ define([
 
             if (options.criteria) {
                 fetchOptions.criteria = options.criteria;
-            } else {
-                fetchOptions.criteria = {
-                    filter: 'ne(removed, true)'
-                };
             }
 
             if (options.onSuccess) {

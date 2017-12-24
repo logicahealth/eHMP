@@ -17,18 +17,23 @@ task :environment_setup, :env do |task, args|
   get_worker_config(env)
 end
 
+def npm_command(env)
+
+  if env == "aws"
+    npm_registry = ENV['NPM_CONFIG_REGISTRY'] || "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+    ret = "scl enable python27 devtoolset-3 'CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry #{npm_registry}'"
+  else
+    ret = "npm install --registry https://sandstore.vistacore.us/nexus/content/repositories/npm-all/"
+  end
+  ret
+end
+
 def environment_endpoints(env)
   case env
   when "virtualbox"
     p "Running with virtualbox environments"
-    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync_client")
+    ENV["VXSYNC_IP"] = knife_search_for_ip("primary_vxsync_client")
     ENV["JDS_IP"] = knife_search_for_ip("jds")
-    begin
-      ENV["SOLR_IP"] = knife_search_for_ip("solr")
-    rescue
-      puts "solr VM not found, trying to find mocks..."
-      ENV["SOLR_IP"] = knife_search_for_ip("mocks")
-    end
     ENV["KODAK_IP"] = knife_search_for_ip("vista-kodak")
     ENV["PANORAMA_IP"] = knife_search_for_ip("vista-panorama")
     ENV["JMEADOWS_IP"] = knife_search_for_ip("mocks")
@@ -39,21 +44,13 @@ def environment_endpoints(env)
   when "aws"
     p "Running with aws environments"
     ve_api_machine = ENV["VE_API_NAME"] || "ve-api-local"
-    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync_client")
-    ENV["JDS_IP"] = knife_search_for_ip("jds")
-    ENV["SOLR_IP"] = knife_search_for_ip("solr")
+    ENV["VXSYNC_IP"] = knife_search_for_ip("primary_vxsync_client")
+    begin
+      ENV["JDS_IP"] = knife_search_for_ip("jds")
+    rescue
+      ENV["JDS_IP"] = knife_search_for_ip("jds_app_server")
+    end
     ENV["MOCKS_IP"] = knife_search_for_ip("mocks")
-  when "ede"
-    p "Running with ede environments"
-    # TODO: Update these when we decide on a permanent location for EDE IP addresses
-    ENV["VXSYNC_IP"] = Servers::EHMP.localIP
-    ENV["JDS_IP"] = Servers::JDS.localIP
-    ENV["SOLR_IP"] = Servers::Solr.localIP
-  when "ede-lxc"
-    p "Running with ede-lxc environments"
-    ENV["VXSYNC_IP"] = Containers::EHMP.localIP
-    ENV["JDS_IP"] = Containers::JDS.localIP
-    ENV["SOLR_IP"] = Containers::Solr.localIP
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox', 'aws', and 'ede', and 'ede-lxc'"
   end
@@ -63,35 +60,37 @@ def get_worker_config(env)
 
 case env
 when "aws"
-  vxsync_ip = knife_search_for_ip("vxsync_client")
-  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no REDACTED@#{vxsync_ip}:/opt/vxsync_client/worker-config.json ."
+  vxsync_ip = knife_search_for_ip("primary_vxsync_client")
+  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no USER    @#{vxsync_ip}:/opt/vxsync_client/worker-config.json ."
 when "virtualbox"
-  vxsync_ip = knife_search_for_ip("vxsync_client")
+  vxsync_ip = knife_search_for_ip("primary_vxsync_client")
   system "scp -i #{ENV['VAGRANT_HOME']}/insecure_private_key vagrant@#{vxsync_ip}:/opt/vxsync_client/worker-config.json ."
 end
 end
 
-task :inttest do
+
+
+task :inttest, :env do |task, args|
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh npm_command(args[:env])
   puts "completed npm install"
   puts "start integration tests"
   sh "npm run-script int-test"
   puts "completed integration tests"
 end
 
-task :operational_data do
+task :operational_data, :env do |task, args|
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh npm_command(args[:env])
   puts "completed npm install"
   puts "start operational data check against #{ENV['JDS_IP']}"
   sh "npm run-script operational-check"
   puts "completed operational data check"
 end
 
-task :patient_sync do
+task :patient_sync, :env do |task, args|
   puts "start npm install"
-  sh "npm install --registry https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  sh npm_command(args[:env])
   puts "completed npm install"
   puts "start patient sync against #{ENV['VXSYNC_IP']}"
   sh "npm run-script sync-patient"

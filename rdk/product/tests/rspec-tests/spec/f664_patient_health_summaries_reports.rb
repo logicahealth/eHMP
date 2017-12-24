@@ -32,7 +32,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
     it '. omitted' do
       response = rdk_fetch(@command,
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(500)
     end
@@ -41,7 +41,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
@@ -50,7 +50,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -68,9 +68,9 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;253',
+                           'pid' => 'SITE;253',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => 'C877')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
@@ -79,16 +79,16 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => 'EEEE;3',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;848484',
+                           'pid' => 'SITE;848484',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
@@ -97,7 +97,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '848V484',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
@@ -106,7 +106,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108v420871',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       # dump(response.body)
       expect(response.code).to eq(200)
@@ -172,7 +172,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
     it '. omitted' do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -180,7 +180,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => '',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -188,7 +188,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => 'NONEXISTING',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -196,7 +196,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => '11;',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -204,7 +204,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => ';OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(200)
       # dump(response.body)
       report_item = get_hash_data(response.body)
@@ -221,7 +221,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => '11',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -229,7 +229,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => 'OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(500)
     end
 
@@ -237,7 +237,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => 'AA;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
       expect(response.code).to eq(200)
       # dump(response.body)
       report_item = get_hash_data(response.body)
@@ -280,9 +280,9 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
 
     it '. site.code not matching pid' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;253',
+                           'pid' => 'SITE;253',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A')
+                           'site.code' => 'SITE')
 
       expect(response.code).to eq(404)
     end
@@ -291,7 +291,7 @@ describe 'f664_patient_health_summaries_reports.rb', acceptance: true do
       response = rdk_fetch(@command,
                            'pid' => '10108V420871',
                            'id' => '11;OUTPATIENT',
-                           'site.code' => '9E7A;C877')
+                           'site.code' => 'SITE;SITE')
 
       expect(response.code).to eq(500)
     end

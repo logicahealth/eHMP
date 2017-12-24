@@ -35,10 +35,10 @@
 				"duz": {
 					"type": "object",
 					"required": [
-						"9E7A"
+						"SITE"
 					],
 					"properties": {
-						"9E7A": {
+						"SITE": {
 							"type": "string"
 						}
 					}

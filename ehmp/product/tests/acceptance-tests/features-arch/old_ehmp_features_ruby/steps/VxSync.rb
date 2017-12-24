@@ -271,7 +271,7 @@ class VxSync
     kod_operational_sync_completed = false
     not_sync_site = ""
     
-    site_name = "9E7A"
+    site_name = "SITE"
     pan_operational_sync_completed = wait_until_site_operational_sync_is_completed(base_url, site_name)
     if pan_operational_sync_completed
       p "The operational sync is completed for site #{site_name}"
@@ -281,7 +281,7 @@ class VxSync
       not_sync_site = site_name + "\n " 
     end
     
-    site_name = "C877"
+    site_name = "SITE"
     kod_operational_sync_completed = wait_until_site_operational_sync_is_completed(base_url, site_name)
     if kod_operational_sync_completed
       p "The operational sync is completed for site #{site_name}"

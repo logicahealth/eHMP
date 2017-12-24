@@ -1,0 +1,11 @@
+"ehmp-ui-stop-20-build-%branch%" {
+  template = 'templates/action-build.tpl'
+	description = "ehmp-ui stop build at 8pm for the branch %branch%"
+
+  gitUrl = 'https://code.vistacore.us/scm/app/ehmp-ui.git'
+	gitBranch = '%branch%'
+
+  time = '21'
+  action = 'stop'
+  projects = "ehmp-ui-deploy-demo-build-%branch%, ehmp-ui-deploy-demo-val-build-%branch%"
+}

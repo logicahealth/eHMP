@@ -2,12 +2,13 @@
 
 var _ = require('lodash');
 
-function isPrimarySite(primarySites, site) {
+function isPrimarySiteDivision(primarySites, facilityCode) {
     var retVal = false;
 
     _.each(primarySites, function (primarySite) {
-        if (primarySite.division === site) {
+        if (primarySite.division === facilityCode) {
             retVal = true;
+            return false; //DE7867 added to break when we find the value
         }
     });
 
@@ -31,7 +32,7 @@ function removeDuplicateImmunizations(vistaSites, immunizations) {
     var secondarySiteRecords = [];
     _.each(immunizations, function(immunization){
         immunization.administeredDateTime = _.isUndefined(immunization.administeredDateTime) ? 'N/A' : immunization.administeredDateTime;
-        isPrimarySite(vistaSites, immunization.facilityCode) ? primarySiteRecords.push(immunization) : secondarySiteRecords.push(immunization); //jshint ignore:line
+        isPrimarySiteDivision(vistaSites, immunization.facilityCode) ? primarySiteRecords.push(immunization) : secondarySiteRecords.push(immunization); //jshint ignore:line
     });
 
 

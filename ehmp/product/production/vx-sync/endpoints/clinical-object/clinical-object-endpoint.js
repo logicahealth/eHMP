@@ -5,7 +5,6 @@ var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var jobUtil = require(global.VX_UTILS + 'job-utils');
 var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 var solrHandler = require(global.VX_HANDLERS + 'solr-record-storage/solr-record-storage-handler');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
 var async = require('async');
 var _ = require('underscore');
 
@@ -53,7 +52,7 @@ function handleClinicalObjectPost(log, config, environment, req, res, next) {
         publishToActivityManagementAndStoreToSolr.bind(null, childLog, environment, config, referenceInfo, record)
     ], function (err) {
         if (err) {
-            childLog.warn('clinical-object-endpoint.handleClinicalObjectPost(): Error occurred during clinical object processing: %s', err);
+            childLog.error('clinical-object-endpoint.handleClinicalObjectPost(): Error occurred during clinical object processing: %s', err);
             res.status(500).json({'error': err});
             return next();
         } else {
@@ -117,15 +116,7 @@ function validateRequest(record) {
  * @returns {string} - An error message OR null if no errors found
  **/
 function storeToPJDS(childLog, environment, config, record, callback) {
-    // Look to see if pjds was passed in the environment
-    // This is used for unit test purposes
-    var pjdsClient;
-    if (environment.pjds) {
-        pjdsClient = environment.pjds;
-    } else {
-        var metrics = environment.metrics;
-        pjdsClient = new PjdsClient(childLog, metrics, config);
-    }
+    const pjdsClient = environment.pjdsHttp;
 
     pjdsClient.createClinicalObject(record, function (error) {
         return callback(error);
@@ -148,7 +139,7 @@ function publishToActivityManagementAndStoreToSolr(childLog, environment, config
 
     publishActivity(childLog, environment, referenceInfo, record, function (error) {
         if (error) {
-            childLog.debug('clinical-object-endpoint.publishToActivityManagementAndStoreToSolr(): error publishing to activity management: %j', error);
+            childLog.error('clinical-object-endpoint.publishToActivityManagementAndStoreToSolr(): error publishing to activity management: %j', error);
             // capture the error, but attempt storing to solr
             errors.push(error);
         }
@@ -156,7 +147,7 @@ function publishToActivityManagementAndStoreToSolr(childLog, environment, config
         // Always attempt to store to Solr ignoring any error from publishActivity
         storeToSolr(childLog, environment, config, record, function (error) {
             if (error) {
-                childLog.debug('clinical-object-endpoint.publishToActivityManagementAndStoreToSolr(): error storing object to SOLR: %j', error);
+                childLog.error('clinical-object-endpoint.publishToActivityManagementAndStoreToSolr(): error storing object to SOLR: %j', error);
                 errors.push(error);
             }
             // call the callback with any errors

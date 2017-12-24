@@ -16,24 +16,7 @@ var locationUtil = rdk.utils.locationUtil;
  */
 var DEFAULT_DATE_RANGE = 30;
 var VISIT_RPC = 'ORWCV VST';
-
-var interceptors = {};
-interceptors.appointments = {
-    synchronize: false,
-    convertPid: true
-};
-interceptors.admissions = {
-    synchronize: false,
-    convertPid: true
-};
-
-var permissions = {};
-permissions.appointments = ['read-encounter'];
-permissions.admissions = ['read-encounter'];
-
-var isPatientCentric = {};
-isPatientCentric.appointments = true;
-isPatientCentric.admissions = true;
+var ADMISSION_RPC = 'ORWPT ADMITLST';
 
 function getVisits(visitType, req, res) {
     req.logger.warn('visit %s resource GET called', visitType);
@@ -76,12 +59,11 @@ function getAdmissions(req, res) {
     });
 
     var limit = req.param('limit');
-    var skipAdmissions = '0';
-    var params = [patientDFN, '', '', skipAdmissions];
+    var params = [patientDFN];
     var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
     var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
 
-    RpcClient.callRpc(req.logger, rpcConfig, VISIT_RPC, params, function(error, result) {
+    RpcClient.callRpc(req.logger, rpcConfig, ADMISSION_RPC, params, function(error, result) {
         if (error) {
             req.logger.error({
                 admissionsRpcError: error
@@ -102,34 +84,23 @@ function getAdmissions(req, res) {
 
             _.forEach(admissions, function(element) {
                 if (element) {
-                    element = element.split(';');
+                    element = element.split('^');
 
-                    var visitType = element[0];
+                    var dateTime = filemanDateUtil.getVprDateTime(element[0]);
 
-                    if (visitType === 'I') {
-                        var dateTime = filemanDateUtil.getVprDateTime(element[1]);
-                        var visitString = element[2];
+                    var locationUid = locationUtil.getLocationUid(patientIdentifiers.site, 'W', element[1]);
+                    var locationName = element[2];
+                    var details = element[3];
 
-                        if (visitString) {
-                            visitString = visitString.split('^');
-                            req.logger.debug({
-                                visitString: visitString
-                            });
+                    var admission = {};
+                    admission.dateTime = dateTime;
+                    admission.locationUid = locationUid;
+                    admission.locationDisplayName = locationName;
+                    admission.details = details;
 
-                            var locationUid = locationUtil.getLocationUid(patientIdentifiers.site, 'W', visitString[0]);
-                            var locationName = visitString[3];
-                            var details = visitString[4];
+                   response.items.push(admission);
 
-                            var admission = {};
-                            admission.visitType = visitType;
-                            admission.dateTime = dateTime;
-                            admission.locationUid = locationUid;
-                            admission.locationDisplayName = locationName;
-                            admission.details = details;
 
-                            response.items.push(admission);
-                        }
-                    }
                 }
             });
             response.items = _.sortBy(response.items, ['dateTime']).reverse();
@@ -219,6 +190,7 @@ function getAppointments(req, res) {
                         appointment.details = details;
 
                         response.items.push(appointment);
+
                     }
                 }
             });
@@ -247,6 +219,3 @@ ParameterError.prototype = Error.prototype;
 
 
 module.exports = getVisits;
-module.exports.interceptors = interceptors;
-module.exports.permissions = permissions;
-module.exports.isPatientCentric = isPatientCentric;

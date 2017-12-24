@@ -17,7 +17,7 @@ var moment = require('moment');
     vprMedication - a single medication object in VPR format
 */
 
-function dodMedicationToVPR(dodMedication, edipi){
+function dodMedicationToVPR(logger, dodMedication, edipi){
     var vprMedication = {};
 
 
@@ -49,13 +49,12 @@ function dodMedicationToVPR(dodMedication, edipi){
     	vprMedication.overallStop = moment(dodMedication.stopDate, 'x').format('YYYYMMDDHHmmss');
  	}
 
-    if(dodMedication.medType && (dodMedication.medType.toUpperCase().valueOf()=='I' || dodMedication.medType.toUpperCase().valueOf()=='O'
-       ||dodMedication.medType.toUpperCase().valueOf()=='N' || dodMedication.medType.toUpperCase().valueOf()=='V'
-    	||dodMedication.medType.toUpperCase().valueOf()=='IMO' || dodMedication.medType.toUpperCase().valueOf()=='SUPPLY'
-    	||dodMedication.medType.toUpperCase().valueOf()=='UNKNOWN')){
+    if(dodMedication.medType && (dodMedication.medType.toUpperCase().valueOf()==='I' || dodMedication.medType.toUpperCase().valueOf()==='O' ||
+           dodMedication.medType.toUpperCase().valueOf()==='N' || dodMedication.medType.toUpperCase().valueOf()==='V' ||
+    	   dodMedication.medType.toUpperCase().valueOf()==='IMO' || dodMedication.medType.toUpperCase().valueOf()==='SUPPLY' ||
+    	   dodMedication.medType.toUpperCase().valueOf()==='UNKNOWN')) {
     	vprMedication.vaType=dodMedication.medType.toUpperCase();
-    }
-    else{
+    } else {
     	vprMedication.vaType='UNKNOWN';
     }
 

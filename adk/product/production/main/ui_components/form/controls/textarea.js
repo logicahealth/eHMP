@@ -26,13 +26,13 @@ define([
     // server via XHR however, carriage returns are preserved (or added by browsers
     // which do not include them in the raw value). A workaround for this issue can
     // be achieved using a valHook as follows:
-    if (Bowser.webkit) {
-        $.valHooks.textarea = {
-            get: function(elem) {
-                return elem.value.replace(/\r?\n/g, "\r\n");
-            }
-        };
-    }
+    // if (Bowser.webkit) {
+    //     $.valHooks.textarea = {
+    //         get: function(elem) {
+    //             return elem.value.replace(/\r?\n/g, "\r\n");
+    //         }
+    //     };
+    // }
 
     var CharacterCountView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
@@ -52,11 +52,12 @@ define([
             maxlength: 200,
             extraClasses: [],
             helpMessage: "",
-            charCount: true
+            charCount: true,
+            readonly: false
         },
         template: Handlebars.compile([
             '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id id) classes=(is-sr-only-label srOnlyLabel)}}',
-            '<textarea class="{{form-class-name "controlClassName"}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if hasMaxlength}} maxlength="{{maxlength}}"{{/if}}{{#if cols}} cols="{{cols}}"{{/if}}{{#if rows}} rows="{{rows}}"{{/if}} name="{{name}}"{{#if title}} title="{{title}}"{{/if}} id={{clean-for-id id}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}>' +
+            '<textarea class="{{form-class-name "controlClassName"}}"{{#if placeholder}} placeholder="{{placeholder}}"{{/if}}{{#if hasMaxlength}} maxlength="{{maxlength}}"{{/if}}{{#if cols}} cols="{{cols}}"{{/if}}{{#if rows}} rows="{{rows}}"{{/if}} name="{{name}}"{{#if title}} title="{{title}}"{{/if}} id={{clean-for-id id}}{{#if disabled}} disabled{{/if}}{{#if required}} required{{/if}}{{#if readonly}} readonly{{/if}}>' +
             '{{value}}' +
             '</textarea>',
             '{{#if charCountShouldShow}}<span class="char-count-region"></span>{{/if}}',
@@ -85,6 +86,9 @@ define([
             },
             "control:disabled": function(event, booleanValue) {
                 this.setBooleanFieldOption("disabled", booleanValue, event);
+            },
+            "control:readonly": function(event, booleanValue) {
+                this.setBooleanFieldOption("readonly", booleanValue, event);
             },
             "control:cols": function(event, intValue) {
                 this.setIntegerFieldOption("cols", intValue, event);

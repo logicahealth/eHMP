@@ -90,8 +90,8 @@ define([
                 });
                 var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                     template: Handlebars.compile([
-                        '{{ui-button "No" classes="btn-default alert-cancel btn-sm" title="Press enter to go back"}}',
-                        '{{ui-button "Yes" classes="btn-primary alert-continue btn-sm" title="Press enter to continue"}}'
+                        '{{ui-button "No" classes="btn-default alert-cancel btn-sm"}}',
+                        '{{ui-button "Yes" classes="btn-primary alert-continue btn-sm"}}'
                     ].join('\n')),
                     events: {
                         'click button.alert-cancel': function() {
@@ -190,6 +190,24 @@ define([
                 this.updateRouter(routeConfig.workspaceModel.get('id'), routeConfig.contextModel.get('id'));
             });
         },
+
+        goToDefault: function() {
+            var currentContext = ADK.WorkspaceContextRepository.currentContext;
+            var currentScreenId = ADK.ADKApp.currentScreen.id;
+            var defaultScreen = currentContext.get('defaultScreen');
+
+            if (currentScreenId === defaultScreen && !_.has(ADK, ['ADKApp', 'Screens', currentScreenId])) {
+                ADK.WorkspaceContextRepository.setDefaultScreenOfContext(currentContext.get('id'), currentContext.get('originalDefaultScreen'));
+                defaultScreen = currentContext.get('defaultScreen');
+            }
+            var options = {
+                route: {
+                    trigger: false
+                }
+            };
+            this.navigate(defaultScreen, options);
+        },
+
         displayScreen: function(workspaceId) {
             this.rerouter(workspaceId);
         },
@@ -267,11 +285,9 @@ define([
         },
         removeWorkspaceRoute: function(routeName, app) {
             if (_.isString(routeName)) {
-                console.log('Before: ', Backbone.history.handlers.length, ' routing handlers available.');
                 Backbone.history.handlers = _.filter(Backbone.history.handlers, function(handler) {
                     return (handler.route.toString() !== ADK.ADKApp.router._routeToRegExp(routeName).toString());
                 });
-                console.log('After: ', Backbone.history.handlers.length, ' routing handlers available.');
             }
         },
         back: function() {

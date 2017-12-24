@@ -81,7 +81,7 @@ define([
             var label = this.model.get('label');
             return {
                 'type': 'button',
-                'title': label ? 'Press enter to add New ' + label : 'Press enter to add New Item'
+                'title': label ? 'Add New ' + label : 'Add New Item'
             };
         },
         template: Handlebars.compile([
@@ -102,7 +102,7 @@ define([
         tagName: 'li',
         className: 'list-group-item all-padding-no bottom-padding-xs all-border-no',
         template: Handlebars.compile([
-            '<a href="#" class="add-new all-padding-sm" title="Press enter to add New {{label}}">',
+            '<a href="#" class="add-new all-padding-sm" title="Add New {{label}}">',
             '{{label}}',
             '</a>'
         ].join('\n')),
@@ -237,21 +237,52 @@ define([
         className: "container-fluid panel panel-default",
         template: Handlebars.compile([
             '<div class="header-container row panel-heading all-padding-no left-padding-sm right-padding-sm"></div>',
+            '{{#if hasNextSuggestion}}<div class="panel all-margin-no" data-flex-order="1">',
+            '{{#if nextSuggestion.header}}<div class="row panel-heading all-padding-no left-padding-sm right-padding-sm background-color-primary-lightest"><h5 class="panel-title font-size-12 top-padding-xs bottom-padding-xs">{{nextSuggestion.header}}</h5></div>{{/if}}',
+            '<div class="row panel-body left-padding-sm right-padding-sm flex-display top-border-grey-dark {{#if nextSuggestion.header}}background-color-primary-light{{else}}background-color-primary-lightest{{/if}}">',
+            '<div class="flex-width-1">{{#if nextSuggestion.suggestionLabel}}<p class="all-margin-no">{{nextSuggestion.suggestionLabel}}</p>{{/if}}<p class="font-size-12 transform-text-uppercase bold-font all-margin-no">{{nextSuggestion.suggestion}}</p></div>',
+            '<div class="flex-width-none"><button data-ui="nextSuggestion" type="button" class="btn btn-primary pull-right" aria-label="{{nextSuggestion.buttonDescription}}">{{#if nextSuggestion.buttonLabel}}{{nextSuggestion.buttonLabel}}{{else}}<i class="fa fa-arrow-right" aria-hidden="true"></i>{{/if}}</button></div></div>',
+            '</div>{{/if}}',
             '<div class="action-list-container row panel-body bottom-border-grey-light"></div>',
             '<div data-flex-width="1" class="summary-list-container row panel-body all-padding-no auto-overflow-y"></div>',
             '<div class="loading-container"></div>'
         ].join("\n")),
+        templateHelpers: function() {
+            var nextViewOptions = this.getOption('nextViewOptions');
+            nextViewOptions = (nextViewOptions instanceof Backbone.Model) ? nextViewOptions.get('nextSuggestion') : {};
+            var helpers = {
+                hasNextSuggestion: !!nextViewOptions && _.has(nextViewOptions, 'suggestion'),
+                nextSuggestion: _.extend({
+                    header: '',
+                    suggestionLabel: '',
+                    buttonLabel: ''
+                }, _.pick(nextViewOptions, ['buttonLabel', 'suggestion', 'header', 'suggestionLabel']))
+            };
+            _.extend(helpers.nextSuggestion, {
+                buttonDescription: _.get(helpers, 'nextSuggestion.suggestionLabel', _.get(helpers, 'nextSuggestion.buttonLabel', '')) + ' ' + _.get(helpers, 'nextSuggestion.suggestion')
+            });
+            return helpers;
+        },
         ui: {
             'HeaderContainer': '.header-container',
             'ListContainer': '.action-list-container',
             'SummaryContainer': '.summary-list-container',
-            'LoadingContainer': '.loading-container'
+            'LoadingContainer': '.loading-container',
+            'NextSuggestionButton': 'button[data-ui="nextSuggestion"]'
         },
         regions: {
             'HeaderRegion': '@ui.HeaderContainer',
             'ActionListRegion': '@ui.ListContainer',
             'SummaryListRegion': '@ui.SummaryContainer',
             'LoadingRegion': '@ui.LoadingContainer'
+        },
+        events: {
+            'click @ui.NextSuggestionButton': function() {
+                var nextViewOptions = this.getOption('nextViewOptions');
+                if (nextViewOptions instanceof Backbone.Model) {
+                    _.result(nextViewOptions.get('nextSuggestion'), 'callback');
+                }
+            }
         },
         options: defaultOptions,
         initialize: function(options) {

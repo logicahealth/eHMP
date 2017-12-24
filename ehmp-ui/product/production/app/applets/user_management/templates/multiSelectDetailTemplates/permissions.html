@@ -1,0 +1,22 @@
+<div class="body auto-overflow-y auto-overflow pixel-height-100">
+    <table class="table ehmp-table-default table-bordered">
+        <caption class="sr-only">This table represents data details for {{label}}</caption>
+        <thead>
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>{{#compare description null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare description "array" operator="typeof"}}
+                <td>{{#each description}}{{this}},{{/each}}</td>{{/compare}}{{#compare description "string" operator="typeof"}}
+                <td>{{description}}</td> {{/compare}}{{#compare description "number" operator="typeof"}}
+                <td>{{description}}</td> {{/compare}}{{#compare example null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare example "array" operator="typeof"}}
+                <td>{{#each example}}{{this}},{{/each}}</td>{{/compare}}{{#compare example "string" operator="typeof"}}
+                <td>{{example}}</td> {{/compare}}{{#compare example "number" operator="typeof"}}
+                <td>{{example}}</td> {{/compare}}</tr>
+        </tbody>
+    </table>
+</div>

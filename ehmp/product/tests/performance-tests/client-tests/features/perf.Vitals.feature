@@ -13,47 +13,47 @@ Scenario: Client can request vitals
 	And the results contain
 		|field|value|
 		|data.typeName|BLOOD PRESSURE|
-		|data.uid|urn:va:vital:B362:3:24038|
+		|data.uid|urn:va:vital:SITE:3:24038|
 		|data.result|80/30|
 		|data.observed|20131015095502|
 		|data.units|mm[Hg]|
 	And the results contain
 		|field|value|
 		|data.typeName|PULSE|
-		|data.uid|urn:va:vital:B362:3:24023|
+		|data.uid|urn:va:vital:SITE:3:24023|
 		|data.result|Pass|
 		|data.observed|201310060900|
 		|data.units|/min|
 	And the results contain
 		|field|value|
 		|data.typeName|RESPIRATION|
-		|data.uid|urn:va:vital:B362:3:24024|
+		|data.uid|urn:va:vital:SITE:3:24024|
 		|data.result|Pass|
 		|data.observed|201310060900|
 		|data.units|/min|
 	And the results contain
 		|field|value|
 		|data.typeName|TEMPERATURE|
-		|data.uid|urn:va:vital:B362:3:24025|
+		|data.uid|urn:va:vital:SITE:3:24025|
 		|data.units|F|
 	And the results contain
 		|field|value|
 		|data.typeName|PULSE OXIMETRY|
-		|data.uid|urn:va:vital:B362:3:24026|
+		|data.uid|urn:va:vital:SITE:3:24026|
 		|data.units|%|
 	And the results contain
 		|field|value|
 		|data.typeName|HEIGHT|
-		|data.uid|urn:va:vital:B362:3:24027|
+		|data.uid|urn:va:vital:SITE:3:24027|
 		|data.units|in|
 	And the results contain
 		|field|value|
 		|data.typeName|PAIN|
-		|data.uid|urn:va:vital:B362:3:24028|
+		|data.uid|urn:va:vital:SITE:3:24028|
 	And the results contain
 		|field|value|
 		|data.typeName|WEIGHT|
-		|data.uid|urn:va:vital:B362:3:24029|
+		|data.uid|urn:va:vital:SITE:3:24029|
 		|data.units|lb|
 
 	

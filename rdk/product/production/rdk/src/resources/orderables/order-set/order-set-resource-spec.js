@@ -162,8 +162,8 @@ function createReqWithParam(map) {
         },
         session: {
             user: {
-                site: '9E7A',
-                uid: 'urn:va:user:9E7A:10000000000'
+                site: 'SITE',
+                uid: 'urn:va:user:SITE:10000000000'
             }
         }
     };
@@ -199,16 +199,16 @@ describe.skip('OrderSets', function() {
             'orderList': [{
                 'uid': 'urn:va:quickorder:3',
                 'type': 'quickorder',
-                'siteId': '9E7A',
-                'createdBy': 'urn:va:user:9E7A:10000000000',
+                'siteId': 'SITE',
+                'createdBy': 'urn:va:user:SITE:10000000000',
                 'name': 'COMPREHENSIVE METABOLIC PANEL',
                 'scope': 'site',
                 'active': true
             }, {
-                'uid': 'urn:va:lab:9E7A:512',
+                'uid': 'urn:va:lab:SITE:512',
                 'type': 'orderable',
                 'domain': 'lab',
-                'siteId': '9E7A',
+                'siteId': 'SITE',
                 'name': 'FASTING GLUCOSE',
                 'scope': 'site',
                 'active': true
@@ -276,12 +276,12 @@ describe.skip('OrderSets', function() {
         it('Sets OrderSet\'s siteId from user session', function() {
             req.body = ordersetPayload;
             orderset.create(req, res);
-            expect(storedOrderSet.siteId).to.equal('9E7A');
+            expect(storedOrderSet.siteId).to.equal('SITE');
         });
         it('Sets OrderSet\'s createdBy from user session', function() {
             req.body = ordersetPayload;
             orderset.create(req, res);
-            expect(storedOrderSet.createdBy).to.equal('urn:va:user:9E7A:10000000000');
+            expect(storedOrderSet.createdBy).to.equal('urn:va:user:SITE:10000000000');
         });
         describe('Returns HTTP-400 bad request if items in the OrderSet payload\'s orderList are not valid', function() {
             beforeEach(function() {
@@ -315,7 +315,7 @@ describe.skip('OrderSets', function() {
                     'uid': '512',
                     'type': 'orderable',
                     'domain': 'invalid_domain',
-                    'siteId': '9E7A',
+                    'siteId': 'SITE',
                     'name': 'Lisinopril 5mg PO QD',
                     'scope': 'individual',
                     'active': true
@@ -328,7 +328,7 @@ describe.skip('OrderSets', function() {
                     'uid': '512',
                     'type': 'orderable',
                     'domain': 'invalid_domain',
-                    //'siteId': '9E7A',
+                    //'siteId': 'SITE',
                     'name': 'Lisinopril 5mg PO QD',
                     'scope': 'individual',
                     'active': true
@@ -347,16 +347,16 @@ describe.skip('OrderSets', function() {
                     'orderList': [{
                         'uid': 'urn:va:quickorder:3',
                         'type': 'quickorder',
-                        'siteId': '9E7A',
-                        'createdBy': 'urn:va:user:9E7A:10000000000',
+                        'siteId': 'SITE',
+                        'createdBy': 'urn:va:user:SITE:10000000000',
                         'name': 'COMPREHENSIVE METABOLIC PANEL',
                         'scope': 'enterprise',
                         'active': true
                     }, {
-                        'uid': 'urn:va:lab:9E7A:512',
+                        'uid': 'urn:va:lab:SITE:512',
                         'type': 'orderable',
                         'domain': 'lab',
-                        'siteId': '9E7A',
+                        'siteId': 'SITE',
                         'name': 'FASTING GLUCOSE',
                         'scope': 'enterprise',
                         'active': true
@@ -516,12 +516,12 @@ describe.skip('OrderSets', function() {
         it('Sets OrderSet\'s siteId from user session', function() {
             req.body = ordersetPayload;
             orderset.updateOrderSet(req, res);
-            expect(storedOrderSet.siteId).to.equal('9E7A');
+            expect(storedOrderSet.siteId).to.equal('SITE');
         });
         it('Sets OrderSet\'s createdBy from user session', function() {
             req.body = ordersetPayload;
             orderset.updateOrderSet(req, res);
-            expect(storedOrderSet.createdBy).to.equal('urn:va:user:9E7A:10000000000');
+            expect(storedOrderSet.createdBy).to.equal('urn:va:user:SITE:10000000000');
         });
         describe('Returns HTTP-400 bad request if items in the OrderSet payload\'s orderList are not valid', function() {
             beforeEach(function() {
@@ -555,7 +555,7 @@ describe.skip('OrderSets', function() {
                     'uid': '512',
                     'type': 'orderable',
                     'domain': 'invalid_domain',
-                    'siteId': '9E7A',
+                    'siteId': 'SITE',
                     'name': 'Lisinopril 5mg PO QD',
                     'scope': 'individual',
                     'active': true
@@ -568,7 +568,7 @@ describe.skip('OrderSets', function() {
                     'uid': '512',
                     'type': 'orderable',
                     'domain': 'invalid_domain',
-                    //'siteId': '9E7A',
+                    //'siteId': 'SITE',
                     'name': 'Lisinopril 5mg PO QD',
                     'scope': 'individual',
                     'active': true
@@ -588,16 +588,16 @@ describe.skip('OrderSets', function() {
                     'orderList': [{
                         'uid': 'urn:va:quickorder:3',
                         'type': 'quickorder',
-                        'siteId': '9E7A',
-                        'createdBy': 'urn:va:user:9E7A:10000000000',
+                        'siteId': 'SITE',
+                        'createdBy': 'urn:va:user:SITE:10000000000',
                         'name': 'COMPREHENSIVE METABOLIC PANEL',
                         'scope': 'enterprise',
                         'active': true
                     }, {
-                        'uid': 'urn:va:lab:9E7A:512',
+                        'uid': 'urn:va:lab:SITE:512',
                         'type': 'orderable',
                         'domain': 'lab',
-                        'siteId': '9E7A',
+                        'siteId': 'SITE',
                         'name': 'FASTING GLUCOSE',
                         'scope': 'enterprise',
                         'active': true

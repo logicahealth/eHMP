@@ -4,9 +4,9 @@ Feature: F1211 - Add Community Health information to patient record text search 
 
 @US18356
 Scenario: Verify RDK results return the highlighting and the authoring institute for Community Health Summary documents C32
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   And solrSyncStatus is true
-  When the client searches text for pid "9E7A;3" and query "summarization"
+  When the client searches text for pid "SITE;3" and query "summarization"
   Then a successful response is returned
   Then the VPR results contain
     | field               | value                                       |
@@ -17,9 +17,9 @@ Scenario: Verify RDK results return the highlighting and the authoring institute
 
 @US18356
 Scenario: Verify RDK results return the highlighting and the authoring institute for Community Health Summary documents CCDA
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   And solrSyncStatus is true
-  When the client searches text for pid "9E7A;3" and query "continuity"
+  When the client searches text for pid "SITE;3" and query "continuity"
   Then a successful response is returned
   Then the VPR results contain
     | field               | value                                       |
@@ -30,24 +30,22 @@ Scenario: Verify RDK results return the highlighting and the authoring institute
 
 @US18356
 Scenario: Verify RDK results return the highlighting and the authoring institute for Community Health Summary documents CCDA and C32 and search term synonyms are highlighted.
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   And solrSyncStatus is true
-  When the client searches text for pid "9E7A;3" and query "bp"
+  When the client searches text for pid "SITE;3" and query "bp"
   Then a successful response is returned
   Then the VPR results contain
     | field               | value                                       |
     | kind                | Community Health Summaries                  |
     | summary             | Summarization of episode note               | 
     | institution         | HEALTHeLINK                                 |
-    | highlights.body     | CONTAINS <span class=\"cpe-search-term-match\">Point</span>|
+    | highlights.body     | CONTAINS {{addTag \"Point\" \"mark" \"cpe-search-term-match\"}}|
    Then the VPR results contain
     | field               | value                                       |
     | kind                | Community Health Summaries                  |
     | summary             | Continuity of Care Document                 | 
     | institution         | Epic CCDA Example 2                         |
-    | highlights.body     | CONTAINS <span class=\"cpe-search-term-match\">Blood</span>   |
-    | highlights.body     | CONTAINS <span class=\"cpe-search-term-match\">blood</span>   |
-    | highlights.body     | CONTAINS <span class=\"cpe-search-term-match\">Pressure</span>|
-    | highlights.body     | CONTAINS <span class=\"cpe-search-term-match\">pressure</span>|
-
-
+    | highlights.body     | CONTAINS {{addTag \"Blood\" \"mark" \"cpe-search-term-match\"}}   |
+    | highlights.body     | CONTAINS {{addTag \"blood\" \"mark" \"cpe-search-term-match\"}}   |
+    | highlights.body     | CONTAINS {{addTag \"Pressure\" \"mark" \"cpe-search-term-match\"}}|
+    | highlights.body     | CONTAINS {{addTag \"pressure\" \"mark" \"cpe-search-term-match\"}}|

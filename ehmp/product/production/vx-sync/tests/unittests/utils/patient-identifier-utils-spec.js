@@ -9,11 +9,11 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 
 var configReqRes = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'stationNumber': 500,
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'stationNumber': 500,
         }
@@ -25,11 +25,11 @@ var configReqRes = {
 
 var configPubSub = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'stationNumber': 500,
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'stationNumber': 500,
         }
@@ -63,10 +63,10 @@ describe('patient-identifier.js', function() {
             value: '10110V004877'
         }, {
             type: 'pid',
-            value: '9E7A;8'
+            value: 'SITE;8'
         }, {
             type: 'pid',
-            value: 'C877;8'
+            value: 'SITE;8'
         }, {
             type: 'hdr',
             value: 'HDR:10110V004877'
@@ -86,10 +86,10 @@ describe('patient-identifier.js', function() {
             var pids = idUtil.extractIdsOfTypes(pIds, 'pid');
             expect(pids).toEqual([{
                 type: 'pid',
-                value: '9E7A;8'
+                value: 'SITE;8'
             }, {
                 type: 'pid',
-                value: 'C877;8'
+                value: 'SITE;8'
             }]);
         });
         it('verify edipi match', function() {
@@ -137,10 +137,10 @@ describe('patient-identifier.js', function() {
             value: '10110V004877'
         }, {
             type: 'pid',
-            value: '9E7A;8'
+            value: 'SITE;8'
         }, {
             type: 'pid',
-            value: 'C877;8'
+            value: 'SITE;8'
         }, {
             type: 'hdr',
             value: 'HDR:10110V004877'
@@ -195,10 +195,10 @@ describe('patient-identifier.js', function() {
             value: '10110V004877'
         }, {
             type: 'pid',
-            value: '9E7A;8'
+            value: 'SITE;8'
         }, {
             type: 'pid',
-            value: 'C877;8'
+            value: 'SITE;8'
         }, {
             type: 'pid',
             value: 'HDR;10110V004877'
@@ -274,10 +274,10 @@ describe('patient-identifier.js', function() {
             expect(idUtil.isIdFormatValid('dfn', '10110V004877', configReqRes)).toBe(false);
         });
         it('verify dfn valid id true', function() {
-            expect(idUtil.isIdFormatValid('dfn', '9E7A;8')).toBe(false);
+            expect(idUtil.isIdFormatValid('dfn', 'SITE;8')).toBe(false);
         });
         it('verify dfn valid id true', function() {
-            expect(idUtil.isIdFormatValid('dfn', '9E7A;8', configReqRes)).toBe(true);
+            expect(idUtil.isIdFormatValid('dfn', 'SITE;8', configReqRes)).toBe(true);
         });
 
 
@@ -298,10 +298,10 @@ describe('patient-identifier.js', function() {
             expect(idUtil.isIdFormatValid('pid', '10110V004877', configReqRes)).toBe(false);
         });
         it('verify pid valid id true', function() {
-            expect(idUtil.isIdFormatValid('pid', '9E7A;8')).toBe(false);
+            expect(idUtil.isIdFormatValid('pid', 'SITE;8')).toBe(false);
         });
         it('verify pid valid id true', function() {
-            expect(idUtil.isIdFormatValid('pid', '9E7A;8', configReqRes)).toBe(true);
+            expect(idUtil.isIdFormatValid('pid', 'SITE;8', configReqRes)).toBe(true);
         });
         it('verify pid valid DOD id true', function() {
             expect(idUtil.isIdFormatValid('pid', 'DOD;000000008', configReqRes)).toBe(true);
@@ -343,7 +343,7 @@ describe('patient-identifier.js', function() {
             expect(idUtil.isIdFormatValid('hdr', 'HDR;8', configPubSub)).toBe(false);
         });
         it('verify hdr(vistaHdr) - VistaDirect - should not be a VistaHdr ID.', function() {
-            expect(idUtil.isIdFormatValid('hdr', '9E7A;8', configPubSub)).toBe(false);
+            expect(idUtil.isIdFormatValid('hdr', 'SITE;8', configPubSub)).toBe(false);
         });
         it('verify hdr(vistaHdr) - VistaDirect - should be valid HDR ID', function() {
             expect(idUtil.isIdFormatValid('hdr', '8211;8', configPubSub)).toBe(true);
@@ -481,19 +481,19 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['xyz'], '9E7A;3')).toBe(false);
+            expect(idUtil.isIdFormatValid(['xyz'], 'SITE;3')).toBe(false);
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['xyz'], '9E7A;3', configReqRes)).toBe(false);
+            expect(idUtil.isIdFormatValid(['xyz'], 'SITE;3', configReqRes)).toBe(false);
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['icn'], '9E7A;3')).toBe(false);
+            expect(idUtil.isIdFormatValid(['icn'], 'SITE;3')).toBe(false);
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['icn'], '9E7A;3', configReqRes)).toBe(false);
+            expect(idUtil.isIdFormatValid(['icn'], 'SITE;3', configReqRes)).toBe(false);
         });
 
         it('verify icn valid id true', function() {
@@ -505,11 +505,11 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['icn', 'pid'], '9E7A;3')).toBe(false);
+            expect(idUtil.isIdFormatValid(['icn', 'pid'], 'SITE;3')).toBe(false);
         });
 
         it('verify icn valid id true', function() {
-            expect(idUtil.isIdFormatValid(['icn', 'pid'], '9E7A;3', configReqRes)).toBe(true);
+            expect(idUtil.isIdFormatValid(['icn', 'pid'], 'SITE;3', configReqRes)).toBe(true);
         });
 
         it('verify icn valid id true', function() {
@@ -580,11 +580,11 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify non-match from punctuation', function() {
-            expect(idUtil.isPid('9E7A:3')).toBe(false);
+            expect(idUtil.isPid('SITE:3')).toBe(false);
         });
 
         it('verify match, uppercase site', function() {
-            expect(idUtil.isPid('9E7A;3')).toBe(true);
+            expect(idUtil.isPid('SITE;3')).toBe(true);
         });
 
         it('verify match, lowercase site', function() {
@@ -606,11 +606,11 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify match, but missing config', function() {
-            expect(idUtil.isVistaDirect('9E7A;3')).toBe(false);
+            expect(idUtil.isVistaDirect('SITE;3')).toBe(false);
         });
 
         it('verify match, uppercase site', function() {
-            expect(idUtil.isVistaDirect('9E7A;3', configReqRes)).toBe(true);
+            expect(idUtil.isVistaDirect('SITE;3', configReqRes)).toBe(true);
         });
 
         it('verify match, site not configured as Direct connected.', function() {
@@ -784,7 +784,7 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify non match - VistaHdr pid but configured as Req/Res', function() {
-            expect(idUtil.isHdr('9E7A;3', configReqRes)).toBe(false);
+            expect(idUtil.isHdr('SITE;3', configReqRes)).toBe(false);
         });
 
         it('verify match - VistaHdr pid configured as Pub/Sub', function() {
@@ -873,12 +873,12 @@ describe('patient-identifier.js', function() {
             expect(idUtil.isSecondarySite('VLER;111', configReqRes)).toBe(true);
         });
 
-        it('verify 9E7A is not secondary site - no config', function() {
-            expect(idUtil.isSecondarySite('9E7A;111')).toBe(false);
+        it('verify SITE is not secondary site - no config', function() {
+            expect(idUtil.isSecondarySite('SITE;111')).toBe(false);
         });
 
-        it('verify 9E7A is not secondary site - with config', function() {
-            expect(idUtil.isSecondarySite('9E7A;111', configReqRes)).toBe(false);
+        it('verify SITE is not secondary site - with config', function() {
+            expect(idUtil.isSecondarySite('SITE;111', configReqRes)).toBe(false);
         });
 
         it('verify HDR (VistaHdr pid) is secondary site - no config', function() {
@@ -918,9 +918,9 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify extract from pid', function() {
-            var pid = '9E7A;8';
+            var pid = 'SITE;8';
             var pieces = {
-                site: '9E7A',
+                site: 'SITE',
                 dfn: '8'
             };
             expect(idUtil.extractPiecesFromPid(pid)).toEqual(pieces);
@@ -936,9 +936,9 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify extract from pid with only site piece', function() {
-            var pid = '9E7A;';
+            var pid = 'SITE;';
             var pieces = {
-                site: '9E7A',
+                site: 'SITE',
                 dfn: null
             };
             expect(idUtil.extractPiecesFromPid(pid)).toEqual(pieces);
@@ -954,9 +954,9 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify extract from pid with too many delimiters', function() {
-            var pid = '9E7A;8;3';
+            var pid = 'SITE;8;3';
             var pieces = {
-                site: '9E7A',
+                site: 'SITE',
                 dfn: '8'
             };
             expect(idUtil.extractPiecesFromPid(pid)).toEqual(pieces);
@@ -972,8 +972,8 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify extract from pid', function() {
-            var pid = '9E7A;8';
-            var site = '9E7A';
+            var pid = 'SITE;8';
+            var site = 'SITE';
             expect(idUtil.extractSiteFromPid(pid)).toEqual(site);
         });
     });
@@ -987,7 +987,7 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify extract from pid', function() {
-            var pid = '9E7A;8';
+            var pid = 'SITE;8';
             var dfn = '8';
             expect(idUtil.extractDfnFromPid(pid)).toEqual(dfn);
         });
@@ -1036,12 +1036,12 @@ describe('patient-identifier.js', function() {
 
     describe('extractPidFromJob()', function() {
         it('verify extract pid from job - happy path', function() {
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var patientId = {
                 type: 'pid',
                 value: pid
             };
-            var jobType = 'vista-9E7A-subscribe-request';
+            var jobType = 'vista-SITE-subscribe-request';
             var job = jobUtil.create(jobType, patientId, null, null, null, 'jpid', false);
             expect(idUtil.extractPidFromJob(job)).toEqual(pid);
         });
@@ -1052,13 +1052,13 @@ describe('patient-identifier.js', function() {
                 type: 'icn',
                 value: icn
             };
-            var jobType = 'vista-9E7A-subscribe-request';
+            var jobType = 'vista-SITE-subscribe-request';
             var job = jobUtil.create(jobType, patientId, null, null, null, 'jpid', false);
             expect(idUtil.extractPidFromJob(job)).toEqual('');
         });
 
         it('verify extract pid from job - Job did not contain an identifier', function() {
-            var jobType = 'vista-9E7A-subscribe-request';
+            var jobType = 'vista-SITE-subscribe-request';
             var job = jobUtil.create(jobType, null, null, null, null, 'jpid', false);
             // console.log("Job looks like: %j", job);
             expect(idUtil.extractPidFromJob(job)).toEqual('');
@@ -1171,7 +1171,7 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify patientIdentifier with correct type - with config for VistaHDR site - should be true', function() {
-            expect(idUtil.isVistaDirectSitePid({ type: 'pid', value: '9E7A;11'}, configPubSub)).toBe(true);
+            expect(idUtil.isVistaDirectSitePid({ type: 'pid', value: 'SITE;11'}, configPubSub)).toBe(true);
         });
 
     });
@@ -1206,7 +1206,7 @@ describe('patient-identifier.js', function() {
         });
 
         it('verify incorrect site id - with right config', function() {
-            expect(idUtil.isVistaHdrSite('C877', configPubSub)).toBe(false);
+            expect(idUtil.isVistaHdrSite('SITE', configPubSub)).toBe(false);
         });
 
         it('verify right site id with right config - should be valid', function() {

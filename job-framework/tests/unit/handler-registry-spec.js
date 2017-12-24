@@ -55,7 +55,7 @@ describe('handler-registry.js', function() {
 	});
 
 	describe('register()', function() {
-		var vistaId = 'C877';
+		var vistaId = 'SITE';
 		var config = {
 			config: 'config'
 		};
@@ -104,7 +104,7 @@ describe('handler-registry.js', function() {
 	});
 
 	describe('get()', function() {
-		var vistaId = 'C877';
+		var vistaId = 'SITE';
 		var config = {
 			config: 'config'
 		};

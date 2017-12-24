@@ -49,7 +49,7 @@ public class RequestIdFilter implements Filter {
 			responseWrapper.addHeader("X-Request-ID", MDC.get("requestId").toString());
 			responseWrapper.addHeader("X-Session-ID", MDC.get("sid").toString());
 
-			LOGGER.info(context + " " + RequestMessageType.INCOMING_REQUEST +  " STARTOF " + requestInfo );
+			LOGGER.info(String.format("%s  %s STARTOF %s", context, RequestMessageType.INCOMING_REQUEST, requestInfo));
 		}
 		catch(Exception e) {
 			LOGGER.error(e.getMessage(), e);

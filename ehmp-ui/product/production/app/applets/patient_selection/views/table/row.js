@@ -33,38 +33,33 @@ define([
      */
     var PatientSearchResultView = Backbone.Marionette.ItemView.extend({
         tagName: 'tr',
-        attributes: function(){
-            return {
-                'tabIndex': '0'
-            };
-        },
         template: tableRow,
         events: {
             "click": "selectPatient",
             "keydown": "selectPatient"
         },
         templateHelpers: {
-            'last5': function(){
-                var lastFourOfSSN = _.isString(this.ssn) ? this.ssn.replace(/\D/g,'').slice(-4) : '';
-                if (lastFourOfSSN.length > 0){
-                    return _.get(this, 'familyName', '').charAt(0) + (_.isUndefined(this.last4) ? (_.isUndefined(this.lastFourSSN) ? lastFourOfSSN : this.lastFourSSN) : this.last4 );
+            'last5': function() {
+                var lastFourOfSSN = _.isString(this.ssn) ? this.ssn.replace(/\D/g, '').slice(-4) : '';
+                if (lastFourOfSSN.length > 0) {
+                    return _.get(this, 'familyName', '').charAt(0) + (_.isUndefined(this.last4) ? (_.isUndefined(this.lastFourSSN) ? lastFourOfSSN : this.lastFourSSN) : this.last4);
                 }
                 return this.ssn || '';
             },
-            'getGenderCode': function(){
+            'getGenderCode': function() {
                 var genderCode = _.get(this, 'genderCode', 'U');
                 genderCode = !_.isString(genderCode) || _.isEmpty(genderCode) ? 'U' : genderCode;
-                if (genderCode.length > 1){
+                if (genderCode.length > 1) {
                     return _.get(this, 'genderName', 'U').charAt(0);
                 }
                 return genderCode;
             },
-            'getGenderName': function(){
+            'getGenderName': function() {
                 var genderName = _.get(this, 'genderName', 'Unknown');
                 genderName = !_.isString(genderName) || _.isEmpty(genderName) ? 'Unknown' : genderName;
                 return genderName;
             }
-    },
+        },
         /**
          *
          * Returns the data template file that corresponds to the type of search being performed.
@@ -110,7 +105,7 @@ define([
             event.currentTarget.classList.add('active');
             event.currentTarget.setAttribute('aria-selected', 'true');
             // set the adequate value to the model
-            ADK.PatientRecordService.setCurrentPatient(this.model);
+            ADK.PatientRecordService.setCurrentPatient(this.model, { confirmationOptions: { reconfirm: true } });
         }
     });
 

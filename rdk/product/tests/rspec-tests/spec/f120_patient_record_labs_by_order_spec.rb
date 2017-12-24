@@ -29,21 +29,21 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
   context 'pid' do
     it '. omitted' do
-      response = rdk_fetch(@command, 'uid' => 'urn:va:order:9E7A:227:16682')
+      response = rdk_fetch(@command, 'uid' => 'urn:va:order:SITE:227:16682')
 
       expect(response.code).to eq(403)
     end
 
     it '. null' do
       response = rdk_fetch(@command, 'pid' => '',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
 
       expect(response.code).to eq(403)
     end
 
     it '. icn' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
 
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -55,8 +55,8 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
     end
 
     it '. site/dfn' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;227',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+      response = rdk_fetch(@command, 'pid' => 'SITE;227',
+                                     'uid' => 'urn:va:order:SITE:227:16682')
 
       expect(response.code).to eq(200)
 
@@ -68,25 +68,25 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. not found site' do
       response = rdk_fetch(@command, 'pid' => 'EEEE;227',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
       expect(response.code).to eq(404)
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;848484',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+      response = rdk_fetch(@command, 'pid' => 'SITE;848484',
+                                     'uid' => 'urn:va:order:SITE:227:16682')
       expect(response.code).to eq(404)
     end
 
     it '. not found icn' do
       response = rdk_fetch(@command, 'pid' => '848V484',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
       expect(response.code).to eq(404)
     end
 
     it '. lower case icn v' do
       response = rdk_fetch(@command, 'pid' => '11016v630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
       expect(response.code).to eq(500)
     end
   end
@@ -94,7 +94,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
   context 'start' do
     it '. omitted' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => '')
 
       expect(response.code).to eq(200)
@@ -107,7 +107,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. zero' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => '0')
 
       expect(response.code).to eq(200)
@@ -119,7 +119,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. one' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => '1')
 
       expect(response.code).to eq(200)
@@ -132,7 +132,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. nominal' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => '5')
 
       expect(response.code).to eq(200)
@@ -145,7 +145,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. total' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' =>
                                        "#{@total_item_count}")
 
@@ -158,7 +158,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. more than total' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => "#{@total_item_count + 1}")
 
       expect(response.code).to eq(200)
@@ -170,7 +170,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. negative' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'start' => '-1')
 
       expect(response.code).to eq(200)
@@ -186,7 +186,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
   context 'limit' do
     it '. zero' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => '0')
       # dump(response.body)
       expect(response.code).to eq(200)
@@ -194,7 +194,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. null' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => '')
       # dump(response.body)
 
@@ -203,7 +203,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. one' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => '1')
 
       expect(response.code).to eq(200)
@@ -212,7 +212,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. nominal' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => '5')
 
       expect(response.code).to eq(200)
@@ -221,7 +221,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. total' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => "#{@total_item_count}")
 
       expect(response.code).to eq(200)
@@ -232,7 +232,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. more than total' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => "#{@total_item_count + 1}")
 
       expect(response.code).to eq(200)
@@ -245,7 +245,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. negative' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'limit' => '-1')
       # puts 'limit - negative ----------------------------------------------'
       # dump(response.body)
@@ -261,7 +261,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
   context 'order' do
     it '. omitted' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682')
+                                     'uid' => 'urn:va:order:SITE:227:16682')
 
       expect(response.code).to eq(200)
 
@@ -278,7 +278,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'DE1790: . one field ascending' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'uid')
       expect(response.code).to eq(200)
 
@@ -297,7 +297,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'DE1790: . one field descending' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'summary%20desc')
 
       expect(response.code).to eq(200)
@@ -318,7 +318,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'DE1790: . one field no ascend/descend (default order)' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'summary')
       expect(response.code).to eq(200)
 
@@ -338,7 +338,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'DE1790: . two fields asc' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'uid,summary%20asc')
 
       expect(response.code).to eq(200)
@@ -364,7 +364,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'DE1790: . two fields desc' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' =>
                                          'uid%20desc,summary%20desc')
 
@@ -393,13 +393,13 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
       # like 'uid asc, summary desc'
 
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'uid,summary%20desc')
       expect(response.code).to eq(200)
       a1 = hash_to_array(get_hash_items(response.body))
 
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' =>
                                          'uid%20asc,summary%20desc')
       expect(response.code).to eq(200)
@@ -414,7 +414,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it '. non-existing field' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:16682',
+                                     'uid' => 'urn:va:order:SITE:227:16682',
                                      'order' => 'FieldNoExist%20asc')
       expect(response.code).to eq(200)
 
@@ -436,7 +436,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
     it '. case in-sensitive' do
       response = rdk_fetch(@command,
                            'pid' => '11016V630869',
-                           'uid' => 'urn:va:order:9E7A:227:16682',
+                           'uid' => 'urn:va:order:SITE:227:16682',
                            'order' => 'SUMMARY%20asc')
       # puts 'order - case in-sensitive -------------------------------------'
       # display_items(response.body, 'summary')
@@ -472,7 +472,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'upper case' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'URN:VA:ORDER:9E7A:227:16682')
+                                     'uid' => 'URN:VA:ORDER:SITE:227:16682')
       expect(response.code).to eq(200)
       # dump(response.body)
       verify_response_contains([%w(totalItems 0)],
@@ -481,7 +481,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'incomplete' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227')
+                                     'uid' => 'urn:va:order:SITE:227')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -491,7 +491,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'truncated' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:227:')
+                                     'uid' => 'urn:va:order:SITE:227:')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -501,7 +501,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'non-existing domain' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:NOTEXIST:9E7A:227:16682')
+                                     'uid' => 'urn:va:NOTEXIST:SITE:227:16682')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -511,7 +511,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'upper case urn' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'URN:va:order:9E7A:227:16682')
+                                     'uid' => 'URN:va:order:SITE:227:16682')
       expect(response.code).to eq(200)
       # dump(response.body)
       verify_response_contains([%w(totalItems 0)],
@@ -520,7 +520,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'upper case va' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:VA:order:9E7A:227:16682')
+                                     'uid' => 'urn:VA:order:SITE:227:16682')
       expect(response.code).to eq(200)
       # dump(response.body)
       verify_response_contains([%w(totalItems 0)],
@@ -529,7 +529,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'upper case domain' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:ORDER:9E7A:227:16682')
+                                     'uid' => 'urn:va:ORDER:SITE:227:16682')
       expect(response.code).to eq(200)
       # dump(response.body)
       verify_response_contains([%w(totalItems 0)],
@@ -538,7 +538,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'missing urn' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => ':va:order:9E7A:227:16682')
+                                     'uid' => ':va:order:SITE:227:16682')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -548,7 +548,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'missing va' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn::order:9E7A:227:16682')
+                                     'uid' => 'urn::order:SITE:227:16682')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -558,7 +558,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'missing domain' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va::9E7A:227:16682')
+                                     'uid' => 'urn:va::SITE:227:16682')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -588,7 +588,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'another uid' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:vital:9E7A:100022:29165')
+                                     'uid' => 'urn:va:vital:SITE:100022:29165')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)
@@ -598,7 +598,7 @@ describe 'f120_patient_record_labs_by_order_spec.rb', debug: true do
 
     it 'partial uid' do
       response = rdk_fetch(@command, 'pid' => '11016V630869',
-                                     'uid' => 'urn:va:order:9E7A:100022:29165')
+                                     'uid' => 'urn:va:order:SITE:100022:29165')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(200)
       # dump(response.body)

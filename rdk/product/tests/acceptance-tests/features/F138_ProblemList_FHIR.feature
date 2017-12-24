@@ -7,25 +7,25 @@
  @F138_1_fhir_problemlist @fhir @10107V395912
  Scenario: Client can request problem list results in FHIR format
   Given a patient with "problem list" in multiple VistAs
-   When the client requests problem list for the patient "9E7A;253" in FHIR format
+   When the client requests problem list for the patient "SITE;253" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "problems"
        | name                                      | value                                |
        | resource.clinicalStatus					         | confirmed                            |
        | resource.category.coding.code             | diagnosis                            |
        | resource.category.coding.system           | 2.16.840.1.113883.4.642.2.224        |
-       | resource.patient.reference                | 9E7A;253                             |
+       | resource.patient.reference                | SITE;253                             |
        | resource.code.coding.display              | DIABETES MELLI W/O COMP TYP II       |
        | resource.asserter.display                 | VEHU,SEVEN                           |
        | resource.dateAsserted                     | IS_FHIR_FORMATTED_DATE               |
        | resource.onsetDateTime                    | IS_FHIR_FORMATTED_DATE               |
        | resource.contained.resourceType           | Encounter                            |
        | resource.contained.text.status                | generated                        |
-       | resource.contained.text.div                   | <div>Encounter with patient 9E7A;253</div> |
+       | resource.contained.text.div                   | <div>Encounter with patient SITE;253</div> |
        | resource.contained.location.resourceType      | Location                                   |
-       | resource.contained.location._id               | urn:va:location:9E7A:32                    |
+       | resource.contained.location._id               | urn:va:location:SITE:32                    |
        | resource.contained.resourceType          | Practitioner                                    |
-       | resource.contained.identifier.value      | urn:va:user:9E7A:20008                          |
+       | resource.contained.identifier.value      | urn:va:user:SITE:20008                          |
        | resource.contained.identifier.system     | urn:oid:2.16.840.1.113883.6.233                 |
        | resource.contained.name                  | VEHU,SEVEN                                      |
        | resource.extension.url                   | http://vistacore.us/fhir/extensions/condition#updated            |
@@ -41,16 +41,16 @@
        | resource.clinicalStatus                  | confirmed                            |
        | resource.category.coding.code             | diagnosis                            |
        | resource.category.coding.system           | 2.16.840.1.113883.4.642.2.224        |
-       | resource.patient.reference                | 9E7A;253                             |
+       | resource.patient.reference                | SITE;253                             |
        | resource.code.coding.display              | DIABETES MELLI W/O COMP TYP II      |
        | resource.asserter.display                 | VEHU,SEVEN                      |
        | resource.dateAsserted                     | IS_FHIR_FORMATTED_DATE               |
        | resource.onsetDateTime                    | IS_FHIR_FORMATTED_DATE               |
        | resource.contained.resourceType               | Encounter                        |
        | resource.contained.text.status                | generated                        |
-       | resource.contained.text.div                   | <div>Encounter with patient 9E7A;253</div> |
+       | resource.contained.text.div                   | <div>Encounter with patient SITE;253</div> |
        | resource.contained.location.resourceType      | Location                                   |
-       | resource.contained.location._id               | urn:va:location:9E7A:32                   |
+       | resource.contained.location._id               | urn:va:location:SITE:32                   |
        | resource.contained.resourceType          | Practitioner                                    |
        | resource.extension.url                   | http://vistacore.us/fhir/extensions/condition#updated            |
        | resource.extension.valueDateTime         | IS_FHIR_FORMATTED_DATE                                           |
@@ -67,7 +67,7 @@
  Scenario: Client can request problem list results in FHIR format
    Given a patient with "problem list" in multiple VistAs
     #   And a patient with pid "5000000116V912836" has been synced through the RDK API
-   When the client requests problem list for the patient "9E7A;100615" in FHIR format
+   When the client requests problem list for the patient "SITE;100615" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "problems"
        | name                                     | value                                |
@@ -127,7 +127,7 @@
  Scenario: Client can request problem list results in FHIR format
  	Given a patient with "problem list" in multiple VistAs
      #  And a patient with pid "10104V248233" has been synced through the RDK API
-       When the client requests problem list for the patient "9E7A;229" in FHIR format
+       When the client requests problem list for the patient "SITE;229" in FHIR format
        Then a successful response is returned
        And the FHIR results contain "problems"
        | name                                     | value                                |
@@ -164,7 +164,7 @@
  @F138_4_fhir_problemlist @fhir @5000000009V082878
  Scenario: Client can request problem list results in FHIR format
    Given a patient with "problem list" in multiple VistAs
-   When the client requests problem list for the patient "9E7A;100125" in FHIR format
+   When the client requests problem list for the patient "SITE;100125" in FHIR format
    Then a successful response is returned
    And the FHIR results contain "problems"
        | name                                      | value                                |

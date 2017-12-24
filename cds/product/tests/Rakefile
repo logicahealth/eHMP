@@ -8,7 +8,7 @@ task :scpCDSILogs, :driver do |t, args|
   logDir = "./cdsi_logs"
   logs = ["catalina.out"]
   key = knife_search_for_key_name("cdsinvocation", args[:driver])
-  user = "REDACTED"
+  user = "USER    "
   ip = knife_search_for_ip("cdsinvocation")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   logs.each do |logname|
@@ -55,13 +55,13 @@ end
 
 task :syncCache do
   patient_sync_list = [
-    "9E7A;140",
-    "9E7A;253",
-    "9E7A;100184"     
+    "SITE;140",
+    "SITE;253",
+    "SITE;100184"     
   ]
 
   ENV["JDS_IP"] = knife_search_for_ip("jds")
   ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
-  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:PORT", 600, ["SITE", "SITE"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
 end

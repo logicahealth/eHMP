@@ -1,26 +1,26 @@
 [{
-    "facility": "C877",
+    "facility": "SITE",
     "teams": [{
         "active": true,
-        "createdByIEN": "C877;10008673",
+        "createdByIEN": "SITE;10008673",
         "createdDateTime": 20150101000000,
-        "modifiedByIEN": "C877;10008833",
+        "modifiedByIEN": "SITE;10008833",
         "modifiedDateTime": 20150101000000,
         "patients": [{
-            "assignedByIEN": "C877;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": "00001",
             "icn": "10108V429807"
         }, {
-            "assignedByIEN": "C877;10008833",
+            "assignedByIEN": "SITE;10008833",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": null,
             "icn": "10108V420871"
         }],
         "position": [{
-            "assignedByIEN": "C877;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
-            "ien": "C877;10000000270",
+            "ien": "SITE;10000000270",
             "positionId": "00001",
             "staffName": "USER,PANORAMA",
             "teamRole": 410,
@@ -33,44 +33,44 @@
         "teamType": 302
     }]
 }, {
-    "facility": "9E7A",
+    "facility": "SITE",
     "teams": [{
         "active": true,
-        "createdByIEN": "9E7A;10008673",
+        "createdByIEN": "SITE;10008673",
         "createdDateTime": 20150101000000,
-        "modifiedByIEN": "9E7A;10008833",
+        "modifiedByIEN": "SITE;10008833",
         "modifiedDateTime": 20150101000000,
         "patients": [{
-            "assignedByIEN": "9E7A;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": "00001",
-            "icn": "9E7A;100141"
+            "icn": "SITE;100141"
         }, {
-            "assignedByIEN": "9E7A;10008833",
+            "assignedByIEN": "SITE;10008833",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": null,
-            "icn": "9E7A;3"
+            "icn": "SITE;3"
         }],
         "position": [{
-            "assignedByIEN": "9E7A;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
-            "ien": "9E7A;10000000270",
+            "ien": "SITE;10000000270",
             "positionId": "00001",
             "staffName": "USER,PANORAMA",
             "teamRole": 403,
             "staffRole": "Child Psychologist"
         }, {
-            "assignedByIEN": "9E7A;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
-            "ien": "9E7A;20112",
+            "ien": "SITE;20112",
             "positionId": "00002",
             "staffName": "NURSE,ONE",
             "teamRole": 410,
             "staffRole": "Nurse Practitioner"
         }, {
-            "assignedByIEN": "9E7A;1000897",
+            "assignedByIEN": "SITE;1000897",
             "assignedDateTime": 20150101000000,
-            "ien": "9E7A;10000000016",
+            "ien": "SITE;10000000016",
             "positionId": "00003",
             "staffName": "TDNURSE,ONE",
             "teamRole": 412,

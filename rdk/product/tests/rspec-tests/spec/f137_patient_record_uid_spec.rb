@@ -31,13 +31,13 @@ describe 'f137_patient_record_uid_spec.rb', acceptance: true do
   context 'uid' do
     it 'nominal document 1' do
       response = rdk_fetch(@command, 'pid' => '5000000009V082878',
-                                     'uid' => 'urn:va:document:9E7A:100125:2258')
+                                     'uid' => 'urn:va:document:SITE:100125:2258')
       expect(response.code).to eq(200)
     end
 
     it 'nominal document 2' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va:document:9E7A:3:2745')
+                                     'uid' => 'urn:va:document:SITE:3:2745')
       expect(response.code).to eq(200)
     end
 
@@ -54,64 +54,64 @@ describe 'f137_patient_record_uid_spec.rb', acceptance: true do
 
     it 'upper case' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'URN:VA:DOCUMENT:9E7A:3:2745')
+                                     'uid' => 'URN:VA:DOCUMENT:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 
     it 'incomplete' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va:document:9E7A:3')
+                                     'uid' => 'urn:va:document:SITE:3')
       expect(response.code).to eq(404)
     end
 
     it 'truncated' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va:document:9E7A:3:')
+                                     'uid' => 'urn:va:document:SITE:3:')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(400)
     end
 
     it 'non-existing domain' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va:NOTEXIST:9E7A:3:2745')
+                                     'uid' => 'urn:va:NOTEXIST:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 
     it 'upper case urn' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'URN:va:document:9E7A:3:2745')
+                                     'uid' => 'URN:va:document:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 
     it 'upper case va' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:VA:document:9E7A:3:2745')
+                                     'uid' => 'urn:VA:document:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 
     it 'upper case domain' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va:DOCUMENT:9E7A:3:2745')
+                                     'uid' => 'urn:va:DOCUMENT:SITE:3:2745')
       expect(response.code).to eq(404)
     end
 
     it 'missing urn' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => ':va:document:9E7A:3:2745')
+                                     'uid' => ':va:document:SITE:3:2745')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(400)
     end
 
     it 'missing va' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn::document:9E7A:3:2745')
+                                     'uid' => 'urn::document:SITE:3:2745')
       # expect(response.code).to eq(404)
       expect(response.code).to eq(400)
     end
 
     it 'missing domain' do
       response = rdk_fetch(@command, 'pid' => '10108V420871',
-                                     'uid' => 'urn:va::9E7A:3:2745')
+                                     'uid' => 'urn:va::SITE:3:2745')
       expect(response.code).to eq(400)
     end
 

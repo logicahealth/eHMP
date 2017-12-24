@@ -10,17 +10,17 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @@users = {}
 
-  @@users["9E7A;pu1234"] = "REDACTED"
-  @@users["C877;pu1234"] = "REDACTED"
-  @@users["9E7A;pr12345"] = "REDACTED"
-  @@users["UnauthorizedUser"] = "REDACTED"
-  @@users["AuditLogUser"] = "REDACTED"
-  @@users["9E7A;lu1234"] = "REDACTED"
-  @@users["9E7A;1tdnurse"] = "REDACTED"
-  @@users["9E7A;xx1234"] = "REDACTED"
-  @@users["9E7A;mx1234"] = "REDACTED"
-  @@users["C877;mx1234"] = "REDACTED"
-  @@users["9E7A;nurse18"] = "eigh18!!"
+  @@users["PW         "] = "PW      "
+  @@users["SITE;USER  "] = "PW      "
+  @@users["SITE;USER   "] = "PW       "
+  @@users["UnauthorizedUser"] = "PW      "
+  @@users["AuditLogUser"] = "PW"
+  @@users["SITE;USER  "] = "PW"
+  @@users["SITE;USER    "] = "PW      "
+  @@users["SITE;REDACT"] = "PW"
+  @@users["SITE;USER  "] = "PW      "
+  @@users["SITE;USER  "] = "PW      "
+  @@users["SITE;USER   "] = "PW      "
   def self.password_for(username)
     return @@users[username]
   end
@@ -28,7 +28,7 @@ end
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :accessCode => "REDACTED", :verifyCode => "REDACTED", :site => "9E7A", :division => "500" }
+  @@auth = { :accessCode => "USER  ", :verifyCode => "PW      ", :site => "SITE", :division => "500" }
 #remove this site before doing things
   @@site = nil
   @@time_start = Time.new

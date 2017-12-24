@@ -29,10 +29,10 @@ var originalVaAppointmentRecord = {
     'lastUpdateTime': 20000521131400,
     'localId': 'A;3000521.09;23',
     'locationName': 'GENERAL MEDICINE',
-    'locationUid': 'urn:va:location:9E7A:23',
+    'locationUid': 'urn:va:location:SITE:23',
     'patientClassCode': 'urn:va:patient-class:AMB',
     'patientClassName': 'Ambulatory',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'providers': [
         {
             'primary': true,
@@ -46,7 +46,7 @@ var originalVaAppointmentRecord = {
     'stopCodeUid': 'urn:va:stop-code:301',
     'typeCode': 9,
     'typeName': 'REGULAR',
-    'uid': 'urn:va:appointment:9E7A:3:A;3000521.09;23',
+    'uid': 'urn:va:appointment:SITE:3:A;3000521.09;23',
     'movements': [{
         'dateTime': 200005210900,
         'localId': 100
@@ -195,10 +195,10 @@ describe('record-enrichment-appointment-xformer.js', function() {
                 'lastUpdateTime': 20000521131400,
                 'localId': 'A;3000521.09;23',
                 'locationName': undefined,                          // Will force us to leave locationDisplayName as undefined
-                'locationUid': 'urn:va:location:9E7A:23',
+                'locationUid': 'urn:va:location:SITE:23',
                 'patientClassCode': 'urn:va:patient-class:AMB',
                 'patientClassName': 'Ambulatory',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'providers': undefined,                             // Will force no conversion on provider array
                 'service': 'MEDICINE',
                 'shortLocationName': 'GM',
@@ -207,7 +207,7 @@ describe('record-enrichment-appointment-xformer.js', function() {
                 'stopCodeUid': 'urn:va:stop-code:301',
                 'typeCode': 9,
                 'typeName': undefined,                          // Will force us to leave typeDisplayName as undefined
-                'uid': 'urn:va:appointment:9E7A:3:A;3000521.09;23'
+                'uid': 'urn:va:appointment:SITE:3:A;3000521.09;23'
             };
 
             var appointmentJob = {

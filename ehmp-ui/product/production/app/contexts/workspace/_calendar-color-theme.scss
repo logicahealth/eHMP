@@ -1,0 +1,58 @@
+@mixin calendarColorTheme($primary, $dark) {
+    .datepicker {
+        table {
+            thead {
+                tr:first-child th:hover {
+                    color: $dark;
+                }
+                .prev,
+                .next {
+                    color: $primary;
+                }
+            }
+            tbody tr td {
+                &.day {
+                    &.today {
+                        border-color: $primary;
+                        &:hover:hover {
+                            background: $primary;
+                            border-color: $primary;
+                        }
+                    }
+                    &.active {
+                        background-color: $primary;
+                        border-color: $primary;
+                        &:hover:hover {
+                            background-color: $dark;
+                            border-color: $dark;
+                        }
+                    }
+                    &:hover:hover {
+                        background: $primary;
+                        border-color: $dark;
+                    }
+                }
+                span {
+                    &.active.active {
+                        background-color: $primary;
+                    }
+                    &:hover {
+                        background: $primary;
+                    }
+                }
+            }
+            tfoot tr th {
+                color: $primary;
+                &:hover {
+                    color: $dark;
+                }
+            }
+        }
+    }
+    .input-group.date .input-group-addon {
+        color: $primary;
+        &:hover {
+            color: $dark;
+        }
+    }
+}

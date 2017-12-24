@@ -16,3 +16,16 @@ node.normal["tomcat"]["more_opts"] = ["-Djavax.net.ssl.trustStorePassword=#{node
 # Logging
 default['tomcat']['logging']['sizeBasedTriggeringPolicy'] = "50MB"
 default['tomcat']['logging']['defaultRolloverStrategy'] = "10"
+
+default[:cdsinvocation][:nerve] = {
+  :check_interval => 30,
+  :checks => [
+		{
+			type: "http",
+			uri: "/cds-results-service/rest/healthcheck",
+			timeout: 5,
+			rise: 3,
+			fall: 2
+		}
+	]
+}

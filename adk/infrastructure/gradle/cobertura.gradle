@@ -1,0 +1,149 @@
+def classSource = new File("${rootDir}/../infrastructure/gradle/coverage/groovy/Cobertura.groovy").text
+
+def cobertura = new GroovyShell().evaluate("""${classSource}
+return new Cobertura()""")
+
+def serFile="${project.buildDir}/cobertura.ser"
+def classes="${project.sourceSets.main.output.classesDir}"
+def instrumentedClasses="${project.buildDir}/classes/instrumented"
+def thresholdsFile=project.file("coverage.thresholds.xml")
+def coverageReportDir="${reporting.baseDir}/coverage"
+def coverageReportFile = "${coverageReportDir}/coverage.xml"
+
+configurations{
+    coberturaRuntime {extendsFrom testRuntime}
+    instrumentedRuntime
+}
+
+dependencies {
+    coberturaRuntime "log4j:log4j:1.2.16"
+    coberturaRuntime ('net.sourceforge.cobertura:cobertura:2.0.3-nodtd')
+    instrumentedRuntime files(instrumentedClasses)
+}
+
+// coverage instrumentation around test
+test {
+    dependencies {
+        testRuntime "log4j:log4j:1.2.16"
+        testRuntime ('net.sourceforge.cobertura:cobertura:2.0.3-nodtd')
+    }
+    
+    classpath = configurations.instrumentedRuntime + classpath
+    jvmArgs "-XX:-UseSplitVerifier"
+    systemProperties["net.sourceforge.cobertura.datafile"] = serFile
+}
+
+class CoverageInstrument extends DefaultTask {
+    ArrayList excludes
+}
+
+task coverageInstrument(type: CoverageInstrument) {
+    inputs.dir classes
+    outputs.dir instrumentedClasses
+
+    doLast {
+        if (new File(classes).exists()) {
+            logger.quiet "Instrumenting classes for Cobertura"
+
+            ant {
+                delete(file:serFile, failonerror:false)
+
+                taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+                'cobertura-instrument'(datafile: serFile, todir: instrumentedClasses) {
+                    fileset(dir: classes) {
+                        include(name: "**/*.class")
+                        excludes.each {excludeName ->
+                            exclude(name: excludeName)
+                        }
+                    }
+                }
+                delete(file:"${projectDir}/cobertura.ser", failonerror:false)
+            }
+        }
+    }
+}
+
+test.dependsOn(coverageInstrument)
+
+// internal coverage XML report task
+task coverageXmlReport(dependsOn: test) {
+    inputs.file serFile
+    outputs.file new File(coverageReportFile)
+}
+
+coverageXmlReport.doLast {
+    if (new File(serFile).exists()) {
+        ant.taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+        ant.'cobertura-report'(destdir: coverageReportDir, format:'xml', srcdir:"src/main/java", datafile: serFile)
+    }
+}
+
+// coverage check task
+task coverageCheck(dependsOn: coverageXmlReport) {
+    group 'coverage'
+    description 'Performs check on code coverage that minimums have been met.'
+    inputs.file coverageReportFile
+    outputs.file "${project.buildDir}/cobertura.check.flag"
+}
+
+coverageCheck.doLast {
+    if (new File(coverageReportFile).exists()) {
+        def thresholds = null
+        if (thresholdsFile.exists())
+            thresholds = new XmlParser().parse(thresholdsFile)
+        def coverage = new XmlParser().parse(coverageReportFile)
+
+        def shouldSave = cobertura.check(project.name, thresholds, coverage, coverageThresholdBranchrate, coverageThresholdLinerate)
+        if (shouldSave)
+            cobertura.writeXml thresholds, thresholdsFile
+
+        def flagFile = new File("${project.buildDir}/cobertura.check.flag")
+        if (flagFile.exists()){
+            flagFile.delete()
+        }
+        flagFile.createNewFile()
+    }
+}
+
+// coverage report task - must be run explicitly
+task coverageReport(dependsOn: test) {
+    group 'coverage'
+    description 'Produces and opens and html coverage report.'
+    inputs.file serFile
+    outputs.dir coverageReportDir
+}
+
+coverageReport.doLast {
+    if (new File(serFile).exists()) {
+        ant.taskdef(resource:'tasks.properties', classpath: configurations.coberturaRuntime.asPath)
+        ant.'cobertura-report'(destdir: coverageReportDir, format:'html', srcdir:"src/main/java", datafile: serFile)
+
+        // open the report in a browser
+        java.awt.Desktop.getDesktop().browse new File(coverageReportDir, "index.html").toURI()
+    }
+}
+
+// coverage bless task--updates coverage.thresholds.xml with all coverage exceptions
+task coverageBless(dependsOn: coverageXmlReport) {
+    group 'coverage'
+    description "Updated the code coverage minimums to match current code coverage rates."
+}
+
+coverageBless.doLast {
+    if (new File(coverageReportFile).exists()) {
+        // create thresholds xml
+        def thresholds = new Node(null, "thresholds")
+
+        // extract failures into it
+        cobertura.extractCoverageFailures coverageReportDir, coverageThresholdBranchrate, coverageThresholdLinerate, {
+            className, branchcount, branchesexecuted, branchrate, linecount, linesexecuted, linerate ->
+            thresholds.appendNode("threshold", ['class':className, 'branchcount':branchcount,
+                        'branchsexecuted':branchesexecuted, 'branchrate':branchrate,
+                        'linecount':linecount, 'linesexecuted':linesexecuted, 'linerate':linerate])
+        }
+
+        // if we got any, write the file
+        if (thresholds.children().size() > 0)
+            cobertura.writeXml thresholds, thresholdsFile
+    }
+}

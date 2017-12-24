@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.EVENT_MATCH_CRITERIA")
+@Table(name = "EVENT_MATCH_CRITERIA", schema = "ACTIVITYDB")
 public class EventMatchCriteria {
 
 	@Id
@@ -27,6 +27,8 @@ public class EventMatchCriteria {
 		this.id = id;
 	}
 
+	public EventMatchCriteria() { }
+	
 	public EventMatchCriteria(BigDecimal id) {
 		this.id = id;
 	}

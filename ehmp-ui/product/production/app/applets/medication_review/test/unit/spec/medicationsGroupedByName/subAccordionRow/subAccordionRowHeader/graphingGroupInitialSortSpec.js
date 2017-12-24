@@ -1,13 +1,13 @@
 define([
     'jasminejquery',
     'backbone',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowHeader/graphingGroupCollection'
-], function(jasminejquery, Backbone, MedicationOrderModel, GraphingGroupCollection) {
+], function(jasminejquery, Backbone, GraphingGroupCollection) {
     'use strict';
     var graphingGroupCollection, med1, med2, med3, med4, med5, med6, med7, med8, med9, med10, med11, med12;
+    var MedicationOrderModel;
 
-    beforeEach(function() {
+    var setupTest = function() {
 
         med1 = new MedicationOrderModel({
             uid: 'uid:med1',
@@ -69,6 +69,21 @@ define([
             name: "aspirin",
             vaType: "O"
         });
+    };
+
+    beforeEach(function(done) {
+        if (_.isUndefined(MedicationOrderModel)) {
+            require([
+                'app/resources/fetch/medication_review/medicationOrderModel'
+            ], function(model) {
+                MedicationOrderModel = model;
+                setupTest();
+                done();
+            });
+        } else {
+            setupTest();
+            done();
+        }
     });
 
     describe("Initial sorting of meds for graphing groups", function() {

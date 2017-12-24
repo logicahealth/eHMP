@@ -24,9 +24,9 @@
         <div class="wrapper-grouping">
             <div class="group-header">Patient Context</div>
             {{#compare ccowStatus 'Connected'}}
-            <button id="leaveContext" class="btn btn-default" type="button" title="Press enter to leave context.">Leave Context</button>
+            <button id="leaveContext" class="btn btn-default" type="button">Leave Context</button>
             {{/compare}} {{#compare ccowStatus 'Suspended'}}
-            <button id="joinContext" class="btn btn-default" type="button" title="Press enter to rejoin context.">Rejoin Context</button>
+            <button id="joinContext" class="btn btn-default" type="button">Rejoin Context</button>
             {{/compare}}
         </div>
     </div>

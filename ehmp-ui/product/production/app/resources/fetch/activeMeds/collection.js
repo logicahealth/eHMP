@@ -12,7 +12,7 @@ define([
             cache: true,
             patientData: true,
             criteria: {
-                afterFilter: 'or(eq(recent,true),eq(calculatedStatus,"Expires"),eq(calculatedStatus,"Start"))'
+                afterFilter: 'or(eq(recent,true),eq(calculatedStatus,"Active"))'
             },
             _inpatientFilter: 'and(ne(vaStatus,"CANCELLED"),or(eq(vaType, "I"),eq(vaType, "IV"),eq(vaType,"V")))',
             _outpatientFilter: 'and(ne(vaStatus,"CANCELLED"),or(eq(vaType, "O"),eq(vaType, "N")))'
@@ -26,9 +26,6 @@ define([
         },
         _success: function success(collection, resp) {
             collection.originalModels = collection.clone();
-
-            collection.trigger('fetchSuccessful', collection);
-            collection.trigger('fetch:success', collection, resp);
         },
         _error: function error(collection, resp) {
             collection.trigger('fetch:error', collection, resp);
@@ -40,7 +37,7 @@ define([
 
             _.set(fetchOptions, 'criteria.filter', filter);
 
-            _.set(fetchOptions, 'success', this._success);
+            _.set(fetchOptions, 'onSuccess', this._success);
             _.set(fetchOptions, 'error', this._error);
 
             this.url = fetchOptions.url = ADK.ResourceService.buildUrl(fetchOptions.resourceTitle, fetchOptions.criteria);

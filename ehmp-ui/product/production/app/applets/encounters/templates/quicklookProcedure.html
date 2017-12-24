@@ -3,8 +3,8 @@
     <thead>
         <tr>
             <th scope="col">Date</th>
+            <th scope="col">{{#if isParentTile}}Procedure Name{{else}}Provider{{/if}}</th>
             <th scope="col">Service</th>
-            <th scope="col">Provider</th>
             <th scope="col">Facility</th>
         </tr>
     </thead>
@@ -13,8 +13,8 @@
         {{#each allGroupedEncounters}}
             <tr>
                 <td>{{showDate}}</td>
-                <td class="word-wrap-break-word">{{Service}}</td>
-                <td class="word-wrap-break-word">{{encProvider}}</td>
+                <td class="word-wrap-break-word">{{#if isParentTile}}{{procName}}{{else}}{{encProvider}}{{/if}}</td>
+                <td class="word-wrap-break-word">{{service}}</td>
                 <td>{{facilityMoniker}}</td>
             </tr>
         {{/each}}

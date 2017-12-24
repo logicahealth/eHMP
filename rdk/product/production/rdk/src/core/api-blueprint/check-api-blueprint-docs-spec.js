@@ -46,7 +46,7 @@ describe('API Blueprint documentation,', function() {
             }
 
             var method = getMethod(resource);
-            var mountpoint = resource.mountpoint.length > 1 ? resource.mountpoint : resource.path;
+            var mountpoint = getMountpoint(resource);
             var markdownPath = getMarkdownPath(resource, filePath);
 
             describe(buildDescription(resource, resourceConfigs, filePath, method), function () {
@@ -187,6 +187,13 @@ function getMethod(resource) {
     return _.find(['get', 'post', 'put', 'delete'], function(httpMethod) {
         return _.has(resource, httpMethod);
     }).toUpperCase();
+}
+
+function getMountpoint(resource) {
+    var mountpoint = resource.mountpoint.length > 1 ? resource.mountpoint : resource.path;
+    // wrap colon-prefixed path parameters (e.g. :pid) with braces (e.g. {pid})
+    mountpoint = mountpoint.replace(/\/:(\w+)(\/|$)/g, '/{$1}$2');
+    return mountpoint;
 }
 
 function withType(type, item) {

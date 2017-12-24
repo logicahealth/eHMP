@@ -4,7 +4,7 @@ maintainer_email 'devops-support@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures beats'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '2.1.0'
+version          '2.233.0'
 
 #############################
 # 3rd party
@@ -13,5 +13,5 @@ version          '2.1.0'
 #############################
 # wrapper_cookbook
 #############################
-depends 'filebeat_wrapper', '=2.1.0'
-depends 'topbeat_wrapper', '=2.1.0'
+depends 'filebeat_wrapper', '=2.233.0'
+depends 'topbeat_wrapper', '=2.233.0'

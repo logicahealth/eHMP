@@ -21,6 +21,8 @@ include_recipe "xvfb_wrapper"
 
 include_recipe "nodejs_wrapper"
 
+include_recipe "nodejs_wrapper::node_6_dev_tools"
+
 include_recipe "workstation::install_packages"
 
 execute "correct ownership of gem home" do
@@ -30,5 +32,3 @@ end
 include_recipe 'oracle_wrapper::client'
 
 include_recipe "workstation::slave_config"
-
-include_recipe "berks-api"

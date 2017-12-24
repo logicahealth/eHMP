@@ -18,9 +18,11 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 // });
 
 describe('solr-visit-xform.js', function() {
-    describe('Transformer', function() {
-        it('Happy Path', function() {
-            var vprRecord = {
+    describe('Transformer', function () {
+        var vprRecord;
+
+        beforeEach(function () {
+            vprRecord = {
                 'categoryCode': 'urn:va:encounter-category:OV',
                 'categoryName': 'Outpatient Visit',
                 'current': false,
@@ -34,15 +36,15 @@ describe('solr-visit-xform.js', function() {
                 'locationDisplayName': 'Primary Care',
                 'locationName': 'PRIMARY CARE',
                 'locationOos': false,
-                'locationUid': 'urn:va:location:9E7A:32',
+                'locationUid': 'urn:va:location:SITE:32',
                 'patientClassCode': 'urn:va:patient-class:AMB',
                 'patientClassName': 'Ambulatory',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'primaryProvider': {
                     'primary': true,
                     'providerDisplayName': 'Programmer,One',
                     'providerName': 'PROGRAMMER,ONE',
-                    'providerUid': 'urn:va:user:9E7A:1',
+                    'providerUid': 'urn:va:user:SITE:1',
                     'role': 'P',
                     'summary': 'EncounterProvider{uid=\'\'}'
                 },
@@ -51,21 +53,21 @@ describe('solr-visit-xform.js', function() {
                         'primary': true,
                         'providerDisplayName': 'Programmer,One',
                         'providerName': 'PROGRAMMER,ONE',
-                        'providerUid': 'urn:va:user:9E7A:1',
+                        'providerUid': 'urn:va:user:SITE:1',
                         'role': 'P',
                         'summary': 'EncounterProvider{uid=\'\'}'
                     },
                     {
                         'providerDisplayName': 'Yackuboskey,Veronica',
                         'providerName': 'YACKUBOSKEY,VERONICA',
-                        'providerUid': 'urn:va:user:9E7A:5',
+                        'providerUid': 'urn:va:user:SITE:5',
                         'role': 'S',
                         'summary': 'EncounterProvider{uid=\'\'}'
                     },
                     {
                         'providerDisplayName': 'Programmer,Five',
                         'providerName': 'PROGRAMMER,FIVE',
-                        'providerUid': 'urn:va:user:9E7A:119',
+                        'providerUid': 'urn:va:user:SITE:119',
                         'role': 'S',
                         'summary': 'EncounterProvider{uid=\'\'}'
                     }
@@ -80,8 +82,11 @@ describe('solr-visit-xform.js', function() {
                 'summary': 'PRIMARY CARE/MEDICINE',
                 'typeDisplayName': 'Primary Care Visit',
                 'typeName': 'PRIMARY CARE VISIT',
-                'uid': 'urn:va:visit:9E7A:8:10047'
+                'uid': 'urn:va:visit:SITE:8:10047'
             };
+        });
+
+        it('Happy Path', function() {
             var solrRecord = xformer(vprRecord, log);
 
             // Verify Common Fields
@@ -113,6 +118,13 @@ describe('solr-visit-xform.js', function() {
             expect(solrRecord.encounter_category).toBe(vprRecord.categoryName);
             expect(solrRecord.primary_provider_name).toBe(vprRecord.providers[0].providerName);
             expect(solrRecord.reason_name).toBe(vprRecord.reasonName);
+            expect(solrRecord.removed).toBeUndefined();
+        });
+
+        it('Removed', function () {
+            vprRecord.removed = true;
+            var solrRecord = xformer(vprRecord, log);
+            expect(solrRecord.removed).toBe('true');
         });
     });
 });

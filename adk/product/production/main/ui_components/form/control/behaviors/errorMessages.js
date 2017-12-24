@@ -60,19 +60,28 @@ define([
             });
             this.$el.append(this.errorMessageView.render().$el);
             var fieldSelector = _.isString(this.getOption('fieldSelector')) ? this.getOption('fieldSelector') : _.isFunction(this.getOption('fieldSelector')) ? this.getOption('fieldSelector')() : null;
-            if (fieldSelector){
-                this.$(fieldSelector).attr('aria-describedby', 'form-control-error-' + this.errorMessageView.cid);
+            if (fieldSelector) {
+                var describedBy = (this.$(fieldSelector).attr('aria-describedby') || '') + ' form-control-error-' + this.errorMessageView.cid;
+                this.$(fieldSelector).attr('aria-describedby', describedBy.trim());
             }
         },
         clearInvalid: function() {
+            var cid = _.get(this, 'errorMessageView.cid', '');
             if (this.errorMessageView instanceof ErrorMessageView) {
+
                 this.errorMessageView.destroy();
             }
             delete this.errorMessageView;
             this.$el.removeClass(ClassDefinitions.errorClassName);
             var fieldSelector = _.isString(this.getOption('fieldSelector')) ? this.getOption('fieldSelector') : _.isFunction(this.getOption('fieldSelector')) ? this.getOption('fieldSelector')() : null;
-            if (fieldSelector){
-                this.$(fieldSelector).removeAttr('aria-describedby');
+            if (fieldSelector) {
+                var describedBy = this.$(fieldSelector).attr('aria-describedby') || '';
+                describedBy = describedBy.replace('form-control-error-' + cid, '');
+                if (!_.isEmpty(describedBy)) {
+                    this.$(fieldSelector).attr('aria-describedby', describedBy.trim());
+                } else {
+                    this.$(fieldSelector).removeAttr('aria-describedby');
+                }
             }
         },
         listenToFieldName: function() {

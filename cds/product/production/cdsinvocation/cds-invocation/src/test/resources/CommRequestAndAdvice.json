@@ -19,14 +19,14 @@
                 "subject": {
                     "codeSystem": null,
                     "entityType": "Subject",
-                    "id": "9E7A;100184",
+                    "id": "SITE;100184",
                     "name": "",
                     "type": null
                 },
                 "user": {
                     "codeSystem": "VA:DUZ",
                     "entityType": "User",
-                    "id": "9E7A:10000000237",
+                    "id": "SITE:10000000237",
                     "name": "USER PANORAMA",
                     "type": "provider"
                 }
@@ -36,7 +36,7 @@
                 "subject": {
                     "codeSystem": null,
                     "entityType": "Subject",
-                    "id": "9E7A;100184",
+                    "id": "SITE;100184",
                     "name": "",
                     "type": null
                 },
@@ -96,9 +96,9 @@
                         "dueDate": null,
                         "generatedBy": "OpenCDS",
                         "id": "9d3fa964-7c64-4da9-95cb-abffa8b2656f-2",
-                        "pid": "9E7A;100184",
+                        "pid": "SITE;100184",
                         "priority": 50,
-                        "provider": "9E7A:10000000237",
+                        "provider": "SITE:10000000237",
                         "title": "Hypertension Screening NCR.",
                         "type": "advice"
                     },

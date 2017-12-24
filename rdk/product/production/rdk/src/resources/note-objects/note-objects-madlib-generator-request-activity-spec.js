@@ -7,29 +7,29 @@ var requestActivityActive = raData.activeRequest;
 var activeRequestWithMissingDataDefault = raData.activeRequestWithMissingDataDefault;
 var appConfig = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'PANORAMA',
             'division': '500',
             'host': 'IP        ',
             'localIP': 'IP      ',
             'localAddress': 'localhost',
-            'port': 9210,
+            'port': PORT,
             'production': false,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'infoButtonOid': '1.3.6.1.4.1.3768',
             'abbreviation': 'PAN'
         },
-        'C877': {
+        'SITE': {
             'name': 'KODAK',
             'division': '507',
             'host': 'IP        ',
             'localIP': 'IP      ',
             'localAddress': 'localhost',
-            'port': 9210,
+            'port': PORT,
             'production': false,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'infoButtonOid': '1.3.6.1.4.1.3768',
             'abbreviation': 'KDK'
         }

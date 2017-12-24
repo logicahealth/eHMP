@@ -1,4 +1,4 @@
-@F144_Lab_Results_Modal @Lab_Results   @reg1
+@F144_Lab_Results_Modal @Lab_Results   @reg3
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results in expanded view
 
 # Team: Andromeda, inherited by Team Venus
@@ -16,7 +16,7 @@ Scenario: Lab History modal graph.
   Then the modal is displayed
   And the modal's title is "TRIGLYCERIDE"
   And the user clicks the date control "All" in the "Numeric Lab Results modal"
-  And the "Lab Graph" should be "Displayed" in the "Numeric Lab Results modal"
+  And the Lab Graph should be displayed in the Numeric Lab Results modal
   And the "Lab Graph" title is "TRIGLYCERIDE - SERUM"
   And the "Y-axis Label" should be "Displayed" in the "Numeric Lab Results modal"
   And the "Y-axis Label" is "mg/dL"

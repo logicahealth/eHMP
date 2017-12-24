@@ -22,10 +22,13 @@ import gov.va.kie.utils.WorkItemUtil;
 
 public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, Cacheable {
 	private static final Logger LOGGER = Logger.getLogger(ClinicalObjectWriteHandler.class);
+
+	@Override
 	public void close() {
 		//Ignored
 	}
 	
+	@Override
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
 		LOGGER.info("ClinicalObjectWriteHandler.abortWorkItem has been called");
 	}
@@ -34,6 +37,7 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 	 * Posts or puts the clinicalObject (contained in a parameter of the WorkItem called 'clinicalObject')
 	 * to pJDS and then completes the WorkItem (the response is contained in ServiceResponse).
 	 */
+	@Override
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
 		String response = null;
 		try {
@@ -42,8 +46,8 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 			String jsonObject = WorkItemUtil.extractRequiredStringParam(workItem,"clinicalObject");
 			String uId = WorkItemUtil.extractOptionalStringParam(workItem,"uid");
 			
-			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
-			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem jsonObject = " + jsonObject);
+			LOGGER.debug(String.format("ClinicalObjectWriteHandler.executeWorkItem pId = %s, uId = %s", pId, uId));
+			LOGGER.debug(String.format("ClinicalObjectWriteHandler.executeWorkItem jsonObject = %s", jsonObject));
 			
 			ResourceUtil resUtil = new ResourceUtil();
 			
@@ -56,14 +60,15 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 				result = resUtil.invokePostResource(jsonObject, pId);
 			}
 
-			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem result = " + result);
+			LOGGER.debug(String.format("ClinicalObjectWriteHandler.executeWorkItem result = %s", result));
 			response = transformResult(result);
-			LOGGER.debug("ClinicalObjectWriteHandler.executeWorkItem response = " + response);
+			LOGGER.debug(String.format("ClinicalObjectWriteHandler.executeWorkItem response = %s", response));
 		} catch (EhmpServicesException e) {
-			response = e.toJsonString();
+			response = e.createJsonErrorResponse();
+			LOGGER.error(e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
-			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
+			LOGGER.error(String.format("ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: %" + e.getMessage(), e));
+			response = ErrorResponseUtil.createJsonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

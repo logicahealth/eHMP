@@ -132,9 +132,9 @@ When(/^the client runs data "(.*?)" using postman$/) do |arg1|
   }
   request = jsonreq.to_json
   urlobj = QueryGenericRDK.new("problems")
-  urlobj.add_parameter("accessCode", "REDACTED")
-  urlobj.add_parameter("verifyCode", "REDACTED")
-  urlobj.add_parameter("site", "9E7A")
+  urlobj.add_parameter("accessCode", "USER  ")
+  urlobj.add_parameter("verifyCode", "PW      ")
+  urlobj.add_parameter("site", "SITE")
   url = urlobj.path
   p url
   puts request
@@ -145,7 +145,7 @@ end
 
 When(/^the client queries JDS$/) do
   path =DefaultLogin.jds_url
-  urlpath  = path+"/vpr/9E7A;3/find/problem?filter=like(localId,\"499\")"
+  urlpath  = path+"/vpr/SITE;3/find/problem?filter=like(localId,\"499\")"
   encoded_url = URI.encode(urlpath)
   #uri = URI.parse(urlpath)
   @response = HTTPartyRDK.get(encoded_url)

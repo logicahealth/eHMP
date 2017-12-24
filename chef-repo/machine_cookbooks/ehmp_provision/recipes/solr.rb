@@ -5,8 +5,6 @@
 
 require 'chef/provisioning/ssh_driver'
 
-include_zk = find_optional_nodes_by_criteria(node[:machine][:stack], 'role:zookeeper', 'role:solr').empty?
-
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('HEALTH_TIME_CORE_LOCAL_FILE')
   node.default[:ehmp_provision][:solr][:copy_files].merge!({
@@ -36,25 +34,54 @@ else
 end
 ############################################## Staging Artifacts #############################################
 
-machine_ident = "solr"
 
-boot_options = node[:ehmp_provision][machine_ident.to_sym]["#{node[:machine][:driver]}".to_sym]
+# deploy default of one machine named "solr" if solr config doesn't exist, get servers from config if config does exist
+solr_machines = if node[:solr_config].nil? then ["solr"] else node[:solr_config].keys end
+
+machine_ident = ENV['SOLR_IDENT'] || "solr"
+db_item = ENV['SOLR_DB_ITEM'] || ENV['SOLR_IDENT']
+
+solr_attributes = {
+  profile: db_item,
+  ehmp: {
+    vpr: vpr_source,
+    health_time_core: health_time_core_source,
+    health_time_solr: health_time_solr_source,
+    collection: {
+      # by default, only allow recreating solr collections when not using ssh driver
+      allow_recreate: node[:machine][:driver] != "ssh"
+    }
+  },
+}
+
+unless db_item.nil?
+  db_attributes = Chef::EncryptedDataBagItem.load("solr_env", db_item, node[:common][:data_bag_string])
+  node.override[:ehmp_provision] = Chef::Mixin::DeepMerge.hash_only_merge(node[:ehmp_provision], db_attributes["ehmp_provision"]) unless db_attributes["ehmp_provision"].nil?
+  solr_attributes = Chef::Mixin::DeepMerge.hash_only_merge(solr_attributes, db_attributes['vx_solr'])
+end
+
+boot_options = node[:ehmp_provision][:solr]["#{node[:machine][:driver]}".to_sym]
 node.default[:ehmp_provision][:solr][:copy_files].merge!(node[:machine][:copy_files])
 
 machine_deps = parse_dependency_versions "machine"
 ehmp_deps = parse_dependency_versions "ehmp_provision"
 
+solr_with_zk = find_optional_node_by_criteria(node[:machine][:stack], 'role:zookeeper AND role:solr')
+mocks_with_zk = find_optional_node_by_criteria(node[:machine][:stack], 'role:zookeeper AND role:mocks')
+zk_on_other_solr =  !solr_with_zk.nil? && !solr_with_zk[:machine_ident].nil? && solr_with_zk[:machine_ident] != machine_ident
+include_zk = ENV['INCLUDE_ZOOKEEPER'] == 'true' || find_optional_nodes_by_criteria(node[:machine][:stack], 'role:zookeeper', 'role:solr').empty? && !zk_on_other_solr && mocks_with_zk.nil?
+
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 r_list << "role[solr]"
 r_list << "role[zookeeper]" if include_zk
 r_list << "recipe[zookeeper@#{ehmp_deps["zookeeper"]}]" if include_zk
 r_list << "recipe[zookeeper::uninstall@#{ehmp_deps["zookeeper"]}]" unless include_zk
 r_list << "recipe[vx_solr@#{ehmp_deps["vx_solr"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -78,6 +105,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -87,22 +115,18 @@ machine machine_name do
     }
   }
   attributes(
+    machine_ident: machine_ident,
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
     data_bag_string: node[:common][:data_bag_string],
-    vx_solr: {
-      ehmp: {
-        vpr: vpr_source,
-        health_time_core: health_time_core_source,
-        health_time_solr: health_time_solr_source,
-        collection: {
-          # by default, only allow recreating solr collections when not using ssh driver
-          allow_recreate: node[:machine][:driver] != "ssh"
-        }
-      }
-    },
+    vx_solr: solr_attributes,
     beats: {
       logging: node[:machine][:logging]
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
   )
   files lazy { node[:ehmp_provision][:solr][:copy_files] }

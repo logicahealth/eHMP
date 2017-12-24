@@ -4,7 +4,8 @@
 #
 
 node[:vxsync][:vxsync_applications].each do |app|
-  node[:vxsync][app.to_sym][:processes].each do |name,process_block|
+  Chef::Log.info "processing vxsync clear_logs for vxsync app #{app}"
+  node["vxsync_#{app}".to_sym][:processes].each do |name,process_block|
     1.upto(process_block[:number_of_copies] || 1) do |index|
       if index==1 then suffix = "" else suffix = "_#{index}" end
       log = "#{node[:vxsync][:log_directory]}/#{name}#{suffix}_stderr.log"

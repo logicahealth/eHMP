@@ -18,7 +18,7 @@ define :ehmp_ui_manifest, :path => "" do
     end
   end
 
-  overall_version = "#{release_version}.#{overall_version}"
+  overall_version = ENV["APP_VERSION"] || "#{release_version}.#{overall_version}"
   puts "overall_version = #{overall_version}"
   puts "\nAPP_VERSION='#{overall_version}'\n"
 
@@ -29,21 +29,11 @@ define :ehmp_ui_manifest, :path => "" do
 
   if ENV.has_key?("UPLOAD_RELEASE_MANIFEST")
 
-    chef_gem 'chef-vault' do
-      version '2.6.1'
-    end
-
-    require 'chef-vault'
-
-    nexus = ChefVault::Item.load(
-      "jenkins", "nexus",
-      node_name: Chef::Config['node_name'],
-      client_key_path: Chef::Config['client_key']
-    ).to_hash
-    nexus_creds = nexus['credentials']
+    raise "UPLOAD_RELEASE_MANIFEST was set, however no Nexus credentials are available." unless ENV.has_key?("NEXUSAUTH")
+    publish_repo = ENV["NEXUS_UPLOAD_REPO"] || "releases"
 
     execute "uploading artifact version shell to nexus" do
-      command "curl -v -F r=releases -F hasPom=false -F e=sh -F g=us.vistacore -F a=artifact-versions-shell -F v=#{overall_version} -F p=sh -F file=@#{version_host_path} -u #{nexus_creds['username']}:#{nexus_creds['password']} #{node[:common][:nexus_url]}/nexus/service/local/artifact/maven/content"
+      command "curl -v -F r=#{publish_repo} -F hasPom=false -F e=sh -F g=us.vistacore -F a=artifact-versions-shell -F v=#{overall_version} -F p=sh -F file=@#{version_host_path} -H 'Authorization: Basic #{ENV['NEXUSAUTH']}' #{node[:common][:nexus_url]}/nexus/service/local/artifact/maven/content"
       sensitive true
     end
 

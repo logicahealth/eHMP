@@ -1,0 +1,18 @@
+<div class="control form-group editActionAlertMessage-control alertMessage" aria-live="assertive">
+    <div class="alert alert-warning alert-user">
+        <div class="alert-content">
+            <p><strong><i class="fa fa-exclamation-triangle"></i> Cloning User Warning</strong></p>
+            <p><strong>The following users currently have more permissions than what will be assigned by taking this action.</strong></p>
+            {{#each users}}
+            <p><strong>{{formattedName}} {{lostPermissionsCountText}} :</strong> {{lostPermissions}}</p>
+            {{/each}}
+            <p><strong>Do you want to proceed?</strong></p>
+            <button type="button" id="cancelActionReturnButton" class="btn btn-default" title="Cancel action and return to user search.">
+                <span aria-hidden="true">No</span>
+            </button>
+            <button type="button" id="confirmActionButton" class="btn btn-default left-margin-xs">
+                <span aria-hidden="true">Yes</span>
+            </button>
+        </div>
+    </div>
+</div>

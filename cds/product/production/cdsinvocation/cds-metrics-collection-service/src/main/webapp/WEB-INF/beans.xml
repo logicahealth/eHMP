@@ -21,6 +21,23 @@
     
     <context:annotation-config/>
     
+    <bean id="requestIdInInterceptor" class="com.cognitive.cds.utils.log.RequestIdIncomingInterceptor"/>
+	<bean id="requestIdOutInterceptor" class="com.cognitive.cds.utils.log.RequestIdOutgoingInterceptor"/>
+	<bean id="cxfInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+	<bean id="cxfOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+	
+	<cxf:bus>
+		<cxf:inInterceptors>
+			<ref bean="requestIdInInterceptor" />
+			<ref bean="cxfInInterceptor" />
+		</cxf:inInterceptors>
+		<cxf:outInterceptors>
+			<ref bean="requestIdOutInterceptor" />
+			<ref bean="cxfOutInterceptor" />
+		</cxf:outInterceptors>
+	</cxf:bus>
+	
+    
     <task:scheduler id="taskScheduler" pool-size="5" />
 
     <bean
@@ -36,17 +53,6 @@
     <bean id="healthCheck" class="com.cognitive.cds.HealthCheck">
         <property name="mongoDb" ref="mongoDbDao" />
     </bean>
-
-    <bean class="org.apache.cxf.interceptor.LoggingInInterceptor" id="logInInterceptor" />
-    <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" id="logOutInterceptor" />
-    <cxf:bus>
-        <cxf:inInterceptors>
-            <ref bean="logInInterceptor" />
-        </cxf:inInterceptors>
-        <cxf:outInterceptors>
-            <ref bean="logOutInterceptor" />
-        </cxf:outInterceptors>
-    </cxf:bus>
     
     <jaxrs:server id="services" address="/">
         <jaxrs:serviceBeans>
@@ -66,7 +72,7 @@
 		<property name="mongoDbDao" ref="mongoDbDao" />
 		<property name="engineInfoDao" ref="engineLookup" />
 		
-		<!-- The line below is mostly intended for developement and testing and should 
+		<!-- The line below is mostly intended for development and testing and should 
 		not be needed in practice. -->
 		<!--property name="dynamicRegistryEnabled" value="false" /-->
 		<!--
@@ -85,7 +91,7 @@
 		<property name="type" value="OpenCDS" />
 		<property name="status" value="true" />
 		<property name="host" value="IP       " />
-		<property name="port" value="8080" />
+		<property name="port" value="PORT" />
 	</bean>
 	-->
 

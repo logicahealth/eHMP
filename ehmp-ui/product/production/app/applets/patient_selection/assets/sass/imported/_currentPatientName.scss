@@ -1,0 +1,11 @@
+.current-patient-name:after {
+	content: "";
+    border-top: 7px solid white;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: relative;
+    float: left;
+    bottom: -10px;
+    left: 59px;
+    z-index: 5;
+}

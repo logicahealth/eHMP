@@ -101,7 +101,7 @@ ${BEANSTALK_EXE} -p 4999 -b ${BEANSTALK_DATA_DIR} -f0 -V -z 20000000 > ${VXSYNC_
 ${NODE_EXE} ./subscriberHost.js --profile error --config-override ${CONFIG_FILE} > ${VXSYNC_LOG_DIR}/update-error.log &
 
 # run ${UPDATE_HANDLER_COUNT} processes of record-update handler
-for (( num=1; num<=${UPDATE_HANDLER_COUNT}+2; num++ ))
+for (( num=1; num<=${UPDATE_HANDLER_COUNT}; num++ ))
 do
   ${NODE_EXE} ./subscriberHost.js --profile update --config-override ${CONFIG_FILE} > ${VXSYNC_LOG_DIR}/subscriberHost-update.log &
 done
@@ -110,8 +110,8 @@ echo "run-update.sh: Record Update Subenvironment is running."
 echo "Press CTRL+C to close the subenvironment."
 echo
 echo "Note:"
-echo "To run this script in the background, start it followed by an \& as shown below:"
-echo "sudo ./record-update/run-update.sh \&"
+echo "To run this script in the background, start it followed by an & as shown below:"
+echo "sudo ./record-update/run-update.sh &"
 echo
 echo "When running this script in the background, it can only be closed via kill command,"
 echo "so take note of the process id."

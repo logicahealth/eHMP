@@ -18,9 +18,9 @@ define([
     // Note: This is the mocked ADK Resource object used for all tests: (orders/test/unit/ADK.js)
     //
     // this.user = new Backbone.Model({
-    //     site: '9E7A',
+    //     site: 'SITE',
     //     duz: {
-    //         '9E7A': '55555'
+    //         'SITE': '55555'
     //     }
     // });
     // this.patient = new Backbone.Model({
@@ -59,7 +59,7 @@ define([
                         slashes: true,
                         auth: null,
                         host: 'IP             ',
-                        port: '9080',
+                        port: 'PORT',
                         hostname: 'IP        ',
                         hash: null,
                         search: null,
@@ -142,7 +142,7 @@ define([
         };
         var testClinicalObject = {
             patientUid: '1234567890',
-            authorUid: 'urn:va:user:9E7A:55555',
+            authorUid: 'urn:va:user:SITE:55555',
             domain: 'ehmp-order',
             subDomain: 'laboratory',
             uid: testUid,
@@ -193,7 +193,7 @@ define([
         });
 
         it('should properly handle accessor calls', function() {
-            var uid = 'urn:va:ehmp:9E7A;8:a90a38f9-ba31-4098-8222-81a93195485c';
+            var uid = 'urn:va:ehmp:SITE;8:a90a38f9-ba31-4098-8222-81a93195485c';
 
             draft.setPayload(testBasicPayload);
             draft.setUid(uid);
@@ -229,7 +229,7 @@ define([
                 expect(draft.get('patientUid')).toBeDefined();
                 expect(draft.get('patientUid')).toBe('1234567890');
                 expect(draft.get('authorUid')).toBeDefined();
-                expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
+                expect(draft.get('authorUid')).toBe('urn:va:user:SITE:55555');
                 expect(draft.get('domain')).toBeDefined();
                 expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
@@ -268,7 +268,7 @@ define([
                 expect(draft.get('patientUid')).toBeDefined();
                 expect(draft.get('patientUid')).toBe('1234567890');
                 expect(draft.get('authorUid')).toBeDefined();
-                expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
+                expect(draft.get('authorUid')).toBe('urn:va:user:SITE:55555');
                 expect(draft.get('domain')).toBeDefined();
                 expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
@@ -309,7 +309,7 @@ define([
                 expect(draft.get('patientUid')).toBeDefined();
                 expect(draft.get('patientUid')).toBe('1234567890');
                 expect(draft.get('authorUid')).toBeDefined();
-                expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
+                expect(draft.get('authorUid')).toBe('urn:va:user:SITE:55555');
                 expect(draft.get('domain')).toBeDefined();
                 expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
@@ -376,7 +376,7 @@ define([
                 expect(draft.get('patientUid')).toBeDefined();
                 expect(draft.get('patientUid')).toBe('1234567890');
                 expect(draft.get('authorUid')).toBeDefined();
-                expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
+                expect(draft.get('authorUid')).toBe('urn:va:user:SITE:55555');
                 expect(draft.get('domain')).toBeDefined();
                 expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();
@@ -418,7 +418,7 @@ define([
                 expect(draft.get('patientUid')).toBeDefined();
                 expect(draft.get('patientUid')).toBe('1234567890');
                 expect(draft.get('authorUid')).toBeDefined();
-                expect(draft.get('authorUid')).toBe('urn:va:user:9E7A:55555');
+                expect(draft.get('authorUid')).toBe('urn:va:user:SITE:55555');
                 expect(draft.get('domain')).toBeDefined();
                 expect(draft.get('domain')).toBe('ehmp-order');
                 expect(draft.get('subDomain')).toBeDefined();

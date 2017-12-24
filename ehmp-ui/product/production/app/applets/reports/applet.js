@@ -10,6 +10,8 @@ define([
 ], function(Backbone, Marionette, _, moment, DetailCommunicator, appletHelper, DocDetailsDisplayer) {
     'use strict';
 
+    var channel = ADK.Messaging.getChannel('reports');
+
     //The important changes are in the columns array as well as replacing the dataGridOptions.groupBy logic with this:   dataGridOptions.groupable = this.options.groupView;
     var fullScreenColumns = [{
         name: 'dateDisplay',
@@ -34,8 +36,7 @@ define([
             groupByRowFormatter: function(item) {
                 return moment(item, 'YYYYMM').format('MMMM YYYY');
             }
-        },
-        hoverTip: 'reports_date'
+        }
     }, {
         name: 'localTitle',
         label: 'Description',
@@ -46,9 +47,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'referenceDateTime'
-        },
-        hoverTip: 'reports_description'
-
+        }
     }, {
         name: 'kind',
         label: 'Type',
@@ -56,8 +55,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'referenceDateTime'
-        },
-        hoverTip: 'reports_type'
+        }
     }, {
         name: 'authorDisplayName',
         label: 'Author/Verifier',
@@ -65,8 +63,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'referenceDateTime'
-        },
-        hoverTip: 'reports_enteredby'
+        }
     }, {
         name: 'facilityMoniker',
         label: 'Facility',
@@ -74,14 +71,32 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'referenceDateTime'
-        },
-        hoverTip: 'reports_facility'
+        }
     }];
     var summaryColumns = [fullScreenColumns[0], fullScreenColumns[2], fullScreenColumns[3]];
     var DEFAULT_FILTER = 'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))),' +
         'in(kind,["Consult","Imaging","Procedure","Radiology","Laboratory Report","Laboratory Result","Surgery"])';
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+        tileOptions: {
+            primaryAction: {
+                enabled: true,
+                onClick: function(params, event) {
+                    var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                    channel.trigger('onGetDetails', this.model, targetElement);
+                }
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'detailsviewbutton',
+                    onClick: function(params, event) {
+                        var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                        channel.trigger('onGetDetails', this.model, targetElement);
+                    }
+                }]
+            }
+        },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
             this.modalCollection = new Backbone.Collection();
@@ -122,6 +137,8 @@ define([
             this.listenTo(this.dataGridOptions.collection, 'sync', this.updateCollection);
             this.dataGridOptions.collection.fetchCollection(fetchOptions);
 
+            this.listenTo(channel, 'onGetDetails', this.getDetailsModal);
+
             this._super.initialize.apply(this, arguments);
         },
         updateCollection: function(collection) {
@@ -138,7 +155,7 @@ define([
         getJdsFilter: function() {
             return 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' + DEFAULT_FILTER;
         },
-        getDetailsModal: function(detailModel) {
+        getDetailsModal: function(detailModel, target) {
             var complexDocBool = detailModel.get('complexDoc');
             var docType = detailModel.get('kind');
             var resultDocCollection = new ADK.UIResources.Fetch.Document.Collections.ResultsByUidCollection();
@@ -155,7 +172,8 @@ define([
             var modalOptions = {
                 'size': 'large',
                 'title': results.title || DocDetailsDisplayer.getTitle(detailModel, docType),
-                'nextPreviousCollection': detailModel.collection
+                'nextPreviousCollection': detailModel.collection,
+                triggerElement: target
             };
 
             var modal = new ADK.UI.Modal({

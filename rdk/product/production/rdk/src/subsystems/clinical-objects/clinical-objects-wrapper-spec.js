@@ -201,15 +201,15 @@ describe('Clinical object note wrapper tests', function() {
             var sample = noteWrapper.returnClinicialObjectData(errorMessages, clinicalObjectCleanPass);
             var expectation = [{
                 test: 'test',
-                uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
                 clinicalObject: {
-                    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                    patientUid: 'urn:va:patient:9E7A:3:3',
-                    authorUid: 'urn:va:user:9E7A:123',
+                    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                    patientUid: 'urn:va:patient:SITE:3:3',
+                    authorUid: 'urn:va:user:SITE:123',
                     domain: 'order',
                     subDomain: 'laboratory',
                     visit: {
-                        location: 'urn:va:location:9E7A:1',
+                        location: 'urn:va:location:SITE:1',
                         serviceCategory: 'PSB',
                         dateTime: '20160101120000'
                     },
@@ -239,13 +239,13 @@ describe('Clinical object note wrapper tests', function() {
             var sample = noteWrapper.returnClinicialObjectData(errorMessages, clinicalObjectUndefinedData);
             var expectation = [{
                 clinicalObject: {
-                    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                    patientUid: 'urn:va:patient:9E7A:3:3',
-                    authorUid: 'urn:va:user:9E7A:123',
+                    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                    patientUid: 'urn:va:patient:SITE:3:3',
+                    authorUid: 'urn:va:user:SITE:123',
                     domain: 'order',
                     subDomain: 'laboratory',
                     visit: {
-                        location: 'urn:va:location:9E7A:1',
+                        location: 'urn:va:location:SITE:1',
                         serviceCategory: 'PSB',
                         dateTime: '20160101120000'
                     },
@@ -260,13 +260,13 @@ describe('Clinical object note wrapper tests', function() {
             var sample = noteWrapper.returnClinicialObjectData(errorMessages, clinicalObjectNullData);
             var expectation = [{
                 clinicalObject: {
-                    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                    patientUid: 'urn:va:patient:9E7A:3:3',
-                    authorUid: 'urn:va:user:9E7A:123',
+                    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                    patientUid: 'urn:va:patient:SITE:3:3',
+                    authorUid: 'urn:va:user:SITE:123',
                     domain: 'order',
                     subDomain: 'laboratory',
                     visit: {
-                        location: 'urn:va:location:9E7A:1',
+                        location: 'urn:va:location:SITE:1',
                         serviceCategory: 'PSB',
                         dateTime: '20160101120000'
                     },
@@ -283,13 +283,13 @@ describe('Clinical object note wrapper tests', function() {
 // Unit test data for unwrapping the clinical object
 // Note: The unwrapper only works on arrays, Gavin says we can add singleton support later if needed
 var clinicalObjectNullData = [{
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'order',
     subDomain: 'laboratory',
     visit: {
-        location: 'urn:va:location:9E7A:1',
+        location: 'urn:va:location:SITE:1',
         serviceCategory: 'PSB',
         dateTime: '20160101120000'
     },
@@ -297,13 +297,13 @@ var clinicalObjectNullData = [{
     data: null
 }];
 var clinicalObjectUndefinedData = [{
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'order',
     subDomain: 'laboratory',
     visit: {
-        location: 'urn:va:location:9E7A:1',
+        location: 'urn:va:location:SITE:1',
         serviceCategory: 'PSB',
         dateTime: '20160101120000'
     },
@@ -311,13 +311,13 @@ var clinicalObjectUndefinedData = [{
     data: undefined
 }];
 var clinicalObjectCleanPass = [{
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'order',
     subDomain: 'laboratory',
     visit: {
-        location: 'urn:va:location:9E7A:1',
+        location: 'urn:va:location:SITE:1',
         serviceCategory: 'PSB',
         dateTime: '20160101120000'
     },
@@ -329,17 +329,17 @@ var clinicalObjectCleanPass = [{
 
 var create_valid = {
     'logger': {},
-    'siteHash': '9E7A',
+    'siteHash': 'SITE',
     'duz': {
-        '9E7A': '10000000272'
+        'SITE': '10000000272'
     },
     'model': {
         'app': 'ehmp',
-        'author': 'KHAN,VIHAAN',
-        'authorDisplayName': 'Khan,Vihaan',
-        'authorUid': 'urn:va:user:9E7A:10000000272',
+        'author': 'LAST,FIRST',
+        'authorDisplayName': 'LAST,FIRST',
+        'authorUid': 'urn:va:user:SITE:10000000272',
         'documentClass': 'PROGRESS NOTES',
-        'documentDefUid': 'urn:va:doc-def:9E7A:17',
+        'documentDefUid': 'urn:va:doc-def:SITE:17',
         'documentTypeName': 'Progress Note',
         'encounterName': 'ALCOHOL04/10/1994 08:00',
         'encounterServiceCategory': 'I',
@@ -369,9 +369,9 @@ var create_valid = {
         'statusDisplayName': 'Unsigned',
         'summary': '',
         'text': [{
-            'author': 'KHAN,VIHAAN',
-            'authorDisplayName': 'KHAN,VIHAAN',
-            'authorUid': 'urn:va:user:9E7A:10000000272',
+            'author': 'LAST,FIRST',
+            'authorDisplayName': 'LAST,FIRST',
+            'authorUid': 'urn:va:user:SITE:10000000272',
             'content': 'teadsf',
             'dateTime': '2016-01-28T15:41:48-05:00',
             'signer': null,
@@ -387,15 +387,15 @@ var create_valid = {
         'derivReferenceTime': '15:41',
         'lastSavedDisplayTime': '',
         'encounterDisplayName': 'ALCOHOL: 04/10/1994',
-        'documentDefUidUnique': 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+        'documentDefUidUnique': 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
         'lastSavedTime': '20160128154148',
-        'siteHash': '9E7A',
+        'siteHash': 'SITE',
         'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     },
     'interceptorResults': {
         'patientIdentifiers': {
-            'siteDfn': '9E7A:8',
-            'site': '9E7A',
+            'siteDfn': 'SITE:8',
+            'site': 'SITE',
             'dfn': '8'
         }
     }
@@ -405,11 +405,11 @@ var update_validAddendum = {
 
     'parentUid': 'test',
     'app': 'ehmp',
-    'author': 'KHAN,VIHAAN',
-    'authorDisplayName': 'Khan,Vihaan',
-    'authorUid': 'urn:va:user:9E7A:10000000272',
+    'author': 'LAST,FIRST',
+    'authorDisplayName': 'LAST,FIRST',
+    'authorUid': 'urn:va:user:SITE:10000000272',
     'documentClass': 'PROGRESS NOTES',
-    'documentDefUid': 'urn:va:doc-def:9E7A:17',
+    'documentDefUid': 'urn:va:doc-def:SITE:17',
     'documentTypeName': 'Progress Note',
     'encounterName': 'ALCOHOL04/10/1994 08:00',
     'encounterServiceCategory': 'I',
@@ -439,9 +439,9 @@ var update_validAddendum = {
     'statusDisplayName': 'Unsigned',
     'summary': '',
     'text': [{
-        'author': 'KHAN,VIHAAN',
-        'authorDisplayName': 'KHAN,VIHAAN',
-        'authorUid': 'urn:va:user:9E7A:10000000272',
+        'author': 'LAST,FIRST',
+        'authorDisplayName': 'LAST,FIRST',
+        'authorUid': 'urn:va:user:SITE:10000000272',
         'content': 'teadsf',
         'dateTime': '2016-01-28T15:41:48-05:00',
         'signer': null,
@@ -457,13 +457,13 @@ var update_validAddendum = {
     'derivReferenceTime': '15:41',
     'lastSavedDisplayTime': '',
     'encounterDisplayName': 'ALCOHOL: 04/10/1994',
-    'documentDefUidUnique': 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+    'documentDefUidUnique': 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
     'lastSavedTime': '20160128154148',
-    'siteHash': '9E7A',
+    'siteHash': 'SITE',
     'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583',
     'clinicalObject': {
-        patientUid: 'urn:va:patient:9E7A:8:8',
-        authorUid: 'urn:va:user:9E7A:10000000272',
+        patientUid: 'urn:va:patient:SITE:8:8',
+        authorUid: 'urn:va:user:SITE:10000000272',
         domain: 'ehmp-note',
         subDomain: 'addendum',
         visit: {
@@ -479,11 +479,11 @@ var update_validAddendum = {
 
 var update_valid = {
     'app': 'ehmp',
-    'author': 'KHAN,VIHAAN',
-    'authorDisplayName': 'Khan,Vihaan',
-    'authorUid': 'urn:va:user:9E7A:10000000272',
+    'author': 'LAST,FIRST',
+    'authorDisplayName': 'LAST,FIRST',
+    'authorUid': 'urn:va:user:SITE:10000000272',
     'documentClass': 'PROGRESS NOTES',
-    'documentDefUid': 'urn:va:doc-def:9E7A:17',
+    'documentDefUid': 'urn:va:doc-def:SITE:17',
     'documentTypeName': 'Progress Note',
     'encounterName': 'ALCOHOL04/10/1994 08:00',
     'encounterServiceCategory': 'I',
@@ -513,9 +513,9 @@ var update_valid = {
     'statusDisplayName': 'Unsigned',
     'summary': '',
     'text': [{
-        'author': 'KHAN,VIHAAN',
-        'authorDisplayName': 'KHAN,VIHAAN',
-        'authorUid': 'urn:va:user:9E7A:10000000272',
+        'author': 'LAST,FIRST',
+        'authorDisplayName': 'LAST,FIRST',
+        'authorUid': 'urn:va:user:SITE:10000000272',
         'content': 'teadsf',
         'dateTime': '2016-01-28T15:41:48-05:00',
         'signer': null,
@@ -531,13 +531,13 @@ var update_valid = {
     'derivReferenceTime': '15:41',
     'lastSavedDisplayTime': '',
     'encounterDisplayName': 'ALCOHOL: 04/10/1994',
-    'documentDefUidUnique': 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+    'documentDefUidUnique': 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
     'lastSavedTime': '20160128154148',
-    'siteHash': '9E7A',
+    'siteHash': 'SITE',
     'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583',
     clinicalObject: {
-        patientUid: 'urn:va:patient:9E7A:8:8',
-        authorUid: 'urn:va:user:9E7A:10000000272',
+        patientUid: 'urn:va:patient:SITE:8:8',
+        authorUid: 'urn:va:user:SITE:10000000272',
         domain: 'ehmp-note',
         subDomain: 'tiu',
         visit: {
@@ -550,8 +550,8 @@ var update_valid = {
 };
 
 var valid_clinicalObj = {
-    patientUid: 'urn:va:patient:9E7A:8:8',
-    authorUid: 'urn:va:user:9E7A:10000000272',
+    patientUid: 'urn:va:patient:SITE:8:8',
+    authorUid: 'urn:va:user:SITE:10000000272',
     domain: 'ehmp-note',
     subDomain: 'tiu',
     visit: {
@@ -562,11 +562,11 @@ var valid_clinicalObj = {
     ehmpState: 'draft',
     data: {
         app: 'ehmp',
-        author: 'KHAN,VIHAAN',
-        authorDisplayName: 'Khan,Vihaan',
-        authorUid: 'urn:va:user:9E7A:10000000272',
+        author: 'LAST,FIRST',
+        authorDisplayName: 'LAST,FIRST',
+        authorUid: 'urn:va:user:SITE:10000000272',
         documentClass: 'PROGRESS NOTES',
-        documentDefUid: 'urn:va:doc-def:9E7A:17',
+        documentDefUid: 'urn:va:doc-def:SITE:17',
         documentTypeName: 'Progress Note',
         encounterName: 'ALCOHOL04/10/1994 08:00',
         encounterServiceCategory: 'I',
@@ -596,9 +596,9 @@ var valid_clinicalObj = {
         statusDisplayName: 'Unsigned',
         summary: '',
         text: [{
-            'author': 'KHAN,VIHAAN',
-            'authorDisplayName': 'KHAN,VIHAAN',
-            'authorUid': 'urn:va:user:9E7A:10000000272',
+            'author': 'LAST,FIRST',
+            'authorDisplayName': 'LAST,FIRST',
+            'authorUid': 'urn:va:user:SITE:10000000272',
             'content': 'teadsf',
             'dateTime': '2016-01-28T15:41:48-05:00',
             'signer': null,
@@ -614,28 +614,28 @@ var valid_clinicalObj = {
         derivReferenceTime: '15:41',
         lastSavedDisplayTime: '',
         encounterDisplayName: 'ALCOHOL: 04/10/1994',
-        documentDefUidUnique: 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+        documentDefUidUnique: 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
         lastSavedTime: '20160128154148',
-        siteHash: '9E7A',
+        siteHash: 'SITE',
         uid: '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     }
 };
 
 var create_valid_addendum = {
     'logger': {},
-    'siteHash': '9E7A',
+    'siteHash': 'SITE',
     'duz': {
-        '9E7A': '10000000272'
+        'SITE': '10000000272'
     },
     'referenceId': 'test',
     'model': {
         'parentUid': 'test',
         'app': 'ehmp',
-        'author': 'KHAN,VIHAAN',
-        'authorDisplayName': 'Khan,Vihaan',
-        'authorUid': 'urn:va:user:9E7A:10000000272',
+        'author': 'LAST,FIRST',
+        'authorDisplayName': 'LAST,FIRST',
+        'authorUid': 'urn:va:user:SITE:10000000272',
         'documentClass': 'PROGRESS NOTES',
-        'documentDefUid': 'urn:va:doc-def:9E7A:17',
+        'documentDefUid': 'urn:va:doc-def:SITE:17',
         'documentTypeName': 'Progress Note',
         'encounterName': 'ALCOHOL04/10/1994 08:00',
         'encounterServiceCategory': 'I',
@@ -665,9 +665,9 @@ var create_valid_addendum = {
         'statusDisplayName': 'Unsigned',
         'summary': '',
         'text': [{
-            'author': 'KHAN,VIHAAN',
-            'authorDisplayName': 'KHAN,VIHAAN',
-            'authorUid': 'urn:va:user:9E7A:10000000272',
+            'author': 'LAST,FIRST',
+            'authorDisplayName': 'LAST,FIRST',
+            'authorUid': 'urn:va:user:SITE:10000000272',
             'content': 'teadsf',
             'dateTime': '2016-01-28T15:41:48-05:00',
             'signer': null,
@@ -683,23 +683,23 @@ var create_valid_addendum = {
         'derivReferenceTime': '15:41',
         'lastSavedDisplayTime': '',
         'encounterDisplayName': 'ALCOHOL: 04/10/1994',
-        'documentDefUidUnique': 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+        'documentDefUidUnique': 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
         'lastSavedTime': '20160128154148',
-        'siteHash': '9E7A',
+        'siteHash': 'SITE',
         'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     },
     'interceptorResults': {
         'patientIdentifiers': {
-            'siteDfn': '9E7A:8',
-            'site': '9E7A',
+            'siteDfn': 'SITE:8',
+            'site': 'SITE',
             'dfn': '8'
         }
     }
 };
 
 var valid_clinicalObjAddendum = {
-    patientUid: 'urn:va:patient:9E7A:8:8',
-    authorUid: 'urn:va:user:9E7A:10000000272',
+    patientUid: 'urn:va:patient:SITE:8:8',
+    authorUid: 'urn:va:user:SITE:10000000272',
     domain: 'ehmp-note',
     subDomain: 'addendum',
     visit: {
@@ -713,11 +713,11 @@ var valid_clinicalObjAddendum = {
     addendum: {
         parentUid: 'test',
         app: 'ehmp',
-        author: 'KHAN,VIHAAN',
-        authorDisplayName: 'Khan,Vihaan',
-        authorUid: 'urn:va:user:9E7A:10000000272',
+        author: 'LAST,FIRST',
+        authorDisplayName: 'LAST,FIRST',
+        authorUid: 'urn:va:user:SITE:10000000272',
         documentClass: 'PROGRESS NOTES',
-        documentDefUid: 'urn:va:doc-def:9E7A:17',
+        documentDefUid: 'urn:va:doc-def:SITE:17',
         documentTypeName: 'Progress Note',
         encounterName: 'ALCOHOL04/10/1994 08:00',
         encounterServiceCategory: 'I',
@@ -747,9 +747,9 @@ var valid_clinicalObjAddendum = {
         statusDisplayName: 'Unsigned',
         summary: '',
         text: [{
-            'author': 'KHAN,VIHAAN',
-            'authorDisplayName': 'KHAN,VIHAAN',
-            'authorUid': 'urn:va:user:9E7A:10000000272',
+            'author': 'LAST,FIRST',
+            'authorDisplayName': 'LAST,FIRST',
+            'authorUid': 'urn:va:user:SITE:10000000272',
             'content': 'teadsf',
             'dateTime': '2016-01-28T15:41:48-05:00',
             'signer': null,
@@ -765,9 +765,9 @@ var valid_clinicalObjAddendum = {
         derivReferenceTime: '15:41',
         lastSavedDisplayTime: '',
         encounterDisplayName: 'ALCOHOL: 04/10/1994',
-        documentDefUidUnique: 'urn:va:doc-def:9E7A:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
+        documentDefUidUnique: 'urn:va:doc-def:SITE:17---ALLERGY__<ADVERSE_REACTION/ALLERGY>---all',
         lastSavedTime: '20160128154148',
-        siteHash: '9E7A',
+        siteHash: 'SITE',
         uid: '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     }
 };

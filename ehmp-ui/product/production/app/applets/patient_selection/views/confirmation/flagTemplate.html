@@ -1,0 +1,31 @@
+<div class="panel-heading">
+    <h4 class="panel-title">
+            <span data-flex-width="1" class="pixel-height-17">{{name}}</span>
+            <span class="label label-{{getCategoryColorClass}} color-pure-black pixel-height-17">Category {{category}}</span>
+      </h4>
+</div>
+<div class="panel-collapse collapse in ackMessagePanel">
+    <div class="panel-body">
+        <h5>{{text}}</h5>
+        <div class="row">
+            <div class="col-xs-6 infoLabelStyle">Initial Assigned Date:</div>
+            <div class="col-xs-6 no-padding-left">{{formatDate assignTS "MM/DD/YYYY HH:mm"}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 infoLabelStyle">Approved by:</div>
+            <div class="col-xs-6 no-padding-left">{{approved}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 infoLabelStyle">Assignment Status:</div>
+            <div class="col-xs-6 no-padding-left">{{assignmentStatus}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 infoLabelStyle">Owner Site:</div>
+            <div class="col-xs-6 no-padding-left">{{ownerSite}}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 infoLabelStyle">Originating Site:</div>
+            <div class="col-xs-6 no-padding-left">{{originatingSite}}</div>
+        </div>
+    </div>
+</div>

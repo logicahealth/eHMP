@@ -103,7 +103,7 @@
           "type": "string"
         },
         "createdBy": {
-          "description" : "Identity of the user, such as 'urn:va:user:9E7A:10000000270'",
+          "description" : "Identity of the user, such as 'urn:va:user:SITE:10000000270'",
           "type": "string"
         }
       }

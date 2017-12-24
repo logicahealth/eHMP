@@ -35,13 +35,11 @@ allprojects  {
 
     def repoCommitCountClosure = {
         if (System.properties['os.name'].toLowerCase().contains('windows')) {
-            return "cmd /C git rev-list --full-history --all ${->commitCountDir} | wc -l".execute().text.trim()
+            return "cmd /C git rev-list --count --first-parent HEAD ${->commitCountDir}".execute().text.trim()
         }
           else {
-            def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-            def proc2 = 'wc -l'.execute()
-            proc1 | proc2
-            return proc2.text.trim()
+            def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+            return proc.text.trim()
         }
     }
 
@@ -122,10 +120,8 @@ def getCurrentCommitHash() {
 // set the project.version property correctly
 def getVersionByCommitCountForProject(projectString ){
     def commitCountDir = project("${projectString}").projectDir
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    version = "${getRepoVersion() + '.' + proc2.text.trim()}"
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    version = "${getRepoVersion() + '.' + proc.text.trim()}"
     return version
 }
 

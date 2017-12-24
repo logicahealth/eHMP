@@ -36,16 +36,11 @@ function createIncidentReport(req, res) {
     req.logger.trace({body: req.body});
     var pid = getPatientFromReport(req.body);
 
-    // We don't want these errors to short-circuit async.parallel
-    // but we do want to save them for handling later
-    var metaStampStatusError;
-    var syncStatusError;
-
     async.parallel({
         metaStampStatus: function(callback) {
             return req.app.subsystems.jdsSync.getPatientStatusDetail(pid, req, function(err, metaStampStatus) {
                 if (err) {
-                    metaStampStatusError = err;
+                    metaStampStatus = err;
                     req.logger.error(err);
                     req.logger.error('Unable to get patient status detail');
                 }
@@ -55,7 +50,7 @@ function createIncidentReport(req, res) {
         syncStatus: function(callback) {
             return req.app.subsystems.jdsSync.getPatientStatus(pid, req, function(err, syncStatus) {
                 if (err) {
-                    syncStatusError = err;
+                    syncStatus = err;
                     req.logger.error(err);
                     req.logger.error('Unable to get patient status');
                 }
@@ -69,8 +64,6 @@ function createIncidentReport(req, res) {
                 var redactedIncidentFileText = formatIncidentFile(req, incidentReportId, syncResults.metaStampStatus, syncResults.syncStatus, false);
                 req.logger.error({incidentText: true}, redactedIncidentFileText);
             }
-            metaStampStatusError = metaStampStatusError || hasSyncError(syncResults.metaStampStatus);
-            syncStatusError = syncStatusError || hasSyncError(syncResults.syncStatus);
             var emailConfigurationError = getEmailConfigurationError(req); // Not the most severe error; handle it later
             sendIncidentEmail(req, err, incidentReportId, function(emailSendRdkError) {
                 var rdkError; // If there are multiple possible errors, send the most severe error.
@@ -84,20 +77,6 @@ function createIncidentReport(req, res) {
                     } else {
                         rdkError = err;
                     }
-                    return res.status(rdkError.status).rdkSend(rdkError);
-                }
-                if (metaStampStatusError) {
-                    rdkError = new RdkError({
-                        code: 'rdk.500.1013',
-                        logger: req.logger
-                    });
-                    return res.status(rdkError.status).rdkSend(rdkError);
-                }
-                if (syncStatusError) {
-                    rdkError = new RdkError({
-                        code: 'rdk.500.1014',
-                        logger: req.logger
-                    });
                     return res.status(rdkError.status).rdkSend(rdkError);
                 }
                 if (emailConfigurationError) {
@@ -135,10 +114,6 @@ function getEmailConfigurationError(req) {
             logger: req.logger
         });
     }
-}
-
-function hasSyncError(syncStatusResponseBody) {
-    return _.get(syncStatusResponseBody, 'status') >= 500;
 }
 
 function sendIncidentEmail(req, writeError, incidentReportId, callback) {
@@ -465,14 +440,25 @@ function normalizeUnixTimestampToMilliseconds(timestamp) {
 }
 
 function formatJsonValueAtIndentationLevel(value, indentationLevel) {
-    var defaultIndentationSize = 2;
     if (_.isUndefined(value)) {
         return 'null\n';
     }
-    var formattedJson = JSON.stringify(value, null, defaultIndentationSize);
+    var defaultIndentationSize = 2;
+    var formattedJson = JSON.stringify(value, replaceErrors, defaultIndentationSize);
     var indentedJson = formattedJson.replace(/^/gm, getNSpaces(indentationLevel * defaultIndentationSize));
     var trimmedJson = indentedJson.trim();
     return trimmedJson + '\n';
+}
+
+function replaceErrors(key, value) {
+    if (value instanceof Error && !(value instanceof RdkError)) {
+        var error = {};
+        _.each(Object.getOwnPropertyNames(value), function (key) {
+            error[key] = value[key];
+        });
+        return error;
+    }
+    return value;
 }
 
 function formatYamlValueAtIndentationLevel(value, indentationLevel) {
@@ -495,10 +481,10 @@ module.exports.getResourceConfig = getResourceConfig;
 module.exports._createIncidentReport = createIncidentReport;
 module.exports._formatYamlValueAtIndentationLevel = formatYamlValueAtIndentationLevel;
 module.exports._formatJsonValueAtIndentationLevel = formatJsonValueAtIndentationLevel;
+module.exports._replaceErrors = replaceErrors;
 module.exports._normalizeUnixTimestampToMilliseconds = normalizeUnixTimestampToMilliseconds;
 module.exports._parseDateFromUuidV1 = parseDateFromUuidV1;
 module.exports._getPatientFromReport = getPatientFromReport;
 module.exports._writeIncidentFile = writeIncidentFile;
 module.exports._sendIncidentEmail = sendIncidentEmail;
-module.exports._hasSyncError = hasSyncError;
 module.exports._isEmailConfigValid = getEmailConfigurationError;

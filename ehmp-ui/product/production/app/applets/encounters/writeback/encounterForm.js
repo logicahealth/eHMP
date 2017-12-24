@@ -19,7 +19,7 @@ define([
         tagName: 'p'
     });
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" id="alert-cancel-btn" classes="btn-primary btn-sm" title="Press enter to go back."}}{{ui-button "Yes" id="alert-continue-btn" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
+        template: Handlebars.compile('{{ui-button "No" id="alert-cancel-btn" classes="btn-primary btn-sm"}}{{ui-button "Yes" id="alert-continue-btn" classes="btn-primary btn-sm"}}'),
         events: {
             'click #alert-continue-btn': function() {
                 ADK.UI.Alert.hide();

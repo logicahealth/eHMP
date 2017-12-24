@@ -7,7 +7,7 @@ Feature: F323  Normalization of Inpatient Medications Data
 @terminology_in_meds @VPR
 Scenario: An authorized user can access VA inpatient medications and see standardized RxNorm values when defined
   Given a patient with "Medications" in multiple VistAs
-  And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "9E7A" site(s)
+  And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "SITE" site(s)
   When the client requests "meds" for the patient "5000000341V359724" in VPR format 
   Then the VPR results contain "medications" terminology from "RxNorm codes"
   	  | field                 | value                                            |
@@ -70,7 +70,7 @@ Scenario: An authorized user can access DoD inpatient medications and see standa
 @terminology_in_meds @VPR
 Scenario: An authorized user can access VA inpatient medications and see standardized RxNorm values when defined
   Given a patient with "Medications" in multiple VistAs
-  And a patient with pid "10110V004877" has been synced through VX-Sync API for "9E7A" site(s)
+  And a patient with pid "10110V004877" has been synced through VX-Sync API for "SITE" site(s)
   When the client requests "meds" for the patient "10110V004877" in VPR format 
   Then the VPR results contain "medications" terminology from "RxNorm codes"
       | field                 | value                   		|
@@ -89,5 +89,5 @@ Scenario: An authorized user can access VA inpatient medications and see standar
 #      but based on talk with Les, Medications first checks in the VA H2 SQL database first to see if there is a mapping.  If it finds it there, it does not look in the mapping tables at all. 
 #      So most VA results (if not all) will be successfully mapped from the H2 database.  Les took a look at the H2 database for these entries and they are correct.
 #      JSON from H2 database is for this vuid is updated in "JSON from H2 database" worksheet in mapping table 
-#  *** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+#  *** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
     

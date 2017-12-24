@@ -48,7 +48,10 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
         logMessagePrefix += '.' + LOG_MESSAGE_PREFIX;
     }
     var hasHmpPatientSelectRpc = _.result(req, 'app.config.vistaSites[' + site + '].hasHmpPatientSelectRpc', null);
-    logger.debug('%s beginning with hasHmpPatientSelectRpc set to %s', logMessagePrefix, hasHmpPatientSelectRpc);
+    if(_.get(req, 'session.user.consumerType') === 'system') {
+        hasHmpPatientSelectRpc = false;
+    }
+    logger.info('%s beginning with hasHmpPatientSelectRpc set to %s', logMessagePrefix, hasHmpPatientSelectRpc);
 
     // If the site is configured to have the HMP PATIENT SELECT RPC, call it to retrieve the patient search results.
     // Otherwise, get the patient search results from JDS.
@@ -56,6 +59,7 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
         logger.debug('%s performing hmpPatientSelect.fetch using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
         hmpPatientSelect.fetch(req, searchOptions, site, function(error, response) {
             if (error) {
+                logger.error(logMessagePrefix + 'Error performing HMP PATIENT SELECT search: [%s]', (error.message || error));
                 /**
                  * If we get the security error from the HMP PATIENT SELECT call we assume that the
                  * RPC is not installed at the site and need to call pt-select from RC23 forward
@@ -64,7 +68,7 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
                     if (!_.isEmpty(_.result(req, 'app.config.vistaSites[' + site + ']', {}))) {
                         //set the config to not have hasHmpPatientSelectRpc
                         req.app.config.vistaSites[site].hasHmpPatientSelectRpc = false;
-                        logger.trace(req.app.config.vistaSites[site]);
+                        logger.trace(req.app.config.vistaSites[site], 'vista site info');
                     }
                     logger.debug('%s performing pt-select search after failed hmpPatientSelect attempt using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
                     return searchJds.getPatients(req, searchOptions, jdsServer, function(err, response) {
@@ -77,13 +81,11 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
                         ptSelectCB(err, response, logger, options);
                     });
                 }
-                logger.error(logMessagePrefix + 'Error performing search [%s]', (error.message || error));
-                error.message = 'There was an error processing your request. The error has been logged: ';
-                return callback(logMessagePrefix + ' ' + error);
+                return callback(logMessagePrefix + 'There was an error processing your request. The error has been logged.');
             }
 
             if (response.statusCode >= 300) {
-                logger.error(logMessagePrefix + 'response.statusCode [%s]', response.statusCode);
+                logger.info(logMessagePrefix + 'response.statusCode [%s]', response.statusCode);
                 return callback({
                     status: response.statusCode,
                     message: response
@@ -113,7 +115,7 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
             }
         });
     } else {
-        logger.debug('%s performing pt-select search instead of hmpPatientSelect using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
+        logger.info('%s performing pt-select search instead of hmpPatientSelect using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
         searchJds.getPatients(req, searchOptions, jdsServer, function(err, response) {
             var options = {
                 finalCB: callback,
@@ -297,7 +299,8 @@ var hmpPatientSelectSearchCB = function(response, options) {
 function finalPatientSearchCallback(err, data, logger, options) {
     var logMessagePrefix = options.logMessagePrefix ? options.logMessagePrefix + '.finalPatientSearchCallback' : 'patientSearch.finalPatientSearchCallback';
     if (err) {
-        return options.finalCB(err);
+        logger.error(logMessagePrefix + ' Error: ' + err);
+        return options.finalCB(err, null);
     }
     data.status = 200;
     logger.trace(data, logMessagePrefix + ' returning result');
@@ -339,7 +342,7 @@ module.exports.callJDSPatientSearch = function(req, logMessagePrefix, site, sear
             return callback(logMessagePrefix + ' ' + error, null);
         }
         if (response.statusCode >= 300) {
-            logger.error(logMessagePrefix + ' response.statusCode [%s]', response.statusCode);
+            logger.info(logMessagePrefix + ' response.statusCode [%s]', response.statusCode);
             return callback({
                 status: response.statusCode,
                 message: result
@@ -550,7 +553,7 @@ function parseFilter(logger, logMessagePrefix, filter) {
 }
 /**
  * Pass in 'req.query.filter' and the response which contains data.items that need to be ordered.
- * Example: http://IP             /resource/locations/clinics/patients?uid=urn:va:location:9E7A:23&filter=eq(familyName,%22EIGHT%22)
+ * Example: http://IP             /resource/locations/clinics/patients?uid=urn:va:location:SITE:23&filter=eq(familyName,%22EIGHT%22)
  *
  * @param logger - req.logger - The logger
  * @param logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.
@@ -635,6 +638,6 @@ module.exports.getSite = function(logger, logMessagePrefix, pid, req) {
         req.logger.debug(logMessagePrefix + '_getSite obtained site (' + site + ') from req.session.user.site');
         return site;
     }
-    req.logger.error(logMessagePrefix + '_getSite unable to obtain site from request');
+    req.logger.info(logMessagePrefix + '_getSite unable to obtain site from request');
     return null;
 };

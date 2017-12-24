@@ -10,12 +10,14 @@ define([
     'main/backgrid/extensions/groupBy/groupByBody',
     'main/backgrid/extensions/groupBy/groupByHeader',
     'main/adk_utils/crsUtil',
+    'main/backgrid/customFilter',
+    'api/PatientRecordService',
+    'api/Messaging',
     'backgrid-moment-cell',
     'main/backgrid/extensions/defaultOverrides',
     'backgrid.filter',
-    'backgrid.paginator',
-    'main/backgrid/customFilter'
-], function(Backbone, Marionette, $, _, Backgrid, dataGridView, DataGridRow, HeaderCell, GroupByBody, GroupByHeader, CrsUtil, customFilter) {
+    'backgrid.paginator'
+], function(Backbone, Marionette, $, _, Backgrid, dataGridView, DataGridRow, HeaderCell, GroupByBody, GroupByHeader, CrsUtil, customFilter, PatientRecordService, Messaging) {
     'use strict';
     var DataGrid = {};
 
@@ -47,10 +49,28 @@ define([
     DataGrid.returnView = function() {
         var GridLayoutView = dataGridView.extend({
             DataGridRow: DataGridRow,
+            behaviors: function() {
+                return {
+                    Injectable: {
+                        className: 'quickmenu-header',
+                        tagName: 'th',
+                        component: 'quickmenu',
+                        containerSelector: function() {
+                            return this.$('table thead tr');
+                        },
+                        attributes: {
+                            'scope': 'col',
+                            'aria-label': 'More Options'
+                        }
+                    }
+                };
+            },
             initialize: function(options) {
                 this.appletConfig = options.appletConfig;
+                var columns = this.getOption('columns');
+
                 var groupableOptions = {};
-                _.each(options.columns, function(column) {
+                _.each(columns, function(column, index) {
                     column.editable = false;
                     column.headerCell = HeaderCell;
                     column.sortType = column.sortType || 'toggle';
@@ -133,7 +153,7 @@ define([
 
                 var row;
 
-                if (options.toolbarOptions) {
+                if (this.isComponentEnabled('quickMenu')) {
                     this.listenTo(ADK.Messaging.getChannel('datagrid'), 'show:toolbar', function(e) {
                         this.activeToolbarContainer = e.activeToolbarContainer;
                     });
@@ -147,16 +167,39 @@ define([
                     });
 
                     //setup toolbar
-                    row = this.DataGridRow.extend({
+                    var DataGridRow = this.DataGridRow;
+                    if (!DataGridRow) throw ('DataGridRow must be defined');
+                    var prototypeBehaviors = _.get(DataGridRow, 'prototype.behaviors');
+                    var behaviors = {
+                        'QuickMenu': {}
+                    };
+                    if (this.isComponentEnabled('actions')) {
+                        behaviors.Actions = {};
+                    }
+                    if (this.isComponentEnabled('notifications')) {
+                        behaviors.Notifications = {};
+                    }
+                    if (this.isComponentEnabled('quickLooks')) {
+                        behaviors.QuickLooks = {};
+                    }
+                    if (prototypeBehaviors) _.extend(behaviors, prototypeBehaviors);
+                    var onClickRow = this.options.onClickRow;
+                    if (!onClickRow) {
+                        this.options.onClickRow = function(model, event, self) {
+                            var currentPatient = PatientRecordService.getCurrentPatient();
+                            var channelObject = {
+                                model: model,
+                                collection: self.collection || model.collection,
+                                uid: model.get("uid")
+                            };
+
+                            Messaging.getChannel(model.get('applet_id')).trigger('detailView', channelObject);
+                        };
+                    }
+                    row = DataGridRow.extend({
                         showLinksButton: options.showLinksButton,
-                        toolbarOptions: options.toolbarOptions,
-                        behaviors: {
-                            FloatingToolbar: {
-                                buttonTypes: options.toolbarOptions.buttonTypes || ['infobutton', 'detailsviewbutton'],
-                                DialogContainer: '.toolbar-container',
-                                disableNonLocal: options.toolbarOptions.disableNonLocal || false,
-                            }
-                        }
+                        tileOptions: this.getOption('tileOptions'),
+                        behaviors: behaviors
                     });
                 } else if (options.appletConfig.simpleGrid && !_.isUndefined(options.appletConfig.simpleGrid) && !_.isNull(options.appletConfig.simpleGrid)) {
                     row = this.DataGridRow.extend({
@@ -171,13 +214,16 @@ define([
                     className: 'backgrid table table-hover',
                     row: row,
                     body: body,
-                    columns: options.columns,
+                    columns: columns,
                     collection: options.collection,
                     emptyText: options.emptyText,
                     groupableOptions: groupableOptions
                 };
             },
-            onBeforeShow: function() {
+            onRender: function() {
+                var tileOptions = this.getOption('tileOptions');
+                var isQuickMenuEnabled = _.get(tileOptions, 'quickMenu.enabled', false);
+                this.gridOptions.isQuickMenuEnabled = isQuickMenuEnabled;
                 this.gridView = new Backgrid.Grid(this.gridOptions);
                 this.dataGrid.show(this.gridView);
 
@@ -190,6 +236,10 @@ define([
                 this.$el.find('table').attr("role", "grid");
                 this.$el.find('table thead tr').attr("role", "row");
                 this.$el.find('table tbody').addClass("auto-overflow-y");
+            },
+            isComponentEnabled: function(component) {
+                var tileOptions = this.getOption('tileOptions');
+                return _.result(_.get(tileOptions, component), 'enabled', false);
             },
             events: {
                 'click tr.selectable': 'onClickRow',
@@ -204,9 +254,9 @@ define([
                     this.$('tbody').off('scroll.dropdown.' + this.cid);
                 },
                 'toolbar.show': function(event) {
-                    var toolbarOptions = _.get(this, 'options.toolbarOptions');
-                    var buttonTypes = _.result(toolbarOptions, 'buttonTypes');
-                    if (_.includes(buttonTypes, CrsUtil.getCrsToolBarButtonName())) {
+                    var toolbarOptions = this.getOption('tileOptions') || {};
+                    var buttons = _.result(toolbarOptions, 'buttons');
+                    if (_.includes(buttons, CrsUtil.getCrsToolBarButtonName())) {
                         CrsUtil.removeStyle(this);
                     }
                 }
@@ -246,10 +296,6 @@ define([
                 }
             },
             onClickRow: function(event, model) {
-                if (this.options.toolbarOptions) {
-                    return;
-                }
-
                 if (_.isUndefined(model)) {
                     this.refocusRow = this.$(event.target).closest("tr");
                     model = this.refocusRow.data('model');
@@ -276,11 +322,12 @@ define([
                 id = id.replace(/[^\w\s]/gi, '');
                 var detailsId = 'details-' + id;
                 var detailsSelector = '#details-' + id;
+                var accordionButton = row.find('.btn-accordion');
+                if(accordionButton.length === 0) {
+                    console.error('508 Error: Must mark the panel control button with the correct expanded or collapsed state, but cannot find any button with class .btn-accordion.');
+                }
                 if (this.$(detailsSelector).length === 0) {
-                    row.attr({
-                        'aria-expanded': 'true',
-                        'title': 'Press enter to collapse accordion'
-                    }).focus();
+                    accordionButton.attr('aria-expanded', 'true');
                     var colspan = row.children().length;
                     var td = $('<td/>').addClass('renderable').attr('colspan', colspan).attr('id', detailsId).addClass('expanded-row');
                     var tr = $('<tr/>');
@@ -300,21 +347,15 @@ define([
                         _.each(this.$(detailsSelector).find('tbody tr'), function(el) {
                             this.$(el).attr({
                                 'data-infobutton': this.$(el).find('td:nth-child(2)').text(),
-                            }).find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to open the toolbar menu.</span>");
+                            });
                         }, this);
                     }
                 } else if (this.$(detailsSelector).hasClass('hide')) {
                     this.$(detailsSelector).removeClass('hide');
-                    row.attr({
-                        'aria-expanded': 'true',
-                        'title': 'Press enter to collapse accordion'
-                    }).focus();
+                    accordionButton.attr('aria-expanded', 'true');
                 } else {
                     this.$(detailsSelector).addClass('hide');
-                    row.attr({
-                        'aria-expanded': 'false',
-                        'title': 'Press enter to expand accordion'
-                    });
+                    accordionButton.attr('aria-expanded', 'false');
                 }
             }
         });

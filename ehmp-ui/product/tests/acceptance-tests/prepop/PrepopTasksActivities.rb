@@ -28,7 +28,7 @@ class PrepopTasksActivities
   end
 
   def self.contains_tasks
-    user = "9E7A;#{DefaultLogin.accesscode}"
+    user = "SITE;#{DefaultLogin.accesscode}"
     pass = DefaultLogin.verifycode
     request = RDKQuery.new('activities-instances-available')
     request.add_parameter('context', 'staff')
@@ -52,7 +52,7 @@ class PrepopTasksActivities
   def self.create_tasks_activities
     @deployment_id = deployment_id
 
-    user = "9E7A;#{DefaultLogin.accesscode}"
+    user = "SITE;#{DefaultLogin.accesscode}"
     pass = DefaultLogin.verifycode
 
     request = RDKQuery.new('activities-start')
@@ -72,11 +72,11 @@ class PrepopTasksActivities
 
   def self.default_activity(patient_id, urgency)
     parameters = {}
-    parameters['patient_facility'] = '9E7A'
-    parameters['assignedToFac'] = '9E7A'
+    parameters['patient_facility'] = 'SITE'
+    parameters['assignedToFac'] = 'SITE'
     parameters['assignedToUser'] = '10000000236'
-    parameters['full_assignedTo'] = '9E7A;10000000236'
-    parameters['authorFac'] = '9E7A'
+    parameters['full_assignedTo'] = 'SITE;10000000236'
+    parameters['authorFac'] = 'SITE'
     parameters['authorId'] = '10000000236'
     parameters['authorName'] = 'EHMP,UATTWO'
     parameters['patient_id'] = patient_id

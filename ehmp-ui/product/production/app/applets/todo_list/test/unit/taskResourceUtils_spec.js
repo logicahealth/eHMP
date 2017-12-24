@@ -17,39 +17,6 @@ define([
 		});
 	});
 
-	describe('Test task resource utilities - hasPermissions', function() {
-		it('Should return true if permissions is undefined', function() {
-			expect(TaskUtil.hasPermissions({})).toEqual(true);
-		});
-
-		it('Should return true if permission.ehmp and permission.user are empty', function() {
-			var task = {
-				PERMISSION: {}
-			};
-			expect(TaskUtil.hasPermissions(task)).toEqual(true);
-		});
-
-		it('Should return true if user is permissions list', function(){
-			var task = {
-				PERMISSION: {
-					ehmp: [],
-					user: ['9E7A;1234']
-				}
-			};
-
-			var userSession = new Backbone.Model({
-				site: '9E7A',
-				duz: {
-					'9E7A': '1234'
-				}
-			});
-
-			spyOn(ADK.UserService, 'getUserSession').and.returnValue(userSession);
-			spyOn(ADK.UserService, 'hasPermissions').and.returnValue(true);
-			expect(TaskUtil.hasPermissions(task)).toEqual(true);
-		});
-	});
-
 	describe('Test task resource utilities - taskComparator', function() {
 		it('Should return calculated comparator value', function() {
 			var model = new Backbone.Model({
@@ -60,6 +27,28 @@ define([
 				earliestDateMilliseconds: 1420088400000
 			});
 			expect(TaskUtil.taskComparator(model)).toEqual(10221420088400000);
+		});
+	});
+
+	describe('Test task resource utilities - isActionable', function() {
+		it('Should return true for active/due task with permissions', function() {
+			expect(TaskUtil.isActionable(true, 0, true, false)).toEqual(true);
+		});
+
+		it('Should return true for active/not due task with permissions and before earliest date flag', function() {
+			expect(TaskUtil.isActionable(true, 1, true, true)).toEqual(true);
+		});
+
+		it('Should return false for inactive task', function() {
+			expect(TaskUtil.isActionable(false, 0, true, true)).toEqual(false);
+		});
+
+		it('Should return false for insufficient permissions', function() {
+			expect(TaskUtil.isActionable(true, 0, false, true)).toEqual(false);
+		});
+
+		it('Should return false for not due task and no earliest date override flag', function() {
+			expect(TaskUtil.isActionable(true, 1, true, false)).toEqual(false);
 		});
 	});
 });

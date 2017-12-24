@@ -1,4 +1,4 @@
-default[:vista][:client][:version] = "2016.04.21"
+default[:vista][:client][:version] = "2017.05.30"
 default[:vista][:client][:url] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/vistacore/vista-clients/#{node[:vista][:client][:version]}/vista-clients-#{node[:vista][:client][:version]}.zip"
 default[:vista][:client][:visual_studio][:version] = "9.0.30729.6161"
 default[:vista][:client][:visual_studio][:x86][:url] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/microsoft/visual-studio/#{node[:vista][:client][:visual_studio][:version]}_x86/visual-studio-#{node[:vista][:client][:visual_studio][:version]}_x86.exe"

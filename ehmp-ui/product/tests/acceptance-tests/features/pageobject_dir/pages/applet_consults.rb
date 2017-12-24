@@ -1,4 +1,6 @@
 require_relative 'parent_applet.rb'
+require_relative 'tray_sidebar_section.rb'
+
 class PobConsultApplet < PobParentApplet
   
   set_url '#/patient/consults-patient-full'
@@ -9,6 +11,7 @@ class PobConsultApplet < PobParentApplet
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
+    
   element :fld_consult_modal_title, "[id='main-workflow-label-Consult-Order']"
 
   element :fld_consult_drop_down, ".consultName [x-is-labelledby^='select2-consultName'][x-is-expanded]"
@@ -20,15 +23,16 @@ class PobConsultApplet < PobParentApplet
 
   element :fld_request_reason, ".requestReason textarea"
   element :fld_override_reason, ".overrideReason textarea"
+  element :fld_consult_comment, "[name='requestComment']"
   element :fld_discontinue_comment, ".comment textarea"
   element :fld_consult_header, "[data-header-instanceid='consults-INSTANCENAME'] a"
   element :fld_consult_created_on, "[data-header-instanceid='consults-createdOn'] a"
 
-  elements :fld_consult_column_data, "#data-grid-consults tr.selectable td:nth-child(3)"
-  elements :fld_mode_column_data, "#data-grid-consults tr.selectable td:nth-child(10)"
-  elements :fld_patient_column_data, "#data-grid-consults tr.selectable td:nth-child(2)"
+  elements :fld_consult_column_data, "[data-appletid=consults] table tr.selectable td:nth-child(4)"
+  elements :fld_mode_column_data, "[data-appletid=consults] table tr.selectable td:nth-child(11)"
+  elements :fld_patient_column_data, "[data-appletid=consults] table tr.selectable td:nth-child(3)"
   elements :fld_assignement_options, "div[data-appletid='consults'] .primarySelection select option"
-  elements :fld_consult_steffview_headers, "#data-grid-consults thead tr th"
+  elements :fld_consult_steffview_headers, "[data-appletid=consults] table thead tr th"
   elements :fld_consult_drop_down_options, ".select-control.consultName option"
   element :fld_provider_search_input, ".select2-search__field"
 
@@ -55,13 +59,20 @@ class PobConsultApplet < PobParentApplet
   
   # *****************  All_Drop_down_Elements  ******************* #
   element :ddl_urgency, ".urgency select"
+  element :ddl_dest_facility, '.destinationFacility select'
+  element :fld_earliest_date, '.earliestDate input.datepicker-input'
+  element :fld_latest_date, '.latestDate input.datepicker-input'
+  element :ddl_problems, '.condition select'
   element :chk_flag, '.onlyShowFlaggedConsults input[type="checkbox"]'
   element :btn_discontinue, "#activityDetailDiscontinue"
   element :btn_discontinue_accept, "#submit-accept"
   element :btn_consult_modal_close, "#activityDetailClose"
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_consult_rows, "#data-grid-consults tr.selectable"
-  
+  elements :tbl_consult_rows, "[data-appletid=consults] table tr.selectable"
+
+  # ***************** DETAIL MODAL ************************#
+  element :detail_name_status_region, "#nameStatusRegion"
+  element :detail_content, ".detail-modal-content"
   def initialize
     super
     appletid_css = "[data-appletid=consults]"
@@ -71,7 +82,7 @@ class PobConsultApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
     add_text_filter_elements appletid_css
   end
 

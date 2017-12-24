@@ -52,9 +52,9 @@ public class EngineInfoDaoTest {
     String engineName2 = "OpenCDSDb";
     String engineType2 = "OpenCDS";
     String engineHost = "IP      ";
-    String enginePort = "8080";
+    String enginePort = "PORT";
     String engineHost2 = "99.99.99.99";
-    String enginePort2 = "9999";
+    String enginePort2 = "PORT";
 
     @BeforeClass
     public static void beforeClass() {
@@ -137,25 +137,25 @@ public class EngineInfoDaoTest {
 	EngineInstanceState engineState = createEngineInstanceState(engineName, engineType, engineHost, enginePort);
 	try {
 
-	    // EngineOne, MockEngine, IP      , 8080, false
+	    // EngineOne, MockEngine, IP      , PORT, false
 	    engineInfoDao.updateEngineInstanceState(engineState);
 
-	    // EngineOne, OpenCDS, IP      , 8080, true
+	    // EngineOne, OpenCDS, IP      , PORT, true
 	    engineState.setStatus(true);
 	    engineState.setType(engineType2);
 	    engineInfoDao.updateEngineInstanceState(engineState);
 
-	    // EngineOne, OpenCDS, 99.99.99.99, 8080, true
+	    // EngineOne, OpenCDS, 99.99.99.99, PORT, true
 	    engineState.setHost(engineHost2);
 	    engineInfoDao.updateEngineInstanceState(engineState);
 
-	    // EngineOne, OpenCDS, IP      , 9999, false
+	    // EngineOne, OpenCDS, IP      , PORT, false
 	    engineState.setHost(engineHost);
 	    engineState.setHost(enginePort2);
 	    engineState.setStatus(false);
 	    engineInfoDao.updateEngineInstanceState(engineState);
 
-	    // OpenCDSDb, MockEngine, IP      , 9999, true
+	    // OpenCDSDb, MockEngine, IP      , PORT, true
 	    engineState.setType(engineType);
 	    engineState.setHost(engineName2);
 	    engineState.setHost(engineHost);

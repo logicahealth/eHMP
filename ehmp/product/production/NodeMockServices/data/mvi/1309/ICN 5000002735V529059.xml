@@ -12,7 +12,7 @@
          <acceptAckCode code="NE" />
          <receiver typeCode="RCV">
             <device determinerCode="INSTANCE" classCode="DEV">
-               <id extension="200EHMP" root="1.2.840.114350.1.13.99997.2.7788" />
+               <id extension="200EHMP" root="1.2.840.114350.1.13.PORT7.2.7788" />
             </device>
          </receiver>
          <sender typeCode="SND">
@@ -63,11 +63,11 @@
                </registrationEvent>
             </subject>
             <queryAck>
-               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.99999.4567.34" />
+               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.PORT9.4567.34" />
                <queryResponseCode code="OK" />
             </queryAck>
             <queryByParameter>
-               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.99999.4567.34" />
+               <queryId extension="YOUR_IDENTIFIER_001" root="1.2.840.114350.1.13.PORT9.4567.34" />
                <statusCode code="new" />
                <responsePriorityCode code="I" />
                <parameterList>

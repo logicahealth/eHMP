@@ -10,7 +10,7 @@ define([
 ], function(_, Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils) {
     "use strict";
 
-    var NO_KNOWN_ALLERGY_CODE = '132;GMRD(120.82';
+    var NO_KNOWN_ALLERGY_CODE = '132;GMRD(120.82,';
 
     var patientAllergyArray = [];
 
@@ -24,7 +24,6 @@ define([
                 control: 'select',
                 name: 'allergen',
                 label: 'Allergen',
-                title: 'Press enter to open search filter text',
                 required: true,
                 disabled: true,
                 pickList: [],
@@ -193,7 +192,7 @@ define([
 
     var SignsAndSymptomsFieldset = {
         control: 'fieldset',
-        legend: '<span class="transform-text-capitalize">signs/symptoms *</span>',
+        legend: 'Signs/Symptoms * ',
         items: [SignsAndSymptoms],
         extraClasses: ['bottom-margin-md', 'signs-and-symptoms']
     };
@@ -265,7 +264,6 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm', 'left-margin-sm'],
                     label: 'Accept',
                     name: 'addBtn',
-                    title: 'Press enter to accept',
                     disabled: true
                 }]
             }]
@@ -278,7 +276,7 @@ define([
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();

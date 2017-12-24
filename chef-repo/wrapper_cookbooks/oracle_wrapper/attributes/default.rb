@@ -3,13 +3,15 @@
 # Attributes:: default
 #
 
+default[:oracle_wrapper][:user] = 'oracle'
+default[:oracle_wrapper][:group] = 'oinstall'
+
 default[:oracle][:user][:edb_item] = 'oracle_user_password'
 
-default[:oracle][:rdbms][:install_files] = ["#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/oracle_linux_1/11.2.0.4/oracle_linux_1-11.2.0.4.zip",
-                                            "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/oracle_linux_2/11.2.0.4/oracle_linux_2-11.2.0.4.zip"]
+default[:oracle][:rdbms][:install_files] = ["#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/oracle_linux_1/12.1.0.2/oracle_linux_1-12.1.0.2.zip",
+                                            "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/oracle_linux_2/12.1.0.2/oracle_linux_2-12.1.0.2.zip"]
 
-# third party cookbook does not support the versions of the files above, so we set these
-#   attributes to true to prevent the third party cookbook's installation recipes from running
+# use our own installation recipes instead of third party ones
 default[:oracle][:rdbms][:is_installed] = true
 default[:oracle][:rdbms][:latest_patch][:is_installed] = true
 
@@ -17,10 +19,11 @@ default[:oracle_wrapper][:dbs] = []
 
 default[:oracle_wrapper][:client][:version] = "12.1.0.2.0-1"
 
-default['oracle']['oracle_gateway']['url'] = "#{node[:nexus_url]}/nexus/content/groups/public/third-party/project/oracle/linux.x64_11gR2_gateways/1.0/linux.x64_11gR2_gateways-1.0.zip"
-default['oracle']['oracle_gateway']['config_dir'] = "/tmp/MSSQL"
+default['oracle']['rdbms']['dbbin_version'] = '12c'
+default['oracle']['oracle_gateway']['url'] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/oracle_gateways/12.1.0.2/oracle_gateways-12.1.0.2.zip"
+default['oracle']['oracle_gateway']['config_dir'] = "/opt/ehmp-oracle/MSSQL"
 default['oracle']['base'] = "#{node[:oracle][:ora_base]}"
-default['oracle']['home'] = "#{node[:oracle][:rdbms][:ora_home]}"
+default['oracle']['home'] = "#{node[:oracle][:rdbms][:ora_home_12c]}"
 default['oracle']['oracle_gateway']['home'] = "#{node['oracle']['base']}"
 default['oracle']['oracle_sid'] = "JBPMDB"
 default['oracle']['group'] = "oinstall"
@@ -28,3 +31,10 @@ default['oracle']['swap'] = 2048
 
 default[:oracle_wrapper][:memory_target] = 1157627904
 default[:oracle_wrapper][:cpu_count] = 0
+default[:oracle_wrapper][:cipher_suites] = "SSL_RSA_WITH_AES_128_CBC_SHA:SSL_RSA_WITH_AES_256_CBC_SHA"
+
+default['oracle_wrapper']['oracle_env'] = {
+  "ORACLE_HOME" => node['oracle']['rdbms']['ora_home_12c'],
+  "ORACLE_SID" => node['oracle_wrapper']['dbs'][0],
+  "PATH" => "#{node['oracle']['rdbms']['ora_home_12c']}/bin:#{ENV['PATH']}"
+}

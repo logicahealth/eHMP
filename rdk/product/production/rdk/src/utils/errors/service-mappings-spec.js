@@ -20,8 +20,11 @@ describe('Service Mappings', function() {
     testStatus('vxsync', 203);
     testStatus('cds', 204);
     testStatus('jbpm', 205);
+    testStatus('oracledb', 206);
     testStatus('dod', 300);
     testStatus('jmeadows', 301);
     testStatus('solr', 302);
     testStatus('mvi', 303);
+    testStatus('vvs', 400);
+    testStatus('pps', 401);
 });

@@ -74,9 +74,9 @@ Scenario: User can filter the task applet
   And task applet table only diplays rows including text "Request-1"
   
 @US17636_verify_locked_task
-Scenario: Verify that the task created by user REDACTED appears as locked to user REDACTED
+Scenario: Verify that the task created by user DNS     appears as locked to user PU1234
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "USER  " verifycode as  "PW      "
   And staff view screen is displayed
   When user searches for and selects "bcma,eight"
   And user navigates to expanded tasks applet
@@ -91,8 +91,6 @@ Scenario: Complete a task
 
   When user searches for and selects "bcma,eight"
   Then Summary View is active
-#  And user navigates to expanded tasks applet
-#  And user makes sure there exists at least one task
   And user navigates to expanded tasks applet
   And the user takes note of number of existing tasks
   And user adds a new request titled "Request-3 created by Automated Testing"

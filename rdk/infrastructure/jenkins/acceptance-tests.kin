@@ -1,0 +1,9 @@
+"rdk-acceptance-test-build-%branch%" { 
+  template = 'templates/acceptance-test-build.tpl'
+	description = "rdk acceptance test build for the branch %branch%"
+  
+  rootDirectory = 'product'
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/rdk.git'
+	gitBranch = '%branch%'
+}

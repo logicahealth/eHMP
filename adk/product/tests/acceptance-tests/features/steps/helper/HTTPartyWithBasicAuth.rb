@@ -9,7 +9,7 @@ require "DomAccess.rb"
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :username => "DNS        ", :password => "IP    !!" }
+  @@auth = { :username => "SITE;USER  ", :password => "PW      " }
 
   @@time_start = Time.new
   @@time_done = Time.new

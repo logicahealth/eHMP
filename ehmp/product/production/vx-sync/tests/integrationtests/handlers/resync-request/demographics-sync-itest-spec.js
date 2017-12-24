@@ -4,7 +4,6 @@ require('../../../../env-setup');
 
 var _ = require('underscore');
 var request = require('request');
-var getDemographics = require(global.VX_HANDLERS + 'resync-request/get-patient-demographics');
 var demographicsSync = require(global.VX_HANDLERS + 'resync-request/demographics-sync');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
@@ -20,7 +19,9 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var hostPort = testConfig.vxsyncPort;
 
 function clearTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -28,7 +29,7 @@ function clearTestPatient(config, patientIdentifierValue) {
 
     runs(function() {
         var options = {
-            url: config.protocol + '://' + config.host + ':' + config.port + config.patientUnsyncPath,
+            url: config.protocol + '://' + config.host + ':' + hostPort + config.patientUnsyncPath,
             method: 'POST',
             qs: {
                 pid: patientIdentifierValue
@@ -84,7 +85,7 @@ describe('demographics-sync', function() {
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
-                    port: 8080,
+                    port: hostPort,
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
@@ -92,8 +93,8 @@ describe('demographics-sync', function() {
                     method: 'POST'
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
@@ -107,7 +108,7 @@ describe('demographics-sync', function() {
                 jds: new JdsClient(dummyLogger, dummyLogger, config)
             };
 
-            clearTestPatient(config.syncRequestApi, '9E7A;3');
+            clearTestPatient(config.syncRequestApi, 'SITE;3');
         });
 
 

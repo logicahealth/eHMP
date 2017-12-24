@@ -152,7 +152,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                         expect($clearButton).toHaveAttr('type', 'button');
                     });
                     it("with correct title", function() {
-                        expect($clearButton).toHaveAttr('title', 'Press enter to clear search text');
+                        expect($clearButton).toHaveAttr('title', 'Clear search text');
                     });
                     it("with correct classes", function() {
                         expect($clearButton).toHaveClass('btn');

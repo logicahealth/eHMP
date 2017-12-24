@@ -10,8 +10,6 @@ set +xe
 
 project_name=ehmp-ui
 
-jdk_version="jdk1.8.0_121"
-
 export VAGRANT_BIN=/usr/local/bin/vagrant
 
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
@@ -63,12 +61,17 @@ else
   export WORKSPACE=$JENKINS_HOME/Projects/vistacore
 fi
 
-# keep $JAVA_HOME out front to circumvent any previously installed jdks/jres
-if uname -a | grep -q "Darwin"; then
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
-  export PATH=/usr/local/git/bin:$PATH
+if [ -f $WORKSPACE/common_set_env.sh ]; then 
+  source $WORKSPACE/common_set_env.sh
 else
-  export JAVA_HOME=/usr/lib/jvm/$jdk_version
+  printf "\n"
+  echo "ERROR: Cannot locate file: $WORKSPACE/common_set_env.sh. Please run configure_workspace.sh to continue."
+  printf "\n"
+  return
+fi
+
+if uname -a | grep -q "Darwin"; then
+  export PATH=/usr/local/git/bin:$PATH
 fi
 
 export GEM_HOME=$WORKSPACE/.aidk_gems

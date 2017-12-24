@@ -19,11 +19,11 @@ var jdsClient = new JdsClient(logger, logger, config);
 var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var jsu = new JobStatusUpdater(logger, config, jdsClient);
 
-var identifiers = ['9E7A;33333'];
+var identifiers = ['SITE;33333'];
 var identifiers2 = ['888V123887', 'ASDF;123'];
 var patientIdentifier = {
     'type': 'pid',
-    'value': '9E7A;33333'
+    'value': 'SITE;33333'
 };
 var jpid;
 

@@ -6,7 +6,7 @@ var config = require(global.VX_ROOT + 'worker-config.json').vxsync;
 var solrSmartClient = require('solr-smart-client');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 
-var client = solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log);
+var client = solrSmartClient.createClient(log, config.solrClient);
 
 client.deleteAll(function(error, response) {
     console.log(error, response);

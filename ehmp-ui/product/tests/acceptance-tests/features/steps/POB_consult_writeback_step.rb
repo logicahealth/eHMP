@@ -43,7 +43,7 @@ end
 
 Then(/^the user takes note of number of existing consults$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other('#data-grid-consults tbody') }
+  wait.until { infinite_scroll_other('[data-appletid=consults] tbody') }
   @number_existing_consults = PobConsultApplet.new.number_expanded_applet_rows
   p "number existing_consults: #{@number_existing_consults}"
 end
@@ -59,7 +59,7 @@ Then(/^a consult is added to the applet$/) do
   ehmp = PobConsultApplet.new
   ehmp.wait_for_tbl_consult_rows
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other("#data-grid-consults tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=consults] tbody") }
   wait.until { ehmp.number_expanded_applet_rows == @number_existing_consults + 1 }
 end
 
@@ -95,6 +95,16 @@ Then(/^user selects "(.*?)" consult$/) do |consult_type|
   end
 end
 
+Then(/^the Physical Therapy tray displays$/) do
+  ehmp = PobConsultApplet.new
+  ehmp.wait_for_ddl_urgency
+  ehmp.wait_for_ddl_dest_facility
+  ehmp.wait_for_fld_earliest_date
+  ehmp.wait_for_fld_latest_date
+  ehmp.wait_for_ddl_problems
+  wait_for_jquery_to_return
+end
+
 Then(/^user selects "(.*?)" for urgency$/) do |urgency|
   cmele = PobCommonElements.new  
   ehmp = PobConsultApplet.new
@@ -113,13 +123,10 @@ end
 
 Then(/^user accepts the consult$/) do
   ehmp = PobConsultApplet.new 
+  # sleep 5
   ehmp.wait_for_btn_consult_accept
   expect(ehmp).to have_btn_consult_accept
   ehmp.btn_consult_accept.click
-  common_element = PobCommonElements.new
-  common_element.wait_for_fld_tray_loader_message(30)
-  expect(common_element).to have_fld_tray_loader_message
-  common_element.wait_until_fld_tray_loader_message_invisible(30)
 end
 
 Then(/^user answers all Neurosurgery questions with a "([^"]*)"$/) do |yes|
@@ -208,6 +215,12 @@ Then(/^the detail modal for consult displays$/) do
   ehmp = ModalElements.new
   ehmp.wait_until_modal_body_visible
   expect(ehmp).to have_modal_body  
+
+  ehmp = PobConsultApplet.new
+  ehmp.wait_for_detail_name_status_region
+  ehmp.wait_for_detail_content
+  expect(ehmp).to have_detail_name_status_region
+  expect(ehmp).to have_detail_content
 end
 
 Then(/^the user sorts the Consult applet by column Consult$/) do
@@ -258,12 +271,14 @@ Then(/^user discontinues the consult$/) do
   ehmp.wait_until_btn_discontinue_accept_visible
   expect(ehmp).to have_btn_discontinue_accept
   ehmp.btn_discontinue_accept.click 
+  ehmp.wait_until_btn_discontinue_accept_invisible
   max_attempt = 4
   begin
-    ehmp.wait_until_btn_consult_modal_close_visible
+    expect(ehmp.wait_for_btn_consult_modal_close).to eq(true)
     expect(ehmp).to have_btn_consult_modal_close
     ehmp.btn_consult_modal_close.click   
     ehmp.wait_until_btn_consult_modal_close_invisible 
+    ModalElements.new.wait_until_fld_main_modal_invisible
   rescue Exception => e
     p "Exception received: trying again"
     max_attempt-=1
@@ -287,7 +302,10 @@ end
 Then(/^Consult applet shows either Open or Closed consults$/) do
   ehmp = PobConsultApplet.new
   ehmp.wait_until_fld_mode_column_data_visible
-  expect(compare_text_in_list(ehmp.fld_mode_column_data, "Open", "Closed")).to eq(true), "Returned rows doesn't include Open and Closed"
+  mode_array = Array.new
+  mode_array.push("Open")
+  mode_array.push("Closed")
+  expect(compare_text_in_list(ehmp.fld_mode_column_data, "#{mode_array}")).to eq(true), "Returned rows doesn't include Open and Closed"
 end
 
 Then(/^user verifies the consults applet has following patients listed$/) do |table|
@@ -361,6 +379,35 @@ Then(/^flagged checkbox is unchecked by default in Consult Applet$/) do
   ehmp = PobConsultApplet.new
   ehmp.wait_until_chk_flag_visible
   expect(ehmp.chk_flag.checked?).to eq(false), "Flagged checkbox is checked, it should be unchecked by default"
+end
+
+Then(/^user enters consult comments "([^"]*)"$/) do |input_text|
+  ehmp = PobConsultApplet.new
+  ehmp.wait_until_fld_consult_comment_visible
+  expect(ehmp).to have_fld_consult_comment
+  @text_search_term = Time.now.strftime("%d/%m/%Y %H%M")
+  comments = input_text + ' ' + @text_search_term
+  #p comments
+  ehmp.fld_consult_comment.set comments
+  ehmp.fld_consult_comment.native.send_keys(:enter)
+end
+
+Then(/^user creates a new Consult "([^"]*)" with comments "([^"]*)"$/) do |consult_name, comments|  
+  steps %{
+    And user navigates to expanded consult applet
+    And the user takes note of number of existing consults
+    And user adds a new consult
+    And user selects "#{consult_name}" consult
+    And user enters a request reason text "Data Setup eHMP Consult"
+    And user enters consult comments "#{comments}"
+    And user accepts the consult
+    Then a consult is added to the applet
+  }
+end
+
+Then(/^user waits for few seconds until consult accepted message$/) do
+  common_element = PobCommonElements.new
+  common_element.wait_until_fld_tray_loader_message_invisible(30)
 end
 
 

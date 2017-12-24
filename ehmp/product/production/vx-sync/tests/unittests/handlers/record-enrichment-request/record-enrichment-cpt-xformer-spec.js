@@ -8,46 +8,46 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 var cptTransformedRecord = {
         'cptCode': 'urn:cpt:82950',
         'encounterName': 'LAB DIV 500 OOS ID 108 May 21, 2000',
-        'encounterUid': 'urn:va:visit:9E7A:3:2306',
+        'encounterUid': 'urn:va:visit:SITE:3:2306',
         'entered': '20000521100717',
         'facilityCode': '500',
         'facilityName': 'CAMP MASTER',
         'lastUpdateTime': '20000521100717',
         'localId': '1646',
         'locationName': 'LAB DIV 500 OOS ID 108',
-        'locationUid': 'urn:va:location:9E7A:252',
+        'locationUid': 'urn:va:location:SITE:252',
         'name': 'GLUCOSE TEST',
-        'pid': '9E7A;3',
+        'pid': 'SITE;3',
         'quantity': 1,
         'stampTime': '20000521100717',
-        'summary': 'VisitCPTCode{pid=\'9E7A;3\',uid=\'urn:va:cpt:9E7A:3:1646\'}',
+        'summary': 'VisitCPTCode{pid=\'SITE;3\',uid=\'urn:va:cpt:SITE:3:1646\'}',
         'type': 'U',
-        'uid': 'urn:va:cpt:9E7A:3:1646'
+        'uid': 'urn:va:cpt:SITE:3:1646'
       };
 var cptRecord = {
         'cptCode': 'urn:cpt:82950',
         'encounterName': 'LAB DIV 500 OOS ID 108 May 21, 2000',
-        'encounterUid': 'urn:va:visit:9E7A:3:2306',
+        'encounterUid': 'urn:va:visit:SITE:3:2306',
         'entered': 20000521100717,
         'facilityCode': 500,
         'facilityName': 'CAMP MASTER',
         'lastUpdateTime': 20000521100717,
         'localId': 1646,
         'locationName': 'LAB DIV 500 OOS ID 108',
-        'locationUid': 'urn:va:location:9E7A:252',
+        'locationUid': 'urn:va:location:SITE:252',
         'name': 'GLUCOSE TEST',
-        'pid': '9E7A;3',
+        'pid': 'SITE;3',
         'quantity': 1,
         'stampTime': 20000521100717,
         'type': 'U',
-        'uid': 'urn:va:cpt:9E7A:3:1646'
+        'uid': 'urn:va:cpt:SITE:3:1646'
       };
 
 var removedRecord = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:cpt:9E7A:3:1646'
+    'uid': 'urn:va:cpt:SITE:3:1646'
 };
 
 var removedJob = {
@@ -85,8 +85,8 @@ describe('record-enrichment-cpt-xformer.js', function(){
                 xformer(log, null, null, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:cpt:9E7A:3:1646');
-                    expect(record.pid).toEqual('9E7A;3');
+                    expect(record.uid).toEqual('urn:va:cpt:SITE:3:1646');
+                    expect(record.pid).toEqual('SITE;3');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

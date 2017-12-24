@@ -255,13 +255,13 @@ describe('active-user-cleanup-util unit test', function() {
 						'items': [{
 							'id': '10000000001',
 							'lastSuccessfulLogin': '20161110132725',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000001'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000001'
 						}, {
 							'id': '10000000016',
 							'lastSuccessfulLogin': '20161110132729',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000016'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000016'
 						}]
 					};
 					var response = {
@@ -282,7 +282,7 @@ describe('active-user-cleanup-util unit test', function() {
 				activeUserCleanupUtil.removeUsersFromGenericStore(function(error) {
 					expect(error).toContain(ERROR_RESPONSE);
 					expect(environment.pjds.getActiveUsers).toHaveBeenCalled();
-					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:9E7A:10000000001', jasmine.any(Function));
+					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:SITE:10000000001', jasmine.any(Function));
 					finished = true;
 				});
 			});
@@ -301,13 +301,13 @@ describe('active-user-cleanup-util unit test', function() {
 						'items': [{
 							'id': '10000000001',
 							'lastSuccessfulLogin': '20161110132725',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000001'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000001'
 						}, {
 							'id': '10000000016',
 							'lastSuccessfulLogin': '20161110132729',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000016'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000016'
 						}]
 					};
 					var response = {
@@ -328,8 +328,8 @@ describe('active-user-cleanup-util unit test', function() {
 				activeUserCleanupUtil.removeUsersFromGenericStore(function(error) {
 					expect(error).toBeFalsy();
 					expect(environment.pjds.getActiveUsers).toHaveBeenCalled();
-					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:9E7A:10000000001', jasmine.any(Function));
-					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:9E7A:10000000016', jasmine.any(Function));
+					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:SITE:10000000001', jasmine.any(Function));
+					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:SITE:10000000016', jasmine.any(Function));
 					finished = true;
 				});
 			});
@@ -461,12 +461,12 @@ describe('active-user-cleanup-util unit test', function() {
 				'_id': 'osyncusers',
 				'users': [{
 					'duz': {
-						'9E7A': '10000000016'
+						'SITE': '10000000016'
 					},
 					'lastlogin': '2016-10-27T20:01:38-04:00'
 				}, {
 					'duz': {
-						'C877': '10000000272'
+						'SITE': '10000000272'
 					},
 					'lastlogin': '2016-10-26T20:16:47-04:00'
 				}]
@@ -500,12 +500,12 @@ describe('active-user-cleanup-util unit test', function() {
 				'_id': 'osyncusers',
 				'users': [{
 					'duz': {
-						'9E7A': '10000000016'
+						'SITE': '10000000016'
 					},
 					'lastlogin': now
 				}, {
 					'duz': {
-						'C877': '10000000272'
+						'SITE': '10000000272'
 					},
 					'lastlogin': fortyDaysAgo
 				}]
@@ -526,7 +526,7 @@ describe('active-user-cleanup-util unit test', function() {
 					expect(environment.jds.saveActiveUsers).toHaveBeenCalled();
 					var activeUsers = [{
 							'duz': {
-								'9E7A': '10000000016'
+								'SITE': '10000000016'
 							},
 							'lastlogin': now
 						}];
@@ -547,12 +547,12 @@ describe('active-user-cleanup-util unit test', function() {
 				'_id': 'osyncusers',
 				'users': [{
 					'duz': {
-						'9E7A': '10000000016'
+						'SITE': '10000000016'
 					},
 					'lastlogin': now
 				}, {
 					'duz': {
-						'C877': '10000000272'
+						'SITE': '10000000272'
 					},
 					'lastlogin': fortyDaysAgo
 				}]
@@ -572,7 +572,7 @@ describe('active-user-cleanup-util unit test', function() {
 					expect(environment.jds.saveActiveUsers).toHaveBeenCalled();
 					var activeUsers = [{
 							'duz': {
-								'9E7A': '10000000016'
+								'SITE': '10000000016'
 							},
 							'lastlogin': now
 						}];
@@ -595,12 +595,12 @@ describe('active-user-cleanup-util unit test', function() {
 				'_id': 'osyncusers',
 				'users': [{
 					'duz': {
-						'9E7A': '10000000016'
+						'SITE': '10000000016'
 					},
 					'lastlogin': now
 				}, {
 					'duz': {
-						'C877': '10000000272'
+						'SITE': '10000000272'
 					},
 					'lastlogin': fortyDaysAgo
 				}]
@@ -642,12 +642,12 @@ describe('active-user-cleanup-util unit test', function() {
 				'_id': 'osyncusers',
 				'users': [{
 					'duz': {
-						'9E7A': '10000000016'
+						'SITE': '10000000016'
 					},
 					'lastlogin': now
 				}, {
 					'duz': {
-						'C877': '10000000272'
+						'SITE': '10000000272'
 					},
 					'lastlogin': fortyDaysAgo
 				}]
@@ -659,13 +659,13 @@ describe('active-user-cleanup-util unit test', function() {
 						'items': [{
 							'id': '10000000001',
 							'lastSuccessfulLogin': '20161110132725',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000001'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000001'
 						}, {
 							'id': '10000000016',
 							'lastSuccessfulLogin': '20161110132729',
-							'site': '9E7A',
-							'uid': 'urn:va:user:9E7A:10000000016'
+							'site': 'SITE',
+							'uid': 'urn:va:user:SITE:10000000016'
 						}]
 					};
 					var response = {
@@ -689,13 +689,13 @@ describe('active-user-cleanup-util unit test', function() {
 				activeUserCleanupUtil.removeInactiveUsers(function(error) {
 					expect(error).toBeFalsy();
 					expect(environment.pjds.getActiveUsers).toHaveBeenCalled();
-					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:9E7A:10000000001', jasmine.any(Function));
-					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:9E7A:10000000016', jasmine.any(Function));
+					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:SITE:10000000001', jasmine.any(Function));
+					expect(environment.pjds.removeActiveUser).toHaveBeenCalledWith('urn:va:user:SITE:10000000016', jasmine.any(Function));
 					expect(environment.jds.getActiveUsers).toHaveBeenCalled();
 					expect(environment.jds.saveActiveUsers).toHaveBeenCalled();
 					var activeUsers = [{
 							'duz': {
-								'9E7A': '10000000016'
+								'SITE': '10000000016'
 							},
 							'lastlogin': now
 						}];

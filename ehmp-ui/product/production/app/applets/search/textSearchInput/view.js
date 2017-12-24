@@ -19,8 +19,10 @@ define([
         'errorIcon': false,
         'title': 'Enter text to search for records'
     };
+    var TEXT_SEARCH_CHANNEL = ADK.Messaging.getChannel('search');
 
     var Form = Backbone.Marionette.ItemView.extend({
+        className: 'percent-height-100 flex-display flex-align-center left-margin-lg',
         template: FormInputTemplate,
         modelEvents: {
             'change:disabled': 'render',
@@ -120,7 +122,7 @@ define([
 
     var SuggestView = Backbone.Marionette.LayoutView.extend({
         template: InputTemplate,
-        className: 'btn-group text-search-input-container text-search-input-container--full-width',
+        className: 'btn-group text-search-input-container text-search-input-container--full-width percent-height-100',
         attributes: {
             'id': 'text-search-input'
         },
@@ -159,7 +161,7 @@ define([
 
             var storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
             if (storageText) {
-                this.searchTerm = storageText;
+                this.searchTerm = _.get(storageText, 'searchTerm');
             }
 
             var ehmpConfig = ADK.Messaging.request('ehmpConfig');
@@ -191,6 +193,20 @@ define([
             }
             this.currentWorkspaceModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
             this.listenTo(this.currentWorkspaceModel, 'change:workspace', this.onChangeWorkspace);
+            TEXT_SEARCH_CHANNEL.reply('get:storage:text', function() {
+                var searchTerm = this.$('[id^=searchText]').val().trim();
+                if (_.isString(searchTerm) && searchTerm !== '') {
+                    return {
+                        searchTerm: searchTerm
+                    };
+                }
+                return null;
+            }.bind(this));
+        },
+        onShow: function() {
+            if (_.isString(this.searchTerm) && this.searchTerm.trim() !== '') {
+                this.$('[id^=searchText]').val(this.searchTerm.trim());
+            }
         },
         getMinumumRequiredStatus: function(model) {
             var minumumRequiredStatus = model.get('mySiteSolrSyncCompleted');
@@ -335,6 +351,7 @@ define([
             }
         },
         onDestroy: function() {
+            TEXT_SEARCH_CHANNEL.stopReplying('get:storage:text');
             this.unbindEntityEvents(this.suggestResults, this.suggestResultsEvents);
         },
         searchFromSuggest: function(suggestion) {
@@ -356,13 +373,13 @@ define([
             var completedSearchData = {
                 searchTerm: this.searchTerm
             };
-            ADK.Navigation.navigate('record-search');
             this.$('input').val(this.searchTerm);
-            ADK.SessionStorage.setAppletStorageModel('search', 'searchText', completedSearchData);
 
-            if (ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm === completedSearchData.searchTerm) {
-                ADK.Messaging.getChannel('search').trigger('newSearch');
+            var currentScreen = ADK.Messaging.request('get:current:screen');
+            if (currentScreen.id !== 'record-search') {
+                return ADK.Navigation.navigate('record-search');
             }
+            return TEXT_SEARCH_CHANNEL.trigger('newSearch', completedSearchData);
         },
         onAccessibilityKeydown: function(keyEvent) {
             if (keyEvent.keyCode === 32 || keyEvent.keyCode === 13) { // trigger click on space/enter key for accessibility
@@ -453,7 +470,7 @@ define([
     });
 
     ADK.Messaging.trigger('register:component', {
-        type: 'contextNavigationItem',
+        type: 'contextHeaderItem',
         group: ['patient', 'patient-right'],
         key: 'textSearchInput',
         view: SuggestView,

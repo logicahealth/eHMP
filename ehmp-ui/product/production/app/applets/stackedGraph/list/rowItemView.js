@@ -1,4 +1,4 @@
-define([
+ define([
     'backbone',
     'marionette',
     'underscore',
@@ -9,10 +9,9 @@ define([
     'hbs!app/applets/stackedGraph/list/rowItemViewLabsTemplate',
     'app/applets/stackedGraph/utils/utils',
     'app/applets/stackedGraph/tilesorting/rowItemParentView',
-    'hbs!app/applets/stackedGraph/list/popoverTemplate',
     'typeahead',
     'highcharts-more'
-], function(Backbone, Marionette, _, Highcharts, moment, RowItemViewTemplate, RowItemViewMedicationsTemplate, RowItemViewLabsTemplate, Utils, RowItemParentView, PopoverTemplate) {
+], function(Backbone, Marionette, _, Highcharts, moment, RowItemViewTemplate, RowItemViewMedicationsTemplate, RowItemViewLabsTemplate, Utils, RowItemParentView) {
     "use strict";
 
 
@@ -195,11 +194,13 @@ define([
     /* jshint ignore:end */
 
     var RowItemView = RowItemParentView.extend({
-        tagName: 'div',
-        className: 'row gist-item',
-        attributes: {
-            'tabindex': 0,
-            'role': 'row'
+        className: 'gist-item all-margin-no',
+        attributes: function() {
+            return {
+                role: 'row',
+                'data-toggle': 'popover',
+                'data-content': this.model.get('tooltip')
+            };
         },
         getTemplate: function() {
             if (this.model.get('graphType') === 'Medications') {
@@ -212,7 +213,26 @@ define([
         },
         events: {
             'click': function(e) {
-                $('[data-toggle=popover]').popover('hide');
+                var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+
+                var triggerElement = this.$('.dropdown--quickmenu > button');
+                var channelObject = {
+                    model: this.model,
+                    collection: this.model.collection,
+                    uid: this.model.get('uid'),
+                    patient: {
+                        icn: currentPatient.get('icn'),
+                        pid: currentPatient.get('pid')
+                    },
+                    $el: triggerElement
+                };
+                ADK.Messaging.getChannel(this.model.get('applet_id')).trigger('detailView', channelObject);
+            },
+            keypress: function(e) {
+                if (e.keyCode === 13 || e.keyCode === 32) {
+                    e.preventDefault();
+                    this.$el.click();
+                }
             }
         },
         templateHelpers: function() {
@@ -267,7 +287,6 @@ define([
                         this.model.set('uid', medGroupType.get('uid'));
                     }
                 }
-                // 2.
                 var numberOfSigs = this.model.get('subMedsInternalGroupModels').length;
                 var height;
                 switch (numberOfSigs) {
@@ -294,26 +313,12 @@ define([
             this.timeLineCharts = options.timeLineCharts;
             this.pointers = options.pointers;
             this._base = RowItemParentView.prototype;
-
-            var currentScreen = ADK.Messaging.request('get:current:screen');
-            var buttonTypes = ['infoButton', 'detailsviewbutton'];
-            if ((!currentScreen.config.predefined && ADK.UserService.hasPermission('access-stack-graph'))) {
-                buttonTypes.push('deleteStackedGraphButton');
-            }
-
-            this.toolbarOptions = {
-                targetElement: this.$el,
-                buttonTypes: buttonTypes,
-                appletID: this.model.get('applet_id'),
-                model: this.model
-            };
             this._base.initialize.apply(this, arguments);
         },
         onDestroy: function() {
             $.each(this.activeCharts, function(i, chart) {
                 $(chart.container).off('.stackedGraph');
             });
-            this._base.onDestroy.apply(this, arguments);
         },
         onRender: function() {
             var self = this,
@@ -488,17 +493,6 @@ define([
                 if (self.model.get('graphType') === 'Lab Tests') {
                     self.$el.applet = 'Lab Tests';
                 }
-                if (self.model.get('graphType') !== 'Medications') {
-                    if (returnedResponse !== null && returnedResponse !== 'No Records Found') {
-                        var index = self.toolbarOptions.buttonTypes.indexOf('detailsviewbutton');
-                        self.toolbarOptions.buttonTypes.splice(index + 1, 0, 'quicklookbutton');
-                    } else {
-                        var buttons = _.clone(self.toolbarOptions.buttons);
-                        self.toolbarOptions.buttonTypes = _.remove(buttons, function(text) {
-                            return text === 'quicklookbutton';
-                        });
-                    }
-                }
 
                 self._base.onRender.apply(self, arguments);
                 if (self.model.get('graphType') !== 'Medications') {
@@ -523,49 +517,6 @@ define([
                     });
                 }
             });
-            this.createPopover();
-        },
-        showPopover: function(evt, popoverElement) {
-            evt.stopPropagation();
-            $('[data-toggle=popover]').not(popoverElement).popover('hide');
-            popoverElement.popover('toggle');
-            var selectedGistItem = this.$el;
-            var widthAdjust = selectedGistItem.width() * 0.85;
-            var widthPxDiff = selectedGistItem.width() - widthAdjust;
-            var offsetLeftToCenter = selectedGistItem.offset().left + (widthPxDiff * 0.5);
-            var $popoverElement = this.$(evt.target).data('bs.popover').$tip;
-            $popoverElement.css('left', offsetLeftToCenter.toString() + "px");
-            $popoverElement.width(widthAdjust);
-        },
-        createPopover: function() {
-            var self = this;
-            var PopoverView = Backbone.Marionette.ItemView.extend({
-                template: PopoverTemplate
-            });
-            this.$el.find('[data-toggle=popover]').popover({
-                trigger: 'manual',
-                html: 'true',
-                container: 'body',
-                template: (new PopoverView().template()),
-                placement: 'bottom'
-            }).click(function(evt) {
-                self.showPopover(evt, $(this));
-            }).focus(function(evt) {
-                evt.preventDefault();
-                evt.stopImmediatePropagation();
-                $(this).keyup(function(e) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    if (e.keyCode === 13 || e.keyCode === 32) {
-                        self.showPopover(evt, $(this));
-                    }
-                });
-
-            });
-        },
-        onBeforeDestroy: function() {
-            $('[data-toggle=popover]').popover('hide');
-            $('.mainAppletToolbar').remove();
         }
     });
 

@@ -57,10 +57,8 @@ define([
                 this.field.set('step', 1);
             }
             // set max length dynamically
-            if (!this.field.get('maxlength')) {
-                var numberOfDigits = Math.floor(Math.log(this.field.get('max') || this.defaults.max) / Math.LN10 + 1);
-                this.field.set('maxlength', numberOfDigits + ((this.field.get('decimals') || this.defaults.decimals) > 0 ? (this.field.get('decimals') || this.defaults.decimals) + 1 : 0));
-            }
+            var numberOfDigits = Math.floor(Math.log(this.field.get('max') || this.defaults.max) / Math.LN10 + 1);
+            this.field.set('maxlength', numberOfDigits + ((this.field.get('decimals') || this.defaults.decimals) > 0 ? (this.field.get('decimals') || this.defaults.decimals) + 1 : 0));
         },
         onRender: function() {
             this.initSlider();

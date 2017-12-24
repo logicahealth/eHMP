@@ -50,12 +50,14 @@
 			height: calc(100% - 80px);
 			overflow-x: hidden;
 			overflow-y: auto;
-			padding-top: 27px;
+			padding: 0;
+			border-top: 1px solid $grey-dark;
 			[role=row] {
-				.selectable {
-					border: 1px solid $grey-dark;
-					border-bottom: none;
-					border-right: none;
+				display: flex;
+				border-bottom: 1px solid $grey-dark;
+				cursor: pointer;
+				[role=gridcell] {
+					border-left: 1px solid $grey-dark;
 					min-height: 100px;
 					word-break: break-word;
 					word-wrap: break-word;
@@ -69,11 +71,8 @@
 						border-right: 1px solid $grey-dark;
 					}
 				}
-				div:not(.selectable) + .selectable {
+				div:not(.selectable) + .selectable { //this should probably be deleted
 					word-wrap: break-word;
-				}
-				&:last-of-type {
-					border-bottom: 1px solid $grey-dark;
 				}
 				.row-graph-data {
 					height: 25px;
@@ -102,6 +101,7 @@
 				background-color: $grey-light;
 				height: 100%;
 				text-align: center;
+				display: block;
 			}
 			.placeholder-tile-sort {
 				height: 50px;

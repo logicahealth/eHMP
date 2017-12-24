@@ -13,7 +13,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
                 'dosage': 44,
                 'dosageUnits': 'mL',
                 'encounterName': 'PRIMARY CARE Mar 04, 2016',
-                'encounterUid': 'urn:va:visit:9E7A:100022:11806',
+                'encounterUid': 'urn:va:visit:SITE:100022:11806',
                 'eventDate': 19980201015959,
                 'expirationDate': 20151201000000,
                 'facilityCode': 500,
@@ -21,17 +21,17 @@ describe('The note-objects-madlib-generator-immunization', function() {
                 'lastUpdateTime': 19980201015959,
                 'localId': 1157,
                 'locationName': 'PRIMARY CARE',
-                'locationUid': 'urn:va:location:9E7A:32',
+                'locationUid': 'urn:va:location:SITE:32',
                 'lotNumber': 'EHMP0001',
                 'manufacturer': 'ABBOTT LABORATORIES',
                 'name': 'INFLUENZA, HIGH DOSE SEASONAL',
                 'cdcFullVaccineName' : 'Diphtheria, tetanus toxoids and acellular pertussis vaccine, Haemophilus influenzae type b conjugate',
                 'performerName': 'USER,PANORAMA',
-                'performerUid': 'urn:va:user:9E7A:10000000270',
+                'performerUid': 'urn:va:user:SITE:10000000270',
                 'routeOfAdministration': 'INTRADERMAL',
                 'siteOfAdministration': 'LEFT DELTOID',
                 'stampTime': 19980201015959,
-                'uid': 'urn:va:immunization:9E7A:100022:1157',
+                'uid': 'urn:va:immunization:SITE:100022:1157',
                 'seriesName':'Series 3'
             };
 
@@ -59,7 +59,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'dosage': 44,
             'dosageUnits': 'mL',
             'encounterName': 'PRIMARY CARE Mar 04, 2016',
-            'encounterUid': 'urn:va:visit:9E7A:100022:11806',
+            'encounterUid': 'urn:va:visit:SITE:100022:11806',
             'eventDate': 19980201015959,
             'expirationDate': 20151201000000,
             'facilityCode': 500,
@@ -67,16 +67,16 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'lastUpdateTime': 19980201015959,
             'localId': 1157,
             'locationName': 'PRIMARY CARE',
-            'locationUid': 'urn:va:location:9E7A:32',
+            'locationUid': 'urn:va:location:SITE:32',
             'lotNumber': 'EHMP0001',
             'manufacturer': 'ABBOTT LABORATORIES',
             'name': 'INFLUENZA, HIGH DOSE SEASONAL',
             'performerName': 'USER,PANORAMA',
-            'performerUid': 'urn:va:user:9E7A:10000000270',
+            'performerUid': 'urn:va:user:SITE:10000000270',
             'routeOfAdministration': 'INTRADERMAL',
             'siteOfAdministration': 'LEFT DELTOID',
             'stampTime': 19980201015959,
-            'uid': 'urn:va:immunization:9E7A:100022:1157',
+            'uid': 'urn:va:immunization:SITE:100022:1157',
             'comment': 'No comments at this time'
         };
 
@@ -97,7 +97,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'dosage': 55,
             'dosageUnits': 'mL',
             'encounterName': 'NEUROSURGEON Aug 14, 2014',
-            'encounterUid': 'urn:va:visit:9E7A:3:11832',
+            'encounterUid': 'urn:va:visit:SITE:3:11832',
             'eventDate': 20140814130730,
             'expirationDate': 20151231000000,
             'facilityCode': 500,
@@ -105,19 +105,19 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'lastUpdateTime': 20140814130730,
             'localId': 1158,
             'locationName': 'NEUROSURGEON',
-            'locationUid': 'urn:va:location:9E7A:38',
+            'locationUid': 'urn:va:location:SITE:38',
             'lotNumber': 'EHMP0006',
             'manufacturer': 'ALPHA THERAPEUTIC CORPORATION',
             'name': 'HEP A-HEP B',
             'performerName': 'USER,PANORAMA',
-            'performerUid': 'urn:va:user:9E7A:10000000270',
+            'performerUid': 'urn:va:user:SITE:10000000270',
             'routeOfAdministration': 'PERCUTANEOUS',
-            'seriesCode': 'urn:va:series:9E7A:3:SERIES 4',
+            'seriesCode': 'urn:va:series:SITE:3:SERIES 4',
             'seriesName': 'SERIES 4',
             'siteOfAdministration': 'LEFT ARM',
             'stampTime': 20140814130730,
             'summary': 'HEP A/HEP B VACC ADULT IM',
-            'uid': 'urn:va:immunization:9E7A:3:1158',
+            'uid': 'urn:va:immunization:SITE:3:1158',
             'vis': [
                 {
                     'editionDate': 20120202,
@@ -148,7 +148,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'dosage': 12,
             'dosageUnits': 'mL',
             'encounterName': 'DERMATOLOGY Mar 22, 2016',
-            'encounterUid': 'urn:va:visit:9E7A:3:11838',
+            'encounterUid': 'urn:va:visit:SITE:3:11838',
             'eventDate': 20160322100000,
             'expirationDate': 20151231000000,
             'facilityCode': 500,
@@ -156,20 +156,20 @@ describe('The note-objects-madlib-generator-immunization', function() {
             'lastUpdateTime': 20160322100000,
             'localId': 1164,
             'locationName': 'DERMATOLOGY',
-            'locationUid': 'urn:va:location:9E7A:62',
+            'locationUid': 'urn:va:location:SITE:62',
             'lotNumber': 'EHMP0006',
             'manufacturer': 'ALPHA THERAPEUTIC CORPORATION',
             'name': 'HEP A-HEP B',
             'orderingProvider': 'USER,PANORAMA',
             'performerName': 'KHAN,VIHAAN',
-            'performerUid': 'urn:va:user:9E7A:10000000272',
+            'performerUid': 'urn:va:user:SITE:10000000272',
             'routeOfAdministration': 'NASAL',
-            'seriesCode': 'urn:va:series:9E7A:3:BOOSTER',
+            'seriesCode': 'urn:va:series:SITE:3:BOOSTER',
             'seriesName': 'BOOSTER',
             'siteOfAdministration': 'LEFT GLUTEUS MEDIUS',
             'stampTime': 20160322100000,
             'summary': 'HEP A/HEP B VACC ADULT IM',
-            'uid': 'urn:va:immunization:9E7A:3:1164',
+            'uid': 'urn:va:immunization:SITE:3:1164',
             'vis': [
                 {
                     'editionDate': 20120202,
@@ -206,7 +206,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'dosage': 30,
  'dosageUnits': 'mL',
  'encounterName': 'SURGICAL CLINIC Mar 21, 2016',
- 'encounterUid': 'urn:va:visit:9E7A:776:11838',
+ 'encounterUid': 'urn:va:visit:SITE:776:11838',
  'eventDate': 20160321104000,
  'expirationDate': 20151231000000,
  'facilityCode': 500,
@@ -214,19 +214,19 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'lastUpdateTime': 20160321104000,
  'localId': 1168,
  'locationName': 'SURGICAL CLINIC',
- 'locationUid': 'urn:va:location:9E7A:239',
+ 'locationUid': 'urn:va:location:SITE:239',
  'lotNumber': 'EHMP0006',
  'manufacturer': 'ALPHA THERAPEUTIC CORPORATION',
  'name': 'HEP A-HEP B',
  'performerName': 'USER,PANORAMA',
- 'performerUid': 'urn:va:user:9E7A:10000000270',
+ 'performerUid': 'urn:va:user:SITE:10000000270',
  'routeOfAdministration': 'INTRADERMAL',
- 'seriesCode': 'urn:va:series:9E7A:776:SERIES 3',
+ 'seriesCode': 'urn:va:series:SITE:776:SERIES 3',
  'seriesName': 'SERIES 3',
  'siteOfAdministration': 'LEFT ARM',
  'stampTime': 20160321104000,
  'summary': 'HEP A/HEP B VACC ADULT IM',
- 'uid': 'urn:va:immunization:9E7A:776:1168'
+ 'uid': 'urn:va:immunization:SITE:776:1168'
     }
 
 
@@ -234,7 +234,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
  {
  'encounterInpatient': '0',
  'encounterLocation': '239',
- 'location': 'urn:va:location:9E7A:239',
+ 'location': 'urn:va:location:SITE:239',
  'encounterServiceCategory': 'I',
  'encounterDateTime': '20160321104000',
  'eventDateTime': '20160321104000',
@@ -253,7 +253,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'encounterProviderIEN': '10000000270',
  'comment': "",
  'expirationDate': '20151231',
- 'authorUid': 'urn:va:user:9E7A:10000000270'
+ 'authorUid': 'urn:va:user:SITE:10000000270'
     }
 
 ----------
@@ -272,7 +272,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'dosage': 123,
  'dosageUnits': 'mL',
  'encounterName': 'SURGICAL CLINIC Mar 21, 2016',
- 'encounterUid': 'urn:va:visit:9E7A:776:11838',
+ 'encounterUid': 'urn:va:visit:SITE:776:11838',
  'eventDate': 20160321104000,
  'expirationDate': 20151231000000,
  'facilityCode': 500,
@@ -280,19 +280,19 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'lastUpdateTime': 20160321104000,
  'localId': 1168,
  'locationName': 'SURGICAL CLINIC',
- 'locationUid': 'urn:va:location:9E7A:239',
+ 'locationUid': 'urn:va:location:SITE:239',
  'lotNumber': 'EHMP0006',
  'manufacturer': 'ALPHA THERAPEUTIC CORPORATION',
  'name': 'HEP A-HEP B',
  'performerName': 'USER,PANORAMA',
- 'performerUid': 'urn:va:user:9E7A:10000000270',
+ 'performerUid': 'urn:va:user:SITE:10000000270',
  'routeOfAdministration': 'PERCUTANEOUS',
- 'seriesCode': 'urn:va:series:9E7A:776:SERIES 3',
+ 'seriesCode': 'urn:va:series:SITE:776:SERIES 3',
  'seriesName': 'SERIES 3',
  'siteOfAdministration': 'RIGHT DELTOID',
  'stampTime': 20160321104000,
  'summary': 'HEP A/HEP B VACC ADULT IM',
- 'uid': 'urn:va:immunization:9E7A:776:1168',
+ 'uid': 'urn:va:immunization:SITE:776:1168',
  'vis': [
  {
  'editionDate': 20120202,
@@ -308,8 +308,8 @@ describe('The note-objects-madlib-generator-immunization', function() {
  }
  ]
  },
- 'immunizationnNoteReferenceId': 'urn:va:ehmp-observation:9E7A:776:a800ddc1-8ac1-4f9e-8123-d2428aee7fea',
- 'noteObjectReferenceId': 'urn:va:ehmp-note:9E7A:776:97535079-2ea4-4cf7-80d7-150e6525a8be'
+ 'immunizationnNoteReferenceId': 'urn:va:ehmp-observation:SITE:776:a800ddc1-8ac1-4f9e-8123-d2428aee7fea',
+ 'noteObjectReferenceId': 'urn:va:ehmp-note:SITE:776:97535079-2ea4-4cf7-80d7-150e6525a8be'
  }
     }
 
@@ -318,7 +318,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
  {
  'encounterInpatient': '0',
  'encounterLocation': '239',
- 'location': 'urn:va:location:9E7A:239',
+ 'location': 'urn:va:location:SITE:239',
  'encounterServiceCategory': 'I',
  'encounterDateTime': '20160321104000',
  'eventDateTime': '20160321104000',
@@ -338,6 +338,6 @@ describe('The note-objects-madlib-generator-immunization', function() {
  'VIS': '5/196101010000;45/196101010000',
  'comment': 'No comments at all mister',
  'expirationDate': '20151231',
- 'authorUid': 'urn:va:user:9E7A:10000000270'
+ 'authorUid': 'urn:va:user:SITE:10000000270'
 }
  */

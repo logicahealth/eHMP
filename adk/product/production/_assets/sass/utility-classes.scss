@@ -39,11 +39,26 @@ $classPixelWidth: pixel-width !default;
 .auto-width {
     width: auto !important;
 }
+.auto-height {
+    height: auto !important;
+}
 .inherit-height {
     height: inherit !important;
 }
+.inherit-max-height {
+    max-height: inherit !important;
+}
 .percent-height-100 {
     height: 100% !important;
+}
+.max-height-sm {    
+    max-height: 100px !important;
+}
+.max-height-md {
+    max-height: 250px !important;
+}
+.max-height-lg {
+    max-height: 500px !important;
 }
 // margin / padding
 // e.g: .all-margin-no, .all-margin-xs, .all-margin-sm, .all-margin-md, .all-margin-lg, .all-margin-xl
@@ -88,6 +103,12 @@ $flexClass: flex-width !default;
     }
     .#{$flexClass + '-' + $i + '_5'} {
         flex: #{$i + '.5'} !important;
+    }
+}
+$flexOrder: flex-order !default;
+@for $i from 0 through 10 {
+    .#{$flexOrder + '-' + $i} {
+        order: #{$i} !important;
     }
 }
 $flexAlignItems: flex-start flex-end center baseline stretch;
@@ -140,6 +161,13 @@ $orderClass: order !default;
         order: #{$i} !important;
     }
 }
+// creates shrink classes e.g: .flex-shrink-1 has shrink: 1; shrink 1 - 10
+$shrinkClass: shrink !default;
+@for $i from 0 through 10 {
+    .flex-#{$shrinkClass + '-' + $i} {
+        flex-shrink: #{$i} !important;
+    }
+}
 // color and background-colors
 // e.g: .color-primary and .background-color-primary for all colors in our colorListVariables variable below
 $colorListVariables: $primary $primary-dark $primary-light $primary-light-alt $primary-lighter $primary-lightest $secondary $secondary-light $secondary-dark $tertiary $tertiary-dark $tertiary-darker $pure-black $pure-white $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $red $red-dark $red-lightest $pure-yellow $yellow-light $orange-dark;
@@ -159,8 +187,8 @@ $colorlistProperty: color background-color;
 }
 // border styles
 // e.g: .top-border-grey and .top-border-grey-dark all colors in our borderColorVariables variable below
-$borderColorVariables: $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $none;
-$borderColorNames: "grey" grey-dark grey-darker grey-darkest grey-light grey-lighter grey-lightest no;
+$borderColorVariables: $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $none $pure-white;
+$borderColorNames: "grey" grey-dark grey-darker grey-darkest grey-light grey-lighter grey-lightest no pure-white;
 $borderProperty: border;
 $borderDirection: top right bottom left;
 // e.g: .all-border-(color) - setting all classes first so individual directions can be overwritten

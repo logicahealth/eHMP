@@ -58,7 +58,7 @@ function registerResource(mountpoint, markdownPath, preload) {
 
     var resources = domains[prefix].resources;
 
-    // wrap colon-prefixed path parameters with braces
+    // wrap colon-prefixed path parameters (e.g. :pid) with braces (e.g. {pid})
     mountpoint = mountpoint.replace(/\/:(\w+)(\/|$)/g, '/{$1}$2');
 
     var existing = _.find(resources, {

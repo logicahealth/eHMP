@@ -283,7 +283,7 @@ define([
                                 author: {
                                     name: "Vehu, Five",
                                     duz: {
-                                        "9E7A": "10000000255"
+                                        "SITE": "10000000255"
                                     }
                                 },
                                 timeStamp: "12/14/2014 11:15PM"
@@ -292,7 +292,7 @@ define([
                                 author: {
                                     name: "Vehu, Five",
                                     duz: {
-                                        "9E7A": "10000000238"
+                                        "SITE": "10000000238"
                                     }
                                 },
                                 timeStamp: "12/13/2014 11:17PM"

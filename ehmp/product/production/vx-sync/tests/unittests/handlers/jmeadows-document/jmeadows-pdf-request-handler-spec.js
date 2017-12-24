@@ -5,8 +5,6 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var fsUtil = require(global.VX_UTILS + 'fs-utils');
 var handler = require(global.VX_HANDLERS + 'jmeadows-document/jmeadows-pdf-request-handler');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
-
 describe('jmeadows-pdf-request-handler', function() {
 
     var config = {
@@ -18,7 +16,7 @@ describe('jmeadows-pdf-request-handler', function() {
             },
             document: {
                 path: '/dod/document'
-            },
+            }
         },
         documentStorage: {
             staging: {
@@ -29,7 +27,7 @@ describe('jmeadows-pdf-request-handler', function() {
                 path: '/tmp/vxsync/documents/published',
                 permissions: '500'
             }
-        },
+        }
     };
 
     describe('create staging file', function() {
@@ -43,7 +41,7 @@ describe('jmeadows-pdf-request-handler', function() {
             'referenceDateTime': '201103021444432',
             'documentTypeName': 'Consultation Note (Provider) Document',
             'sensitive': true,
-            'dodComplexNoteUri': 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157584289',
+            'dodComplexNoteUri': 'http://127.0.0.1:8080/MockDoDAdaptor/async/complex/note/2157584289',
             'uid': null,
             'pid': 'DOD;00000099',
             'text': null

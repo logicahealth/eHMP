@@ -23,24 +23,24 @@ var mockConfig = {
     delay: 5,
     rpcContext: 'HMP SYNCHRONIZATION CONTEXT',
     vistaSites: _.defaults(wConfig.vistaSites, {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 20000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'stationNumber': 500,
             'localAddress': 'localhost',
@@ -68,7 +68,7 @@ describe('osync-admissions-handler.js', function () {
         runs(function () {
             var job = {};
             job.type = 'admissions';
-            job.siteId = 'C877';
+            job.siteId = 'SITE';
 
             var mockPublisher = new Publisher(logger, mockConfig, job.type);
             var environment = {

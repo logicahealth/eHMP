@@ -164,11 +164,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getProgressNoteCompleted()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:3");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:3");
         documentDetails.setDocStatus("COMPLETED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -176,11 +176,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getAdvanceDirective()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:27");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:27");
         documentDetails.setDocStatus("UNCOSIGNED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -188,11 +188,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getProgressNoteCompletedForDifferentSite()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:3");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:3");
         documentDetails.setDocStatus("COMPLETED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:C877:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -201,11 +201,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getCrisisCompleted()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:117");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:117");
         documentDetails.setDocStatus("COMPLETED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -213,11 +213,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getCrisisUnsigned()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:117");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:117");
         documentDetails.setDocStatus("UNSIGNED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -226,11 +226,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getCrisisNoteCompleted()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:30");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:30");
         documentDetails.setDocStatus("COMPLETED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -238,11 +238,11 @@ public class TestASURuleEvaluation
     private ASUDocumentDetails getPhysicianProgressUnsigned()
     {
         ASUDocumentDetails documentDetails=new ASUDocumentDetails();
-        documentDetails.setDocDefUid("urn:va:doc-def:9E7A:307");
+        documentDetails.setDocDefUid("urn:va:doc-def:SITE:307");
         documentDetails.setDocStatus("UNSIGNED");
 
         ArrayList<String> userClassUids =new ArrayList<String>();
-        userClassUids.add("urn:va:asu-class:9E7A:561");
+        userClassUids.add("urn:va:asu-class:SITE:561");
         documentDetails.setUserClassUids(userClassUids);
         return documentDetails;
     }
@@ -251,22 +251,22 @@ public class TestASURuleEvaluation
         List<DocumentDefinition> docDefList = new ArrayList<DocumentDefinition>();
 
         DocumentDefinition uid3 = new DocumentDefinition();
-        uid3.setData("uid", "urn:va:doc-def:9E7A:3");
+        uid3.setData("uid", "urn:va:doc-def:SITE:3");
         docDefList.add(uid3);
         DocumentDefinition uid30 = new DocumentDefinition();
-        uid30.setData("uid", "urn:va:doc-def:9E7A:30");
+        uid30.setData("uid", "urn:va:doc-def:SITE:30");
         docDefList.add(uid30);
         DocumentDefinition uid38 = new DocumentDefinition();
-        uid38.setData("uid", "urn:va:doc-def:9E7A:38");
+        uid38.setData("uid", "urn:va:doc-def:SITE:38");
         docDefList.add(uid38);
         DocumentDefinition uid117 = new DocumentDefinition();
-        uid117.setData("uid", "urn:va:doc-def:9E7A:117");
+        uid117.setData("uid", "urn:va:doc-def:SITE:117");
         docDefList.add(uid117);
         DocumentDefinition uid150 = new DocumentDefinition();
-        uid150.setData("uid", "urn:va:doc-def:9E7A:150");
+        uid150.setData("uid", "urn:va:doc-def:SITE:150");
         docDefList.add(uid150);
         DocumentDefinition uid307 = new DocumentDefinition();
-        uid307.setData("uid", "urn:va:doc-def:9E7A:307");
+        uid307.setData("uid", "urn:va:doc-def:SITE:307");
         docDefList.add(uid307);
 
         // Add children
@@ -306,65 +306,65 @@ public class TestASURuleEvaluation
         List<AsuRuleDef> asuRules=new ArrayList<AsuRuleDef>();
 
         AsuRuleDef asuRuleClinicalDocument=new AsuRuleDef();
-        asuRuleClinicalDocument.setDocDefUid("urn:va:doc-def:9E7A:38");
+        asuRuleClinicalDocument.setDocDefUid("urn:va:doc-def:SITE:38");
         asuRuleClinicalDocument.setActionName("VIEW");
         asuRuleClinicalDocument.setIsAnd("false");
         asuRuleClinicalDocument.setStatusName("COMPLETED");
-        asuRuleClinicalDocument.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleClinicalDocument.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleClinicalDocument.setDescription("A Clinical Documents with a status of completed can be viewed by USER");
         asuRules.add(asuRuleClinicalDocument);
 
         AsuRuleDef asuRuleProgressNote=new AsuRuleDef();
-        asuRuleProgressNote.setDocDefUid("urn:va:doc-def:9E7A:3");
+        asuRuleProgressNote.setDocDefUid("urn:va:doc-def:SITE:3");
         asuRuleProgressNote.setActionName("VIEW");
         asuRuleProgressNote.setIsAnd("false");
         asuRuleProgressNote.setStatusName("COMPLETED");
-        asuRuleProgressNote.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleProgressNote.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleProgressNote.setDescription("A Progress Note with a status of completed can be viewed by USER");
         asuRules.add(asuRuleProgressNote);
 
-        //NO RULE SHOULD BE ADDED FOR CRISIS NOTES - urn:va:doc-def:9E7A:30
+        //NO RULE SHOULD BE ADDED FOR CRISIS NOTES - urn:va:doc-def:SITE:30
 
         AsuRuleDef asuRuleCrisis=new AsuRuleDef();
-        asuRuleCrisis.setDocDefUid("urn:va:doc-def:9E7A:117");
+        asuRuleCrisis.setDocDefUid("urn:va:doc-def:SITE:117");
         asuRuleCrisis.setActionName("VIEW");
         asuRuleCrisis.setIsAnd("true");
         asuRuleCrisis.setStatusName("COMPLETED");
-        asuRuleCrisis.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleCrisis.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleCrisis.setUserRoleName("AUTHOR/DICTATOR");
         asuRuleCrisis.setDescription("A CRISIS with a status of completed can be viewed by USER");
         asuRules.add(asuRuleCrisis);
 
         AsuRuleDef asuRuleCrisisEditRecord=new AsuRuleDef();
-        asuRuleCrisisEditRecord.setDocDefUid("urn:va:doc-def:9E7A:117");
+        asuRuleCrisisEditRecord.setDocDefUid("urn:va:doc-def:SITE:117");
         asuRuleCrisisEditRecord.setActionName("EDIT RECORD");
         asuRuleCrisisEditRecord.setIsAnd("true");
         asuRuleCrisisEditRecord.setStatusName("COMPLETED");
-        asuRuleCrisisEditRecord.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleCrisisEditRecord.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleCrisisEditRecord.setUserRoleName("AUTHOR/DICTATOR");
         asuRuleCrisisEditRecord.setDescription("A CRISIS with a status of completed can perform EDIT RECORD by USER");
         asuRules.add(asuRuleCrisisEditRecord);
 
 
         AsuRuleDef asuRuleCrisisUnsigned=new AsuRuleDef();
-        asuRuleCrisisUnsigned.setDocDefUid("urn:va:doc-def:9E7A:244");
+        asuRuleCrisisUnsigned.setDocDefUid("urn:va:doc-def:SITE:244");
         asuRuleCrisisUnsigned.setActionName("VIEW");
         asuRuleCrisisUnsigned.setIsAnd("false");
         asuRuleCrisisUnsigned.setStatusName("UNSIGNED");
-        asuRuleCrisisUnsigned.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleCrisisUnsigned.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleCrisisUnsigned.setUserRoleName("AUTHOR/DICTATOR");
         asuRuleCrisisUnsigned.setDescription("A DISCHARGE SUMMARY with a status of UNSIGNED can be viewed by USER");
         asuRules.add(asuRuleCrisisUnsigned);
 
-        //NO RULE SHOULD BE ADDED FOR PHYSICIAN PROGRESS - urn:va:doc-def:9E7A:307
+        //NO RULE SHOULD BE ADDED FOR PHYSICIAN PROGRESS - urn:va:doc-def:SITE:307
 
         //DOCTOTS NOTE UNSIGNED
         AsuRuleDef asuRuleDocNoteUnsignedisAndTrue=new AsuRuleDef();
-        asuRuleDocNoteUnsignedisAndTrue.setDocDefUid("urn:va:doc-def:9E7A:150");
+        asuRuleDocNoteUnsignedisAndTrue.setDocDefUid("urn:va:doc-def:SITE:150");
         asuRuleDocNoteUnsignedisAndTrue.setActionName("VIEW");
         asuRuleDocNoteUnsignedisAndTrue.setIsAnd("true");
         asuRuleDocNoteUnsignedisAndTrue.setStatusName("UNSIGNED");
-        asuRuleDocNoteUnsignedisAndTrue.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleDocNoteUnsignedisAndTrue.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleDocNoteUnsignedisAndTrue.setUserRoleName("AUTHOR/DICTATOR");
         asuRuleDocNoteUnsignedisAndTrue.setDescription("A DOCTORS NOTES with a status of UNSIGNED can be viewed by USER");
         asuRules.add(asuRuleDocNoteUnsignedisAndTrue);
@@ -372,11 +372,11 @@ public class TestASURuleEvaluation
         //DOCTOTS NOTE UNSIGNED
 
         AsuRuleDef asuRuleDocNoteUnsignedisAndFalse=new AsuRuleDef();
-        asuRuleDocNoteUnsignedisAndFalse.setDocDefUid("urn:va:doc-def:9E7A:150");
+        asuRuleDocNoteUnsignedisAndFalse.setDocDefUid("urn:va:doc-def:SITE:150");
         asuRuleDocNoteUnsignedisAndFalse.setActionName("VIEW");
         asuRuleDocNoteUnsignedisAndFalse.setIsAnd("false");
         asuRuleDocNoteUnsignedisAndFalse.setStatusName("UNSIGNED");
-        asuRuleDocNoteUnsignedisAndFalse.setUserClassUid("urn:va:asu-class:9E7A:561");
+        asuRuleDocNoteUnsignedisAndFalse.setUserClassUid("urn:va:asu-class:SITE:561");
         asuRuleDocNoteUnsignedisAndFalse.setUserRoleName("AUTHOR/DICTATOR");
         asuRuleDocNoteUnsignedisAndFalse.setDescription("A DOCTORS NOTES with a status of UNSIGNED can be viewed by USER");
         asuRules.add(asuRuleDocNoteUnsignedisAndFalse);

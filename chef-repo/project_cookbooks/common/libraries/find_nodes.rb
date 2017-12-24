@@ -24,8 +24,8 @@ def find_optional_node_by_criteria(stack, include_criteria=nil, exclude_criteria
   nodes = search(:node, "#{search_query}")
   nodes.flatten!
 
-  # Warn if no node has been found in the stack
-  Chef::Log.warn "The search query '#{search_query}' returned 0 results." if nodes.size == 0
+  # Inform if no node has been found in the stack
+  Chef::Log.info "The search query '#{search_query}' returned 0 results." if nodes.size == 0
   # Fail if mutiple nodes have been found in the stack
   raise "Multiple machines that match the search query '#{search_query}' were found in the #{stack} environment... This is not allowed. Cleanup of nodes may be necessary." if nodes.size > 1
   return nodes[0]

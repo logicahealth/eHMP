@@ -30,7 +30,7 @@ Get encounter info for specific location and datetime
                     "providers": [],
                     "service": "ssss",
                     "typeDisplayName": "ssss",
-                    "uid": "urn:va:document:9E7A:3:3"
+                    "uid": "urn:va:document:SITE:3:3"
                 },
                 "status": 200
             }

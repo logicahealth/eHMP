@@ -4,7 +4,7 @@
 #
 
 # most of this recipe is taken from the dbbin recipe from the third party cookbook
-# changes and additions are made to support version 11.2.0.1 and make the recipe idempotent and are marked with comments
+# changes and additions are made to support 12c and make the recipe idempotent and are marked with comments
 # see original recipe for original comments
 
 file "#{node[:oracle][:ora_inventory]}/ContentsXML/comps.xml" do
@@ -68,42 +68,44 @@ directory node[:oracle][:ora_inventory] do
   action :create
 end
 
-template "#{node[:oracle][:rdbms][:install_dir]}/db11R23.rsp" do
+#remove 11g response file creation
+
+template "#{node[:oracle][:rdbms][:install_dir]}/db12c.rsp" do
   cookbook 'oracle'
   owner 'oracle'
   group 'oinstall'
   mode '0644'
 end
 
-# remove options incompatible with version 11.2.0.1
-# add 253 (warnings?) and 254 (already installed) as acceptable exit codes
+#add 253 (warnings?) as an acceptable exit code
+#add guard to skip if oracle home exists
 bash 'run_rdbms_installer' do
   cwd "#{node[:oracle][:rdbms][:install_dir]}/database"
-  environment (node[:oracle][:rdbms][:env])
-  code "sudo -Eu oracle ./runInstaller -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node[:oracle][:rdbms][:install_dir]}/db11R23.rsp -invPtrLoc #{node[:oracle][:ora_base]}/oraInst.loc"
+  environment (node[:oracle][:rdbms][:env_12c])
+  code "sudo -Eu oracle ./runInstaller -showProgress -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node[:oracle][:rdbms][:install_dir]}/db12c.rsp -invPtrLoc #{node[:oracle][:ora_base]}/oraInst.loc"
   returns [0, 6, 253]
-  not_if { File.exist? node[:oracle][:rdbms][:ora_home] }
+  not_if { File.exist? node[:oracle][:rdbms][:ora_home_12c] }
 end
 
 execute 'root.sh_rdbms' do
-  command "#{node[:oracle][:rdbms][:ora_home]}/root.sh"
+  command "#{node[:oracle][:rdbms][:ora_home_12c]}/root.sh"
 end
 
-template "#{node[:oracle][:rdbms][:ora_home]}/network/admin/listener.ora" do
-  owner 'oracle'
-  group 'oinstall'
-  mode '0644'
-  cookbook 'oracle'
-end
+# template "#{node[:oracle][:rdbms][:ora_home_12c]}/network/admin/listener.ora" do
+#   owner 'oracle'
+#   group 'oinstall'
+#   mode '0644'
+#   cookbook 'oracle'
+# end
 
 # install sqlnet.ora
-cookbook_file "#{node[:oracle][:rdbms][:ora_home]}/network/admin/sqlnet.ora" do
+cookbook_file "#{node[:oracle][:rdbms][:ora_home_12c]}/network/admin/sqlnet.ora" do
   owner 'oracle'
   group 'oinstall'
   mode '0644'
 end
 
-cookbook_file "#{node[:oracle][:rdbms][:ora_home]}/sqlplus/admin/glogin.sql" do
+cookbook_file "#{node[:oracle][:rdbms][:ora_home_12c]}/sqlplus/admin/glogin.sql" do
   owner 'oracle'
   group 'oinstall'
   mode '0644'
@@ -111,7 +113,8 @@ cookbook_file "#{node[:oracle][:rdbms][:ora_home]}/sqlplus/admin/glogin.sql" do
 end
 
 template '/etc/init.d/oracle' do
-  source 'ora_init_script.erb'
+  source 'ora_12c_init_script.erb'
+  cookbook 'oracle'
   mode '0755'
 end
 
@@ -119,5 +122,3 @@ service 'start oracle' do
   service_name 'oracle'
   action [:enable, :start]
 end
-
-# removed else block for running install for oracle 12

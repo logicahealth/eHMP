@@ -7,7 +7,7 @@ var activateUtility = require('./lib/message-utility-activate');
 var deleteUtility = require('./lib/message-utility-delete');
 var updateUserPrefs = require('./lib/message-utility-update-user');
 
-var defaultConfig = '../rdk/config/rdk-fetch-server-config.json';
+var defaultConfig = '../fetch_server/config/rdk-fetch-server-config.json';
 var defaultObject = 'oracledb.communicationsDatabase';
 
 var argv = require('yargs')

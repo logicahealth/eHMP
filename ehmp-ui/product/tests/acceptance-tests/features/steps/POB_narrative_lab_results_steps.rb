@@ -78,8 +78,5 @@ When(/^the user views the details of the first Narrative Lab Results$/) do
   rows = ehmp.fld_applet_table_rows
   expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
   rows[0].click
-  ehmp.wait_until_btn_detail_view_visible
-  expect(ehmp).to have_btn_detail_view
-  ehmp.btn_detail_view.click
 end
 

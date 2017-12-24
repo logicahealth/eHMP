@@ -11,15 +11,13 @@ define([
                 title: 'Type',
                 sortable: true,
                 sortType: 'alphabetical',
-                key: 'descriptionColumn',
-                hoverTip: 'vitals_type'
+                key: 'descriptionColumn'
             },
             header2: {
                 title: 'Result',
                 sortable: true,
                 sortType: 'numeric',
-                key: 'result',
-                hoverTip: 'vitals_results'
+                key: 'result'
             },
             header3: {
                 title: '',

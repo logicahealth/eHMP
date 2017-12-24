@@ -7,7 +7,7 @@ Feature: F323  Normalization of Clinical Notes Document Data
   @terminology_clinical_notes @VPR 
   Scenario: An authorized user can access DoD Notes and see standardized LOINC values when defined
     Given a patient with "Notes" in multiple VistAs
-    And a patient with pid "9E7A;3" has been synced through VX-Sync API for "DoD" site(s)
+    And a patient with pid "SITE;3" has been synced through VX-Sync API for "DoD" site(s)
 	When the client requests "document" for the patient "10108V420871" in VPR format
     Then the VPR results contain "document" terminology from "LOINC codes"
       | field         | value           					|
@@ -48,4 +48,4 @@ Feature: F323  Normalization of Clinical Notes Document Data
 #TestNote:
 #  * We could not test notes/documents in FHIR format because it's not available through FHIR.
 #  * VUID->LOINC mapping table is quite limited and test patient with a note vuid that could be mapped to VUID->LOINC mapping table could not be found.
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS RE/JLV+Terminology+Handling

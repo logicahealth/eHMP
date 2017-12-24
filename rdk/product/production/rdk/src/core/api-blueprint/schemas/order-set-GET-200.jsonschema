@@ -64,7 +64,7 @@
                     "description": "Id of the site this Order Set belongs to. This is null for 'enterprise' scope."
                 },
                 "createdBy": {
-                    "description": "User id of creator of the Order Set (e.g., urn:va:user:9E7A:10000000238)",
+                    "description": "User id of creator of the Order Set (e.g., urn:va:user:SITE:10000000238)",
                     "type": "string"
                 },
                 "active": {

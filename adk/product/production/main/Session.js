@@ -3,13 +3,15 @@ define([
     'moment',
     'api/Messaging',
     'underscore',
-    'api/UrlBuilder'
+    'api/UrlBuilder',
+    'main/adk_utils/patientUtils'
 ], function(
     Backbone,
     moment,
     Messaging,
     _,
-    UrlBuilder
+    UrlBuilder,
+    patientUtils
 ) {
     'use strict';
 
@@ -21,11 +23,26 @@ define([
         },
         parse: function(resp) {
             if (_.has(resp, 'data')) {
-                return resp.data;
+                resp = resp.data;
             }
-            return resp;
+            return _.extend({ displayName: this.getDisplayName(resp)}, resp);
+        },
+        getDisplayName: function(resp){
+            var lastName = _.get(resp, 'lastname');
+            var firstName = _.get(resp, 'firstname');
+            var displayName = lastName;
+            displayName += ((!_.isEmpty(lastName) && !_.isEmpty(firstName)) ? ', ' : '');
+            displayName += firstName;
+            return displayName;
+        },
+        initialize: function() {
+            Messaging.getChannel('User').reply('site', this.getSite.bind(this));
+        },
+        getSite: function () {
+            return this.get('site');
         }
     });
+
     var PatientModel = Backbone.Model.extend({
         isInpatient: function() {
             if (this.patientStatusClass() == "Inpatient") {
@@ -129,20 +146,7 @@ define([
                     criteria: {}
                 }, opts);
 
-                //Pid will be used if exists unless patientIdentifierType specified to ICN
-                if (options.patientIdentifierType && this.get(options.thisIdentifierType)) {
-                    options.criteria.pid = this.get(options.thisIdentifierType);
-                } else if (this.get("pid")) {
-                    options.criteria.pid = this.get("pid");
-                } else if (this.get("icn")) {
-                    options.criteria.pid = this.get("icn");
-                } else {
-                    options.criteria.pid = this.get("id");
-                }
-
-                if (this.has("acknowledged")) {
-                    options.criteria._ack = 'true';
-                }
+                options = this.setFetchParams(options);
 
                 this.url = UrlBuilder.buildUrl(options.resourceTitle, options.criteria);
             } else {
@@ -167,6 +171,15 @@ define([
                 this.unset('patientRecordFlag');
             }
             return refreshedPatient;
+        },
+        setFetchParams: function(opts) {
+            return patientUtils.setPatientFetchParams(this, opts);
+        },
+        getIdentifier: function(patientIdentifierType) {
+            return patientUtils.getPatientIdentifier(this, patientIdentifierType);
+        },
+        isInPrimaryVista: function() {
+            return patientUtils.isPatientInPrimaryVista(this);
         }
     });
 

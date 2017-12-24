@@ -1,0 +1,15 @@
+$staff-primary:         		#076F7D;
+$staff-primary-dark:         	#05434B;
+$staff-primary-light:     		#E4EFEC;
+
+$staff-primary-light-alt:       #CAE0DA;
+$staff-primary-lighter:       	#E2F3F8;
+$staff-primary-lightest:		#F3F5F7;
+
+$staff-secondary:      			#328443;
+$staff-secondary-light:      	#E4EFEC;
+$staff-secondary-dark:			#256632;
+
+.staff-context {
+	@include context-theme($staff-primary,$staff-primary-dark,$staff-primary-light,$staff-primary-light-alt,$staff-primary-lighter,$staff-primary-lightest,$staff-secondary,$staff-secondary-light,$staff-secondary-dark);
+}

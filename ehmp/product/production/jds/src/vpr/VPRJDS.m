@@ -24,8 +24,12 @@ SAVE(JSON) ; Save a JSON encoded object
  I OLDSTAMP'="",STAMP'<OLDSTAMP S OLDOBJ="" M OLDOBJ=^VPRJD(UID,OLDSTAMP)
  ; Rebuild template if STAMP is equal or greater than OLDSTAMP
  I STAMP'<OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
- K ^VPRJD(UID,STAMP)
- K ^VPRJDJ("JSON",UID,STAMP)
+ ;
+ ; ** Begin Critical Section - data update **
+ L +^VPRJD(UID):$G(^VPRCONFIG("timeout","odstore"),5) E  D SETERROR^VPRJRER(502,"Unable to obtain lock for "_UID) Q
+ ;
+ K:$D(^VPRJD(UID,STAMP)) ^VPRJD(UID,STAMP)
+ K:$D(^VPRJDJ("JSON",UID,STAMP)) ^VPRJDJ("JSON",UID,STAMP)
  ;
  M ^VPRJDJ("JSON",UID,STAMP)=JSON
  ; Merge template array if STAMP is equal or greater than OLDSTAMP
@@ -38,16 +42,19 @@ SAVE(JSON) ; Save a JSON encoded object
  S DOMAIN=COLL
  ; Operational Data Sync Status global structure:
  ; ^VPRSTATUSOD(SOURCE,SOURCESTAMP,DOMAIN,ITEM,ITEMSTAMP)
- ; ** Begin Critical Section **
+ ; ** Begin Critical Section - metastamp update **
  L +^VPRSTATUSOD(SOURCE,DOMAIN,UID,STAMP):$G(^VPRCONFIG("timeout","odstore"),5) E  D SETERROR^VPRJRER(502) Q
  S ^VPRSTATUSOD(SOURCE,DOMAIN,UID,STAMP,"stored")="1"
  L -^VPRSTATUSOD(SOURCE,DOMAIN,UID,STAMP)
- ; ** End Critical Section **
+ ; ** End Critical Section - metastamp update **
  ;
  ; If we have an OLDSTAMP, but no OLDOBJ it means that
  ; the object on file was newer than the object currently
  ; stored and we shouldn't update any indexes
  I '((OLDSTAMP'="")&($D(OLDOBJ)=0)) D INDEX^VPRJDX(UID,.OLDOBJ,.OBJECT)
+ ;
+ L -^VPRJD(UID)
+ ; ** Begin Critical Section - data update **
  ;
  Q $$URLENC^VPRJRUT(UID)  ; no errors
  ;
@@ -64,9 +71,9 @@ DELETE(KEY) ; Delete an object given its UID
  S OLDOBJ="" I STAMP'="" M OLDOBJ=^VPRJD(KEY,STAMP)
  ; Kill all versions of this object
  TSTART
- K ^VPRJD(KEY)
- K ^VPRJDJ("JSON",KEY)
- K ^VPRJDJ("TEMPLATE",KEY)
+ K:$D(^VPRJD(KEY)) ^VPRJD(KEY)
+ K:$D(^VPRJDJ("JSON",KEY)) ^VPRJDJ("JSON",KEY)
+ K:$D(^VPRJDJ("TEMPLATE",KEY)) ^VPRJDJ("TEMPLATE",KEY)
  D INDEX^VPRJDX(KEY,.OLDOBJ,.OBJECT)
  TCOMMIT
  L -^VPRJD(KEY)

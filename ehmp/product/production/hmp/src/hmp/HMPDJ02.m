@@ -1,5 +1,5 @@
-HMPDJ02 ;ASMR/MKB/JD,CK,CPC,PB - Problems,Allergies,Vitals ;Aug 23, 2016 09:56:26
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 02, 2016;Build 7
+HMPDJ02 ;ASMR/MKB/JD,CK,CPC,PB,BL - Problems,Allergies,Vitals ;Aug 23, 2016 09:56:26
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;Sep 02, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -46,7 +46,7 @@ GMPL1(ID,POVLST) ; -- problem
  . I HMPL("CSYS")="ICD" S PROB("icdCode")=$$SETNCS^HMPUTILS("icd",HMPL("DIAGNOSIS")),PROB("icdName")=DIAG
  . ; Create codes array for both ICD9 or ICD10
  . S PROB("codes",1,"code")=HMPL("DIAGNOSIS")
- . S PROB("codes",1,"display")=$S(HMPL("CSYS")="ICD":DIAG,HMPL("CSYS")="10D":HMPL("ICDD"))
+ . S PROB("codes",1,"display")=$S(HMPL("CSYS")="ICD":DIAG,HMPL("CSYS")="10D":HMPL("ICDD"),1:DIAG)  ;DE8166
  . S PROB("codes",1,"system")=$S(HMPL("CSYS")="ICD":"urn:oid:2.16.840.1.113883.6.42",HMPL("CSYS")="10D":"urn:oid:2.16.840.1.113883.6.3",1:"codesystem error")
  . ;SNOMED CT codes
  . S SCTCODE=HMPL("SCTC") ;DE4685 ;9000011,80001 SNOMED CT CONCEPT CODE
@@ -181,20 +181,23 @@ DIAGLIST(DIAGS,DFN,ORDATE,ORPRCNT) ;BL,JL; get list diagnosis on past notes
  S:'+$G(ORPRCNT) ORPRCNT=1
  ;Use TIU DOCUMENTS BY CONTEXT to retrieve all notes associated with patient (CONTEXT^TIUSRVLO)
  K ENC,DIAGCODE,CNT,DIAG,DIAGNUM,DIAGLINE,ENCNUM,LINE,IEN,CLASS,CONTEXT,EARLY,LATE,PERSON,OCCLIM,SEQUENCE,SHOWADD,INCUND,LSTNUM,NOTEINFO
- K NEWCNT,OLDLST,DIAGCNT
+ K NEWCNT,OLDLST,DIAGCNT,^TMP("HMP",$J)
  S CLASS=3,CONTEXT=1,EARLY=-1,LATE=-1,PERSON=0,OCCLIM=0,SEQUENCE="D",SHOWADD=0,INCUND=0,OLDLST=""
  ;TAKE EXISTING LIST FROM ENCOUNTER CALL AND PRESERVE TO BE APPENDED AFTERWARD
  K DIAGS S DIAGS=""
  D CONTEXT^TIUSRVLO(.DIAGS,CLASS,CONTEXT,DFN,EARLY,LATE,PERSON,OCCLIM,SEQUENCE,SHOWADD,INCUND)
- M DIAGS=^TMP("TIUR",$J)
+ ;DE7518;BL Previous call creates several elements ensure all are combined. Then move array to ^TMP
+ M ^TMP("HMP",$J,"DIAGS")=^TMP("TIUR",$J)
+ M ^TMP("HMP",$J,"DIAGS")=DIAGS  ;DE7518;BL prevent DIAGS array from getting to large causes STORE error
+ K DIAGS
  ;Go through notes list extract diagnosis associated with each encounter to previous problem list
  S LSTNUM=""
  ;THIS CALL WILL EXTRACT ALL THE VISIT INFORMATION TO ^TMP(PXKENC,$J,VISIT)
  N VIEN
- F  S LSTNUM=$O(DIAGS(LSTNUM)) Q:LSTNUM=""  D
+ F  S LSTNUM=$O(^TMP("HMP",$J,"DIAGS",LSTNUM)) Q:LSTNUM=""  D
  . N HMPV
  . S NOTEINFO=""
- . S IEN=$P(DIAGS(LSTNUM),"^",1)
+ . S IEN=$P(^TMP("HMP",$J,"DIAGS",LSTNUM),"^",1)
  . ;DE6877 - 21 Jan 17 - PB next two lines of code check to see if the Visit/Admit Date&Time and/or Patient Name fields are missing for the visit. if either are missing processing this record stops.
  . S HMPV=$P($G(^TIU(8925,IEN,0)),U,3)
  . I $G(HMPV)>0 Q:$$VSTIEN^HMPDJ02A(HMPV)>0
@@ -205,15 +208,15 @@ DIAGLIST(DIAGS,DFN,ORDATE,ORPRCNT) ;BL,JL; get list diagnosis on past notes
  . . S DIAGCNT=DIAGCNT+1
  . . S VISITDT=$P($G(NOTEINFO(2)),U,3)  ; get the visit datetime
  . . S ICDCODE=$P(NOTEINFO(CNT),U,2)  ; get the diagnosis code
- . . I $D(ENC(ICDCODE,VISITDT))=0 D
+ . . I $D(^TMP("HMP",$J,"ENC",ICDCODE,VISITDT))=0 D  ;DE7518 move ENC array to global reference
  . . . S VIEN=$$GETVIEN^HMPDJ02A(DFN,VISITDT)
  . . . ;W:VIEN=-1 "Can not find Visit ID for "_NOTEINFO(CNT),!
- . . . S:VIEN'=-1 ENC(ICDCODE,VISITDT)=VIEN_U_$G(DIAGS(LSTNUM)) ;  add to list only if visit ien is valid
+ . . . S:VIEN'=-1 ^TMP("HMP",$J,"ENC",ICDCODE,VISITDT)=VIEN_U_$G(^TMP("HMP",$J,"DIAGS",LSTNUM)) ;  add to list only if visit ien is valid
  ; KILL DIAGS BECAUSE IT NOW CONTAINS NOTE INFO
  K DIAGS
- M DIAGS=ENC
+ M DIAGS=^TMP("HMP",$J,"ENC")
  ;CLEAN UP ARRAYS
- K NOTEINFO,ENC,DIAG,^TMP("TIUR",$J)
+ K NOTEINFO,ENC,DIAG,^TMP("TIUR",$J),^TMP("HMP",$J)
  D GMPLPOV(DFN,.DIAGS,1)  ; Also loop thru V POV file to find extra encounter
  Q
  ;
@@ -282,76 +285,14 @@ NKA ; -- no assessment or NKA [GMRAL=0 or ""]
  D ADD^HMPDJ("REAC","allergy")
  Q
  ;
+ ;DE7518; This routine has exceed SACC adding the following subroutines to HMPDJ02A
 GMV1(ID) ; -- vital/measurement ^UTILITY($J,"GMRVD",HMPIDT,HMPTYP,ID)
- N VIT,HMPY,X0,TYPE,LOC,FAC,X,Y,MRES,MUNT,HIGH,LOW,I
- D GETREC^GMVUTL(.HMPY,ID,1) S X0=$G(HMPY(0))
- ; GMRVUT0 returns CLiO data with a pseudo-ID >> get real ID
- I X0="",$G(HMPIDT),$D(HMPTYP) D  ;[from HMPDJ0]
- . N GMRVD S GMRVD=$G(^UTILITY($J,"GMRVD",HMPIDT,HMPTYP,ID))
- . S ID=$O(^PXRMINDX(120.5,"PI",DFN,$P(GMRVD,U,3),+GMRVD,""))
- . I $L(ID) D GETREC^GMVUTL(.HMPY,ID,1) S X0=$G(HMPY(0))
- Q:X0=""
- ;
- N $ES,$ET,ERRPAT,ERRMSG
- S $ET="D ERRHDLR^HMPDERRH",ERRPAT=DFN
- S ERRMSG="A problem occurred converting record "_ID_" for the vitals domain"
- S VIT("localId")=ID,VIT("kind")="Vital Sign"
- S VIT("uid")=$$SETUID^HMPUTILS("vital",DFN,ID)
- S VIT("observed")=$$JSONDT^HMPUTILS(+X0)
- S VIT("resulted")=$$JSONDT^HMPUTILS(+$P(X0,U,4))
- S TYPE=$$FIELD^GMVGETVT(+$P(X0,U,3),2)
- S VIT("displayName")=TYPE
- S VIT("typeName")=$$FIELD^GMVGETVT($P(X0,U,3),1)
- S VIT("typeCode")="urn:va:vuid:"_$$FIELD^GMVGETVT($P(X0,U,3),4)
- S X=$P(X0,U,8),VIT("result")=X
- S VIT("units")=$$UNIT^HMPDGMV(TYPE),(MRES,MUNT)=""
- I TYPE="T"  S:X=+X MUNT="C",MRES=$J(X-32*5/9,0,1) ;EN1^GMRVUTL
- I TYPE="HT" S MUNT="cm",MRES=$J(2.54*X,0,2)  ;EN2^GMRVUTL
- I TYPE="WT" S MUNT="kg",MRES=$J(X/2.2,0,2)   ;EN3^GMRVUTL
- I TYPE="CG" S MUNT="cm",MRES=$J(2.54*X,0,2)
- S:MRES VIT("metricResult")=MRES,VIT("metricUnits")=MUNT
- S X=$$RANGE^HMPDGMV(TYPE) I $L(X) S VIT("high")=$P(X,U),VIT("low")=$P(X,U,2)
- S VIT("summary")=VIT("typeName")_" "_VIT("result")_" "_VIT("units")
- F I=1:1:$L(HMPY(5),U) S X=$P(HMPY(5),U,I) I X D
- . S VIT("qualifiers",I,"name")=$$FIELD^GMVGETQL(X,1)
- . S VIT("qualifiers",I,"vuid")=$$FIELD^GMVGETQL(X,3)
- ;US4338 - add pulse ox qualifier if it exists. name component is required. vuid is not per Thomas Loth
- I $P(X0,U,10) S VIT("qualifiers",I+1,"name")=$P(X0,U,10)
- I $G(HMPY(2)) D
- . S VIT("removed")="true"        ;entered in error
- . S X=$$GET1^DIQ(120.506,"1,"_ID_",",.01,"E") S:X VIT("reasonEnteredInError")=X
- . S X=$$GET1^DIQ(120.506,"1,"_ID_",",.02,"I") S:X VIT("dateEnteredInError")=$$JSONDT^HMPUTILS(X)
- S LOC=+$P(X0,U,5),FAC=$$FAC^HMPD(LOC)
- S VIT("locationUid")=$$SETUID^HMPUTILS("location",,LOC)
- S VIT("locationName")=$S(LOC:$P($G(^SC(LOC,0)),U),1:"unknown")
- N USERID S USERID=$P(HMPY(0),U,6)
- I $G(USERID) D
- . S VIT("enteredByUid")=$$SETUID^HMPUTILS("user",,USERID)
- . S VIT("enteredByName")=$P($G(^VA(200,USERID,0)),U,1)
- D FACILITY^HMPUTILS(FAC,"VIT")
- S VIT("lastUpdateTime")=$$EN^HMPSTMP("vital")
- S VIT("stampTime")=VIT("lastUpdateTime") ; RHL 20141231
- ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("vital",VIT("uid"),VIT("stampTime")) Q:HMPMETA=1  ;US11019/US6734
- D ADD^HMPDJ("VIT","vital")
+ D GMV1^HMPDJ02A(ID)
  Q
  ;
 HMP(COLL) ; -- HMP Patient Objects
- N ID I $L($G(HMPID)) D  Q
- . S ID=+HMPID I 'ID S ID=+$O(^HMP(800000.1,"B",HMPID,0)) ;IEN or UID
- . D:ID HMP1(800000.1,ID)
- Q:$G(COLL)=""  ;error
- S ID=0 F  S ID=$O(^HMP(800000.1,"C",DFN,COLL,ID)) Q:ID<1  D HMP1(800000.1,ID)
+ D HMP^HMPDJ02A(COLL)
  Q
 HMP1(FNUM,ID) ; -- [patient] object
- N I,X,HMPY
- N $ES,$ET,ERRPAT,ERRMSG
- S $ET="D ERRHDLR^HMPDERRH",ERRPAT=$G(DFN)
- S ERRMSG="A problem occurred retreiving record "_ID_" for the HMP domain"
- S I=0 F  S I=$O(^HMP(FNUM,ID,1,I)) Q:I<1  S X=$G(^(I,0)),HMPY(I)=X
- I $D(HMPY) D  ;already encoded JSON
- . S HMPI=HMPI+1 S:HMPI>1 @HMP@(HMPI,.3)=","
- . M @HMP@(HMPI)=HMPY
- . ; -- chunk data if from DQINIT^HMPDJFSP ; i.e. HMPCHNK defined ;*S68-JCH*
- . D CHNKCHK^HMPDJFSP(.HMP,.HMPI) ;*S68-JCH*
+ D HMP1^HMPDJ02A(FNUM,ID)
  Q

@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # HWRP:: user
 #
 # Author:: Seth Vargo <sethvargo@gmail.com>
 #
-# Copyright 2013-2014, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,6 +64,7 @@ end
 
 class Chef
   class Provider::JenkinsUser < Provider::LWRPBase
+    provides :jenkins_user
     use_inline_resources
     include Jenkins::Helper
 
@@ -182,8 +183,3 @@ class Chef
     end
   end
 end
-
-Chef::Platform.set(
-  resource: :jenkins_user,
-  provider: Chef::Provider::JenkinsUser
-)

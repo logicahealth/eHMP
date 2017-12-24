@@ -11,8 +11,12 @@
         margin-top: 55px;
         .panel-heading {
             border-bottom: 2px solid $primary-light;
+            h2 {
+                text-transform: capitalize;
+            }
         }
-        .panel-heading, .panel-footer {
+        .panel-heading,
+        .panel-footer {
             background-color: $primary-lighter;
             padding: 10px;
         }
@@ -41,7 +45,7 @@
                         &.predefined-screen-row {
                             background-color: $primary-lighter;
                         }
-                        &.user-defined{
+                        &.user-defined {
                             background-color: $pure-white;
                         }
                         .form-group {
@@ -52,6 +56,12 @@
                                 box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
                                 outline: #843534 auto 5px;
                                 outline-offset: -2px;
+                            }
+                            .has-error,
+                            .has-success {
+                                input.editor-input-element {
+                                    padding-right: 15px;
+                                }
                             }
                             .form-control {
                                 &::-ms-clear {
@@ -66,6 +76,7 @@
                                 }
                             }
                             .editor-input-element {
+                                padding: 0;
                                 background-color: transparent;
                                 border: none;
                                 -webkit-box-shadow: none;
@@ -87,7 +98,6 @@
                         .association-manager-popover {
                             box-shadow: 1px 1px 10px 0px $grey-darker;
                             cursor: default;
-                            height: 220px;
                             width: 350px;
                             max-width: 350px;
                             .association-manager {
@@ -159,7 +169,6 @@
                                 }
                             }
                             .association-manager-footer {
-                                height: 45px;
                                 margin-top: 10px;
                                 button {
                                     margin: -4px 15px 0 0;
@@ -177,8 +186,7 @@
 }
 
 .workspace-preview {
-    height: 300px;
-    width: 800px;
+
     .gridsterContainer {
         height: 100%;
         overflow-x: auto;
@@ -187,6 +195,7 @@
             height: 100%;
         }
         ul {
+            height: 260px !important; //important necessary to overwrite gridster inline styles
             list-style: none;
             li {
                 background-color: $primary-lightest;
@@ -215,68 +224,52 @@
     }
 }
 
-.context-navigation-bar {
-    .workspace-manager-btn {
-        border-radius: 20px;
-        padding: 4px 7px;
-        &.workspace-editor-trigger-button {
-            padding: 4px 8px;
-        }
-        .fa-caret-down {
-            padding: 2px 5px 0 0;
-        }
-    }
-}
-
 .workspace-selector {
-    flex: 3 0 35%;
-    max-width: 325px;
-    .btn-primary {
-        &.dropdown-toggle {
-            border: none;
-            width: 100%;
-            min-width: 150px;
-        }
-    }
-    .workspace-editor-button-region {
-        margin-left: -3px;
-    }
-    .dropdown-menu {
-        width: 100%;
-        .dropdown-header {
-            overflow: hidden;
-            padding: 3px;
-            form {
-                .input-sm::-ms-clear {
-                    display: none;
-                }
-                i.fa-filter {
-                    left: 10px;
-                    position: absolute;
-                    top: 12px;
-                }
-                input {
-                    padding: 5px 18px;
-                }
-                button {
-                    position: absolute;
-                    right: 7px;
-                    top: 7px;
+    // BEGIN -- Should be in ADK
+    margin: -3px 0;
+    .dropdown[class*="dropdown--"] {
+        &.open > button.btn.dropdown-toggle {
+            &,
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $primary;
+                &,
+                .context-name {
+                    color: $pure-white;
                 }
             }
         }
-        .dropdown-body {
-            max-height: 263px;
-            overflow-y: auto;
-            .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
-                background-image: none;
-                text-shadow: none;
-                background-color: $primary-light;
-                color: $primary-dark;
-                border-color: $pure-white;
-                font-weight: bold;
+        button.btn.dropdown-toggle {
+            padding: 5px 10px;
+            border-radius: 0;
+            background-color: $pure-white;
+            color: $primary-dark;
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: $primary;
+                &,
+                .context-name {
+                    color: $pure-white;
+                }
             }
-            li {
+        }
+        .dropdown-menu {
+            li.list-group-item {
+                &:first-child {
+                    border-radius: 0px;
+                }
+                &.active,
+                &.active:hover,
+                &.active:focus {
+                    background-image: none;
+                    text-shadow: none;
+                    background-color: $primary-light;
+                    color: $primary-dark;
+                    border-color: $pure-white;
+                    font-weight: bold;
+                }
                 a {
                     border-bottom: 1px solid $grey-lighter;
                     color: $grey-darkest;
@@ -285,9 +278,56 @@
                 }
             }
         }
-        .dropdown-footer {
-            button {
-                text-align: left;
+    }
+    // END -- Should be in ADK
+    .btn {
+        box-shadow: none;
+    }
+    .context-name {
+        color: $grey-darkest;
+    }
+    .workspace-name {
+        i {
+            vertical-align: middle;
+        }
+    }
+    .dropdown--workspace {
+        // Provides seperatation/line between workspace dropdown and the options dropdown
+        margin-right: 2px;
+        > button {
+            width: 100%;
+        }
+    }
+    .dropdown-menu {
+        width: 100%;
+        // Min-width set for both the workspace and options dropdown menus
+        min-width: 300px;
+        margin: 0;
+        .dropdown-body {
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        // Dropdown Menu Filter Specific Styling
+        .dropdown-header {
+            padding: 3px;
+            form {
+                input {
+                    padding-left: 18px;
+                    padding-right: 18px;
+                    &::-ms-clear {
+                        display: none;
+                    }
+                }
+                button {
+                    position: absolute;
+                    right: 5px;
+                    top: 5px;
+                }
+                i.fa-filter {
+                    position: absolute;
+                    left: 8px;
+                    top: 11px;
+                }
             }
         }
     }

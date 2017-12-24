@@ -3,15 +3,10 @@ var _ = require('underscore');
 var moment = require('moment');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
-var inspect = require(global.VX_UTILS + 'inspect');
 
 
-function dodLabToVPR(dodLab, edipi) {
+function dodLabToVPR(logger, dodLab, edipi) {
     var vprLab = {};
-
-    if(isChemLab(dodLab) && !dodLab.orderDate) {
-        return {transformError: 'Cannot transform DOD CHEM lab to VPR because the orderDate field is missing. This field is required to generate the record\'s uid. EDIPI: ' + edipi + ' cdrEventId: ' + dodLab.cdrEventId + ' Record contents: ' + inspect(dodLab)};
-    }
 
     vprLab.codes = xformUtils.transformCodes(dodLab.codes);
 
@@ -71,17 +66,30 @@ function dodLabToVPR(dodLab, edipi) {
         vprLab.organizerType = 'organizerType';
         vprLab.typeName = dodLab.testName;
 
-        vprLab.uid = generateCustomLabUid(dodLab, vprLab, edipi);
-    }
-    //AP or MI
-    else {
+        var code = _.findWhere(dodLab.codes, {
+            system: 'DOD_NCID'
+        });
+
+        if (_.isEmpty(code.code)) {
+            logger.error('v2_3_3_0_2/jmeadows-lab-xformer.dodLabToVPR() transforming ChemLab for edipi: %s, but DOD_NCID code is empty. ' +
+                    'This implies that there is a possibility that multiple events for this patient may end up having the same UID and that ' +
+                    'one may overwrite the others.\n %j', edipi, dodLab);
+        }
+
+        if (dodLab.cdrEventId) {
+            // Multiple ChemLabs can have the same cdrEventId, so it is
+            // necessary to use the code value to make it unique.
+            vprLab.uid = uidUtils.getUidForDomain('lab', 'DOD', edipi, dodLab.cdrEventId) + '_' + code.code;
+        } else {
+            vprLab.uid = generateCustomLabUid(dodLab, vprLab, edipi);
+        }
+    } else { //AP or MI
         vprLab.organizerType = 'accession';
         vprLab.typeName = null;
 
         if (dodLab.cdrEventId) {
             vprLab.uid = uidUtils.getUidForDomain('lab', 'DOD', edipi, dodLab.cdrEventId);
-        }
-        else {
+        } else {
             vprLab.uid = generateCustomLabUid(dodLab, vprLab, edipi);
         }
     }
@@ -115,18 +123,21 @@ function dodLabToVPR(dodLab, edipi) {
             }
         };
 
-        var hl7Abnormal = dodHiLoFlagToHl7Abnormal[dodLab.interpretation.toLowerCase()] || {code: '', name: ''};
+        var hl7Abnormal = dodHiLoFlagToHl7Abnormal[dodLab.interpretation.toLowerCase()] || {
+            code: '',
+            name: ''
+        };
 
         vprLab.interpretationCode = hl7Abnormal.code;
         vprLab.interpretationName = hl7Abnormal.name;
     }
 
-    if(!isChemLab(dodLab)) {
+    if (!isChemLab(dodLab)) {
         var results = [{}];
-        if(vprLab.labType === 'AP') {
+        if (vprLab.labType === 'AP') {
             results[0].localTitle = 'PATHOLOGY REPORT';
             results[0].summary = 'PATHOLOGY REPORT';
-        } else if(vprLab.labType === 'MI') {
+        } else if (vprLab.labType === 'MI') {
             results[0].localTitle = 'MICROBIOLOGY REPORT';
             results[0].summary = 'MICROBIOLOGY REPORT';
         }
@@ -151,20 +162,20 @@ function getVPRDocument(vprLab) {
         pid: vprLab.pid,
         uid: vprLab.uid.replace('lab', 'document')
     };
-    if(vprLab.labType === 'AP') {
+    if (vprLab.labType === 'AP') {
         vprDocument.localTitle = 'PATHOLOGY REPORT';
-    } else if(vprLab.labType === 'MI') {
+    } else if (vprLab.labType === 'MI') {
         vprDocument.localTitle = 'MICROBIOLOGY REPORT';
     }
     vprDocument.referenceDateTime = vprLab.observed || vprLab.resulted || '';
 
-    if(vprLab.result) {
+    if (vprLab.result) {
         vprDocument.text = [{
             content: vprLab.result,
             dateTime: vprDocument.referenceDateTime,
             status: 'completed',
             uid: vprDocument.uid,
-            summary: 'DocumentText{uid=\''+vprDocument.uid+'\'}'
+            summary: 'DocumentText{uid=\'' + vprDocument.uid + '\'}'
         }];
     }
 
@@ -175,28 +186,29 @@ function isChemLab(dodLab) {
     return dodLab.testType === 'CH' || dodLab.testType === 'CHEM';
 }
 
-//Generate DOD lab UID for CHEM labs and other lab types without cdr event ids.
+// Generate DOD lab UID for labs without cdr event ids.
 function generateCustomLabUid(dodLab, vprLab, edipi) {
     var modifiedLocalId = null;
-    if(vprLab.observed) {
+    if (vprLab.observed) {
         modifiedLocalId = vprLab.observed;
-    }
-    else {
+    } else {
         modifiedLocalId = vprLab.resulted;
     }
 
-    if(modifiedLocalId && vprLab.localId) {
+    if (modifiedLocalId && vprLab.localId) {
         modifiedLocalId += '_';
     }
-    if(vprLab.localId) {
+    if (vprLab.localId) {
         modifiedLocalId += vprLab.localId.replace(/[ \^]/g, '-');
     }
     var uidCode = '';
-    var code = _.findWhere(dodLab.codes, {system: 'DOD_NCID'});
-    if(code){
+    var code = _.findWhere(dodLab.codes, {
+        system: 'DOD_NCID'
+    });
+    if (code) {
         uidCode = code.code;
     }
-    if(uidCode) {
+    if (uidCode) {
         modifiedLocalId += '_' + uidCode;
     }
 

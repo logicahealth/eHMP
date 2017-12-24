@@ -2,7 +2,7 @@
 	"sites": [{
 		"apiVersion": "1.01",
 		"params": {
-			"domain": "CHEY.VACO.DNS",
+			"domain": "DOMAIN",
 			"systemId": "9016"
 		},
 		"data": {
@@ -11,26 +11,26 @@
 			"items": [{
 				"address": [{
 					"city": "LOVELAND",
-					"line1": "4114 ALDER COURT",
+					"line1": "ADDRESS",
 					"state": "CO",
 					"use": "H",
-					"zip": 80538
+					"zip": ZIPCODE
 				}],
 				"birthDate": 19520724,
 				"briefId": "I3277",
 				"contact": [{
-					"name": "AKRE,CARY",
+					"name": "LAST,FIRST",
 					"telecom": [{
 						"use": "H",
-						"value": "(222)222-2222"
+						"value": "PHONE"
 					}],
 					"typeCode": "urn:va:pat-contact:NOK",
 					"typeName": "Next of Kin"
 				}, {
-					"name": "AKRE,CARY",
+					"name": "LAST,FIRST",
 					"telecom": [{
 						"use": "H",
-						"value": "(222)222-2222"
+						"value": "PHONE"
 					}],
 					"typeCode": "urn:va:pat-contact:ECON",
 					"typeName": "Emergency Contact"
@@ -72,16 +72,16 @@
 					"name": "IPOTEST 1",
 					"systemId": 9016
 				}],
-				"familyName": "IPOAKRE",
-				"fullName": "IPOAKRE,SON",
+				"familyName": "LAST",
+				"fullName": "LAST,FIRST",
 				"genderCode": "urn:va:pat-gender:M",
 				"genderName": "Male",
-				"givenNames": "SON",
-				"icn": "1012740388V345084",
+				"givenNames": "PII",
+				"icn": "USER",
 				"localId": 9106,
 				"lrdfn": 469225,
 				"maritalStatusCode": "urn:va:pat-maritalStatus:M",
-				"maritalStatusName": "Married",
+				"maritalStatusName": "PII",
 				"meanStatus": "MT COPAY REQUIRED",
 				"pid": "9016;9106",
 				"race": [{
@@ -119,7 +119,7 @@
 				},
 				"telecom": [{
 					"use": "H",
-					"value": "(222)222-2222"
+					"value": "PHONE"
 				}],
 				"uid": "urn:va:patient:9016:9106:9106",
 				"veteran": true

@@ -30,13 +30,13 @@ public class PatientIdentifierTest {
 
 	@Test
 	public void testDfn() {
-		String inputId = "9E7A;3";
+		String inputId = "SITE;3";
 		PatientIdentifier id = PatientIdentifier.getPatientId(inputId);
 		assertTrue(id instanceof Dfn);
 		assertEquals(inputId, id.toString());
 		MviDfn dfn = new MviDfn((Dfn)id);
 		assertNotNull(dfn);
-		assertEquals("3^PI^9E7A^USVHA", dfn.toString());
+		assertEquals("3^PI^SITE^USVHA", dfn.toString());
 	}
 
 	@Test
@@ -59,11 +59,11 @@ public class PatientIdentifierTest {
 
 	@Test
 	public void testMviDfn() {
-		String inputId = "100625^PI^9E7A^USVHA";
+		String inputId = "100625^PI^SITE^USVHA";
 		PatientIdentifier id = PatientIdentifier.getPatientId(inputId);
 		assertTrue(id instanceof MviDfn);
 		assertEquals(inputId, id.toString());
-		assertEquals("9E7A;100625", id.getPrefixedId());
+		assertEquals("SITE;100625", id.getPrefixedId());
 	}
 
 	@Test

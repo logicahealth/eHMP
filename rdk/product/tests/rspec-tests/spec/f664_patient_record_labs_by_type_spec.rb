@@ -62,7 +62,7 @@ describe 'f664_patient_record_labs_by_type_spec.rb', acceptance: true do
     end
 
     it '. site/dfn' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;3',
+      response = rdk_fetch(@command, 'pid' => 'SITE;3',
                                      'type' => 'POTASSIUM')
 
       expect(response.code).to eq(200)
@@ -82,7 +82,7 @@ describe 'f664_patient_record_labs_by_type_spec.rb', acceptance: true do
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;848484',
+      response = rdk_fetch(@command, 'pid' => 'SITE;848484',
                                      'type' => 'POTASSIUM')
       expect(response.code).to eq(404)
     end

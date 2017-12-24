@@ -4,11 +4,11 @@ maintainer_email 'team-milkyway@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures cds_provision'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.25"
+version          "2.233.55"
 
-depends "machine", "2.1.9"
+depends "machine", "2.233.22"
 
-depends "cdsdb", "2.1.3"
-depends "cdsinvocation", "2.1.11"
-depends "cdsdashboard", "2.1.12"
-depends "opencds", "2.1.7"
+depends "cdsdb", "2.233.6"
+depends "cdsinvocation", "2.233.28"
+depends "cdsdashboard", "2.233.28"
+depends "opencds", "2.233.16"

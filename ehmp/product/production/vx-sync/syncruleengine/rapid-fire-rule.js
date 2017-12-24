@@ -1,32 +1,37 @@
 'use strict';
 
-var _ = require('underscore');
-var inspect = require(global.VX_UTILS + 'inspect');
-var jobUtil = require(global.VX_UTILS + 'job-utils');
+const _ = require('lodash');
+const inspect = require(global.VX_UTILS + 'inspect');
 
 function rapidFire(log, config, environment, patientIdentifiers, exceptions, callback) {
-    log.debug('rapid-fire-rule.rapidFire() : Running rapid-fire-rule on ' + inspect(patientIdentifiers));
-    log.debug('Getting job state for %s', patientIdentifiers[0].value);
-    environment.jds.getJobStatus({ 'jpid': patientIdentifiers[0].value }, function(error, response, result) {
+    log.debug('rapid-fire-rule.rapidFire(): Running rapid-fire-rule on ' + inspect(patientIdentifiers));
+    log.debug('rapid-fire-rule.rapidFire(): Getting simple sync status for %s', patientIdentifiers[0].value);
+    environment.jds.getSimpleSyncStatus(patientIdentifiers[0], function(error, response, result){
         if (error) {
-            return callback(error, []);
+            return callback('rapid-fire-rule.rapidFire(): JDS.getSimpleSyncStatus returned error: ' + inspect(error), []);
         }
-        log.debug('Filtering job states for source sync jobs');
-        var sourceSyncJobs = _.filter(result.items, function(job) {
-            return jobUtil.isSyncJobType(job);
+
+        if (!_.get(result, 'latestSourceStampTime')){
+            //First sync attempt for this patient. Let all patientIdentifiers through.
+            return callback(null, patientIdentifiers);
+        }
+
+        let siteStatusCollection = _.get(result, 'sites');
+
+        log.debug('rapid-fire-rule.rapidFire(): Got site statuses: %s. Now finding jobs in progress...', inspect(siteStatusCollection));
+        let sitesStatusIncomplete = _.filter(siteStatusCollection, function(siteStatus){
+            return !_.get(siteStatus, 'hasError') && !_.get(siteStatus, 'syncCompleted');
         });
-        log.debug('Found source sync jobs.  Find jobs in progress', inspect(sourceSyncJobs));
-        var incompleteJobs = _.filter(sourceSyncJobs, function(job) {
-            return job.status !== 'error' && job.status !== 'completed';
-        });
-        log.debug('Found incomplete jobs.  Extracting PIDs', inspect(incompleteJobs));
-        var incompletePids = _.pluck(incompleteJobs, 'patientIdentifier');
-        incompletePids = _.pluck(incompletePids, 'value');
-        log.debug('Found PIDs for incomplete jobs, removing from rule result', inspect(incompletePids));
+
+        log.debug('rapid-fire-rule.rapidFire(): Found incomplete sites: %s. Extracting PIDs...', inspect(sitesStatusIncomplete));
+        let incompletePids = _.pluck(sitesStatusIncomplete, 'pid');
+
+        log.debug('rapid-fire-rule.rapidFire(): Found PIDs for incomplete sites, removing them from rule result: %s', inspect(incompletePids));
         patientIdentifiers = _.filter(patientIdentifiers, function(patientIdentifier) {
             return !_.contains(incompletePids, patientIdentifier.value);
         });
-        log.debug('Filtered incomplete pids', inspect(patientIdentifiers));
+
+        log.debug('rapid-fire-rule.rapidFire(): Finished running rule. Remaining pids: %s', inspect(patientIdentifiers));
         return callback(null, patientIdentifiers);
     });
 }

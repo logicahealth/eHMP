@@ -265,7 +265,6 @@ define(["test/stubs",
                             login();
                             expect(ADK.ADKApp.initAllRouters).toHaveBeenCalled();
                             expect(ADK.Navigation.navigate).toHaveBeenCalled();
-                            expect(ADK.CCOWService.start).toHaveBeenCalled();
                             expect(window.localStorage.getItem('division')).toEqual('test_login');
                         });
 

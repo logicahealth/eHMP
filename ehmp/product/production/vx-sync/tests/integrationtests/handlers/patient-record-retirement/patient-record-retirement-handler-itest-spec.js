@@ -19,26 +19,28 @@ var async = require('async');
 var request = require('request');
 
 var config = require(global.VX_ROOT + 'worker-config');
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var syncApiPort = testConfig.vxsyncPort;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var solrSmartClient = require('solr-smart-client');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
 var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var VxSyncForeverAgent = require('http').Agent;
 
 /*
 	*** Note ***
 	This test requires a patient to be synced before it can test the utility.
-	The patient used here is 9E7A;20.
+	The patient used here is SITE;20.
 	This patient will be unsynced after the test runs.
  */
 
 describe('patient-record-retirement-handler', function() {
 	it('handle', function() {
 
-		var pid = '9E7A;20';
+		var pid = 'SITE;20';
 		var patientIdentifier = {
 			type: 'pid',
 			value: pid
@@ -47,7 +49,7 @@ describe('patient-record-retirement-handler', function() {
 		var environment = {
 			vistaClient: new VistaClient(log, log, config, null),
 			jds: new JdsClient(log, log, config),
-			solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log, new VxSyncForeverAgent()),
+			solr: solrSmartClient.createClient(log, config.solrClient, new VxSyncForeverAgent({keepAlive: true, maxSockets: config.handlerMaxSockets || 5})),
 			hdrClient: new HdrClient(log, log, config)
 		};
 
@@ -72,7 +74,7 @@ describe('patient-record-retirement-handler', function() {
 			var syncStatusCallResponse;
 			runs(function() {
 				var options = {
-					url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
+					url: config.syncRequestApi.protocol + '://' + host + ':' + syncApiPort + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
 					method: 'GET'
 				};
 
@@ -124,7 +126,7 @@ describe('patient-record-retirement-handler', function() {
 		//------------------------------------------------------------------------------------------------------
 		runs(function() {
 			var options = {
-				url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
+				url: config.syncRequestApi.protocol + '://' + host + ':' + syncApiPort + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
 				method: 'GET'
 			};
 

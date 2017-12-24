@@ -113,6 +113,7 @@ define([
                 if (isAutoLoadingPayload === true) {
                     loadPayload.apply(this);
                 }
+                options.suppressBanner = true;
                 break;
             case 'draft:delete:success':
                 action = 'deleted';
@@ -123,6 +124,7 @@ define([
             default:
                 break;
         }
+        this.view.$el.trigger('tray.loaderHide');
         executeEventCallback.call(this, event, options);
         this.model.trigger(event, model, resp, options);
         displayBanner(action, getSubDomain(model), getUid(model), options);
@@ -148,6 +150,7 @@ define([
                 break;
         }
         executeEventCallback.call(this, event, options);
+        this.view.$el.trigger('tray.loaderhide');
         this.model.trigger(event, model, resp, options);
         var errorMessage = resp;
         if (!_.isString(errorMessage)) {
@@ -190,8 +193,7 @@ define([
         var forceDelete = !!_.get(options, 'forceDelete', false);
         if (forceDelete) {
             draft.deleteDraft(options);
-        }
-        else {
+        } else {
             showDeleteDraftDialog.call(this, draft, options);
         }
     };
@@ -214,71 +216,59 @@ define([
         options = options || {};
         options.attribute = 'data';
         getAttribute.call(this, draft, options);
-        this.model.set('uid', draft.get('uid'));
-        this.model.set('creationDateTime', draft.get('creationDateTime'));
-        
-        var draftData = draft.get('data');
-        if (draftData.requests && _.isArray(draftData.requests) && draftData.requests[0]) {
-            if (draftData.requests[0].urgency) {
-                this.model.set('urgency', draftData.requests[0].urgency);
-            }
-            if (draftData.requests[0].earliestDate) {
-                this.model.set('earliest', moment(draftData.requests[0].earliestDate).format('MM/DD/YYYY'));
-            }
-            if (draftData.requests[0].latestDate) {
-                this.model.set('latest', moment.utc(draftData.requests[0].latestDate).local().format('MM/DD/YYYY'));
-            }
-            if (draftData.requests[0].request) {
-                var requestDetails = draftData.requests[0].request;
-                if (requestDetails && _.isString(requestDetails)) {
-                    requestDetails = requestDetails.trim();
-                }
-                this.model.set('requestDetails', requestDetails);
-            }
-            if (draftData.requests[0].title) {
-                this.model.set('title', draftData.requests[0].title);
-            }
-            if (draftData.requests[0].assignTo) {
-                if (draftData.requests[0].assignTo === 'Me') {
-                    this.model.set('assignment', 'opt_me');
-                } else if (draftData.requests[0].assignTo === 'Person') {
-                    if (draftData.requests[0].route.facility) {
-                        this.model.set('pendingFacility', draftData.requests[0].route.facility);
-                    }
-                    if (draftData.requests[0].route.person) {
-                        this.model.set('pendingPerson', draftData.requests[0].route.person);
-                    }
-                    this.model.set('assignment', 'opt_person');
-                } else {
-                    if (draftData.requests[0].route.team) {
-                        this.model.set('pendingTeam', draftData.requests[0].route.team.code);
-                    }
-                    if (draftData.requests[0].route.teamFocus) {
-                        this.model.set('pendingTeamFocus', draftData.requests[0].route.teamFocus.code);
-                    }
-                    if (draftData.requests[0].route.assignedRoles && _.isArray(draftData.requests[0].route.assignedRoles)) {
-                        var pendingRoles = [];
-                        _.each(draftData.requests[0].route.assignedRoles, function(role) {
-                            if (role) {
-                                pendingRoles.push(role.code);
-                            }
-                        });
-                        this.model.set('pendingRoles', pendingRoles);
-                    }
 
-                    if (draftData.requests[0].assignTo === 'My Teams') {
-                        this.model.set('assignment', 'opt_myteams');
-                    } else if (draftData.requests[0].assignTo === 'Patient\'s Teams') {
-                        this.model.set('assignment', 'opt_patientteams');
-                    } else if (draftData.requests[0].assignTo === 'Any Team') {
-                        if (draftData.requests[0].route.facility) {
-                            this.model.set('pendingFacility', draftData.requests[0].route.facility);
-                        }
-                        this.model.set('assignment', 'opt_anyteam');
+        var data = draft.pick('uid', 'creationDateTime');
+        var draftData = draft.get('data');
+        var requestData = _.get(draftData, 'requests[0]');
+        if (_.isObject(requestData)) {
+            var shouldOmit = function(value, key) {
+                return _.isNull(value) || _.isEqual(value, 'Invalid date') || _.isEmpty(value) || _.isUndefined(value);
+            };
+            var dataToAdd = _.extend({}, _.pick(requestData, ['urgency', 'title']), {
+                earliest: moment(_.get(requestData, 'earliestDate', null)).format('MM/DD/YYYY'),
+                latest: moment.utc(_.get(requestData, 'latestDate', null)).local().format('MM/DD/YYYY'),
+                requestDetails: _.isString(_.get(requestData, 'request')) ? _.get(requestData, 'request').trim() : null,
+            });
+            _.extend(data, _.omit(dataToAdd, shouldOmit));
+
+            var assignmentType = _.get(requestData, 'assignTo');
+            if (assignmentType) {
+                var modelAssignmentObject = _.clone(this.model.get('assignment') || {});
+                var assignmentOptions = {
+                    'Me': 'opt_me',
+                    'Person': 'opt_person',
+                    'My Teams': 'opt_myteams',
+                    'Patient\'s Teams': 'opt_patientteams',
+                    'Any Team': 'opt_anyteam'
+                };
+
+                if (_.isEqual(assignmentType, 'Person')) {
+                    _.extend(modelAssignmentObject, _.pick(_.get(requestData, 'route', {}), ['facility', 'person']));
+                } else if (!_.isEqual(assignmentType, 'Me')) {
+                    _.extend(modelAssignmentObject, {
+                        team: _.get(requestData, 'route.team.code')
+                        // Commenting out becuase nothing in the UI repository is using this.
+                        // pendingTeamFocus: _.get(requestData, 'route.teamFocus.code')
+                    });
+                    var assignedRoles = _.get(requestData, 'route.assignedRoles');
+                    if (_.isArray(assignedRoles)) {
+                        _.extend(modelAssignmentObject, {
+                            roles: _.transform(assignedRoles, function(result, role, index) {
+                                if (_.get(role, 'code')) {
+                                    result.push(role.code);
+                                }
+                            }, [])
+                        });
+                    }
+                    if (_.isEqual(assignmentType, 'Any Team')) {
+                        _.extend(modelAssignmentObject, _.pick(_.get(requestData, 'route', {}), ['facility']));
                     }
                 }
+                _.extend(modelAssignmentObject, { type: assignmentOptions[assignmentType] });
+                _.extend(data, { assignment: _.omit(modelAssignmentObject, shouldOmit) });
             }
         }
+        this.model.set(data);
     };
 
     var copyToModel = function(draft, options) {
@@ -355,13 +345,14 @@ define([
         }, this);
     };
 
-    var onRender = function() {
+    var onAttach = function() {
         // Automatically load the draft activity if the 'draft-uid' parameter is set on the model prior to rendering.
         var draftUid = this.model.get('draft-uid');
         if (!_.isUndefined(draftUid)) {
             this.model.trigger('draft:setuid', draftUid);
-            this.model.trigger('draft:load', {loadPayload: this.model.get('draft-load-payload')});
-            this.model.unset('draft-uid', {silent: true});
+            this.model.trigger('draft:load', { loadPayload: this.model.get('draft-load-payload') });
+            this.view.$el.trigger('tray.loaderShow', { loadingString: 'Loading' });
+            this.model.unset('draft-uid', { silent: true });
         }
     };
 
@@ -390,7 +381,7 @@ define([
         },
         modelEvents: modelEvents,
         initialize: initialize,
-        onRender: onRender,
+        onAttach: onAttach,
         onBeforeDestroy: onBeforeDestroy,
         onDestroy: onDestroy
     });

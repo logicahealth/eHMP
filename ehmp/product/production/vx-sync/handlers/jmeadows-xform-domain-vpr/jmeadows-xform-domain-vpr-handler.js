@@ -35,9 +35,9 @@ function handle(log, config, environment, job, handlerCallback) {
 
     //Load the transformer for the given domain
     if (!xformer[job.dataDomain]) {
-        var domainXformerPath = util.format('./v%s/jmeadows-%s-xformer', config.jmeadows.version.replace(/\./g, "_"), job.dataDomain);
+        var domainXformerPath = util.format('./v%s/jmeadows-%s-xformer', config.jmeadows.version.replace(/\./g, '_'), job.dataDomain);
 
-        log.debug("jmeadows xformer path: %s", domainXformerPath);
+        log.debug('jmeadows xformer path: %s', domainXformerPath);
 
         try {
             xformer[job.dataDomain] = require(domainXformerPath);
@@ -187,7 +187,7 @@ var xformItemCollection = function(log, domain, items, edipi, domainXformer, sta
     });
 
     return _.flatten(mapUtil.filteredMap(filteredItems, function(item) {
-        var vprItem = domainXformer(item, edipi, patientDemographicsIcn);
+        var vprItem = domainXformer(log, item, edipi, patientDemographicsIcn);
 
         if (!vprItem) {
             log.error('jmeadows-xform-domain-vpr-handler.xformItemCollection() pid: %s; domain: %s; could not transform record: %j', edipi, domain, item);

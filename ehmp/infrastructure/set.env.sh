@@ -21,8 +21,6 @@ export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
 export PATH=$GROOVY_HOME/bin:$GRADLE_HOME/bin:$PATH
 
-jdk_version="jdk1.8.0_121"
-
 export destroyAll="destroyAll"
 export startAll="startJDS startMocks startKodak startPanorama startVxSync"
 export stopAll="stopJDS stopMocks stopKodak stopPanorama stopVxSync"
@@ -35,7 +33,6 @@ export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-h
 export deployVE2All="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2Solr deployVE2Ehmp deployVE2VeApi"
 export deployVE2AllDev="deployVE2JDS deployMssql deployJmeadows deployKodak deployPanorama deployVE2SolrDev deployVE2EhmpDev deployVE2VeApiDev"
 export destroyVE2All="destroyVE2JDS destroyJmeadows destroyKodak destroyMssql destroyPanorama destroyVE2Solr destroyVE2Ehmp destroyVE2VeApi destroyOpeninfobutton"
-export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositories/npm-all/"
 
 ###########################################################################################################
 #
@@ -92,12 +89,20 @@ else
   export WORKSPACE=$JENKINS_HOME/Projects/vistacore
 fi
 
-# keep $JAVA_HOME out front to circumvent any previously installed jdks/jres
-if uname -a | grep -q "Darwin"; then
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
-  export PATH=/usr/local/git/bin:$PATH
+if [ -f $WORKSPACE/common_set_env.sh ]; then
+  source $WORKSPACE/common_set_env.sh
 else
-  export JAVA_HOME=/usr/lib/jvm/$jdk_version
+  printf "\n"
+  echo "ERROR: Cannot locate file: $WORKSPACE/common_set_env.sh. Please run configure_workspace.sh to continue."
+  printf "\n"
+  return
+fi
+
+if uname -a | grep -q "Darwin"; then
+  export PATH=/usr/local/git/bin:$PATH
+  export NPM_CONFIG_REGISTRY=https://sandstore.vistacore.us/nexus/content/repositories/npm-all/
+else
+  export NPM_CONFIG_REGISTRY="https://store.vistacore.us/nexus/content/repositories/npm-all/"
 fi
 
 export PATH=$JAVA_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH

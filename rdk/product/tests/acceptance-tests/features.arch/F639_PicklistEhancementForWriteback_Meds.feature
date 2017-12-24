@@ -4,10 +4,10 @@ Feature:F639 - Picklist Enhancement for Writeback
 
 @F639_1_Outpatient_Medication_Endpoint_For_Caculate_Days_Supply @US9740 @DE3059
 Scenario: Create Endpoint for Calculate Days Supply (ORWDPS1 DFLTSPLY) (Medication)
-  When the client requests picklist with the parameters for "medication-orders-default-days" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-orders-default-days" with the user "SITE;USER  "
       | paramter name | value                          |
       | type          | medication-orders-default-days |
-      | pid           | 9E7A;0                         |
+      | pid           | SITE;0                         |
       | unitStr       | 0                              |
       | schedStr      | 240                            |
       | drug          | 0                              |
@@ -19,10 +19,10 @@ Scenario: Create Endpoint for Calculate Days Supply (ORWDPS1 DFLTSPLY) (Medicati
 
 @F639_2_Outpatient_Medication_Endpoint_For_Caculate_Quantity @US9741  @DE3059
 Scenario: Create Endpoint for Calculate Quantity (ORWDPS2 DAY2QTY) (Medication)
-  When the client requests picklist with the parameters for "medication-orders-quantity-for-days-supply" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-orders-quantity-for-days-supply" with the user "SITE;USER  "
       | paramter name | value                                      |
       | type          | medication-orders-quantity-for-days-supply |
-      | pid           | 9E7A;146                                 |
+      | pid           | SITE;146                                 |
       | daysSupply    | 30                                         |
       | unitsPerDose  | 1^                                         |
       | schedule      | QOD PRN^                                   |
@@ -37,10 +37,10 @@ Scenario: Create Endpoint for Calculate Quantity (ORWDPS2 DAY2QTY) (Medication)
 
 @F639_3_Outpatient_Medication_Endpoint_For_Caculate_Max_Refills @US9742 @DE3059
 Scenario: Create Endpoint for Calculate Max Refills (ORWDPS2 MAXREF) Medication)
-  When the client requests picklist with the parameters for "medication-orders-calc-max-refills" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-orders-calc-max-refills" with the user "SITE;USER  "
       | paramter name | value                              |
       | type          | medication-orders-calc-max-refills |
-      | pid           | 9E7A;398                           |
+      | pid           | SITE;398                           |
       | days          | 90                                 |
       | ordItem       | 2086                               |
       | discharge     | false                              |
@@ -53,7 +53,7 @@ Scenario: Create Endpoint for Calculate Max Refills (ORWDPS2 MAXREF) Medication)
 
 @F639_4_Outpatient_Medication_Endpoint_For_Supplemental_Drug_Message @US9743
 Scenario: Create Endpoint for Supplemental Drug Message (ORWDPS32 DRUGMSG) (Medication)
-  When the client requests picklist with the parameters for "medication-orders-dispense-drug-message" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-orders-dispense-drug-message" with the user "SITE;USER  "
       | paramter name | value                                   |
       | ien           | 5030                                    |
 
@@ -66,7 +66,7 @@ Scenario: Create Endpoint for Supplemental Drug Message (ORWDPS32 DRUGMSG) (Medi
 @F639_5_Outpatient_medication_defaults
 Scenario: Returns Outpatient medication priorities, display messages, refills, and pickup options (ORWDPS1 ODSLCT)
 #Note:  pharmacyType = U/F/O is either U, F, or O - U = Unit Dose, F = IV Fluids, and O = Outpatient)
-  When the client requests picklist with the parameters for "medication-defaults" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-defaults" with the user "SITE;USER  "
       | paramter name | value                  |
       | pharmacyType  | O                      |
       | location   | 3 |
@@ -93,7 +93,7 @@ Scenario: Returns Outpatient medication priorities, display messages, refills, a
 
 @F639_6_Outpatient_medication_PKI_Digital_Sig
 Scenario: Determines if the PKI Digital Signature is enabled on the site (ORWOR PKISITE)
-  When the client requests picklist with the parameters for "pki-enabled" with the user "REDACTED"
+  When the client requests picklist with the parameters for "pki-enabled" with the user "SITE;USER  "
       | paramter name | value       |
 
   Then a successful response is returned
@@ -104,7 +104,7 @@ Scenario: Determines if the PKI Digital Signature is enabled on the site (ORWOR 
 
 @F639_7_Outpatient_medication_ORDER_QUICK_VIEW_file @DE3059
 Scenario: Retrieves Outpatient Medication ORDER QUICK VIEW file #101.44 subset of orderable items or quick orders in alphabetical order to specific sequence numbers (ORWUL FV4DG)
-  When the client requests picklist with the parameters for "medication-list" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-list" with the user "SITE;USER  "
       | paramter name | value           |
       | searchString  | O RX            |
 
@@ -116,7 +116,7 @@ Scenario: Retrieves Outpatient Medication ORDER QUICK VIEW file #101.44 subset o
 
 @F639_8_Outpatient_medication_index_based_on_search
 Scenario: Get the index of a medication that meets a search term (ORWUL FVIDX)
-  When the client requests picklist with the parameters for "medication-index" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-index" with the user "SITE;USER  "
       | paramter name | value               |
       | ien           | 95               |
       | searchString  | ACES~ |
@@ -130,7 +130,7 @@ Scenario: Get the index of a medication that meets a search term (ORWUL FVIDX)
 
 @F639_9_Outpatient_medication_schedules
 Scenario: Get the iOutpatient medication schedules (ORWDPS1 SCHALL)
-  When the client requests picklist with the parameters for "medication-schedules" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-schedules" with the user "SITE;USER  "
       | paramter name | value               |
 
   Then a successful response is returned
@@ -156,11 +156,11 @@ Scenario: Get the iOutpatient medication schedules (ORWDPS1 SCHALL)
 
 @F639_10_Outpatient_medication_dosage_dispense_route_schedule
 Scenario: Get the Outpatient medication sOutpatient medication dosages, dispense, route, schedule, guideline, message, DEA schedule. (ORWDPS2 OISLCT)
-  When the client requests picklist with the parameters for "medication-order-defaults" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-order-defaults" with the user "SITE;USER  "
       | paramter name | value               |
       | ien           | 4937    |
       | pharmacyType  | O|
-      | pid           | 9E7A;204 |
+      | pid           | SITE;204 |
       | needPatientInstructions| true|
       | pkiEnabled  |  true |
 
@@ -208,7 +208,7 @@ Scenario: Get the Outpatient medication sOutpatient medication dosages, dispense
 
 @F639_11_Outpatient_medication_list
 Scenario: Get list of available Med Orders (ORWUL FVSUB)
-  When the client requests picklist with the parameters for "medication-orders" with the user "REDACTED"
+  When the client requests picklist with the parameters for "medication-orders" with the user "SITE;USER  "
       | paramter name | value             |
       | ien           | 95                |
       | first         | 1501              |

@@ -1,5 +1,5 @@
-HMPDJ01 ;SLC/MKB,ASMR/MBS -- Orders ;Aug 17, 2016 11:42:39
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
+HMPDJ01 ;SLC/MKB,ASMR/MBS -- Orders ;Aug 28, 2017 9:41:39
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3,11**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          ICR
@@ -37,8 +37,9 @@ OR1(ID) ; -- order ID >> ^TMP("ORR",$J,ORLIST,HMPN)
  . ; DE5111 end
  . K CHILD D ORX(HMPC,.CHILD)
  . M ORDER("children",HMPC)=CHILD
- S ORDER("lastUpdateTime")=$$EN^HMPSTMP("order") ;RHL 20141231
- S ORDER("stampTime")=ORDER("lastUpdateTime") ; RHL 20141231
+ D:$D(ORDER)  ;BL;DE7806 If a deleted order must not build these nodes
+ . S ORDER("lastUpdateTime")=$$EN^HMPSTMP("order") ;RHL 20141231
+ . S ORDER("stampTime")=ORDER("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
  I $G(HMPMETA) D ADD^HMPMETA("order",ORDER("uid"),ORDER("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("ORDER","order")
@@ -73,24 +74,30 @@ ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  S ORD("entered")=$$JSONDT^HMPUTILS($P(X0,U,3))
  S ORD("start")=$$JSONDT^HMPUTILS($P(X0,U,4)),ORD("stop")=$$JSONDT^HMPUTILS($P(X0,U,5))  ;US10045, DE3054
  S ORD("statusCode")="urn:va:order-status:"_$P(X0,U,7)
- S ORD("statusName")=$P(X0,U,6)
- S ORD("statusVuid")="urn:va:vuid:"_$$STS^HMPDOR($P(X0,U,7))
+ S ORD("statusName")=$P(X0,U,6) S ORD("statusVuid")="urn:va:vuid:"_$$STS^HMPDOR($P(X0,U,7))
  D SETTEXT^HMPUTILS($NA(^TMP("ORR",$J,ORLIST,ORLST,"TX")),$NA(^TMP("HMPTEXT",$J,IFN)))
  M ORD("content","\")=^TMP("HMPTEXT",$J,IFN)
  ; DE3504 - Jan 18, 2016, added the code for US10045 below
  ; US10045 - PB Dec 7, 2015 if ORDER is saved, signed, discontinued, then ORDER is unsigned
  S HDFN=+$P($G(^OR(100,+IFN,0)),U,2)
- S ORDSTAT=$$ORDACT(HDFN,+IFN) I ORDSTAT="DC" D
+ S ORDSTAT=$$ORDACT(HDFN,+IFN)
+ I ORDSTAT="" D  ; DE6002 - August 28, 2017 - get hold status even if order not in HMP(800000 for initial sync
+ . N ORFSTAT
+ . S ORFSTAT=$O(^OR(100,+IFN,8,"A"),-1)
+ . I $G(ORFSTAT),$P($G(^OR(100,+IFN,8,ORFSTAT,0)),U,2)="HD" S ORDSTAT="HD"
+ I ORDSTAT="DC"!(ORDSTAT="HD") D
+ . ; DE6002 - August 9, 2016 - apply the same logic for unsigned 'HOLD'
  . ; DE3777 - March 15, 2016 - Modified the statusName to "UNRELEASED" for the  order to match the status
  . ;  that appears in CPRS if the ORDER was DISCONTINUED and is UNSIGNED
  . N HDC,HDCRSN,HMPORACT,HPTR,HSIGN
- . S HDC=$O(^OR(100,IFN,8,"C","DC","")),HSIGN="" Q:'(HDC>0)
+ . S HDC=$O(^OR(100,IFN,8,"C",ORDSTAT,"")),HSIGN="" Q:'(HDC>0)  ; DE6002
  . S HMPORACT=$G(^OR(100,IFN,8,HDC,0))
  . ; The 15th piece of HMPORACT is the RELEASE STATUS - '11' FOR unreleased
  . I $P(HMPORACT,U,15)=11 S ORD("statusName")="UNRELEASED",ORD("statusCode")="urn:va:order-status:unr"
  . S:$P($G(HMPORACT),U,4)=2 HSIGN="*UNSIGNED*"
  . S HPTR=+$P($G(^OR(100,IFN,6)),U,4),HDCRSN=$P($G(^ORD(100.03,HPTR,0)),U)  ;Combined fixes Mar 16, 2016 DE3777 CK - PB - DE4027
  . I $L(HDCRSN) S ORD("content","\",2)=" <"_$G(HDCRSN)_"> "_HSIGN  ; add DC order not signed in JSON object
+ . I ORDSTAT="HD",HSIGN="*UNSIGNED*" S ORD("content","\",2)=" "_HSIGN_" ",ORD("content","\",1)="Hold "_ORD("content","\",1) ;DE6002
  . ; DE3777 - end of changes
  ;
  S X=$$GET1^DIQ(100,IFN_",",1,"I") I X D

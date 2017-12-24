@@ -13,18 +13,16 @@
     <div class="patient-info toggle-details">
         <p>
             {{#if sensitive}}
-            <span class="small background-color-pure-white color-red all-padding-xs inline-block-display top-margin-xs bottom-margin-sm sensitive-patient">*SENSITIVE*</span><br />
-            {{/if}}
+            <span class="small background-color-pure-white color-red all-padding-xs inline-block-display top-margin-xs bottom-margin-sm sensitive-patient">*SENSITIVE*</span>
+            <br /> {{/if}}
             <strong aria-hidden="true">DOB: </strong>
             <span class="sr-only">Patient's date of birth</span><span data-instanceid='patientDemographic-patientInfo-dob'>{{formatDate birthDate}}</span> (<span data-description="patients-age">{{getAge birthDate}}</span><span aria-hidden="true">y</span><span class="sr-only">years old</span>)
             <br />
             <strong aria-hidden="true">SSN: </strong>
             <span class="sr-only">Social Security Number</span>{{formatSSN ssn false}}
             <br />
-            <strong>Gender:</strong> {{genderName}}
-            {{#if roomBed}}
-            <br /><strong>Room-Bed:</strong> {{roomBed}}
-            {{/if}}
+            <strong>Gender:</strong> {{genderName}} {{#if roomBed}}
+            <br /><strong>Room-Bed:</strong> {{roomBed}} {{/if}}
             <br /><span class="sr-only">Type of care: </span><span>{{getPatientStatusClassInfo}}</span>
         </p>
     </div>

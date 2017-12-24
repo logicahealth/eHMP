@@ -18,13 +18,13 @@ var req = {
 		'x-request-id': 'requestId'
 	},
 	body: {
-		'uid': 'urn:va:ehmp:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-		'patientUid':'urn:va:patient:9E7A:3:3',
-		'authorUid': 'urn:va:user:9E7A:123:123',
+		'uid': 'urn:va:ehmp:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+		'patientUid':'urn:va:patient:SITE:3:3',
+		'authorUid': 'urn:va:user:SITE:123:123',
 		'domain': 'ehmp-order',
 		'subDomain': 'noteObject',
 		'visit': {
-			'location':'urn:va:location:9E7A:1',
+			'location':'urn:va:location:SITE:1',
 			'serviceCategory': 'E',
 			'dateTime': '20160118123000'
 		},
@@ -71,13 +71,13 @@ describe('activity-management-endpoint.js', function() {
 			expect(env.publisherRouter.publish).toHaveBeenCalled();
 			var publishParam = jasmine.objectContaining({
 				type: 'publish-data-change-event',
-				patientIdentifier: { type: 'pid', value: '9E7A;3' },
+				patientIdentifier: { type: 'pid', value: 'SITE;3' },
 				referenceInfo: { sessionId: 'sessionId', requestId: 'requestId' },
 				dataDomain: 'ehmp-order',
 				record: jasmine.objectContaining({
 					subDomain: 'noteObject',
 					visit: {
-						location: 'urn:va:location:9E7A:1',
+						location: 'urn:va:location:SITE:1',
 						serviceCategory: 'E',
 						dateTime: '20160118123000'
 					},

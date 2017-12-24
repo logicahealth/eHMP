@@ -45,8 +45,8 @@ var metastampLargeDomain = {
     'icn': '10110V004877',
     'stampTime': '20131031094920',
     'sourceMetaStamp': {
-        '9E7A': {
-            'pid': '9E7A;8',
+        'SITE': {
+            'pid': 'SITE;8',
             'localId': '8',
             'stampTime': '20131031094920',
             'domainMetaStamp': {
@@ -54,28 +54,28 @@ var metastampLargeDomain = {
                     'domain': 'lab',
                     'stampTime': '20131031094920',
                     'eventMetaStamp': {
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;80': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;80': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;81': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;81': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;82': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;82': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;83': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;83': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;84': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;84': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;85': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;85': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;86': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;86': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;87': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;87': {
                             'stampTime': '20131031094920'
                         }
                     }
@@ -89,8 +89,8 @@ var metastampSources = {
     'icn': '10110V004877',
     'stampTime': '20131031094920',
     'sourceMetaStamp': {
-        '9E7A': {
-            'pid': '9E7A;8',
+        'SITE': {
+            'pid': 'SITE;8',
             'localId': '8',
             'stampTime': '20131031094920',
             'domainMetaStamp': {
@@ -98,28 +98,28 @@ var metastampSources = {
                     'domain': 'lab',
                     'stampTime': '20131031094920',
                     'eventMetaStamp': {
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;80': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;80': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;81': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;81': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;82': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;82': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;83': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;83': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;84': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;84': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;85': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;85': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;86': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;86': {
                             'stampTime': '20131031094920'
                         },
-                        'urn:va:lab:9E7A:8:CH;6899693.879999;87': {
+                        'urn:va:lab:SITE:8:CH;6899693.87PORT;87': {
                             'stampTime': '20131031094920'
                         }
                     }
@@ -148,71 +148,71 @@ var metastampSources = {
 var largeOPDomain = {
     'stampTime': '20150623215404',
     'sourceMetaStamp': {
-        'C877': {
+        'SITE': {
             'stampTime': '20150623215404',
             'domainMetaStamp': {
                 'asu-class': {
                     'domain': 'asu-class',
                     'stampTime': '20150623215404',
                     'itemMetaStamp': {
-                        'urn:va:asu-class:C877:19': {
+                        'urn:va:asu-class:SITE:19': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:31': {
+                        'urn:va:asu-class:SITE:31': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:34': {
+                        'urn:va:asu-class:SITE:34': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:35': {
+                        'urn:va:asu-class:SITE:35': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:42': {
+                        'urn:va:asu-class:SITE:42': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:46': {
+                        'urn:va:asu-class:SITE:46': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:48': {
+                        'urn:va:asu-class:SITE:48': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:54': {
+                        'urn:va:asu-class:SITE:54': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:55': {
+                        'urn:va:asu-class:SITE:55': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:56': {
+                        'urn:va:asu-class:SITE:56': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:58': {
+                        'urn:va:asu-class:SITE:58': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:91': {
+                        'urn:va:asu-class:SITE:91': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:92': {
+                        'urn:va:asu-class:SITE:92': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:93': {
+                        'urn:va:asu-class:SITE:93': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:94': {
+                        'urn:va:asu-class:SITE:94': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:100': {
+                        'urn:va:asu-class:SITE:100': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:101': {
+                        'urn:va:asu-class:SITE:101': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:104': {
+                        'urn:va:asu-class:SITE:104': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:119': {
+                        'urn:va:asu-class:SITE:119': {
                             'stampTime': '20150623215404'
                         },
-                        'urn:va:asu-class:C877:151': {
+                        'urn:va:asu-class:SITE:151': {
                             'stampTime': '20150623215404'
                         }
                     }
@@ -227,7 +227,7 @@ describe('jds-client.js', function() {
     describe('getSyncStatus()', function() {
         var patientIdentifier = {
             type: 'pid',
-            value: '9E7A;3'
+            value: 'SITE;3'
         };
         var expectedBasePath = '/status/' + patientIdentifier.value;
         var finished = false;
@@ -365,23 +365,23 @@ describe('jds-client.js', function() {
         it('split metastamp by event', function() {
             var metastamps = jds._splitMetastampDomain(metastampLargeDomain, 800);
             expect(metastamps.length).toBe(2);
-            expect(_.size(metastamps[0].sourceMetaStamp['9E7A'].domainMetaStamp.lab.eventMetaStamp)).toBe(4);
-            expect(_.size(metastamps[1].sourceMetaStamp['9E7A'].domainMetaStamp.lab.eventMetaStamp)).toBe(4);
+            expect(_.size(metastamps[0].sourceMetaStamp['SITE'].domainMetaStamp.lab.eventMetaStamp)).toBe(4);
+            expect(_.size(metastamps[1].sourceMetaStamp['SITE'].domainMetaStamp.lab.eventMetaStamp)).toBe(4);
         });
 
         it('split operational metastamp by event', function() {
             var metastamps = jds._splitMetastampDomain(largeOPDomain, 800);
             expect(metastamps.length).toBe(3);
-            expect(_.size(metastamps[0].sourceMetaStamp.C877.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
-            expect(_.size(metastamps[1].sourceMetaStamp.C877.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
-            expect(_.size(metastamps[1].sourceMetaStamp.C877.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
+            expect(_.size(metastamps[0].sourceMetaStamp.SITE.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
+            expect(_.size(metastamps[1].sourceMetaStamp.SITE.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
+            expect(_.size(metastamps[1].sourceMetaStamp.SITE.domainMetaStamp['asu-class'].itemMetaStamp)).toBe(7);
         });
 
         it('split metastamp', function() {
             var metastamps = jds._ensureMetastampSize(opstamp, 20000);
             expect(metastamps.length).toBeGreaterThan(17);
             _.each(metastamps, function(stamp) {
-                expect(_.size(stamp.sourceMetaStamp.C877.domainMetaStamp)).toBeGreaterThan(0);
+                expect(_.size(stamp.sourceMetaStamp.SITE.domainMetaStamp)).toBeGreaterThan(0);
             });
         });
 

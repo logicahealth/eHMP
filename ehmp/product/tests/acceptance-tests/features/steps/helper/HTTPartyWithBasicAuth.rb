@@ -9,7 +9,7 @@ require "PatientPickerDomElements.rb"
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :username => "REDACTED", :password => "REDACTED" }
+  @@auth = { :username => "PW         ", :password => "PW      " }
   @@time_start = Time.new
   @@time_done = Time.new
 
@@ -19,8 +19,8 @@ class HTTPartyWithBasicAuth
   end
   
   def self.check_host(path)
-    if path.include? "C877;"
-      @@auth = { :username => "REDACTED", :password => "REDACTED" }
+    if path.include? "SITE;"
+      @@auth = { :username => "SITE;USER  ", :password => "PW      " }
     end
   end
 

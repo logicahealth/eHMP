@@ -16,24 +16,24 @@
     },
     "maxMetastampSize": 10485760,
     "vistaSites": {
-        "9E7A": {
+        "SITE": {
           "name": "PANORAMA",
           "host": "IP           ",
-          "port": port,
-          "accessCode": "REDACTED",
-          "verifyCode": "REDACTED",
+          "port": PORT,
+          "accessCode": "USER  ",
+          "verifyCode": "PW      ",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000
       },
-        "C877": {
+        "SITE": {
           "name": "KODAK",
           "host": "IP         ",
-          "port": port,
-          "accessCode": "REDACTED",
-          "verifyCode": "REDACTED",
+          "port": PORT,
+          "accessCode": "USER  ",
+          "verifyCode": "PW      ",
           "localIP": "127.0.0.1",
           "stationNumber": "507",
           "localAddress": "localhost",
@@ -44,7 +44,7 @@
     "syncRequestApi": {
         "protocol": "http",
         "host": "IP           ",
-        "port": 8080,
+        "port": PORT,
         "patientSyncPath": "/sync/load",
         "patientUnsyncPath": "/sync/clearPatient",
         "method": "POST"
@@ -145,11 +145,11 @@
             "vital"
         ],
         "hdrSites": {
-           "3A8B": { "stationNumber": 42 },
-           "CF2A": { "stationNumber": 101 },
-           "72A0": { "stationNumber": 13 },
-           "8211": { "stationNumber": 1337 },
-           "84F0": { "stationNumber": 578 }
+           "SITE": { "stationNumber": 42 },
+           "SITE": { "stationNumber": 101 },
+           "SITE": { "stationNumber": 13 },
+           "SITE": { "stationNumber": 1337 },
+           "SITE": { "stationNumber": 578 }
         },
         "operationMode": "REQ/RES",
         "defaults": {
@@ -293,8 +293,8 @@
           "error-request"
         ],
         "primary": [
-          "vista-9E7A-subscribe-request",
-          "vista-C877-subscribe-request",
+          "vista-SITE-subscribe-request",
+          "vista-SITE-subscribe-request",
           "enterprise-sync-request",
           "vista-operational-subscribe-request"
         ],
@@ -493,7 +493,7 @@
         "ttr": 120,
         "timeout": 10,
         "initMillis": 1000,
-        "maxMillis": 1PORT,
+        "maxMillis": 15000,
         "incMillis": 1000
     },
     "repoDefaults": {
@@ -510,9 +510,9 @@
         },
         "vista-operational-subscribe-request": {
         },
-        "vista-9E7A-subscribe-request": {
+        "vista-SITE-subscribe-request": {
         },
-        "vista-C877-subscribe-request": {
+        "vista-SITE-subscribe-request": {
         },
         "jmeadows-sync-request": {
         },
@@ -668,15 +668,15 @@
         },
         "record-enrichment": {
           "host": "IP           ",
-          "port": port
+          "port": PORT
         },
         "store-record": {
           "host": "IP           ",
-          "port": port
+          "port": PORT
         },
         "operational-store-record": {
           "host": "IP           ",
-          "port": port
+          "port": PORT
         },
         "vista-prioritization-request": {
         },

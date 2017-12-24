@@ -16,7 +16,7 @@ module.exports.getResourceConfig = function(app) {
         path: '',
         interceptors: {
             operationalDataCheck: true,
-            synchronize: true
+            synchronize: false
         },
         requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,

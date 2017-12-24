@@ -62,7 +62,7 @@ describe 'f664_patient_record_patient_entered_goals_spec.rb', future: true do
 
     it '. site/dfn' do
       response = rdk_fetch(@command,
-                           'subject.identifier' => '9E7A;1')
+                           'subject.identifier' => 'SITE;1')
       # puts response.code
       # dump(response.body)
 
@@ -83,7 +83,7 @@ describe 'f664_patient_record_patient_entered_goals_spec.rb', future: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'subject.identifier' => '9E7A;848484')
+                           'subject.identifier' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 

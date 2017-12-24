@@ -40,9 +40,9 @@ KATTRIB(OBJECT) ; Kill attribute based index
  I $L(IDXMETA("review")) D
  . N REVTM
  . S REVTM=$G(^VPRPTI(JPID,PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
- . K ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)
- . K ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
- . K ^VPRPTX("pidReview",PID,REVTM)
+ . K:$D(^VPRPTI(JPID,PID,"review",KEY,IDXNAME)) ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)
+ . K:$D(^VPRPTX("review",REVTM,PID,KEY,IDXNAME)) ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
+ . K:$D(^VPRPTX("pidReview",PID,REVTM)) ^VPRPTX("pidReview",PID,REVTM)
  ;
  I IDXMETA("levels")=0  D KA0  Q
  ;
@@ -56,25 +56,25 @@ SA0 ; unsorted list set logic
  S ^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)=""
  Q
 KA0 ; unsorted list kill logic
- K ^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)
+ K:$D(^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)) ^VPRPTI(JPID,PID,"attr",IDXNAME,KEY)
  Q
 SA1 ; one attribute set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)=""
  Q
 KA1 ; one attribute kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)) ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),KEY,I)
  Q
 SA2 ; two attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
  Q
 KA2 ; two attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)) ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
  Q
 SA3 ; three attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
  Q
 KA3 ; three attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)) ^VPRPTI(JPID,PID,"attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
  Q
  ;
  ; ----- Index Logic: attributes across patients -----
@@ -116,8 +116,8 @@ KXATTR(OBJECT) ; Set attribute based index
  . N REVTM
  . S REVTM=$G(^VPRPTI(JPID,PID,"review",KEY,IDXNAME)) Q:'$L(REVTM)
  . K ^VPRPTI(JPID,PID,"review",KEY,IDXNAME)
- . K ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
- . K ^VPRPTX("pidReview",PID,REVTM)
+ . K:$D(^VPRPTX("review",REVTM,PID,KEY,IDXNAME)) ^VPRPTX("review",REVTM,PID,KEY,IDXNAME)
+ . K:$D(^VPRPTX("pidReview",PID,REVTM)) ^VPRPTX("pidReview",PID,REVTM)
  ;
  I IDXMETA("levels")=0  D KXA0  Q
  ;
@@ -131,23 +131,23 @@ SXA0 ; unsorted list set logic
  S ^VPRPTX("xattr",IDXNAME,KEY)=""
  Q
 KXA0 ; unsorted list kill logic
- K ^VPRPTX("xattr",IDXNAME,KEY)
+ K:$D(^VPRPTX("xattr",IDXNAME,KEY)) ^VPRPTX("xattr",IDXNAME,KEY)
  Q
 SXA1 ; one attribute set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTX("xattr",IDXNAME,VALUES(I,1),KEY,I)=""
  Q
 KXA1 ; one attribute kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTX("xattr",IDXNAME,VALUES(I,1),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTX("xattr",IDXNAME,VALUES(I,1),KEY,I)) ^VPRPTX("xattr",IDXNAME,VALUES(I,1),KEY,I)
  Q
 SXA2 ; two attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
  Q
 KXA2 ; two attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)) ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
  Q
 SXA3 ; three attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
  Q
 KXA3 ; three attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)) ^VPRPTX("xattr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
  Q

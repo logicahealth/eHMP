@@ -1,0 +1,145 @@
+.quickmenu-container, 
+.quickmenu-header,
+// overwrite width for backgrid tables and table based applets
+table.backgrid th.quickmenu-header,
+table.backgrid td.quickmenu-container,
+table[class*="table-view"] th.quickmenu-header,
+table[class*="table-view"] td.quickmenu-container {
+    width: 22px;
+    min-width: 22px;
+    max-width: 22px;
+    padding: 0;
+    border-right: none;
+}
+// overwrite vitals padding
+.a-table td.quickmenu-container,  
+.b-table td.quickmenu-container {
+    padding: 0;
+}
+// main component
+.dropdown--quickmenu {
+    height: 100%;
+    // menu button
+    .dropdown-toggle {
+        opacity: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0 5px;
+        height: 100%;
+        width: 100%;
+        &:hover {
+            color: $primary-dark;
+            background-color: $primary-light-alt;
+        }
+        &:focus {
+            color: $pure-white;
+            background-color: $primary-dark;
+        }
+        &:active, &:active:focus {
+            color: $pure-white;
+            background-color: $primary;
+        }
+    }
+    // show/style button when dropdown is open
+    &.open {
+        & > .dropdown-toggle {
+            opacity: 1;
+            color: $pure-white;
+            background-color: $primary;
+            &:hover, &:focus {
+                color: $pure-white;
+                background-color: $primary;
+            }
+        }
+    }
+    // tile sorting
+    .tilesort:empty {
+        display:none;
+    }
+    .tilesort {
+        height: 100%;
+        display: block;
+        .tilesort-button {
+            width: 100%;
+            &, &:hover, &:focus {
+                color: $pure-white;
+                height: 100%;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 0 5px;
+                background-color: $secondary-dark;
+            }
+        }
+    }
+}
+// visible on tab
+.dropdown-toggle:focus,
+// visible on hover of row
+.dragging-row .dropdown-toggle, // tile sorting
+.dropdown-hover .dropdown-toggle { 
+    opacity: 1;
+}
+.quick-menu-table .table-row {
+    cursor: pointer;
+}
+// quickmenu dropdown menu and submenu
+.dropdown-menu--quick-menu {
+    position: absolute;
+    padding: 0;
+    z-index: 1050;
+    ul {
+        padding: 0;
+        margin: 0;
+        li.list-group-item {
+            color: $primary;
+            border: none;
+            a {
+                cursor: pointer;
+                &[aria-disabled="true"],
+                &.disabled {
+                    opacity: 0.65; 
+                    cursor: not-allowed;
+                }
+            }
+            i {
+                width: 1.5em;
+                text-align: center;
+                margin-right: 5px;
+                margin-left: -5px;
+            }
+        }
+    }
+}
+.dropdown-submenu {
+    position: relative;
+    .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+}
+// applet specific styling - once complete, revisit to make sure these can't be integrated into the base above
+[gistviewtype="pills"] { 
+    .quickmenu-open .pill-item-info {
+        padding: 3px 0 3px 24px;
+    }
+    .quickmenu-container {
+        position: absolute;
+        &:hover, &:focus, &:active {
+            & ~ .pill-item-info {
+                padding: 3px 0 3px 24px;
+            }
+        }
+        .dropdown-toggle {
+            &, &:hover, &:focus, &:active {
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+        }
+    }
+    .quickmenu-hasfocus .pill-item-info,
+    .pill-item-info:hover {
+        padding: 3px 0 3px 24px;
+    }
+}

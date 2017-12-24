@@ -6,20 +6,39 @@ define([
     "handlebars",
     "hbs!main/components/views/appletViews/interventionsGistView/templates/interventionsGistLayout",
     "hbs!main/components/views/appletViews/interventionsGistView/templates/interventionsGistChild",
-    "hbs!main/components/views/appletViews/sharedTemplates/gistPopover",
     "api/ResourceService",
     "api/UserService",
     "api/Messaging",
     'main/components/applets/baseDisplayApplet/baseDisplayAppletItem',
     'main/components/applets/baseDisplayApplet/baseGistView',
-    "main/components/appletToolbar/appletToolbarView",
     "main/components/views/appletViews/TileSortManager",
     '_assets/js/tooltipMappings'
-], function($, _, Utils, Backbone, Handlebars, interventionsGistLayoutTemplate, interventionsGistChildTemplate, popoverTemplate, ResourceService, UserService, Messaging, BaseAppletItem, BaseGistView, ToolbarView, TileSortManager, TooltipMappings) {
+], function($, _, Utils, Backbone, Handlebars, interventionsGistLayoutTemplate, interventionsGistChildTemplate, ResourceService, UserService, Messaging, BaseAppletItem, BaseGistView, TileSortManager, TooltipMappings) {
     'use strict';
 
     var InterventionsGistItem = BaseAppletItem.extend({
         template: interventionsGistChildTemplate,
+        tileOptions: {
+            quickLooks: {
+                enabled: true
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton',
+                    shouldShow: function() {
+                        return this.getOption('showInfoButton') !== false;
+                    }
+                }, {
+                    type: 'detailsviewbutton'
+                }, {
+                    type: 'tilesortbutton',
+                    shouldShow: function() {
+                        return !Messaging.request('get:current:screen').config.predefined;
+                    }
+                }]
+            }
+        },
         getInterventionSeverityClass: function(interventionCount) {
             switch (interventionCount.toUpperCase()) {
                 case '0':
@@ -31,9 +50,6 @@ define([
                 default:
                     return 'lineCorrection';
             }
-        },
-        onDestroy: function() {
-            this.ui.popoverEl.popup('destroy');
         },
         templateHelpers: function() {
             var self = this;
@@ -61,8 +77,8 @@ define([
                         var fullName = this.normalizedName;
                         return new Handlebars.SafeString([
                             this.shortName,
-                            ' <a class="more-name" data-toggle="collapse" href="#'+self.cid+'-name">...</a>',
-                            '<div class="collapse" id="'+self.cid+'-collapse-name">'+fullName.substring(this.shortName.length)+'</div>'
+                            ' <a class="more-name" data-toggle="collapse" href="#' + self.cid + '-name">...</a>',
+                            '<div class="collapse" id="' + self.cid + '-collapse-name">' + fullName.substring(this.shortName.length) + '</div>'
                         ].join(''));
                     } else {
                         return this.normalizedName;
@@ -73,8 +89,8 @@ define([
                         var fullDescription = this.description;
                         return new Handlebars.SafeString([
                             this.shortDescription,
-                            ' <a class="more-description" data-toggle="collapse" href="#'+self.cid+'-description">...</a>',
-                            '<div class="collapse" id="'+self.cid+'-collapse-description">'+fullDescription.substring(this.shortDescription.length)+'</div>'
+                            ' <a class="more-description" data-toggle="collapse" href="#' + self.cid + '-description">...</a>',
+                            '<div class="collapse" id="' + self.cid + '-collapse-description">' + fullDescription.substring(this.shortDescription.length) + '</div>'
                         ].join(''));
                     } else {
                         return this.description;
@@ -97,20 +113,12 @@ define([
         toggleMore: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var collapseElement = this.$el.find('#'+this.cid+'-collapse-'+e.currentTarget.className.split(' ')[0].split('-')[1]);
+            var collapseElement = this.$el.find('#' + this.cid + '-collapse-' + e.currentTarget.className.split(' ')[0].split('-')[1]);
             collapseElement.collapse('toggle');
             $(e.currentTarget).insertAfter(collapseElement);
         },
         initialize: function(options) {
             this.callingView = options.appletOptions.appletId;
-            var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
-            if (!Messaging.request('get:current:screen').config.predefined) {
-                buttonTypes.unshift('tilesortbutton');
-            }
-
-            this.toolbarOptions = {
-                buttonTypes: buttonTypes
-            };
         },
         onRender: function() {
             //this._base.onRender.apply(this, arguments);
@@ -123,7 +131,6 @@ define([
                 countText = 'Unknown';
                 severityCheck.text('NA');
             }
-            this.createPopover();
         }
     });
 
@@ -140,11 +147,6 @@ define([
                 'role': 'grid',
                 'aria-label': gridTitle
             };
-        },
-        events: {
-            'after:hidetoolbar': function(e) {
-                this.$el.find('.dragging-row').removeClass('dragging-row');
-            }
         },
         initialize: function(options) {
             this.callingView = options.appletId;
@@ -174,7 +176,7 @@ define([
             this.model.set('appletID', this.AppletID);
             this.childViewContainer = ".gist-item-list";
         },
-        onRender: function(){
+        onRender: function() {
             _.each(this.$('.toolbar-508'), function(span) {
                 var tooltipKey = span.innerHTML;
                 span.innerHTML = '( ' + TooltipMappings[tooltipKey] + ' )';
@@ -191,9 +193,6 @@ define([
                     return true;
                 }
             };
-        },
-        behaviors: {
-            Tooltip: {}
         }
     });
 

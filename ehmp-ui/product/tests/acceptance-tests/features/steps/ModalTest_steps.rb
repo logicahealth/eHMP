@@ -7,25 +7,6 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 
 require 'AccessBrowserV2.rb'
 
-class ModalTest < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-close-button")) 
-    add_action(CucumberLabel.new("Cancel Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-footer div div.pull-right #cancelBtn"))
-    add_verify(CucumberLabel.new("ModalTitle"), VerifyContainsText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
-  end
-end
-
-Then(/^a modal with the title "(.*?)" is displayed$/) do |title|
-  expect(ModalTest.instance.perform_verification("ModalTitle", title)).to be_true
-end
-
-When(/^the user clicks the modal "(.*?)"$/) do |button|
-  con = ModalTest.instance
-  expect(con.perform_action(button)).to be_true
-end
-
 Then(/^the user clicks the modal Close Button$/) do
   modal = ModalElements.new
   modal.wait_until_btn_modal_close_visible
@@ -43,8 +24,14 @@ end
 
 def wait_until_modal_is_not_displayed
   modal = ModalElements.new
-  modal.wait_until_fld_main_modal_invisible
-  modal.wait_until_fld_main_modal_fade_in_invisible 
+  begin
+    modal.wait_until_fld_main_modal_invisible(20)
+    modal.wait_until_fld_main_modal_fade_in_invisible(20)
+  rescue Exception => e
+    p "Exception received: #{e}"
+    take_screenshot("wait_until_modal_is_not_displayed")
+    raise e 
+  end
 end
 
 Then(/^the modal is closed$/) do

@@ -26,11 +26,11 @@ table[class*="table-view"]{
             word-wrap: break-word;
             &.flex-width-date {
                 flex: none;
-                width: 115px;
+                width: 75px;
             }
             &.flex-width-date-time {
                 flex: none;
-                width: 115px;
+                width: 75px;
             }
             &.flex-width-comment {
                 flex: none;
@@ -47,7 +47,7 @@ table[class*="table-view"]{
         border-bottom: 2px solid $grey-light;
         height: 20px;
         tr {
-        	padding-right: 15px;
+            padding-right: 15px;
         }
         th, tr {
             border-bottom: none;
@@ -66,29 +66,29 @@ table[class*="table-view"]{
 			    border: none;
             }
         }
+        th:last-child {
+            padding-right: 15px;
+        }
     }
     tbody {
         height: calc(100% - 20px);
         overflow-y: auto;
-        -ms-overflow-style: -ms-autohiding-scrollbar;
         tr {
             cursor: pointer;
             &.no-hover-state {
                 cursor: default;
             }
-            &:not(.no-hover-state):hover {
-                background-color: $primary-lightest;
-            }
-            &.row-header {
-                background-color: $grey-lightest;
-            }
+            &:not(.no-hover-state):hover,
             &:focus {
                 background-color: $primary-lighter;
                 color: $primary-dark;
             }
+            &.row-header {
+                background-color: $grey-lightest;
+            }
         }
         &.no-scroll tr {
-        	padding-right: 15px;
+            padding-right: 15px;
         }
     }
 }

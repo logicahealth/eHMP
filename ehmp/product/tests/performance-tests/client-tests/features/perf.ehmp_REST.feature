@@ -53,14 +53,14 @@ Scenario: Patient record sync process for api testing
     Given a patient with pid "5000000009V082878" has been synced through Admin API 
     Given a patient with pid "5000000116V912836" has been synced through Admin API  
     Given a patient with pid "5000000217V519385" has been synced through Admin API      
-    Given a patient with pid "9E7A;100022" has been synced through Admin API
-    Given a patient with pid "9E7A;100033" has been synced through Admin API
-    Given a patient with pid "9E7A;129" has been synced through Admin API
-    Given a patient with pid "9E7A;737" has been synced through Admin API
-    Given a patient with pid "9E7A;17" has been synced through Admin API   
-    Given a patient with pid "9E7A;1" has been synced through Admin API
-    Given a patient with pid "C877;737" has been synced through Admin API 
-    Given a patient with pid "C877;100022" has been synced through Admin API 
+    Given a patient with pid "SITE;100022" has been synced through Admin API
+    Given a patient with pid "SITE;100033" has been synced through Admin API
+    Given a patient with pid "SITE;129" has been synced through Admin API
+    Given a patient with pid "SITE;737" has been synced through Admin API
+    Given a patient with pid "SITE;17" has been synced through Admin API   
+    Given a patient with pid "SITE;1" has been synced through Admin API
+    Given a patient with pid "SITE;737" has been synced through Admin API 
+    Given a patient with pid "SITE;100022" has been synced through Admin API 
     #Given a patient with pid "E168;100022" has been synced through Admin API   
 
 @perf.ehmp_REST @perf.VPRallergies @perf.VPR
@@ -72,11 +72,11 @@ Scenario Outline: User requests direct REST call to VPR api end-points
 
     Examples:
         | pid                  |  desc         |
-        | 9E7A;100022          |  High volume  |    
+        | SITE;100022          |  High volume  |    
 #        | 10108V420871         |  Med volume   |    
 #        | 11016V630869         |  Sm volume    |
         | 5000000217V519385    |  DoD          |
-        | C877;737             |  HDR          |
+        | SITE;737             |  HDR          |
 
 #@perf.ehmp_REST @perf.VPRallergies @perf.VPR
 Scenario Outline: User requests direct REST call to VPR api end-points and retreive patient records from other VistAs
@@ -87,7 +87,7 @@ Scenario Outline: User requests direct REST call to VPR api end-points and retre
 
     Examples:
         | pid           | desc        |   
-        | C877;100022   | VistaKodak  |
+        | SITE;100022   | VistaKodak  |
         | E168;100022   | VistaAlpha  |
 
 @perf.ehmp_REST @perf.VPRvitals @perf.VPR
@@ -101,9 +101,9 @@ Scenario Outline: User requests direct REST call to VPR api end-points
         | pid                  |  desc         |
 #        | 10108V420871         |  High volume  |    
 #        | 11016V630869         |  Med volume   |    
-        | 9E7A;100022          |  Sm volume    |
+        | SITE;100022          |  Sm volume    |
         | 5000000116V912836    |  DoD          |
-        | 9E7A;737             |  HDR          |
+        | SITE;737             |  HDR          |
 
 #@perf.ehmp_REST @perf.VPRvitals @perf.VPR
 Scenario Outline: User requests direct REST call to VPR api end-points and retreive patient records from other VistAs
@@ -114,7 +114,7 @@ Scenario Outline: User requests direct REST call to VPR api end-points and retre
 
     Examples:
         | pid           | desc        |   
-        | C877;100022   | VistaKodak  |
+        | SITE;100022   | VistaKodak  |
         | E168;100022   | VistaAlpha  |
 
 @perf.ehmp_REST @perf.VPRdemographics @perf.VPR
@@ -126,7 +126,7 @@ Scenario Outline: User requests direct REST call to VPR api end-points   #Bcma,E
 
     Examples:
         | pid                  |  desc                       |
-        | 9E7A;100022          |  Bcma,Eight                 |    
+        | SITE;100022          |  Bcma,Eight                 |    
 #        | 10108V420871         |  Eight,Patient              |    
 #        | 11016V630869         |  Onehundredsixteen,Patient  |
         | 10105V001065         |  Five,Patient               |            
@@ -195,7 +195,7 @@ Scenario Outline: Client can request lab results in VPR format
         | pid                  |  desc           |   
         | 11016V630869         |  Lab (Chem/Hem) |
         | 10110V004877         |  DoD            |  
-        | 9E7A;737             |  Lab (MI)-HDR   |
+        | SITE;737             |  Lab (MI)-HDR   |
 
 @perf.ehmp_REST @perf.VPRproblem @perf.VPR
 Scenario Outline: Client can request problem list results in VPR format
@@ -206,7 +206,7 @@ Scenario Outline: Client can request problem list results in VPR format
 
     Examples:
         | pid               |  desc    |   
-        | 9E7A;129          |  VA      | 
+        | SITE;129          |  VA      | 
 #        | 10108V420871      |  DoD     |
 
 @perf.ehmp_REST @perf.VPRmed @perf.VPR
@@ -218,10 +218,10 @@ Scenario Outline: Client can request medication results in VPR format
 
     Examples:
         | pid           |  desc                          |   
-        | 9E7A;100033   |  Inpatient medication results  |
-        | 9E7A;17       |  IV medication results         |  
+        | SITE;100033   |  Inpatient medication results  |
+        | SITE;17       |  IV medication results         |  
         | 10118V572553  |  Non-va medication results     |
-        | 9E7A;1        |  Outpatient medication results |
+        | SITE;1        |  Outpatient medication results |
 
 @perf.ehmp_REST @perf.VPRdocument @perf.VPR
 Scenario Outline: Client can request documents in VPR format
@@ -284,7 +284,7 @@ Scenario Outline: User requests direct REST call to FHIR api end-points
     
     Examples:
         | pid                  |  desc         |
-        | 9E7A;100022          |  High volume  |    
+        | SITE;100022          |  High volume  |    
 #        | 10108V420871         |  Med volume   |    
 #        | 11016V630869         |  Sm volume    |
         | 5000000217V519385    |  DoD          |    
@@ -300,7 +300,7 @@ Scenario Outline: User requests direct REST call to FHIR api end-points
         | pid                    |  desc         |
 #        | 10108V420871V420871    |  High volume  |    
 #        | 11016V630869           |  Med volume   |    
-        | 9E7A;100022            |  Sm volume    |
+        | SITE;100022            |  Sm volume    |
 
 @perf.ehmp_REST @perf.FHIRdemographics @perf.FHIR 
 Scenario Outline: User requests direct REST call to FHIR api end-points   
@@ -311,7 +311,7 @@ Scenario Outline: User requests direct REST call to FHIR api end-points
 
     Examples:
         | pid                      |  desc                       |
-        | 9E7A;100022              |  Bcma,Eight                 |    
+        | SITE;100022              |  Bcma,Eight                 |    
 #        | 10108V420871             |  Eight,Patient              |    
 #        | 11016V630869V630869      |  Onehundredsixteen,Patient  |
         | 10105V001065             |  Five,Patient               |  
@@ -327,13 +327,13 @@ Scenario Outline: User requests direct REST call to FHIR api end-points
         | pid                |  desc         |
         | 10105V001065       |  High volume  |    
         | 11016V630869       |  Med volume   |    
-        | 9E7A;100022        |  Sm volume    |       
+        | SITE;100022        |  Sm volume    |       
 
 
 @perf.ehmp_REST @perf.FHIRmed @perf.FHIRinpa @perf.FHIR 
 Scenario: User can request in-patient medication results in FHIR format
     Given a patient with "in-patient medication results" in multiple VistAs
-    When the client requests in-patient medication results for that patient "9E7A;100033" in FHIR format      
+    When the client requests in-patient medication results for that patient "SITE;100033" in FHIR format      
     And a successful response is returned    
     And the result is validated    
 
@@ -361,7 +361,7 @@ Scenario: Client can request radiology report results in FHIR format
 @perf.ehmp_REST @perf.DoDmed @perf.DoD
 Scenario: Client can request outpatient meds
     Given a patient with "outpatient medications" in multiple VistAs
-    When the client requests Meds for the patient "9E7A;71"
+    When the client requests Meds for the patient "SITE;71"
     And a successful response is returned    
     And the result is validated      
 
@@ -389,56 +389,56 @@ Scenario: Client can request complex DoD note
 @perf.ehmp_REST @perf.HDRappointments @perf.HDR    
 Scenario: Client can request appointments from multiple VistAs
     Given a patient with "appointments" in multiple VistAs
-    When the client requests appointments for the patient "C877;737" in VPR format
+    When the client requests appointments for the patient "SITE;737" in VPR format
     And a successful response is returned    
     And the result is validated      
 
 @perf.ehmp_REST @perf.HDRconsults @perf.HDR    
 Scenario: Client can request consults from multiple VistAs
     Given a patient with "consults" in multiple VistAs
-    When the client requests consult results for the patient "C877;737" in VPR format_HDR
+    When the client requests consult results for the patient "SITE;737" in VPR format_HDR
     And a successful response is returned    
     And the result is validated      
 
 @perf.ehmp_REST @perf.HDRcpt @perf.HDR   
 Scenario: Client can request cpt from multiple VistAs
     Given a patient with "cpt" in multiple VistAs
-    When the client requests cpt for the patient "C877;737" in VPR format
+    When the client requests cpt for the patient "SITE;737" in VPR format
     And a successful response is returned    
     And the result is validated 
 
 @perf.ehmp_REST @perf.HDRdocuments @perf.HDR   
 Scenario: Client can request documents from multiple VistAs
     Given a patient with "documents" in multiple VistAs
-    When the client requests documents for the patient "C877;737" in VPR format_HDR
+    When the client requests documents for the patient "SITE;737" in VPR format_HDR
     And a successful response is returned    
     And the result is validated 
 
 @perf.ehmp_REST @perf.HDReducations @perf.HDR   
 Scenario: Client can request educations from multiple VistAs in VPR format
     Given a patient with "educations" in multiple VistAs
-    When the client requests educations for the patient "9E7A;737" in VPR format
+    When the client requests educations for the patient "SITE;737" in VPR format
     And a successful response is returned    
     And the result is validated 
 
 @perf.ehmp_REST @perf.HDRexams @perf.HDR 
 Scenario: Client can request exams from multiple VistAs in VPR format
     Given a patient with "exams" in multiple VistAs
-    When the client requests exams for the patient "9E7A;737" in VPR format
+    When the client requests exams for the patient "SITE;737" in VPR format
     Then a successful response is returned 
     And the result is validated
 
 @perf.ehmp_REST @perf.HDRfactors @perf.HDR 
 Scenario: Client can request factors from multiple VistAs in VPR format
     Given a patient with "factors" in multiple VistAs
-    When the client requests factors for the patient "9E7A;737" in VPR format
+    When the client requests factors for the patient "SITE;737" in VPR format
     Then a successful response is returned 
     And the result is validated
 
 @perf.ehmp_REST @perf.HDRimages @perf.HDR 
 Scenario: Client can request images from multiple VistAs in VPR format
     Given a patient with "images" in multiple VistAs
-    When the client requests images for the patient "9E7A;737" in VPR format
+    When the client requests images for the patient "SITE;737" in VPR format
     Then a successful response is returned 
     And the result is validated
 

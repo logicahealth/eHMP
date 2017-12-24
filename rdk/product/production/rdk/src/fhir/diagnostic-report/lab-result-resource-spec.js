@@ -6,10 +6,10 @@ var input = require('./lab-result-resource-spec-data');
 
 describe('Lab Results FHIR Resource', function() {
     var req = {
-        '_pid': '9E7A;253',
-        originalUrl: '/fhir/diagnosticreport?subject.identifier=9E7A;253&domain=lab',
+        '_pid': 'SITE;253',
+        originalUrl: '/fhir/diagnosticreport?subject.identifier=SITE;253&domain=lab',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };

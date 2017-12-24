@@ -23,7 +23,7 @@ Scenario: VistA Exchange supports request, retrieval, storage, and display of La
     | issued                                                | 2004-03-28T23:49:00                                           | Yes |
     | subject.reference                                     | Patient/E102                                                   | Yes |
     | identifier.system                                     | urn:oid:2.16.840.1.113883.6.233                               | Yes |
-    | identifier.value                                      | urn:va:9E7A:227:lab:CH;6959670.765095;1.2                     | Yes |
+    | identifier.value                                      | urn:va:SITE:227:lab:CH;6959670.765095;1.2                     | Yes |
     | text.status                                           | generated                                                     | Yes |
     | contained[Organization]._id                           |                                                               | Yes |
     | contained[Organization].text.status                   | generated                                                     | Yes |
@@ -198,7 +198,7 @@ Scenario: VistA Exchange supports request, retrieval, storage, and display of La
 	| issued                                           | | Yes |
 	| subject.reference                                | | Yes |
 	| identifier.system                                | urn:oid:2.16.840.1.113883.6.233 | Yes |
-	| identifier.value[String]                         | urn:va:9E7A:3:lab:CH;6899693.879999;3.9 | Yes |
+	| identifier.value[String]                         | urn:va:SITE:3:lab:CH;6899693.879999;3.9 | Yes |
 	| text.status                                      | generated | Yes |
 	| text.div                                         | | Yes |
 	| contained[Organization].id                       | | Yes |

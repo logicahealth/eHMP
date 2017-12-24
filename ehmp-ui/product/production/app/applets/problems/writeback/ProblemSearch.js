@@ -16,7 +16,7 @@ define([
             control: 'container',
             modelListeners: ['row', 'showKeepProblem', 'problemText'],
             extraClasses: ['row', 'all-padding-md', 'top-padding-lg', 'keep-problem-container', 'background-color-pure-white'],
-            template: '{{#if showKeepProblem}}<div class="col-xs-6 left-padding-no"><p class="bottom-margin-xs"><strong>Currently Selected Problem</strong></p><p>{{problemText}}</p></div><div class="col-xs-6 all-padding-no"><button type="button" id="keepProblemBtn" class="btn btn-sm btn-primary" title="Press enter to keep previous problem name.">Keep Previous Problem Name</button></div>{{/if}}',
+            template: '{{#if showKeepProblem}}<div class="col-xs-6 left-padding-no"><p class="bottom-margin-xs"><strong>Currently Selected Problem</strong></p><p>{{problemText}}</p></div><div class="col-xs-6 all-padding-no"><button type="button" id="keepProblemBtn" class="btn btn-sm btn-primary">Keep Previous Problem Name</button></div>{{/if}}',
             hidden: true
         }, {
             control: 'container',
@@ -63,8 +63,7 @@ define([
                 type: 'button',
                 label: 'Extend Search',
                 hidden: true,
-                extraClasses: ['btn-default', 'btn-xs'],
-                title: 'Press enter to extend search'
+                extraClasses: ['btn-default', 'btn-xs']
             }, {
                 control: 'button',
                 id: 'freeTxtBtn',
@@ -73,7 +72,7 @@ define([
                 label: 'Enter Free Text',
                 hidden: true,
                 extraClasses: ['btn-default', 'btn-xs'],
-                title: 'Press enter search as free text'
+                title: 'Search as free text'
             }]
         }]
     };
@@ -130,8 +129,23 @@ define([
         }]
     }];
     var ParentView = ADK.UI.Form;
-    var problemSearchView = ParentView.extend({
+    var ProblemSearchModel = Backbone.Model.extend({
+        defaults: {
+            problemTerm: ''
+        },
+        validate: function(attributes, options) {
+            var problemTerm = this.get('problemTerm').trim();
+            if (!_.isString(problemTerm) || problemTerm.length < 3) {
+                this.errorModel.set('problemTerm', 'Search string must contain at least 3 characters');
+            }
+            if (!this.errorModel.isEmpty()) {
+                return "Validation errors. Please fix.";
+            }
+        }
+    });
+    var ProblemSearchView = ParentView.extend({
         initialize: function() {
+            this.model = this.getOption('model') || new ProblemSearchModel();
             this.termsCollection = new ADK.UIResources.Picklist.Problems.Terms();
             this.extendedTermsCollection = new ADK.UIResources.Picklist.Problems.ExtendedTerms();
             this.bindEntityEvents(this.termsCollection, this.termCollectionEvents);
@@ -319,22 +333,29 @@ define([
             }
         },
         performSearch: function(extended) {
-            this.removeProblemResultTable();
-            this.ui.problemResults.trigger('control:hidden', false);
-            this.ui.problemResults.trigger('control:loading:show');
-            this.ui.problemResultsHeader.trigger('control:hidden', false);
-            this.ui.problemResultsFooter.trigger('control:hidden', false);
-            var term = this.$('#problemTerm').val();
-            var termCollection;
+            this.model.set('validateSearchTerm', true);
+            if (this.model.isValid()) {
+                this.model.set('validateSearchTerm', false);
+                this.removeProblemResultTable();
+                this.ui.problemResults.trigger('control:hidden', false);
+                this.ui.problemResults.trigger('control:loading:show');
+                this.ui.problemResultsHeader.trigger('control:hidden', false);
+                this.ui.problemResultsFooter.trigger('control:hidden', false);
+                var term = this.$('#problemTerm').val();
+                var termCollection;
 
-            termCollection = (extended) ? this.extendedTermsCollection : this.termsCollection;
-            termCollection.fetch({
-                searchString: term,
-                synonym: 1,
-                noMinimumLength: 1
-            });
+                termCollection = (extended) ? this.extendedTermsCollection : this.termsCollection;
+                termCollection.fetch({
+                    searchString: term,
+                    synonym: 1,
+                    noMinimumLength: 1
+                });
+            } else {
+                this.model.set('validateSearchTerm', false);
+                this.transferFocusToFirstError();
+            }
         }
     });
 
-    return problemSearchView;
+    return ProblemSearchView;
 });

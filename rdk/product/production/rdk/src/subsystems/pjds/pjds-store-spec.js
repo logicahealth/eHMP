@@ -1,6 +1,7 @@
 'use strict';
 
 var pjds = require('./pjds-store');
+var _ = require('lodash');
 var logger = sinon.stub(require('bunyan').createLogger({
     name: 'pjds-store'
 }));
@@ -20,5 +21,13 @@ describe('pJDS  Store', function() {
         expect(pjds.patch).to.be.a.function();
         expect(pjds.delete).to.be.a.function();
         expect(pjds.parseUid).to.be.a.function();
+    });
+    it('DE8457: tests that pjds getDefaults to return safe to modify data', function() {
+        var pjdsDefaults = pjds.defaults;
+        var pjdsSafeDefaults = pjds.getDefaults();
+        _.set(pjdsSafeDefaults, 'user.uid', 'modified_uid');
+
+        expect(_.get(pjdsSafeDefaults, 'user.uid')).to.equal('modified_uid');
+        expect(_.get(pjdsDefaults, 'user.uid')).to.equal('');
     });
 });

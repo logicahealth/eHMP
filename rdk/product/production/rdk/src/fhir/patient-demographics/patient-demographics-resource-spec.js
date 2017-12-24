@@ -11,7 +11,7 @@ describe('Patient FHIR Resource', function() {
             'totalItems': 1,
             'currentItemCount': 1,
             'items': [{
-                'admissionUid': 'urn:va:visit:C877:100022:H3419',
+                'admissionUid': 'urn:va:visit:SITE:100022:H3419',
                 'birthDate': '19350407',
                 'briefId': 'B0008',
                 'cwadf': 'A',
@@ -43,7 +43,7 @@ describe('Patient FHIR Resource', function() {
                     'localPatientId': '100022',
                     'name': 'CAMP BEE',
                     'summary': 'CAMP BEE',
-                    'systemId': 'C877'
+                    'systemId': 'SITE'
                 }],
                 'familyName': 'BCMA',
                 'fullName': 'BCMA,EIGHT',
@@ -58,7 +58,7 @@ describe('Patient FHIR Resource', function() {
                 'lrdfn': '418',
                 'maritalStatusCode': 'urn:va:pat-maritalStatus:M',
                 'maritalStatusName': 'Married',
-                'pid': 'C877;100022',
+                'pid': 'SITE;100022',
                 'roomBed': '2-C',
                 'sensitive': false,
                 'serviceConnected': false,
@@ -66,7 +66,7 @@ describe('Patient FHIR Resource', function() {
                 'specialty': 'GENERAL MEDICINE',
                 'specialtyService': 'M',
                 'ssn': '666330008',
-                'summary': 'gov.va.cpe.vpr.PatientDemographics{pids=[500;100022, 666330008, C877;100022]}',
+                'summary': 'gov.va.cpe.vpr.PatientDemographics{pids=[500;100022, 666330008, SITE;100022]}',
                 'syncErrorCount': 0,
                 'teamInfo': {
                     'associateProvider': {
@@ -77,7 +77,7 @@ describe('Patient FHIR Resource', function() {
                         'digitalPager': '',
                         'name': 'RADTECH,THIRTYNINE',
                         'officePhone': '',
-                        'uid': 'urn:va:user:C877:11815'
+                        'uid': 'urn:va:user:SITE:11815'
                     },
                     'inpatientProvider': {
                         'name': 'unassigned'
@@ -95,7 +95,7 @@ describe('Patient FHIR Resource', function() {
                     },
                     'text': 'No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n      Attending Physician:  RADTECH,THIRTYNINE\r\n             Analog Pager:  \r\n            Digital Pager:  \r\n   Office Phone:  \r\n \r\nNo Inpatient Provider Assigned.\r\n \r\n'
                 },
-                'uid': 'urn:va:patient:C877:100022:100022',
+                'uid': 'urn:va:patient:SITE:100022:100022',
                 'veteran': true
             }]
         }

@@ -2,7 +2,7 @@ def verify_numeric_lab_between(start_time, end_time)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { @lr.applet_loaded? }
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
-  wait.until { infiniate_scroll('#data-grid-lab_results_grid tbody') }
+  wait.until { infiniate_scroll('[data-appletid=lab_results_grid] tbody', 3) }
 
   @ehmp = PobNumericLabApplet.new 
   unless @ehmp.has_fld_empty_row?

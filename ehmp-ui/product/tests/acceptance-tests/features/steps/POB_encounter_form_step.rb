@@ -54,6 +54,38 @@ class EncounterFormActions
   end
 end
 
+Then(/^user sets current encounter with location "([^"]*)" and provider "([^"]*)"$/) do |encounter_location, encounter_provider|
+  @ehmp = PobEncountersApplet.new
+
+  expect(@ehmp.wait_for_btn_set_encounter).to eq(true), "Expected a set encounter btn"
+  @ehmp.wait_until_btn_set_encounter_visible(30) 
+
+  expect(@ehmp).to have_btn_set_encounter
+  @ehmp.btn_set_encounter.click
+  @ehmp.wait_for_ddl_encounter_provider
+  @ehmp.wait_for_fld_tab_new_visit
+  @ehmp.wait_until_fld_tab_new_visit_visible
+  expect(@ehmp).to have_fld_tab_new_visit
+  @ehmp.fld_tab_new_visit.click
+
+  # set location
+  EncounterFormActions.select_encounter_location encounter_location
+
+  # set provider
+  EncounterFormActions.select_encounter_provider encounter_provider
+ 
+  @ehmp.wait_until_btn_confirm_encounter_disabled_invisible
+  @ehmp.wait_until_btn_confirm_encounter_visible
+  expect(@ehmp).to have_btn_confirm_encounter
+
+  @ehmp.btn_confirm_encounter.click
+  
+  verify_and_close_growl_alert_pop_up("Successfully set with no errors.")
+  
+  @ehmp.wait_until_btn_set_encounter_visible  
+  expect(@ehmp.btn_set_encounter.text.upcase).to have_text(encounter_location.upcase), "Expected #{@ehmp.btn_set_encounter.text} to have #{encounter_location}"
+end
+
 Then(/^POB user selects and sets new encounter with location "(.*?)" and provider "(.*?)"$/) do  |encounter_location, encounter_provider|
   @ehmp = PobEncountersApplet.new
 
@@ -93,7 +125,6 @@ When(/^the POB user selects change current encounter$/) do
   @ehmp.wait_for_btn_set_encounter
   expect(@ehmp).to have_btn_set_encounter
   @ehmp.wait_until_btn_set_encounter_visible(30) 
-  expect(@ehmp.btn_set_encounter).to have_text("Current Encounter")
   @ehmp.btn_set_encounter.click
 
   @ehmp.wait_for_btn_confirm_encounter
@@ -175,13 +206,16 @@ When(/^POB user chooses the first hospital admission$/) do
   @ehmp = PobEncountersApplet.new
   @ehmp.wait_until_tbl_hosptial_admission_visible(30)
   expect(@ehmp).to have_tbl_hosptial_admission
+  expect(@ehmp).to have_tbl_hosptial_admission_location
+  @hospital_admission_location = @ehmp.tbl_hosptial_admission_location.text
   @ehmp.tbl_hosptial_admission.click
 end
 
 When(/^POB new hospital admission encounter is set$/) do
   @ehmp = PobEncountersApplet.new
+  expect(@hospital_admission_location).to_not be_nil, "Expected variable hospital_admission_location to be set by a previous step"
   @ehmp.wait_until_btn_set_encounter_visible(30)
-  expect(@ehmp.btn_set_encounter.text.upcase).to have_text("Drugster".upcase)
+  expect(@ehmp.btn_set_encounter.text.upcase).to have_text(@hospital_admission_location.upcase)
 end
 
 When(/^POB user opens the encounter form$/) do

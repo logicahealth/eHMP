@@ -19,7 +19,7 @@ var log = require('bunyan').createLogger({
 
 //TODO: Replace jds/solr client creation with poller-utils buildEnvironment
 var jdsClient = new JdsClient(log, log, config);
-var solr = solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log);
+var solr = solrSmartClient.createClient(log, config.solrClient);
 
 var argv = parseOptions(log);
 
@@ -33,7 +33,7 @@ log.debug('Using sync endpoint location: ', optionConfig.host);
 
 log.info('check-solr: Starting process...');
 
-// http://ip:port/solr/vpr/select?q=*&fq=pid:(9E7A;100826+OR+C877;100826+OR+HDR;5000000327V828570)&wt=json&fl=uid,pid,domain
+// http://ip:port/solr/vpr/select?q=*&fq=pid:(SITE;100826+OR+SITE;100826+OR+HDR;5000000327V828570)&wt=json&fl=uid,pid,domain
 function buildSolrSearchUrl(completedPids) {
     var pidJoin = completedPids.join('+OR+');
     //Use very large number for rows, more than could conceivably be returned, so that all data is returned on a single call
@@ -195,13 +195,13 @@ getListOfPatients(log, argv, function(err, patients) {
                     logger.debug('Querying Solr with query: ' + url);
                     // "docs": [
                     //     {
-                    //         "uid": "urn:va:allergy:9E7A:3:751",
-                    //         "pid": "9E7A;3",
+                    //         "uid": "urn:va:allergy:SITE:3:751",
+                    //         "pid": "SITE;3",
                     //         "domain": "allergy"
                     //     },
                     //     {
-                    //         "uid": "urn:va:allergy:9E7A:3:874",
-                    //         "pid": "9E7A;3",
+                    //         "uid": "urn:va:allergy:SITE:3:874",
+                    //         "pid": "SITE;3",
                     //         "domain": "allergy"
                     //     },
                     //

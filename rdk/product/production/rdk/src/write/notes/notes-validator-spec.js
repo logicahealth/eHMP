@@ -9,14 +9,14 @@ describe('The Notes input validator', function() {
         writebackContext = {
             resourceId: '12345',
             duz: {
-                '9E7A': 'duz1',
-                'C77A': 'duz2'
+                'SITE': 'duz1',
+                'SITE': 'duz2'
             },
             vistaConfig: {
                 host: 'IP        ',
                 port: PORT,
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 localIP: 'IP      ',
                 localAddress: 'localhost',
                 context: 'HMP UI CONTEXT'
@@ -26,20 +26,20 @@ describe('The Notes input validator', function() {
             },
             model: {
                 'authorUid': '10000000255',
-                'documentDefUid': 'urn:va:doc-def:9E7A:40',
+                'documentDefUid': 'urn:va:doc-def:SITE:40',
                 'encounterDateTime': '199310131400',
                 'encounterCategoryName': 'Appointment',
                 'referenceDateTime': '201507101410',
-                'locationUid': 'urn:va:location:9E7A:w9',
+                'locationUid': 'urn:va:location:SITE:w9',
                 'patientIcn': '10110V004877',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'status': 'UNSIGNED'
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    'siteDfn': '9E7A;8',
+                    'siteDfn': 'SITE;8',
                     'dfn': '8',
-                    'site': '9E7A'
+                    'site': 'SITE'
                 }
             },
             logger: sinon.stub(require('bunyan').createLogger({
@@ -66,7 +66,7 @@ describe('The Notes input validator', function() {
         });
 
         it('encrypts the signature code and sets the dfn', function(done) {
-            writebackContext.model.signatureCode = 'REDACTED';
+            writebackContext.model.signatureCode = 'PW      ';
             writebackContext.model.signItems = [{}];
             notesValidator.sign(writebackContext, function() {
                 expect(writebackContext.model.signatureCode).to.be.truthy();
@@ -105,10 +105,10 @@ describe('The Notes input validator', function() {
         });
 
         it('sets the pid, siteHash, authorUid, uid, and localId in the writebackContext.model where siteHash is defined', function(done) {
-            writebackContext.interceptorResults.patientIdentifiers.site = '9E7A';
+            writebackContext.interceptorResults.patientIdentifiers.site = 'SITE';
             notesValidator.update(writebackContext, function() {
                 expect(writebackContext.model.pid).to.eql('8');
-                expect(writebackContext.model.siteHash).to.eql('9E7A');
+                expect(writebackContext.model.siteHash).to.eql('SITE');
                 expect(writebackContext.model.uid).to.eql('12345');
                 expect(writebackContext.model.localId).to.eql('12345');
                 done();
@@ -126,7 +126,7 @@ describe('The Notes input validator', function() {
         });
 
         // it('calls httpUtil.get with error', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
 
         //     sinon.stub(httpUtil, 'get', function(options, callback) {
         //         var err = 'error';
@@ -142,7 +142,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls httpUtil.get without error using existing Visit', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
 
         //     sinon.stub(httpUtil, 'get', function(options, callback) {
         //         var err = null;
@@ -163,7 +163,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls httpUtil.get without error using new Visit', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
         //     delete writebackContext.model.encounterCategoryName;
         //     writebackContext.model.encounterServiceCategory = 'A';
 
@@ -186,7 +186,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls validateVisitExist with error using new Visit where serviceCategory is missing', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
         //     delete writebackContext.model.encounterCategoryName;
 
         //     notesValidator.unsigned(writebackContext, function(error, result) {
@@ -196,7 +196,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls validateVisitExist with error using new Visit where encounterDateTime is missing', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
         //     delete writebackContext.model.encounterCategoryName;
         //     delete writebackContext.model.encounterDateTime;
         //     writebackContext.model.encounterServiceCategory = 'A';
@@ -208,7 +208,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls validateVisitExist with error using new Visit where locationUid is missing', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
         //     delete writebackContext.model.encounterCategoryName;
         //     delete writebackContext.model.locationUid;
         //     writebackContext.model.encounterServiceCategory = 'A';
@@ -220,7 +220,7 @@ describe('The Notes input validator', function() {
         // });
 
         // it('calls httpUtil.get with encounter missing error', function(done) {
-        //     writebackContext.siteHash = '9E7A';
+        //     writebackContext.siteHash = 'SITE';
 
         //     sinon.stub(httpUtil, 'get', function(options, callback) {
         //         var err = null;

@@ -49,19 +49,19 @@ var mockReqResUtil = (function() {
                 config: {
                     rpcConfig: {
                         context: 'HMP UI CONTEXT',
-                        siteHash: '9E7A'
+                        siteHash: 'SITE'
                     },
                     vistaSites: {}
                 }
             },
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             }
         };

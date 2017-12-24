@@ -1,12 +1,13 @@
 define([
+    'jquery',
     'main/ResourceDirectory'
-], function(ResourceDirectory) {
+], function($, ResourceDirectory) {
     'use strict';
 
     var resourceDirectory = ResourceDirectory.instance();
 
     var UrlBuilder = {
-        buildUrl: function(resourceTitle, criteria) {
+        buildUrl: function(resourceTitle, criteria, allowDuplicateParams) {
             var url;
             var queryParams = '';
             // "resourceDirectory.get" was failing because it wasn't doing an exact match.  More specifically given
@@ -21,16 +22,21 @@ define([
 
 
             if (criteria) {
-                var encodedCriteria = [];
-                _.each(criteria, function(v, k) {
-                    if (k === 'path') {
-                        url = url + v;
-                    }
-                    else {
-                        encodedCriteria.push(encodeURIComponent(k).concat('=', encodeURIComponent(v)));
-                    }
-                });
-                queryParams = '?' + encodedCriteria.join('&');
+                if (allowDuplicateParams) {
+                    url += _.get(criteria, 'path', '');
+                    queryParams = '?' + $.param(_.omit(criteria, 'path'), true);
+                } else {
+                    var encodedCriteria = [];
+                    _.each(criteria, function(v, k) {
+                        if (k === 'path') {
+                            url = url + v;
+                        }
+                        else {
+                            encodedCriteria.push(encodeURIComponent(k).concat('=', encodeURIComponent(v)));
+                        }
+                    });
+                    queryParams = '?' + encodedCriteria.join('&');
+                }
             }
 
             return url.replace(/\/$/, '') + queryParams;

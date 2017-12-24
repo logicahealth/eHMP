@@ -23,7 +23,7 @@ function processQueue(jobProcessor, callback) {
 
     worker.client.watch(tubeName, function(error) {
         if (error) {
-            worker.logger.warn('process-single-tube-strategy.processQueue: error trying to watch tube %s', tubeName);
+            worker.logger.error('process-single-tube-strategy.processQueue: error trying to watch tube %s', tubeName);
             return callback(error);
         }
 
@@ -59,7 +59,7 @@ function retrieveJob(jobProcessor, callback) {
 
     worker.client.reserve_with_timeout(worker.beanstalkJobTypeConfig.timeout, function(error, beanstalkJobId, beanstalkJobPayload) {
         if (error && error !== 'TIMED_OUT' && error !== 'DEADLINE_SOON') {
-            worker.logger.warn('process-single-tube-strategy.retrieveJob(%s): error trying to reserve job with timeout. ERROR: %j', tubeName, error);
+            worker.logger.error('process-single-tube-strategy.retrieveJob(%s): error trying to reserve job with timeout. ERROR: %j', tubeName, error);
             return callback();
         }
 

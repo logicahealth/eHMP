@@ -28,6 +28,14 @@ define([
     var PAGINATION_LEFT_OFFSET = 18;
     var PAGINATION_RIGHT_OFFSET = 75;
     var BROWSER_SCROLLBAR_HEIGHT = 17;
+    var hasScreenOrLayoutChanged = function(screenModuleA, screenModuleB) {
+        if (screenModuleA.id !== screenModuleB.id || screenModuleA.applets.length !== screenModuleB.applets.length) {
+            return true;
+        }
+        return !_.every(screenModuleA.applets, function(applet, index) {
+            return _.isEqual(applet, screenModuleB.applets[index]);
+        });
+    };
 
     /**
      *  Overwriting Gridster Methods
@@ -85,7 +93,7 @@ define([
     };
     Gridster.prototype.set_dom_grid_height = function(height) {
         this.container_height = this.$wrapper.height();
-        this.$el.css('height', ResizeUtils.dimensions.gridsterRegion.get('height') || this.wrapper_height);
+        this.$el.height(ResizeUtils.dimensions.gridsterRegion.get('height') || this.wrapper_height);
         return this;
     };
 
@@ -125,7 +133,6 @@ define([
             var appConfig = new Backbone.Model();
             appConfig.set(ADK.Messaging.request('appConfig').attributes);
 
-            this.freezeApplets = options.freezeApplets;
             this.saveThrottleProperties.maxMoves = appConfig.get("numMovesBeforeSaveUDSConfig");
             this.saveThrottleProperties.gracePeriod = appConfig.get("saveUDSConfigTimeout");
             if (typeof this.saveThrottleProperties.maxMoves != 'number') {
@@ -177,7 +184,13 @@ define([
                 contentRegionWidth = ResizeUtils.dimensions.contentRegion.get('viewport');
             }
             this.$el.width(contentRegionWidth);
-            this.$(".gridster").gridster().data('gridster').set_dom_grid_width(undefined, gridsterWidgetModel);
+            var xSize = gridsterWidgetModel.get('width'),
+                ySize = gridsterWidgetModel.get('height');
+            var $gridsterEl = this.$(".gridster").gridster().data('gridster');
+            $gridsterEl.resize_widget_dimensions({
+                widget_base_dimensions: [xSize, ySize]
+            });
+            $gridsterEl.set_dom_grid_width(undefined, gridsterWidgetModel);
             var numberOfCols = gridsterWidgetModel.get('breakPointValue');
             var scrollSpeed = gridsterWidgetModel.get('width') * numberOfCols + (numberOfCols * WIDGET_PADDING);
             var options = {
@@ -199,6 +212,21 @@ define([
 
             }
         },
+        setLastSaveTime: function(time) {
+            return _.set(this, 'saveThrottleProperties.lastSave.time', time);
+        },
+        getLastSaveNumMoves: function() {
+            return _.get(this, 'saveThrottleProperties.lastSave.numMoves');
+        },
+        getLastSaveGracePeriod: function() {
+            return _.get(this, 'saveThrottleProperties.lastSave.gracePeriod');
+        },
+        setLastSaveNumMoves: function(count) {
+            return _.set(this, 'saveThrottleProperties.lastSave.numMoves', count);
+        },
+        resetLastSaveNumMoves: function() {
+            return this.setLastSaveNumMoves(0);
+        },
         onDomRefresh: function() {
             UserDefinedScreens.getGridsterMaxColumn(ADKApp.currentScreen);
             var self = this;
@@ -206,38 +234,40 @@ define([
             var $gridsterEl = this.$("> .gridster");
             var screenId = Messaging.request('get:current:screen').id;
             var appletsConfig;
-
-            var gridsterWidgetModel = ResizeUtils.dimensions.gridsterWidget,
-                gridsterRegionModel = ResizeUtils.dimensions.gridsterRegion;
+            var gridsterWidgetModel = ResizeUtils.dimensions.gridsterWidget;
+            var gridsterRegionModel = ResizeUtils.dimensions.gridsterRegion;
 
             function saveGridsterAppletsConfig(overrideThrottle, isStackedGraph) {
                 var screen = Messaging.request('get:current:screen').id;
                 appletsConfig = UserDefinedScreens.serializeGridsterScreen($gridsterEl, screen);
                 // check if anything changed from last save
-                if (self.saveThrottleProperties.lastSave.currentScreenModule && UserDefinedScreens.getGridsterTemplate(self.saveThrottleProperties.lastSave.currentScreenModule) === UserDefinedScreens.getGridsterTemplate(appletsConfig) && !isStackedGraph) {
-                    self.saveThrottleProperties.lastSave.numMoves = 0;
+                var lastSaveModule = self.saveThrottleProperties.lastSave.currentScreenModule;
+                var shouldClear = lastSaveModule && !hasScreenOrLayoutChanged(lastSaveModule, appletsConfig) && !isStackedGraph;
+                if (shouldClear) {
+                    self.resetLastSaveNumMoves();
                     clearSaveGridsterAppletsConfigOnTimeout();
                     return;
                 }
-
                 ADK.UserDefinedScreens.setHasCustomize(screenId);
 
                 // save to the session
                 UserDefinedScreens.saveGridsterConfigToSession(appletsConfig, screen);
 
                 var currentTime = getSaveTime();
-                var timeDiff = currentTime - self.saveThrottleProperties.lastSave.time;
-                self.saveThrottleProperties.lastSave.numMoves++;
-                if (self.saveThrottleProperties.lastSave.numMoves === 1 && !overrideThrottle) {
+                var timeDiff = currentTime - _.get(self, 'saveThrottleProperties.lastSave.time');
+                var lastSaveNumMoves = self.getLastSaveNumMoves();
+                lastSaveNumMoves++;
+                self.setLastSaveNumMoves(lastSaveNumMoves);
+                if (lastSaveNumMoves === 1 && !overrideThrottle) {
                     // This is the first move so let's start a "timer"
-                    self.saveThrottleProperties.lastSave.time = currentTime;
-                } else if (overrideThrottle || timeDiff > self.saveThrottleProperties.gracePeriod || self.saveThrottleProperties.lastSave.numMoves >= self.saveThrottleProperties.maxMoves) {
+                    self.setLastSaveTime(currentTime);
+                } else if (overrideThrottle || timeDiff > self.getLastSaveGracePeriod() || lastSaveNumMoves >= _.get(self, 'saveThrottleProperties.maxMoves')) {
                     // Force save, elapsed time longer than grace perieod, or more than enough moves to do the save
                     // so save and reset the counters/"timer"
                     UserDefinedScreens.saveGridsterConfig(appletsConfig, screen);
-                    self.saveThrottleProperties.lastSave.time = currentTime;
-                    self.saveThrottleProperties.lastSave.numMoves = 0;
-                    self.saveThrottleProperties.lastSave.currentScreenModule = appletsConfig;
+                    self.setLastSaveTime(currentTime);
+                    self.resetLastSaveNumMoves();
+                    _.set(self, 'saveThrottleProperties.lastSave.currentScreenModule', appletsConfig);
                 }
                 // reset the timeout to save in case this save is not called again
                 clearSaveGridsterAppletsConfigOnTimeout();
@@ -247,9 +277,9 @@ define([
             function saveGridsterAppletsConfigOnTimeout(configuration, screen) {
                 Gridster.saveGridsterConfigTimeout = setTimeout(function() {
                     UserDefinedScreens.saveGridsterConfig(configuration, screen);
-                    self.saveThrottleProperties.lastSave.time = getSaveTime();
-                    self.saveThrottleProperties.lastSave.numMoves = 0;
-                }, self.saveThrottleProperties.gracePeriod);
+                    self.setLastSaveTime(getSaveTime());
+                    self.resetLastSaveNumMoves();
+                }, self.getLastSaveGracePeriod());
             }
 
             function clearSaveGridsterAppletsConfigOnTimeout() {
@@ -274,7 +304,7 @@ define([
             var resizable = {};
             var draggable = {};
 
-            if (this.freezeApplets) {
+            if (this.getOption('freezeApplets')) {
                 resizable = {
                     enabled: false
                 };

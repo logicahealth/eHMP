@@ -929,9 +929,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24038',
+            'uid': 'urn:va:vital:SITE:3:24038',
             'summary': 'BLOOD PRESSURE 80/30 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24038',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -940,7 +940,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -970,9 +970,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24038',
+            'uid': 'urn:va:vital:SITE:3:24038',
             'summary': 'BLOOD PRESSURE 80/30 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24038',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -981,7 +981,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -1011,9 +1011,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24037',
+            'uid': 'urn:va:vital:SITE:3:24037',
             'summary': 'BLOOD PRESSURE 100/40 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24037',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1022,7 +1022,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -1049,9 +1049,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24037',
+            'uid': 'urn:va:vital:SITE:3:24037',
             'summary': 'BLOOD PRESSURE 100/40 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24037',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1060,7 +1060,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -1087,9 +1087,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24035',
+            'uid': 'urn:va:vital:SITE:3:24035',
             'summary': 'BLOOD PRESSURE 180/130 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24035',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1098,7 +1098,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'FEMORAL',
                 'vuid': 4688655
@@ -1122,9 +1122,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24035',
+            'uid': 'urn:va:vital:SITE:3:24035',
             'summary': 'BLOOD PRESSURE 180/130 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24035',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1133,7 +1133,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'FEMORAL',
                 'vuid': 4688655
@@ -1157,9 +1157,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24034',
+            'uid': 'urn:va:vital:SITE:3:24034',
             'summary': 'BLOOD PRESSURE 170/120 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24034',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1168,7 +1168,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'ARTERIAL LINE',
                 'vuid': 4688701
@@ -1189,9 +1189,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24034',
+            'uid': 'urn:va:vital:SITE:3:24034',
             'summary': 'BLOOD PRESSURE 170/120 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24034',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1200,7 +1200,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'ARTERIAL LINE',
                 'vuid': 4688701
@@ -1221,9 +1221,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24033',
+            'uid': 'urn:va:vital:SITE:3:24033',
             'summary': 'BLOOD PRESSURE 160/110 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24033',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1232,7 +1232,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'SITTING',
                 'vuid': 4688703
@@ -1253,9 +1253,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24033',
+            'uid': 'urn:va:vital:SITE:3:24033',
             'summary': 'BLOOD PRESSURE 160/110 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24033',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1264,7 +1264,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'SITTING',
                 'vuid': 4688703
@@ -1351,9 +1351,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24032',
+            'uid': 'urn:va:vital:SITE:3:24032',
             'summary': 'BLOOD PRESSURE 150/100 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24032',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1362,7 +1362,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -1392,9 +1392,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24032',
+            'uid': 'urn:va:vital:SITE:3:24032',
             'summary': 'BLOOD PRESSURE 150/100 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24032',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1403,7 +1403,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -1433,9 +1433,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24031',
+            'uid': 'urn:va:vital:SITE:3:24031',
             'summary': 'BLOOD PRESSURE Refused mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24031',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1444,7 +1444,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1461,9 +1461,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24031',
+            'uid': 'urn:va:vital:SITE:3:24031',
             'summary': 'BLOOD PRESSURE Refused mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24031',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1472,7 +1472,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1489,9 +1489,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24030',
+            'uid': 'urn:va:vital:SITE:3:24030',
             'summary': 'BLOOD PRESSURE Unavailable mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24030',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1500,7 +1500,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1517,9 +1517,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24030',
+            'uid': 'urn:va:vital:SITE:3:24030',
             'summary': 'BLOOD PRESSURE Unavailable mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24030',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1528,7 +1528,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1545,9 +1545,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24022',
+            'uid': 'urn:va:vital:SITE:3:24022',
             'summary': 'BLOOD PRESSURE Pass mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24022',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1556,7 +1556,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1573,9 +1573,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:24023',
+            'uid': 'urn:va:vital:SITE:3:24023',
             'summary': 'PULSE Pass /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24023',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -1584,7 +1584,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1601,9 +1601,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:24024',
+            'uid': 'urn:va:vital:SITE:3:24024',
             'summary': 'RESPIRATION Pass /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24024',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -1612,7 +1612,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1631,9 +1631,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:24025',
+            'uid': 'urn:va:vital:SITE:3:24025',
             'summary': 'TEMPERATURE Pass F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24025',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -1642,7 +1642,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1659,9 +1659,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:24026',
+            'uid': 'urn:va:vital:SITE:3:24026',
             'summary': 'PULSE OXIMETRY Pass %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24026',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -1670,7 +1670,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1685,9 +1685,9 @@ var inputValue = {
             'units': 'in',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:24027',
+            'uid': 'urn:va:vital:SITE:3:24027',
             'summary': 'HEIGHT Pass in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24027',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -1696,7 +1696,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1711,9 +1711,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:24028',
+            'uid': 'urn:va:vital:SITE:3:24028',
             'summary': 'PAIN Pass ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24028',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -1722,7 +1722,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1737,9 +1737,9 @@ var inputValue = {
             'units': 'lb',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:24029',
+            'uid': 'urn:va:vital:SITE:3:24029',
             'summary': 'WEIGHT Pass lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24029',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -1748,7 +1748,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1765,9 +1765,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24022',
+            'uid': 'urn:va:vital:SITE:3:24022',
             'summary': 'BLOOD PRESSURE Pass mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24022',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1776,7 +1776,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1793,9 +1793,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:24023',
+            'uid': 'urn:va:vital:SITE:3:24023',
             'summary': 'PULSE Pass /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24023',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -1804,7 +1804,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1821,9 +1821,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:24024',
+            'uid': 'urn:va:vital:SITE:3:24024',
             'summary': 'RESPIRATION Pass /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24024',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -1832,7 +1832,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1851,9 +1851,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:24025',
+            'uid': 'urn:va:vital:SITE:3:24025',
             'summary': 'TEMPERATURE Pass F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24025',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -1862,7 +1862,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1879,9 +1879,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:24026',
+            'uid': 'urn:va:vital:SITE:3:24026',
             'summary': 'PULSE OXIMETRY Pass %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24026',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -1890,7 +1890,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1905,9 +1905,9 @@ var inputValue = {
             'units': 'in',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:24027',
+            'uid': 'urn:va:vital:SITE:3:24027',
             'summary': 'HEIGHT Pass in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24027',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -1916,7 +1916,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1931,9 +1931,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:24028',
+            'uid': 'urn:va:vital:SITE:3:24028',
             'summary': 'PAIN Pass ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24028',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -1942,7 +1942,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1957,9 +1957,9 @@ var inputValue = {
             'units': 'lb',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:24029',
+            'uid': 'urn:va:vital:SITE:3:24029',
             'summary': 'WEIGHT Pass lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24029',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -1968,7 +1968,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -1985,9 +1985,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24021',
+            'uid': 'urn:va:vital:SITE:3:24021',
             'summary': 'BLOOD PRESSURE 140/90 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24021',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -1996,7 +1996,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -2026,9 +2026,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24021',
+            'uid': 'urn:va:vital:SITE:3:24021',
             'summary': 'BLOOD PRESSURE 140/90 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24021',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2037,7 +2037,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L LEG',
                 'vuid': 4688658
@@ -2067,9 +2067,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24020',
+            'uid': 'urn:va:vital:SITE:3:24020',
             'summary': 'BLOOD PRESSURE 130/80 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24020',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2078,7 +2078,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'R LEG',
                 'vuid': 4688677
@@ -2108,9 +2108,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24020',
+            'uid': 'urn:va:vital:SITE:3:24020',
             'summary': 'BLOOD PRESSURE 130/80 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24020',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2119,7 +2119,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'R LEG',
                 'vuid': 4688677
@@ -2149,9 +2149,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24019',
+            'uid': 'urn:va:vital:SITE:3:24019',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24019',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2160,7 +2160,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L ARM',
                 'vuid': 4688657
@@ -2190,9 +2190,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24019',
+            'uid': 'urn:va:vital:SITE:3:24019',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24019',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2201,7 +2201,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'L ARM',
                 'vuid': 4688657
@@ -2231,9 +2231,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24018',
+            'uid': 'urn:va:vital:SITE:3:24018',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24018',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2242,7 +2242,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'R ARM',
                 'vuid': 4688676
@@ -2272,9 +2272,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24018',
+            'uid': 'urn:va:vital:SITE:3:24018',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24018',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2283,7 +2283,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'qualifiers': [{
                 'name': 'R ARM',
                 'vuid': 4688676
@@ -2313,9 +2313,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:24017',
+            'uid': 'urn:va:vital:SITE:3:24017',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '24017',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2324,7 +2324,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2341,9 +2341,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:24017',
+            'uid': 'urn:va:vital:SITE:3:24017',
             'summary': 'BLOOD PRESSURE 120/70 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '24017',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2352,7 +2352,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2438,9 +2438,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:23457',
+            'uid': 'urn:va:vital:SITE:3:23457',
             'summary': 'BLOOD PRESSURE 134/81 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '23457',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2449,7 +2449,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2468,9 +2468,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:23458',
+            'uid': 'urn:va:vital:SITE:3:23458',
             'summary': 'TEMPERATURE 98.5 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '23458',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -2479,7 +2479,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2496,9 +2496,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:23459',
+            'uid': 'urn:va:vital:SITE:3:23459',
             'summary': 'PULSE 74 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '23459',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -2507,7 +2507,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2524,9 +2524,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:23460',
+            'uid': 'urn:va:vital:SITE:3:23460',
             'summary': 'WEIGHT 178 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '23460',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -2535,7 +2535,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2550,9 +2550,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:23461',
+            'uid': 'urn:va:vital:SITE:3:23461',
             'summary': 'PAIN 1 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '23461',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -2561,7 +2561,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2578,9 +2578,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:23457',
+            'uid': 'urn:va:vital:SITE:3:23457',
             'summary': 'BLOOD PRESSURE 134/81 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '23457',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2589,7 +2589,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2608,9 +2608,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:23458',
+            'uid': 'urn:va:vital:SITE:3:23458',
             'summary': 'TEMPERATURE 98.5 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '23458',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -2619,7 +2619,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2636,9 +2636,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:23459',
+            'uid': 'urn:va:vital:SITE:3:23459',
             'summary': 'PULSE 74 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '23459',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -2647,7 +2647,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2664,9 +2664,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:23460',
+            'uid': 'urn:va:vital:SITE:3:23460',
             'summary': 'WEIGHT 178 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '23460',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -2675,7 +2675,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2690,9 +2690,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:23461',
+            'uid': 'urn:va:vital:SITE:3:23461',
             'summary': 'PAIN 1 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '23461',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -2701,7 +2701,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2718,9 +2718,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:22851',
+            'uid': 'urn:va:vital:SITE:3:22851',
             'summary': 'BLOOD PRESSURE 143/87 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22851',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2729,7 +2729,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2748,9 +2748,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:22852',
+            'uid': 'urn:va:vital:SITE:3:22852',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22852',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -2759,7 +2759,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2776,9 +2776,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:22853',
+            'uid': 'urn:va:vital:SITE:3:22853',
             'summary': 'PULSE 78 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22853',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -2787,7 +2787,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2804,9 +2804,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:22854',
+            'uid': 'urn:va:vital:SITE:3:22854',
             'summary': 'WEIGHT 182 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22854',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -2815,7 +2815,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2832,9 +2832,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:22855',
+            'uid': 'urn:va:vital:SITE:3:22855',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22855',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -2843,7 +2843,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2858,9 +2858,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:22856',
+            'uid': 'urn:va:vital:SITE:3:22856',
             'summary': 'PAIN 2 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22856',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -2869,7 +2869,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2886,9 +2886,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:22851',
+            'uid': 'urn:va:vital:SITE:3:22851',
             'summary': 'BLOOD PRESSURE 143/87 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22851',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -2897,7 +2897,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2916,9 +2916,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:22852',
+            'uid': 'urn:va:vital:SITE:3:22852',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22852',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -2927,7 +2927,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2944,9 +2944,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:22853',
+            'uid': 'urn:va:vital:SITE:3:22853',
             'summary': 'PULSE 78 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22853',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -2955,7 +2955,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -2972,9 +2972,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:22854',
+            'uid': 'urn:va:vital:SITE:3:22854',
             'summary': 'WEIGHT 182 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22854',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -2983,7 +2983,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3000,9 +3000,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:22855',
+            'uid': 'urn:va:vital:SITE:3:22855',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22855',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -3011,7 +3011,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3026,9 +3026,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:22856',
+            'uid': 'urn:va:vital:SITE:3:22856',
             'summary': 'PAIN 2 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22856',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -3037,7 +3037,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3054,9 +3054,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:22043',
+            'uid': 'urn:va:vital:SITE:3:22043',
             'summary': 'BLOOD PRESSURE 154/90 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22043',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -3065,7 +3065,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3084,9 +3084,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:22044',
+            'uid': 'urn:va:vital:SITE:3:22044',
             'summary': 'TEMPERATURE 98.9 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22044',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -3095,7 +3095,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3112,9 +3112,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:22045',
+            'uid': 'urn:va:vital:SITE:3:22045',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22045',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -3123,7 +3123,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3140,9 +3140,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:22046',
+            'uid': 'urn:va:vital:SITE:3:22046',
             'summary': 'PULSE 82 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22046',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -3151,7 +3151,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3168,9 +3168,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:22047',
+            'uid': 'urn:va:vital:SITE:3:22047',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22047',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -3179,7 +3179,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3196,9 +3196,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:22048',
+            'uid': 'urn:va:vital:SITE:3:22048',
             'summary': 'WEIGHT 190 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22048',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -3207,7 +3207,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3224,9 +3224,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:22049',
+            'uid': 'urn:va:vital:SITE:3:22049',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22049',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -3235,7 +3235,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3250,9 +3250,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:22050',
+            'uid': 'urn:va:vital:SITE:3:22050',
             'summary': 'PAIN 6 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '22050',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -3261,7 +3261,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3278,9 +3278,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:22043',
+            'uid': 'urn:va:vital:SITE:3:22043',
             'summary': 'BLOOD PRESSURE 154/90 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22043',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -3289,7 +3289,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3308,9 +3308,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:22044',
+            'uid': 'urn:va:vital:SITE:3:22044',
             'summary': 'TEMPERATURE 98.9 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22044',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -3319,7 +3319,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3336,9 +3336,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:22045',
+            'uid': 'urn:va:vital:SITE:3:22045',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22045',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -3347,7 +3347,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3364,9 +3364,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:22046',
+            'uid': 'urn:va:vital:SITE:3:22046',
             'summary': 'PULSE 82 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22046',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -3375,7 +3375,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3392,9 +3392,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:22047',
+            'uid': 'urn:va:vital:SITE:3:22047',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22047',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -3403,7 +3403,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3420,9 +3420,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:22048',
+            'uid': 'urn:va:vital:SITE:3:22048',
             'summary': 'WEIGHT 190 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22048',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -3431,7 +3431,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3448,9 +3448,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:22049',
+            'uid': 'urn:va:vital:SITE:3:22049',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22049',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -3459,7 +3459,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3474,9 +3474,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:22050',
+            'uid': 'urn:va:vital:SITE:3:22050',
             'summary': 'PAIN 6 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '22050',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -3485,7 +3485,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3502,9 +3502,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:21336',
+            'uid': 'urn:va:vital:SITE:3:21336',
             'summary': 'BLOOD PRESSURE 143/90 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21336',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -3513,7 +3513,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3532,9 +3532,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:21337',
+            'uid': 'urn:va:vital:SITE:3:21337',
             'summary': 'TEMPERATURE 99.2 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21337',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -3543,7 +3543,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3560,9 +3560,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:21338',
+            'uid': 'urn:va:vital:SITE:3:21338',
             'summary': 'RESPIRATION 17 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21338',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -3571,7 +3571,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3588,9 +3588,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:21339',
+            'uid': 'urn:va:vital:SITE:3:21339',
             'summary': 'PULSE 88 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21339',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -3599,7 +3599,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3616,9 +3616,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:21340',
+            'uid': 'urn:va:vital:SITE:3:21340',
             'summary': 'WEIGHT 185 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21340',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -3627,7 +3627,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3644,9 +3644,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:21341',
+            'uid': 'urn:va:vital:SITE:3:21341',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21341',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -3655,7 +3655,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3670,9 +3670,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:21342',
+            'uid': 'urn:va:vital:SITE:3:21342',
             'summary': 'PAIN 4 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '21342',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -3681,7 +3681,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3698,9 +3698,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:21336',
+            'uid': 'urn:va:vital:SITE:3:21336',
             'summary': 'BLOOD PRESSURE 143/90 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21336',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -3709,7 +3709,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3728,9 +3728,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:21337',
+            'uid': 'urn:va:vital:SITE:3:21337',
             'summary': 'TEMPERATURE 99.2 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21337',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -3739,7 +3739,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3756,9 +3756,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:21338',
+            'uid': 'urn:va:vital:SITE:3:21338',
             'summary': 'RESPIRATION 17 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21338',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -3767,7 +3767,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3784,9 +3784,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:21339',
+            'uid': 'urn:va:vital:SITE:3:21339',
             'summary': 'PULSE 88 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21339',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -3795,7 +3795,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3812,9 +3812,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:21340',
+            'uid': 'urn:va:vital:SITE:3:21340',
             'summary': 'WEIGHT 185 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21340',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -3823,7 +3823,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3840,9 +3840,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:21341',
+            'uid': 'urn:va:vital:SITE:3:21341',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21341',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -3851,7 +3851,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3866,9 +3866,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:21342',
+            'uid': 'urn:va:vital:SITE:3:21342',
             'summary': 'PAIN 4 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '21342',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -3877,7 +3877,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3894,9 +3894,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:20629',
+            'uid': 'urn:va:vital:SITE:3:20629',
             'summary': 'BLOOD PRESSURE 135/86 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20629',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -3905,7 +3905,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3924,9 +3924,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:20630',
+            'uid': 'urn:va:vital:SITE:3:20630',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20630',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -3935,7 +3935,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3952,9 +3952,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:20631',
+            'uid': 'urn:va:vital:SITE:3:20631',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20631',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -3963,7 +3963,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -3980,9 +3980,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:20632',
+            'uid': 'urn:va:vital:SITE:3:20632',
             'summary': 'PULSE 80 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20632',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -3991,7 +3991,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4008,9 +4008,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:20633',
+            'uid': 'urn:va:vital:SITE:3:20633',
             'summary': 'WEIGHT 180 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20633',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4019,7 +4019,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4036,9 +4036,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:20634',
+            'uid': 'urn:va:vital:SITE:3:20634',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20634',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -4047,7 +4047,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4062,9 +4062,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:20635',
+            'uid': 'urn:va:vital:SITE:3:20635',
             'summary': 'PAIN 2 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '20635',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -4073,7 +4073,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4090,9 +4090,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:20629',
+            'uid': 'urn:va:vital:SITE:3:20629',
             'summary': 'BLOOD PRESSURE 135/86 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20629',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -4101,7 +4101,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4120,9 +4120,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:20630',
+            'uid': 'urn:va:vital:SITE:3:20630',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20630',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -4131,7 +4131,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4148,9 +4148,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:20631',
+            'uid': 'urn:va:vital:SITE:3:20631',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20631',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -4159,7 +4159,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4176,9 +4176,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:20632',
+            'uid': 'urn:va:vital:SITE:3:20632',
             'summary': 'PULSE 80 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20632',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -4187,7 +4187,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4204,9 +4204,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:20633',
+            'uid': 'urn:va:vital:SITE:3:20633',
             'summary': 'WEIGHT 180 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20633',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4215,7 +4215,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4232,9 +4232,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:20634',
+            'uid': 'urn:va:vital:SITE:3:20634',
             'summary': 'PULSE OXIMETRY 97 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20634',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -4243,7 +4243,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4258,9 +4258,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:20635',
+            'uid': 'urn:va:vital:SITE:3:20635',
             'summary': 'PAIN 2 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '20635',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -4269,7 +4269,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4286,9 +4286,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:19922',
+            'uid': 'urn:va:vital:SITE:3:19922',
             'summary': 'BLOOD PRESSURE 124/80 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19922',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -4297,7 +4297,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4316,9 +4316,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:19923',
+            'uid': 'urn:va:vital:SITE:3:19923',
             'summary': 'TEMPERATURE 98.8 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19923',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -4327,7 +4327,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4344,9 +4344,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:19924',
+            'uid': 'urn:va:vital:SITE:3:19924',
             'summary': 'PULSE 82 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19924',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -4355,7 +4355,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4372,9 +4372,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:19925',
+            'uid': 'urn:va:vital:SITE:3:19925',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19925',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -4383,7 +4383,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4400,9 +4400,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:19926',
+            'uid': 'urn:va:vital:SITE:3:19926',
             'summary': 'WEIGHT 172 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19926',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4411,7 +4411,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4428,9 +4428,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:19927',
+            'uid': 'urn:va:vital:SITE:3:19927',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19927',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -4439,7 +4439,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4454,9 +4454,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:19928',
+            'uid': 'urn:va:vital:SITE:3:19928',
             'summary': 'PAIN 0 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19928',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -4465,7 +4465,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4482,9 +4482,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:19922',
+            'uid': 'urn:va:vital:SITE:3:19922',
             'summary': 'BLOOD PRESSURE 124/80 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19922',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -4493,7 +4493,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4512,9 +4512,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:19923',
+            'uid': 'urn:va:vital:SITE:3:19923',
             'summary': 'TEMPERATURE 98.8 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19923',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -4523,7 +4523,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4540,9 +4540,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:19924',
+            'uid': 'urn:va:vital:SITE:3:19924',
             'summary': 'PULSE 82 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19924',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -4551,7 +4551,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4568,9 +4568,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:19925',
+            'uid': 'urn:va:vital:SITE:3:19925',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19925',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -4579,7 +4579,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4596,9 +4596,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:19926',
+            'uid': 'urn:va:vital:SITE:3:19926',
             'summary': 'WEIGHT 172 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19926',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4607,7 +4607,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4624,9 +4624,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:19927',
+            'uid': 'urn:va:vital:SITE:3:19927',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19927',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -4635,7 +4635,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4650,9 +4650,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:19928',
+            'uid': 'urn:va:vital:SITE:3:19928',
             'summary': 'PAIN 0 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19928',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -4661,7 +4661,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4678,9 +4678,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:19215',
+            'uid': 'urn:va:vital:SITE:3:19215',
             'summary': 'BLOOD PRESSURE 158/104 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19215',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -4689,7 +4689,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4708,9 +4708,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:19216',
+            'uid': 'urn:va:vital:SITE:3:19216',
             'summary': 'TEMPERATURE 101 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19216',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -4719,7 +4719,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4736,9 +4736,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:19217',
+            'uid': 'urn:va:vital:SITE:3:19217',
             'summary': 'PULSE 82 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19217',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -4747,7 +4747,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4764,9 +4764,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:19218',
+            'uid': 'urn:va:vital:SITE:3:19218',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19218',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -4775,7 +4775,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4792,9 +4792,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:19219',
+            'uid': 'urn:va:vital:SITE:3:19219',
             'summary': 'WEIGHT 170 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19219',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4803,7 +4803,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4820,9 +4820,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:19220',
+            'uid': 'urn:va:vital:SITE:3:19220',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19220',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -4831,7 +4831,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4846,9 +4846,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:19221',
+            'uid': 'urn:va:vital:SITE:3:19221',
             'summary': 'PAIN 3 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '19221',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -4857,7 +4857,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4874,9 +4874,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:19215',
+            'uid': 'urn:va:vital:SITE:3:19215',
             'summary': 'BLOOD PRESSURE 158/104 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19215',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -4885,7 +4885,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4904,9 +4904,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:19216',
+            'uid': 'urn:va:vital:SITE:3:19216',
             'summary': 'TEMPERATURE 101 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19216',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -4915,7 +4915,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4932,9 +4932,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:19217',
+            'uid': 'urn:va:vital:SITE:3:19217',
             'summary': 'PULSE 82 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19217',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -4943,7 +4943,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4960,9 +4960,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:19218',
+            'uid': 'urn:va:vital:SITE:3:19218',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19218',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -4971,7 +4971,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -4988,9 +4988,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:19219',
+            'uid': 'urn:va:vital:SITE:3:19219',
             'summary': 'WEIGHT 170 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19219',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -4999,7 +4999,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5016,9 +5016,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:19220',
+            'uid': 'urn:va:vital:SITE:3:19220',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19220',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5027,7 +5027,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5042,9 +5042,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:19221',
+            'uid': 'urn:va:vital:SITE:3:19221',
             'summary': 'PAIN 3 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '19221',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5053,7 +5053,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5070,9 +5070,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:18508',
+            'uid': 'urn:va:vital:SITE:3:18508',
             'summary': 'BLOOD PRESSURE 156/96 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18508',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5081,7 +5081,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5100,9 +5100,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:18509',
+            'uid': 'urn:va:vital:SITE:3:18509',
             'summary': 'TEMPERATURE 99.2 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18509',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5111,7 +5111,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5128,9 +5128,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:18510',
+            'uid': 'urn:va:vital:SITE:3:18510',
             'summary': 'PULSE 82 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18510',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -5139,7 +5139,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5156,9 +5156,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:18511',
+            'uid': 'urn:va:vital:SITE:3:18511',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18511',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -5167,7 +5167,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5184,9 +5184,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:18512',
+            'uid': 'urn:va:vital:SITE:3:18512',
             'summary': 'WEIGHT 174 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18512',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -5195,7 +5195,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5212,9 +5212,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:18513',
+            'uid': 'urn:va:vital:SITE:3:18513',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18513',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5223,7 +5223,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5238,9 +5238,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:18514',
+            'uid': 'urn:va:vital:SITE:3:18514',
             'summary': 'PAIN 3 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18514',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5249,7 +5249,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5266,9 +5266,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:18508',
+            'uid': 'urn:va:vital:SITE:3:18508',
             'summary': 'BLOOD PRESSURE 156/96 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18508',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5277,7 +5277,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5296,9 +5296,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:18509',
+            'uid': 'urn:va:vital:SITE:3:18509',
             'summary': 'TEMPERATURE 99.2 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18509',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5307,7 +5307,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5324,9 +5324,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:18510',
+            'uid': 'urn:va:vital:SITE:3:18510',
             'summary': 'PULSE 82 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18510',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -5335,7 +5335,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5352,9 +5352,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:18511',
+            'uid': 'urn:va:vital:SITE:3:18511',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18511',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -5363,7 +5363,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5380,9 +5380,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:18512',
+            'uid': 'urn:va:vital:SITE:3:18512',
             'summary': 'WEIGHT 174 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18512',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -5391,7 +5391,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5408,9 +5408,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:18513',
+            'uid': 'urn:va:vital:SITE:3:18513',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18513',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5419,7 +5419,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5434,9 +5434,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:18514',
+            'uid': 'urn:va:vital:SITE:3:18514',
             'summary': 'PAIN 3 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18514',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5445,7 +5445,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5462,9 +5462,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:18003',
+            'uid': 'urn:va:vital:SITE:3:18003',
             'summary': 'BLOOD PRESSURE 145/94 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18003',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5473,7 +5473,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5492,9 +5492,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:18004',
+            'uid': 'urn:va:vital:SITE:3:18004',
             'summary': 'TEMPERATURE 98.8 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18004',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5503,7 +5503,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5520,9 +5520,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:18005',
+            'uid': 'urn:va:vital:SITE:3:18005',
             'summary': 'PULSE 80 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18005',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -5531,7 +5531,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5548,9 +5548,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:18006',
+            'uid': 'urn:va:vital:SITE:3:18006',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18006',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5559,7 +5559,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5574,9 +5574,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:18007',
+            'uid': 'urn:va:vital:SITE:3:18007',
             'summary': 'PAIN 2 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '18007',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5585,7 +5585,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5602,9 +5602,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:18003',
+            'uid': 'urn:va:vital:SITE:3:18003',
             'summary': 'BLOOD PRESSURE 145/94 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18003',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5613,7 +5613,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5632,9 +5632,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:18004',
+            'uid': 'urn:va:vital:SITE:3:18004',
             'summary': 'TEMPERATURE 98.8 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18004',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5643,7 +5643,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5660,9 +5660,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:18005',
+            'uid': 'urn:va:vital:SITE:3:18005',
             'summary': 'PULSE 80 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18005',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -5671,7 +5671,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5688,9 +5688,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:18006',
+            'uid': 'urn:va:vital:SITE:3:18006',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18006',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5699,7 +5699,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5714,9 +5714,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:18007',
+            'uid': 'urn:va:vital:SITE:3:18007',
             'summary': 'PAIN 2 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '18007',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5725,7 +5725,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5742,9 +5742,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:17296',
+            'uid': 'urn:va:vital:SITE:3:17296',
             'summary': 'BLOOD PRESSURE 140/90 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17296',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5753,7 +5753,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5772,9 +5772,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:17297',
+            'uid': 'urn:va:vital:SITE:3:17297',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17297',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5783,7 +5783,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5800,9 +5800,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:17298',
+            'uid': 'urn:va:vital:SITE:3:17298',
             'summary': 'PULSE 80 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17298',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -5811,7 +5811,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5828,9 +5828,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:17299',
+            'uid': 'urn:va:vital:SITE:3:17299',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17299',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -5839,7 +5839,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5856,9 +5856,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:17300',
+            'uid': 'urn:va:vital:SITE:3:17300',
             'summary': 'WEIGHT 166 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17300',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -5867,7 +5867,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5884,9 +5884,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:17301',
+            'uid': 'urn:va:vital:SITE:3:17301',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17301',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -5895,7 +5895,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5910,9 +5910,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:17302',
+            'uid': 'urn:va:vital:SITE:3:17302',
             'summary': 'PAIN 1 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '17302',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -5921,7 +5921,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5938,9 +5938,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:17296',
+            'uid': 'urn:va:vital:SITE:3:17296',
             'summary': 'BLOOD PRESSURE 140/90 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17296',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -5949,7 +5949,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5968,9 +5968,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:17297',
+            'uid': 'urn:va:vital:SITE:3:17297',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17297',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -5979,7 +5979,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -5996,9 +5996,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:17298',
+            'uid': 'urn:va:vital:SITE:3:17298',
             'summary': 'PULSE 80 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17298',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6007,7 +6007,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6024,9 +6024,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:17299',
+            'uid': 'urn:va:vital:SITE:3:17299',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17299',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -6035,7 +6035,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6052,9 +6052,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:17300',
+            'uid': 'urn:va:vital:SITE:3:17300',
             'summary': 'WEIGHT 166 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17300',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6063,7 +6063,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6080,9 +6080,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:17301',
+            'uid': 'urn:va:vital:SITE:3:17301',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17301',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -6091,7 +6091,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6106,9 +6106,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:17302',
+            'uid': 'urn:va:vital:SITE:3:17302',
             'summary': 'PAIN 1 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '17302',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -6117,7 +6117,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6134,9 +6134,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:16589',
+            'uid': 'urn:va:vital:SITE:3:16589',
             'summary': 'BLOOD PRESSURE 138/88 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16589',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6145,7 +6145,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6164,9 +6164,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:16590',
+            'uid': 'urn:va:vital:SITE:3:16590',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16590',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -6175,7 +6175,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6192,9 +6192,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:16591',
+            'uid': 'urn:va:vital:SITE:3:16591',
             'summary': 'PULSE 80 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16591',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6203,7 +6203,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6220,9 +6220,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:16592',
+            'uid': 'urn:va:vital:SITE:3:16592',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16592',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -6231,7 +6231,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6248,9 +6248,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:16593',
+            'uid': 'urn:va:vital:SITE:3:16593',
             'summary': 'WEIGHT 168 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16593',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6259,7 +6259,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6276,9 +6276,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:9E7A:3:16594',
+            'uid': 'urn:va:vital:SITE:3:16594',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16594',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -6287,7 +6287,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6302,9 +6302,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:16595',
+            'uid': 'urn:va:vital:SITE:3:16595',
             'summary': 'PAIN 0 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16595',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -6313,7 +6313,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6330,9 +6330,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:16589',
+            'uid': 'urn:va:vital:SITE:3:16589',
             'summary': 'BLOOD PRESSURE 138/88 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16589',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6341,7 +6341,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6360,9 +6360,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:16590',
+            'uid': 'urn:va:vital:SITE:3:16590',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16590',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -6371,7 +6371,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6388,9 +6388,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:16591',
+            'uid': 'urn:va:vital:SITE:3:16591',
             'summary': 'PULSE 80 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16591',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6399,7 +6399,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6416,9 +6416,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:16592',
+            'uid': 'urn:va:vital:SITE:3:16592',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16592',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -6427,7 +6427,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6444,9 +6444,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:16593',
+            'uid': 'urn:va:vital:SITE:3:16593',
             'summary': 'WEIGHT 168 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16593',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6455,7 +6455,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6472,9 +6472,9 @@ var inputValue = {
             'high': '100',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE OXIMETRY',
-            'uid': 'urn:va:vital:C877:3:16594',
+            'uid': 'urn:va:vital:SITE:3:16594',
             'summary': 'PULSE OXIMETRY 98 %',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16594',
             'typeCode': 'urn:va:vuid:4500637',
             'typeName': 'PULSE OXIMETRY',
@@ -6483,7 +6483,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Oxygen saturation in Arterial blood by Pulse oximetry'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6498,9 +6498,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:16595',
+            'uid': 'urn:va:vital:SITE:3:16595',
             'summary': 'PAIN 0 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16595',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -6509,7 +6509,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6526,9 +6526,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:16225',
+            'uid': 'urn:va:vital:SITE:3:16225',
             'summary': 'BLOOD PRESSURE 136/70 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16225',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6537,7 +6537,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6554,9 +6554,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:16226',
+            'uid': 'urn:va:vital:SITE:3:16226',
             'summary': 'PULSE 82 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16226',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6565,7 +6565,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6582,9 +6582,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:16227',
+            'uid': 'urn:va:vital:SITE:3:16227',
             'summary': 'WEIGHT 175 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '16227',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6593,7 +6593,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6610,9 +6610,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:16225',
+            'uid': 'urn:va:vital:SITE:3:16225',
             'summary': 'BLOOD PRESSURE 136/70 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16225',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6621,7 +6621,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6638,9 +6638,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:16226',
+            'uid': 'urn:va:vital:SITE:3:16226',
             'summary': 'PULSE 82 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16226',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6649,7 +6649,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6666,9 +6666,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:16227',
+            'uid': 'urn:va:vital:SITE:3:16227',
             'summary': 'WEIGHT 175 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '16227',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6677,7 +6677,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6694,9 +6694,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:15862',
+            'uid': 'urn:va:vital:SITE:3:15862',
             'summary': 'BLOOD PRESSURE 156/92 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15862',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6705,7 +6705,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6722,9 +6722,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:15863',
+            'uid': 'urn:va:vital:SITE:3:15863',
             'summary': 'PULSE 87 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15863',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6733,7 +6733,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6750,9 +6750,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:15864',
+            'uid': 'urn:va:vital:SITE:3:15864',
             'summary': 'WEIGHT 184 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15864',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6761,7 +6761,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6778,9 +6778,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:15862',
+            'uid': 'urn:va:vital:SITE:3:15862',
             'summary': 'BLOOD PRESSURE 156/92 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15862',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6789,7 +6789,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6806,9 +6806,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:15863',
+            'uid': 'urn:va:vital:SITE:3:15863',
             'summary': 'PULSE 87 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15863',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6817,7 +6817,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6834,9 +6834,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:15864',
+            'uid': 'urn:va:vital:SITE:3:15864',
             'summary': 'WEIGHT 184 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15864',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6845,7 +6845,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6862,9 +6862,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:15499',
+            'uid': 'urn:va:vital:SITE:3:15499',
             'summary': 'BLOOD PRESSURE 160/97 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15499',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6873,7 +6873,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6890,9 +6890,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:15500',
+            'uid': 'urn:va:vital:SITE:3:15500',
             'summary': 'PULSE 92 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15500',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6901,7 +6901,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6918,9 +6918,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:15501',
+            'uid': 'urn:va:vital:SITE:3:15501',
             'summary': 'WEIGHT 196 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '15501',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -6929,7 +6929,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6946,9 +6946,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:15499',
+            'uid': 'urn:va:vital:SITE:3:15499',
             'summary': 'BLOOD PRESSURE 160/97 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15499',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -6957,7 +6957,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -6974,9 +6974,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:15500',
+            'uid': 'urn:va:vital:SITE:3:15500',
             'summary': 'PULSE 92 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15500',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -6985,7 +6985,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -7002,9 +7002,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:15501',
+            'uid': 'urn:va:vital:SITE:3:15501',
             'summary': 'WEIGHT 196 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '15501',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -7013,7 +7013,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -7032,9 +7032,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:14888',
+            'uid': 'urn:va:vital:SITE:3:14888',
             'summary': 'TEMPERATURE 99 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14888',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7043,7 +7043,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7064,9 +7064,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:14889',
+            'uid': 'urn:va:vital:SITE:3:14889',
             'summary': 'PULSE 72 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14889',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7075,7 +7075,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7096,9 +7096,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:14890',
+            'uid': 'urn:va:vital:SITE:3:14890',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14890',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7107,7 +7107,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7128,9 +7128,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:14891',
+            'uid': 'urn:va:vital:SITE:3:14891',
             'summary': 'BLOOD PRESSURE 168/68 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14891',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7139,7 +7139,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7154,9 +7154,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:14892',
+            'uid': 'urn:va:vital:SITE:3:14892',
             'summary': 'PAIN 1 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14892',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -7165,7 +7165,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7184,9 +7184,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:14888',
+            'uid': 'urn:va:vital:SITE:3:14888',
             'summary': 'TEMPERATURE 99 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14888',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7195,7 +7195,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7216,9 +7216,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:14889',
+            'uid': 'urn:va:vital:SITE:3:14889',
             'summary': 'PULSE 72 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14889',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7227,7 +7227,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7248,9 +7248,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:14890',
+            'uid': 'urn:va:vital:SITE:3:14890',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14890',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7259,7 +7259,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7280,9 +7280,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:14891',
+            'uid': 'urn:va:vital:SITE:3:14891',
             'summary': 'BLOOD PRESSURE 168/68 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14891',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7291,7 +7291,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7306,9 +7306,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:14892',
+            'uid': 'urn:va:vital:SITE:3:14892',
             'summary': 'PAIN 1 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14892',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -7317,7 +7317,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7336,9 +7336,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:14263',
+            'uid': 'urn:va:vital:SITE:3:14263',
             'summary': 'TEMPERATURE 102.6 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14263',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7347,7 +7347,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7368,9 +7368,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:14264',
+            'uid': 'urn:va:vital:SITE:3:14264',
             'summary': 'PULSE 88 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14264',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7379,7 +7379,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7400,9 +7400,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:14265',
+            'uid': 'urn:va:vital:SITE:3:14265',
             'summary': 'RESPIRATION 21 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14265',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7411,7 +7411,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7432,9 +7432,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:14266',
+            'uid': 'urn:va:vital:SITE:3:14266',
             'summary': 'BLOOD PRESSURE 176/82 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14266',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7443,7 +7443,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7458,9 +7458,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:14267',
+            'uid': 'urn:va:vital:SITE:3:14267',
             'summary': 'PAIN 3 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '14267',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -7469,7 +7469,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7488,9 +7488,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:14263',
+            'uid': 'urn:va:vital:SITE:3:14263',
             'summary': 'TEMPERATURE 102.6 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14263',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7499,7 +7499,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7520,9 +7520,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:14264',
+            'uid': 'urn:va:vital:SITE:3:14264',
             'summary': 'PULSE 88 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14264',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7531,7 +7531,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7552,9 +7552,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:14265',
+            'uid': 'urn:va:vital:SITE:3:14265',
             'summary': 'RESPIRATION 21 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14265',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7563,7 +7563,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7584,9 +7584,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:14266',
+            'uid': 'urn:va:vital:SITE:3:14266',
             'summary': 'BLOOD PRESSURE 176/82 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14266',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7595,7 +7595,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7610,9 +7610,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:14267',
+            'uid': 'urn:va:vital:SITE:3:14267',
             'summary': 'PAIN 3 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '14267',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -7621,7 +7621,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7640,9 +7640,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:13381',
+            'uid': 'urn:va:vital:SITE:3:13381',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13381',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7651,7 +7651,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7672,9 +7672,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:13382',
+            'uid': 'urn:va:vital:SITE:3:13382',
             'summary': 'PULSE 76 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13382',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7683,7 +7683,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7704,9 +7704,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:13383',
+            'uid': 'urn:va:vital:SITE:3:13383',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13383',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7715,7 +7715,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7736,9 +7736,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:13384',
+            'uid': 'urn:va:vital:SITE:3:13384',
             'summary': 'BLOOD PRESSURE 182/88 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13384',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7747,7 +7747,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7764,9 +7764,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:13385',
+            'uid': 'urn:va:vital:SITE:3:13385',
             'summary': 'HEIGHT 71 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13385',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -7775,7 +7775,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -7796,9 +7796,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:13386',
+            'uid': 'urn:va:vital:SITE:3:13386',
             'summary': 'WEIGHT 199 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13386',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -7807,7 +7807,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -7826,9 +7826,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:13387',
+            'uid': 'urn:va:vital:SITE:3:13387',
             'summary': 'PAIN 3 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '13387',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -7837,7 +7837,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7856,9 +7856,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:13381',
+            'uid': 'urn:va:vital:SITE:3:13381',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13381',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -7867,7 +7867,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -7888,9 +7888,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:13382',
+            'uid': 'urn:va:vital:SITE:3:13382',
             'summary': 'PULSE 76 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13382',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -7899,7 +7899,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -7920,9 +7920,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:13383',
+            'uid': 'urn:va:vital:SITE:3:13383',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13383',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -7931,7 +7931,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -7952,9 +7952,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:13384',
+            'uid': 'urn:va:vital:SITE:3:13384',
             'summary': 'BLOOD PRESSURE 182/88 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13384',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -7963,7 +7963,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -7980,9 +7980,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:13385',
+            'uid': 'urn:va:vital:SITE:3:13385',
             'summary': 'HEIGHT 71 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13385',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -7991,7 +7991,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8012,9 +8012,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:13386',
+            'uid': 'urn:va:vital:SITE:3:13386',
             'summary': 'WEIGHT 199 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13386',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -8023,7 +8023,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8042,9 +8042,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:13387',
+            'uid': 'urn:va:vital:SITE:3:13387',
             'summary': 'PAIN 3 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '13387',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -8053,7 +8053,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:158',
+            'locationUid': 'urn:va:location:SITE:158',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -8072,9 +8072,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:12447',
+            'uid': 'urn:va:vital:SITE:3:12447',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12447',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -8083,7 +8083,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'AXILLARY',
                 'vuid': 4688640
@@ -8104,9 +8104,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:12448',
+            'uid': 'urn:va:vital:SITE:3:12448',
             'summary': 'PULSE 68 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12448',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -8115,7 +8115,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'BRACHIAL',
                 'vuid': 4688643
@@ -8136,9 +8136,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:12449',
+            'uid': 'urn:va:vital:SITE:3:12449',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12449',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -8147,7 +8147,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -8168,9 +8168,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:12450',
+            'uid': 'urn:va:vital:SITE:3:12450',
             'summary': 'BLOOD PRESSURE 120/86 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12450',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -8179,7 +8179,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -8196,9 +8196,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:12451',
+            'uid': 'urn:va:vital:SITE:3:12451',
             'summary': 'HEIGHT 70 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12451',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -8207,7 +8207,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'ESTIMATED',
                 'vuid': 4688653
@@ -8228,9 +8228,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:12452',
+            'uid': 'urn:va:vital:SITE:3:12452',
             'summary': 'WEIGHT 185 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12452',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -8239,7 +8239,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8258,9 +8258,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:12453',
+            'uid': 'urn:va:vital:SITE:3:12453',
             'summary': 'PAIN 2 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '12453',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -8269,7 +8269,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -8288,9 +8288,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:12447',
+            'uid': 'urn:va:vital:SITE:3:12447',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12447',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -8299,7 +8299,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'AXILLARY',
                 'vuid': 4688640
@@ -8320,9 +8320,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:12448',
+            'uid': 'urn:va:vital:SITE:3:12448',
             'summary': 'PULSE 68 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12448',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -8331,7 +8331,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'BRACHIAL',
                 'vuid': 4688643
@@ -8352,9 +8352,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:12449',
+            'uid': 'urn:va:vital:SITE:3:12449',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12449',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -8363,7 +8363,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -8384,9 +8384,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:12450',
+            'uid': 'urn:va:vital:SITE:3:12450',
             'summary': 'BLOOD PRESSURE 120/86 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12450',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -8395,7 +8395,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -8412,9 +8412,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:12451',
+            'uid': 'urn:va:vital:SITE:3:12451',
             'summary': 'HEIGHT 70 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12451',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -8423,7 +8423,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'ESTIMATED',
                 'vuid': 4688653
@@ -8444,9 +8444,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:12452',
+            'uid': 'urn:va:vital:SITE:3:12452',
             'summary': 'WEIGHT 185 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12452',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -8455,7 +8455,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8474,9 +8474,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:12453',
+            'uid': 'urn:va:vital:SITE:3:12453',
             'summary': 'PAIN 2 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '12453',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -8485,7 +8485,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:278',
+            'locationUid': 'urn:va:location:SITE:278',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -8504,9 +8504,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:8734',
+            'uid': 'urn:va:vital:SITE:3:8734',
             'summary': 'TEMPERATURE 98.7 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8734',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -8515,7 +8515,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -8535,9 +8535,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:8735',
+            'uid': 'urn:va:vital:SITE:3:8735',
             'summary': 'PULSE 72 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8735',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -8546,7 +8546,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -8566,9 +8566,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:8736',
+            'uid': 'urn:va:vital:SITE:3:8736',
             'summary': 'RESPIRATION 10 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8736',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -8577,7 +8577,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -8597,9 +8597,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:8737',
+            'uid': 'urn:va:vital:SITE:3:8737',
             'summary': 'BLOOD PRESSURE 146/92 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8737',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -8608,7 +8608,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -8624,9 +8624,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:8738',
+            'uid': 'urn:va:vital:SITE:3:8738',
             'summary': 'WEIGHT 174 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8738',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -8635,7 +8635,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8653,9 +8653,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:8739',
+            'uid': 'urn:va:vital:SITE:3:8739',
             'summary': 'PAIN 5 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '8739',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -8664,7 +8664,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -8682,9 +8682,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:8734',
+            'uid': 'urn:va:vital:SITE:3:8734',
             'summary': 'TEMPERATURE 98.7 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8734',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -8693,7 +8693,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -8713,9 +8713,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:8735',
+            'uid': 'urn:va:vital:SITE:3:8735',
             'summary': 'PULSE 72 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8735',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -8724,7 +8724,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -8744,9 +8744,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:8736',
+            'uid': 'urn:va:vital:SITE:3:8736',
             'summary': 'RESPIRATION 10 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8736',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -8755,7 +8755,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -8775,9 +8775,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:8737',
+            'uid': 'urn:va:vital:SITE:3:8737',
             'summary': 'BLOOD PRESSURE 146/92 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8737',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -8786,7 +8786,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -8802,9 +8802,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:8738',
+            'uid': 'urn:va:vital:SITE:3:8738',
             'summary': 'WEIGHT 174 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8738',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -8813,7 +8813,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -8831,9 +8831,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:8739',
+            'uid': 'urn:va:vital:SITE:3:8739',
             'summary': 'PAIN 5 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '8739',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -8842,7 +8842,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -8860,9 +8860,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:4485',
+            'uid': 'urn:va:vital:SITE:3:4485',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4485',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -8871,7 +8871,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -8891,9 +8891,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:4486',
+            'uid': 'urn:va:vital:SITE:3:4486',
             'summary': 'PULSE 76 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4486',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -8902,7 +8902,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -8922,9 +8922,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:4487',
+            'uid': 'urn:va:vital:SITE:3:4487',
             'summary': 'RESPIRATION 12 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4487',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -8933,7 +8933,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -8953,9 +8953,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:4488',
+            'uid': 'urn:va:vital:SITE:3:4488',
             'summary': 'BLOOD PRESSURE 146/84 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4488',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -8964,7 +8964,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -8980,9 +8980,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:4489',
+            'uid': 'urn:va:vital:SITE:3:4489',
             'summary': 'HEIGHT 70 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4489',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -8991,7 +8991,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -9011,9 +9011,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:4490',
+            'uid': 'urn:va:vital:SITE:3:4490',
             'summary': 'WEIGHT 172 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4490',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -9022,7 +9022,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -9040,9 +9040,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:4491',
+            'uid': 'urn:va:vital:SITE:3:4491',
             'summary': 'PAIN 4 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '4491',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9051,7 +9051,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -9069,9 +9069,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:4485',
+            'uid': 'urn:va:vital:SITE:3:4485',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4485',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9080,7 +9080,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ORAL',
                 'vuid': 4500642
@@ -9100,9 +9100,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:4486',
+            'uid': 'urn:va:vital:SITE:3:4486',
             'summary': 'PULSE 76 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4486',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9111,7 +9111,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'RADIAL',
                 'vuid': 4688678
@@ -9131,9 +9131,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:4487',
+            'uid': 'urn:va:vital:SITE:3:4487',
             'summary': 'RESPIRATION 12 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4487',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9142,7 +9142,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'SPONTANEOUS',
                 'vuid': 4688706
@@ -9162,9 +9162,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:4488',
+            'uid': 'urn:va:vital:SITE:3:4488',
             'summary': 'BLOOD PRESSURE 146/84 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4488',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9173,7 +9173,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '515.6',
@@ -9189,9 +9189,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:4489',
+            'uid': 'urn:va:vital:SITE:3:4489',
             'summary': 'HEIGHT 70 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4489',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -9200,7 +9200,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -9220,9 +9220,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:4490',
+            'uid': 'urn:va:vital:SITE:3:4490',
             'summary': 'WEIGHT 172 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4490',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -9231,7 +9231,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'qualifiers': [{
                 'name': 'ACTUAL',
                 'vuid': 4688634
@@ -9249,9 +9249,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:4491',
+            'uid': 'urn:va:vital:SITE:3:4491',
             'summary': 'PAIN 4 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '4491',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9260,7 +9260,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:9',
+            'locationUid': 'urn:va:location:SITE:9',
             'facilityMoniker': '515.6'
         }, {
             'facilityCode': '500',
@@ -9276,9 +9276,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:2523',
+            'uid': 'urn:va:vital:SITE:3:2523',
             'summary': 'BLOOD PRESSURE 136/76 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2523',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9287,7 +9287,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9306,9 +9306,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:2524',
+            'uid': 'urn:va:vital:SITE:3:2524',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2524',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9317,7 +9317,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9334,9 +9334,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:2525',
+            'uid': 'urn:va:vital:SITE:3:2525',
             'summary': 'RESPIRATION 19 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2525',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9345,7 +9345,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9362,9 +9362,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:2526',
+            'uid': 'urn:va:vital:SITE:3:2526',
             'summary': 'PULSE 62 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2526',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9373,7 +9373,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9388,9 +9388,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:2527',
+            'uid': 'urn:va:vital:SITE:3:2527',
             'summary': 'PAIN 0 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2527',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9399,7 +9399,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9416,9 +9416,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:2523',
+            'uid': 'urn:va:vital:SITE:3:2523',
             'summary': 'BLOOD PRESSURE 136/76 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2523',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9427,7 +9427,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9446,9 +9446,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:2524',
+            'uid': 'urn:va:vital:SITE:3:2524',
             'summary': 'TEMPERATURE 98.4 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2524',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9457,7 +9457,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9474,9 +9474,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:2525',
+            'uid': 'urn:va:vital:SITE:3:2525',
             'summary': 'RESPIRATION 19 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2525',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9485,7 +9485,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9502,9 +9502,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:2526',
+            'uid': 'urn:va:vital:SITE:3:2526',
             'summary': 'PULSE 62 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2526',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9513,7 +9513,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9528,9 +9528,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:2527',
+            'uid': 'urn:va:vital:SITE:3:2527',
             'summary': 'PAIN 0 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2527',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9539,7 +9539,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9556,9 +9556,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:2400',
+            'uid': 'urn:va:vital:SITE:3:2400',
             'summary': 'BLOOD PRESSURE 125/80 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2400',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9567,7 +9567,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9586,9 +9586,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:2401',
+            'uid': 'urn:va:vital:SITE:3:2401',
             'summary': 'TEMPERATURE 98.7 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2401',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9597,7 +9597,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9614,9 +9614,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:2402',
+            'uid': 'urn:va:vital:SITE:3:2402',
             'summary': 'RESPIRATION 23 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2402',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9625,7 +9625,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9642,9 +9642,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:2403',
+            'uid': 'urn:va:vital:SITE:3:2403',
             'summary': 'PULSE 67 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2403',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9653,7 +9653,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9670,9 +9670,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:2404',
+            'uid': 'urn:va:vital:SITE:3:2404',
             'summary': 'WEIGHT 169 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2404',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -9681,7 +9681,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9696,9 +9696,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:2405',
+            'uid': 'urn:va:vital:SITE:3:2405',
             'summary': 'PAIN 0 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '2405',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9707,7 +9707,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9724,9 +9724,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:2400',
+            'uid': 'urn:va:vital:SITE:3:2400',
             'summary': 'BLOOD PRESSURE 125/80 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2400',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9735,7 +9735,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9754,9 +9754,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:2401',
+            'uid': 'urn:va:vital:SITE:3:2401',
             'summary': 'TEMPERATURE 98.7 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2401',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9765,7 +9765,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9782,9 +9782,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:2402',
+            'uid': 'urn:va:vital:SITE:3:2402',
             'summary': 'RESPIRATION 23 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2402',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9793,7 +9793,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9810,9 +9810,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:2403',
+            'uid': 'urn:va:vital:SITE:3:2403',
             'summary': 'PULSE 67 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2403',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9821,7 +9821,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9838,9 +9838,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:2404',
+            'uid': 'urn:va:vital:SITE:3:2404',
             'summary': 'WEIGHT 169 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2404',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -9849,7 +9849,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9864,9 +9864,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:2405',
+            'uid': 'urn:va:vital:SITE:3:2405',
             'summary': 'PAIN 0 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '2405',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -9875,7 +9875,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:240',
+            'locationUid': 'urn:va:location:SITE:240',
             'facilityDisplay': 'Camp Master',
             'facilityMoniker': 'TST2'
         }, {
@@ -9892,9 +9892,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:417',
+            'uid': 'urn:va:vital:SITE:3:417',
             'summary': 'BLOOD PRESSURE 120/80 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '417',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -9903,7 +9903,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -9922,9 +9922,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:418',
+            'uid': 'urn:va:vital:SITE:3:418',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '418',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -9933,7 +9933,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -9950,9 +9950,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:419',
+            'uid': 'urn:va:vital:SITE:3:419',
             'summary': 'RESPIRATION 14 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '419',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -9961,7 +9961,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -9978,9 +9978,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:420',
+            'uid': 'urn:va:vital:SITE:3:420',
             'summary': 'PULSE 90 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '420',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -9989,7 +9989,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10006,9 +10006,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:421',
+            'uid': 'urn:va:vital:SITE:3:421',
             'summary': 'HEIGHT 70 in',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '421',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -10017,7 +10017,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10034,9 +10034,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:9E7A:3:422',
+            'uid': 'urn:va:vital:SITE:3:422',
             'summary': 'WEIGHT 160 lb',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '422',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -10045,7 +10045,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10060,9 +10060,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:9E7A:3:423',
+            'uid': 'urn:va:vital:SITE:3:423',
             'summary': 'PAIN 0 ',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '423',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -10071,7 +10071,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10088,9 +10088,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:417',
+            'uid': 'urn:va:vital:SITE:3:417',
             'summary': 'BLOOD PRESSURE 120/80 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '417',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -10099,7 +10099,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10118,9 +10118,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:418',
+            'uid': 'urn:va:vital:SITE:3:418',
             'summary': 'TEMPERATURE 98.6 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '418',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -10129,7 +10129,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10146,9 +10146,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:419',
+            'uid': 'urn:va:vital:SITE:3:419',
             'summary': 'RESPIRATION 14 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '419',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -10157,7 +10157,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10174,9 +10174,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:420',
+            'uid': 'urn:va:vital:SITE:3:420',
             'summary': 'PULSE 90 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '420',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -10185,7 +10185,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10202,9 +10202,9 @@ var inputValue = {
             'metricUnits': 'cm',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'HEIGHT',
-            'uid': 'urn:va:vital:C877:3:421',
+            'uid': 'urn:va:vital:SITE:3:421',
             'summary': 'HEIGHT 70 in',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '421',
             'typeCode': 'urn:va:vuid:4688724',
             'typeName': 'HEIGHT',
@@ -10213,7 +10213,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body height'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10230,9 +10230,9 @@ var inputValue = {
             'metricUnits': 'kg',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'WEIGHT',
-            'uid': 'urn:va:vital:C877:3:422',
+            'uid': 'urn:va:vital:SITE:3:422',
             'summary': 'WEIGHT 160 lb',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '422',
             'typeCode': 'urn:va:vuid:4500639',
             'typeName': 'WEIGHT',
@@ -10241,7 +10241,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body weight'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10256,9 +10256,9 @@ var inputValue = {
             'units': '',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PAIN',
-            'uid': 'urn:va:vital:C877:3:423',
+            'uid': 'urn:va:vital:SITE:3:423',
             'summary': 'PAIN 0 ',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '423',
             'typeCode': 'urn:va:vuid:4500635',
             'typeName': 'PAIN',
@@ -10267,7 +10267,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Pain severity - 0-10 verbal numeric rating [#] - Reported'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10284,9 +10284,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:424',
+            'uid': 'urn:va:vital:SITE:3:424',
             'summary': 'BLOOD PRESSURE 130/80 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '424',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -10295,7 +10295,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10314,9 +10314,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:425',
+            'uid': 'urn:va:vital:SITE:3:425',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '425',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -10325,7 +10325,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10342,9 +10342,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:426',
+            'uid': 'urn:va:vital:SITE:3:426',
             'summary': 'RESPIRATION 16 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '426',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -10353,7 +10353,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10370,9 +10370,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:427',
+            'uid': 'urn:va:vital:SITE:3:427',
             'summary': 'PULSE 83 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '427',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -10381,7 +10381,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10398,9 +10398,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:424',
+            'uid': 'urn:va:vital:SITE:3:424',
             'summary': 'BLOOD PRESSURE 130/80 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '424',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -10409,7 +10409,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10428,9 +10428,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:425',
+            'uid': 'urn:va:vital:SITE:3:425',
             'summary': 'TEMPERATURE 98.2 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '425',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -10439,7 +10439,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10456,9 +10456,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:426',
+            'uid': 'urn:va:vital:SITE:3:426',
             'summary': 'RESPIRATION 16 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '426',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -10467,7 +10467,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10484,9 +10484,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:427',
+            'uid': 'urn:va:vital:SITE:3:427',
             'summary': 'PULSE 83 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '427',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -10495,7 +10495,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10512,9 +10512,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:9E7A:3:428',
+            'uid': 'urn:va:vital:SITE:3:428',
             'summary': 'BLOOD PRESSURE 120/75 mm[Hg]',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '428',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -10523,7 +10523,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10542,9 +10542,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:9E7A:3:429',
+            'uid': 'urn:va:vital:SITE:3:429',
             'summary': 'TEMPERATURE 99 F',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '429',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -10553,7 +10553,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10570,9 +10570,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:9E7A:3:430',
+            'uid': 'urn:va:vital:SITE:3:430',
             'summary': 'RESPIRATION 18 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '430',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -10581,7 +10581,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10598,9 +10598,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:9E7A:3:431',
+            'uid': 'urn:va:vital:SITE:3:431',
             'summary': 'PULSE 100 /min',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'localId': '431',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -10609,7 +10609,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:9E7A:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10626,9 +10626,9 @@ var inputValue = {
             'high': '210/110',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'BLOOD PRESSURE',
-            'uid': 'urn:va:vital:C877:3:428',
+            'uid': 'urn:va:vital:SITE:3:428',
             'summary': 'BLOOD PRESSURE 120/75 mm[Hg]',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '428',
             'typeCode': 'urn:va:vuid:4500634',
             'typeName': 'BLOOD PRESSURE',
@@ -10637,7 +10637,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Blood pressure systolic and diastolic'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10656,9 +10656,9 @@ var inputValue = {
             'high': '102',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'TEMPERATURE',
-            'uid': 'urn:va:vital:C877:3:429',
+            'uid': 'urn:va:vital:SITE:3:429',
             'summary': 'TEMPERATURE 99 F',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '429',
             'typeCode': 'urn:va:vuid:4500638',
             'typeName': 'TEMPERATURE',
@@ -10667,7 +10667,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Body temperature'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10684,9 +10684,9 @@ var inputValue = {
             'high': '30',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'RESPIRATION',
-            'uid': 'urn:va:vital:C877:3:430',
+            'uid': 'urn:va:vital:SITE:3:430',
             'summary': 'RESPIRATION 18 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '430',
             'typeCode': 'urn:va:vuid:4688725',
             'typeName': 'RESPIRATION',
@@ -10695,7 +10695,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Respiratory rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10712,9 +10712,9 @@ var inputValue = {
             'high': '120',
             'patientGeneratedDataFlag': false,
             'qualifiedName': 'PULSE',
-            'uid': 'urn:va:vital:C877:3:431',
+            'uid': 'urn:va:vital:SITE:3:431',
             'summary': 'PULSE 100 /min',
-            'pid': 'C877;3',
+            'pid': 'SITE;3',
             'localId': '431',
             'typeCode': 'urn:va:vuid:4500636',
             'typeName': 'PULSE',
@@ -10723,7 +10723,7 @@ var inputValue = {
                 'system': 'http://loinc.org',
                 'display': 'Heart rate'
             }],
-            'locationUid': 'urn:va:location:C877:242',
+            'locationUid': 'urn:va:location:SITE:242',
             'facilityDisplay': 'Bay Pines CIO Test',
             'facilityMoniker': 'BAY'
         }, {
@@ -10754,8 +10754,8 @@ var inputValue = {
             'facilityMoniker': '*VA'
         }],
         'syncedSites': [
-            '9E7A',
-            'C877',
+            'SITE',
+            'SITE',
             'VLER',
             'DOD',
             'DAS'

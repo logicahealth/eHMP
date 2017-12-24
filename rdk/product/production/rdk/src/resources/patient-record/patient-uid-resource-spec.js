@@ -1,9 +1,11 @@
 'use strict';
 
-var patientUidResource = require('./patient-uid-resource');
-var httpMocks = require('node-mocks-http');
-var jds = require('../../subsystems/jds/jds-subsystem');
 var _ = require('lodash');
+var httpMocks = require('node-mocks-http');
+var bunyan = require('bunyan');
+var jds = require('../../subsystems/jds/jds-subsystem');
+var asuUtils = require('../../resources/patient-record/asu-utils');
+var patientUidResource = require('./patient-uid-resource');
 
 describe('Verify isCheckASU', function() {
     var details;
@@ -60,6 +62,92 @@ describe('Verify isCheckASU', function() {
         item_data.documentDefUid = 'defined';
         _.set(details, 'data.items', [item_data]);
         expect(patientUidResource._isCheckASU(details)).to.be('true');
+    });
+});
+
+describe('filterAsuDocuments', function () {
+    var req;
+    var res;
+    var spyStatus;
+    var mockAsu;
+
+    beforeEach(function() {
+        req = httpMocks.createRequest();
+        req.audit = {};
+        _.set(req, 'app.config.vistaSites', {});
+        req.query = {};
+        req.logger = sinon.stub(bunyan.createLogger({
+            name: 'patient-uid-resource-spec.js'
+        }));
+        res = httpMocks.createResponse();
+        _.set(res, 'data.items', {});
+        spyStatus = sinon.spy(res, 'status');
+    });
+
+    afterEach(function() {
+        spyStatus.reset();
+        if (mockAsu) {
+            asuUtils.applyAsuRules.restore();
+            mockAsu = null;
+        }
+    });
+
+    it('doesn\'t process a missing result', function (done) {
+        var testData = [null, {}, { data: {} }, { data: { items: [] } }];
+        _.each(testData, function (details) {
+            res.rdkSend = function (response) {
+                expect(spyStatus.withArgs(200).called).to.be.true();
+                expect(response).to.be(details);
+            };
+            patientUidResource._filterAsuDocuments(req, res, 200, details);
+        });
+        done();
+    });
+
+    it('asu filters all records', function(done) {
+        mockAsu = sinon.stub(asuUtils, 'applyAsuRules').callsFake(function(req, details, callback) {
+            return callback(null, []);
+        });
+        var details = {
+            data: {
+                items: [{
+                    localTitle: 'two'
+                }]
+            }
+        };
+        var expectedResponse = [];
+        res.rdkSend = function (response) {
+            expect(spyStatus.withArgs(200).called).to.be.true();
+            expect(response).to.eql(expectedResponse);
+            done();
+        };
+
+        patientUidResource._filterAsuDocuments(req, res, 200, details);
+    });
+
+    it('asu returns records', function(done) {
+        mockAsu = sinon.stub(asuUtils, 'applyAsuRules').callsFake(function(req, details, callback) {
+            return callback(null, [{
+                localTitle: 'two'
+            }]);
+        });
+        var details = {
+            data: {
+                items: [{
+                    localTitle: 'two'
+                }]
+            }
+        };
+        var expectedResponse = [{
+            localTitle: 'two'
+        }];
+        res.rdkSend = function (response) {
+            expect(spyStatus.withArgs(200).called).to.be.true();
+            expect(response).to.eql(expectedResponse);
+            done();
+        };
+
+        patientUidResource._filterAsuDocuments(req, res, 200, details);
     });
 });
 

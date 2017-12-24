@@ -10,7 +10,6 @@ define([
         className: 'handlebars-cell',
         render: function(modelJSON) {
             this.$el.empty();
-
             if (_.isString(this.column.get('template'))) {
                 this.column.set('template', Handlebars.compile(this.column.get('template')));
             }
@@ -36,8 +35,7 @@ define([
                     string = this.model.get(column);
                 }
             }
-
-            this.$el.html(string);
+            this.$el.html(Handlebars.Utils.escapeExpression(string));
             this.delegateEvents();
             return this;
         }

@@ -160,11 +160,14 @@ define([
 
                 _.each(groupsArray, function(group){
                     if(_.isArray(group)){
-                        if(group.length === 1){
-                            treeData.add(group[0]);
+                        var uniqGroupItems = _.uniq(group, function(model){
+                            return model.get('prefText');
+                        });
+                        if(uniqGroupItems.length === 1){
+                            treeData.add(uniqGroupItems[0]);
                         } else {
-                            var topLevelNode = _.first(group);
-                            var nodes = _.sortBy(_.rest(group), function(nodeModel){
+                            var topLevelNode = _.first(uniqGroupItems);
+                            var nodes = _.sortBy(_.rest(uniqGroupItems), function(nodeModel){
                                 return nodeModel.get('prefText');
                             });
 

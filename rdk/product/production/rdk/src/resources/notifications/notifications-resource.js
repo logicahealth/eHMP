@@ -13,7 +13,7 @@ function getResourceConfig() {
         requiredPermissions: ['future-release-not-available-for-use'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given patient id',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-staff-growler-list',
         path: 'staff/:userId/growler',
@@ -25,7 +25,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the growler',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-staff-list',
         path: 'staff/:userId/list',
@@ -37,7 +37,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given user id',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-staff-indicator-list',
         path: 'staff/:userId/indicator/list',
@@ -49,7 +49,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Gets the list for global notification list based on the given user id',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-staff-indicator-summary',
         path: 'staff/:userId/indicator/summary',
@@ -61,7 +61,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Gets the count for global notification list based on the given user id',
-        subsystems: []
+        subsystems: ['oracle']
     },{
         name: 'notifications-create',
         path: '',
@@ -75,7 +75,7 @@ function getResourceConfig() {
         requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Create a notification',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-update-by-id',
         path: 'id/:notificationId/resolved',
@@ -89,7 +89,7 @@ function getResourceConfig() {
         requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Resolve a notification by id',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-update-by-ref-id',
         path: 'reference-id/:referenceId/resolved',
@@ -103,7 +103,7 @@ function getResourceConfig() {
         requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Resolve notifications by reference id',
-        subsystems: []
+        subsystems: ['oracle']
     }, {
         name: 'notifications-by-ref-id',
         path: 'reference-id/:referenceId/list',
@@ -117,7 +117,7 @@ function getResourceConfig() {
         requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given reference id',
-        subsystems: []
+        subsystems: ['oracle']
     }];
 }
 

@@ -1,0 +1,2 @@
+#remove jds journal files every 5 minutes, only leaving the cache.lck and the 2 newest journal files
+*/5 * * * * root if [ `ls -1 <%=node[:jds][:cache_mgr_dir]%>/journal | wc -l` != "3" ]; then cd <%=node[:jds][:cache_mgr_dir]%>/journal;rm $(ls -r | grep -v cache.lck | sed -n '1,2 ! p'); fi

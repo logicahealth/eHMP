@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.SIMPLE_MATCH")
+@Table(name = "SIMPLE_MATCH", schema = "ACTIVITYDB")
 public class SimpleMatch implements Serializable {
 	
 	private static final long serialVersionUID = 1234567890;
@@ -85,6 +85,8 @@ public class SimpleMatch implements Serializable {
 		this.eventMatchCriteriaId = eventMatchCriteriaId;
 	}
 
+	public SimpleMatch() { }
+	
 	public SimpleMatch(String matchField, String matchValue, BigDecimal eventMatchCriteriaId) {
 		this.matchField = matchField;
 		this.matchValue = matchValue;

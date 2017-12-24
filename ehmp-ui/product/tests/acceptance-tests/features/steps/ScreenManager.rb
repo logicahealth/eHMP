@@ -33,30 +33,8 @@ class ScrnManager < AccessBrowserV2
   end
 end
 
-class ScrnManagerElements < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    @@count_elements = AccessHtmlElement.new(:xpath, ".//*[@id='list-group']/div/div")
-    add_verify(CucumberLabel.new("workspace rows"), VerifyXpathCount.new(@@count_elements), @@count_elements)
-    @@count_elements2 = AccessHtmlElement.new(:xpath, "//*[@id='content-region']/div/div/div")
-    add_verify(CucumberLabel.new("coversheet check"), VerifyXpathCount.new(@@count_elements2), @@count_elements2)
-  end
-end
-
 When(/^the user clicks "(.*?)" on the workspace manager$/) do |html_action_element|
   navigation = ScrnManager.instance
   navigation.wait_until_action_element_visible(html_action_element, 40)
   expect(navigation.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
-end
-
-Then(/^there are (\d+) "(.*?)"$/) do |num, applet| 
-  aa = ScrnManagerElements.instance
-  expect(aa.wait_until_xpath_count(applet, num, 50)).to be_true
-end
-
-Then(/^the workspace manager "(.*?)" contains "(.*?)"$/) do |field, text| 
-  aa = ScrnManager.instance
-  expect(aa.wait_until_action_element_visible(field, DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification(field, text)).to be_true
 end

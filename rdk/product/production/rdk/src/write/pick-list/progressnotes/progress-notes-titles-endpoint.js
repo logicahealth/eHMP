@@ -3,7 +3,6 @@ var _ = require('lodash');
 var querystring = require('querystring');
 var jdsFilter = require('jds-filter');
 var nullUtil = require('../../core/null-utils');
-var async = require('async');
 var validate = require('./../utils/validation-util');
 var rdk = require('../../../core/rdk');
 var http = rdk.utils.http;
@@ -56,6 +55,7 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
     //Call ASU Rules on each one of them and populate a flag saying whether it was approved or not.
     //console.log(JSON.stringify(jsonParams, null, 2));
     asuProcess.evaluate(httpBody, null, httpConfig, null, logger, function(error, asuResponses) {
+
         if (error) {
             logger.error({
                 error: error
@@ -94,18 +94,12 @@ function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, ac
             return finished(myErrorMessage);
         }
 
-        //Now that we know what was approved (flag that was set), filter out anything that isn't approved.
-        async.filterSeries(progressNotes, function(item, callback) {
-                logger.debug('progress-notes-titles-endpoint.asuFilter asu approved for docDefUid ' + item.documentDefUid + ' is: ' + item.asuApproved);
-                return setImmediate(callback, null, item.asuApproved === true);
-            },
-            function(error, fieldResults) {
-                logger.debug('progress-notes-titles-endpoint.asuFilter FINISHED FILTERING asu approved');
-                return finished(error, fieldResults);
-            });
+        var filteredNotes = _.filter(progressNotes, function(item) {  // Filter out
+            return item.asuApproved === true;                         // any items that are not approved
+        });                                                           // and
+        return finished(error, filteredNotes);                        // callback with the filtered notes
     });
 }
-module.exports._asuFilter = asuFilter;
 
 module.exports.getResourceConfig = function( /*app*/ ) {
     var resourceConfig = [{
@@ -277,7 +271,6 @@ function parseTitles(req, data, callback) {
     var whiteList = _.filter(notesClass.item, function(item) {
         return item.name !== 'CONSULTS';
     });
-    whiteList = whiteList.concat(_.find(data, 'name', 'ADDENDUM').item);
 
     var i = 0;
     while (i < whiteList.length) {
@@ -295,3 +288,6 @@ function parseTitles(req, data, callback) {
     }
     return callback(null, retVal);
 }
+
+module.exports._asuProcess = asuProcess;
+module.exports._asuFilter = asuFilter;

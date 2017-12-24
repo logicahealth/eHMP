@@ -11,7 +11,7 @@ var ReEnrichUtil = require(global.VX_ROOT + './record-update/utils/record-re-enr
 var solrReindexingUtil = require(global.VX_UTILS + 'solr-reindexing-util');
 
 var domain = 'ehmp-activity';
-var pid = '9E7A;3';
+var pid = 'SITE;3';
 var icn ='10110V004877';
 
 // var logger = require('bunyan').createLogger({
@@ -23,22 +23,22 @@ var config = {
     jds: {
     protocol: 'http',
     host: 'IP        ',
-    port: 'PORT',
+    port: '9082',
     timeout: 300000
     },
     pjds: {
         protocol: 'http',
         host: 'IP        ',
-        port: 'PORT',
+        port: '9082',
         timeout: 300000
     },
-    vistaSites: {'9E7A': {}, 'C877': {}}
+    vistaSites: {'SITE': {}, 'SITE': {}}
 };
 
 function createEnvironment(log, config) {
     return {
         jds: new JdsClientDummy(log, config),
-        pjds: new PjdsClientDummy(log, config),
+        pjdsHttp: new PjdsClientDummy(log, config),
         metrics: logger
     };
 }
@@ -151,7 +151,7 @@ describe('solr-reindexing-util', function() {
 
         it('domain data published', function() {
             var environment = createEnvironment(logger, config);
-            var dataItems = [{pid: '9E7A;3'}, {patientUid: 'urn:va:patient:ICN:10108V420871:10108V420871'}];
+            var dataItems = [{pid: 'SITE;3'}, {patientUid: 'urn:va:patient:ICN:10108V420871:10108V420871'}];
 
             runs(function() {
                 solrReindexingUtil.createAndPublishSolrStoreJob(logger, config, environment, domain, dataItems, function (err, result) {
@@ -282,13 +282,13 @@ describe('solr-reindexing-util', function() {
         it('generate multiple patient uuids when icn used', function() {
             var environment = createEnvironment(logger, config);
 
-            environment.jds._setResponseData(null, {statusCode: 200}, {patientIdentifiers: ['9E7A;3', 'C877;3', 'WE3D;3']});
+            environment.jds._setResponseData(null, {statusCode: 200}, {patientIdentifiers: ['SITE;3', 'SITE;3', 'WE3D;3']});
 
             solrReindexingUtil._getAllPatientIds(logger, config, environment, icn, function(err, result) {
                 expect(err).toBeFalsy();
                 expect(result.length).toBe(3);
-                expect(result).toContain('urn:va:patient:C877:3:3');
-                expect(result).toContain('urn:va:patient:9E7A:3:3');
+                expect(result).toContain('urn:va:patient:SITE:3:3');
+                expect(result).toContain('urn:va:patient:SITE:3:3');
                 expect(result).toContain('urn:va:patient:ICN:' + icn + ':' + icn);
                 expect(result).not.toContain('urn:va:patient:WE3D:3:3');
             });
@@ -299,7 +299,7 @@ describe('solr-reindexing-util', function() {
 
             solrReindexingUtil._getAllPatientIds(logger, config, environment, pid, function(err, result) {
                 expect(err).toBeFalsy();
-                expect(result).toContain('urn:va:patient:9E7A:3:3');
+                expect(result).toContain('urn:va:patient:SITE:3:3');
                 expect(result.length).toBe(1);
             });
         });
@@ -396,7 +396,7 @@ describe('solr-reindexing-util', function() {
             var environment = createEnvironment(logger, config);
             var reindexingContext = {jdsDomains: null, pjdsDomains: [domain], patientId: pid};
 
-            environment.pjds._setResponseData(null, {statusCode: 200}, {data: {items: []}});
+            environment.pjdsHttp._setResponseData(null, {statusCode: 200}, {data: {items: []}});
 
             solrReindexingUtil.processPatient(logger, config, environment, reindexingContext, function(err, result) {
                 expect(err).toBeFalsy();

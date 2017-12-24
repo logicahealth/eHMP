@@ -89,5 +89,5 @@ Scenario Outline: An authorized user can access DOD Vitals and see standardized 
       | DOD          | 8310-5     | 2154          | DOD_NCID   | Body temperature                      | TEMPERATURE 100.5 F          |
       | DOD          | 3141-9     | 2178          | DOD_NCID   | Body weight Measured                  | WEIGHT 125 lb                |
 
- #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+ #  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
     

@@ -10,10 +10,11 @@ define([
     var SPACE_KEY = 32;
 
     var TableBodyRow = Backbone.Marionette.CollectionView.extend({
-        tagName: 'tr',
-        attributes: {
-            tabIndex: 0
+        behaviors: {
+            QuickMenu: {},
+            Actions: {}
         },
+        tagName: 'tr',
         childView: Cell,
         events: {
             'click': 'onClickRow',
@@ -29,6 +30,21 @@ define([
         },
         onClickRow: function(event) {
             if (_.has(event, 'keyCode') && (event.keyCode !== ENTER_KEY && event.keyCode !== SPACE_KEY)) {
+                return;
+            }
+            var tileOptions = this.getOption('tileOptions', {});
+            var primaryAction = _.result(tileOptions, 'primaryAction', true);
+            if (primaryAction) {
+                if (!_.result(primaryAction, 'enabled', true)) return;
+                var onClick = _.get(primaryAction, 'onClick');
+                if (onClick) {
+                    return onClick.call(this, {
+                        model: this.model,
+                        collection: _.get(this, 'model.collection'),
+                        $el: this.$('.dropdown--quickmenu > button')
+                    }, event);
+                }
+            } else {
                 return;
             }
             _.get(this, 'options.onClickRow', _.noop)(this.model, this);

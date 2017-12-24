@@ -276,5 +276,4 @@ TLT5 ;; @TEST building template with instances
  N TLT
  D BLDTLT("TLT5",.TLT)
  D ASSERT(0,$D(TLT("errors")))
- ;W ! ZW TLT
  Q

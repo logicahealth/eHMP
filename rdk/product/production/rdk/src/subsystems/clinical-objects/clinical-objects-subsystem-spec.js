@@ -6,11 +6,11 @@ var logger = sinon.stub(require('bunyan').createLogger({name: 'clinical-objects-
 var nock = require('nock');
 
 var sample1 = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
     model: {
-        patientUid: 'urn:va:patient:9E7A:3:3',
-        authorUid: 'REDACTED',
+        patientUid: 'urn:va:patient:SITE:3:3',
+        authorUid: 'USER  ',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         ehmpState: 'active',
@@ -19,7 +19,7 @@ var sample1 = {
             serviceCategory: 'serviceCategory',
             dateTime: 'dateTime'
         },
-        referenceId: 'urn:va:order:9E7A:3:15479',
+        referenceId: 'urn:va:order:SITE:3:15479',
         data: {
             labTestText: 'Lab Text',
             currentItemCount: 1,
@@ -35,7 +35,7 @@ var sample1 = {
 var clinicalObject = {
     uid: '',
     patientUid: '',
-    authorUid: 'urn:va:user:9E7A:123',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     ehmpState: 'active',
@@ -44,7 +44,7 @@ var clinicalObject = {
        serviceCategory: 'PSB',
        dateTime: '20160101120000'
     },
-    referenceId: 'urn:va:order:9E7A:3:15479',
+    referenceId: 'urn:va:order:SITE:3:15479',
     data: {}
 };
 
@@ -55,7 +55,7 @@ var buildSampleObject = function(sample) {
         authorUid: sample.model.authorUid,
         items: [{
             addendum: 'my note',
-            authorUid: 'REDACTED',
+            authorUid: 'USER  ',
             data: {
                 labTestText: 'Lab Text',
                 currentItemCount: 1,
@@ -67,10 +67,10 @@ var buildSampleObject = function(sample) {
             },
             domain: 'ehmp-order',
             ehmpState: 'active',
-            patientUid: 'urn:va:patient:9E7A:3:3',
-            referenceId: 'urn:va:order:9E7A:3:15479',
+            patientUid: 'urn:va:patient:SITE:3:3',
+            referenceId: 'urn:va:order:SITE:3:15479',
             subDomain: 'laboratory',
-            uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+            uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
             visit: {
                 dateTime: '01-25-2018',
                 location: 'lab',
@@ -82,10 +82,10 @@ var buildSampleObject = function(sample) {
 
 var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
     return {
-        pid: '9E7A;3',
+        pid: 'SITE;3',
         model: {
-            patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'REDACTED',
+            patientUid: 'urn:va:patient:SITE:3:3',
+            authorUid: 'USER  ',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -108,10 +108,10 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
     };
 };
 
-var updatedClinincalObject  = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'REDACTED',
+var updatedClinicalObject  = {
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'USER  ',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     ehmpState: 'active',
@@ -165,6 +165,23 @@ describe('Clinical object subsystem resource task tests', function() {
             });
         });
 
+        it('clinical object create should fail on invalid status code', function(done) {
+
+            var serviceUnavailableStatus = 503;
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(serviceUnavailableStatus, {'status': 'Internal service error'});
+
+            var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-order', 'laboratory');
+            clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
+                expect(response).to.be.undefined();
+                // Ensure logged message includes the original status code
+                expect(logger.error.calledWithMatch('Received statusCode ' + serviceUnavailableStatus)).to.be.true();
+                expect(err).to.be.an.object();
+                // Ensure caller receives HTTP 500 rather than original status code
+                expect(err.status).to.be(500);
+                done();
+            });
+        });
+
         it('should fail validation and handle errors if domain is incorrect', function(done) {
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-123', 'wrong');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
@@ -176,7 +193,6 @@ describe('Clinical object subsystem resource task tests', function() {
         });
 
         it('should fail validation and handle errors if called with an invalid model', function(done) {
-
             clinicalObjects.create(logger, appConfig, sample1.patientUid, function(err, response) {
                 expect(response).to.be.undefined();
                 expect(err).not.to.be.undefined();
@@ -246,13 +262,28 @@ describe('Clinical object subsystem resource task tests', function() {
         it('should update a clinical object when called with the correct parameters', function(done) {
             nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(200, {});
 
-            clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinincalObject, function(err, response) {
+            clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinicalObject, function(err, response) {
                 expect(response.body).to.be.an.object();
                 expect(err).to.be.null();
                 done();
             });
         });
 
+        it('clinical object update should fail on invalid status code', function(done) {
+
+            var serviceUnavailableStatus = 503;
+            nock(testVxsyncEndpoint).post('/' + vxSyncEndpoint).reply(serviceUnavailableStatus, {'status': 'Internal service error'});
+
+            clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinicalObject, function(err, response) {
+                expect(response).to.be.undefined();
+                // Ensure logged message includes the original status code
+                expect(logger.error.calledWithMatch('Received statusCode ' + serviceUnavailableStatus)).to.be.true();
+                expect(err).to.be.an.object();
+                // Ensure caller receives HTTP 500 rather than original status code
+                expect(err.status).to.be(500);
+                done();
+            });
+        });
         it('should fail validation and handle errors if called with an invalid UID', function(done) {
 
             var model = buildSampleObject(sample1);
@@ -300,9 +331,9 @@ describe('Clinical object subsystem resource task tests', function() {
             done();
         });
 
-        it ('should not transform site piece from 9E7A to ICN', function(done) {
+        it ('should not transform site piece from SITE to ICN', function(done) {
 
-            var clinicalObj = {patientUid:'urn:va:patient:9E7A:3:3'};
+            var clinicalObj = {patientUid:'urn:va:patient:SITE:3:3'};
 
             clinicalObjects.transformPatientUid(clinicalObj);
 
@@ -315,9 +346,9 @@ describe('Clinical object subsystem resource task tests', function() {
     describe('storeToSolr business rule', function() {
         describe('ehmp-activity consult', function() {
             var ehmpActivityConsultClinicalObject  = {
-                uid: 'urn:va:ehmp-activity:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                patientUid: 'urn:va:patient:9E7A:3:3',
-                authorUid: 'REDACTED',
+                uid: 'urn:va:ehmp-activity:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:SITE:3:3',
+                authorUid: 'USER  ',
                 domain: 'ehmp-activity',
                 subDomain: 'consult',
                 visit: {
@@ -341,9 +372,9 @@ describe('Clinical object subsystem resource task tests', function() {
         });
         describe('ehmp-activity request', function() {
             var ehmpActivityRequestClinicalObject  = {
-                uid: 'urn:va:ehmp-activity:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                patientUid: 'urn:va:patient:9E7A:3:3',
-                authorUid: 'REDACTED',
+                uid: 'urn:va:ehmp-activity:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:SITE:3:3',
+                authorUid: 'USER  ',
                 domain: 'ehmp-activity',
                 subDomain: 'request',
                 visit: {
@@ -368,9 +399,9 @@ describe('Clinical object subsystem resource task tests', function() {
         });
         describe('ehmp-order laboratory', function() {
             var ehmpOrderLaboratoryClinicalObject  = {
-                uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                patientUid: 'urn:va:patient:9E7A:3:3',
-                authorUid: 'REDACTED',
+                uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'urn:va:patient:SITE:3:3',
+                authorUid: 'USER  ',
                 domain: 'ehmp-order',
                 subDomain: 'laboratory',
                 visit: {

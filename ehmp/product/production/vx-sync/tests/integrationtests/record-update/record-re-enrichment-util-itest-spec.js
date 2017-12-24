@@ -24,7 +24,9 @@ var clearTubes = require(global.VX_INTTESTS + 'framework/handler-test-framework'
 var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 var moment = require('moment');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var syncApiPort = testConfig.vxsyncPort;
 
 //Use the main vxsync beanstalk for testing, since the record-update environment is run separately
 var port = PORT;
@@ -32,10 +34,11 @@ var port = PORT;
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = {
 	syncRequestApi: _.defaults({
-		host: host
+		host: host,
+		port: syncApiPort
 	}, wConfig.syncRequestApi),
 	vistaSites: {
-		'9E7A': _.clone(wConfig.vistaSites['9E7A'])
+		'SITE': _.clone(wConfig.vistaSites['SITE'])
 	},
 	jds: _.clone(wConfig.jds)
 };
@@ -47,13 +50,13 @@ var tubenames;
 /*
 	*** Note ***
 	This test requires a patient to be synced before it can test the utility.
-	The patient used here is 9E7A;25.
+	The patient used here is SITE;25.
 	This patient will remain synced after the test runs.
  */
 
 describe('Record Re-Enrichment util integration test', function() {
 	it('Verify utility runs without error', function() {
-		var pid = '9E7A;25';
+		var pid = 'SITE;25';
 
 		var pids = [pid];
 		var updateTime = moment().format('YYYYMMDDHHmmss');

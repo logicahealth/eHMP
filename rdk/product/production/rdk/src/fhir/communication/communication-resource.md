@@ -85,7 +85,7 @@ Updates user the preferences on what kind of messages they wish to receive
                     "system": "http://ehmp.DNS   /messagetypes"
                 },
                 "enabled": false,
-                "userId": "urn:va:user:9E7A:10000000270"
+                "userId": "urn:va:user:SITE:10000000270"
             }
     
     + Schema

@@ -14,7 +14,7 @@ module SitePrism
                   p Time.now - start_time
                   raise
                 else
-                  p "OVERWRITTEN INVISIBLITY CHECK: #{e.message}: retry"
+                  # p "OVERWRITTEN INVISIBLITY CHECK: #{e.message}: retry"
                   retry
                 end # if
               end # rescue

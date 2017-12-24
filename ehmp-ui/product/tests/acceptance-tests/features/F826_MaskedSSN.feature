@@ -1,4 +1,4 @@
-@F826  @reg1
+@F826  @reg3
 Feature: Maintain and Resume Patient Context
 
 @F826_1 @DE3047 @DE3863 @US14691 @DE5359 @DE4619 

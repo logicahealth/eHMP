@@ -7,6 +7,18 @@
         "name": "Applets",
         "url": "./#/ui/applets/"
     }, {
+        "name": "Contexts",
+        "url": "./#/ui/contexts/",
+        "subItemDropdown": true
+    }, {
+        "name": "Extensions",
+        "url": "./#/ui/extensions/",
+        "subItemDropdown": true
+    }, {
+        "name": "Resources",
+        "url": "./#/ui/resources/",
+        "subItemDropdown": true
+    }, {
         "name": "Screens",
         "url": "./#/ui/screens/"
     }],

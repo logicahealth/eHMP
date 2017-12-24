@@ -7,18 +7,18 @@ var input = require('./composition-resource-spec-data').inputValue;
 var singleRecord = input.data.items[0];
 
 var req = {
-    '_pid': '9E7A;253',
+    '_pid': 'SITE;253',
     query: {
-        'subject.identifier': '9E7A;253'
+        'subject.identifier': 'SITE;253'
     },
     headers: {
-        host: 'localhost:8888'
+        host: 'localhost:PORT'
     },
     protocol: 'http',
     param: function() {
-        return '9E7A;253';
+        return 'SITE;253';
     },
-    originalUrl: '/fhir/composition?subject.identifier=9E7A;253'
+    originalUrl: '/fhir/composition?subject.identifier=SITE;253'
 };
 
 function getClinicianExtension(extensions, uid, prop) {
@@ -66,7 +66,7 @@ describe('Composition FHIR conversion methods', function() {
         expect(fhirBundle.link).to.not.be.undefined();
         expect(fhirBundle.link.length).to.equal(1);
         expect(fhirBundle.link[0].relation).to.equal('self');
-        expect(fhirBundle.link[0].url).to.equal('http://localhost:8888/fhir/composition?subject.identifier=9E7A;253');
+        expect(fhirBundle.link[0].url).to.equal('http://localhost:PORT/fhir/composition?subject.identifier=SITE;253');
         expect(fhirBundle.total).to.equal(99);
         expect(fhirBundle.entry).to.not.be.undefined();
         expect(fhirBundle.entry.length).to.equal(2);

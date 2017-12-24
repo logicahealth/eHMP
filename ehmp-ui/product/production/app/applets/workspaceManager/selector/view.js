@@ -4,38 +4,40 @@ define([
     'underscore',
     'handlebars',
     'hbs!app/applets/workspaceManager/selector/templates/selectDropdown',
-    'hbs!app/applets/workspaceManager/selector/templates/menuItem',
-    'hbs!app/applets/workspaceManager/selector/templates/selectDropdownToggleButton'
+    'hbs!app/applets/workspaceManager/selector/templates/menuItem'
 ], function(
     Backbone,
     Marionette,
     _,
     Handlebars,
     WorkspaceSelectTemplate,
-    WorkSpaceSelectMenuItemTemplate,
-    WorkspaceSelectDropdownToggleButtonTemplate
+    WorkSpaceSelectMenuItemTemplate
 ) {
     'use strict';
 
     var CurrentScreenModel = Backbone.Model.extend({
         defaults: {
+            currentContextTitle: "",
             currentWorkspaceTitle: "",
-            predefined: false
+            predefined: false,
+            showFilter: true
         }
     });
+
+    var requestAnimationFrame = requestAnimationFrame || _.partialRight(setTimeout, 0);
 
     var WorkspaceSelectDropdownItemView = Backbone.Marionette.ItemView.extend({
         template: WorkSpaceSelectMenuItemTemplate,
         tagName: 'li',
-        className: 'list-group-item',
+        className: 'list-group-item prevent-default-styling',
         attributes: {
-            role: 'menuitem'
+            role: 'presentation'
         },
         ui: {
             'WorkspaceLink': 'a.workspace-navigation-link'
         },
         events: {
-            'click @ui.WorkspaceLink': 'navigateToNewScreen',
+            'click @ui.WorkspaceLink': 'navigateToNewScreen'
         },
         sessionUserEvents: {
             'change:preferences:defaultScreen': 'render'
@@ -51,15 +53,19 @@ define([
         navigateToNewScreen: function(e) {
             e.preventDefault();
             // Reset CRS highlighting
-            ADK.utils.crsUtil.removeStyle(this);
-            this.triggerMethod('navigate:new:screen');
+            this.$el.trigger('hidden.bs.dropdown');
+            ADK.Messaging.trigger('obscure:content');
+            requestAnimationFrame(function() {
+                this.triggerMethod('navigate:new:screen');
+                ADK.utils.crsUtil.removeStyle(this);
+            }.bind(this));
         },
         templateHelpers: function() {
             return {
                 'currentWorkspace': function() {
                     return ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === this.routeName;
                 },
-                'defaultScreen': function () {
+                'defaultScreen': function() {
                     return this.id === ADK.WorkspaceContextRepository.currentContextDefaultScreen;
                 }
             };
@@ -75,14 +81,14 @@ define([
             'FilterInput': 'input'
         },
         events: {
-            'submit' :function(e) {
+            'submit': function(e) {
                 e.preventDefault();
             },
             'click @ui.ClearFilterButton': function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.resetMenuItems();
-                this.$el.find('#dropdownSearchElement').focus();
+                this.ui.FilterInput.focus();
             },
             'keydown @ui.FilterInput': function(e) {
                 if (e.which === 32) {
@@ -108,20 +114,26 @@ define([
                     this.resetMenuItems();
                 }
             },
-            'click #workspaceNavigationManagerButton': function(e){
-                var channel = ADK.Messaging.getChannel('workspaceManagerChannel');
-                channel.trigger('workspaceManager');
+            'keydown .dropdown-body li:first a': function(e) {
+                if (_.isEqual(e.which, 38) && this.model.get('showFilter')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.ui.FilterInput.focus();
+                }
             }
         },
         childViewContainer: '@ui.DropdownMenuItemsContainer',
         childView: WorkspaceSelectDropdownItemView,
         emptyView: Backbone.Marionette.ItemView.extend({
-            template: _.template('<p class="left-padding-sm top-margin-sm">No workspaces found.</p>'),
+            template: _.template('<p class="left-padding-sm top-margin-sm" role="menuitem">No workspaces found.</p>'),
             tagName: 'li',
             attributes: {
-                "aria-live":"assertive"
+                "aria-live": "assertive"
             }
         }),
+        modelEvents: {
+            'change:currentContextTitle': 'render'
+        },
         childEvents: {
             'navigate:new:screen': function(child) {
                 this.navigate(child);
@@ -139,7 +151,6 @@ define([
         },
         initialize: function(options) {
             this.originalCollection = options.originalCollection;
-            this.currentWorkspaceModel = options.currentWorkspaceModel;
             this.listenTo(ADK.Messaging, 'screen:navigate', function() {
                 this.resetMenuItems();
                 this.updateForCurrentScreen();
@@ -166,7 +177,7 @@ define([
             }
         },
         updateForCurrentScreen: function() {
-            var currentWorkspaceID = this.currentWorkspaceModel.get('currentWorkspace').id;
+            var currentWorkspaceID = this.model.get('currentWorkspace').id;
             var currentWorkspaceMenuItem = this.children.find(function(child) {
                 return child.model.get('id') == currentWorkspaceID;
             });
@@ -179,60 +190,164 @@ define([
     });
 
     var WorkspaceSelectDropdownButtonTextView = Backbone.Marionette.ItemView.extend({
-        template: WorkspaceSelectDropdownToggleButtonTemplate,
-        initialize: function(options) {
-            this.listenTo(this.model, 'change:currentWorkspaceTitle', this.render);
+        tagName: 'span',
+        className: 'right-padding-xs transform-text-uppercase',
+        attributes: {
+            'id': 'screenName'
+        },
+        template: Handlebars.compile('<i class="fa fa-th-large" aria-hidden="true"></i> {{#if currentWorkspaceTitle}}{{currentWorkspaceTitle}}{{else}}Menu{{/if}}'),
+        modelEvents: {
+            'change:currentWorkspaceTitle': 'render'
         }
     });
 
-    var WorkspaceSelectDropdownLayoutView = Backbone.Marionette.LayoutView.extend({
-        className: 'btn-group workspace-selector left-padding-xs',
+    var WorkspaceContextTextView = Backbone.Marionette.ItemView.extend({
+        tagName: 'span',
+        template: Handlebars.compile('{{currentContextTitle}} Workspace:'),
+        modelEvents: {
+            'change:currentContextTitle': 'render'
+        }
+    });
+
+    var WorkspaceSelectOptionsDropdownCollectioneView = Backbone.Marionette.CompositeView.extend({
         template: Handlebars.compile([
-            '<div class="dropdown">',
-            '<button type="button" class="btn btn-primary dropdown-toggle workspace-dropdown-button workspace-manager-btn" ',
-            'title="Press enter to open the workspace navigation drop down." ',
-            'data-toggle="dropdown" aria-expanded="false"></button>',
-            '<div class="dropdown-menu-container"></div>',
-            '</div>'
+            '<button type="button" class="btn dropdown-toggle right-padding-xs left-padding-xs percent-height-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-original-title="Workspace Options">',
+            '<i class="fa fa-lg fa-cog"></i><span class="sr-only">Workspace Options</span>',
+            '</button>',
+            '<ul class="dropdown-menu" role="menu"></ul>'
         ].join('\n')),
-        ui: {
-            'DropdownToggleButton': 'button.workspace-dropdown-button',
-            'DropdownMenu': '.dropdown-menu-container'
-        },
-        regions: {
-            'WorkspaceSelectDropdownButtonTextRegion': '@ui.DropdownToggleButton',
-            'WorkspaceSelectDropdownMenuRegion': '@ui.DropdownMenu'
+        className: 'dropdown dropdown--options btn-group',
+        attributes: {
+            role: 'group'
         },
         events: {
-            'shown.bs.dropdown': function(e) {
+            'shown.bs.dropdown': 'transferFocusToFirstItem'
+        },
+        transferFocusToFirstItem: function() {
+            this.$('ul a:first').focus();
+        },
+        childViewContainer: 'ul',
+        behaviors: {
+            Tooltip: {
+                trigger: 'hover focus',
+                selector: '> button'
+            }
+        },
+        getChildView: function(item) {
+            return item.get('view').extend({
+                tagName: 'li',
+                className: 'prevent-default-styling',
+                attributes: {
+                    role: 'presentation'
+                }
+            });
+        },
+        childViewOptions: function(model, index) {
+            return {
+                optionsButton: this.$('button.dropdown-toggle')[0]
+            };
+        },
+        filter: function(child) {
+            return child.isOfGroup('workspaceSelectorOption', ADK.WorkspaceContextRepository.currentContextId) && child.shouldShow();
+        },
+        hasItems: function() {
+            return !_.isEmpty(this.collection.filter(this.filter));
+        },
+        resortView: function() {} // Turning off the rendering of children on a sort of the collection
+    });
+
+    var WorkspaceSelectDropdownLayoutView = Backbone.Marionette.LayoutView.extend({
+        behaviors: function() {
+            return {
+                Tooltip: {},
+                SkipLinks: {
+                    items: [{
+                        label: 'Workspace Navigation',
+                        element: function() {
+                            return this.$el;
+                        },
+                        rank: 1,
+                        focusFirstTabbable: true
+                    }]
+                },
+                FlexContainer: {
+                    container: [{
+                        container: true,
+                        direction: 'row'
+                    }, {
+                        container: 'button > div ',
+                        direction: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }, {
+                        container: 'button',
+                        direction: 'row',
+                        alignItems: 'center'
+                    }]
+                }
+            };
+        },
+        className: 'prevent-default-styling btn-group workspace-selector',
+        template: Handlebars.compile([
+            '<div class="dropdown dropdown--workspace btn-group" role="group">',
+            '<button type="button" class="btn left-padding-sm dropdown-toggle workspace-dropdown-button workspace-manager-btn" ',
+            'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+            '<span class="context-name right-padding-xs"></span>',
+            '<div>',
+            '<span class="workspace-name"></span>',
+            '<i class="fa fa-caret-down pull-right" aria-hidden="true"></i>',
+            '</div>',
+            '</button>',
+            '<div class="dropdown-menu-container--workspaces"></div>',
+            '</div>',
+        ].join('\n')),
+        ui: {
+            'WorkspaceName': '.workspace-name',
+            'ContextName': '.context-name',
+            'WorkspaceDropdown': '.dropdown--workspace',
+            'WorkspaceDropdownMenuContainer': '.dropdown-menu-container--workspaces',
+            'WorkspaceDropdownToggleButton': '.workspace-dropdown-button'
+        },
+        regions: {
+            'WorkspaceNameRegion': '@ui.WorkspaceName',
+            'ContextNameRegion': '@ui.ContextName',
+            'WorkspaceDropdownMenuRegion': '@ui.WorkspaceDropdownMenuContainer'
+        },
+        events: {
+            'shown.bs.dropdown @ui.WorkspaceDropdown': function(e) {
                 e.stopImmediatePropagation();
-                this.ui.DropdownMenu.addClass('open');
-                this.$('#dropdownSearchElement').focus();
-            },
-            'hidden.bs.dropdown': function(e) {
-                e.stopImmediatePropagation();
-                this.ui.DropdownMenu.removeClass('open');
-                this.ui.DropdownMenu.attr('aria-expanded', 'false');
-            },
-            'blur @ui.DropdownToggleButton': function(e) {
-                if(this.$('.dropdown').hasClass('open') && this.$(e.relatedTarget).length === 0) {
-                    this.ui.DropdownToggleButton.trigger('click');
+                this.ui.WorkspaceDropdownMenuContainer.addClass('open');
+                this.$el.addClass('dropdown-menu-open');
+                if (this.currentWorkspaceModel.get('showFilter')) {
+                    this.$('#dropdownSearchElement').focus();
+                } else {
+                    this.ui.WorkspaceDropdownMenuContainer.find('.dropdown-body li:first a').focus();
                 }
             },
-            'blur @ui.DropdownMenu': function(e) {
-                if(this.$('.dropdown').hasClass('open') && _.isEmpty(this.$el.find(e.relatedTarget)) && e.relatedTarget !== null) {
-                    this.ui.DropdownToggleButton.trigger('click');
+            'hidden.bs.dropdown @ui.WorkspaceDropdown': function(e) {
+                e.stopImmediatePropagation();
+                this.ui.WorkspaceDropdownMenuContainer.removeClass('open');
+                this.$el.removeClass('dropdown-menu-open');
+                this.ui.WorkspaceDropdownMenuContainer.attr('aria-expanded', 'false');
+            },
+            'blur @ui.WorkspaceDropdownToggleButton': function(e) {
+                if (this.$('.dropdown').hasClass('open') && this.$(e.relatedTarget).length === 0) {
+                    this.ui.WorkspaceDropdownToggleButton.trigger('click');
+                }
+            },
+            'blur @ui.WorkspaceDropdownMenuContainer': function(e) {
+                if (this.$('.dropdown').hasClass('open') && _.isEmpty(this.$el.find(e.relatedTarget)) && e.relatedTarget !== null) {
+                    this.ui.WorkspaceDropdownToggleButton.trigger('click');
                 }
             }
         },
         initialize: function(options) {
             this.collection = new Backbone.Collection();
-            this.originalCollection =  new Backbone.Collection();
+            this.originalCollection = new Backbone.Collection();
+            this.currentWorkspaceModel = new CurrentScreenModel();
             this.listenToOnce(this.collection, 'change', this.updateCurrentScreenModel);
             this.updateWorkspaceList();
             this.listenTo(ADK.Messaging, 'close:workspaceManager', this.updateWorkspaceList);
-
-            this.currentWorkspaceModel = new CurrentScreenModel();
 
             // Update the current screen model once on init to pick up the default screen model attributes
             this.updateCurrentScreenModel();
@@ -240,25 +355,78 @@ define([
             this.dropdownButtonTextView = new WorkspaceSelectDropdownButtonTextView({
                 model: this.currentWorkspaceModel
             });
-            this.dropdownMenuView = new WorkspaceSelectDropdownCompositeView({
-                currentWorkspaceModel: this.currentWorkspaceModel,
+            this.contextTextView = new WorkspaceContextTextView({
+                model: this.currentWorkspaceModel
+            });
+            this.workspaceDropdownMenuView = new WorkspaceSelectDropdownCompositeView({
+                model: this.currentWorkspaceModel,
                 collection: this.collection,
                 originalCollection: this.originalCollection
             });
 
-            this.listenTo(ADK.WorkspaceContextRepository.currentWorkspaceAndContext, 'change:workspace', function() {
+            this.registeredComponentsCollection = ADK.Messaging.request('get:components');
+            this.optionsDropdownMenuView = new WorkspaceSelectOptionsDropdownCollectioneView({
+                collection: this.registeredComponentsCollection
+            });
+
+            this.currentContextAndWorkspace = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
+
+            this.listenTo(this.currentContextAndWorkspace, 'change:workspace change:context', function() {
                 // this needs to be called upon each change of screen unless we go to a global collection
                 this.updateWorkspaceList();
                 this.updateCurrentScreenModel();
             });
+            this.listenTo(this.currentContextAndWorkspace, 'change:context', this.updateVisibility);
 
-            this.listenTo(ADK.Messaging, 'workspace:change:currentWorkspaceTitle', function (newTitle) {
+            this.listenTo(ADK.Messaging, 'workspace:change:currentWorkspaceTitle', function(newTitle) {
                 this.currentWorkspaceModel.set('currentWorkspaceTitle', newTitle);
             });
+
+            this.bindEntityEvents(ADK.UserDefinedScreens, this.userDefinedScreensEvents);
+        },
+        onAttach: function(){
+            this.updateSkipLinkVisibility();
+        },
+        updateSkipLinkVisibility: function() {
+            this.triggerMethod('toggle:skip:link', 'Workspace Navigation', !!ADK.WorkspaceContextRepository.currentContext.get('showWorkspaceSelector'));
+        },
+        updateVisibility: function() {
+            var showWorkspaceSelector = ADK.WorkspaceContextRepository.currentContext.get('showWorkspaceSelector');
+            if (showWorkspaceSelector) {
+                this.$el.removeClass('hidden');
+            } else {
+                this.$el.addClass('hidden');
+            }
+            this.updateSkipLinkVisibility();
+            this.toggleOptionsView();
         },
         onBeforeShow: function() {
-            this.showChildView('WorkspaceSelectDropdownButtonTextRegion', this.dropdownButtonTextView);
-            this.showChildView('WorkspaceSelectDropdownMenuRegion', this.dropdownMenuView);
+            this.updateVisibility();
+            this.showChildView('ContextNameRegion', this.contextTextView);
+            this.showChildView('WorkspaceNameRegion', this.dropdownButtonTextView);
+            this.showChildView('WorkspaceDropdownMenuRegion', this.workspaceDropdownMenuView);
+            this.toggleOptionsView();
+        },
+        toggleOptionsView: function() {
+            this.stopListening(this.registeredComponentsCollection, 'add');
+            var hasItems = this.optionsDropdownMenuView.hasItems();
+            if (!hasItems && !_.isEmpty(this.$('.dropdown--options'))) {
+                this.el.removeChild(this.optionsDropdownMenuView.el);
+            }
+            this.showOptions(hasItems);
+        },
+        showOptions: function(shouldShow) {
+            if (shouldShow) {
+                this.optionsDropdownMenuView.render();
+                this.el.appendChild(this.optionsDropdownMenuView.el);
+            } else {
+                this.listenTo(this.registeredComponentsCollection, 'add', function(componentModel) {
+                    if (this.optionsDropdownMenuView.filter(componentModel)) {
+                        this.showOptions();
+                        this.stopListening(this.registeredComponentsCollection, 'add');
+                    }
+                });
+            }
         },
         updateCurrentScreenModel: function() {
             var screenTitle = "",
@@ -276,30 +444,39 @@ define([
             }
 
             this.currentWorkspaceModel.set({
+                currentContextTitle: _.capitalize(ADK.WorkspaceContextRepository.currentContextId),
                 currentWorkspace: currentWorkspace,
                 predefined: currentWorkspace.get('predefined') || false,
                 currentWorkspaceTitle: screenTitle,
-                userDefined: (!currentWorkspace.get('predefined') && (currentWorkspace.get('contentRegionLayout') === 'gridster'))
+                userDefined: (!currentWorkspace.get('predefined') && (currentWorkspace.get('contentRegionLayout') === 'gridster')),
+                showFilter: !ADK.WorkspaceContextRepository.currentContext.get('hideFilterInWorkspaceSelector')
             });
         },
-        updateWorkspaceList: function() {
-            // this should be updated when global collection integration occurs
-            ADK.UserDefinedScreens.getScreensConfig().done(function(screensConfig) {
-                if (!_.isEqual(this.lastScreensConfig, screensConfig)) {
-                    this.collection.set(screensConfig.screens);
-                    this.originalCollection.set(this.collection.models);
-                    this.lastScreensConfig = screensConfig;
-                }
-            }.bind(this));
+        userDefinedScreensEvents: {
+            'fetch:success': 'updateWorkspaceList',
+            'clone:success': 'updateWorkspaceList',
+            'save:success': 'updateWorkspaceList'
+        },
+        updateWorkspaceList: function(model) {
+            var screensConfig = ADK.UserDefinedScreens.getScreensConfigFromSession();
+            if (screensConfig && !_.isEqual(this.lastScreensConfig, screensConfig)) {
+                this.collection.set(screensConfig.screens);
+                this.originalCollection.set(this.collection.models);
+                this.lastScreensConfig = screensConfig;
+                this.updateCurrentScreenModel();
+            }
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(ADK.UserDefinedScreens, this.userDefinedScreensEvents);
         }
     });
 
     ADK.Messaging.trigger('register:component', {
-        type: "contextNavigationItem",
-        group: ["patient", "patient-right", "staff", "admin"],
+        type: "applicationHeaderItem",
+        group: ["left"],
         key: "workspaceSelector",
         view: WorkspaceSelectDropdownLayoutView,
-        orderIndex: 3
+        orderIndex: 20
     });
 
     return WorkspaceSelectDropdownLayoutView;

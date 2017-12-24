@@ -3,9 +3,11 @@
 var rdk = require('../../../core/rdk');
 var uriBuilder = rdk.utils.uriBuilder;
 var httpUtil = rdk.utils.http;
+var RdkError = rdk.utils.RdkError;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var _ = require('lodash');
 var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
+var getDatabaseConfigFromRequest = require('../activity-utils').getDatabaseConfigFromRequest;
 var callJpid = require('./task-operations-resource').callJpid;
 var async = require('async');
 var moment = require('moment');
@@ -21,6 +23,15 @@ function getOpenConsultTasks(req, res) {
         pidError = new Error('Unable to retrieve \'pid\' parameter');
         req.logger.error(pidError);
         return res.status(rdk.httpstatus.bad_request).rdkSend(pidError.message);
+    }
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        var configError = new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        });
+        return res.status(configError.status).rdkSend(configError);
     }
 
     var consultTaskCb = function(err, results) {
@@ -60,10 +71,10 @@ function getOpenConsultTasks(req, res) {
             if (pid.indexOf(',') !== -1) {
                 return consultTaskCb(new Error('Invalid \'pid\' parameter'));
             }
-            return doGetOpenConsultTasks(pid, req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+            return doGetOpenConsultTasks(pid, req.logger, getGenericJbpmConfig(req), dbConfig, consultTaskCb);
         }
 
-        return doGetOpenConsultTasks(identifiers.join(), req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+        return doGetOpenConsultTasks(identifiers.join(), req.logger, getGenericJbpmConfig(req), dbConfig, consultTaskCb);
     });
 }
 
@@ -196,7 +207,7 @@ function doGetOpenConsultTasks(identifiers, logger, jbpmConfig, dbConfig, consul
         p_process_definition: processDefinitionId
     };
 
-    var query = 'BEGIN TASKS.getTasksByState(:p_patient_identifiers, :p_activity_states, :p_process_definition, :recordset); END;';
+    var query = 'BEGIN activitydb.tasks.getTasksByState(:p_patient_identifiers, :p_activity_states, :p_process_definition, :recordset); END;';
     logger.debug({query: query, parameters: procParams}, 'consult-tasks-resource:doGetOpenConsultTasks executing stored procedure');
 
     activityDb.doExecuteProcWithParams({

@@ -1,0 +1,16 @@
+#!/bin/sh
+# synapse
+#
+# Starts synapse
+description "upstart script for the synapse process"
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+respawn
+respawn limit 15 5
+
+env GEM_HOME=<%= @gem_home %>
+env PATH=/opt/chef/bin:/opt/chef/embedded/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+chdir <%= @deploy_path %>
+exec <%= @executable %> --config <%= @config_file %> >> /var/log/synapse.log 2>> /var/log/synapse.err

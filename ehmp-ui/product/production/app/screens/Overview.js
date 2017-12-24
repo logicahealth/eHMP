@@ -23,6 +23,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "cds_advice",
+            'instanceId': 'applet-1',
             "title": "Clinical Reminders",
             "maximizeScreen": "cds-advice-full",
             "region": "8afd050c9965",
@@ -37,6 +38,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "problems",
+            'instanceId': 'applet-2',
             "title": "Problems",
             "maximizeScreen": "problems-full",
             "region": "88c9e691ddef",
@@ -51,6 +53,7 @@ define([
             "viewType": "gist"
         }, {
             "id": "immunizations",
+            'instanceId': 'applet-3',
             "title": "Immunizations",
             "maximizeScreen": "immunizations-full",
             "region": "f620bece943a",
@@ -65,6 +68,7 @@ define([
             "viewType": "gist"
         }, {
             "id": "encounters",
+            'instanceId': 'applet-4',
             "title": "Encounters",
             "region": "c16a40538ae0",
             "dataRow": "1",
@@ -79,6 +83,7 @@ define([
             "maximizeScreen": "news-feed"
         }, {
             "id": "activeMeds",
+            'instanceId': 'applet-5',
             "title": "Active & Recent Medications",
             "region": "fdf270309a7d",
             "dataRow": "5",
@@ -93,6 +98,7 @@ define([
             "maximizeScreen": "medication-review"
         }, {
             "id": "allergy_grid",
+            'instanceId': 'applet-6',
             "title": "Allergies",
             "maximizeScreen": "allergy-grid-full",
             "region": "ae935faac713",
@@ -107,6 +113,7 @@ define([
             "viewType": "gist"
         }, {
             "id": "reports",
+            'instanceId': 'applet-7',
             "title": "Reports",
             "maximizeScreen": "reports-full",
             "region": "d67b019e20e6",
@@ -121,6 +128,7 @@ define([
             "viewType": "summary"
         }, {
             "id": "vitals",
+            'instanceId': 'applet-8',
             "title": "Vitals",
             "maximizeScreen": "vitals-full",
             "region": "07464d212c2e",
@@ -135,6 +143,7 @@ define([
             "viewType": "gist"
         }, {
             "id": "lab_results_grid",
+            'instanceId': 'applet-9',
             "title": "Numeric Lab Results",
             "maximizeScreen": "lab-results-grid-full",
             "region": "a4fcd86f8715",

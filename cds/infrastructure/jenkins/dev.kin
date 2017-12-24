@@ -1,0 +1,10 @@
+"cds-dev-build-%branch%" {
+	template = 'templates/gradle-dev-build.tpl'
+	description = "cds dev build for the branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/cds.git'
+	gitBranch = '%branch%'
+	
+  rootDirectory = 'product'
+	gradleTasks = 'build upload'
+}

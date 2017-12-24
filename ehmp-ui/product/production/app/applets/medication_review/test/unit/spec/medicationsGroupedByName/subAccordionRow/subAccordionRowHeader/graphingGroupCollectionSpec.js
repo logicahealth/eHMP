@@ -1,14 +1,15 @@
 define([
     'jasminejquery',
     'backbone',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowHeader/graphingGroupCollection',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/medNameRowSubCollection'
-], function(jasminejquery, Backbone, MedicationOrderModel, GraphingGroupCollection, MedNameRowSubCollection) {
+], function(jasminejquery, Backbone, GraphingGroupCollection, MedNameRowSubCollection) {
     'use strict';
     var graphingGroupCollection, med1, med2, med3, med4, med5, med6, med7, med8, med9, med10, med11, med12;
+    var MedicationOrderModel;
 
-    beforeEach(function() {
+
+    var setupTest = function() {
 
         med1 = new MedicationOrderModel({
             uid: 'uid:med1',
@@ -106,7 +107,23 @@ define([
                 fillsRemaining: 1
             }]
         });
+    };
+
+    beforeEach(function(done) {
+        if (_.isUndefined(MedicationOrderModel)) {
+            require([
+                'app/resources/fetch/medication_review/medicationOrderModel'
+            ], function(model) {
+                MedicationOrderModel = model;
+                setupTest();
+                done();
+            });
+        } else {
+            setupTest();
+            done();
+        }
     });
+
 
     describe("Graphing group collection parse with all meds not graphable", function() {
         it("Will return meds in the given order when all are not graphable", function() {

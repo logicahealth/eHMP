@@ -5,7 +5,7 @@
     "link": [
         {
             "rel": "self",
-            "href": "http://127.0.0.1:8888/resource/fhir/allergyintolerance?subject.identifier=10107V395912&accessCode=REDACTED &verifyCode=REDACTED&site=9E7A&division=500"
+            "href": "http://127.0.0.1:PORT/resource/fhir/allergyintolerance?subject.identifier=10107V395912&accessCode=USER  &verifyCode=PW      &site=SITE&division=500"
         }
     ],
     "entry": [
@@ -18,7 +18,7 @@
                 },
                 "recordedDate": "2005-03-17T20:06:00",
                 "patient": {
-                    "reference" : "9E7A;253"
+                    "reference" : "SITE;253"
                 },
                
                 "substance": [
@@ -69,7 +69,7 @@
                     "div": "<div>CHOCOLATE</div>"
                 },
                 "recordedDate": "2007-12-17T15:12:00",
-                "patient": "9E7A;253",
+                "patient": "SITE;253",
                 "substance": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233"
@@ -149,7 +149,7 @@
                     "div": "<div>PENICILLIN</div>"
                 },
                 "recordedDate": "2005-03-17T20:06:00",
-                "patient": "C877;253",
+                "patient": "SITE;253",
                 "substance": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
@@ -190,7 +190,7 @@
                     "div": "<div>CHOCOLATE</div>"
                 },
                 "recordedDate": "2007-12-17T15:12:00",
-                "patient": "C877;253",
+                "patient": "SITE;253",
                 "substance": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233"

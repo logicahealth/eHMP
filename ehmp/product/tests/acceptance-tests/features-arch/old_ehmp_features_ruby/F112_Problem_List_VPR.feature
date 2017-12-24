@@ -7,16 +7,16 @@ Feature: F112 Return of Problem List in VPR format
 @f112_1_problem_vpr @vpr
 Scenario: Client can request the Problem List in VPR format
 	Given a patient with "problem list results" in multiple VistAs
-      Given a patient with pid "9E7A;129" has been synced through Admin API
-	When the client requests problem lists for the patient "9E7A;129" in VPR format
+      Given a patient with pid "SITE;129" has been synced through Admin API
+	When the client requests problem lists for the patient "SITE;129" in VPR format
 	Then the client receives 16 VPR "VistA" result(s)
 	Then the client receives 16 VPR "panorama" result(s)
 	Then the VPR results contain:
                                                       
       | field                  | value                          |
-      | uid                    | urn:va:problem:9E7A:129:134    |
+      | uid                    | urn:va:problem:SITE:129:134    |
       | summary                | 518.83 (ICD-9-CM 799.9)        |
-      | pid                    | 9E7A;129                       |
+      | pid                    | SITE;129                       |
       | localId                | 134                            |
       | facilityCode           | 500                            |
       | facilityName           | CAMP MASTER                    |
@@ -41,26 +41,26 @@ Scenario: Client can request the Problem List in VPR format
       | comments.summary       | ProblemComment{uid='null'}     |
       | comments.entered       | 19981204                       |
       | comments.enteredByName | PROVIDER,TWOHUNDREDNINETYSEVEN |
-      | comments.enteredByCode | urn:va:user:9E7A:11712         |
+      | comments.enteredByCode | urn:va:user:SITE:11712         |
       | comments.comment       | this is a new icd 9 code       |
       | kind                   | Problem                        |
       | icdGroup               | 799                            |
-      | providerUid            | urn:va:user:9E7A:11712         |
-      | locationUid            | urn:va:location:9E7A:261       |
+      | providerUid            | urn:va:user:SITE:11712         |
+      | locationUid            | urn:va:location:SITE:261       |
       
 @f112_2_problem_vpr @vpr
 Scenario: Client can request the Problem List in VPR format
 	Given a patient with "problem list results" in multiple VistAs
-    Given a patient with pid "C877;129" has been synced through Admin API
-	When the client requests problem lists for the patient "C877;129" in VPR format
+    Given a patient with pid "SITE;129" has been synced through Admin API
+	When the client requests problem lists for the patient "SITE;129" in VPR format
 	Then the client receives 16 VPR "VistA" result(s)
 	Then the client receives 16 VPR "kodak" result(s)
 	Then the VPR results contain:
                                                       
       | field                  | value                          |
-      | uid                    | urn:va:problem:C877:129:134    |
+      | uid                    | urn:va:problem:SITE:129:134    |
       | summary                | 518.83 (ICD-9-CM 799.9)        |
-      | pid                    | C877;129                       |
+      | pid                    | SITE;129                       |
       | localId                | 134                            |
       | facilityCode           | 500                            |
       | facilityName           | CAMP BEE                       |
@@ -85,12 +85,12 @@ Scenario: Client can request the Problem List in VPR format
       | comments.summary       | ProblemComment{uid='null'}     |
       | comments.entered       | 19981204                       |
       | comments.enteredByName | PROVIDER,TWOHUNDREDNINETYSEVEN |
-      | comments.enteredByCode | urn:va:user:C877:11712         |
+      | comments.enteredByCode | urn:va:user:SITE:11712         |
       | comments.comment       | this is a new icd 9 code       |
       | kind                   | Problem                        |
       | icdGroup               | 799                            |
-      | providerUid            | urn:va:user:C877:11712         |
-      | locationUid            | urn:va:location:C877:261       |
+      | providerUid            | urn:va:user:SITE:11712         |
+      | locationUid            | urn:va:location:SITE:261       |
 
 # following 2 scenarios are checking for another patient for return of problems results.
 # only few fields are checked to validate data integrity.
@@ -105,7 +105,7 @@ Scenario: Client can request problem list results in VPR format
 	Then the VPR results contain:
                                                       
       | field						| value   									|
-      | uid							| CONTAINS urn:va:problem:9E7A:100012    	|
+      | uid							| CONTAINS urn:va:problem:SITE:100012    	|
       | pid							| CONTAINS ;100012								|
       | facilityCode				| 500										|
       | facilityName				| CAMP MASTER								|
@@ -133,7 +133,7 @@ Scenario: Client can request problem list results in VPR format
 	Then the VPR results contain:
                                                       
       | field						| value   									|
-      | uid							| CONTAINS urn:va:problem:C877:100012    	|
+      | uid							| CONTAINS urn:va:problem:SITE:100012    	|
 
       | pid							| CONTAINS ;100012							|
       | facilityCode				| 500										|
@@ -157,8 +157,8 @@ Scenario: Client can request problem list results in VPR format
 @f100_5_problem_vpr_neg_vpr	
 Scenario: Negative scenario.  Client can request problem list results in VPR format
 	Given a patient with "No problem list results" in multiple VistAs
-      Given a patient with pid "9E7A;737" has been synced through Admin API
-	When the client requests problem lists for the patient "9E7A;737" in VPR format
+      Given a patient with pid "SITE;737" has been synced through Admin API
+	When the client requests problem lists for the patient "SITE;737" in VPR format
 	Then a successful response is returned
 	Then corresponding matching records totaling "0" are displayed      
       

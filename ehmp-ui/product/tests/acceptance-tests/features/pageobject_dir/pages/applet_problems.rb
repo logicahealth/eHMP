@@ -14,13 +14,13 @@ class PobProblemsApplet < PobParentApplet
   elements :fld_problem_gist_toolbar_trigger, "[data-appletid='problems'] .table-row-toolbar .table-row [dialog-toggle='toolbar']"
   elements :fld_problems_gist, "[data-appletid=problems] .gist-item-list .gist-item"
   
-  element :fld_quick_view_no_toolbar, "[data-item-instanceid='onset_formatted_urn_va_problem_9E7A_711_139']"
+  element :fld_quick_view_no_toolbar, "[data-item-instanceid='onset_formatted_urn_va_problem_SITE_711_139']"
 
   element :fld_open_tray, "#patientDemographic-newObservation.sidebar.open"
-  element :fld_add_problem_title, "#main-workflow-label-Add-Problem"
+  element :fld_add_problem_title, "[id^=main-workflow-label-view]"
 
-  elements :fld_all_problems_expanded_view, "#data-grid-problems tr.selectable"
-
+  elements :fld_all_problems_expanded_view, "[data-appletid='problems'] .data-grid table tr.selectable"
+  elements :fld_expanded_facilities, "[data-appletid='problems'] tbody td .facilityName"
   elements :fld_gist_problem_names, "[data-appletid='problems'] .problem-name span:not(.sr-only)"
   elements :fld_gist_onset, "[data-appletid='problems'] [data-item-instanceid^='onset_formatted']"
 
@@ -35,12 +35,12 @@ class PobProblemsApplet < PobParentApplet
   # *****************  All_Drop_down_Elements  ******************* #
 
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_problems, "table[id='data-grid-problems'] tr.selectable"
-  element :tbl_empty_row, "table[id='data-grid-problems'] tr.empty"
+  elements :tbl_problems, "[data-appletid='problems'] .data-grid table tr.selectable"
+  element :tbl_empty_row, "[data-appletid='problems'] .data-grid table tr.empty"
   elements :tbl_summary_problem_names, "[data-appletid=problems] tr.selectable td:first-of-type"
   elements :tbl_summary_problem_names_srelement, "[data-appletid=problems] tr.selectable td:first-of-type span"
   elements :tbl_problems_quick_view, ".table-condensed tr"
-  elements :tbl_problems_quick_view_headers, "#urn_va_problem_9E7A_711_139 thead th"
+  elements :tbl_problems_quick_view_headers, "div.popover [id^=urn_va_problem_] thead th"
   
   element :col_problems, "[data-appletid=problems] [data-header-instanceid='name-header']"
   element :col_acuity, "[data-appletid=problems] [data-header-instanceid='onset-date-header']"
@@ -48,7 +48,18 @@ class PobProblemsApplet < PobParentApplet
   element :col_facility, "[data-appletid=problems] [data-header-instanceid='facility-name-header']"
   
   element :col_problem_name, "[data-header-instanceid='problems-problemText'] a"
+    
+  # *************** CIW **************** #
+  element :pbm_essential_hypertension, :xpath, "//div[@data-appletid='problems']/descendant::span[contains(string(), 'Essential hypertension')]/ancestor::div[starts-with(@data-cell-instanceid, 'event_name_urn_va_problem')]"
+  elements :udw_pbm_essential_hypertension, :xpath, "//*[@data-appletid='problems']/descendant::td[contains(string(), 'Hypertension')]"
+  element :btn_associated_workspace_multiple, "[aria-label='associated workspace']"
+  elements :fld_sub_menu_items, "[aria-labelledby^='submenuview'].dropdown-menu .list-group-item"
+  element :btn_associated_workspace, ".associatedworkspace-button-toolbar"
+  element :btn_second_udw, "[aria-labelledby^='submenuview'].dropdown-menu li:nth-child(2) a"
+    
 
+  # *************** DETAILS ************** #
+  element :btn_edit_problem, '#editBtn'
   def initialize
     super
     appletid_css = "[data-appletid=problems]"
@@ -58,7 +69,8 @@ class PobProblemsApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
     add_tile_sort_elements
     add_text_filter appletid_css
   end
@@ -73,7 +85,7 @@ class PobProblemsApplet < PobParentApplet
   
   def applet_gist_loaded?
     return true if has_fld_empty_gist?
-    return fld_problems_gist.length > 0
+    return fld_gist_problem_names.length > 0
   rescue => exc
     p exc
     return false
@@ -118,5 +130,13 @@ class PobProblemsApplet < PobParentApplet
 
   def gist_facility_column_text
     fld_gist_facility.map { | name_element | name_element.text  }
+  end
+
+  def rows_for_facility(facility)
+    self.class.elements :fld_facility_rows, :xpath, "//span[@class='facilityName' and contains(string(),'#{facility}')]/ancestor::tr"
+  end
+
+  def expanded_row_elements(data_row_instanceid)
+    self.class.element :td_acuity, "[data-row-instanceid='#{data_row_instanceid}'] .acuityType"
   end
 end

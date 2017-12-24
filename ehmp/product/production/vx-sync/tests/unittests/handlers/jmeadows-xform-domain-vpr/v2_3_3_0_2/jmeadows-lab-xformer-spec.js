@@ -2,10 +2,14 @@
 
 require('../../../../../env-setup');
 var _ = require('underscore');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
-var handler = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-xform-domain-vpr-handler');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_3_0_2/jmeadows-lab-xformer');
-var util = require('util');
 
 describe('jmeadows-lab-xformer', function() {
 
@@ -55,7 +59,7 @@ describe('jmeadows-lab-xformer', function() {
         'units': 'mmol/L',
         'sensitive': false,
         'verifiedBy': ''
-    }; //require('../../../data/secondary/dod/lab');
+    };  //require('../../../data/secondary/dod/lab');
 
     var sampleDODLab2 = _.clone(sampleDODLab);  // "NEGATIVE"
     sampleDODLab2.referenceRange = '(NEGATIVE)';
@@ -207,7 +211,7 @@ describe('jmeadows-lab-xformer', function() {
     }];
 
     it('transform sample lab to VPR', function() {
-        var result = xformer(sampleDODLab, mockEdipi);
+        var result = xformer(log, sampleDODLab, mockEdipi);
         expect(result.codes).toEqual(sampleVPRLab.codes);
         expect(result.facilityCode).toEqual(sampleVPRLab.facilityCode);
         expect(result.facilityName).toEqual(sampleVPRLab.facilityName);
@@ -233,58 +237,53 @@ describe('jmeadows-lab-xformer', function() {
         expect(result.typeName).toEqual(sampleVPRLab.typeName);
         expect(result.interpretationName).toEqual(sampleVPRLab.interpretationName);
         expect(result.interpretationCode).toEqual(sampleVPRLab.interpretationCode);
-        expect(result.uid).toMatch(/^(urn:va:lab:DOD:000000121:\d{14}_130505-BCH-1659-CH_6827)/);
+        expect(result.uid).toMatch('urn:va:lab:DOD:000000121:1000010437_6827');
         expect(result.pid).toEqual(sampleVPRLab.pid);
     });
 
     describe('referenceRange', function(){
         it('transform reference range', function(){
-            var result = xformer(sampleDODLab2, mockEdipi);
+            var result = xformer(log, sampleDODLab2, mockEdipi);
             expect(result.high).toBeUndefined();
             expect(result.low).toBeUndefined();
         });
 
         it('decimal without preceding integer referenceRange', function(){
-            var result = xformer(sampleDODLab3, mockEdipi);
+            var result = xformer(log, sampleDODLab3, mockEdipi);
             expect(result.high).toBe('1.3');
             expect(result.low).toBe('.2');
         });
 
         it('integer referenceRange', function(){
-            var result = xformer(sampleDODLab4, mockEdipi);
+            var result = xformer(log, sampleDODLab4, mockEdipi);
             expect(result.high).toBe('35');
             expect(result.low).toBe('0');
         });
 
         it('< integer referenceRange', function(){
-            var result = xformer(sampleDODLab5, mockEdipi);
+            var result = xformer(log, sampleDODLab5, mockEdipi);
             expect(result.high).toBeUndefined();
             expect(result.low).toBeUndefined();
         });
 
         it('double precision decimal', function(){
-            var result = xformer(sampleDODLab6, mockEdipi);
+            var result = xformer(log, sampleDODLab6, mockEdipi);
             expect(result.high).toBe('13.00');
             expect(result.low).toBe('5.00');
         });
 
         it('reversed high/low - invalid but should still work', function(){
-            var result = xformer(sampleDODLab7, mockEdipi);
+            var result = xformer(log, sampleDODLab7, mockEdipi);
             expect(result.high).toBe('13');
             expect(result.low).toBe('54');
         });
     });
 
     it('transform sample lab document record to VRP types', function() {
-        var resultDoc = xformer(sampleDODLabDocument, mockEdipi);
-        // console.log(util.inspect(resultDoc, {
-        //     depth: 4
-        // }));
+        var resultDoc = xformer(log, sampleDODLabDocument, mockEdipi);
         expect(_.isArray(resultDoc)).toBeTruthy();
         expect(resultDoc.length).toBe(2);
         expect(_.isArray(resultDoc[0].codes)).toBeTruthy();
-        // expect(resultDoc[0].codes[0].code).toEqual(sampleDODLabDocument[0].codes[0].code);
-        // expect(resultDoc[0].codes[0].system).toEqual(sampleDODLabDocument[0].codes[0].system);
         expect(resultDoc[0].facilityCode).toEqual(sampleVPRLabDocument[0].facilityCode);
         expect(resultDoc[0].facilityName).toEqual(sampleVPRLabDocument[0].facilityName);
         expect(resultDoc[0].localId).toEqual(sampleVPRLabDocument[0].localId);
@@ -329,15 +328,5 @@ describe('jmeadows-lab-xformer', function() {
         expect(resultDoc[0].results[0].localTitle).toEqual(sampleVPRLabDocument[0].results[0].localTitle);
         expect(resultDoc[0].results[0].summary).toEqual(sampleVPRLabDocument[0].results[0].summary);
         expect(resultDoc[0].results[0].uid).toEqual(resultDoc[0].uid);
-    });
-
-    it('return error message if orderDate field is missing', function(){
-        var labWithoutOrderDate = _.clone(sampleDODLab);
-        delete labWithoutOrderDate.orderDate;
-
-        var result = xformer(labWithoutOrderDate, mockEdipi);
-        expect(result).toBeTruthy();
-        expect(result.transformError).toBeTruthy();
-        expect(_.isEmpty(result.transformError)).toBe(false);
     });
 });

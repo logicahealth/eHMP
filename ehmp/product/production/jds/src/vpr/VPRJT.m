@@ -1,5 +1,4 @@
 VPRJT ;SLC/KCM -- Unit test driver
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ;with acknowlegements to XTMUNIT, Imitation is the sincerest form of flattery
  ;
@@ -39,7 +38,7 @@ TEST(ZZROU) ; Run tests in a specific routine
  . . S ZZK=$T(@("SETUP^"_ZZROU)) I $L(ZZK) D @("SETUP^"_ZZROU)
  . . D @(ZZLABEL_"^"_ZZROU) ; run the unit test
  . . S ZZK=$T(@("TEARDOWN^"_ZZROU)) I $L(ZZK) D @("TEARDOWN^"_ZZROU)
- . . ;W ! ZW ; normally comment out except when looking for non-newed variables
+ . . ;W ! ZWRITE ; normally comment out except when looking for non-newed variables
  ;
  S ZZK=$T(@("SHUTDOWN^"_ZZROU)) I $L(ZZK) D @("SHUTDOWN^"_ZZROU)
  Q
@@ -104,8 +103,13 @@ EACH ; run each test one at a time
  ;;VPRJTPSTATUS -- Unit/Integration tests for simple patient sync status
  ;;VPRJTAR      -- Special tests for RESTful queries across patients
  ;;VPRJTQP      -- Integration tests for POST queries
+ ;;VPRJT2D      -- Integration tests for operational utilities
+ ;;VPRJT2P      -- Integration tests for patient utilities
+ ;;VPRJTPRN     -- Unit tests for individual patient data wrapper code for jdsClient using cache.node
+ ;;VPRJTDRN     -- Unit tests for operational data wrapper code for jdsClient using cache.node
+ ;;VPRJTGDSN    -- Unit tests for generic data store wrapper code for pjdsClient using cache.node
  ;;zzzzz
  ;;
  N ZZZ S ZZZ=0
- F  S ZZZ=ZZZ+1 Q:$P($P($T(EACH+ZZZ),";;",2,99)," ")="zzzzz"  D EN($P($P($T(EACH+ZZZ),";;",2,99)," ")) ;W ! ZW
+ F  S ZZZ=ZZZ+1 Q:$P($P($T(EACH+ZZZ),";;",2,99)," ")="zzzzz"  D EN($P($P($T(EACH+ZZZ),";;",2,99)," ")) ;W ! ZWRITE
  Q

@@ -16,14 +16,25 @@ define([
             collapse_container: '.collapse',
             medsItemRow: '.meds-item',
             medicationNameLayoutRow: '[data-medication-container=medication-list]',
-            medNameListToolabr: '[data-toolbar=appletToolbar]',
             medsReviewContainer: '.meds-review-container'
+        },
+        tileOptions: {
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton',
+                    onClick: function(params, event) {
+                        this.onClick(event, params);
+                    }
+                }]
+            }
         },
         attributes: function() {
             var dataCode = this.model.has('dataCode') ? this.model.get('dataCode') : '';
             return {
                 role: 'presentation',
-                tabindex: '0',
                 'data-code': dataCode
             };
         },
@@ -39,8 +50,7 @@ define([
         },
         regions: {
             medicationGroup: '.medication-group',
-            medicationDetailPanel: '.panel-collapse',
-            medNameList: '[data-toolbar=appletToolbar]'
+            medicationDetailPanel: '.panel-collapse'
         },
         initialize: function(options) {
             this.model = options.model;
@@ -55,75 +65,43 @@ define([
                 collection: graphingGroup
             }));
         },
-        addToolbar: function() {
-            var self = this;
-            if (!this.toolbarView) {
-                this.toolbarView = new ADK.Views.AppletToolbarView({
-                    targetView: self,
-                    targetElement: {
-                        model: self.model.get('medications').at(0)
-                    },
-                    buttonTypes: ['infobutton', 'detailsviewbutton'],
-                    detailViewEvent: {
-                        click: function() {
-                            this.$el.tooltip('hide');
-                            self.ui.collapse_container.collapse('toggle');
-                            self.panelOpen = !self.panelOpen;
-                        }
+        elementInView: function elementInView(el) {
+            var elBounds = el.getBoundingClientRect();
+            return (
+                elBounds.top >= 0 &&
+                elBounds.bottom <= this.ui.medsReviewContainer.innerHeight
+            );
+        },
+        onClick: function(event, params) {
+            this.trigger('panelClick');
+
+            this.ui.collapse_container.collapse('toggle');
+            this.panelOpen = !this.panelOpen;
+
+            if (this.panelOpen) {
+                var region = this.getRegion('medicationDetailPanel');
+                this.listenToOnce(region, 'show', function() {
+                    var $a = this.$el.find('a:first');
+                    $a.focus();
+                    var $container = this.$el.closest('.meds-review-container');
+                    var $row = this.ui.medsItemRow.parent();
+                    $row = $row.prev();
+                    if($row.length) {
+                        $container.scrollTo($row, 250, {offset: 100});
                     }
                 });
-            }
-            this.medNameList.show(this.toolbarView);
-            this.toolbarView.show();
-            this.ui.medNameListToolabr.attr('tabindex', '0');
-            this.ui.medNameListToolabr.focus();
-        },
-        onClick: function(event) {
-            var self = this;
-            var toolbarHeight = 25;
 
-            function elementInView(el) {
-                var elBounds = el.getBoundingClientRect();
-                return (
-                    elBounds.top >= 0 &&
-                    elBounds.bottom <= self.ui.medsReviewContainer.innerHeight
-                );
-            }
-            $(this.medicationDetailPanel.$el.selector).on('hidden.bs.collapse', function(e) {
-                if (event.currentTarget !== e.currentTarget && !elementInView(event.currentTarget)) {
-                    $(self.ui.medsReviewContainer.selector).scrollTo(self.ui.medsItemRow, 0, { offset: -toolbarHeight });
-                }
-            });
-            $(this.medicationDetailPanel.$el.selector).on('shown.bs.collapse', function(e) {
-                if (event.currentTarget !== e.currentTarget && !elementInView(this.parentElement)) {
-                    $(self.ui.medsReviewContainer.selector).scrollTo(this.parentElement, 0, { offset: -toolbarHeight });
-                }
-            });
-
-            this.trigger('toolbar');
-            if (!this.panelOpen) {
-                if (this.showingToolbar) {
-                    this.onOtherChildClicked();
-                } else {
-                    this.addToolbar();
-                    this.showingToolbar = true;
-                    this.ui.medsItemRow.addClass('active-row');
-                    this.ui.medsItemRow.removeClass('meds-item');
-                }
-            }
-
-            if (!this.hasDetailPanel) {
                 this.createDetailPanel();
                 this.hasDetailPanel = true;
+            } else {
+                var $el = _.get(params, '$el') || this.$(event.currentTarget);
+                if (_.get($el,'[0].type') !== 'button') {
+                    $el = $el.find('.dropdown--quickmenu > button');
+                }
+                $el.focus();
             }
         },
         onOtherChildClicked: function() {
-            if (this.showingToolbar) {
-                this.toolbarView.hide();
-                this.showingToolbar = false;
-                this.ui.medsItemRow.removeClass('active-row');
-                this.ui.medsItemRow.addClass('meds-item');
-            }
             if (this.panelOpen) {
                 this.ui.collapse_container.collapse('toggle');
                 this.panelOpen = false;
@@ -134,11 +112,6 @@ define([
                 collection: this.model.get('medications'),
                 model: this.model.get('medications').models[0]
             }));
-        },
-        onBeforeDestroy: function() {
-            if (this.toolbarView) {
-                this.toolbarView.destroy();
-            }
         }
     });
 

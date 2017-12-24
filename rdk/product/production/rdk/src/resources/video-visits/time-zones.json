@@ -1,0 +1,758 @@
+{
+    "84": {
+        "name": "Morocco_Standard_Time",
+        "gmtValue": "GMT+00:00",
+        "zoneId": "84",
+        "abbreviation": "MOST",
+        "zoneName": "Africa/Casablanca"
+    },
+    "92": {
+        "name": "UTC",
+        "gmtValue": "GMT+00:00",
+        "zoneId": "92",
+        "abbreviation": "UTC",
+        "zoneName": "UTC"
+    },
+    "85": {
+        "name": "GMT_Standard_Time",
+        "gmtValue": "GMT+00:00",
+        "zoneId": "85",
+        "abbreviation": "GMT",
+        "zoneName": "GMT"
+    },
+    "90": {
+        "name": "Greenwich_Standard_Time",
+        "gmtValue": "GMT+00:00",
+        "zoneId": "90",
+        "abbreviation": "GMT",
+        "zoneName": "Greenwich"
+    },
+    "100": {
+        "name": "Central_Europe_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "100",
+        "abbreviation": "CEST",
+        "zoneName": "Europe/Sarajevo"
+    },
+    "105": {
+        "name": "Romance_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "105",
+        "abbreviation": "RST",
+        "zoneName": "Europe/Brussels"
+    },
+    "110": {
+        "name": "W_Europe_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "110",
+        "abbreviation": "WEST",
+        "zoneName": "Europe/Amsterdam"
+    },
+    "95": {
+        "name": "Central_European_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "95",
+        "abbreviation": "CEST",
+        "zoneName": "Europe/Belgrade"
+    },
+    "113": {
+        "name": "W_Central_Africa_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "113",
+        "abbreviation": "WCAST",
+        "zoneName": ""
+    },
+    "141": {
+        "name": "Namibia_Standard_Time",
+        "gmtValue": "GMT+01:00",
+        "zoneId": "141",
+        "abbreviation": "NST",
+        "zoneName": "Africa/Windhoek"
+    },
+    "129": {
+        "name": "Jordan_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "129",
+        "abbreviation": "JORST",
+        "zoneName": "Asia/Amman"
+    },
+    "130": {
+        "name": "GTB_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "130",
+        "abbreviation": "GST",
+        "zoneName": "Europe/Athens"
+    },
+    "131": {
+        "name": "Middle_East_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "131",
+        "abbreviation": "MEST",
+        "zoneName": "Asia/Beirut"
+    },
+    "120": {
+        "name": "Egypt_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "120",
+        "abbreviation": "EGST",
+        "zoneName": "Africa/Cairo"
+    },
+    "133": {
+        "name": "Syria_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "133",
+        "abbreviation": "SYST",
+        "zoneName": "Asia/Damascus"
+    },
+    "115": {
+        "name": "E_Europe_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "115",
+        "abbreviation": "EEST",
+        "zoneName": "Turkey"
+    },
+    "140": {
+        "name": "South_Africa_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "140",
+        "abbreviation": "SAFST",
+        "zoneName": "Africa/Harare"
+    },
+    "125": {
+        "name": "FLE_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "125",
+        "abbreviation": "FST",
+        "zoneName": "Europe/Helsinki"
+    },
+    "134": {
+        "name": "Turkey_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "134",
+        "abbreviation": "TST",
+        "zoneName": "Europe/Istanbul"
+    },
+    "135": {
+        "name": "Jerusalem_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "135",
+        "abbreviation": "JERST",
+        "zoneName": "Asia/Jerusalem"
+    },
+    "159": {
+        "name": "Kaliningrad_Standard_Time",
+        "gmtValue": "GMT+02:00",
+        "zoneId": "159",
+        "abbreviation": "KALST",
+        "zoneName": "Europe/Kaliningrad"
+    },
+    "150": {
+        "name": "Arab_Standard_Time",
+        "gmtValue": "GMT+03:00",
+        "zoneId": "150",
+        "abbreviation": "ARKST",
+        "zoneName": "Asia/Kuwait"
+    },
+    "158": {
+        "name": "Arabic_Standard_Time",
+        "gmtValue": "GMT+03:00",
+        "zoneId": "158",
+        "abbreviation": "ARBST",
+        "zoneName": "Asia/Baghdad"
+    },
+    "151": {
+        "name": "Belarus_Standard_Time",
+        "gmtValue": "GMT+03:00",
+        "zoneId": "151",
+        "abbreviation": "BELST",
+        "zoneName": "Europe/Minsk"
+    },
+    "145": {
+        "name": "Russian_Standard_Time",
+        "gmtValue": "GMT+03:00",
+        "zoneId": "145",
+        "abbreviation": "RUST",
+        "zoneName": "Europe/Moscow"
+    },
+    "155": {
+        "name": "E_Africa_Standard_Time",
+        "gmtValue": "GMT+03:00",
+        "zoneId": "155",
+        "abbreviation": "ESAST",
+        "zoneName": "Africa/Nairobi"
+    },
+    "160": {
+        "name": "Iran_Standard_Time",
+        "gmtValue": "GMT+03:30",
+        "zoneId": "160",
+        "abbreviation": "IRAST",
+        "zoneName": "Asia/Tehran"
+    },
+    "165": {
+        "name": "Arabian_Standard_Time",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "165",
+        "abbreviation": "AMST",
+        "zoneName": "Asia/Muscat"
+    },
+    "169": {
+        "name": "Azerbaijan_Standard_Time",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "169",
+        "abbreviation": "AZST",
+        "zoneName": "Asia/Baku"
+    },
+    "174": {
+        "name": "Russian_Standard_Time_3",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "174",
+        "abbreviation": "RST3",
+        "zoneName": "Europe/Samara"
+    },
+    "172": {
+        "name": "Mauritius_Standard_Time",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "172",
+        "abbreviation": "MAST",
+        "zoneName": "Indian/Mauritius"
+    },
+    "173": {
+        "name": "Georgian_Standard_Time",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "173",
+        "abbreviation": "GEST",
+        "zoneName": "Asia/Tbilisi"
+    },
+    "170": {
+        "name": "Caucasus_Standard_Time",
+        "gmtValue": "GMT+04:00",
+        "zoneId": "170",
+        "abbreviation": "CAST",
+        "zoneName": "Asia/Yerevan"
+    },
+    "175": {
+        "name": "Afghanistan_Standard_Time",
+        "gmtValue": "GMT+04:30",
+        "zoneId": "175",
+        "abbreviation": "AFT",
+        "zoneName": "Asia/Kabul"
+    },
+    "180": {
+        "name": "Ekaterinburg_Standard_Time",
+        "gmtValue": "GMT+05:00",
+        "zoneId": "180",
+        "abbreviation": "EKST",
+        "zoneName": "Asia/Yekaterinburg"
+    },
+    "185": {
+        "name": "West_Asia_Standard_Time",
+        "gmtValue": "GMT+05:00",
+        "zoneId": "185",
+        "abbreviation": "WAST",
+        "zoneName": "Asia/Ashgabat"
+    },
+    "184": {
+        "name": "Pakistan_Standard_Time",
+        "gmtValue": "GMT+05:00",
+        "zoneId": "184",
+        "abbreviation": "PKST",
+        "zoneName": "Asia/Karachi"
+    },
+    "200": {
+        "name": "Sri_Lanka_Standard_Time",
+        "gmtValue": "GMT+05:30",
+        "zoneId": "200",
+        "abbreviation": "LKR",
+        "zoneName": "Asia/Colombo"
+    },
+    "190": {
+        "name": "India_Standard_Time",
+        "gmtValue": "GMT+05:30",
+        "zoneId": "190",
+        "abbreviation": "IST",
+        "zoneName": "Asia/Calcutta"
+    },
+    "193": {
+        "name": "Nepal_Standard_Time",
+        "gmtValue": "GMT+05:45",
+        "zoneId": "193",
+        "abbreviation": "NEST",
+        "zoneName": "Asia/Kathmandu"
+    },
+    "195": {
+        "name": "Central_Asia_Standard_Time",
+        "gmtValue": "GMT+06:00",
+        "zoneId": "195",
+        "abbreviation": "CAST",
+        "zoneName": "Asia/Astana"
+    },
+    "196": {
+        "name": "Bangladesh_Standard_Time",
+        "gmtValue": "GMT+06:00",
+        "zoneId": "196",
+        "abbreviation": "BST",
+        "zoneName": "Asia/Dhaka"
+    },
+    "201": {
+        "name": "N_Central_Asia_Standard_Time",
+        "gmtValue": "GMT+06:00",
+        "zoneId": "201",
+        "abbreviation": "NCAST",
+        "zoneName": "Asia/Novosibirsk"
+    },
+    "203": {
+        "name": "Myanmar_Standard_Time",
+        "gmtValue": "GMT+06:30",
+        "zoneId": "203",
+        "abbreviation": "MYST",
+        "zoneName": "Asia/Rangoon"
+    },
+    "205": {
+        "name": "S_E_Asia_Standard_Time",
+        "gmtValue": "GMT+07:00",
+        "zoneId": "205",
+        "abbreviation": "SEAST",
+        "zoneName": "Asia/Bangkok"
+    },
+    "227": {
+        "name": "North_Asia_Standard_Time",
+        "gmtValue": "GMT+07:00",
+        "zoneId": "227",
+        "abbreviation": "NAST",
+        "zoneName": "Asia/Krasnoyarsk"
+    },
+    "210": {
+        "name": "China_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "210",
+        "abbreviation": "CHST",
+        "zoneName": "Hongkong"
+    },
+    "227": {
+        "name": "North_Asia_East_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "227",
+        "abbreviation": "NAEST",
+        "zoneName": "Asia/Irkutsk"
+    },
+    "215": {
+        "name": "Singapore_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "215",
+        "abbreviation": "SPST",
+        "zoneName": "Asia/Singapore"
+    },
+    "225": {
+        "name": "W_Australia_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "225",
+        "abbreviation": "WAST",
+        "zoneName": "Australia/Perth"
+    },
+    "220": {
+        "name": "Taipei_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "220",
+        "abbreviation": "TAST",
+        "zoneName": "Asia/Taipei"
+    },
+    "228": {
+        "name": "Ulaanbaatar_Standard_Time",
+        "gmtValue": "GMT+08:00",
+        "zoneId": "228",
+        "abbreviation": "ULST",
+        "zoneName": "Asia/Ulaanbaatar"
+    },
+    "235": {
+        "name": "Tokyo_Standard_Time",
+        "gmtValue": "GMT+09:00",
+        "zoneId": "235",
+        "abbreviation": "TKST",
+        "zoneName": "Asia/Tokyo"
+    },
+    "230": {
+        "name": "Korea_Standard_Time",
+        "gmtValue": "GMT+09:00",
+        "zoneId": "230",
+        "abbreviation": "KST",
+        "zoneName": "Asia/Seoul"
+    },
+    "240": {
+        "name": "Yakutsk_Standard_Time",
+        "gmtValue": "GMT+09:00",
+        "zoneId": "240",
+        "abbreviation": "YAKST",
+        "zoneName": "Asia/Yakutsk"
+    },
+    "250": {
+        "name": "Cen_Australia_Standard_Time",
+        "gmtValue": "GMT+09:30",
+        "zoneId": "250",
+        "abbreviation": "CAUST",
+        "zoneName": "Australia/Adelaide"
+    },
+    "251": {
+        "name": "Adelaide",
+        "gmtValue": "GMT+09:30",
+        "zoneId": "251",
+        "abbreviation": "ADST",
+        "zoneName": "Australia/Adelaide"
+    },
+    "260": {
+        "name": "East_Australia_Standard_Time",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "260",
+        "abbreviation": "EAUST",
+        "zoneName": "Australia/Darwin"
+    },
+    "255": {
+        "name": "AUS_Australia_Standard_Time",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "255",
+        "abbreviation": "AUST",
+        "zoneName": "Australia/Melbourne"
+    },
+    "256": {
+        "name": "Canberra_Melbourne_Sydney",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "256",
+        "abbreviation": "CMST",
+        "zoneName": "Australia/Canberra"
+    },
+    "275": {
+        "name": "West_Pacific_Standard_Time",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "275",
+        "abbreviation": "WSST",
+        "zoneName": "Pacific/Guamb"
+    },
+    "265": {
+        "name": "Tasmania_Standard_Time",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "265",
+        "abbreviation": "TAST",
+        "zoneName": "Australia/Hobart"
+    },
+    "266": {
+        "name": "Hobart",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "266",
+        "abbreviation": "HST",
+        "zoneName": "Australia/Hobart"
+    },
+    "270": {
+        "name": "Vladivostok_Standard_Time",
+        "gmtValue": "GMT+10:00",
+        "zoneId": "270",
+        "abbreviation": "VLST",
+        "zoneName": "Asia/Vladivostok"
+    },
+    "280": {
+        "name": "Central_Pacific_Standard_Time",
+        "gmtValue": "GMT+11:00",
+        "zoneId": "280",
+        "abbreviation": "CPST",
+        "zoneName": "Asia/Magadan"
+    },
+    "295": {
+        "name": "Russia_Time_Zone_11",
+        "gmtValue": "GMT+11:00",
+        "zoneId": "295",
+        "abbreviation": "RUTZ_11",
+        "zoneName": "Asia/Anadyr"
+    },
+    "290": {
+        "name": "New_Zealand_Standard_Time",
+        "gmtValue": "GMT+12:00",
+        "zoneId": "290",
+        "abbreviation": "NZST",
+        "zoneName": "Pacific/Auckland"
+    },
+    "284": {
+        "name": "UTC_12",
+        "gmtValue": "GMT+12:00",
+        "zoneId": "284",
+        "abbreviation": "UTC-12",
+        "zoneName": "Etc/GMT+12"
+    },
+    "285": {
+        "name": "Fiji_Islands_Standard_Time",
+        "gmtValue": "GMT+12:00",
+        "zoneId": "285",
+        "abbreviation": "FIJST",
+        "zoneName": "Pacific/Fiji"
+    },
+    "281": {
+        "name": "Magadan_Standard_Time",
+        "gmtValue": "GMT+12:00",
+        "zoneId": "281",
+        "abbreviation": "MAGST",
+        "zoneName": "Asia/Magadan"
+    },
+    "300": {
+        "name": "Tonga_Standard_Time",
+        "gmtValue": "GMT+13:00",
+        "zoneId": "300",
+        "abbreviation": "TOGST",
+        "zoneName": "Pacific/Tongatapu"
+    },
+    "1": {
+        "name": "Samoa_Standard_Time",
+        "gmtValue": "GMT+13:00",
+        "zoneId": "1",
+        "abbreviation": "SAMST",
+        "zoneName": "Pacific/Samoa"
+    },
+    "0": {
+        "name": "Dateline_Standard_Time",
+        "gmtValue": "GMT-12:00",
+        "zoneId": "0",
+        "abbreviation": "DATST",
+        "zoneName": "GMT"
+    },
+    "6": {
+        "name": "UTC_11",
+        "gmtValue": "GMT-11:00",
+        "zoneId": "6",
+        "abbreviation": "UTC-11",
+        "zoneName": "UTC-11"
+    },
+    "2": {
+        "name": "Hawaiian_Standard_Time",
+        "gmtValue": "GMT-10:00",
+        "zoneId": "2",
+        "abbreviation": "HAST",
+        "zoneName": "US/Hawaii"
+    },
+    "3": {
+        "name": "Alaskan_Standard_Time",
+        "gmtValue": "GMT-09:00",
+        "zoneId": "3",
+        "abbreviation": "AKST",
+        "zoneName": "US/Alaska"
+    },
+    "4": {
+        "name": "Pacific_Standard_Time",
+        "gmtValue": "GMT-08:00",
+        "zoneId": "4",
+        "abbreviation": "PST",
+        "zoneName": "US/Pacific"
+    },
+    "5": {
+        "name": "Mexico_Pacific_Standard_Time",
+        "gmtValue": "GMT-08:00",
+        "zoneId": "5",
+        "abbreviation": "PST(Mexico)",
+        "zoneName": "US/Pacific"
+    },
+    "10": {
+        "name": "Mountain_Standard_Time",
+        "gmtValue": "GMT-07:00",
+        "zoneId": "10",
+        "abbreviation": "MST",
+        "zoneName": "US/Mountain"
+    },
+    "13": {
+        "name": "Mexico_Standard_Time_2",
+        "gmtValue": "GMT-07:00",
+        "zoneId": "13",
+        "abbreviation": "MST(Mexico)",
+        "zoneName": "America/Chihuahua"
+    },
+    "12": {
+        "name": "Mexico_Mountain_Standard_Time",
+        "gmtValue": "GMT-07:00",
+        "zoneId": "12",
+        "abbreviation": "MST(Mex)",
+        "zoneName": "America/Chihuahua"
+    },
+    "15": {
+        "name": "U_S_Mountain_Standard_Time",
+        "gmtValue": "GMT-07:00",
+        "zoneId": "15",
+        "abbreviation": "MST",
+        "zoneName": "US/Mountain"
+    },
+    "25": {
+        "name": "Canada_Central_Standard_Time",
+        "gmtValue": "GMT-06:00",
+        "zoneId": "25",
+        "abbreviation": "CST(CAN)",
+        "zoneName": "Canada/Central"
+    },
+    "30": {
+        "name": "Mexico_Standard_Time",
+        "gmtValue": "GMT-06:00",
+        "zoneId": "30",
+        "abbreviation": "MXST",
+        "zoneName": "America/Mexico_City"
+    },
+    "29": {
+        "name": "Mexico_Central_Standard_Time",
+        "gmtValue": "GMT-06:00",
+        "zoneId": "29",
+        "abbreviation": "CST(Mex)",
+        "zoneName": "America/Monterrey"
+    },
+    "20": {
+        "name": "Central_Standard_Time",
+        "gmtValue": "GMT-06:00",
+        "zoneId": "20",
+        "abbreviation": "CST",
+        "zoneName": "US/Central"
+    },
+    "33": {
+        "name": "Central_America_Standard_Time",
+        "gmtValue": "GMT-06:00",
+        "zoneId": "33",
+        "abbreviation": "CAST",
+        "zoneName": "US/Central"
+    },
+    "40": {
+        "name": "U_S_Eastern_Standard_Time",
+        "gmtValue": "GMT-05:00",
+        "zoneId": "40",
+        "abbreviation": "EST",
+        "zoneName": "US/Eastern"
+    },
+    "35": {
+        "name": "Eastern_Standard_Time",
+        "gmtValue": "GMT-05:00",
+        "zoneId": "35",
+        "abbreviation": "EST",
+        "zoneName": "US/Eastern"
+    },
+    "301": {
+        "name": "Mexico_Eastern_Standard_Time",
+        "gmtValue": "GMT-05:00",
+        "zoneId": "301",
+        "abbreviation": "EST(Mex)",
+        "zoneName": "US/Eastern"
+    },
+    "45": {
+        "name": "S_A_Pacific_Standard_Time",
+        "gmtValue": "GMT-05:00",
+        "zoneId": "45",
+        "abbreviation": "SAPST",
+        "zoneName": "America/Bogota"
+    },
+    "47": {
+        "name": "Venezuela_Standard_Time",
+        "gmtValue": "GMT-04:30",
+        "zoneId": "47",
+        "abbreviation": "VZST",
+        "zoneName": "America/Caracas"
+    },
+    "55": {
+        "name": "S_A_Western_Standard_Time",
+        "gmtValue": "GMT-04:00",
+        "zoneId": "55",
+        "abbreviation": "SAWST",
+        "zoneName": "America/Manaus"
+    },
+    "58": {
+        "name": "Central_Brazilian_Standard_Time",
+        "gmtValue": "GMT-04:00",
+        "zoneId": "58",
+        "abbreviation": "CBST",
+        "zoneName": "America/Cuiaba"
+    },
+    "50": {
+        "name": "Atlantic_Standard_Time",
+        "gmtValue": "GMT-04:00",
+        "zoneId": "50",
+        "abbreviation": "AST",
+        "zoneName": "Canada/Atlantic"
+    },
+    "59": {
+        "name": "Paraguay_Standard_Time",
+        "gmtValue": "GMT-04:00",
+        "zoneId": "59",
+        "abbreviation": "PGUST",
+        "zoneName": "America/Asuncion"
+    },
+    "60": {
+        "name": "Newfoundland_Standard_Time",
+        "gmtValue": "GMT-03:30",
+        "zoneId": "60",
+        "abbreviation": "CNFST",
+        "zoneName": "Canada/Newfoundland"
+    },
+    "56": {
+        "name": "Pacific_S_A_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "56",
+        "abbreviation": "PSAST",
+        "zoneName": "America/Santiago"
+    },
+    "71": {
+        "name": "Bahia_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "71",
+        "abbreviation": "BAHST",
+        "zoneName": "America/El_Salvador"
+    },
+    "74": {
+        "name": "Montevideo_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "74",
+        "abbreviation": "MONST",
+        "zoneName": "America/Montevideo"
+    },
+    "73": {
+        "name": "Greenland_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "73",
+        "abbreviation": "GLST",
+        "zoneName": "America/Godthab"
+    },
+    "70": {
+        "name": "S_A_Eastern_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "70",
+        "abbreviation": "SAEST",
+        "zoneName": "America/Cayenne"
+    },
+    "69": {
+        "name": "Argentina_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "69",
+        "abbreviation": "AGST",
+        "zoneName": "America/Argentina/Buenos_Aires"
+    },
+    "65": {
+        "name": "E_South_America_Standard_Time",
+        "gmtValue": "GMT-03:00",
+        "zoneId": "65",
+        "abbreviation": "ESAST",
+        "zoneName": "America/Argentina/Buenos_Aires"
+    },
+    "75": {
+        "name": "Mid_Atlantic_Standard_Time",
+        "gmtValue": "GMT-02:00",
+        "zoneId": "75",
+        "abbreviation": "MAST",
+        "zoneName": "Atlantic/Bermuda"
+    },
+    "76": {
+        "name": "UTC_2",
+        "gmtValue": "GMT-02:00",
+        "zoneId": "76",
+        "abbreviation": "UTC02",
+        "zoneName": "UTC-02"
+    },
+    "83": {
+        "name": "Cape_Verde_Standard_Time",
+        "gmtValue": "GMT-01:00",
+        "zoneId": "83",
+        "abbreviation": "COPVEST",
+        "zoneName": "Atlantic/Cape_Verde"
+    },
+    "80": {
+        "name": "Azores_Standard_Time",
+        "gmtValue": "GMT-01:00",
+        "zoneId": "80",
+        "abbreviation": "AZOST",
+        "zoneName": "Atlantic/Azores"
+    }
+}

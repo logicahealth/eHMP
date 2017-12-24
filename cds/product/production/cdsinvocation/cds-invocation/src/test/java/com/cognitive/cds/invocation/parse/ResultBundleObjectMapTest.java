@@ -232,7 +232,7 @@ public class ResultBundleObjectMapTest {
      * as unusable pointer address //OUTCOME: 2015-05-31 16:40:39 INFO
      * ResultBundleObjectMapTest:215 -
      * {"results":[{"type":"Test2","body":Bundle[319
-     * entries,id=http://127.0.0.1:8888/resource/fhir/Bundle/a4a17e7a-874d-3279-
+     * entries,id=http://127.0.0.1:PORT/resource/fhir/Bundle/a4a17e7a-874d-3279-
      * b663-4f47b700f8cf],"callId":"Called","title":"A Test Result 2"
      * ,"provenance":"JUNIT","generatedBy":null}],"status":{"code":"0"},
      * "faultInfo":[]} //SUBTEST: without @JsonRawValue on "body" --> THIS GIVES

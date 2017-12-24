@@ -17,7 +17,7 @@ function handle(log, config, environment, job, handlerCallback) {
         writers = {};
 
         _.each(config['error-handling'].writers, function(writer) {
-            writers[writer] = require('./' + writer).createErrorRecordWriter(config);
+            writers[writer] = require('./' + writer).createErrorRecordWriter(config, environment, log);
         });
     }
 

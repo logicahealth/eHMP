@@ -58,8 +58,8 @@ JobStatusUpdater.prototype.writeStatus = function(jobState, callback) {
     }
 
     if (jobState.status !== 'error') {
-        if (_.isUndefined(jobState.jpid) || _.isUndefined(jobState.rootJobId)) {
-            self.logger.debug('JobStatusUpdater.writeStatus: No jpid or rootJobId');
+        if (_.isUndefined(jobState.rootJobId)) {
+            self.logger.debug('JobStatusUpdater.writeStatus: No rootJobId');
             return callback(null, 'no job state for jobs not started by a user');
         }
         if (!_.isUndefined(jobState.record) || !_.isUndefined(jobState['event-uid'])) {
@@ -71,7 +71,7 @@ JobStatusUpdater.prototype.writeStatus = function(jobState, callback) {
     self.jdsClient.saveJobState(jobState, function(error, response, result) {
         self.logger.debug('JobStatusUpdater.writeStatus: Response from saveJobState: error: %s, response: %j, result: %j', error, response, result);
         if (error) {
-            self.logger.debug('JobStatusUpdater.writeStatus: An error occurred.  error: %s; response: %j; result: %j', error, response, result);
+            self.logger.error('JobStatusUpdater.writeStatus: An error occurred.  error: %s; response: %j; result: %j', error, response, result);
             return callback(error, response, result);
         }
         if ((response) && (response.statusCode !== 200)) {

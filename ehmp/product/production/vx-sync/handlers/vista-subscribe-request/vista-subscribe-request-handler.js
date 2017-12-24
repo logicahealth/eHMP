@@ -34,11 +34,24 @@ function handle(vistaId, log, config, environment, job, handlerCallback) {
 		_validateParameters.bind(null, vistaId, pidSite, pid, log),
 	];
 
+    var cleanupTasks = [];
+
     var pollerJobIds = [];
     _.each(domainList, function(domain){
         var domainJobId = uuid.v4(); // Since this case we are not getting a JobId from DropWizard - we have to create our own.  Use a UUID.
         pollerJobIds.push({'domain': domain, 'jobId': domainJobId});
-        tasks.push(_createNewJobStatus.bind(null, vistaId, domain, pidSite, pid, job, domainJobId, environment.jobStatusUpdater, log));
+        tasks.push(_createJobStatus.bind(null, vistaId, domain, pidSite, pid, job, domainJobId, environment.jobStatusUpdater.createJobStatus.bind(environment.jobStatusUpdater), log));
+
+        // The following is to cover a case that should not happen - but has happened.   In some edge cases where a subscription is sent to VistA on a patient
+        // that is already subscribed - Vista may send a rejection error stating that this is a duplicate.   This happens when a patient still has data
+        // in a batch that VistA has not tidied up (Garbage collected) yet.   If this happens, we must "complete" all of the domain sync jobs that we
+        // created.  If we do not - then the patient will look like it is still synchronizing and it is not.
+        //
+        // WARNING:  You may think you should just wait to create the "initial" jobs after making the request - YOU CANNOT DO THAT - IT WILL CREATE A
+        //           RACE CONDITION.   THE POLLER JOBS MUST BE IN PLACE BEFORE VISTA IS SENT THE SUBSCRIBE MESSAGE - SO THAT THE JOBS ARE ALREADY
+        //           IN A CREATED STATE BEFORE IT STARTS SENDING DATA TO THE POLLER.  SO IT HAS TO BE CREATED AND THEN COMPLETED.
+        //----------------------------------------------------------------------------------------------------------------------------------------------------
+        cleanupTasks.push(_createJobStatus.bind(null, vistaId, domain, pidSite, pid, job, domainJobId, environment.jobStatusUpdater.completeJobStatus.bind(environment.jobStatusUpdater), log));
     });
 
     if (!isHdr) {
@@ -48,7 +61,7 @@ function handle(vistaId, log, config, environment, job, handlerCallback) {
 		tasks.push(_subscribePatientToVistAHdr.bind(null, vistaId, pidSite, pid, job, pollerJobIds, environment.hdrClient, log));
 	}
 
-	processJob(vistaId, pidSite, pid, tasks, log, handlerCallback);
+	processJob(vistaId, pidSite, pid, tasks, cleanupTasks, log, handlerCallback);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -56,21 +69,59 @@ function handle(vistaId, log, config, environment, job, handlerCallback) {
 //
 // vistaId - The site hash for the vistaId that this handler is configured to process.
 // pidSite - The site hash that was in the PID.
+// pid - The PID for this patient.
 // tasks - The array of functions to be called to process this message.
+// cleanupTasks - If the patient has already been subscribed - then this is the set of tasks to set
+//                all the domain sync jobs to completed.
 // log - The logger to be used to log messages.
 // handlerCallBack - The call back that should be called when this job is completed.
 //----------------------------------------------------------------------------------------------------
-function processJob(vistaId, pidSite, pid, tasks, log, handlerCallback) {
+function processJob(vistaId, pidSite, pid, tasks, cleanupTasks, log, handlerCallback) {
 	log.debug('vista-subscribe-request-handler.processJob: Entering method. vistaId: %s; pidSite: %s for pid: %s', vistaId, pidSite, pid);
 
 	var actualError = null;
 	var actualResponse = '';
 	async.series(tasks, function (error, response) {
+		// We have a special case that VistA will reject as an error - but is really not an error.  The situation occurs when a subscribe
+		// request is made on a patient that has already been subscribed.  VistA will reject the request - but we should treat that as a
+		// "No Error" situation.  However when this happens to completely clean things up - we need to close all the domain sync start
+		// jobs that we created before requesting the subscribe - so the sync status is cleaned up on the patient.
+		//--------------------------------------------------------------------------------------------------------------------------------
+		if ((error) && (_.isString(error)) && (error.indexOf('Duplicate sync request') >= 0)) {
+            log.debug('vista-subscribe-request-handler.processJob: Patient was already subscribed.  Setting all domain sync jobs to completed. vistaId: %s; pidSite: %s for pid: %s', vistaId, pidSite, pid);
+            return _patientAlreadySubscribedCleanup(vistaId, pidSite, pid, cleanupTasks, log, handlerCallback);
+		}
+
 		log.debug('vista-subscribe-request-handler.processJob: callback from async.series called.  error: %s; response: %j', error, response);
 		actualError = error ? errorUtil.createTransient(error) : null;
 		actualResponse = response;
-        handlerCallback(actualError, actualResponse);
+        return handlerCallback(actualError, actualResponse);
 	});
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// This function is called if we requested a subscription to VistA and it returned that this was already done.  If that
+// happens we need to set all of the sync domain job status records to completed - or the patient will look like they
+// were not synchronized.
+//
+// vistaId - The site hash for the vistaId that this handler is configured to process.
+// pidSite - The site hash that was in the PID.
+// pid - The PID for this patient.
+// cleanupTasks - If the patient has already been subscribed - then this is the set of tasks to set
+//                all the domain sync jobs to completed.
+// log - The logger to be used to log messages.
+// handlerCallBack - The call back that should be called when this job is completed.
+//----------------------------------------------------------------------------------------------------------------------
+function _patientAlreadySubscribedCleanup(vistaId, pidSite, pid, cleanupTasks, log, handlerCallback) {
+    var actualError = null;
+    var actualResponse = '';
+
+    async.series(cleanupTasks, function (error, response) {
+        log.debug('vista-subscribe-request-handler._patientAlreadySubscribedCleanup: callback from async.series called.  error: %s; response: %j; vistaId: %s; pidSite: %s for pid: %s', error, response, vistaId, pidSite, pid);
+        actualError = error ? errorUtil.createTransient(error) : null;
+        actualResponse = response;
+        return handlerCallback(actualError, actualResponse);
+    });
 }
 
 //--------------------------------------------------------------------------------------------
@@ -106,12 +157,14 @@ function _validateParameters(vistaId, pidSite, pid, log, callback) {
 // pollerJobId - The job ID for the job that will be logged in JDS to represent the job that the
 //               poller will process.  Note the poller does not get this job from a tube - rather
 //               it will get it from VistA when the sync message is received.
-// jobStatusUpdater - The handle to the module that is used to update job status in the JDS.
+// jobStatusUpdaterFunction - The handle to the function that updates the job status record.
+//                            this will be either jobStatusUpdater.createJobStatus or
+//                            jobstatusUpdater.completeJobStatus.
 // log - The logger to be used to log messages.
 // callback - This is the callback that is called back after the job status has been created.
 //--------------------------------------------------------------------------------------------
-function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jobStatusUpdater, log, callback) {
-	log.debug('vista-subscribe-request-handler._createNewJobStatus: Entering method. vistaId: %s; pidSite: %s; pid: %j; pollerJobId: %s; job: %j', vistaId, pidSite, pid, pollerJobId, job);
+function _createJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jobStatusUpdaterFunction, log, callback) {
+	log.debug('vista-subscribe-request-handler._createJobStatus: Entering method. vistaId: %s; pidSite: %s; pid: %j; pollerJobId: %s; job: %j', vistaId, pidSite, pid, pollerJobId, job);
 	var patientIdentifier = idUtil.create('pid', pid);
 	var record = null;
 	var eventUid = null;
@@ -133,17 +186,18 @@ function _createNewJobStatus(vistaId, domain, pidSite, pid, job, pollerJobId, jo
 		pollerJob = jobUtil.createVistaHdrPollerDomainRequest(vistaId, domain, patientIdentifier, record, eventUid, meta);
 	}
 	// pollerJob.jobId = pollerJobId;
-	jobStatusUpdater.createJobStatus(pollerJob, function (error, response) {
-		// Note - right now JDS is returning an error 200 if things worked correctly.   So
-		// we need to absorb that error.
-		//--------------------------------------------------------------------------------
-		if ((error) && (String(error) === '200')) {
-			callback(null, response);
-		}
-		else {
-			callback(error, response);
-		}
-	});
+
+    jobStatusUpdaterFunction(pollerJob, function (error, response) {
+        // Note - right now JDS is returning an error 200 if things worked correctly.   So
+        // we need to absorb that error.
+        //--------------------------------------------------------------------------------
+        if ((error) && (String(error) === '200')) {
+            callback(null, response);
+        }
+        else {
+            callback(error, response);
+        }
+    });
 }
 
 //--------------------------------------------------------------------------------------------
@@ -176,6 +230,6 @@ function _subscribePatientToVistAHdr(siteId, pidSite, pid, job, pollerJobId, hdr
 module.exports = handle;
 module.exports.handle = handle;
 module.exports._validateParameters = _validateParameters;
-module.exports._createNewJobStatus = _createNewJobStatus;
+module.exports._createJobStatus = _createJobStatus;
 module.exports._subscribePatientToVistA = _subscribePatientToVistA;
 module.exports._subscribePatientToVistAHdr = _subscribePatientToVistAHdr;

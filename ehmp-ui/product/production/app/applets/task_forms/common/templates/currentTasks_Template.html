@@ -1,18 +1,17 @@
-<div class="sr-only">This table represents tasks for this activity categorized by priority, due status, and title.</div>
-<div class="faux-table">
-    <div class="header table-row bottom-border-grey">
-        <div class="table-cell flex-width-1 right-border-no left-border-grey">
-            <div><span class="sr-only">Status</span></div>
-        </div>
-        <div class="table-cell flex-width-6 left-border-no right-border-grey">
-            <div><span class="color-primary font-size-12"><strong>Priority</strong></span></div>
-        </div>
-        <div class="table-cell flex-width-3 right-border-grey">
-            <div><span class="color-primary font-size-12"><strong>Due</strong></span></div>
-        </div>
-        <div class="table-cell flex-width-6 right-border-grey">
-            <div><span class="color-primary font-size-12"><strong>Title</strong></span></div>
-        </div>
-    </div>
-    <div class="body"></div>
-</div>
+<table class="table">
+    <caption class="sr-only">This table represents tasks for this activity.</caption>
+    <thead class="header table-row bottom-border-grey">
+        <th scope="col" class="table-cell right-border-no left-border-grey"><span class="sr-only">Notifications</span></th>
+        <th scope="col" class="table-cell flex-width-2 left-border-no right-border-grey"><span class="color-primary font-size-12"><strong>Priority</strong></span></th>
+        <th scope="col" class="table-cell right-border-grey"><span class="color-primary font-size-12"><strong>Due</strong></span></th>
+        <th scope="col" class="table-cell flex-width-2 right-border-grey"><span class="color-primary font-size-12"><strong>Title</strong></span></th>
+        <th scope="col" class="table-cell pixel-width-50 right-border-grey">
+            <span class="color-primary font-size-12">
+                <i class="icon-action-arrow color-primary-dark">
+                    <span class="sr-only">Associated action</span>
+                </i>
+            </span>
+        </th>
+    </thead>
+    <tbody class="body"></tbody>
+</table>

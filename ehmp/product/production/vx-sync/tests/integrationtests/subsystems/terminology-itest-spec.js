@@ -10,7 +10,8 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 
 var TerminologyUtil = require(global.VX_SUBSYSTEMS + '/terminology/terminology-utils');
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 config.terminology.host = vx_sync_ip;

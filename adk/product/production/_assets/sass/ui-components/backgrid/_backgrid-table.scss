@@ -23,7 +23,6 @@ table.backgrid {
         margin: 0;
         width: 100%;
         border-bottom: 1px solid $grey-lighter;
-        padding-right: 15px;
         td {
             white-space: normal;
             border-bottom: none;
@@ -42,16 +41,19 @@ table.backgrid {
             }
             &.flex-width-date {
                 flex: none;
-                width: 115px;
+                width: 75px;
             }
             &.flex-width-date-time {
                 flex: none;
-                width: 115px;
+                width: 75px;
             }
             &.flex-width-comment {
                 flex: none;
                 width: 30px;
                 min-width: 20px;
+            }
+            &:last-child {
+                padding-right: 15px;
             }
         }
     }
@@ -96,9 +98,11 @@ table.backgrid {
         overflow-y: auto;
         -ms-overflow-style: -ms-autohiding-scrollbar;
         tr {
-            cursor: pointer;
+            &:not(.empty) {
+                cursor: pointer;
+            }
             &:hover, &:focus {
-                background-color: $primary-lightest;
+                background-color: $primary-lighter;
             }
             // no records found
             &.empty td {

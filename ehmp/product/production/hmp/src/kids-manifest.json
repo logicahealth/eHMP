@@ -21,10 +21,13 @@
     "HMP2_0P02T13.KID",
     "HMP_DE6589_JD.KID",
     "HMP2_0P08T2.KID",
-    "HMP2_0P3T7.KID",
-    "HMP_UI_CONTEXT.KID"
+    "HMP2_0P3T9.KID",
+    "HMP2_0P4T2.KID",
+    "HMP_UI_CONTEXT.KID",
+    "GMRC_3-0_90T1.KID"
   ],
   "vista-panorama_patches": [
+    "HMPMS_US18179.KID"
   ],
   "vista-panorama_test_data": [
     "ZZPANORAMA_1_1.KID",
@@ -43,6 +46,7 @@
     "NORA-VITALS.KID"
   ],
   "vista-kodak_patches": [
+    "HMPMS_US18179.KID"
   ],
   "vista-kodak_test_data": [
     "ZZKODAK_1_1.KID",

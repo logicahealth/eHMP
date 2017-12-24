@@ -4,19 +4,11 @@
 #
 user_password = Chef::EncryptedDataBagItem.load("credentials", "jds_passwords", node[:data_bag_string])["user_password"]
 
-directory(node[:jds][:jds_database_location]) do
+common_directory(node[:jds][:jds_database_location]) do
   owner node[:jds][:cache_user]
   group node[:jds][:cache_user]
   recursive true
-  mode "0750"
-end
-
-cookbook_file "vprnamespace.mac" do
-  path "#{Chef::Config[:file_cache_path]}/vprnamespace.mac"
-  owner node[:jds][:cache_user]
-  group node[:jds][:cache_user]
   mode "0755"
-  action :create
 end
 
 # Retrieve database encryption key and details from encrypted data bag
@@ -35,6 +27,15 @@ file "#{node[:jds][:cache_mgr_dir]}/#{cache_key_file}" do
   group node[:jds][:cache_user]
   mode "0640"
   action :create_if_missing
+  notifies :execute, "jds_key_block[key block]", "immediately"
+end
+
+# Activate database encryption key and configure startup options
+jds_key_block "key block" do
+  cache_username node[:jds][:default_admin_user]
+  cache_password user_password
+  log node[:jds][:chef_log]
+  action :nothing
 end
 
 # Retrieve cache license from encrypted data bag
@@ -47,16 +48,7 @@ file "#{node[:jds][:cache_mgr_dir]}/cache.key" do
   group node[:jds][:cache_user]
   mode "0640"
   action :create
-  notifies :execute, 'jds_key_block[key block]', :immediately
   notifies :restart, "service[#{node[:jds][:service_name]}]"
-end
-
-# Activate database encryption key and configure startup options
-jds_key_block "key block" do
-  cache_username node[:jds][:default_admin_user]
-  cache_password user_password
-  log node[:jds][:chef_log]
-  action :nothing
 end
 
 user_export = Chef::EncryptedDataBagItem.load("jds_data", "user_export", node[:data_bag_string])["user_export"]
@@ -81,27 +73,13 @@ jds_security_block "security block" do
   action :nothing
 end
 
-# This is apache configuration for the embedded apache server in Cache 2014
+# This is apache configuration for the embedded apache server in Cache
 template "#{node[:jds][:cache_dir]}/httpd/conf/httpd.conf" do
   source 'http.conf.erb'
   owner node[:jds][:cache_user]
   group node[:jds][:cache_user]
   mode '0755'
   notifies :restart, "service[#{node[:jds][:service_name]}]"
-end
-
-jds_mumps_block "create namespace" do
-  cache_username node[:jds][:default_admin_user]
-  cache_password user_password
-  namespace "%SYS"
-  command [
-    "set RoutineFile = \"#{Chef::Config[:file_cache_path]}/vprnamespace.mac\"",
-    "OPEN RoutineFile USE RoutineFile ZLOAD",
-    "ZSAVE VPRNAMESPACE",
-    "D CREATE^VPRNAMESPACE(\"#{node[:jds][:cache_namespace]}\", \"#{node[:jds][:jds_database_location]}\")"
-  ]
-  log node[:jds][:chef_log]
-  not_if "echo -e \"i ##class(%SYS.Namespace).Exists(\\\"#{node[:jds][:cache_namespace]}\\\") w \\\"found\\\"\" | #{node[:jds][:session]} | grep \"found\"", :user => node[:jds][:install_user]
 end
 
 # make CSP.ini 600
@@ -114,8 +92,10 @@ end
 # In development this is enabled
 clear_jds_journal_action = node[:jds][:clear_jds_journal] ? :create : :delete
 
-cookbook_file "clear_jds_journal" do
-  path "#{node[:jds][:cron_dir]}/clear_jds_journal"
-  mode "0755"
+template "#{node[:jds][:cron_dir]}/clear_jds_journal" do
+  owner "root"
+  group "root"
+  mode "0644"
+  source "clear_jds_journal.erb"
   action clear_jds_journal_action
 end

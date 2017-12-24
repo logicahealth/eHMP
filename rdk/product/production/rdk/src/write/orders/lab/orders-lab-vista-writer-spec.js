@@ -37,7 +37,7 @@ describe('write-back orders lab vista writer', function() {
                 'orderCheck': 'NEW^11^2^Duplicate order: 11-DEOXYCORTISOL BLOOD   SERUM SP *UNSIGNED*  [UNRELEASED]'
             }],
             'localId': '12519',
-            'uid': 'urn:va:order:9E7A:100615:12519',
+            'uid': 'urn:va:order:SITE:100615:12519',
             'kind': 'Laboratory'
         };
         var expectedArray = ['100615', '10000000231', '285', 'LR OTHER LAB TESTS', '6', '2', '38479;1', {

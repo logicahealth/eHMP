@@ -8,7 +8,7 @@ var logUtil = require(global.VX_UTILS + 'log');
 var Metrics = require(global.VX_UTILS + 'metrics');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
-function writeErrorRecord(jds, errorRecord, callback) {
+function writeErrorRecord(jds, config, errorRecord, callback) {
     callback = _.isFunction(callback) ? callback : function() {};
 
     // these are necessary for searching via JDS filter
@@ -25,32 +25,36 @@ function writeErrorRecord(jds, errorRecord, callback) {
         errorRecord.patientIdentifierValue = errorRecord.patientIdentifier.value;
     }
 
+    if (config.environmentName) {
+        errorRecord.vxsyncEnvironmentName= config.environmentName;
+    }
+
     jds.addErrorRecord(errorRecord, callback);
 }
 
-/*
-Variadic Function:
-createErrorRecordWriter(config)
-createErrorRecordWriter(logger, config)
-
-Use this function to create an error record writer bound
-to the given configuration.
-
-logger should be a bunyan logger object.
-config should be worker-config.json 'config' object.
-*/
-function createErrorRecordWriter(logger, config) {
-    if (arguments.length === 1) {
-        config = arguments[0];
+//---------------------------------------------------------------------------------------------
+// This function creates the error record writer and returns a handle to it.
+//
+// config: The worker-config settings.
+// environment: The environment information to be used to write this error.
+// logger: The logger to be used to write the error information.
+// returns: The error record writer function.
+//----------------------------------------------------------------------------------------------
+function createErrorRecordWriter(config, environment, logger) {
+    if (!logger) {
         logUtil.initialize(config);
         logger = logUtil.get('jds-error-writer');
     }
 
-    var metrics = new Metrics(config);
-    var jdsClient = new JdsClient(logger, metrics, config);
+    var jdsClient;
+    if ((environment) && (environment.jds)) {
+        jdsClient = environment.jds;
+    } else {
+        var metrics = new Metrics(config);
+        jdsClient = new JdsClient(logger, metrics, config);
+    }
 
-
-    return writeErrorRecord.bind(null, jdsClient);
+    return writeErrorRecord.bind(null, jdsClient, config);
 }
 
 module.exports.writeErrorRecord = writeErrorRecord;

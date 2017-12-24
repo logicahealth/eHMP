@@ -3,6 +3,12 @@
 require('../../../../../env-setup');
 var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-appointment-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-appointment-xformer', function() {
     var mockEdipi = '00000099';
@@ -64,7 +70,7 @@ describe('jmeadows-appointment-xformer', function() {
 
 
     it('verify transform sample appointment to VPR', function() {
-        var vprData = xformer(sampleDODAppointment, mockEdipi);
+        var vprData = xformer(log, sampleDODAppointment, mockEdipi);
         expect(vprData.dateTime).toMatch(/\d{14}/);
         expect(vprData.categoryName).toEqual(sampleVPRAppointment.categoryName);
         expect(vprData.locationName).toEqual(sampleVPRAppointment.locationName);
@@ -81,7 +87,7 @@ describe('jmeadows-appointment-xformer', function() {
 
     it('verify date skipped when null', function() {
         var filteredAppointment = _.omit(sampleDODAppointment, 'apptDate');
-        var vprData = xformer(filteredAppointment, mockEdipi);
+        var vprData = xformer(log, filteredAppointment, mockEdipi);
         expect(vprData.dateTime).toBeUndefined();
     });
 

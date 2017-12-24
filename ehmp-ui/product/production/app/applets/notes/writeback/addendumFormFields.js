@@ -96,7 +96,6 @@ define([
                             control: "button",
                             name: "addendum-delete",
                             id: "delete-addendum-form-btn",
-                            title: "Press enter to delete and close addendum",
                             extraClasses: ["btn-danger", "btn-sm", "pull-left"]
                         }, {
                             label: "Preview",
@@ -104,7 +103,6 @@ define([
                             control: "button",
                             name: "addendum-preview",
                             id: "preview-addendum-form-btn",
-                            title: "Press enter to preview addendum",
                             extraClasses: ["btn-primary", "btn-sm"]
                         }, {
                             label: "Draft",
@@ -113,14 +111,12 @@ define([
                             name: "addendum-close",
                             id: "close-addendum-form-btn",
                             extraClasses: ["btn-primary", "btn-sm"],
-                            title: "Press enter to save and close addendum"
                         }, {
                             label: "Sign",
                             type: "submit",
                             control: "button",
                             name: "addendum-sign",
                             id: "sign-addendum-form-btn",
-                            title: "Press enter to sign addendum",
                             extraClasses: ["btn-primary", "btn-sm"]
                         }]
                     }]

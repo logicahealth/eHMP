@@ -1,0 +1,8 @@
+"chef-server-team-package-%branch%" {
+	template = 'templates/chef-server-team-package.tpl'
+	description = "This job creates a package of the cookbooks used in a release and uploads it to nexus; this is then delivered to non development environments"
+
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+   release = '%branch%'
+}

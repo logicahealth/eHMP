@@ -27,7 +27,7 @@ var originalVaPatientRecord = {
         'start': 20130101090807,
         'end': 20130101090807
     }],
-    'admissionUid': 'urn:va:visit:9E7A:3:H4612',
+    'admissionUid': 'urn:va:visit:SITE:3:H4612',
     'alias': [{
         'fullName': 'P8'
     }],
@@ -65,7 +65,7 @@ var originalVaPatientRecord = {
         'latestDate': 20010101,
         'localPatientId': 3,
         'name': 'CAMP MASTER',
-        'systemId': '9E7A'
+        'systemId': 'SITE'
     }, {
         'code': 998,
         'localPatientId': 3,
@@ -73,7 +73,7 @@ var originalVaPatientRecord = {
         'earliestDate': 20010101,
         'latestDate': 20010101,
         'name': 'ABILENE (CAA)',
-        'systemId': 'C877'
+        'systemId': 'SITE'
     }],
     'familyName': 'EIGHT',
     'fullName': 'EIGHT,PATIENT',
@@ -98,7 +98,7 @@ var originalVaPatientRecord = {
         'text': 'This patient likes to wander around the hospital.  Please notify the\r\nsecurity office',
         'type': 'OTHER'
     }],
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'religionCode': 'urn:va:pat-religion:99',
     'religionName': 'ROMAN CATHOLIC CHURCH',
     'roomBed': '722-B',
@@ -119,14 +119,14 @@ var originalVaPatientRecord = {
             'digitalPager': '',
             'name': 'PROVIDER,THIRTY',
             'officePhone': '',
-            'uid': 'urn:va:user:9E7A:1057'
+            'uid': 'urn:va:user:SITE:1057'
         },
         'inpatientProvider': {
             'analogPager': '',
             'digitalPager': '',
             'name': 'PROVIDER,TWENTY',
             'officePhone': '',
-            'uid': 'urn:va:user:9E7A:1005'
+            'uid': 'urn:va:user:SITE:1005'
         },
         'mhCoordinator': {
             'mhPosition': 'unassigned',
@@ -139,7 +139,7 @@ var originalVaPatientRecord = {
         'team': {
             'name': 'RED',
             'phone': '555-555-5551',
-            'uid': 'urn:va:team:9E7A:3'
+            'uid': 'urn:va:team:SITE:3'
         },
         'text': '        Primary Care Team:  '
     },
@@ -147,7 +147,7 @@ var originalVaPatientRecord = {
         'use': 'H',
         'value': '(222)555-8235'
     }],
-    'uid': 'urn:va:patient:9E7A:3:3',
+    'uid': 'urn:va:patient:SITE:3:3',
     'veteran': true,
     'insurance': [{
         'companyName': 'Acme Insurance',
@@ -194,7 +194,7 @@ var originalDodPatientRecord = {
         'start': 20130101090807,
         'end': 20130101090807
     }],
-    'admissionUid': 'urn:va:visit:9E7A:3:H4612',
+    'admissionUid': 'urn:va:visit:SITE:3:H4612',
     'alias': [{
         'fullName': 'P8'
     }],
@@ -232,7 +232,7 @@ var originalDodPatientRecord = {
         'latestDate': 20010101,
         'localPatientId': 3,
         'name': 'CAMP MASTER',
-        'systemId': '9E7A'
+        'systemId': 'SITE'
     }, {
         'code': 998,
         'localPatientId': 3,
@@ -240,7 +240,7 @@ var originalDodPatientRecord = {
         'earliestDate': 20010101,
         'latestDate': 20010101,
         'name': 'ABILENE (CAA)',
-        'systemId': 'C877'
+        'systemId': 'SITE'
     }],
     'familyName': 'EIGHT',
     'fullName': 'EIGHT,PATIENT',
@@ -286,14 +286,14 @@ var originalDodPatientRecord = {
             'digitalPager': '',
             'name': 'PROVIDER,THIRTY',
             'officePhone': '',
-            'uid': 'urn:va:user:9E7A:1057'
+            'uid': 'urn:va:user:SITE:1057'
         },
         'inpatientProvider': {
             'analogPager': '',
             'digitalPager': '',
             'name': 'PROVIDER,TWENTY',
             'officePhone': '',
-            'uid': 'urn:va:user:9E7A:1005'
+            'uid': 'urn:va:user:SITE:1005'
         },
         'mhCoordinator': {
             'mhPosition': 'unassigned',
@@ -306,7 +306,7 @@ var originalDodPatientRecord = {
         'team': {
             'name': 'RED',
             'phone': '555-555-5551',
-            'uid': 'urn:va:team:9E7A:3'
+            'uid': 'urn:va:team:SITE:3'
         },
         'text': '        Primary Care Team:  '
     },

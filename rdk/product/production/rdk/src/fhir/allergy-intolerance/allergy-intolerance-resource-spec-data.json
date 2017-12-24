@@ -23,7 +23,7 @@
                     "localId": "850",
                     "mechanism": "PHARMACOLOGIC",
                     "originatorName": "VEHU,ONEHUNDREDSIXTEEN",
-                    "pid": "9E7A;227",
+                    "pid": "SITE;227",
                     "products": [
                         {
                             "name": "PENICILLIN",
@@ -42,7 +42,7 @@
                     "stampTime": "20050320115222",
                     "summary": "PENICILLIN",
                     "typeName": "DRUG",
-                    "uid": "urn:va:allergy:9E7A:227:850",
+                    "uid": "urn:va:allergy:SITE:227:850",
                     "verified": "20050320115222",
                     "verifierName": "<auto-verified>"
                 },
@@ -111,7 +111,7 @@
                     "localId": "850",
                     "mechanism": "PHARMACOLOGIC",
                     "originatorName": "VEHU,ONEHUNDREDSIXTEEN",
-                    "pid": "C877;227",
+                    "pid": "SITE;227",
                     "products": [
                         {
                             "name": "PENICILLIN",
@@ -130,7 +130,7 @@
                     "stampTime": "20050320115222",
                     "summary": "PENICILLIN",
                     "typeName": "DRUG",
-                    "uid": "urn:va:allergy:C877:227:850",
+                    "uid": "urn:va:allergy:SITE:227:850",
                     "verified": "20050320115222",
                     "verifierName": "<auto-verified>"
                 }

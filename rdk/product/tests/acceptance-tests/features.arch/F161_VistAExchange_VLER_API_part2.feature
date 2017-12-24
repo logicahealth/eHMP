@@ -6,8 +6,8 @@ Feature: F161 - VistA Exchange - VLER API
 @F161_2_fhir_vler_api @unstable @fhir @10110V004877
 Scenario: For a patient a collection of data is made successfully
 	Given a patient with "data" in multiple VistAs
-	And a patient with pid "9E7A;8" has been synced through the RDK API
-	When the client requests data for the patient "9E7A;8" in VPR format in encounter "urn:va:visit:9E7A:8:6472"
+	And a patient with pid "SITE;8" has been synced through the RDK API
+	When the client requests data for the patient "SITE;8" in VPR format in encounter "urn:va:visit:SITE:8:6472"
 	Then a successful response is returned
 	And the results contain
 		#Header
@@ -56,7 +56,7 @@ Scenario: For a patient a collection of data is made successfully
 		| header.patient.facility.localPatientId           | 8                                                      |
 		| header.patient.facility.name                     | CAMP MASTER                                            |
 		| header.patient.facility.summary                  | CAMP MASTER                                            |
-		| header.patient.facility.systemId                 | 9E7A                                                   |
+		| header.patient.facility.systemId                 | SITE                                                   |
 		| header.patient.facility.code                     | 987                                                    |
 		| header.patient.facility.homeSite                 | false                                                  |
 		| header.patient.facility.latestDate               | 20010101                                               |
@@ -115,7 +115,7 @@ Scenario: For a patient a collection of data is made successfully
 		| header.patient.lrdfn                             | 24                                                     |
 		| header.patient.maritalStatusCode                 | urn:va:pat-maritalStatus:S                             |
 		| header.patient.maritalStatusName                 | Never Married                                          |
-		| header.patient.pid                               | 9E7A;8                                                 |
+		| header.patient.pid                               | SITE;8                                                 |
 		| header.patient.religionCode                      | urn:va:pat-religion:24                                 |
 		| header.patient.religionName                      | PROTESTANT                                             |
 		| header.patient.scPercent                         | 20                                                     |
@@ -123,7 +123,7 @@ Scenario: For a patient a collection of data is made successfully
 		| header.patient.serviceConnected                  | true                                                   |
 		| header.patient.ssn                               | 666000010                                              |
 		# Patient summmary is not being used, comment it out.
-		#| header.patient.summary                           | CONTAINS 9E7A;8                                        |
+		#| header.patient.summary                           | CONTAINS SITE;8                                        |
 		# syncErrorCount is being deprecated.
 		#| header.patient.syncErrorCount                    | 0                                                      |
 		| header.patient.teamInfo.associateProvider.name   | unassigned                                             |
@@ -139,7 +139,7 @@ Scenario: For a patient a collection of data is made successfully
 		| header.patient.telecom.value                     | (222)555-8235                                          |
 		| header.patient.telecom.use                       | WP                                                     |
 		| header.patient.telecom.value                     | (222)555-7720                                          |
-		| header.patient.uid                               | urn:va:patient:9E7A:8:8                                |
+		| header.patient.uid                               | urn:va:patient:SITE:8:8                                |
 		| header.patient.veteran                           | true                                                   |
 		Then in section "problems" the response contains 32 "problem"s
 		And the results contain
@@ -160,9 +160,9 @@ Scenario: For a patient a collection of data is made successfully
 		| problems.problem.onset               | 20000221                                      |
 		| problems.problem.kind                | Problem                                       |
 		| problems.problem.icdGroup            | 250                                           |
-		| problems.problem.uid                 | urn:va:problem:9E7A:8:185                     |
+		| problems.problem.uid                 | urn:va:problem:SITE:8:185                     |
 		| problems.problem.summary             | CONTAINS unspecified (ICD-9-CM 250.00)        |
-		| problems.problem.pid                 | 9E7A;8                                        |
+		| problems.problem.pid                 | SITE;8                                        |
 		| problems.problem.localId             | 185                                           |
 		| problems.problem.locationDisplayName | Primary Care                                  |
 		| problems.problem.providerDisplayName | Vehu,Ten                                      |
@@ -171,8 +171,8 @@ Scenario: For a patient a collection of data is made successfully
 		| problems.problem.statusDisplayName   | Active                                        |
 		| problems.problem.unverified          | false                                         |
 		| problems.problem.serviceConnected    | false                                         |
-		| problems.problem.providerUid         | urn:va:user:9E7A:20012                        |
-		| problems.problem.locationUid         | urn:va:location:9E7A:32                       |
+		| problems.problem.providerUid         | urn:va:user:SITE:20012                        |
+		| problems.problem.locationUid         | urn:va:location:SITE:32                       |
 		And the results contain
 		#Problems
 		| problems.problem.facilityCode        | 500                                           |
@@ -190,9 +190,9 @@ Scenario: For a patient a collection of data is made successfully
 		| problems.problem.onset               | 20000221                                      |
 		| problems.problem.kind                | Problem                                       |
 		| problems.problem.icdGroup            | 250                                           |
-		| problems.problem.uid                 | urn:va:problem:C877:8:185                     |
+		| problems.problem.uid                 | urn:va:problem:SITE:8:185                     |
 		| problems.problem.summary             | CONTAINS Diabetes Mellitus Type II            |
-		| problems.problem.pid                 | C877;8                                        |
+		| problems.problem.pid                 | SITE;8                                        |
 		| problems.problem.localId             | 185                                           |
 		| problems.problem.locationDisplayName | Primary Care                                  |
 		| problems.problem.providerDisplayName | Vehu,Ten                                      |
@@ -202,8 +202,8 @@ Scenario: For a patient a collection of data is made successfully
 		| problems.problem.serviceConnected    | false                                         |
 		| problems.problem.unverified          | false                                         |
 		| problems.problem.codes.code          | 59621000                                      |
-		| problems.problem.providerUid         | urn:va:user:C877:20012                        |
-		| problems.problem.locationUid         | urn:va:location:C877:32                       |
+		| problems.problem.providerUid         | urn:va:user:SITE:20012                        |
+		| problems.problem.locationUid         | urn:va:location:SITE:32                       |
 		Then in section "encounters" the response contains 25 "encounter"s
 		And the results contain
 		#Encounter - visit
@@ -215,14 +215,14 @@ Scenario: For a patient a collection of data is made successfully
 		| encounters.encounter.dateTime            | 200807170800                                 |
 		| encounters.encounter.service             | MEDICINE                                     |
 		| encounters.encounter.stopCodeName        | GENERAL INTERNAL MEDICINE                    |
-		| encounters.encounter.locationUid         | urn:va:location:9E7A:23                      |
+		| encounters.encounter.locationUid         | urn:va:location:SITE:23                      |
 		| encounters.encounter.locationName        | GENERAL MEDICINE                             |
 		| encounters.encounter.shortLocationName   | GM                                           |
 		| encounters.encounter.locationDisplayName | General Medicine                             |
 		| encounters.encounter.kind                | Visit                                        |
-		| encounters.encounter.uid                 | urn:va:visit:9E7A:8:6472                     |
+		| encounters.encounter.uid                 | urn:va:visit:SITE:8:6472                     |
 		| encounters.encounter.summary             | GENERAL INTERNAL MEDICINE                    |
-		| encounters.encounter.pid                 | 9E7A;8                                       |
+		| encounters.encounter.pid                 | SITE;8                                       |
 		| encounters.encounter.localId             | 6472                                         |
 		| encounters.encounter.typeName            | GENERAL MEDICINE VISIT                       |
 		| encounters.encounter.typeDisplayName     | General Medicine Visit                       |
@@ -234,16 +234,16 @@ Scenario: For a patient a collection of data is made successfully
 		And the results contain
 		#Encounter - document
 		| name                                     | value                       |
-		| encounters.document.authorUid            | urn:va:user:9E7A:20012      |
+		| encounters.document.authorUid            | urn:va:user:SITE:20012      |
 		| encounters.document.authorDisplayName    | Vehu,Ten                    |
-		| encounters.document.attendingUid         | urn:va:user:9E7A:20012      |
+		| encounters.document.attendingUid         | urn:va:user:SITE:20012      |
 		| encounters.document.attendingDisplayName | Vehu,Ten                    |
-		| encounters.document.signerUid            | urn:va:user:9E7A:20012      |
+		| encounters.document.signerUid            | urn:va:user:SITE:20012      |
 		| encounters.document.signerDisplayName    | Vehu,Ten                    |
 		| encounters.document.signedDateTime       | 20070529124057              |
 		| encounters.document.urgency              | routine                     |
 		| encounters.document.kind                 | Discharge Summary           |
-		| encounters.document.documentDefUid       | urn:va:doc-def:9E7A:1       |
+		| encounters.document.documentDefUid       | urn:va:doc-def:SITE:1       |
 		| encounters.document.isInterdisciplinary  | false                       |
 		| encounters.document.facilityCode         | 998                         |
 		| encounters.document.facilityName         | ABILENE (CAA)               |
@@ -256,9 +256,9 @@ Scenario: For a patient a collection of data is made successfully
 		| encounters.document.nationalTitle.vuid   | urn:va:vuid:4693715         |
 		# This is deprecated.
 		#| encounters.document.documentDefUidVuid   | urn:va:vuid:4693715         |
-		| encounters.document.uid                  | urn:va:document:9E7A:8:3962 |
+		| encounters.document.uid                  | urn:va:document:SITE:8:3962 |
 		| encounters.document.summary              | Discharge Summary           |
-		| encounters.document.pid                  | 9E7A;8                      |
+		| encounters.document.pid                  | SITE;8                      |
 		| encounters.document.author               | VEHU,TEN                    |
 		| encounters.document.attending            | VEHU,TEN                    |
 		| encounters.document.signer               | VEHU,TEN                    |
@@ -275,9 +275,9 @@ Scenario: For a patient a collection of data is made successfully
 		| allergies.allergy.originatorName      | VEHU,TEN                                      |
 		| allergies.allergy.verifierName        | <auto-verified>                               |
 		| allergies.allergy.mechanism           | PHARMACOLOGIC                                 |
-		| allergies.allergy.uid                 | urn:va:allergy:9E7A:8:753                     |
+		| allergies.allergy.uid                 | urn:va:allergy:SITE:8:753                     |
 		| allergies.allergy.summary             | PENICILLIN                                    |
-		| allergies.allergy.pid                 | 9E7A;8                                        |
+		| allergies.allergy.pid                 | SITE;8                                        |
 		| allergies.allergy.localId             | 753                                           |
 		| allergies.allergy.historical          | true                                          |
 		| allergies.allergy.reference           | 125;GMRD(120.82,                              |
@@ -344,16 +344,16 @@ Scenario: For a patient a collection of data is made successfully
 		| vitalsigns.vitalsign.high                     | 210/110                                       |
 		| vitalsigns.vitalsign.patientGeneratedDataFlag | false                                         |
 		| vitalsigns.vitalsign.qualifiedName            | BLOOD PRESSURE                                |
-		| vitalsigns.vitalsign.uid                      | urn:va:vital:9E7A:8:23462                     |
+		| vitalsigns.vitalsign.uid                      | urn:va:vital:SITE:8:23462                     |
 		| vitalsigns.vitalsign.summary                  | BLOOD PRESSURE 134/81 mm[Hg]                  |
-		| vitalsigns.vitalsign.pid                      | 9E7A;8                                        |
+		| vitalsigns.vitalsign.pid                      | SITE;8                                        |
 		| vitalsigns.vitalsign.localId                  | 23462                                         |
 		| vitalsigns.vitalsign.typeCode                 | urn:va:vuid:4500634                           |
 		| vitalsigns.vitalsign.typeName                 | BLOOD PRESSURE                                |
 		| vitalsigns.vitalsign.codes.code               | 55284-4                                       |
 		| vitalsigns.vitalsign.codes.system             | http://loinc.org                              |
 		| vitalsigns.vitalsign.codes.display            | Blood pressure systolic and diastolic         |
-		| vitalsigns.vitalsign.locationUid              | urn:va:location:9E7A:23                       |
+		| vitalsigns.vitalsign.locationUid              | urn:va:location:SITE:23                       |
 		Then in section "procedures" the response contains 76 "procedure"s
 		And the results contain
 		#Procedures
@@ -362,9 +362,9 @@ Scenario: For a patient a collection of data is made successfully
 		| procedures.procedure.facilityCode                  | 500                                                   |
 		| procedures.procedure.facilityName                  | CAMP MASTER                                           |
 		| procedures.procedure.statusName                    | COMPLETED                                             |
-		| procedures.procedure.uid                           | urn:va:surgery:9E7A:8:10016                           |
+		| procedures.procedure.uid                           | urn:va:surgery:SITE:8:10016                           |
 		| procedures.procedure.summary                       | LEFT INGUINAL HERNIA REPAIR WITH MESH                 |
-		| procedures.procedure.pid                           | 9E7A;8                                                |
+		| procedures.procedure.pid                           | SITE;8                                                |
 		| procedures.procedure.localId                       | 10016                                                 |
 		| procedures.procedure.typeName                      | LEFT INGUINAL HERNIA REPAIR WITH MESH                 |
 		| procedures.procedure.dateTime                      | 200612080730                                          |
@@ -372,18 +372,18 @@ Scenario: For a patient a collection of data is made successfully
 		| procedures.procedure.providers.providerName        | PROVIDER,ONE                                          |
 		| procedures.procedure.providers.providerDisplayName | Provider,One                                          |
 		| procedures.procedure.providers.summary             | ProcedureProvider{uid=''}                         |
-		| procedures.procedure.providers.providerUid         | urn:va:user:9E7A:983                                  |
+		| procedures.procedure.providers.providerUid         | urn:va:user:SITE:983                                  |
 		| procedures.procedure.providerName                  | PROVIDER,ONE                                          |
 		| procedures.procedure.providerDisplayName           | Provider,One                                          |
 		| procedures.procedure.results.localTitle            | OPERATION REPORT                                      |
-		| procedures.procedure.results.uid                   | urn:va:document:9E7A:8:3563                           |
-		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:9E7A:8:3563'}    |
+		| procedures.procedure.results.uid                   | urn:va:document:SITE:8:3563                           |
+		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:SITE:8:3563'}    |
 		| procedures.procedure.results.localTitle            | NURSE INTRAOPERATIVE REPORT                           |
-		| procedures.procedure.results.uid                   | urn:va:document:9E7A:8:3532                           |
-		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:9E7A:8:3532'}    |
+		| procedures.procedure.results.uid                   | urn:va:document:SITE:8:3532                           |
+		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:SITE:8:3532'}    |
 		| procedures.procedure.results.localTitle            | ANESTHESIA REPORT                                     |
-		| procedures.procedure.results.uid                   | urn:va:document:9E7A:8:3531                           |
-		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:9E7A:8:3531'}    |
+		| procedures.procedure.results.uid                   | urn:va:document:SITE:8:3531                           |
+		| procedures.procedure.results.summary               | ProcedureResult{uid='urn:va:document:SITE:8:3531'}    |
 		Then in section "immunizations" the response contains 43 "immunization"s
 		And the results contain
 		#Immunization
@@ -393,12 +393,12 @@ Scenario: For a patient a collection of data is made successfully
 		| immunizations.immunization.administeredDateTime | 20000405112729                                 |
 		| immunizations.immunization.cptCode              | urn:cpt:90732                                  |
 		| immunizations.immunization.cptName              | PNEUMOCOCCAL VACCINE                           |
-		| immunizations.immunization.performerUid         | urn:va:user:9E7A:11620                         |
-		| immunizations.immunization.encounterUid         | urn:va:visit:9E7A:8:2005                       |
+		| immunizations.immunization.performerUid         | urn:va:user:SITE:11620                         |
+		| immunizations.immunization.encounterUid         | urn:va:visit:SITE:8:2005                       |
 		| immunizations.immunization.kind                 | Immunization                                   |
-		| immunizations.immunization.uid                  | urn:va:immunization:9E7A:8:54                  |
+		| immunizations.immunization.uid                  | urn:va:immunization:SITE:8:54                  |
 		| immunizations.immunization.summary              | PNEUMOCOCCAL                                   |
-		| immunizations.immunization.pid                  | 9E7A;8                                         |
+		| immunizations.immunization.pid                  | SITE;8                                         |
 		| immunizations.immunization.localId              | 54                                             |
 		| immunizations.immunization.name                 | PNEUMOCOCCAL                                   |
 		| immunizations.immunization.contraindicated      | false                                          |
@@ -406,7 +406,7 @@ Scenario: For a patient a collection of data is made successfully
 		| immunizations.immunization.codes.system         | urn:oid:2.16.840.1.113883.12.292               |
 		| immunizations.immunization.codes.display        | pneumococcal polysaccharide vaccine, 23 valent |
 		| immunizations.immunization.performerName        | STUDENT,FOUR                                   |
-		| immunizations.immunization.locationUid          | urn:va:location:9E7A:240                       |
+		| immunizations.immunization.locationUid          | urn:va:location:SITE:240                       |
 		| immunizations.immunization.locationName         | 20 MINUTE                                      |
 		| immunizations.immunization.encounterName        | 20 MINUTE Apr 05, 2000                         |
 		Then in section "results" the response contains 260 "laboratory"s
@@ -416,7 +416,7 @@ Scenario: For a patient a collection of data is made successfully
 		| results.laboratory.facilityCode    | 500                                           |
 		| results.laboratory.facilityName    | CAMP MASTER                                   |
 		| results.laboratory.groupName       | CH 0323 2426                                  |
-		| results.laboratory.groupUid        | urn:va:accession:9E7A:8:CH;6899693.879999     |
+		| results.laboratory.groupUid        | urn:va:accession:SITE:8:CH;6899693.87PORT     |
 		| results.laboratory.categoryCode    | urn:va:lab-category:CH                        |
 		| results.laboratory.categoryName    | Laboratory                                    |
 		| results.laboratory.observed        | 201003051200                                  |
@@ -434,9 +434,9 @@ Scenario: For a patient a collection of data is made successfully
 		| results.laboratory.abnormal        | false                                         |
 		| results.laboratory.micro           | false                                         |
 		| results.laboratory.qualifiedName   | HDL (SERUM)                                   |
-		| results.laboratory.uid             | urn:va:lab:9E7A:8:CH;6899693.879999;80        |
+		| results.laboratory.uid             | urn:va:lab:SITE:8:CH;6899693.87PORT;80        |
 		| results.laboratory.summary         | HDL (SERUM) 58 MG/DL                          |
-		| results.laboratory.pid             | 9E7A;8                                        |
+		| results.laboratory.pid             | SITE;8                                        |
 		| results.laboratory.localId         | CH;6899693.879999;80                          |
 		| results.laboratory.typeName        | HDL                                           |
 		| results.laboratory.statusCode      | urn:va:lab-status:completed                   |
@@ -483,15 +483,15 @@ Scenario: For a patient a collection of data is made successfully
 		| assessment.encounter.dateTime            | 200807170800                                  |
 		| assessment.encounter.service             | MEDICINE                                      |
 		| assessment.encounter.stopCodeName        | GENERAL INTERNAL MEDICINE                     |
-		| assessment.encounter.locationUid         | urn:va:location:9E7A:23                       |
+		| assessment.encounter.locationUid         | urn:va:location:SITE:23                       |
 		| assessment.encounter.locationName        | GENERAL MEDICINE                              |
 		| assessment.encounter.shortLocationName   | GM                                            |
 		| assessment.encounter.locationDisplayName | General Medicine                              |
 		| assessment.encounter.locationOos         | false                                         |
 		| assessment.encounter.kind                | Visit                                         |
-		| assessment.encounter.uid                 | urn:va:visit:9E7A:8:6472                      |
+		| assessment.encounter.uid                 | urn:va:visit:SITE:8:6472                      |
 		| assessment.encounter.summary             | GENERAL INTERNAL MEDICINE                     |
-		| assessment.encounter.pid                 | 9E7A;8                                        |
+		| assessment.encounter.pid                 | SITE;8                                        |
 		| assessment.encounter.localId             | 6472                                          |
 		| assessment.encounter.typeName            | GENERAL MEDICINE VISIT                        |
 		| assessment.encounter.typeDisplayName     | General Medicine Visit                        |

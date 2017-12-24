@@ -18,7 +18,7 @@ Feature: F117 Searching for patient with first letter of last name + last 4 soci
       | familyName  | BCMA                                         |
       | genderName  | Male                                         |
       | givenNames  | EIGHT                                        |
-      | pid         | 9E7A;100022                                  |
+      | pid         | SITE;100022                                  |
       | ssn         |  ***-**-0008                                 |
       | summary     | Bcma,Eight                                   |
       | localId     | 100022                                       |

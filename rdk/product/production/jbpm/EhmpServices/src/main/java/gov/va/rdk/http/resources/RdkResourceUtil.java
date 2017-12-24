@@ -1,13 +1,6 @@
 package gov.va.rdk.http.resources;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -23,7 +16,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import gov.va.clinicalobjectstorageservice.ClinicalObjectWriteHandler;
 import gov.va.ehmp.services.exception.EhmpServicesException;
 import vistacore.jbpm.utils.logging.RequestMessageType;
 
@@ -74,16 +66,15 @@ public abstract class RdkResourceUtil {
 	 */
 	private boolean establishSession() throws EhmpServicesException {
 		String resourceUrl = getRDKUrl(RDK_FETCHSERVER_CONFIG) + AUTHENTICATION_RESOURCE;
-		LOGGER.debug("establishSession Establishing Session from: " + resourceUrl);
 		
 		try {
 			HttpEntity<String> request = new HttpEntity<String>(addJbpmAuthenticationHeader());
-			LOGGER.debug("establishSession Connecting to: " + resourceUrl);
+			LOGGER.debug(String.format("RdkResourceUtil.establishSession Connecting to: %s", resourceUrl));
 						
 			ResponseEntity<String> result = getRestTemplate().exchange(resourceUrl, HttpMethod.POST, request, String.class);
 			HttpStatus resultStatus = result.getStatusCode();
 			
-			LOGGER.debug("RdkResourceUtil.establishSession resultStatus is: " + resultStatus);
+			LOGGER.debug(String.format("RdkResourceUtil.establishSession resultStatus is: %s", resultStatus));
 			
 			if (resultStatus.is2xxSuccessful()) {
 				Collection<String> cookies = result.getHeaders().get("Set-Cookie");
@@ -100,7 +91,8 @@ public abstract class RdkResourceUtil {
 									if (sessionIdParts.length > 0) {
 										rdkSessionCookieId = sessionIdParts[0];
 										sessionId = sessionIdParts[1];
-										LOGGER.debug("RdkResourceUtil.establishSession Found rdkSessionCookieId: " + rdkSessionCookieId + ", sessionId: " + sessionId);
+										LOGGER.debug(String.format("RdkResourceUtil.establishSession Found rdkSessionCookieId: %s, sessionId: %s",
+												rdkSessionCookieId, sessionId));
 										sessionIdFound = true;
 									}
 								}
@@ -114,7 +106,7 @@ public abstract class RdkResourceUtil {
 				for (String jwtHeader : jwtHeaders) {
 					if (jwtHeader.length() > 0) {
 						jwt = jwtHeader;
-						LOGGER.debug("establishSession Found jwt: " + jwt);
+						LOGGER.debug(String.format("establishSession Found jwt: %s", jwt));
 						return sessionIdFound;
 					}
 				}
@@ -146,82 +138,10 @@ public abstract class RdkResourceUtil {
 	 * @throws EhmpServicesException If the server encounters bad data or any unexpected conditions. 
 	 */
 	protected String getRDKUrl(String configFile) throws EhmpServicesException {
-		LOGGER.debug("Getting RDK URL from configFile: " + configFile);
-		String rdkResourceEndpoint = "";
-		Properties prop = new Properties();
-		String propertiesPath = "";
-
-		File tempFile;
-		FileInputStream file = null;
-
-		try {
-			String path = getPath();
-			tempFile = new File(path);
-			propertiesPath = tempFile.getParent();
-			String filename = "";
-			
-			try {
-				filename = Paths.get(propertiesPath, configFile).toString();
-				file = new FileInputStream(filename);
-			} catch (FileNotFoundException e) {
-				// if the properties file not found where the jar is, look for
-				// it in the project file
-				propertiesPath = tempFile.getParentFile().getParent();
-				String warningMsg = "getRDKUrl Couldn't find rdk config file at '" + filename + "'\nTrying to find it at ";
-				filename = propertiesPath + "/" + configFile;
-				warningMsg += "'" + filename + "'";
-				LOGGER.warn(warningMsg, e);
-				file = new FileInputStream(filename);
-			}
-			
-			prop.load(file);
-			
-			rdkResourceEndpoint = prop.getProperty("RDK-Protocol") + "://"
-					+ prop.getProperty("RDK-IP") + ":"
-					+ prop.getProperty("RDK-Port") + "/";
-		} catch (Exception e) {
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to get RDK url. Exception:" + e.getMessage(), e);
-		}
-		finally {
-			if (file != null) {
-				try { 
-					file.close();
-				} catch(Exception e){
-					// Do nothing
-				}				
-			}	
-		}
-
-		return rdkResourceEndpoint;
-	}
-
-	private String getPath() throws EhmpServicesException {
-		ProtectionDomain protectionDomain = ClinicalObjectWriteHandler.class.getProtectionDomain();
-		if (protectionDomain == null)
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "protectionDomain was null");
-		
-		CodeSource codeSource = protectionDomain.getCodeSource();
-		if (codeSource == null)
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "codeSource was null");
-		
-		URL location = codeSource.getLocation();
-		if (location == null)
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "location was null");
-		
-		URI uri = null;
-		try {
-			uri = location.toURI();
-		} catch (Exception e) {
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "uri was invalid");
-		}
-		if (uri == null)
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "uri was null");
-		
-		String path = uri.getPath();
-		if (path == null)
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "path was null");
-		
-		return path;
+		LOGGER.debug(String.format("Getting RDK URL from configFile: %s", configFile));
+		return RdkInnerResource.getProperty(configFile,"RDK-Protocol") + "://"
+		+ RdkInnerResource.getProperty(configFile,"RDK-IP") + ":"
+		+ RdkInnerResource.getProperty(configFile,"RDK-Port") + "/";
 	}
 	
 	/**
@@ -259,7 +179,10 @@ public abstract class RdkResourceUtil {
 	 * @throws EhmpServicesException If the server encounters bad data or any unexpected conditions. 
 	 */
 	private String invokeResource(String resourceUrl, HttpMethod httpMethod, String jsonBody, boolean isRetry) throws EhmpServicesException {
-		LOGGER.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Invoking a " + httpMethod + " on the resource: " + resourceUrl);
+		LOGGER.debug(String.format("invokeResource %s Invoking a %s on the resource: %s"
+				, (isRetry ? "(retry) " : "")
+				, httpMethod.toString()
+				, resourceUrl ));
 
 		//If the thread has a resquestId and a sessionId save those so they can be re-threaded
 		Object requestId = MDC.get("requestId");
@@ -268,7 +191,7 @@ public abstract class RdkResourceUtil {
 		String response = "";
 
 		if (sessionId == null || jwt == null) {
-			LOGGER.debug("invokeResource " + (isRetry ? "(retry)" : "") + "sessionId and jwt were null, re-establishing session");
+			LOGGER.debug(String.format("invokeResource %s sessionId and jwt were null, re-establishing session", (isRetry ? "(retry)" : "")));
 			if (!establishSession()) {
 				// couldn't establish a session..
 				throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to establish a session"); 
@@ -296,7 +219,7 @@ public abstract class RdkResourceUtil {
 			HttpEntity<String> request = null;
 			
 			//Log the Outgoing Request
-			LOGGER.info(RequestMessageType.OUTGOING_REQUEST + " " + httpMethod + " " + resourceUrl );
+			LOGGER.info(String.format("%s %s %s", RequestMessageType.OUTGOING_REQUEST.toString(), httpMethod.toString(), resourceUrl));
 
 			if ((httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) && jsonBody != null) {
 				request = new HttpEntity<String>(jsonBody, headers);
@@ -323,12 +246,18 @@ public abstract class RdkResourceUtil {
 				response = result.getBody();
 
 				//Log the Incoming Response
-				LOGGER.info(RequestMessageType.INCOMING_RESPONSE + " " + response );
+				LOGGER.info(String.format("%s %s", RequestMessageType.INCOMING_RESPONSE.toString(), response ));
 			} 
 			else {
 				//Log the Incoming Response Error
-				LOGGER.info(RequestMessageType.INCOMING_RESPONSE + " Response code: "+
-						resultStatus.value() + " - " + resultStatus.getReasonPhrase());
+				LOGGER.error(String.format("ERROR: RedResourceUtil.invokeResource %s Response code: %d - %s%n Outgoing json - %s%n resourceUrl - %s"
+						,RequestMessageType.INCOMING_RESPONSE.toString()
+						,resultStatus.value()
+						,resultStatus.getReasonPhrase()
+						,jsonBody
+						,resourceUrl));
+				throw new EhmpServicesException(resultStatus, "RedResourceUtil.invokeResource: RDK response error - " + resultStatus.value() + "): " 
+						+ resultStatus.getReasonPhrase() + ", outgoing message: " + jsonBody);
 			}
 			
 
@@ -365,6 +294,45 @@ public abstract class RdkResourceUtil {
 			}
 		}
 		return response;
+	}
+	
+	/**
+	 * Inner class to remain static when dealing with the properties
+	 */
+	private static final class RdkInnerResource {
+		private static final Properties fetchReadProperties = new Properties();
+		private static final Properties rdkWriteProperties = new Properties();
+		private static final Logger LOGGER = Logger.getLogger(RdkInnerResource.class);
+		static {
+			try {
+				LOGGER.debug(String.format("Loading Properties files; %s - %s ",RDK_FETCHSERVER_CONFIG, RDK_WRITEBACKSERVER_CONFIG));
+				
+				/*
+				 * The following code will throw a runtime initialization exception if the RDK_FETCHSERVER_CONFIG
+				 * and/or  RDK_WRITEBACKSERVER_CONFIG files cannot be found.  This is intentional because these configuration
+				 * files are required to provide a configured service.
+				 */
+				fetchReadProperties.load(RdkInnerResource.class.getClassLoader().getResourceAsStream(RDK_FETCHSERVER_CONFIG));
+				rdkWriteProperties.load(RdkInnerResource.class.getClassLoader().getResourceAsStream(RDK_WRITEBACKSERVER_CONFIG));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		/**
+		 * Pulls a property from the properties based on the original file name
+		 * @return String
+		 */
+		public static final String getProperty(String property_file_name, String prop) {
+			if(RDK_FETCHSERVER_CONFIG.equals(property_file_name)) {
+				return fetchReadProperties.getProperty(prop);
+			}
+			else if(RDK_WRITEBACKSERVER_CONFIG.equals(property_file_name)) {
+				return rdkWriteProperties.getProperty(prop);
+			}
+			return null;
+		}
+
 	}
 
 }

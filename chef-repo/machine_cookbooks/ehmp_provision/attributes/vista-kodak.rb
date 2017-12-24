@@ -8,9 +8,9 @@ default[:ehmp_provision][:'vista-kodak'][:copy_files] = {}
 #######################################################################################################################
 # vista-kodak specific aws configuration options
 default[:ehmp_provision][:'vista-kodak'][:aws][:instance_type] = "m3.medium"
-default[:ehmp_provision][:'vista-kodak'][:aws][:subnet] = "subnet-213b2256"
-default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_username] = "REDACTED"
-default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_keyname] = "REDACTED"
+default[:ehmp_provision][:'vista-kodak'][:aws][:subnet] = "DNS"
+default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_username] = "USER    "
+default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:ehmp_provision][:'vista-kodak'][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:ehmp_provision][:'vista-kodak'][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

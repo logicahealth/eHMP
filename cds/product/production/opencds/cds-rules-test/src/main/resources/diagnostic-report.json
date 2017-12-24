@@ -5,7 +5,7 @@
   "link": [
     {
       "relation": "self",
-      "url": "http://IP               /resource/fhir/patient/9E7A;129/diagnosticreport?name=urn:va:ien:60:1359:139"
+      "url": "http://IP               /resource/fhir/patient/SITE;129/diagnosticreport?name=urn:va:ien:60:1359:139"
     }
   ],
   "total": 1,
@@ -26,7 +26,7 @@
         "status": "final",
         "issued": "1998-02-19T13:55:00",
         "subject": {
-          "reference": "Patient/9E7A;129"
+          "reference": "Patient/SITE;129"
         },
         "performer": {
           "reference": "#5dac20ed-57d7-477f-8fbf-cc0560957fa2",
@@ -57,7 +57,7 @@
               "text": "FECES"
             },
             "subject": {
-              "reference": "Patient/9E7A;129"
+              "reference": "Patient/SITE;129"
             },
             "collection": {
               "collectedDateTime": "1998-02-19T13:54:00"
@@ -107,7 +107,7 @@
         "identifier": [
           {
             "system": "urn:oid:2.16.840.1.113883.6.233",
-            "value": "urn:va:lab:9E7A:129:CH;7019779.864549;500027"
+            "value": "urn:va:lab:SITE:129:CH;7019779.864549;500027"
           }
         ],
         "serviceCategory": {
@@ -158,7 +158,7 @@
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#groupUid",
-            "valueString": "urn:va:accession:9E7A:129:CH;7019779.864549"
+            "valueString": "urn:va:accession:SITE:129:CH;7019779.864549"
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#high",
@@ -186,7 +186,7 @@
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#pid",
-            "valueString": "9E7A;129"
+            "valueString": "SITE;129"
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#qualifiedName",
@@ -226,7 +226,7 @@
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#orderUid",
-            "valueString": "urn:va:order:9E7A:129:7740.1"
+            "valueString": "urn:va:order:SITE:129:7740.1"
           },
           {
             "url": "http://vistacore.us/fhir/extensions/lab#lnccodes[0]",
@@ -241,7 +241,7 @@
         ],
         "text": {
           "status": "generated",
-          "div": "<div>Collected: 1998-02-19T13:54:00<br/>Report Released: 1998-02-19T13:55:00<br/>Accession: urn:va:accession:9E7A:129:CH;7019779.864549<br/>Test: OCCULT BLOOD<br/>Result: POS<br/>Specimen: FECES<br/>Performing Lab: CAMP MASTER<br/>\t\tundefined<br/></div>"
+          "div": "<div>Collected: 1998-02-19T13:54:00<br/>Report Released: 1998-02-19T13:55:00<br/>Accession: urn:va:accession:SITE:129:CH;7019779.864549<br/>Test: OCCULT BLOOD<br/>Result: POS<br/>Specimen: FECES<br/>Performing Lab: CAMP MASTER<br/>\t\tundefined<br/></div>"
         }
       }
     }

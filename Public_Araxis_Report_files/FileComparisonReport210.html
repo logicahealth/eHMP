@@ -1,0 +1,848 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>210. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>210. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:27:53 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>210.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\chef-repo\chef-repo\project_cookbooks\ehmp_oracle\recipes</td> 
+     <td>gateway_config.rb</td> 
+     <td>Tue Oct 3 17:15:46 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\chef-repo\chef-repo\project_cookbooks\ehmp_oracle\recipes</td> 
+     <td>gateway_config.rb</td> 
+     <td>Wed Oct 11 13:50:47 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">2</td> 
+     <td style="text-align: right;">260</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">2</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>210.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>210.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;Cookbook</span> <span class="U2">&nbsp;Name::&nbsp;or</span> <span class="U2">acle-xe_wr</span> <span class="U2">apper</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;Recipe::</span> <span class="U2">&nbsp;gateway_c</span> <span class="U2">onfig</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">mssql&nbsp;=&nbsp;fi</span> <span class="U2">nd_optiona</span> <span class="U2">l_node_by_</span> <span class="U2">role("pcmm</span> <span class="U2">db",&nbsp;node[</span> <span class="U2">:stack])&nbsp;|</span> <span class="U2">|&nbsp;data_bag</span> <span class="U2">_item('ser</span> <span class="U2">vers',&nbsp;'pc</span> <span class="U2">mmdb').to_</span> <span class="U2">hash</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;'c</span> <span class="U2">ycle_lsnrc</span> <span class="U2">tl'&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"export&nbsp;OR</span> <span class="U2">ACLE_HOME=</span> <span class="U2">#{node[nod</span> <span class="U2">e['ehmp_or</span> <span class="U2">acle']['or</span> <span class="U2">acle_servi</span> <span class="U2">ce']]['hom</span> <span class="U2">e']};&nbsp;sudo</span> <span class="U2">&nbsp;-Eu&nbsp;oracl</span> <span class="U2">e&nbsp;#{node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['h</span> <span class="U2">ome']}/bin</span> <span class="U2">/lsnrctl&nbsp;s</span> <span class="U2">top;&nbsp;sudo&nbsp;</span> <span class="U2">-Eu&nbsp;oracle</span> <span class="U2">&nbsp;#{node[no</span> <span class="U2">de['ehmp_o</span> <span class="U2">racle']['o</span> <span class="U2">racle_serv</span> <span class="U2">ice']]['ho</span> <span class="U2">me']}/bin/</span> <span class="U2">lsnrctl&nbsp;st</span> <span class="U2">art;"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">nothing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">remote_fil</span> <span class="U2">e&nbsp;"#{Chef:</span> <span class="U2">:Config.fi</span> <span class="U2">le_cache_p</span> <span class="U2">ath}/gatew</span> <span class="U2">ays.zip"&nbsp;d</span> <span class="U2">o</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;use_cond</span> <span class="U2">itional_ge</span> <span class="U2">t&nbsp;true</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;source&nbsp;n</span> <span class="U2">ode[node['</span> <span class="U2">ehmp_oracl</span> <span class="U2">e']['oracl</span> <span class="U2">e_service'</span> <span class="U2">]]['oracle</span> <span class="U2">_gateway']</span> <span class="U2">['url']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;mode&nbsp;'75</span> <span class="U2">5'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:delete,&nbsp;</span> <span class="U2">"directory</span> <span class="U2">[#{node[no</span> <span class="U2">de['ehmp_o</span> <span class="U2">racle']['o</span> <span class="U2">racle_serv</span> <span class="U2">ice']]['or</span> <span class="U2">acle_gatew</span> <span class="U2">ay']['conf</span> <span class="U2">ig_dir']}]</span> <span class="U2">",&nbsp;:immedi</span> <span class="U2">ately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">directory&nbsp;</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'base_dir'</span> <span class="U2">]&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;owner&nbsp;'o</span> <span class="U2">racle'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr</span> <span class="U2">oup&nbsp;node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['g</span> <span class="U2">roup']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;mode&nbsp;'75</span> <span class="U2">5'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;recursiv</span> <span class="U2">e&nbsp;true</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">create</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">directory&nbsp;</span> <span class="U2">node[node[</span> <span class="U2">'ehmp_orac</span> <span class="U2">le']['orac</span> <span class="U2">le_service</span> <span class="U2">']]['oracl</span> <span class="U2">e_gateway'</span> <span class="U2">]['config_</span> <span class="U2">dir']&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ow</span> <span class="U2">ner&nbsp;'oracl</span> <span class="U2">e'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr</span> <span class="U2">oup&nbsp;node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['g</span> <span class="U2">roup']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mo</span> <span class="U2">de&nbsp;'755'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re</span> <span class="U2">cursive&nbsp;tr</span> <span class="U2">ue</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ac</span> <span class="U2">tion&nbsp;:crea</span> <span class="U2">te</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;"e</span> <span class="U2">xtract_gat</span> <span class="U2">eways.zip"</span> <span class="U2">&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;cwd&nbsp;node</span> <span class="U2">[node['ehm</span> <span class="U2">p_oracle']</span> <span class="U2">['oracle_s</span> <span class="U2">ervice']][</span> <span class="U2">'oracle_ga</span> <span class="U2">teway']['c</span> <span class="U2">onfig_dir'</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"sudo&nbsp;-Eu&nbsp;</span> <span class="U2">oracle&nbsp;unz</span> <span class="U2">ip&nbsp;-o&nbsp;#{Ch</span> <span class="U2">ef::Config</span> <span class="U2">.file_cach</span> <span class="U2">e_path}/ga</span> <span class="U2">teways.zip</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:create,&nbsp;</span> <span class="U2">"template[</span> <span class="U2">#{node[nod</span> <span class="U2">e['ehmp_or</span> <span class="U2">acle']['or</span> <span class="U2">acle_servi</span> <span class="U2">ce']]['ora</span> <span class="U2">cle_gatewa</span> <span class="U2">y']['confi</span> <span class="U2">g_dir']}/g</span> <span class="U2">ateways/re</span> <span class="U2">sponse/tg4</span> <span class="U2">msql.rsp]"</span> <span class="U2">,&nbsp;:immedia</span> <span class="U2">tely</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;'ex</span> <span class="U2">ecute[prov</span> <span class="U2">ision_gate</span> <span class="U2">way]',&nbsp;:im</span> <span class="U2">mediately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:create,&nbsp;</span> <span class="U2">"template[</span> <span class="U2">#{node[nod</span> <span class="U2">e['ehmp_or</span> <span class="U2">acle']['or</span> <span class="U2">acle_servi</span> <span class="U2">ce']]['ora</span> <span class="U2">cle_gatewa</span> <span class="U2">y']['home'</span> <span class="U2">]}/gateway</span> <span class="U2">s/dg4msql/</span> <span class="U2">admin/init</span> <span class="U2">dg4ehmp.or</span> <span class="U2">a]",&nbsp;:imme</span> <span class="U2">diately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;"ex</span> <span class="U2">ecute[inse</span> <span class="U2">rt_#{node[</span> <span class="U2">'ehmp_orac</span> <span class="U2">le']['orac</span> <span class="U2">le_service</span> <span class="U2">']}_listen</span> <span class="U2">er]",&nbsp;:imm</span> <span class="U2">ediately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;'ex</span> <span class="U2">ecute[inse</span> <span class="U2">rt&nbsp;tnsname</span> <span class="U2">s]',&nbsp;:imme</span> <span class="U2">diately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;'ex</span> <span class="U2">ecute[cycl</span> <span class="U2">e_lsnrctl]</span> <span class="U2">',&nbsp;:immedi</span> <span class="U2">ately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;only_if&nbsp;</span> <span class="U2">{&nbsp;(Dir.ent</span> <span class="U2">ries(node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">oracle_gat</span> <span class="U2">eway']['co</span> <span class="U2">nfig_dir']</span> <span class="U2">)&nbsp;-&nbsp;%w{&nbsp;.&nbsp;</span> <span class="U2">..&nbsp;}).empt</span> <span class="U2">y?&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">template&nbsp;"</span> <span class="U2">#{node[nod</span> <span class="U2">e['ehmp_or</span> <span class="U2">acle']['or</span> <span class="U2">acle_servi</span> <span class="U2">ce']]['ora</span> <span class="U2">cle_gatewa</span> <span class="U2">y']['confi</span> <span class="U2">g_dir']}/g</span> <span class="U2">ateways/re</span> <span class="U2">sponse/tg4</span> <span class="U2">msql.rsp"&nbsp;</span> <span class="U2">do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ow</span> <span class="U2">ner&nbsp;'oracl</span> <span class="U2">e'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr</span> <span class="U2">oup&nbsp;node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['g</span> <span class="U2">roup']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">riables(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;:unix_</span> <span class="U2">group_name</span> <span class="U2">&nbsp;=&gt;&nbsp;"dba",</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:ora</span> <span class="U2">cle_home&nbsp;=</span> <span class="U2">&gt;&nbsp;"#{node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">oracle_gat</span> <span class="U2">eway']['ho</span> <span class="U2">me']}/gate</span> <span class="U2">ways",</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;:mssql</span> <span class="U2">&nbsp;=&gt;&nbsp;mssql</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ac</span> <span class="U2">tion&nbsp;:noth</span> <span class="U2">ing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">template&nbsp;"</span> <span class="U2">#{node[nod</span> <span class="U2">e['ehmp_or</span> <span class="U2">acle']['or</span> <span class="U2">acle_servi</span> <span class="U2">ce']]['ora</span> <span class="U2">cle_gatewa</span> <span class="U2">y']['home'</span> <span class="U2">]}/gateway</span> <span class="U2">s/dg4msql/</span> <span class="U2">admin/init</span> <span class="U2">dg4ehmp.or</span> <span class="U2">a"&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so</span> <span class="U2">urce&nbsp;"orac</span> <span class="U2">le_initdg4</span> <span class="U2">.ora.erb"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ow</span> <span class="U2">ner&nbsp;'oracl</span> <span class="U2">e'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gr</span> <span class="U2">oup&nbsp;node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['g</span> <span class="U2">roup']</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;va</span> <span class="U2">riables(</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:mss</span> <span class="U2">ql&nbsp;=&gt;&nbsp;mssq</span> <span class="U2">l</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;'ex</span> <span class="U2">ecute[cycl</span> <span class="U2">e_lsnrctl]</span> <span class="U2">',&nbsp;:immedi</span> <span class="U2">ately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;"p</span> <span class="U2">rovision_g</span> <span class="U2">ateway"&nbsp;do</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cw</span> <span class="U2">d&nbsp;"#{node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">oracle_gat</span> <span class="U2">eway']['co</span> <span class="U2">nfig_dir']</span> <span class="U2">}/gateways</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co</span> <span class="U2">mmand&nbsp;"sud</span> <span class="U2">o&nbsp;-Eu&nbsp;orac</span> <span class="U2">le&nbsp;#{node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">oracle_gat</span> <span class="U2">eway']['co</span> <span class="U2">nfig_dir']</span> <span class="U2">}/gateways</span> <span class="U2">/runInstal</span> <span class="U2">ler&nbsp;-silen</span> <span class="U2">t&nbsp;-waitfor</span> <span class="U2">completion</span> <span class="U2">&nbsp;-noconfig</span> <span class="U2">&nbsp;-response</span> <span class="U2">File&nbsp;#{nod</span> <span class="U2">e[node['eh</span> <span class="U2">mp_oracle'</span> <span class="U2">]['oracle_</span> <span class="U2">service']]</span> <span class="U2">['oracle_g</span> <span class="U2">ateway']['</span> <span class="U2">config_dir</span> <span class="U2">']}/gatewa</span> <span class="U2">ys/respons</span> <span class="U2">e/tg4msql.</span> <span class="U2">rsp&nbsp;-invPt</span> <span class="U2">rLoc&nbsp;#{nod</span> <span class="U2">e[node['eh</span> <span class="U2">mp_oracle'</span> <span class="U2">]['oracle_</span> <span class="U2">service']]</span> <span class="U2">['base']}/</span> <span class="U2">oraInst.lo</span> <span class="U2">c"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ac</span> <span class="U2">tion&nbsp;:noth</span> <span class="U2">ing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;"ex</span> <span class="U2">ecute[stop</span> <span class="U2">_oracle]",</span> <span class="U2">&nbsp;:before</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;"ex</span> <span class="U2">ecute[star</span> <span class="U2">t_oracle]"</span> <span class="U2">,&nbsp;:immedia</span> <span class="U2">tely</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;returns&nbsp;</span> <span class="U2">[0,&nbsp;6]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">SID_NAME&nbsp;=</span> <span class="U2">&nbsp;"dg4ehmp"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">listener_o</span> <span class="U2">racle_xe&nbsp;=</span> <span class="U2">&nbsp;"\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SID</span> <span class="U2">_DESC=\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span> <span class="U2">SID_NAME=#</span> <span class="U2">{SID_NAME}</span> <span class="U2">)\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span> <span class="U2">ORACLE_HOM</span> <span class="U2">E=#{node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['o</span> <span class="U2">racle_gate</span> <span class="U2">way']['hom</span> <span class="U2">e']}/gatew</span> <span class="U2">ays)\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span> <span class="U2">ENVS=LD_LI</span> <span class="U2">BRARY_PATH</span> <span class="U2">=#{node[no</span> <span class="U2">de['ehmp_o</span> <span class="U2">racle']['o</span> <span class="U2">racle_serv</span> <span class="U2">ice']]['or</span> <span class="U2">acle_gatew</span> <span class="U2">ay']['home</span> <span class="U2">']}/gatewa</span> <span class="U2">ys/dg4msql</span> <span class="U2">/driver/li</span> <span class="U2">b:#{node[n</span> <span class="U2">ode['ehmp_</span> <span class="U2">oracle']['</span> <span class="U2">oracle_ser</span> <span class="U2">vice']]['o</span> <span class="U2">racle_gate</span> <span class="U2">way']['hom</span> <span class="U2">e']}/gatew</span> <span class="U2">ays/lib)\\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span> <span class="U2">PROGRAM=dg</span> <span class="U2">4msql)\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">listener_o</span> <span class="U2">racle&nbsp;=&nbsp;"S</span> <span class="U2">ID_LIST=(S</span> <span class="U2">ID_DESC=(S</span> <span class="U2">ID_NAME=#{</span> <span class="U2">SID_NAME})</span> <span class="U2">(ORACLE_HO</span> <span class="U2">ME=#{node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">oracle_gat</span> <span class="U2">eway']['ho</span> <span class="U2">me']}/gate</span> <span class="U2">ways)(ENVS</span> <span class="U2">=LD_LIBRAR</span> <span class="U2">Y_PATH=#{n</span> <span class="U2">ode[node['</span> <span class="U2">ehmp_oracl</span> <span class="U2">e']['oracl</span> <span class="U2">e_service'</span> <span class="U2">]]['oracle</span> <span class="U2">_gateway']</span> <span class="U2">['home']}/</span> <span class="U2">gateways/d</span> <span class="U2">g4msql/dri</span> <span class="U2">ver/lib/:#</span> <span class="U2">{node[node</span> <span class="U2">['ehmp_ora</span> <span class="U2">cle']['ora</span> <span class="U2">cle_servic</span> <span class="U2">e']]['orac</span> <span class="U2">le_gateway</span> <span class="U2">']['home']</span> <span class="U2">}/gateways</span> <span class="U2">/lib)(PROG</span> <span class="U2">RAM=dg4msq</span> <span class="U2">l))"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">tnsnames&nbsp;=</span> <span class="U2">&nbsp;"\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#{SID_NAME</span> <span class="U2">}&nbsp;&nbsp;=\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;(DESCRIP</span> <span class="U2">TION=\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">94</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">(ADDRESS=(</span> <span class="U2">PROTOCOL=t</span> <span class="U2">cp)(HOST=l</span> <span class="U2">ocalhost)(</span> <span class="U2">PORT=</span> <span class="C2">PORT</span> <span class="U2">))\\</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;(CONNE</span> <span class="U2">CT_DATA=(S</span> <span class="U2">ID=#{SID_N</span> <span class="U2">AME}))\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;(HS=OK</span> <span class="U2">)\\</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;)"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">ruby_block</span> <span class="U2">&nbsp;"insert_l</span> <span class="U2">isteners"&nbsp;</span> <span class="U2">do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;notifies</span> <span class="U2">&nbsp;:run,&nbsp;"ex</span> <span class="U2">ecute[inse</span> <span class="U2">rt_#{node[</span> <span class="U2">'ehmp_orac</span> <span class="U2">le']['orac</span> <span class="U2">le_service</span> <span class="U2">']}_listen</span> <span class="U2">er]",&nbsp;:imm</span> <span class="U2">ediately</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ac</span> <span class="U2">tion&nbsp;:noth</span> <span class="U2">ing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;'s</span> <span class="U2">tart_oracl</span> <span class="U2">e'&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"sudo&nbsp;serv</span> <span class="U2">ice&nbsp;#{node</span> <span class="U2">['ehmp_ora</span> <span class="U2">cle']['ora</span> <span class="U2">cle_servic</span> <span class="U2">e']}&nbsp;start</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">nothing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;'s</span> <span class="U2">top_oracle</span> <span class="U2">'&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"sudo&nbsp;serv</span> <span class="U2">ice&nbsp;#{node</span> <span class="U2">['ehmp_ora</span> <span class="U2">cle']['ora</span> <span class="U2">cle_servic</span> <span class="U2">e']}&nbsp;stop"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">nothing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;"i</span> <span class="U2">nsert_orac</span> <span class="U2">le_listene</span> <span class="U2">r"&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;cwd&nbsp;"#{n</span> <span class="U2">ode[node['</span> <span class="U2">ehmp_oracl</span> <span class="U2">e']['oracl</span> <span class="U2">e_service'</span> <span class="U2">]]['home']</span> <span class="U2">}/network/</span> <span class="U2">admin"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"sudo&nbsp;-Eu&nbsp;</span> <span class="U2">oracle&nbsp;sed</span> <span class="U2">&nbsp;-i.orig&nbsp;'</span> <span class="U2">s|SID_LIST</span> <span class="U2">\=|#{liste</span> <span class="U2">ner_oracle</span> <span class="U2">}|'&nbsp;listen</span> <span class="U2">er.ora"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">nothing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;"i</span> <span class="U2">nsert_orac</span> <span class="U2">le-xe_list</span> <span class="U2">ener"&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;cwd&nbsp;"#{n</span> <span class="U2">ode[node['</span> <span class="U2">ehmp_oracl</span> <span class="U2">e']['oracl</span> <span class="U2">e_service'</span> <span class="U2">]]['home']</span> <span class="U2">}/network/</span> <span class="U2">admin"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;command&nbsp;</span> <span class="U2">"sudo&nbsp;-Eu&nbsp;</span> <span class="U2">oracle&nbsp;sed</span> <span class="U2">&nbsp;-i.orig&nbsp;'</span> <span class="U2">/SID_LIST&nbsp;</span> <span class="U2">\=/a&nbsp;#{lis</span> <span class="U2">tener_orac</span> <span class="U2">le_xe}'&nbsp;li</span> <span class="U2">stener.ora</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action&nbsp;:</span> <span class="U2">nothing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">execute&nbsp;"i</span> <span class="U2">nsert&nbsp;tnsn</span> <span class="U2">ames"&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cw</span> <span class="U2">d&nbsp;"#{node[</span> <span class="U2">node['ehmp</span> <span class="U2">_oracle'][</span> <span class="U2">'oracle_se</span> <span class="U2">rvice']]['</span> <span class="U2">home']}/ne</span> <span class="U2">twork/admi</span> <span class="U2">n"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;co</span> <span class="U2">mmand&nbsp;"sud</span> <span class="U2">o&nbsp;-Eu&nbsp;orac</span> <span class="U2">le&nbsp;sed&nbsp;-i.</span> <span class="U2">orig&nbsp;'$&nbsp;a&nbsp;</span> <span class="U2">#{tnsnames</span> <span class="U2">}'&nbsp;tnsname</span> <span class="U2">s.ora"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ac</span> <span class="U2">tion&nbsp;:noth</span> <span class="U2">ing</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

@@ -1,0 +1,48 @@
+@mixin trayColorTheme($color-primary, $color-primary-dark, $color-primary-light, $color-primary-light-alt) {
+    aside.tray-container .tray-menu > li.open > button,
+    aside ul.tray-list--arrow-right li {
+        > button {
+            background-color: $pure-white;
+            color: $color-primary;
+            &:hover {
+                background-color: $color-primary-light-alt;
+                color: $color-primary-dark;
+            }
+        }
+        &.open > button {
+            background-color: $color-primary-dark;
+            &:hover {
+                background-color: $color-primary-dark;
+                color: $pure-white;
+            }
+        }
+    }
+    .sidebar .sidebar-tray {
+        .fa-caret-down,
+        .fa-caret-right {
+            color: $color-primary;
+        }
+        .panel .panel-body {
+            background-color: $color-primary-light;
+            &.action-list-container {
+                background-color: $color-primary-light-alt;
+                .btn-group .btn.btn-default {
+                    background-color: $color-primary;
+                    &:hover {
+                        background-color: $color-primary-dark;
+                    }
+                }
+            }
+        }
+        .modal-body {
+            background-color: $color-primary-light;
+        }
+        .modal-footer {
+            background-color: $color-primary-light-alt;
+        }
+        .modal-header,
+        .panel-heading {
+            background-color: $color-primary-dark;
+        }
+    }
+}

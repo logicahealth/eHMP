@@ -5,6 +5,7 @@ define([
     'main/AppletBuilder',
     'main/ResourceBuilder',
     'main/Session',
+    'main/ADKApp',
     'api/SessionStorage',
     'api/UserDefinedScreens',
     'api/Messaging',
@@ -17,17 +18,20 @@ define([
     AppletBuilder,
     ResourceBuilder,
     Session,
+    ADKApp,
     SessionStorage,
     UserDefinedScreens,
     Messaging,
     Navigation,
     WorkspaceContextRepository) {
     'use strict';
+
     var AppletsManifest = Messaging.request('AppletsManifest');
     var NewUserScreen = Messaging.request('NewUserScreen');
     var ScreenBuilder = {};
 
-    ScreenBuilder.addNewScreen = function(screenConfig, app, screenIndex, callback) {
+
+    ScreenBuilder.addNewScreen = function(screenConfig, app, screenIndex) {
         screenConfig.fileName = "NewUserScreen";
 
         //initialize the screen
@@ -38,15 +42,19 @@ define([
 
         var newScreenConfig = _.clone(NewUserScreen);
         newScreenConfig.id = screenConfig.id;
+        var callback = function() {
+            if (_.isUndefined(screenConfig.context) && !_.isUndefined(WorkspaceContextRepository.currentContext)) {
+                screenConfig.context = WorkspaceContextRepository.currentContextId;
+            }
+            ScreenBuilder.build(app, newScreenConfig);
+            return newScreenConfig;
+        };
         UserDefinedScreens.addNewScreen(screenConfig, screenIndex, callback);
-        if (_.isUndefined(screenConfig.context) && !_.isUndefined(WorkspaceContextRepository.currentContext)) {
-            screenConfig.context = WorkspaceContextRepository.currentContextId;
-        }
-        ScreenBuilder.build(app, newScreenConfig);
     };
 
     ScreenBuilder.editScreen = function(newScreenConfig, origId) {
-        var screensConfig = UserDefinedScreens.getScreensConfigFromSession();
+        var _screensConfig = UserDefinedScreens.getScreensConfigFromSession();
+        var screensConfig = _.cloneDeep(_screensConfig);
 
         var screenIndex = null;
         var oldScreenConfig = null;
@@ -62,6 +70,16 @@ define([
         var currentWorkspaceId = WorkspaceContextRepository.currentWorkspace.get('id');
         if (newId !== origId) {
             UserDefinedScreens.updateScreenId(origId, newId);
+            var model = UserDefinedScreens.model;
+
+            model.listenToOnce(model, 'save:success', function() {
+                this.stopListening('save:error');
+                _washScreens(screensConfig, screenIndex, newScreenConfig);
+            });
+
+            model.listenToOnce(model, 'save:error', function() {
+                this.stopListening('save:success');
+            });
 
             var attributesToChangeObject = _.pick(newScreenConfig, ['id', 'screenId', 'title']);
             ADK.ADKApp.Screens[newId] = _.extend(ADK.ADKApp.Screens[origId], _.defaults({
@@ -77,7 +95,7 @@ define([
             Navigation.removeWorkspaceRoute(oldScreenConfig.routeName || null, ADK.ADKApp);
             Navigation.initWorkspaceRoute(newScreenConfig.routeName, ADK.ADKApp);
 
-            ADK.ADKApp.Screens[origId].stop();
+            _.result(ADKApp, ['Screens',origId, 'stop']);
             delete ADK.ADKApp.Screens[origId];
 
             var contextId = WorkspaceContextRepository.getWorkspace(newId).get('context');
@@ -98,14 +116,20 @@ define([
             if (_.isEqual(Backbone.history._previousFragment, oldformattedFragment)) {
                 Backbone.history._previousFragment = newformattedFragment;
             }
+        } else {
+            _washScreens(screensConfig, screenIndex, newScreenConfig);
         }
+    };
+
+    function _washScreens(screensConfig, screenIndex, newScreenConfig) {
         if (!_.isNull(screenIndex)) {
             screensConfig.screens[screenIndex] = newScreenConfig;
         } else {
             screensConfig.screens.push(newScreenConfig);
         }
-        UserDefinedScreens.saveScreensConfig(screensConfig);
-    };
+        UserDefinedScreens.saveScreensConfig(screensConfig, null, null, true);
+    }
+
 
     //Deletes the user screen and checks if removed screen is a default screen
     ScreenBuilder.deleteUserScreen = function(screenId) {
@@ -115,11 +139,11 @@ define([
             return screen.id === screenId;
         });
         screensConfig.screens = _.without(screensConfig.screens, screenToRemove);
+        UserDefinedScreens.removeOneScreenFromJSON(screenId, screensConfig);
         UserDefinedScreens.saveScreensConfig(screensConfig, function() {
             UserDefinedScreens.saveGridsterConfig({}, screenToRemove.id);
-        });
+        }, 'delete');
 
-        UserDefinedScreens.removeOneScreenFromSession(screenId);
 
         if (screenToRemove.id === WorkspaceContextRepository.currentContextDefaultScreen) {
             // ScreenBuilder.resetUserSelectedDefaultScreen();
@@ -145,19 +169,33 @@ define([
             if (ADK.ADKApp.currentScreen.id === currentContext.get('defaultScreen')) {
                 WorkspaceContextRepository.setDefaultScreenOfContext(currentContext.get('id'), currentContext.get('originalDefaultScreen'));
             }
-            Navigation.navigate(currentContext.get('defaultScreen'), {
-                route: {
-                    trigger: false
-                }
-            });
+
+            var overLayRegion = Messaging.request('get:adkApp:region', 'modalRegion');
+            if (overLayRegion.hasView()) {
+                overLayRegion.once('emtpy', function() {
+                    Navigation.navigate(currentContext.get('defaultScreen'), {
+                        route: {
+                            trigger: false
+                        }
+                    });
+                    WorkspaceContextRepository.removeWorkspace(screenToRemove.id);
+                });
+            } else {
+                Navigation.navigate(currentContext.get('defaultScreen'), {
+                    route: {
+                        trigger: false
+                    }
+                });
+                WorkspaceContextRepository.removeWorkspace(screenToRemove.id);
+            }
         }
 
         // Remove the workspace routes asscoiated with the acreen
         Navigation.removeWorkspaceRoute(screenToRemove.routeName || null, ADK.ADKApp);
 
-        WorkspaceContextRepository.removeWorkspace(screenToRemove.id);
+        //WorkspaceContextRepository.removeWorkspace(screenToRemove.id);
 
-        ADK.ADKApp.Screens[screenToRemove.id].stop();
+        _.result(ADKApp, ['Screens',screenToRemove.id, 'stop']);
         delete ADK.ADKApp.Screens[screenToRemove.id];
     };
 

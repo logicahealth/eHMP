@@ -6,9 +6,10 @@ define([
     "app/applets/task_forms/activities/order.consult/viewController",
     "app/applets/task_forms/activities/order.lab/viewController",
     "app/applets/task_forms/activities/requests/responseViewController",
+    "app/applets/task_forms/activities/order.dischargefollowup/viewController",
     "app/applets/task_forms/activities/order.consult/utils",
 ], function(CommonViewController, FITFOBTViewController, SimpleActivityViewController,
-            SignNoteViewController, ConsultsViewController, LabViewController, ResponseViewController, OrderConsultUtils) {
+            SignNoteViewController, ConsultsViewController, LabViewController, ResponseViewController, DischargeFollupViewController, OrderConsultUtils) {
     "use strict";
 
     var channel = ADK.Messaging.getChannel('task_forms');
@@ -28,6 +29,7 @@ define([
     ConsultsViewController.initialize(appletDefinition.appletId);
     LabViewController.initialize(appletDefinition.appletId);
     ResponseViewController.initialize(appletDefinition.appletId);
+    DischargeFollupViewController.initialize(appletDefinition.appletId);
 
     return ADK.createSimpleApplet(appletDefinition);
 });

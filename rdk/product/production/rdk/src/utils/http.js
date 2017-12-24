@@ -57,15 +57,19 @@ var _ = require('lodash');
  *      further if desired.
  */
 
-module.exports = wrapRequest(withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.get = wrapRequest(withMethod('GET'), withRequestContext, withLogging, withCaching, withMetrics, withCertificates, withForever);
-module.exports.patch = wrapRequest(withMethod('PATCH'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.post = wrapRequest(withMethod('POST'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.put = wrapRequest(withMethod('PUT'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever);
-module.exports.delete = wrapRequest(withMethod('DELETE'), withRequestContext, withLogging, withMetrics, withCertificates, withForever);
+module.exports = wrapRequest(withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever, withMaxSockets);
+module.exports.get = wrapRequest(withMethod('GET'), withRequestContext, withLogging, withCaching, withMetrics, withCertificates, withForever, withMaxSockets);
+module.exports.patch = wrapRequest(withMethod('PATCH'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever, withMaxSockets);
+module.exports.post = wrapRequest(withMethod('POST'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever, withMaxSockets);
+module.exports.put = wrapRequest(withMethod('PUT'), withRequestContext, withLogging, withMetrics, withCertificates, withJSON, withForever, withMaxSockets);
+module.exports.delete = wrapRequest(withMethod('DELETE'), withRequestContext, withLogging, withMetrics, withCertificates, withForever, withMaxSockets);
 module.exports.initializeTimeout = initializeTimeout;
 module.exports.setMaxSockets = setMaxSockets;
+
 module.exports._withCertificates = withCertificates;
+module.exports._withMaxSockets = withMaxSockets;
+
+module.exports._maxSockets = http.globalAgent.maxSockets;
 
 var defaultTimeout = 120000;
 
@@ -80,6 +84,7 @@ function setMaxSockets(maxSockets) {
     if (maxSockets === -1) {
         maxSockets = Infinity;
     }
+    module.exports._maxSockets = maxSockets;
     http.globalAgent.maxSockets = maxSockets || http.globalAgent.maxSockets;
     https.globalAgent.maxSockets = maxSockets || https.globalAgent.maxSockets;
 }
@@ -228,6 +233,26 @@ function withJSON(next, options, callback) {
 function withForever(next, options, callback) {
     if (_.isUndefined(options.forever)) {
         options.forever = true;
+    }
+    return next(options, callback);
+}
+
+function withMaxSockets(next, options, callback) {
+    // The request.js documentation makes it seem like this is the correct way
+    // to set maxSockets, but this seems to create a new pool/agent for each
+    // request, defeating the purpose of maxSockets
+    // if (_.isUndefined(options.pool)) {
+    //     options.pool = {
+    //         maxSockets: module.exports._maxSockets
+    //     };
+    // }
+
+    // This seems to properly set maxSockets without creating a new agent for
+    // each request
+    if (_.isUndefined(options.agentOptions)) {
+        options.agentOptions = {
+            maxSockets: module.exports._maxSockets
+        };
     }
     return next(options, callback);
 }

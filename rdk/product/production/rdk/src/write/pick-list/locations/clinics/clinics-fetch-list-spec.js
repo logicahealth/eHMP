@@ -24,9 +24,9 @@ describe('unit test to validate clinics-fetch-list', function() {
                 'shortName': '008',
                 'stampTime': '20170130095710',
                 'type': 'C',
-                'uid': 'urn:va:location:9E7A:448',
+                'uid': 'urn:va:location:SITE:448',
                 'displayName': 'TESTCLINIC008',
-                'summary': 'Location{uid="urn:va:location:9E7A:448"}',
+                'summary': 'Location{uid="urn:va:location:SITE:448"}',
                 'typeName': 'Clinic'
             }]
         }
@@ -36,12 +36,12 @@ describe('unit test to validate clinics-fetch-list', function() {
         'error': {
             'code': 404,
             'errors': [{
-                'domain': 'UID:urn:va:location:9E7A:64',
+                'domain': 'UID:urn:va:location:SITE:64',
                 'message': 'Bad key',
                 'reason': 104
             }],
             'message': 'Not Found',
-            'request': 'GET /data/urn:va:location:9E7A:64 '
+            'request': 'GET /data/urn:va:location:SITE:64 '
         }
     };
 
@@ -87,8 +87,8 @@ describe('unit test to validate clinics-fetch-list', function() {
             return callback(null);
         });
 
-        clinicsFetchList.getClinicFromJds(logger, '9E7A', clinicList, jdsOptions, '64^AUDIOLOGY', function(err) {
-            expect(jdsOptions.url).to.equal('/data/urn:va:location:9E7A:64');
+        clinicsFetchList.getClinicFromJds(logger, 'SITE', clinicList, jdsOptions, '64^AUDIOLOGY', function(err) {
+            expect(jdsOptions.url).to.equal('/data/urn:va:location:SITE:64');
             done();
         });
         clinicsFetchList.http.restore();
@@ -98,7 +98,7 @@ describe('unit test to validate clinics-fetch-list', function() {
 
         var mockConfig = {
             host: '1.1.1.1',
-            port: 9210,
+            port: PORT,
             accessCode: 'null',
             verifyCode: 'null!!',
             context: 'HMP UI CONTEXT',
@@ -131,7 +131,7 @@ describe('unit test to validate clinics-fetch-list', function() {
 
         var mockConfig = {
             host: '1.1.1.1',
-            port: 9210,
+            port: PORT,
             accessCode: 'null',
             verifyCode: 'null!!',
             context: 'HMP UI CONTEXT',

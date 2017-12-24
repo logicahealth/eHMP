@@ -1,6 +1,4 @@
-VPRJOB ;CNP/JD -- Handle Job operations ;2015-04-15  8:33 PM
- ;;1.0;JSON DATA STORE;;Dec 02, 2014
- ;;Dec 09, 2014
+VPRJOB ;CNP/JD -- Handle Job operations
  ;
  Q
  ;
@@ -28,8 +26,9 @@ SET(ARGS,BODY) ; Store job info
  S VPRTS=$G(DEMOG("timestamp"))
  I VPRTS="" D SETERROR^VPRJRER(235) Q ""
  ;
+ ; The job may contain a JPID. We will purposely ignore/re-set it as it can be a VX-Sync generated
+ ; UUID v4 and not a JPID that JDS generated
  ; Make sure we have a patient identifier
- S JPID=$G(DEMOG("jpid"))
  I $G(DEMOG("patientIdentifier","type"))="pid" S PID=$G(DEMOG("patientIdentifier","value"))
  I $G(DEMOG("patientIdentifier","type"))="icn" S ICN=$G(DEMOG("patientIdentifier","value"))
  ; If what we are passed isn't a JPID get a JPID
@@ -37,6 +36,7 @@ SET(ARGS,BODY) ; Store job info
  I $G(PID)'="" S JPID=$$JPID4PID^VPRJPR(PID)
  ; A JPID should exist by now if not error out
  I $G(JPID)="" D SETERROR^VPRJRER(231) Q ""
+ S DEMOG("jpid")=JPID
  ; Ensure we know jpid
  I '$$JPIDEXISTS^VPRJPR(JPID) D SETERROR^VPRJRER(224) Q ""
  ;
@@ -45,11 +45,21 @@ SET(ARGS,BODY) ; Store job info
  S VPRA=$O(^VPRJOB("C",JID,""))
  I VPRA,(RJID'=VPRA) D SETERROR^VPRJRER(236) Q ""
  S VPRCNT=$I(^VPRJOB(0))
+ L +^VPRJOB(VPRCNT)
+ L +^VPRJOB("A",JPID,JTYPE,RJID,JID,VPRTS,JSTAT)
+ L +^VPRJOB("B",VPRCNT)
+ L +^VPRJOB("C",JID,RJID)
+ L +^VPRJOB("D",JPID,JTYPE,VPRTS,VPRCNT)
  S ^VPRJOB("A",JPID,JTYPE,RJID,JID,VPRTS,JSTAT)=VPRCNT
  S ^VPRJOB("B",VPRCNT)=JPID_U_JTYPE_U_RJID_U_JID_U_VPRTS_U_JSTAT
  S ^VPRJOB("C",JID,RJID)=""
  S ^VPRJOB("D",JPID,JTYPE,VPRTS,VPRCNT)=VPRCNT
  M ^VPRJOB(VPRCNT)=DEMOG
+ L -^VPRJOB(VPRCNT)
+ L -^VPRJOB("A",JPID,JTYPE,RJID,JID,VPRTS,JSTAT)
+ L -^VPRJOB("B",VPRCNT)
+ L -^VPRJOB("C",JID,RJID)
+ L -^VPRJOB("D",JPID,JTYPE,VPRTS,VPRCNT)
  Q ""
  ;
 GET(RESULT,ARGS,ENCODE,TEMPLATE) ; Return job info
@@ -90,8 +100,9 @@ GET(RESULT,ARGS,ENCODE,TEMPLATE) ; Return job info
  . N TIMESTAMP,COUNTER
  . S TIMESTAMP=""
  . S TIMESTAMP=$O(^VPRJOB("D",JPID,"enterprise-sync-request",TIMESTAMP),-1)
- . S COUNTER=$O(^VPRJOB("D",JPID,"enterprise-sync-request",TIMESTAMP,""))
- . M DEMOG("items",COUNTER)=^VPRJOB(COUNTER)
+ . I TIMESTAMP'="" D
+ . . S COUNTER=$O(^VPRJOB("D",JPID,"enterprise-sync-request",TIMESTAMP,""))
+ . . M DEMOG("items",COUNTER)=^VPRJOB(COUNTER)
  ;
  E  D
  . ; Loop through A index
@@ -118,24 +129,12 @@ GET(RESULT,ARGS,ENCODE,TEMPLATE) ; Return job info
  . . . . I $D(CLAUSES) D  Q
  . . . . . ; Ensure we only run this for the last timestamp for the JPID and job type
  . . . . . I VPRC'=$O(^VPRJOB("D",JPID,JTYPE,""),-1) Q
- . . . . . N I
- . . . . . S I=""
- . . . . . ; Loop through all of the clauses we have
- . . . . . F  S I=$O(CLAUSES(I)) Q:I=""  D
- . . . . . . M CLAUSE=CLAUSES(I)
- . . . . . . N FILTERRSLT
- . . . . . . I CLAUSE("type")=1 D
- . . . . . . . I $D(^VPRJOB(VPRA,CLAUSE("field")))\10 D
- . . . . . . . . S FIELD=""
- . . . . . . . . F  S FIELD=$O(^VPRJOB(VPRA,CLAUSE("field"),FIELD),-1) D  Q:FIELD=""  Q:VALUE'=""
- . . . . . . . . . S VALUE=$G(^VPRJOB(VPRA,CLAUSE("field"),FIELD))
- . . . . . . . E  D
- . . . . . . . . S VALUE=$G(^VPRJOB(VPRA,CLAUSE("field")))
- . . . . . . . S FILTERRSLT=$$EVALONE^VPRJCF D:FILTERRSLT
- . . . . . . . . M:'$D(TEMPLATE) DEMOG("items",VPRA)=^VPRJOB(VPRA)
- . . . . . . . . I $D(TEMPLATE) N FIELD S FIELD="" F  S FIELD=$O(TEMPLATE(FIELD)) Q:FIELD=""  D
- . . . . . . . . . I FIELD'["." M DEMOG("items",VPRA,FIELD)=^VPRJOB(VPRA,FIELD)
- . . . . . . . . . E  M DEMOG("items",VPRA,$P(FIELD,".",1),$P(FIELD,".",2))=^VPRJOB(VPRA,$P(FIELD,".",1),$P(FIELD,".",2))
+ . . . . . ; Evaluate CLAUSES in an implicit AND clause
+ . . . . . Q:'$$EVALAND^VPRJGQF(.CLAUSES,$NA(^VPRJOB(VPRA)))
+ . . . . . M:'$D(TEMPLATE) DEMOG("items",VPRA)=^VPRJOB(VPRA)
+ . . . . . I $D(TEMPLATE) N FIELD S FIELD="" F  S FIELD=$O(TEMPLATE(FIELD)) Q:FIELD=""  D
+ . . . . . . I FIELD'["." M DEMOG("items",VPRA,FIELD)=^VPRJOB(VPRA,FIELD)
+ . . . . . . E  M DEMOG("items",VPRA,$P(FIELD,".",1),$P(FIELD,".",2))=^VPRJOB(VPRA,$P(FIELD,".",1),$P(FIELD,".",2))
  . . . . ;
  . . . . ; Return jobs without filter
  . . . . ; If we have a rootJobId and JobId and TimeStamp and they match return the Job
@@ -156,7 +155,7 @@ GET(RESULT,ARGS,ENCODE,TEMPLATE) ; Return job info
  I '$G(ENCODE),$D(ERR) D SETERROR^VPRJRER(202) Q
  Q
 CLEAR(RESULT,ARGS) ; Delete all job state data
- K ^VPRJOB
+ K:$D(^VPRJOB) ^VPRJOB
  Q
 DEL(PID) ; Delete all job statuses for a PID
  ; Get the JPID for a PID as Job status depends on JPID
@@ -179,15 +178,15 @@ DEL(PID) ; Delete all job statuses for a PID
  . . . . . ; Get the sequential counter
  . . . . . S SC=$G(^VPRJOB("A",JPID,JTYPE,RJID,JID,TS,STATUS))
  . . . . . ; Kill the data
- . . . . . K ^VPRJOB(SC)
+ . . . . . K:$D(^VPRJOB(SC)) ^VPRJOB(SC)
  . . . . . ; Kill the D index
- . . . . . K ^VPRJOB("D",JPID,JTYPE)
+ . . . . . K:$D(^VPRJOB("D",JPID,JTYPE)) ^VPRJOB("D",JPID,JTYPE)
  . . . . . ; Kill the C index
- . . . . . K ^VPRJOB("C",JID,RJID)
+ . . . . . K:$D(^VPRJOB("C",JID,RJID)) ^VPRJOB("C",JID,RJID)
  . . . . . ; Kill the B index
- . . . . . K ^VPRJOB("B",SC)
+ . . . . . K:$D(^VPRJOB("B",SC)) ^VPRJOB("B",SC)
  . . . . . ; Kill the A index
- . . . . . K ^VPRJOB("A",JPID,JTYPE,RJID,JID,TS,STATUS)
+ . . . . . K:$D(^VPRJOB("A",JPID,JTYPE,RJID,JID,TS,STATUS)) ^VPRJOB("A",JPID,JTYPE,RJID,JID,TS,STATUS)
  Q
  ;
 DELJID(RESULT,ARGS) ; REST entry point to delete a job id
@@ -210,17 +209,17 @@ DELJID(RESULT,ARGS) ; REST entry point to delete a job id
  . . . . . ; Get the sequential counter
  . . . . . S SC=$G(^VPRJOB("A",JPID,JTYPE,RJID,JID,TS,STATUS))
  . . . . . ; Kill the data
- . . . . . K ^VPRJOB(SC)
+ . . . . . K:$D(^VPRJOB(SC)) ^VPRJOB(SC)
  . . . . . ; Kill the B index
- . . . . . K ^VPRJOB("B",SC)
+ . . . . . K:$D(^VPRJOB("B",SC)) ^VPRJOB("B",SC)
  . . . . . ; Kill the D index
- . . . . . K ^VPRJOB("D",JPID,JTYPE,TS,SC)
+ . . . . . K:$D(^VPRJOB("D",JPID,JTYPE,TS,SC)) ^VPRJOB("D",JPID,JTYPE,TS,SC)
  . . . ; Needs to be killed outside the inner two loops, as it is being iterated
  . . . ; Kill the A index
- . . . K ^VPRJOB("A",JPID,JTYPE,RJID,JID)
+ . . . K:$D(^VPRJOB("A",JPID,JTYPE,RJID,JID)) ^VPRJOB("A",JPID,JTYPE,RJID,JID)
  ; Don't keep killing the same nodes over and over in all the inner loops
  ; Kill the C index
- K ^VPRJOB("C",JID)
+ K:$D(^VPRJOB("C",JID)) ^VPRJOB("C",JID)
  S RESULT="{}"
  Q
  ;
@@ -240,11 +239,11 @@ DELSITE(PID) ; Delete the job status for a site
  . . S JID=^VPRJOB(SC,"jobId")
  . . S STAMP=^VPRJOB(SC,"timestamp")
  . . ;
- . . K ^VPRJOB("A",JPID,TYPE,RJID,JID,STAMP)
- . . K ^VPRJOB("B",SC)
- . . K ^VPRJOB("C",JID,RJID)
- . . K ^VPRJOB("D",JPID,TYPE,STAMP)
- . . K ^VPRJOB(SC)
+ . . K:$D(^VPRJOB("A",JPID,TYPE,RJID,JID,STAMP)) ^VPRJOB("A",JPID,TYPE,RJID,JID,STAMP)
+ . . K:$D(^VPRJOB("B",SC)) ^VPRJOB("B",SC)
+ . . K:$D(^VPRJOB("C",JID,RJID)) ^VPRJOB("C",JID,RJID)
+ . . K:$D(^VPRJOB("D",JPID,TYPE,STAMP)) ^VPRJOB("D",JPID,TYPE,STAMP)
+ . . K:$D(^VPRJOB(SC)) ^VPRJOB(SC)
  Q
 DELETE(RESULT,ARGS) ; REST entry point wrapper for DEL^VPRJOB
  N PID

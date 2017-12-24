@@ -42,7 +42,7 @@ class VitalsWriteBack < AllApplets
     add_verify(CucumberLabel.new('Date Taken Error Message'), VerifyText.new, AccessHtmlElement.new(:css, '.dateTakenInput span.error'))
     add_verify(CucumberLabel.new("Time Taken"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='time-taken']"))
     add_action(CucumberLabel.new("Time Taken Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='time-taken']"))
-    add_verify(CucumberLabel.new('Time Taken Input Value'), VerifyValueFormat.new(Regexp.new("\\d{2}\:\\d{2}")), AccessHtmlElement.new(:css, "[name='time-taken']"))
+    add_verify(CucumberLabel.new('Time Taken Input Value'), VerifyValueFormat.new(Regexp.new("\\d+\:\\d{2}")), AccessHtmlElement.new(:css, "[name='time-taken']"))
     add_action(CucumberLabel.new("Expand All"), ClickAction.new, AccessHtmlElement.new(:css, "div.expandCollapseAll > button"))
     add_action(CucumberLabel.new("Pass"), ClickAction.new, AccessHtmlElement.new(:css, "div.facility-name-pass-po > button"))
     add_verify(CucumberLabel.new("Modal Loaded"), VerifyText.new, AccessHtmlElement.new(:css, ".modal-content"))
@@ -57,6 +57,8 @@ class VitalsWriteBack < AllApplets
     #add_verify(CucumberLabel.new("BP value"), VerifyContainsText.new, AccessHtmlElement.new(:css, '[data-appletid=vitals] [data-infobutton=BP] td:nth-child(2)'))
     add_verify(CucumberLabel.new("BP value"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@id='data-grid-vitals']/descendant::td[contains(string(), '130/80')]"))
     add_action(CucumberLabel.new("New Observation Button"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic-newObservation [type=button]"))
+  
+    add_verify(CucumberLabel.new("Error message"), VerifyText.new, AccessHtmlElement.new(:css, 'span.help-block.error'))
   end
 end
 
@@ -140,7 +142,7 @@ class RespirationLabels < VitalsWriteBack
     add_verify(CucumberLabel.new("Respiration Position"), VerifyText.new, AccessHtmlElement.new(:css, "label[for^='respiration-position-po']"))
     resp_units = "/min"    
     add_verify(CucumberLabel.new("Respiration Units"), VerifyText.new, AccessHtmlElement.new(:xpath, "//span[contains(@class, 'input-group-addon') and contains(string(), '#{resp_units}')]"))
-    add_action(CucumberLabel.new("Respiration Input Box"), SendKeysAction.new, AccessHtmlElement.new(:css, "[name='respirationInputValue']"))
+    add_action(CucumberLabel.new("Respiration Input Box"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "[name='respirationInputValue']"))
     add_action(CucumberLabel.new("Respiration Unavailable Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Unavailable']"))
     add_action(CucumberLabel.new("Respiration Refused Input Box"), ClickAction.new, AccessHtmlElement.new(:css, "[name='respiration-radio-po'][value='Refused']"))
     add_action(CucumberLabel.new("Respiration Method Drop Down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "[id^='respiration-method-po']"))
@@ -270,16 +272,13 @@ Then(/^user chooses to "([^"]*)" on add vitals modal detail screen$/) do | expan
   @ehmp.wait_until_btn_expand_collapse_button_visible
   @ehmp.btn_expand_collapse_button.click
   @ehmp.wait_until_fld_temp_location_visible
-  # btn_expand_collapse_button
-  # wait.until { aa.get_element(expand_all).displayed? }
-  # wait.until { aa.get_element(expand_all).enabled? }
-  # expect(aa.perform_action(expand_all)).to eq(true)
-  # expect(aa.am_i_visible?("Temp Location Drop Down")).to eq(true)
 end
 
 Then(/^add vital modal detail title says "([^"]*)"$/) do |modal_title|
-  aa = VitalsWriteBack.instance
-  expect(aa.perform_verification("Add Vitals Modal Title", modal_title.upcase)).to eq(true)
+  modal = AddVitalModal.new
+  modal.wait_for_fld_modal_title
+  expect(modal).to have_fld_modal_title
+  expect(modal.fld_modal_title.text.upcase).to eq(modal_title.upcase)
 end
 
 Then(/^the add vitals detail modal displays labels$/) do |table|
@@ -343,9 +342,36 @@ def verify_vitals_modal_details(table, modal)
 end
 
 Then(/^user adds a Vital record for the current visit$/) do |table| 
+  tray = AddVitalModal.new
+  vital_elements = tray.map_elements
   table.rows.each do | row |
-    vital_class = map_add_vitals_class(row[0])
-    expect(vital_class.perform_action(row[1], row[2])).to eq(true), "Vital Type #{row[0]}: could not input the value #{row[2]} for #{row[1]}"
+    begin
+      p row
+      field = vital_elements[row[1]]
+      expect(field).to_not be_nil, "expected #{row[1]} to not be nil"
+      field.native.send_keys row[2]
+      page.driver.browser.execute_script("$(arguments[0]).blur();", field.native)
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      vital_elements = tray.map_elements
+      retry
+    end
+  end
+end
+
+Then(/^user sets dropdown values for the vitals$/) do |table|
+  tray = AddVitalModal.new
+  vital_elements = tray.map_elements
+  table.rows.each do | row |
+    begin
+      p row
+      field = vital_elements[row[1]]
+      expect(field).to_not be_nil, "expected #{row[1]} to not be nil"
+      field.select row[2]
+      #page.driver.browser.execute_script("$(arguments[0]).blur();", field.native)
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      vital_elements = tray.map_elements
+      retry
+    end
   end
 end
 
@@ -374,22 +400,11 @@ end
 
 Then(/^the recently added vital record is displayed$/) do |table|
   aa = VitalsWriteBack.instance
-#  expect(aa.perform_action("GDF Region")).to eq(true)
-#  expect(aa.perform_action("GDF 24 Hours")).to eq(true)
-#  expect(aa.perform_action("GDF Apply")).to eq(true)
-  
-#  expect(aa.perform_action("24 HR Range Vital")).to eq(true)
   table.rows.each do | row |
     expect(aa.perform_verification("BP label", row[0])).to eq(true)
     expect(aa.perform_verification("BP value", row[1])).to eq(true)
   end
 end
-
-# When(/^user keyboard enters$/) do
-#   aa = RespirationLabels.instance
-#   input_box = aa.get_element('Respiration Input Box')
-#   input_box.send_keys [:enter]
-# end
 
 When(/^user attempts to add vital$/) do
   aa = VitalsWriteBack.instance

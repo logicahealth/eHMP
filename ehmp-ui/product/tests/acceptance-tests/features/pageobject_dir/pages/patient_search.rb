@@ -1,10 +1,12 @@
+require_relative 'skip_links'
 class PobPatientSearch < SitePrism::Page
   set_url '/#patient-search-screen'
   set_url_matcher(/\/#patient-search-screen$/)
 
-  section :global_header, GlobalHeaderSection, ".navbar"
+  section :skip_link_menu, SkipLinks, '.provider-centric-view'
 
   # *****************  All_Form_Elements  ******************* #
+  element :a_flags_back_to_top, ".flags-body-container .scroll-to-top-container a"
 
   # *****************  All_Container_Elements  ******************* #
   element :ctn_fluid, "div[class='container-fluid']"
@@ -24,8 +26,8 @@ class PobPatientSearch < SitePrism::Page
   element :fld_global_Search_Last_N, "#globalSearchLastName"
   element :fld_global_Search_Ssn, "#globalSearchSsn"
   element :fld_global_Search_dob, "#globalSearchDob"
-  element :fld_confirm_modal, '#confirmSection'
-  element :fld_confirm_header, "div[id='confirmSection'] .patientName"
+  element :fld_confirm_modal, '.patient-confirmation-modal'
+  element :fld_confirm_header, "div.patient-confirmation-modal .patientName"
   element :fld_patient_search_confirmation_info, "div[class='fixedHeightZone']"
   element :fld_nav_bar, "#header-region .navbar"
 
@@ -75,6 +77,7 @@ class PobPatientSearch < SitePrism::Page
   element :btn_custom_range_apply, "#custom-range-apply"
   element :btn_clinics, '#clinics'
   element :btn_clinics_active, '[id=clinics].active'
+  element :btn_restricted_record_ack, '#ackMsgTitleId button.collapsed'
   
    # *****************  All_Error_Text_Elements  ******************* #
   element :err_message1, "p[class='error-message padding']"

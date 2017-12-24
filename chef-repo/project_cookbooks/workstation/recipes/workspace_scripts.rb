@@ -14,6 +14,14 @@ template "#{node[:workstation][:user_home]}/Projects/vistacore/configure_workspa
   mode "0755"
 end
 
+template "#{node[:workstation][:user_home]}/Projects/vistacore/common_set_env.sh" do
+  source "common_set_env.sh.erb"
+  mode "0755"
+  variables ({
+      :java_home => node[:workstation][:java_osx][:java_home]
+  })
+end
+
 cookbook_file "#{node[:workstation][:user_home]}/Projects/vistacore/vms.sh" do
   source "vms.sh"
   owner node[:workstation][:user]

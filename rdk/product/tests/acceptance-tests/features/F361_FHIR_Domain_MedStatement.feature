@@ -4,13 +4,13 @@ Feature: F361 FHIR Domain - MedicationStatement
  Scenario: Client can request Medication Statement in FHIR format
      Given a patient with "medicationstatement" in multiple VistAs
      #And a patient with pid "5000000217V519385" has been synced through the RDK API
- 	When the client requests medicationstatement for the patient "9E7A;229"
+ 	When the client requests medicationstatement for the patient "SITE;229"
      Then a successful response is returned
      And the FHIR results contain "medicationstatement"
      	 | field 						 | value 		     |
      	 | resource.resourceType 		 | MedicationStatement |
        | resource.status                   | in-progress |
-       | resource.patient.reference        | Patient/9E7A;229 |
+       | resource.patient.reference        | Patient/SITE;229 |
        | resource.contained.resourceType   | Medication |
        | resource.contained.name           | ASPIRIN TAB,EC |
        | resource.contained.code.text      | 308416/Aspirin 81 MG Delayed Release Oral Tablet |
@@ -29,8 +29,8 @@ Feature: F361 FHIR Domain - MedicationStatement
        | resource.contained.contained.description      | ASPIRIN 81MG TAB,EC |
        | resource.contained.extension.valueString  | CONTAINS urn:vandf:4017536|
        | resource.identifier.system                | CONTAINS urn:oid:2.16.840.1.113883.6.233 |
-       | resource.identifier.value                 | CONTAINS urn:va:med:9E7A:229:18084|
-       | resource.informationSource.reference      | Practitioner/urn:va:user:9E7A:10000000031|
+       | resource.identifier.value                 | CONTAINS urn:va:med:SITE:229:18084|
+       | resource.informationSource.reference      | Practitioner/urn:va:user:SITE:10000000031|
        | resource.wasNotGiven                      | false |
        | resource.note                             | ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING |
        | resource.medication.display               | ASPIRIN TAB,EC |

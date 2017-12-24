@@ -8,15 +8,15 @@ var saveWritebackContext = {
     interceptorResults: {
         patientIdentifiers: {
             'dfn': '100615',
-            'siteDfn': '9E7A;100615',
-            'site': '9E7A'
+            'siteDfn': 'SITE;100615',
+            'site': 'SITE'
         }
     },
     vistaConfig: {
         host: 'IP        ',
         port: PORT,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
@@ -50,7 +50,7 @@ var saveWritebackContext = {
             'inputValue': '28'
         }],
         'localId': '12519',
-        'uid': 'urn:va:order:9E7A:100615:12519',
+        'uid': 'urn:va:order:SITE:100615:12519',
         'kind': 'Laboratory'
     },
     logger: sinon.stub(require('bunyan').createLogger({

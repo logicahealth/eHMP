@@ -30,14 +30,14 @@ define('main/components/applet_chrome/views/filterButtonView', [
 
             var filterArea = this.$('#grid-filter-' + appletInstanceId);
             if (filterArea.hasClass('in')) {
-                this.model.set('buttonMsg', 'Press enter to collapse filter.');
+                this.model.set('buttonMsg', 'Filter. Expanded.');
             } else {
-                this.model.set('buttonMsg', 'Press enter to expand filter.');
+                this.model.set('buttonMsg', 'Filter. Collapsed.');
             }
         },
         setVisibilityIfFilters: function(args) {
             if (_.get(args, 'anyFilters', null)) {
-                this.toggleFilterButtonEvent({}, true);
+                this.toggleFilterButtonEvent({}, _.get(args, 'applet.showFilters', true));
             }
         },
         events: {
@@ -83,7 +83,7 @@ define('main/components/applet_chrome/views/filterButtonView', [
                 }
 
                 var filterName = ADK.SessionStorage.getAppletStorageModel(appletInstanceId, 'filterName', true) || '';
-                this.model.set({ 'buttonMsg': 'Press enter to expand filter.', 'filterName': filterName });
+                this.model.set({ 'buttonMsg': 'Filter. Collapsed.', 'filterName': filterName });
                 filterCollapseContainer.collapse('hide');
                 this.$('button').focus();
             } else {
@@ -98,7 +98,7 @@ define('main/components/applet_chrome/views/filterButtonView', [
                     this.$el.closest('[data-instanceid="newsfeed-gdt"]').find('table.backgrid').addClass('filter-expanded');
                 }
 
-                this.model.set('buttonMsg', 'Press enter to collapse filter.');
+                this.model.set('buttonMsg', 'Filter. Expanded.');
                 filterCollapseContainer.collapse('show');
             }
         }

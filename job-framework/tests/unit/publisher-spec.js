@@ -38,7 +38,7 @@ describe('publisher.js', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: 'SITE;3'
                 },
                 rootJobId: '1',
                 jobId: '1'

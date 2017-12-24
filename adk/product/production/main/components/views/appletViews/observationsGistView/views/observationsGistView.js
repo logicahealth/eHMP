@@ -8,12 +8,11 @@ define('main/components/views/appletViews/observationsGistView/views/observation
     "hbs!main/components/views/appletViews/sharedTemplates/gistPopover",
     "api/ResourceService",
     "api/Messaging",
-    "main/components/appletToolbar/appletToolbarView",
     "main/components/views/appletViews/TileSortManager",
     "main/components/applets/baseDisplayApplet/baseDisplayAppletItem",
     "main/components/applets/baseDisplayApplet/baseGistView",
     '_assets/js/tooltipMappings'
-], function($, _, Backbone, Utils, observationsGistLayoutTemplate, observationsGistChildTemplate, popoverTemplate, ResourceService, Messaging, ToolbarView, TileSortManager, BaseAppletItem, BaseGistView, TooltipMappings) {
+], function($, _, Backbone, Utils, observationsGistLayoutTemplate, observationsGistChildTemplate, popoverTemplate, ResourceService, Messaging, TileSortManager, BaseAppletItem, BaseGistView, TooltipMappings) {
     'use strict';
 
     var ObservationsGistItem = BaseAppletItem.extend({
@@ -31,21 +30,33 @@ define('main/components/views/appletViews/observationsGistView/views/observation
             this.disableNoRecordClick();
         },
         initialize: function(options) {
-            var toolbarButtonsDisabled = this.model.get('resultUnitsMetricResultUnits') === 'No Records Found';
-            this.toolbarOptions = {
-                buttonTypes: _.get(options, 'appletOptions.buttonTypes', []),
-                quickLooksDisabled: toolbarButtonsDisabled,
-                detailsViewDisabled: toolbarButtonsDisabled
-            };
-
             if (this.model.get('displayName')) {
                 this.$el.attr('data-row-instanceid', this.model.get('displayName'));
             }
-            this.model.set('uniqueName', this.model.get('displayName')+'-'+this.cid);
+            this.model.set('uniqueName', this.model.get('displayName') + '-' + this.cid);
         },
         onDomRefresh: function() {
             this.$('svg.gist-trend-graph').attr('focusable', 'false');
             this.$('svg.gist-trend-graph').attr('aria-hidden', 'true');
+        },
+        tileOptions: {
+            quickLooks: true,
+            quickMenu: function() {
+                return {
+                    enabled: true,
+                    buttons: [{
+                        type: 'infobutton',
+                        shouldShow: function() {
+                            return this.getOption('showInfoButton') !== false;
+                        }
+                    }, {
+                        type: 'detailsviewbutton',
+                        disabled: function() {
+                            return this.model.get('resultUnitsMetricResultUnits') === 'No Records Found';
+                        }
+                    }]
+                };
+            }
         }
     });
 
@@ -53,14 +64,9 @@ define('main/components/views/appletViews/observationsGistView/views/observation
         template: observationsGistLayoutTemplate,
         childView: ObservationsGistItem,
         className: 'faux-table-container',
-        events: {
-            'after:hidetoolbar': function(e) {
-                this.$el.find('.dragging-row').removeClass('dragging-row');
-            }
-        },
-        attributes: function(){
+        attributes: function() {
             var gridTitle = '';
-            if(this.options) {
+            if (this.options) {
                 gridTitle = this.options.appletConfig.title + ' Grid';
             }
             return {
@@ -87,7 +93,7 @@ define('main/components/views/appletViews/observationsGistView/views/observation
             this.model.set('AppletID', this.AppletID);
             this.childViewContainer = ".gist-item-list";
         },
-        onRender: function(){
+        onRender: function() {
             _.each(this.$('.toolbar-508'), function(span) {
                 var tooltipKey = span.innerHTML;
                 span.innerHTML = '( ' + TooltipMappings[tooltipKey] + ' )';

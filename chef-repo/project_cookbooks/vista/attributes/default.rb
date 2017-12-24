@@ -13,7 +13,7 @@ default[:vista][:session]  =                 "csession cache"
 default[:vista][:shell_timeout_seconds] =    20
 default[:vista][:prompt] =           "VISTA>"
 default[:vista][:namespace] =        "VISTA"
-default[:vista][:rpc_port] = 9210
+default[:vista][:rpc_port] = PORT
 
 default[:vista][:cache_user] =   "cacheserver"
 default[:vista][:cache_dir] =    "/usr/cachesys"
@@ -23,8 +23,8 @@ default[:vista][:vista_dir] =    "/usr/cachesys/mgr/VISTA"
 default[:vista][:cache_license_data_bag] = "cache_license"
 default[:vista][:cache_license_item] = "license"
 
-default[:vista][:cache_key_file] =     "key1"
-default[:vista][:cache_key_user] =  "UNKNOWNUSER"
+default[:vista][:cache_key_file] =     "KEY"
+default[:vista][:cache_key_user] =  "USER"
 default[:vista][:cache_key] =  ""
 default[:vista][:cache_key_identifier] =  "FB925728-1114-11E4-956B-00274DB37D00"
 
@@ -36,7 +36,7 @@ default[:vista][:diedit_next_field_regex] =  /THEN EDIT FIELD:/
 default[:vista][:jds_namespace] =        "JSONVPR"
 default[:vista][:jds_jsonvpr_dir] =    "/usr/cachesys/vista/jsonvpr"
 default[:vista][:jds_jsonvpr_vista_dir] =    "/usr/cachesys/vista"
-default[:vista][:jds_listener_ports] = [9080]
+default[:vista][:jds_listener_ports] = [PORT]
 
 default[:fmql][:name] =  "USER,FMQL"
 default[:fmql][:initial] =   "FMQL"
@@ -68,3 +68,6 @@ default[:vista][:connect_timeout] = 3000
 default[:vista][:send_timeout] = 20000
 
 default[:vista][:ua_tracker] = true
+
+default[:vista][:multiple_mode] = false
+default[:vista][:poller_process_count] = 1

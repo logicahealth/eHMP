@@ -11,7 +11,7 @@ require "PatientPickerDomElements.rb"
 class HTTPartyWithAuthorization
   include HTTParty
 
-  # Authorization header is Base64 encoding of "9E7A;500:REDACTED;REDACTED"
+  # Authorization header is Base64 encoding of "SITE;500:USER  ;PW      "
   @@header = { 'Authorization' => 'Basic OUU3QTs1MDA6cHUxMjM0O3B1MTIzNCEh' }
   @@time_start = Time.new
   @@time_done = Time.new

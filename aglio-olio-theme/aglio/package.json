@@ -1,0 +1,57 @@
+{
+  "name": "aglio-theme-olio",
+  "version": "1.6.11",
+  "description": "Default theme for the Aglio API Blueprint renderer",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "coffeelint src/*.coffee && coffee -o lib -c src",
+    "precoverage": "npm run build",
+    "coverage": "istanbul cover -x cache/*.js _mocha -- --compilers coffee:coffee-script/register -R spec",
+    "precoveralls": "npm run coverage",
+    "coveralls": "coveralls <coverage/lcov.info",
+    "pretest": "npm run build",
+    "test": "mocha --compilers coffee:coffee-script/register",
+    "prepublish": "npm run build",
+    "postinstall": "node scripts/setup-cache.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielgtaylor/aglio"
+  },
+  "keywords": [
+    "api",
+    "blueprint",
+    "protagonist",
+    "snowcrash",
+    "html",
+    "parse",
+    "markdown"
+  ],
+  "author": "Daniel G. Taylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielgtaylor/aglio/issues"
+  },
+  "homepage": "https://github.com/danielgtaylor/aglio/tree/olio-theme",
+  "dependencies": {
+    "coffee-script": "^1.8.0",
+    "highlight.js": "^8.4.0",
+    "jade": "^1.8.2",
+    "less": "^2.1.2",
+    "markdown-it": "^4.3.0",
+    "markdown-it-anchor": "^2.1.0",
+    "markdown-it-checkbox": "^1.1.0",
+    "markdown-it-container": "^1.0.0",
+    "markdown-it-emoji": "^1.0.0",
+    "moment": "^2.8.4",
+    "stylus": "^0.51.1"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "coffeelint": "^1.7.1",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.6",
+    "mocha": "^2.0.1",
+    "rimraf": "^2.4.1"
+  }
+}

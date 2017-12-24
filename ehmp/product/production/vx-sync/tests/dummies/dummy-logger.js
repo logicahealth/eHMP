@@ -23,5 +23,6 @@ module.exports = {
         warn: console.log,
         error: console.log,
         fatal: console.log
-    }
+    },
+    level: function() {}
 };

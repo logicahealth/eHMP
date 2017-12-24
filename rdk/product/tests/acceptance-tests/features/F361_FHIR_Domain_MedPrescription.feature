@@ -3,7 +3,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
   @F361_medicationprescription @US5272 @DE3161
   Scenario: Client can request Med Prescription in FHIR format
       Given a patient with "medicationprescription-medicationprescription" in multiple VistAs
-  	  When the client requests medicationprescription for the patient "9E7A;229"
+  	  When the client requests medicationprescription for the patient "SITE;229"
       Then a successful response is returned
       And the FHIR results contain "medicationprescription"
       	| field 						                  | value 						     		|
@@ -26,10 +26,10 @@ Feature: F361 FHIR Domain - MedicationPrescription
         | resource.contained.contained.type.coding.display  | CONTAINS METFORMIN|
         | resource.contained.contained.description          | CONTAINS METFORMIN HCL 500MG 24HR TAB,SA|
         | resource.identifier.system              | CONTAINS rn:oid:2.16.840.1.113883.6.233 |
-        | resource.identifier.value               | CONTAINS urn:va:med:9E7A:229:27852 |
+        | resource.identifier.value               | CONTAINS urn:va:med:SITE:229:27852 |
         | resource.note                           | CONTAINS METFORMIN HCL 500MG 24HR TAB,SA (EXPIRED)\n TAKE ONE TABLET MOUTH TWICE A DAY |
         | resource.dateWritten                    | IS_FHIR_FORMATTED_DATE |
-        | resource.prescriber.reference           | CONTAINS Provider/urn:va:user:9E7A:983 |
+        | resource.prescriber.reference           | CONTAINS Provider/urn:va:user:SITE:983 |
         | resource.dosageInstruction.text         | CONTAINS TAKE ONE TABLET MOUTH TWICE A DAY |
         | resource.dosageInstruction.scheduledTiming.repeat.frequency | 1 |
         | resource.dosageInstruction.scheduledTiming.repeat.periodUnits | CONTAINS s   |
@@ -47,7 +47,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
   @F361_medicationprescription_count @US9154 @US16298
   Scenario: Client can request Med Prescription in FHIR format
       Given a patient with "medicationprescription-medicationprescription" in multiple VistAs
-      When requesting "medicationprescription" FHIR resources compartmentalized by patient "9E7A;229" with search parameter "count" as "3"
+      When requesting "medicationprescription" FHIR resources compartmentalized by patient "SITE;229" with search parameter "count" as "3"
       Then a successful response is returned
       And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
@@ -66,7 +66,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
        And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
       | resource.resourceType                 | MedicationPrescription        | 
-      | resource.id                           | CONTAINS urn.va.med.9E7A.229.27952     |
+      | resource.id                           | CONTAINS urn.va.med.SITE.229.27952     |
       | resource.status                       | CONTAINS stopped                       |
       | resource.contained.resourceType       | CONTAINS Medication                    |
       | resource.contained.name               | CONTAINS METOPROLOL TARTRATE TAB                    |
@@ -80,7 +80,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
       And the FHIR results contain "medicationprescription"    
       | field                                 | value                         |
       | resource.resourceType                 | MedicationPrescription        | 
-      | resource.id                           | CONTAINS urn.va.med.9E7A.229.28052     |
+      | resource.id                           | CONTAINS urn.va.med.SITE.229.28052     |
       | resource.status                       | CONTAINS stopped                       |
       | resource.contained.resourceType       | CONTAINS Medication                    |
       | resource.contained.name               | CONTAINS SIMVASTATIN TAB               |
@@ -95,7 +95,7 @@ Feature: F361 FHIR Domain - MedicationPrescription
   @F361_medicationprescription_sort @US9154 @US16298
   Scenario: Client can request Med Prescription in FHIR format
       Given a patient with "medicationprescription-medicationprescription" in multiple VistAs
-      When requesting "medicationprescription" FHIR resources compartmentalized by patient "9E7A;229" with search parameter "sort" as "identifier"
+      When requesting "medicationprescription" FHIR resources compartmentalized by patient "SITE;229" with search parameter "sort" as "identifier"
       Then a successful response is returned
       And the FHIR results contain "medicationprescription"    
       | field                               | value                         |
@@ -106,18 +106,18 @@ Feature: F361 FHIR Domain - MedicationPrescription
       And the FHIR results contain "medicationprescription"    
       | resource.resourceType               | MedicationPrescription                        | 
       | resource.identifier.system          | CONTAINS urn:oid:2.16.840.1.113883.6.233      |
-      | resource.identifier.value           | CONTAINS urn:va:med:9E7A:229:10552            |
+      | resource.identifier.value           | CONTAINS urn:va:med:SITE:229:10552            |
       | resource.dateWritten                | IS_FHIR_FORMATTED_DATE                        |
        And the FHIR results contain "medicationprescription"    
       | resource.resourceType               | MedicationPrescription                        | 
       | resource.identifier.system          | CONTAINS urn:oid:2.16.840.1.113883.6.233      |
-      | resource.identifier.value           | CONTAINS urn:va:med:9E7A:229:10553            |
+      | resource.identifier.value           | CONTAINS urn:va:med:SITE:229:10553            |
       | resource.dateWritten                | IS_FHIR_FORMATTED_DATE                        |
 
   @F361_medicationprescription_dateWritten @US9154 @US16298
   Scenario: Client can request Med Prescription in FHIR format
       Given a patient with "medicationprescription-medicationprescription" in multiple VistAs
-      When requesting "medicationprescription" FHIR resources compartmentalized by patient "9E7A;229" with search parameter "dateWritten" as "!=2000"
+      When requesting "medicationprescription" FHIR resources compartmentalized by patient "SITE;229" with search parameter "dateWritten" as "!=2000"
       Then a successful response is returned
       And the FHIR results contain "medicationprescription"    
       | field                               | value                         |

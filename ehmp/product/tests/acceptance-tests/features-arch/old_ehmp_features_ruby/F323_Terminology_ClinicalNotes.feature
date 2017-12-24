@@ -48,4 +48,4 @@ Feature: F323  Normalization of Clinical Notes Document Data
 #TestNote:
 #  * We could not test notes/documents in FHIR format because it's not available through FHIR.
 #  * VUID->LOINC mapping table is quite limited and test patient with a note vuid that could be mapped to VUID->LOINC mapping table could not be found.
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling

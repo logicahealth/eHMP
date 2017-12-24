@@ -1,3 +1,5 @@
+require_relative 'tray_sidebar_section.rb'
+
 class ToolTips < SitePrism::Page
   elements :fld_tooltips, ".tooltip-inner"
   def clear_all_tool_tips
@@ -19,11 +21,14 @@ class PobCommonElements < SitePrism::Page
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
+  
+  section :action_tray, ActionTraySection, "#patientDemographic-action"
+    
   element :fld_growl_alert, ".notify-message"
   element :fld_modal_body, ".modal-body"
   element :fld_modal_header, "#modal-header h4"
   element :fld_modal_title, "h5.panel-title-label"
-  element :fld_detail_modal_content, ".detail-modal-content pre"
+  element :fld_detail_modal_content, ".detail-modal-content"
   elements :fld_clear_udf_tags, ".clear-udaf-tag"
   element :fld_online_help_status_bar, "footer .help-icon-button-container .help-icon-link"
   element :fld_new_window, ".MsoNormal>b>span"
@@ -32,10 +37,12 @@ class PobCommonElements < SitePrism::Page
   element :fld_tray_loader_message, ".tray-loader-message"
 
   # *****************  All_Button_Elements  ******************* #
-  element :btn_action_tray, "#patientDemographic-action [title='Press enter to activate menu']"
-  element :btn_add_new_action, "#patientDemographic-action [title='Press enter to add New Action']"
+  element :btn_action_tray, "#patientDemographic-action button"
+  element :btn_add_new_action, "#patientDemographic-action .action-list-child-container button"
   element :btn_remove_all_filter, ".udaf-remove-btn button"
-  element :btn_workspace_manager, '#workspaceManagerButton'
+  element :btn_workspace_options, ".workspace-selector .dropdown--options button.dropdown-toggle"
+  element :workspace_options_menu, ".workspace-selector .dropdown--options .dropdown-menu"
+  element :btn_workspace_manager_option, ".workspace-manager-option"
   element :btn_growl_close, "[data-notify='dismiss']"
   element :btn_modal_close, "#modal-close-button"
 
@@ -50,6 +57,7 @@ class PobUDAF < SitePrism::Page
   element :btn_add_filter, 'button.filter-add'
 
   def to_filter_applet_grid(id)
+    self.class.element :btn_open_filter_section, "[data-instanceid=applet-#{id}] .applet-filter-button"
     self.class.element :fld_filter, "#input-filter-search-applet-#{id}"
     self.class.elements :fld_grid_rows, "#data-grid-applet-#{id} tbody tr.selectable"
     self.class.element :btn_remove_all, "#applet-#{id} .remove-all"

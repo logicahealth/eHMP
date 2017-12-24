@@ -31,9 +31,10 @@ import static org.junit.Assert.assertEquals;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
@@ -85,14 +86,14 @@ public class VitalsResultsServiceIT {
 
 		InvocationTarget target = new InvocationTarget();
 		Context context = new Context();
-		context.setSubject(new Subject("TestSubject", "9E7A;100816"));
+		context.setSubject(new Subject("TestSubject", "SITE;100816"));
 		context.setLocation(new Location("Test Location", "Location1"));
 		context.setUser(new User("Tester", "Id1"));
 		target.setMode(InvocationMode.Normal);
 		target.setType(InvocationType.Direct);
 		LinkedList<String> intents = new LinkedList<String>();
 		target.setIntentsSet(intents);
-		Properties parameters = new Properties();
+		Map<String, Object> parameters = new HashMap<>();
 
 		ResultBundle out;
 

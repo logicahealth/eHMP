@@ -4,10 +4,11 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures ehmp-ui"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.2"
+version          "2.233.7"
 
 supports "windows"
 supports "mac_os_x"
 supports "centos"
 
-depends "adk", "2.1.2"
+depends "adk", "2.233.4"
+depends "common", "2.233.5"

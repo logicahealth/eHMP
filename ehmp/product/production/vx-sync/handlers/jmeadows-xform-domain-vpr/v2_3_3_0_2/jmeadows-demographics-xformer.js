@@ -1,8 +1,6 @@
 'use strict';
 
-var moment = require('moment');
-
-function dodDemographicsToVPR(dodDemographics, edipi, patientIcn){
+function dodDemographicsToVPR(logger, dodDemographics, edipi, patientIcn){
     var genderNameMap = {
         'M': 'Male',
         'F': 'Female',

@@ -65,12 +65,12 @@ function createPatientList() {
         'dfn': '3',
         'name': 'EIGHT,PATIENT',
         'roomBed': '722-B',
-        'siteId': '9E7A'
+        'siteId': 'SITE'
     }, {
         'dfn': '100162',
         'name': 'TWOHUNDREDSIXTEEN,PATIENT',
         'roomBed': '',
-        'siteId': '9E7A'
+        'siteId': 'SITE'
     }];
 
     return patients;
@@ -86,28 +86,26 @@ function verifyJobs(jobs) {
     expect(jobs.length).toBe(2);
     expect(jobs).toContain({
         type: 'sync',
-        jpid: jasmine.any(String),
         source: 'patient lists',
         patient: {
             dfn: '3',
             name: 'EIGHT,PATIENT',
             roomBed: '722-B',
-            siteId: '9E7A'
+            siteId: 'SITE'
         },
-        siteId: '9E7A',
+        siteId: 'SITE',
         referenceInfo: referenceInfo
     });
     expect(jobs).toContain({
         type: 'sync',
-        jpid: jasmine.any(String),
         source: 'patient lists',
         patient: {
             dfn: '100162',
             name: 'TWOHUNDREDSIXTEEN,PATIENT',
             roomBed: '',
-            siteId: '9E7A'
+            siteId: 'SITE'
         },
-        siteId: '9E7A',
+        siteId: 'SITE',
         referenceInfo: referenceInfo
     });
 }
@@ -211,7 +209,7 @@ describe('patientlist', function() {
                 'type': 'patientlist',
                 'user': {
                     'id': '12345',
-                    'site': '9E7A'
+                    'site': 'SITE'
                 }
             };
             var errorMessage = validate(job);
@@ -375,7 +373,7 @@ describe('patientlist', function() {
                 'type': 'patientlist',
                 'user': {
                     'id': '12345',
-                    'site': '9E7A'
+                    'site': 'SITE'
                 }
             };
 
@@ -413,7 +411,7 @@ describe('patientlist', function() {
                 'type': 'patientlist',
                 'user': {
                     'id': '12345',
-                    'site': '9E7A'
+                    'site': 'SITE'
                 },
                 'referenceInfo': referenceInfo
             };
@@ -453,7 +451,7 @@ describe('patientlist', function() {
                 'type': 'patientlist',
                 'user': {
                     'id': '12345',
-                    'site': '9E7A'
+                    'site': 'SITE'
                 },
                 'referenceInfo': referenceInfo
             };

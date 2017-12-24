@@ -1,32 +1,32 @@
 <div gistviewtype="events" role="presentation" class="faux-table">
     <div class="header table-row" role="row">
         <div class="flex-width-2_5" role="presentation">
-            <div aria-sort="none" role="gridcell" class="table-cell flex-width-2_5">
+            <div aria-sort="none" role="columnheader" class="table-cell flex-width-2_5">
                 <div>
-                    <a href="#" data-header-instanceid="name-header" role="button" class="{{#if gistHeaders.name.sortable}}selectable{{/if}}" sortable="{{gistHeaders.name.sortable}}" sortType="{{gistHeaders.name.sortType}}" sortDirection="none" sortKey="{{gistHeaders.name.key}}" tooltip-data-key="{{gistHeaders.name.hoverTip}}">
+                    <a href="#" data-header-instanceid="name-header" role="button" class="{{#if gistHeaders.name.sortable}}selectable{{/if}}" sortable="{{gistHeaders.name.sortable}}" sortType="{{gistHeaders.name.sortType}}" sortDirection="none" sortKey="{{gistHeaders.name.key}}">
                         {{gistHeaders.name.title}}
                         <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                         <span class="sr-only toolbar-508">{{gistHeaders.name.hoverTip}}</span>
-                        <span class="sr-only sort-span">Press enter to sort</span>
+                        <span class="sr-only sort-span">Sortable Column</span>
                     </a>
                 </div>
             </div>
-            <div aria-sort="none" role="gridcell" class="table-cell flex-width-1">
-                <a href="#" data-header-instanceid="status-name-header" role="button" class="{{#if gistHeaders.statusName.sortable}}selectable{{/if}} text-center" sortable="{{gistHeaders.statusName.sortable}}" sortType="{{gistHeaders.statusName.sortType}}" sortDirection="none" sortShowReverse="true" sortKey="{{gistHeaders.statusName.key}}" tooltip-data-key="{{gistHeaders.statusName.hoverTip}}">
+            <div aria-sort="none" role="columnheader" class="table-cell flex-width-1">
+                <a href="#" data-header-instanceid="status-name-header" role="button" class="{{#if gistHeaders.statusName.sortable}}selectable{{/if}} text-center" sortable="{{gistHeaders.statusName.sortable}}" sortType="{{gistHeaders.statusName.sortType}}" sortDirection="none" sortShowReverse="false" sortKey="{{gistHeaders.statusName.key}}">
                     {{gistHeaders.statusName.title}}
                     <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                     <span class="sr-only toolbar-508">{{gistHeaders.statusName.hoverTip}}</span>
-                    <span class="sr-only sort-span">Press enter to sort</span>
+                    <span class="sr-only sort-span">Sortable Column</span>
                 </a>
             </div>
         </div>
         <div class="flex-width-1 all-padding-no" role="presentation">
-            <div aria-sort="none" role="gridcell" class="table-cell flex-width-1">
-                <a href="#" data-header-instanceid="onset-date-header" role="button" class="{{#if gistHeaders.onsetDate.sortable}}selectable{{/if}} text-center" sortable="{{gistHeaders.onsetDate.sortable}}" sortType="{{gistHeaders.onsetDate.sortType}}" sortDirection="none" sortKey="{{gistHeaders.onsetDate.key}}" tooltip-data-key="{{gistHeaders.onsetDate.hoverTip}}">
+            <div aria-sort="none" role="columnheader" class="table-cell flex-width-1">
+                <a href="#" data-header-instanceid="onset-date-header" role="button" class="{{#if gistHeaders.onsetDate.sortable}}selectable{{/if}} text-center" sortable="{{gistHeaders.onsetDate.sortable}}" sortType="{{gistHeaders.onsetDate.sortType}}" sortDirection="none" sortKey="{{gistHeaders.onsetDate.key}}">
                     {{gistHeaders.onsetDate.title}}
                     <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
                     <span class="sr-only toolbar-508">{{gistHeaders.onsetDate.hoverTip}}</span>
-                    <span class="sr-only sort-span">Press enter to sort</span>
+                    <span class="sr-only sort-span">Sortable Column</span>
                 </a>
             </div>
         </div>

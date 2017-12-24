@@ -37,27 +37,27 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'REDACTED    ',
+		host: 'IP        ',
 		port: PORT
 	},
 	'vistaSites': {
-		'9E7A': {
+		'SITE': {
 			'name': 'panorama',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
 			'sendTimeout': 10000
 		},
-		'C877': {
+		'SITE': {
 			'name': 'kodak',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -156,7 +156,7 @@ function createJob(priority) {
 		type: 'event-prioritization-request',
 		patientIdentifier: {
 			type: 'pid',
-			value: '9E7A;3'
+			value: 'SITE;3'
 		},
 		jpid: '8107cc41-69eb-4060-8813-a82db245a11a',
 		rootJobId: '1',

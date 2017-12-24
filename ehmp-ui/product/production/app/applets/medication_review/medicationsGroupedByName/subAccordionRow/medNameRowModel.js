@@ -15,6 +15,9 @@ define([
             medsGroupedByName[0].set(CRSDOMAIN, crsUtil.domain.MEDICATION);
             crsUtil.applyConceptCodeId(medsGroupedByName[0]);
 
+            var facilityCode = _.get(medsGroupedByName, '[0].attributes.facilityCode');
+            var facilityModel = ADK.Enrichment.getFacility(facilityCode) || new Backbone.Model();
+
             return {
                 medicationName: medsGroupedByName[0].getDisplayName().value,
                 uidUnderscored: medsGroupedByName[0].getUid(),
@@ -24,7 +27,8 @@ define([
                 sig: medsGroupedByName[0].getSig(),
                 modifiedVaStatus: medsGroupedByName[0].getModifiedVaStatus(),
                 nextMedication: medsGroupedByName[0].getNextMedication(date),
-                dataCode: medsGroupedByName[0].get('dataCode')
+                dataCode: medsGroupedByName[0].get('dataCode'),
+                facilityMoniker: facilityModel.get('facilityMoniker')
             };
         }
     });

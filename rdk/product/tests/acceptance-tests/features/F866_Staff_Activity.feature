@@ -3,54 +3,54 @@ Feature: F866 - Staff Activity Applet
 
 @createdByMe @intendedForMeAndMyTeams
 Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams activity requests
-  Given a patient with pid "9E7A;100728" has been synced through the RDK API
+  Given a patient with pid "SITE;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user "9E7A;1tdnurse" has started an activity assigned to a person with parameters
+  And the user "SITE;USER    " has started an activity assigned to a person with parameters
       | parameter        | value            |
-      | patient_facility | 9E7A             |
+      | patient_facility | SITE             |
       | patient_id       | 100728           |
-      | assignedToFac    | 9E7A             |
+      | assignedToFac    | SITE             |
       | assignedToUser   | 10000000270      |
-      | full_assignedTo  | 9E7A;10000000270 |
-      | authorFac        | 9E7A             |
+      | full_assignedTo  | SITE;10000000270 |
+      | authorFac        | SITE             |
       | authorId         | 10000000016      |
       | authorName       | TDNURSE,ONE      |
       | urgency          | 4                |
 
-  When the user "REDACTED" requests open activities for the staff context
+  When the user "PW         " requests open activities for the staff context
       | extra parameter         | value |
       | intendedForMeAndMyTeams | true  |
 
   Then the activities instances list contains
       | parameter            | value                    |
       | NAME                 | Request                  |
-      | PID                  | 9E7A;100728              |
-      | CREATEDBYID          | 9E7A;10000000016         |
+      | PID                  | SITE;100728              |
+      | CREATEDBYID          | SITE;10000000016         |
       | URGENCY              | 4                        |
       | TASKSTATE            | Active: Pending Response |
       | ASSIGNEDTOFACILITYID | 500                      |
       | CREATEDATID          | 500                      |
-      | ASSIGNEDTOID         | 9E7A;10000000270         |
+      | ASSIGNEDTOID         | SITE;10000000270         |
       | MODE                 | Open                     |
       | DOMAIN               | Request                  |
       | CREATEDBYNAME        | TDNURSE,ONE              |
       | INTENDEDFOR          | USER,PANORAMA            |
       | PATIENTNAME          | TWENTY,INPATIENT         |
 
-  When the user "9E7A;1tdnurse" requests open activities for the staff context
+  When the user "SITE;USER    " requests open activities for the staff context
       | extra parameter         | value |
       | createdByMe             | true  |
 
   Then the activities instances list contains
       | parameter            | value                    |
       | NAME                 | Request                  |
-      | PID                  | 9E7A;100728              |
-      | CREATEDBYID          | 9E7A;10000000016         |
+      | PID                  | SITE;100728              |
+      | CREATEDBYID          | SITE;10000000016         |
       | URGENCY              | 4                        |
       | TASKSTATE            | Active: Pending Response |
       | ASSIGNEDTOFACILITYID | 500                      |
       | CREATEDATID          | 500                      |
-      | ASSIGNEDTOID         | 9E7A;10000000270         |
+      | ASSIGNEDTOID         | SITE;10000000270         |
       | MODE                 | Open                     |
       | DOMAIN               | Request                  |
       | CREATEDBYNAME        | TDNURSE,ONE              |
@@ -59,31 +59,31 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams activity r
 
 @createdByMe_unsignedconsult @intendedForMeAndMyTeams_unsignedconsult
 Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED consult - Physical Therapy
-  Given a patient with pid "9E7A;100728" has been synced through the RDK API
+  Given a patient with pid "SITE;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user "REDACTED" has started a consult with parameters
+  And the user "SITE;USER  " has started a consult with parameters
       | parameters                   | value                                      |
-      | icn                          | 9E7A;100728                                |
+      | icn                          | SITE;100728                                |
       | assignedTo                   | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
-      | executionUserId              | urn:va:user:9E7A:10000000272               |
-      | executionUserName            | KHAN, VIHAAN                               |
+      | executionUserId              | urn:va:user:SITE:10000000272               |
+      | executionUserName            | LAST,FIRST                               |
       | formAction                   | accepted                                   |
-      | orderingProvider displayName | KHAN, VIHAAN                               |
-      | orderingProvider uid         | urn:va:user:9E7A:10000000272               |
+      | orderingProvider displayName | LAST,FIRST                               |
+      | orderingProvider uid         | urn:va:user:SITE:10000000272               |
       | destination facility code    | 500                                        |
       | destination facility name    | PANORAMA                                   |
   And a successful response is returned
   And the successful response contains a processInstanceId 
 
-  When the user "REDACTED" requests open activities for the staff context
+  When the user "PW         " requests open activities for the staff context
       | extra parameter         | value |
       | intendedForMeAndMyTeams | true  |
 
   Then the activities instances list contains
       | parameter            | value                                      |
       | NAME                 | Consult                                    |
-      | PID                  | 9E7A;100728                                |
-      | CREATEDBYID          | 9E7A;10000000272                           |
+      | PID                  | SITE;100728                                |
+      | CREATEDBYID          | SITE;10000000272                           |
       | URGENCY              | 9                                          |
       | TASKSTATE            | Unreleased:Pending Signature               |
       | ASSIGNEDTOID         | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -91,19 +91,19 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED c
       | ASSIGNEDTOFACILITYID | 500                                        |
       | MODE                 | Open                                       |
       | DOMAIN               | consult                                    |
-      | CREATEDBYNAME        | KHAN,VIHAAN                                |
+      | CREATEDBYNAME        | LAST,FIRST                                |
       | INTENDEDFOR          | Physical Therapy                           |
       | PATIENTNAME          | TWENTY,INPATIENT                           |
 
-  When the user "REDACTED" requests open activities for the staff context
+  When the user "SITE;USER  " requests open activities for the staff context
       | extra parameter         | value |
       | createdByMe             | true  |
 
   Then the activities instances list contains
       | parameter            | value                                      |
       | NAME                 | Consult                                    |
-      | PID                  | 9E7A;100728                                |
-      | CREATEDBYID          | 9E7A;10000000272                           |
+      | PID                  | SITE;100728                                |
+      | CREATEDBYID          | SITE;10000000272                           |
       | URGENCY              | 9                                          |
       | TASKSTATE            | Unreleased:Pending Signature               |
       | ASSIGNEDTOID         | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -111,25 +111,25 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams UNSIGNED c
       | ASSIGNEDTOFACILITYID | 500                                        |
       | MODE                 | Open                                       |
       | DOMAIN               | consult                                    |
-      | CREATEDBYNAME        | KHAN,VIHAAN                                |
+      | CREATEDBYNAME        | LAST,FIRST                                |
       | INTENDEDFOR          | Physical Therapy                           |
       | PATIENTNAME          | TWENTY,INPATIENT                           |
 
 @createdByMe_signedconsult @intendedForMeAndMyTeams_signedconsult
 Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams SIGNED consult - Physical Therapy
-  Given a patient with pid "9E7A;100728" has been synced through the RDK API
+  Given a patient with pid "SITE;100728" has been synced through the RDK API
   And the client has the current deploymentid
-  And the user REDACTED   has created and signed a consult for patient "9E7A;100728"
+  And the user SITE;USER   has created and signed a consult for patient "SITE;100728"
 
-  When the user "REDACTED" requests open activities for the staff context
+  When the user "PW         " requests open activities for the staff context
       | extra parameter         | value |
       | intendedForMeAndMyTeams | true  |
 
   Then the activities instances list contains
       | parameter            | value                                      |
       | NAME                 | Consult                                    |
-      | PID                  | 9E7A;100728                                |
-      | CREATEDBYID          | 9E7A;10000000272                           |
+      | PID                  | SITE;100728                                |
+      | CREATEDBYID          | SITE;10000000272                           |
       | URGENCY              | 9                                          |
       | TASKSTATE            | Pending                                    |
       | ASSIGNEDTOID         | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -137,19 +137,19 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams SIGNED con
       | ASSIGNEDTOFACILITYID | 500                                        |
       | MODE                 | Open                                       |
       | DOMAIN               | consult                                    |
-      | CREATEDBYNAME        | KHAN,VIHAAN                                |
+      | CREATEDBYNAME        | LAST,FIRST                                |
       | INTENDEDFOR          | Physical Therapy                           |
       | PATIENTNAME          | TWENTY,INPATIENT                           |
 
-  When the user "REDACTED" requests open activities for the staff context
+  When the user "SITE;USER  " requests open activities for the staff context
       | extra parameter         | value |
       | createdByMe             | true  |
 
   Then the activities instances list contains
       | parameter            | value                                      |
       | NAME                 | Consult                                    |
-      | PID                  | 9E7A;100728                                |
-      | CREATEDBYID          | 9E7A;10000000272                           |
+      | PID                  | SITE;100728                                |
+      | CREATEDBYID          | SITE;10000000272                           |
       | URGENCY              | 9                                          |
       | TASKSTATE            | Pending                                    |
       | ASSIGNEDTOID         | [FC:PANORAMA(500)/TF:Physical Therapy(81)] |
@@ -157,6 +157,6 @@ Scenario:  Staff View, verify createdByMe and intendedForMeAndMyTeams SIGNED con
       | ASSIGNEDTOFACILITYID | 500                                        |
       | MODE                 | Open                                       |
       | DOMAIN               | consult                                    |
-      | CREATEDBYNAME        | KHAN,VIHAAN                                |
+      | CREATEDBYNAME        | LAST,FIRST                                |
       | INTENDEDFOR          | Physical Therapy                           |
       | PATIENTNAME          | TWENTY,INPATIENT                           |

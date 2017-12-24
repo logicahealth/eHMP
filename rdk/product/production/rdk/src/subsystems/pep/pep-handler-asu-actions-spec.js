@@ -10,17 +10,17 @@ describe('When pep handler asu actions is called', function() {
     var mock;
     var callback;
     var res;
-    var puUid = 'urn:va:user:9E7A:10000000270';
+    var puUid = 'urn:va:user:SITE:10000000270';
     var puName = 'USER,PANORAMA';
-    var site = '9E7A';
+    var site = 'SITE';
     var puDuz = {
-        '9E7A': '10000000270'
+        'SITE': '10000000270'
     };
 
     var defaultVistaClass = [
         {
           role: 'USER',
-          uid: 'urn:va:asu-class:9E7A:561'
+          uid: 'urn:va:asu-class:SITE:561'
         }
     ];
 
@@ -83,7 +83,7 @@ describe('When pep handler asu actions is called', function() {
             author: puName,
             authorUid:puUid,
             documentClass:'PROGRESS NOTES',
-            documentDefUid:'urn:va:doc-def:9E7A:20',
+            documentDefUid:'urn:va:doc-def:SITE:20',
             localTitle:'CRISIS NOTE',
             status:'UNSIGNED',
         };
@@ -119,7 +119,7 @@ describe('When pep handler asu actions is called', function() {
             author: puName,
             authorUid:puUid,
             documentClass:'PROGRESS NOTES',
-            documentDefUid:'urn:va:doc-def:9E7A:20',
+            documentDefUid:'urn:va:doc-def:SITE:20',
             documentTypeName:'Crisis Note',
             kind:'Crisis Note',
             localTitle:'CRISIS NOTE',

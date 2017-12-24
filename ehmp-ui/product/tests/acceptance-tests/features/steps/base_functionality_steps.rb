@@ -6,23 +6,24 @@ def verify_applet_view_type(type, applet_id)
 end
 
 Then(/^the Active Medications Summary applet is displayed$/) do
-  active_medications = ActiveMedications.instance
-
-  verify_applet_exists(active_medications.appletid)
-  verify_applet_view_type('summary', active_medications.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { active_medications.applet_loaded? }
+
+  applet = PobActiveRecentMedApplet.new
+  verify_applet_exists(applet.appletid)
+  verify_applet_view_type('summary', applet.appletid)
+  wait.until { applet.summary_applet_loaded? }
 end
 
 Then(/^the Allergies Trend applet is displayed$/) do
-  verify_applet_exists(@ag.appletid)
-  verify_applet_view_type('gist', @ag.appletid)
+  applet = PobAllergiesApplet.new
+  verify_applet_exists(applet.appletid)
+  verify_applet_view_type('gist', applet.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @ag.applet_loaded? }
+  wait.until { applet.applet_gist_loaded? }
 end
 
 Then(/^the Appt and Visits Summary applet is displayed$/) do
-  appointments = AppointmentsCoverSheet.instance
+  appointments = PobAppointmentsApplet.new
   verify_applet_exists(appointments.appletid)
   verify_applet_view_type('summary', appointments.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
@@ -115,11 +116,11 @@ Then(/^the Immunization Trend applet is displayed$/) do
 end
 
 Then(/^the Active Medications Trend applet is displayed$/) do
-  # @mg = MedicationGistContainer.instance
-  verify_applet_exists(@mg.appletid)
-  verify_applet_view_type('gist', @mg.appletid)
+  applet = PobActiveRecentMedApplet.new
+  verify_applet_exists(applet.appletid)
+  verify_applet_view_type('gist', applet.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @mg.applet_loaded? }
+  wait.until { applet.applet_gist_loaded? }
 end
 
 Then(/^the Problems Trend applet is displayed$/) do
@@ -146,11 +147,11 @@ Then(/^the Documents Expanded applet is displayed$/) do
 end
 
 Then(/^the Reports Summary applet is displayed$/) do
-  reports = ReportsGistContainer.instance
+  reports = PobReportsApplet.new
   verify_applet_exists(reports.appletid)
   verify_applet_view_type('summary', reports.appletid)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { reports.applet_grid_loaded }
+  wait.until { reports.applet_loaded? }
 end
 
 Then(/^the Clinical Reminders Summary applet is displayed$/) do
@@ -168,11 +169,11 @@ Then(/^the Timeline Summary applet is displayed$/) do
 
   # verify applet exists
   driver = TestSupport.driver
-  applets = driver.find_elements(:css, "[data-instanceid='newsfeed']")
+  applets = driver.find_elements(:css, "[data-appletid='newsfeed']")
   expect(applets.size).to be_eql(1), "The number of found applets matching that id was #{applets.size}."
 
   # verify applet type
-  applets = driver.find_elements(:css, "[data-view-type=summary] [data-instanceid='newsfeed']")
+  applets = driver.find_elements(:css, "[data-view-type=summary] [data-appletid='newsfeed']")
   expect(applets.size).to be_eql(1), "The number of found applets matching that id and type was #{applets.size}"
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { timeline.applet_loaded? }

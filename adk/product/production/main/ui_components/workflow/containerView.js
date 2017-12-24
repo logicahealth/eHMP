@@ -22,7 +22,7 @@ define([
                 eventString: 'show.bs.modal'
             }
         },
-        className: 'modal fade',
+        className: 'modal',
         tagName: 'div',
         attributes: {
             'role': 'dialog',
@@ -39,6 +39,12 @@ define([
                 if (_.isNumber(ADK_WorkflowRegion.currentView.$el.zIndex()) && $workflowBackdrop instanceof jQuery && $workflowBackdrop.length > 0){
                     $workflowBackdrop.css('z-index', ADK_WorkflowRegion.currentView.$el.zIndex()-1);
                 }
+                Messaging.trigger('obscure:background:content');
+            },
+            'hide.bs.modal': function(){
+                if(_.get(this.$el.data('bs.modal'), '$body', $('body')).find('.modal-backdrop.in').length === 1) {
+                    Messaging.trigger('reveal:background:content');
+                }
             }
         },
         ui: {
@@ -47,7 +53,7 @@ define([
         regions: {
             workflowRegion: '@ui.WorkflowRegion'
         },
-        template: Handlebars.compile('<div class="workflow-container"><div class="modal-dialog{{#if sizeClass}} {{sizeClass}}{{/if}}"></div></div>'),
+        template: Handlebars.compile('<div class="workflow-container"><div class="modal-dialog{{#if sizeClass}} {{sizeClass}}{{/if}}{{#if modalClass}} {{modalClass}}{{/if}}"></div></div>'),
         initialize: function(options) {
             this.workflowOptions = options.workflowOptions;
             this.controllerView = options.controllerView;
@@ -72,6 +78,7 @@ define([
             } else if (this.workflowOptions.size === 'xlarge') {
                 this.model.set('sizeClass', 'modal-xl');
             }
+            this.model.set('modalClass', this.workflowOptions.wrapperClasses);
             this.showChildView('workflowRegion', this.controllerView);
             Messaging.getChannel('toolbar').trigger('open:worflow:modal');
         }

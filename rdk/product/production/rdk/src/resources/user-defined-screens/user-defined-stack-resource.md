@@ -49,7 +49,7 @@ Create a new stacked graph in a particular applet in a particular workspace
 
             {
               "data": {
-                "_id": "9E7A;10000000270_UserScreensConfig",
+                "_id": "SITE;10000000270_UserScreensConfig",
                 "userDefinedFilters": [
                   {
                     "applets": [
@@ -393,7 +393,7 @@ Remove a stacked graph in a particular applet in a particular workspace
 
             {
               "data": {
-                "_id": "9E7A;10000000270_UserScreensConfig",
+                "_id": "SITE;10000000270_UserScreensConfig",
                 "userDefinedFilters": [
                   {
                     "applets": [
@@ -725,7 +725,7 @@ Remove a stacked graph in a particular applet in a particular workspace
 
             {
               "data": {
-                "_id": "9E7A;10000000270_UserScreensConfig",
+                "_id": "SITE;10000000270_UserScreensConfig",
                 "userDefinedFilters": [
                   {
                     "applets": [
@@ -1038,7 +1038,7 @@ Update a stacked graph's order in a particular applet in a particular workspace
     + Body
 
             {
-                "id": "9E7A;12345",
+                "id": "SITE;12345",
                 "instanceId": "ssss",
                 "graphs": []
             }
@@ -1053,7 +1053,7 @@ Update a stacked graph's order in a particular applet in a particular workspace
 
             {
               "data": {
-                "_id": "9E7A;10000000270_UserScreensConfig",
+                "_id": "SITE;10000000270_UserScreensConfig",
                 "userDefinedFilters": [
                   {
                     "applets": [

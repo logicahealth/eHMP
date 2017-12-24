@@ -9,7 +9,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
 
         function getPatient(isInpatient, hasLocationUid, hasCategoryCode, isNewVisit){
             var currentPatient = new Backbone.Model();
-            currentPatient.set('pid', '9E7A;3');
+            currentPatient.set('pid', 'SITE;3');
             var visit = {};
 
             if(isInpatient){
@@ -17,11 +17,11 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             }
 
             if(hasLocationUid){
-                visit.locationUid = 'uid:location:9E7A:27';
+                visit.locationUid = 'uid:location:SITE:27';
             }
 
             if(hasCategoryCode){
-                visit.categoryCode = 'uid:category:9E7A:27:AB';
+                visit.categoryCode = 'uid:category:SITE:27:AB';
             }
 
             if(isNewVisit){
@@ -41,9 +41,9 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             it('Test visit model properties - first case', function(){
                 var model = new Backbone.Model({administeredHistorical: 'administered', administeredBy: '99;TEST PROVIDER'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(true, true, true, true), new Backbone.Model());
-                expect(immunizationModel.get('pid')).toEqual('9E7A;3');
+                expect(immunizationModel.get('pid')).toEqual('SITE;3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('1');
-                expect(immunizationModel.get('encounterLocation')).toEqual('uid:location:9E7A:27');
+                expect(immunizationModel.get('encounterLocation')).toEqual('uid:location:SITE:27');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151031');
                 expect(immunizationModel.get('eventDateTime')).toEqual('20151031');
@@ -51,7 +51,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             it('Test visit model properties - second case', function(){
                 var model = new Backbone.Model({administeredHistorical: 'administered', administeredBy: '99;TEST PROVIDER'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(false, false, true, false), new Backbone.Model());
-                expect(immunizationModel.get('pid')).toEqual('9E7A;3');
+                expect(immunizationModel.get('pid')).toEqual('SITE;3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('0');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151101');

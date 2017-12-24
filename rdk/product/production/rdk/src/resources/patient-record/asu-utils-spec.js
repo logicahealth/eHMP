@@ -404,15 +404,15 @@ describe('Document.setUserClassUids', function () {
     it('checks the ids get set', function () {
         var item = {
             status: 'valid status',
-            documentDefUid: 'urn:va:doc-def:C877:111'
+            documentDefUid: 'urn:va:doc-def:SITE:111'
         };
         var userClasses = [
-            {'uid':'urn:va:user:9E7A:10000000270'},
-            {'uid':'urn:va:asu-class:C877:561'},
+            {'uid':'urn:va:user:SITE:10000000270'},
+            {'uid':'urn:va:asu-class:SITE:561'},
             {'uid': 'bad:id'}
         ];
         var userDetails = {
-            vistaUserClass: [{'uid':'urn:va:user:9E7A:10000000270'}]
+            vistaUserClass: [{'uid':'urn:va:user:SITE:10000000270'}]
         };
 
         var document = asu_utils._createDocument(item);

@@ -1,0 +1,5 @@
+source :chef_server
+
+solver :ruby, :required
+
+cookbook 'rdk_provision', "=#{ENV['RDK_PROVISION']}"

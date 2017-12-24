@@ -15,7 +15,7 @@ class DefaultLogin
   if ENV.keys.include?('JDS_HOST')
     @@jds_url = ENV.keys.include?('JDS_HOST') ? 'http://' + ENV['JDS_HOST'] + ":" + ENV['JDS_PORT']  : 'http://IP             '
   else
-    @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":9080" : "http://IP             "
+    @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":PORT" : "http://IP             "
   end
 
   if ENV.keys.include?('VISTA_PANORAMA_HOST')

@@ -1,16 +1,15 @@
 'use strict';
 var _ = require('lodash');
 var async = require('async');
-var Datastore = require('nedb');
+var EventEmitter = require('events').EventEmitter;
 var nullUtil = require('../core/null-utils');
-var pickListConfigInMemoryRpcCall = require('./config/pick-list-config-in-memory-rpc-call');
-var pickListConfig = require('./config/pick-list-config-in-memory-rpc-call').pickListConfig;
-var validationUtil = require('./utils/validation-util');
+var JSONStream = require('JSONStream');
+var FileDB = require('./pick-list-db-file');
+var pickListUtil = require('./pick-list-utils');
 
 var pickListRoot = './';
 var loading = [];
 
-var db = new Datastore();
 var refreshInProgress = null;
 module.exports.refreshInProgress = refreshInProgress;
 
@@ -18,164 +17,17 @@ var REFRESH_STATE_NOT_LOADED = 'notLoaded';
 var REFRESH_STATE_NORMAL = 'normal';
 var REFRESH_STATE_STALE = 'stale';
 
-
-
-module.exports.retrieveDataFromDB = retrieveDataFromDB;
-module.exports.updateDatabase = updateDatabase;
 module.exports.REFRESH_STATE_NOT_LOADED = REFRESH_STATE_NOT_LOADED;
 module.exports.REFRESH_STATE_NORMAL = REFRESH_STATE_NORMAL;
 module.exports.REFRESH_STATE_STALE = REFRESH_STATE_STALE;
 
 /**
- * Retrieves the data from the database.  If an error occurs, and error will be returned.  Otherwise you will receive
- * a result which contains status and possibly data.<br/>
- * If the status is REFRESH_STATE_NOT_LOADED, data will be null.<br/>
- * If the status is REFRESH_STATE_NORMAL, data will contain the data retrieved from the database.<br/>
- * If the status is REFRESH_STATE_STALE, data will contain the data retrieved from the database - it is the responsibility
- * of the caller to refresh the data asynchronously at this point.<br/>
+ * db needs to have two methods:
  *
- * @param logger The logger.
- * @param dataNeedsRefreshAfterMinutes How many minutes old is cached data still acceptable?
- * @param query The pick-list name, site, and any other parameters.
- * @param callback The function to call when done.
+ * retrieve(logger, dataNeedsRefreshAfterMinutes, query, callback)
+ * store(logger, params, data, callback)
  */
-function retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, query, callback) {
-    var dateCurrent = new Date();
-    var refreshIntervalInMilliseconds = 1000 * 60 * dataNeedsRefreshAfterMinutes;
-    db.find(query, function(err, res) {
-        if (err) {
-            logger.error({
-                error: err
-            }, 'pick-list-db.retrieveDataFromDB error finding data');
-            return callback(err);
-        }
-
-        var result = {
-            data: null,
-            status: REFRESH_STATE_NOT_LOADED
-        };
-        if (nullUtil.isNullish(res)) {
-            logger.warn({
-                error: err
-            }, 'pick-list-db.retrieveDataFromDB warning res was nullish');
-            return callback(null, {});
-        } else if (res.length < 1) {
-            logger.debug({
-                result: result
-            }, 'pick-list-db.retrieveDataFromDB res.length < 1');
-            return callback(null, result);
-        } else {
-            logger.debug('pick-list-db.retrieveDataFromDB res.length === ' + res.length);
-
-            if (nullUtil.isNullish(res[0]) || nullUtil.isNullish(res[0].data)) {
-                logger.warn('pick-list-db.retrieveDataFromDB warning res[0] or res[0].data was nullish');
-                return callback(null, {});
-            }
-
-            var dateCreated = new Date(res[0].timeStamp);
-            result.data = res[0].data;
-            //result.pickList = res[0].pickList;
-            //result.site = res[0].site;
-            //result.timeStamp = res[0].timeStamp;
-            if ((dateCurrent.getTime() - dateCreated.getTime()) < refreshIntervalInMilliseconds) {
-                result.status = REFRESH_STATE_NORMAL;
-            } else {
-                result.status = REFRESH_STATE_STALE;
-            }
-
-            logger.debug({
-                result: result
-            }, 'pick-list-db.retrieveDataFromDB result');
-            return callback(null, result);
-        }
-    });
-}
-
-/**
- * Method to see if the current heap size exceeds the percentage we have specified.
- *
- * @param logger The logger.
- */
-function isHeapSizeExceeded(logger) {
-    var percentTotalHeapBeforeMemoryNotification = 75;
-    if (!_.has(pickListConfigInMemoryRpcCall, 'percentTotalHeapBeforeMemoryNotification')) {
-        logger.error('pick-list-db.isHeapSizeExceeded error: percentTotalHeapBeforeMemoryNotification is not found in pick-list-config-in-memory-rpc-call.json');
-    } else if (!validationUtil.isWholeNumber(pickListConfigInMemoryRpcCall.percentTotalHeapBeforeMemoryNotification)) {
-        logger.error('pick-list-db.isHeapSizeExceeded error: percentTotalHeapBeforeMemoryNotification is not a whole number in pick-list-config-in-memory-rpc-call.json');
-    } else {
-        percentTotalHeapBeforeMemoryNotification = pickListConfigInMemoryRpcCall.percentTotalHeapBeforeMemoryNotification;
-    }
-
-    var memory = process.memoryUsage();
-    var acceptableMemory = percentTotalHeapBeforeMemoryNotification * 0.01 * memory.heapTotal;
-    var memoryExceeded = memory.heapUsed > acceptableMemory;
-
-    if (memoryExceeded) {
-        logger.error('pick-list-db.isHeapSizeExceeded error: The acceptable memory allocated on the heap for pick-lists has been exceeded' +
-            '(Used: ' + memory.heapUsed + '  Threshold:  ' + acceptableMemory + '  Total:' + memory.heapTotal + ')');
-    }
-
-    logger.debug('pick-list in-memory footprint:  (Used: ' + memory.heapUsed +
-        '  Threshold:  ' + acceptableMemory + '  Total:' + memory.heapTotal + ')');
-
-    return memoryExceeded;
-}
-
-/**
- * Method to store pick-list data in the database.
- *
- * @param logger The logger.
- * @param params The pick-list name, site, and any other parameters.
- * @param timeStamp The timestamp to record with the data.
- * @param data The pick-list data.
- * @param callback The function to call when done.
- */
-function updateDatabase(logger, params, timeStamp, data, callback) {
-    var updatedData = _.clone(params, true);
-    _.set(updatedData, 'timeStamp', timeStamp);
-    _.set(updatedData, 'data', data);
-    db.update(params, updatedData, {
-        upsert: true
-    }, function(err, numReplaced, newDoc) {
-        isHeapSizeExceeded(logger);
-
-        if (err) {
-            logger.error({
-                error: err
-            }, 'pick-list-db.updateDatabase error updating data');
-            return callback(err);
-        }
-        if (numReplaced === 0) {
-            logger.error({
-                error: err
-            }, 'pick-list-db.updateDatabase error no records were stored in-memory');
-            return callback('No records were stored in-memory');
-        }
-        if (nullUtil.isNullish(newDoc) || nullUtil.isNullish(newDoc.data)) {
-            if (nullUtil.isNullish(data)) {
-                logger.warn('pick-list-db.updateDatabase warning newDoc or newDoc.data was nullish and data was also nullish');
-                return callback(null, {});
-            } else {
-                logger.debug({
-                    data: data
-                }, 'pick-list-db.updateDatabase newDoc or newDoc.data was nullish - data contained');
-                return callback(null, data);
-            }
-        }
-
-        //Uncomment for testing - shows you everything in the database after your update.
-        //db.find({}, function (error, results) {
-        //    console.log(results);
-        logger.debug({
-            data: data
-        }, 'pick-list-db.updateDatabase data');
-        logger.debug({
-            data: newDoc.data
-        }, 'pick-list-db.updateDatabase newDoc.data');
-        callback(null, newDoc.data);
-        //});
-    });
-}
+module.exports.db = new FileDB();
 
 /**
  * Generic method to load a pick-list into the in-memory database.
@@ -205,7 +57,7 @@ function loadPickList(app, siteConfig, params, modulePath, callback) {
             return callback(null, params.site + ':' + params.pickList + ' contained no data');
         }
 
-        updateDatabase(logger, params, new Date(), result, callback);
+        module.exports.db.store(app, params, result, callback);
     }, params, app.config);
 }
 
@@ -247,32 +99,26 @@ module.exports.refresh = function refresh(app, forcedRefresh, callback) {
     if (refreshInProgress === null || !refreshInProgress) {
         refreshInProgress = true;
     }
-    //var config = app.config;
-    var sites = app.config.vistaSites;
-    var siteNames = [];
-    var siteConfigs = [];
-    if (!_.isNull(sites)) {
-        for (var key in sites) {
-            if (sites.hasOwnProperty(key) && typeof sites[key] === 'object') {
-                siteNames.push(key);
-                siteConfigs.push(sites[key]);
-            }
-        }
-    }
+
+    var siteNames = _.keys(app.config.vistaSites);
     var processedData = [];
+    var errored = false;
     _.each(siteNames, function(site, i) {
         var siteConfig = app.config.vistaSites[site];
-        async.series(_.map(app.config.pickListConfig, function(value /*, index, collection*/ ) {
-            return function(callback) {
-                loadPickList(app, siteConfig, site, value, callback);
+        async.series(_.map(pickListUtil.inMemoryConfig(app), function(value) {
+            return function (callback) {
+                var params = { site: site, pickList: value.name };
+                loadPickList(app, siteConfig, params, value.modulePath, callback);
             };
-        }), function(err, results) {
+        }), function (err, results) {
+            if (errored) {
+                return;
+            }
             if (err) {
                 refreshInProgress = false;
-                logger.error({
-                    error: err
-                }, 'pick-list-db.refresh error retrieving data');
-                callback(err);
+                errored = true;
+                app.logger.error({error: err}, 'pick-list-db.refresh error retrieving data');
+                return callback(err);
             } else {
                 processedData.push(results);
                 if (i === (siteNames.length - 1)) {
@@ -288,61 +134,22 @@ module.exports.refresh = function refresh(app, forcedRefresh, callback) {
 };
 
 /**
- * Converts a string into a properly escaped regular expression.
- */
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/**
- * Removes all of the records whose filters.fieldToCheckAgainst don't contain the string filters.stringToSearchFor
- *
- * @param data The data to filter out records that don't match.
- * @param filters filters out the data by comparing filters.fieldToCheckAgainst to see if that matches what is contained
- * in filters.stringToSearchFor.  It does this with a case insensitive search and adds it if the match is found anywhere
- * in that string.
- */
-function filterResults(data, filters) {
-    if (nullUtil.isNullish(filters)) {
-        return data;
-    }
-    if (nullUtil.isNullish(filters.fieldToCheckAgainst) || _.isEmpty(filters.fieldToCheckAgainst)) {
-        return data;
-    }
-    if (nullUtil.isNullish(filters.stringToSearchFor) || _.isEmpty(filters.stringToSearchFor)) {
-        return data;
-    }
-
-    var reg = new RegExp(escapeRegExp(filters.stringToSearchFor), 'i');
-    var retValue = _.filter(data, function(n) {
-        if (nullUtil.isNullish(n)) {
-            return false;
-        } else if (nullUtil.isNullish(n[filters.fieldToCheckAgainst])) {
-            return false;
-        } else if (n[filters.fieldToCheckAgainst].match(reg)) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    return retValue;
-}
-
-/**
  * Retrieves a pick-list after refreshing it if needed.
  *
  * @param app A reference to the application object (e.g. logger, config, etc.).
+ * @param logger request logger
  * @param siteConfig The configuration for calling RPCs.
  * @param params The pick-list name, site, and any other parameters.
  * @param modulePath The path of the file with the pick-list's fetch function.
  * @param dataNeedsRefreshAfterMinutes How many minutes old is cached data still acceptable? (Use 0 to force a cache refresh.)
  * @param callback The function to call when done.
  */
-module.exports.retrievePickList = function retrievePickList(app, siteConfig, params, filters, modulePath, dataNeedsRefreshAfterMinutes, callback) {
-    var logger = app.logger;
+module.exports.retrievePickList = function retrievePickList(app, logger, siteConfig, params, filters, modulePath, dataNeedsRefreshAfterMinutes, callback) {
+    var originalParams = params;
+    params = _.omit(params, 'parseStreams');
+    var pickListConfig = pickListUtil.inMemoryConfig(app);
 
-    retrieveDataFromDB(logger, dataNeedsRefreshAfterMinutes, params, function(err, res) {
+    module.exports.db.retrieve(app, logger, dataNeedsRefreshAfterMinutes, params, function(err, res) {
         if (err) {
             logger.error({
                 error: err
@@ -399,11 +206,13 @@ module.exports.retrievePickList = function retrievePickList(app, siteConfig, par
                 }
 
                 if (allowCallback) {
-                    var retValue = filterResults(result, filters);
-                    logger.debug({
-                        retValue: retValue
-                    }, 'pick-list-db.retrievePickList: retValue');
-                    return callback(null, retValue);
+                    parseJSONIfNeeded(originalParams.parseStreams, result, function (err, result) {
+                        var retValue = filterResults(result, filters);
+                        logger.debug({
+                            retValue: retValue
+                        }, 'pick-list-db.retrievePickList: retValue');
+                        return callback(err, retValue);
+                    });
                 }
             });
         } else {
@@ -411,26 +220,111 @@ module.exports.retrievePickList = function retrievePickList(app, siteConfig, par
                 data: res.data
             }, 'pick-list-db.retrievePickList: res.data');
 
-            var retValue = filterResults(res.data, filters);
-            logger.debug({
-                retValue: retValue
-            }, 'pick-list-db.retrievePickList: retValue filtered');
-            callback(null, retValue);
+            parseJSONIfNeeded(originalParams.parseStreams, res.data, function (err, result) {
+                var retValue = filterResults(result, filters);
+                logger.debug({
+                    retValue: retValue
+                }, 'pick-list-db.retrievePickList: retValue filtered');
+                callback(err, retValue);
 
-            //Purposefully done after the callback so it can reload new data after the stale data is returned.
-            if (res.status === REFRESH_STATE_STALE) {
-                loadPickList(app, siteConfig, params, modulePath, function(error /*, result*/ ) {
-                    if (error) {
-                        logger.error({
-                            error: error
-                        }, 'pick-list-db.retrievePickList error occurred trying to refresh stale data:');
-                    }
-                });
-            }
+                //Purposefully done after the callback so it can reload new data after the stale data is returned.
+                if (res.status === REFRESH_STATE_STALE) {
+                    loadPickList(app, siteConfig, params, modulePath, function (error/*, result*/) {
+                        if (error) {
+                            logger.error({
+                                error: error
+                            }, 'pick-list-db.retrievePickList error occurred trying to refresh stale data:');
+                        }
+                    });
+                }
+            });
         }
     });
 };
 
-module.exports._loadPickList = loadPickList;
-module.exports._updateDatabase = updateDatabase;
-module.exports._database = db;
+function parseJSONIfNeeded(parse, data, callback) {
+    if (!parse || !(data instanceof EventEmitter) || !_.isFunction(data.pipe)) {
+        return callback(null, data);
+    }
+
+    var results = [];
+    var parser = JSONStream.parse('*');
+    parser.on('data', function parseJSONOnEntry(entry) {
+        results.push(entry);
+    });
+    parser.on('error', callback);
+    parser.on('end', function parseJSONOnEnd() {
+        return callback(null, results);
+    });
+    data.pipe(parser);
+}
+
+/**
+ * Removes all of the records whose filters.fieldToCheckAgainst don't contain the string filters.stringToSearchFor
+ *
+ * @param data The data to filter out records that don't match.
+ * @param filters filters out the data by comparing filters.fieldToCheckAgainst to see if that matches what is contained
+ * in filters.stringToSearchFor.  It does this with a case insensitive search and adds it if the match is found anywhere
+ * in that string.
+ */
+function filterResults(data, filters) {
+    if (!_.get(filters, 'fieldToCheckAgainst') || !_.get(filters, 'stringToSearchFor')) {
+        return data;
+    }
+
+    var regex = new RegExp(_.escapeRegExp(filters.stringToSearchFor), 'i');
+
+    if (data instanceof EventEmitter && _.isFunction(data.pipe)) {
+        return addStreamFilter(data, filters.fieldToCheckAgainst, regex);
+    } else {
+        var retValue = _.filter(data, function (n) {
+            if (!_.get(n, filters.fieldToCheckAgainst)) {
+                return false;
+            }
+            return regex.test(n[filters.fieldToCheckAgainst]);
+        });
+        return retValue;
+    }
+}
+
+/**
+ * Adds a field and value to filter records in a stream.
+ *
+ * @param {stream.Readable} stream The stream to filter out records that don't match (must be parsable as JSON).
+ * @param {string} field The name of the field to compare the value to.
+ * @param {any} value The value to find records with.
+ */
+function addStreamFilter(stream, field, value) {
+    if (!stream.pickListFilters) {
+        var pickListFilters = [];
+
+        var parser = JSONStream.parse('*', function (entry) {
+            var negativeMatch = _.find(pickListFilters, function (filter) {
+                var value = _.get(entry, filter.field);
+                if (!_.has(entry, filter.field)) {
+                    return true;
+                } else if (filter.value instanceof RegExp) {
+                    return !filter.value.test(value);
+                } else {
+                    return !_.isEqual(filter.value, value);
+                }
+            });
+            return negativeMatch ? undefined : entry;
+        });
+
+        var stringer = JSONStream.stringify();
+
+        stream = stream.pipe(parser).pipe(stringer);
+
+        stream.pickListFilters = pickListFilters;
+    }
+
+    stream.pickListFilters.push({
+        field: field,
+        value: value
+    });
+
+    return stream;
+}
+
+module.exports._filterResults = filterResults;

@@ -1,8 +1,13 @@
 'use strict';
 
 require('../../../../../env-setup');
-//var _ = require('underscore');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_3_0_2/jmeadows-immunization-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-immunization-xformer', function() {
     var mockEdipi = '00000099';
@@ -54,7 +59,7 @@ describe('jmeadows-immunization-xformer', function() {
     };
 
     it('verify transform sample immunization to VPR', function() {
-        var vprData = xformer(sampleDodImmunization, mockEdipi);
+        var vprData = xformer(log, sampleDodImmunization, mockEdipi);
 
         //console.log(vprData);
         expect(vprData.codes).toEqual(sampleVPRImmunization.codes);

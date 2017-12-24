@@ -74,14 +74,12 @@ define([
                         extraClasses: ["btn-default", "btn-sm", "close-modal", "pull-left"],
                         label: "Close",
                         type: "button",
-                        title: "Press enter to close the order.",
                         name: "close-modal"
                     }, {
                         control: "button",
                         extraClasses: ["btn-danger", "btn-sm", "continue", "pull-right"],
                         type: "submit",
                         label: "Discontinue Order",
-                        title: "Press enter to discontinue the order.",
                         name: "discontinue"
                     }]
                 }]
@@ -106,13 +104,11 @@ define([
     var DEFAULT_FORM_ATTRIBUTES = {
         cancel: {
             buttonLabel: 'Cancel Order',
-            buttonTitle: 'Press enter to cancel order',
             growlTitle: 'Lab Order Cancelled',
             growlMessage: 'Lab order successfully Cancelled.'
         },
         discontinue: {
             buttonLabel: 'Discontinue Order',
-            buttonTitle: 'Press enter to discontinue order',
             growlTitle: 'Lab Order Discontinued',
             growlMessage: 'Lab order successfully Discontinued.'
         }
@@ -151,7 +147,6 @@ define([
         },
         onRender: function() {
             this.ui.discontinue.trigger('control:label', this.buttonLabel);
-            this.ui.discontinue.trigger('control:title', this.buttonTitle);
             this.hideErrorMessage();
 
             if (!this.isCanceling) {

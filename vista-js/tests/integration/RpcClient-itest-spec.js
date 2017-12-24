@@ -11,11 +11,11 @@ var logger = require('bunyan').createLogger({
 var wConfig = require('./config');
 var RpcClient = require('../../src/RpcClient').RpcClient;
 
-var config = _.defaults(wConfig.vistaSites['9E7A'], {
+var config = _.defaults(wConfig.vistaSites['SITE'], {
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     context: 'HMP SYNCHRONIZATION CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',
@@ -33,8 +33,8 @@ describe('verify RpcClient() and instance methods against Panorama', function() 
             var expectedError = null;
             var expectedResult = {
                 connect: {
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED',
+                    accessCode: 'USER  ',
+                    verifyCode: 'PW      ',
                     duz: jasmine.any(String),
                     greeting: jasmine.any(String)
                 },

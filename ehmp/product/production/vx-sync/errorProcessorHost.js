@@ -12,6 +12,11 @@ var moment = require('moment');
 logUtil.initialize(config);
 
 var logger = logUtil.get('errorProcessorHost', 'host');
+if (config.appDynamicsProfile) {
+    log.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+    var appDynamicsProfile = JSON.parse(JSON.stringify(config.appDynamicsProfile));
+    require('appdynamics').profile(appDynamicsProfile); // tier and node names are read from environment variables
+}
 var healthcheckUtils = require(global.VX_UTILS + 'healthcheck-utils');
 
 //////////////////////////////////////////////////////////////////////////////

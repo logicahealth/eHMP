@@ -1,0 +1,28 @@
+# worker MPM configuration
+#
+# Note that these values apply to Apache httpd before version 2.3.9/2.3.13 where MaxRequestsPerChild and MaxClients were renamed.
+#    When we move to newer versions of Apache httpd we should remove this template and use the template contained in the apache2 cookbook.
+#
+# StartServers: initial number of server processes to start.  Default: 3
+# MinSpareThreads: minimum number of worker threads which are kept spare (idle).  Default: 75
+# MaxSpareThreads: maximum number of worker threads which are kept spare (idle).  Default: 250
+# ThreadsPerChild: constant number of worker threads in each server process.  Default: 25
+# MaxClients (renamed to MaxRequestWorkers in version 2.3.13): maximum number of request-handling threads for the server.
+#             Any requests above that will be queued until a thread is available.
+#             Default: ServerLimit * ThreadsPerChild
+# MaxRequestsPerChild (renamed to MaxConnectionsPerChild in version 2.3.9): maximum number of requests a server process serves
+# ThreadLimit: ThreadsPerChild can be changed to this maximum value during a graceful restart.
+#             ThreadLimit can only be changed by stopping and starting Apache.  Default: 64
+# ServerLimit: use this directive only if the MaxClients and ThreadsPerChild settings require more than 16 server processes (default).
+#             Do not set the value of this directive any higher than the number of server processes required for MaxClients and ThreadsPerChild.
+#
+<IfModule mpm_worker_module>
+  StartServers           <%= node['apache']['worker']['startservers'] %>
+  MinSpareThreads        <%= node['apache']['worker']['minsparethreads'] %>
+  MaxSpareThreads        <%= node['apache']['worker']['maxsparethreads'] %>
+  ThreadsPerChild        <%= node['apache']['worker']['threadsperchild'] %>
+  MaxClients             <%= node['apache']['worker']['maxrequestworkers'] %>
+  MaxRequestsPerChild    <%= node['apache']['worker']['maxconnectionsperchild'] %>
+  ThreadLimit            <%= node['apache']['worker']['threadlimit'] %>
+  ServerLimit            <%= node['apache']['worker']['serverlimit'] %>
+</IfModule>

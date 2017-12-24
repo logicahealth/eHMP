@@ -1,15 +1,3 @@
-#class FocusInAction
-#  include HTMLAction
-#  def initialize(html_id)
-#    @id = html_id
-#  end
-#  
-#  def perform_action(html_element, value)
-#    driver = TestSupport.driver
-#    driver.execute_script("$('##{@id}').focusin();")
-#  end
-#end
-
 class MedReviewApplet < AllApplets
   include Singleton
   attr_reader :appletid
@@ -21,7 +9,7 @@ class MedReviewApplet < AllApplets
     add_applet_buttons appletid_css
     add_action(CucumberLabel.new("Coversheet Dropdown"), ClickAction.new, AccessHtmlElement.new(:id, "screenName"))
     add_verify(CucumberLabel.new("Drop Down Menu"), VerifyText.new, AccessHtmlElement.new(:class, "dropdown-menu"))
-    add_action(CucumberLabel.new("Meds Review"), ClickAction.new, AccessHtmlElement.new(:link_text, "Meds Review"))
+    add_action(CucumberLabel.new("Meds Review"), ClickAction.new, AccessHtmlElement.new(:link_text, "Medication Review"))
     add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:class, "emptyMedsList")) 
 
     add_action(CucumberLabel.new("Clinic Order Meds Group"), ClickAction.new, AccessHtmlElement.new(:css, "[data-type-row='clinical']"))
@@ -32,23 +20,23 @@ class MedReviewApplet < AllApplets
     add_verify(CucumberLabel.new("Outpatient Meds Group"), VerifyText.new, AccessHtmlElement.new(:css, "[id^='accordion'] [data-type-row='outpatient']"))
     add_verify(CucumberLabel.new("Applet Title"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] .panel-title-label"))
 
-    warfarin_tab_id = 'medication_name_urn_va_med_9E7A_271_17220'
+    warfarin_tab_id = 'medication_name_urn_va_med_SITE_271_17220'
     #add_action(CucumberLabel.new("WARFARIN TAB"), FocusInAction.new(warfarin_tab_id), AccessHtmlElement.new(:id, warfarin_tab_id))
     add_action(CucumberLabel.new("WARFARIN TAB"), ClickAction.new, AccessHtmlElement.new(:id, warfarin_tab_id))
-    add_action(CucumberLabel.new("WARFARIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:css, "#medication_Item_urn_va_med_9E7A_271_17220 [button-type=detailView-button-toolbar]"))
-    add_action(CucumberLabel.new("DIGOXIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:css, "#medication_Item_urn_va_med_9E7A_164_9583 [button-type=detailView-button-toolbar]"))
-    # add_action(CucumberLabel.new("DIGOXIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='medication_Item_urn_va_med_9E7A_164_9583']/descendant::a[@id='detailView-button-toolbar']"))
+    add_action(CucumberLabel.new("WARFARIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:css, "#medication_Item_urn_va_med_SITE_271_17220 [button-type=detailView-button-toolbar]"))
+    add_action(CucumberLabel.new("DIGOXIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:css, "#medication_Item_urn_va_med_SITE_164_9583 [button-type=detailView-button-toolbar]"))
+    # add_action(CucumberLabel.new("DIGOXIN TAB detail icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='medication_Item_urn_va_med_SITE_164_9583']/descendant::a[@id='detailView-button-toolbar']"))
 
-    digoxin_tab_id = 'medication_name_urn_va_med_9E7A_164_9583'
+    digoxin_tab_id = 'medication_name_urn_va_med_SITE_164_9583'
     #add_action(CucumberLabel.new("DIGOXIN TAB"), FocusInAction.new(digoxin_tab_id), AccessHtmlElement.new(:css, "[data-appletid='medication_review'] ##{digoxin_tab_id}"))
     add_action(CucumberLabel.new("DIGOXIN TAB"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] ##{digoxin_tab_id}"))
-    metformin_tab_id = 'medication_name_urn_va_med_9E7A_271_27860'
+    metformin_tab_id = 'medication_name_urn_va_med_SITE_271_27860'
     #add_action(CucumberLabel.new("METFORMIN TAB,SA"), FocusInAction.new(metformin_tab_id), AccessHtmlElement.new(:css, "[data-appletid='medication_review'] ##{metformin_tab_id}"))
     add_action(CucumberLabel.new("METFORMIN TAB,SA"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] ##{metformin_tab_id}"))
 
-    add_action(CucumberLabel.new("METFORMIN TAB,SA detail icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='medication_Item_urn_va_med_9E7A_271_27860']/descendant::a[@button-type='detailView-button-toolbar']"))
-    add_verify(CucumberLabel.new("Order Hx Date Range 1"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-urn_va_med_9E7A_271_27860"))
-    add_verify(CucumberLabel.new("Order Hx Date Range 2"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-urn_va_med_C877_271_27860"))
+    add_action(CucumberLabel.new("METFORMIN TAB,SA detail icon"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='medication_Item_urn_va_med_SITE_271_27860']/descendant::a[@button-type='detailView-button-toolbar']"))
+    add_verify(CucumberLabel.new("Order Hx Date Range 1"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-urn_va_med_SITE_271_27860"))
+    add_verify(CucumberLabel.new("Order Hx Date Range 2"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-urn_va_med_SITE_271_27860"))
     add_action(CucumberLabel.new("Meds Review Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "input[name='q-8afd050c9965']"))
     add_action(CucumberLabel.new("Meds Review Search Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-8afd050c9965"))
 
@@ -85,79 +73,59 @@ class MedReviewApplet < AllApplets
   end
 end
 
-class MedReviewAppletSummaryDetailsHeader < ADKContainer
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("Outpatient Name Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='medicationName']"))
-    add_verify(CucumberLabel.new("Outpatient Sig Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='sig']"))
-    add_verify(CucumberLabel.new("Outpatient Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #OUTPATIENT-time-header"))
-    add_verify(CucumberLabel.new("Outpatient Status/Fillable Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[id^='outpatient'] [sortkey='status']"))
-
-    add_verify(CucumberLabel.new("Inpatient Name Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='medicationName']"))
-    add_verify(CucumberLabel.new("Inpatient Sig Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='sig']"))
-    add_verify(CucumberLabel.new("Inpatient Last Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #INPATIENT-time-header"))
-    add_verify(CucumberLabel.new("Inpatient Status/Next Header"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] div.text-center button"))
-
-    add_action(CucumberLabel.new("Outpatient Name Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='medicationName']"))
-    add_action(CucumberLabel.new("Outpatient Sig Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] button[sortkey='sig']"))
-    add_action(CucumberLabel.new("Outpatient Last Header Sort"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #OUTPATIENT-time-header"))
-  end
-end
-
 class MedReviewAppletSummaryDetails < ADKContainer
   include Singleton
   def initialize
     super
     #outpatient medications
-    add_verify(CucumberLabel.new("METFORMIN TAB,SA Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_27860"))
-    add_verify(CucumberLabel.new("METOPROLOL TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_16944"))
-    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_27960"))
-    add_verify(CucumberLabel.new("SIMVASTATIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_28060"))
-    add_verify(CucumberLabel.new("WARFARIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_271_18044"))
+    add_verify(CucumberLabel.new("METFORMIN TAB,SA Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_27860"))
+    add_verify(CucumberLabel.new("METOPROLOL TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_16944"))
+    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_27960"))
+    add_verify(CucumberLabel.new("SIMVASTATIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_28060"))
+    add_verify(CucumberLabel.new("WARFARIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_271_18044"))
 
-    add_verify(CucumberLabel.new("METFORMIN TAB,SA Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_27860"))
-    add_verify(CucumberLabel.new("METOPROLOL TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_16944"))
-    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_27960"))
-    add_verify(CucumberLabel.new("SIMVASTATIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_28060"))
-    add_verify(CucumberLabel.new("WARFARIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_271_18044"))
+    add_verify(CucumberLabel.new("METFORMIN TAB,SA Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_27860"))
+    add_verify(CucumberLabel.new("METOPROLOL TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_16944"))
+    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_27960"))
+    add_verify(CucumberLabel.new("SIMVASTATIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_28060"))
+    add_verify(CucumberLabel.new("WARFARIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_271_18044"))
 
-    add_verify(CucumberLabel.new("METFORMIN TAB,SA Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_27860"))
-    add_verify(CucumberLabel.new("METOPROLOL TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_16944"))
-    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_27960"))
-    add_verify(CucumberLabel.new("SIMVASTATIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_28060"))
-    add_verify(CucumberLabel.new("WARFARIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_271_18044"))
+    add_verify(CucumberLabel.new("METFORMIN TAB,SA Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_27860"))
+    add_verify(CucumberLabel.new("METOPROLOL TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_16944"))
+    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_27960"))
+    add_verify(CucumberLabel.new("SIMVASTATIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_28060"))
+    add_verify(CucumberLabel.new("WARFARIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_271_18044"))
 
-    add_verify(CucumberLabel.new("METFORMIN TAB,SA Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_27860"))
-    add_verify(CucumberLabel.new("METOPROLOL TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_16944"))
-    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_27960"))
-    add_verify(CucumberLabel.new("SIMVASTATIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_28060"))
-    add_verify(CucumberLabel.new("WARFARIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_271_18044"))
+    add_verify(CucumberLabel.new("METFORMIN TAB,SA Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_27860"))
+    add_verify(CucumberLabel.new("METOPROLOL TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_16944"))
+    add_verify(CucumberLabel.new("METOPROLOL TARTRATE TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_27960"))
+    add_verify(CucumberLabel.new("SIMVASTATIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_28060"))
+    add_verify(CucumberLabel.new("WARFARIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("ASPIRIN TAB,EC Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_271_18044"))
 
     #inpatient medications
-    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_164_10714"))
-    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_164_10717"))
-    add_verify(CucumberLabel.new("DIGOXIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("FUROSEMIDE TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_9E7A_164_9584"))
+    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_164_10714"))
+    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_164_10717"))
+    add_verify(CucumberLabel.new("DIGOXIN TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("FUROSEMIDE TAB Name"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #medication_name_urn_va_med_SITE_164_9584"))
 
-    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_164_10714"))
-    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_164_10717"))
-    add_verify(CucumberLabel.new("DIGOXIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("FUROSEMIDE TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_9E7A_164_9584"))
+    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_164_10714"))
+    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_164_10717"))
+    add_verify(CucumberLabel.new("DIGOXIN TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("FUROSEMIDE TAB Sig"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #sig_urn_va_med_SITE_164_9584"))
 
-    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_164_10714"))
-    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_164_10717"))
-    add_verify(CucumberLabel.new("DIGOXIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("FUROSEMIDE TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_9E7A_164_9584"))
+    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_164_10714"))
+    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_164_10717"))
+    add_verify(CucumberLabel.new("DIGOXIN TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("FUROSEMIDE TAB Last"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #time_urn_va_med_SITE_164_9584"))
 
-    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_164_10714"))
-    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_164_10717"))
-    add_verify(CucumberLabel.new("DIGOXIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("FUROSEMIDE TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_9E7A_164_9584"))
+    add_verify(CucumberLabel.new("AMPICILLIN INJ in SODIUM CHLORIDE 0.9% INJ Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_164_10714"))
+    add_verify(CucumberLabel.new("CEFAZOLIN INJ in SODIUM CHLORIDE 0.9% INJ Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_164_10717"))
+    add_verify(CucumberLabel.new("DIGOXIN TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("FUROSEMIDE TAB Fillable"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #fillable_urn_va_med_SITE_164_9584"))
   end
 end
 
@@ -165,23 +133,23 @@ class MedReviewAppletDetailsView < ADKContainer
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("Med Name_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #qualifiedName-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Sig_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #med-summary-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Status_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #status_urn_va_med_9E7A_271_17220"))
+    add_verify(CucumberLabel.new("Med Name_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #qualifiedName-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Sig_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #med-summary-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Status_Warfarin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #status_urn_va_med_SITE_271_17220"))
 
-    add_verify(CucumberLabel.new("Med Name_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #qualifiedName-urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("Sig_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #med-summary-urn_va_med_9E7A_164_9583"))
-    add_verify(CucumberLabel.new("Status_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #status_urn_va_med_9E7A_164_9583"))
+    add_verify(CucumberLabel.new("Med Name_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #qualifiedName-urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("Sig_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #med-summary-urn_va_med_SITE_164_9583"))
+    add_verify(CucumberLabel.new("Status_Digoxin"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #status_urn_va_med_SITE_164_9583"))
 
-    add_verify(CucumberLabel.new("Prescription No. Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #prescription-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Supply Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #supply-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Dose/Schedule Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #dose-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Provider Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #provider-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Pharmacist Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #pharmacist-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Location Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #location-label-urn_va_med_9E7A_271_17220"))
-    add_verify(CucumberLabel.new("Facility Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #facility-label-urn_va_med_9E7A_271_17220"))
+    add_verify(CucumberLabel.new("Prescription No. Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #prescription-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Supply Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #supply-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Dose/Schedule Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #dose-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Provider Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #provider-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Pharmacist Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #pharmacist-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Location Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #location-label-urn_va_med_SITE_271_17220"))
+    add_verify(CucumberLabel.new("Facility Label"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #facility-label-urn_va_med_SITE_271_17220"))
 
-    add_verify(CucumberLabel.new("Med Review Details Values"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-detail-urn_va_med_9E7A_271_17220"))
+    add_verify(CucumberLabel.new("Med Review Details Values"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='medication_review'] #order-detail-urn_va_med_SITE_271_17220"))
   end
 end
 
@@ -204,11 +172,29 @@ When(/^user selects Meds Review from drop down menu$/) do
   expect(aa.perform_action("Meds Review", "")).to be_true, "Could not click on Med Review link"
 end
 
-When(/^user navigates to Meds Review Applet$/) do
-  navigate_in_ehmp "#medication-review"
-  aa = MedReviewApplet.instance
-  expect(aa.wait_until_action_element_visible("Applet Title", DefaultLogin.wait_time * 4)).to be_true
-  MedReviewApplet.instance.clear_filter
+When(/^user navigates to Meds Review Applet$/) do  
+  ehmp = PobMedsReview.new
+  ehmp.load
+  expect(ehmp).to be_displayed
+  medication_review_loaded?
+  
+  # remove filters if any applied
+  ehmp.wait_for_btn_applet_remove_filters(1)
+  if ehmp.has_btn_applet_remove_filters?
+    ehmp.btn_applet_remove_filters.click
+    # once we remove filters, the applet needs to reload 
+    medication_review_loaded? 
+  end
+end
+
+def medication_review_loaded?  
+  ehmp = PobMedsReview.new
+  expect(ehmp.wait_for_fld_inpatient_meds_group).to eq(true)
+  expect(ehmp.wait_for_fld_outpatient_meds_group).to eq(true)
+  expect(ehmp.wait_for_fld_clinic_order_meds_group).to eq(true)
+  
+  ehmp.menu.wait_until_fld_screen_name_visible
+  expect(ehmp.menu.fld_screen_name.text.upcase).to have_text("Medication Review".upcase)
 end
 
 Then(/^the title of the page says "(.*?)" in Meds Review Applet$/) do |title|
@@ -217,17 +203,14 @@ Then(/^the title of the page says "(.*?)" in Meds Review Applet$/) do |title|
   expect(aa.perform_verification("Applet Title", title)).to be_true, "Title does not say MEDICATION REVIEW"
 end
 
-Then(/^user sees "(.*?)" and "(.*?)" in Meds Review Applet$/) do |outpatient_group, inpatient_group|
+Then(/^user sees "(.*?)" and "(.*?)" and "(.*?)" in Meds Review Applet$/) do |outpatient_group, inpatient_group, clinic_group|
   @ehmp = PobMedsReview.new
   @ehmp.wait_for_fld_inpatient_meds_group
+  @ehmp.wait_for_fld_clinic_order_meds_group
   @ehmp.wait_for_fld_outpatient_meds_group
   expect(@ehmp).to have_fld_inpatient_meds_group
   expect(@ehmp).to have_fld_outpatient_meds_group
-  # aa = MedReviewApplet.instance
-  # expect(aa.wait_until_action_element_visible(outpatient_group, DefaultLogin.wait_time)).to be_true
-  # expect(aa.wait_until_action_element_visible(inpatient_group, DefaultLogin.wait_time)).to be_true
-  # expect(aa.perform_verification(outpatient_group, "OUTPATIENT MEDS")).to be_true, "Outpatient group does not exist"
-  # expect(aa.perform_verification(inpatient_group, "INPATIENT MEDS")).to be_true, "Inpatient group does not exist"
+  expect(@ehmp).to have_fld_clinic_order_meds_group
 end
 
 When(/^user expands "(.*?)" in Meds Review Applet$/) do |med_group_name|
@@ -240,14 +223,12 @@ When(/^user expands "(.*?)" in Meds Review Applet$/) do |med_group_name|
 end
 
 Then(/^"(.*?)" summary view contains headers in Meds Review Applet$/) do |med_group_name, table|
-  ma = MedReviewApplet.instance
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  # expect(ma.wait_until_action_element_visible(med_group_name, 30)).to be_true
-  patient_type = med_group_name.split(" ")
-  p patient_type[0]
-  expected_headers = table.headers
-  for i in 0...expected_headers.length
-    expect(aa.perform_verification(patient_type[0] + " " + expected_headers[i] + " Header", expected_headers[i].upcase, DefaultTiming.default_table_row_load_time)).to be_true, "#{expected_headers[i]} header does not exist"
+  applet = PobMedsReview.new
+  applet.section_header_elements med_group_name
+  applet.wait_for_section_headers
+  header_text = applet.section_headers.map { |header| header.text.upcase.sub('SORTABLE COLUMN', '').strip }
+  table.headers.each do | header |
+    expect(header_text).to include header.upcase
   end
 end
 
@@ -259,118 +240,6 @@ Then(/^"(.*?)" summary view contains medications in Meds Review Applet$/) do |me
     expect(aa.perform_verification(row[0] +" Name", row[0])).to be_true, "The value #{row[0]} is not present in the Medication Name column"
     expect(aa.perform_verification(row[0] + " Sig", row[1])).to be_true, "The value #{row[1]} is not present in the Sig column"
     expect(aa.perform_verification(row[0] + " Fillable", row[2])).to be_true, "The value #{row[0]} #{row[2]} is not present in the Fillable column"
-  end
-end
-
-Then(/^the medication detail header section in Meds Review Applet contains$/) do |table|
-  aa = MedReviewAppletDetailsView.instance
-  table.rows.each do |row|
-    expect(aa.perform_verification(row[0], row[1])).to be_true, "The value #{row[1]} is not present in the Medication Detail View"
-  end
-end
-
-Then(/^medication detail description section in Meds Review Applet contains$/) do |table|
-  aa = MedReviewAppletDetailsView.instance
-  table.rows.each do |row|
-    expect(aa.perform_verification(row[0] + " Label", row[0])).to be_true, "The Label #{row[0]} is not present in the Medication Detail View"
-    expect(aa.perform_verification("Med Review Details Values", row[1])).to be_true, "The Value #{row[1]} is not present in the Medication Detail View"
-  end
-end
-
-Then(/^the medication detail fill history section in Meds Review Applet contains$/) do |table|
-  aa = MedReviewAppletDetailsView.instance
-  verify_table_rows_med_review(table)
-end
-
-def verify_table_rows_med_review(table)
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.compare_specific_row(table, '#history-table-urn_va_med_9E7A_271_17220') }
-end
-
-When(/^user clicks on the column header "(.*?)" in Med Review Applet$/) do |name_column_header|
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  expect(aa.wait_until_action_element_visible(name_column_header + " Header", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action(name_column_header + " Header Sort", "")).to be_true
-end
-
-Then(/^"(.*?)" column is sorted in ascending order in Med Review Applet$/) do |column_name|
-  driver = TestSupport.driver
-  column_values_array = []
-
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  expect(aa.wait_until_action_element_visible("Outpatient " + column_name + " Header", DefaultLogin.wait_time)).to be_true
-
-  case column_name
-  when 'Name'
-    element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-3.outpatientMedItemName')
-  when 'Sig'
-    element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-2.outpatientMedItemSig')
-  else
-    fail "**** No function found! Check your script ****"
-  end
-
-  element_column_values.each do |row|
-    #    print "selenium data ----"
-    #    p row.text
-    column_values_array << row.text.downcase
-    # sorted_array_empty_string_removed
-    column_values_array -= [""]
-  end
-
-  (column_values_array == column_values_array.sort { |x, y| x <=> y }).should == true
-
-end
-
-Then(/^"(.*?)" column is sorted in descending order in Med Review Applet$/) do |column_name|
-  driver = TestSupport.driver
-  column_values_array = []
-
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  expect(aa.wait_until_action_element_visible("Outpatient " + column_name + " Header", DefaultLogin.wait_time)).to be_true
-
-  case column_name
-  when 'Name'
-    element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-5.outpatientMedItemName')
-  when 'Sig'
-    element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-2.outpatientMedItemSig')
-  else
-    fail "**** No function found! Check your script ****"
-  end
-
-  element_column_values.each do |row|
-    #    print "selenium data ----"
-    #    p row.text
-    column_values_array << row.text.downcase
-    column_values_array -= [""]
-  end
-
-  (column_values_array == column_values_array.sort { |x, y| y <=> x }).should == true
-end
-
-Then(/^"(.*?)" column is sorted in "(.*?)" order in Med Review Applet$/) do |column_name, _sort_type, table|
-  driver = TestSupport.driver
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  expect(aa.wait_until_action_element_visible("Outpatient " + column_name + " Header", DefaultLogin.wait_time)).to be_true
-
-  element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-1.outpatientMedItemTime')
-  column_values_array = []
-
-  element_column_values.each do |row|
-    #    print "selenium data ----"
-    #    p row.text
-    column_values_array << row.text.downcase
-  end
-
-  cucumber_array = table.headers
-  (column_values_array == cucumber_array).should == true
-end
-
-Then(/^OrderHx date range shows$/) do |table|
-  aa = MedReviewApplet.instance
-  i = 1
-  table.rows.each do |row|
-    expect(aa.perform_verification("Order Hx Date Range #{i}", row[0])).to be_true, "The orderHx #{row[0]} is not present in the Medication Detail View"
-    i += 1
   end
 end
 
@@ -387,93 +256,33 @@ Then(/^the user types "(.*?)" in search box of the Meds Review Applet$/) do |sea
   expect(aa.perform_action("Control - applet - Text Filter", search_field)).to be_true  
 end
 
-Then(/^user selects the "(.*?)" detail icon in Meds Review Applet$/) do |arg1|
-  aa = MedReviewApplet.instance
-  label = "#{arg1} detail icon"
-  expect(aa.perform_action(label)).to be_true
-end
-
-Then(/^"(.*?)" column is sorted in default sorting order in Med Review Applet$/) do |column_name, table|
-  driver = TestSupport.driver
-  aa = MedReviewAppletSummaryDetailsHeader.instance
-  expect(aa.wait_until_action_element_visible("Outpatient " + column_name + " Header", DefaultLogin.wait_time)).to be_true
-
-  element_column_values = driver.find_elements(css: '#medication_review-medication-list-items .col-sm-5.outpatientMedItemName')
-  column_values_array = []
-
-  element_column_values.each do |row|
-    print "selenium data ----"
-    p row.text
-    column_values_array << row.text.downcase
-    column_values_array -= [""]
-  end
-
-  cucumber_array = []
-  table.rows.each do |row|
-    cucumber_array << row[0]
-  end
-
-  (column_values_array == cucumber_array).should == true
-end
-
-def status_num(element)
-  # p element.attribute('title')
-  title = element.attribute('title').downcase
-  return 0 if title.include? 'active'
-  return 1 if title.include? 'pending'
-  return 2 if title.include? 'expired' # pending
-  return 3 if title.include? 'discontinued'
-  return 4
-end
-
-Then(/^the Outpatient Status column is sorted in default sorting order in Med Review Applet$/) do
-  driver = TestSupport.driver
-  elements = driver.find_elements(css: '#medsReviewApplet_mainContentArea_listArea_OUTPATIENTMedications_medication_review div.MedItemFillable span')
-  last_element_num = 0
-  elements.each do |element|
-    element.location_once_scrolled_into_view
-    current_element_num = status_num element
-
-    is_element_greater = current_element_num >= last_element_num
-    expect(is_element_greater).to be_true
-
-    last_element_num = current_element_num
-  end # row_elements.each
-
-end
-
 Then(/^Inpatient Meds Group summary view displays medications$/) do
-  med_reivew_applet = MedReviewApplet.instance
-  expect(med_reivew_applet.wait_until_xpath_count_greater_than('Inpatient Med Rows', 0)).to eq(true), "Expected Inpatient Meds to display more then 0 rows"
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_inpatient_meds_rows
+  expect(ehmp.fld_inpatient_meds_rows.length). to be > 0, "Inpatient Meds group doesn't display any medications"
 end
 
 Then(/^Outpatient Meds Group summary view displays medications$/) do
-  med_reivew_applet = MedReviewApplet.instance
-  expect(med_reivew_applet.wait_until_xpath_count_greater_than('Outpatient Med Rows', 0)).to eq(true), "Expected Outpatient Meds to display more then 0 rows"
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_med_rows
+  expect(ehmp.fld_outpatient_med_rows.length). to be > 0, "Outpatient Meds group doesn't display any medications"
 end
 
 Then(/^the user filters the Medication Review Applet by text "([^"]*)"$/) do |input_text|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  med_reivew_applet = MedReviewApplet.instance
-
-  in_row_count = med_reivew_applet.get_elements('Inpatient Med Rows').size
-  out_row_count = med_reivew_applet.get_elements('Outpatient Med Rows').size
-
-  expect(med_reivew_applet.perform_action('Control - applet - Text Filter', input_text)).to eq(true)
-  wait.until { in_row_count != med_reivew_applet.get_elements("Inpatient Med Rows").size || out_row_count != med_reivew_applet.get_elements("Outpatient Med Rows").size }
+  ehmp = PobMedsReview.new
+  row_count = ehmp.fld_outpatient_med_rows.length
+  ehmp.wait_until_fld_applet_text_filter_visible
+  expect(ehmp).to have_fld_applet_text_filter
+  ehmp.fld_applet_text_filter.set input_text
+  ehmp.fld_applet_text_filter.native.send_keys(:enter)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { row_count != ehmp.fld_outpatient_med_rows.length }
 end
 
-Then(/^the Medication Review table only diplays rows including text "([^"]*)"$/) do |input_text|
-  @ehmp = PobMedsReview.new
-  @ehmp.wait_for_fld_med_review_applet_rows(30)
-  expect(object_exists_in_list(@ehmp.fld_med_review_applet_rows, input_text)).to be true
-end
-
-When(/^the Meds Review Applet contains data rows$/) do
-  meds_review = MedReviewApplet.instance
-  med_items = AccessHtmlElement.new(:css, "[data-appletid='medication_review'] [class='panel-heading meds-item']")
-  meds_review.add_verify(CucumberLabel.new("Number of Medications"), VerifyXpathCount.new(med_items), med_items)
-  expect(meds_review.wait_until_xpath_count_greater_than("Number of Medications", 0)).to be_true
+Then(/^the Medication Review table only diplays rows including text "([^"]*)"$/) do |input_text|    
+  ehmp = PobMedsReview.new
+  ehmp.wait_until_fld_outpatient_med_rows_visible
+  expect(only_text_exists_in_list(ehmp.fld_outpatient_med_rows, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
 end
 
 When(/^user refreshes Meds Review Applet$/) do
@@ -499,10 +308,6 @@ When(/^the user views the details of an inpatient med$/) do
   begin
     @ehmp.wait_for_fld_inpatient_meds_rows
     @ehmp.fld_inpatient_meds_rows.first.click
-    @ehmp.wait_for_fld_toolbar
-    expect(@ehmp).to have_fld_toolbar
-    expect(@ehmp).to have_btn_detail_view
-    @ehmp.btn_detail_view.click
   rescue => e
     attempt -=1
     retry if attempt > 1
@@ -517,10 +322,6 @@ When(/^the user views the details of an outpatient med$/) do
   begin
     @ehmp.wait_for_fld_outpatient_med_rows
     @ehmp.fld_outpatient_med_rows.first.click
-    @ehmp.wait_for_fld_toolbar
-    expect(@ehmp).to have_fld_toolbar
-    expect(@ehmp).to have_btn_detail_view
-    @ehmp.btn_detail_view.click
   rescue => e
     attempt -= 1
     retry if attempt > 1
@@ -542,4 +343,143 @@ Given(/^the Meds Review applet displays at least (\d+) outpatient medication$/) 
   @ehmp.wait_for_fld_outpatient_med_rows
   expect(@ehmp.fld_outpatient_med_rows.length). to be >= num.to_i
 end
+
+Then(/^the workspace title and category group texts are displayed correctly$/) do 
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_inpatient_meds_group
+  ehmp.wait_for_fld_clinic_order_meds_group
+  ehmp.wait_for_fld_outpatient_meds_group
+  expect(ehmp.fld_outpatient_meds_group.text.upcase).to have_text("outpatient and non-va".upcase)
+  expect(ehmp.fld_clinic_order_meds_group.text.upcase).to have_text("clinic order".upcase)
+  expect(ehmp.fld_inpatient_meds_group.text.upcase).to have_text("inpatient".upcase)
+  expect(ehmp.menu.fld_screen_name.text.upcase).to have_text("Medication Review".upcase)
+end
+
+Then(/^Outpatient Meds Group is also expanded$/) do 
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_meds_group
+  ehmp.wait_for_fld_outpatient_meds_group_expanded
+  expect(ehmp).to have_fld_outpatient_meds_group_expanded
+end
+
+Given(/^Medication Review applet is loaded successfully$/) do
+  ehmp = PobMedsReview.new
+  medication_review_loaded?
+end
+
+When(/^user sorts the Medication Review applet by column header Name$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_until_btn_name_header_visible
+  expect(ehmp).to have_btn_name_header
+  ehmp.btn_name_header.click
+end
+
+Then(/^the Medication Review applet is sorted in alphabetic order based on column Name$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_med_rows
+     
+  column_values = ehmp.fld_outpatient_med_rows
+  expect(column_values.length).to be >= 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Medication Review applet is sorted in reverse alphabetic order based on column Name$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_med_rows
+    
+  column_values = ehmp.fld_outpatient_med_rows
+  expect(column_values.length).to be >= 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end
+
+When(/^user sorts the Medication Review applet by column header Sig$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_until_btn_sig_header_visible
+  expect(ehmp).to have_btn_sig_header
+  ehmp.btn_sig_header.click
+end
+
+Then(/^the Medication Review applet is sorted in alphabetic order based on column Sig$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_sig_rows
+     
+  column_values = ehmp.fld_outpatient_sig_rows
+  expect(column_values.length).to be >= 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Medication Review applet is sorted in reverse alphabetic order based on column Sig$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_sig_rows
+    
+  column_values = ehmp.fld_outpatient_sig_rows
+  expect(column_values.length).to be >= 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end
+
+When(/^user sorts the Medication Review applet by column header Facility$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_until_btn_facility_header_visible
+  expect(ehmp).to have_btn_facility_header
+  ehmp.btn_facility_header.click
+end
+
+Then(/^the Medication Review applet is sorted in alphabetic order based on column Facility$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_facility_rows
+     
+  column_values = ehmp.first_facility_grouped("outpatient-applet")
+  expect(column_values.length).to be >= 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Medication Review applet is sorted in reverse alphabetic order based on column Facility$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_outpatient_facility_rows
+    
+  column_values = ehmp.first_facility_grouped("outpatient-applet")
+  expect(column_values.length).to be >= 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end
+
+When(/^user hovers over the medication review applet row$/) do
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_fld_med_review_applet_rows
+  expect(ehmp).to have_fld_med_review_applet_rows
+  rows = ehmp.fld_med_review_applet_rows
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+Given(/^user can view the Quick Menu Icon in medication review applet$/) do
+  ehmp = PobMedsReview.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in medication review applet$/) do
+  ehmp = PobMedsReview.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in medication review applet$/) do
+  ehmp = PobMedsReview.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the medication review applet$/) do |table|
+  ehmp = PobMedsReview.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+When(/^user selects the detail view from Quick Menu Icon of medication review applet$/) do
+  ehmp = PobMedsReview.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+
 

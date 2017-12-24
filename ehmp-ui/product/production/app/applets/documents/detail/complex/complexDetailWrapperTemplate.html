@@ -172,11 +172,7 @@
 		                <td>{{formatDate dateTime "MM/DD/YYYY - HH:mm"}}</td>
 		                <td>{{name}}</td>
 		                <td>{{responsible}}</td>
-		                {{#if note}}
-						<td>{{note}}</td>
-						{{else}}
-						<td></td>
-						{{/if}}
+		                <td>{{#if note}}{{note}}{{else if comment}}{{comment}}{{/if}}</td>
 		            </tr>
 		            {{/each}}
 		        </tbody>

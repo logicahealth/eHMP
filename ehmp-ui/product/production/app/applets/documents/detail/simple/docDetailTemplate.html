@@ -55,7 +55,7 @@
 				<h5 class="bottom-border-grey-dark">Results</h5>
 			</div>
 			{{#each results}} {{#if report}}
-			<button type="button" class="detail-result-link btn btn-link btn-sm bottom-margin-lg" data-doc-uid="{{../../uid}}" title="Press enter to view results">{{localTitle}}</button>
+			<button type="button" class="detail-result-link btn btn-link btn-sm bottom-margin-lg" data-doc-uid="{{../../uid}}" aria-label="View results for {{localTitle}}">{{localTitle}}</button>
 			{{/if}} {{/each}}
 			{{#each results}} {{#if report}}
 			<pre class="result-doc" data-doc-uid="{{../../uid}}">{{report}}</pre>

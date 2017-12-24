@@ -1,6 +1,6 @@
 {
   "name": "solr-smart-client",
-  "version": "2.0.2",
+  "version": "2.3.0",
   "description": "Solr Client for SolrCloud.  Utilizes Zookeeper information determine Solr configuration and optimize calls.",
   "main": "solr-smart-client.js",
   "scripts": {
@@ -16,7 +16,8 @@
   "dependencies": {
     "node-zookeeper-client": "^0.2.2",
     "solr-client": "^0.5.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "jasmine-node": "^1.14.5",

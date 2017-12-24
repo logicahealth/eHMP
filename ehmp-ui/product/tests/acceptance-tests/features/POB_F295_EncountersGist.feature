@@ -1,4 +1,4 @@
-@F295_encounters_trend_view  @reg1
+@F295_encounters_trend_view @applet_encounters @reg1
 Feature: F295 - Encounters Applet
 
 @pob_f295_encounters_initial_view @F295-1.1 @F295-1.2 @F295-1.3 @F295_4 @F295-1.5 @F295-1.7 @US3706 @US4001 @US4154 @US5126

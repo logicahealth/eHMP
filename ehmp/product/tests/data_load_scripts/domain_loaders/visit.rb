@@ -9,7 +9,7 @@ patient_id = "100841" # alpha test
 #------------------------------------
 
 
-@broker = VistaRPC4r::RPCBrokerConnection.new(serve_ip, 9210, "pr12345", "pr12345!!", false)
+@broker = VistaRPC4r::RPCBrokerConnection.new(serve_ip, PORT, "USER   ", "PW       ", false)
 @broker.connect
 @broker.setContext('OR CPRS GUI CHART')
 

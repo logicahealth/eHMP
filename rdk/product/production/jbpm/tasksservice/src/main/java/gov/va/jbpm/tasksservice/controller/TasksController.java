@@ -49,7 +49,7 @@ public class TasksController {
 		String uri = request.getRequestURI()+StringUtils.defaultIfEmpty(request.getQueryString(),"");
 		String method = request.getMethod();
 		//Log the Incoming Request
-		LOGGER.info(RequestMessageType.INCOMING_REQUEST + " " + method + " " + uri );
+		LOGGER.info(String.format("%s %s %s", RequestMessageType.INCOMING_REQUEST, method, uri));
 
 		TasksResponse taskResponse = new TasksResponse();  //Default value
 		try {
@@ -75,7 +75,7 @@ public class TasksController {
 			String url =  instanceUrl + "/rest/query/runtime/task?taskId=" + taskId;
 
 			//Log the Outgoing Request
-			LOGGER.info(RequestMessageType.OUTGOING_REQUEST + " " +  HttpMethod.POST + " " + url );
+			LOGGER.info(String.format("%s %s %s", RequestMessageType.OUTGOING_REQUEST,  HttpMethod.POST, url));
 
 			ResponseEntity<TaskDetail> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, TaskDetail.class);
 			
@@ -83,7 +83,7 @@ public class TasksController {
 			Task task = TaskUtils.transformTaskDetailToTask(taskDetail);
 
 			//Log the Incoming Response
-			LOGGER.info(RequestMessageType.INCOMING_RESPONSE +  " Task : "+task.getTaskInfoList() );
+			LOGGER.info(String.format("%s Task : %s",RequestMessageType.INCOMING_RESPONSE ,task.getTaskInfoList()));
 			
 			if (task.getTaskInfoList() != null && !task.getTaskInfoList().isEmpty()) {
 				Base64.Decoder dec = Base64.getDecoder();
@@ -125,15 +125,15 @@ public class TasksController {
 			
 			taskResponse = TaskUtils.transformToTasksResponse(task);
 		} catch (RestClientException e) {
-			LOGGER.error("TasksController.getTaskById: An unexpected condition has happened with rest: " + e.getMessage(), e);
+			LOGGER.error(String.format("TasksController.getTaskById: An unexpected condition has happened with rest: %s", e.getMessage()), e);
 		} catch (TaskServiceException e) {
-			//Error was already logged
+			LOGGER.error(String.format("TasksController.getTaskById: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("TasksController.getTaskById: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("TasksController.getTaskById: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 		finally{
 			//Log the Outgoing Response
-			LOGGER.info(RequestMessageType.OUTGOING_RESPONSE +  " TASKID : " + taskId );
+			LOGGER.info(String.format("%s TASKID : %d", RequestMessageType.OUTGOING_RESPONSE, taskId ));
 		}
 		return taskResponse;			
 	}

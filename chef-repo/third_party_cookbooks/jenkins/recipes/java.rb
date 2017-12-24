@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # Recipe:: java
 #
 # Author: Seth Vargo <sethvargo@chef.io>
 #
-# Copyright 2014-2016, Chef Software, Inc.
+# Copyright:: 2014-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,11 @@ Chef::Log.warn('The jenkins::java recipe has been deprecated. We recommend addin
 
 case node['platform_family']
 when 'debian'
-  package 'openjdk-8-jdk'
+  if node['platform'] == 'ubuntu' && Chef::VersionConstraint.new('>= 15.10').include?(node['platform_version'])
+    package 'openjdk-8-jdk'
+  else
+    package 'openjdk-7-jdk'
+  end
 when 'rhel'
   package 'java-1.8.0-openjdk'
 else

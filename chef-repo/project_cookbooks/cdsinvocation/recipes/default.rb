@@ -12,3 +12,5 @@ include_recipe "cdsinvocation::import_cert"
 include_recipe "cdsinvocation::configure_war"
 
 include_recipe "cdsinvocation::deploy_artifacts"
+
+include_recipe "cdsinvocation::nerve"

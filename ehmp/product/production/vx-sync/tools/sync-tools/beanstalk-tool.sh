@@ -122,7 +122,7 @@ set_vars () {	## Create variables for the script
 
 	# Define TUBE Array
 		# Get data for the array
-		curl -s "http://"$vxsync_ip":9999/beanstalk/stats-tube" | python -c "import sys, json; print json.dumps(json.load(sys.stdin).keys(), indent=4)" > "$tools_dir"/tmp/tubes.tmp
+		curl -s "http://"$vxsync_ip":PORT/beanstalk/stats-tube" | python -c "import sys, json; print json.dumps(json.load(sys.stdin).keys(), indent=4)" > "$tools_dir"/tmp/tubes.tmp
 		sed -i '1d;$d' "$tools_dir"/tmp/tubes.tmp  #Remove first and last line
 		sed -i 's/,//g' "$tools_dir"/tmp/tubes.tmp  #Remove all commas
 		sed -i "s/\"/'/g" "$tools_dir"/tmp/tubes.tmp #Replace all double quotes with single quotes
@@ -139,7 +139,7 @@ get_data () {		# Get updated statistics
 	echo -n ""$ts"|" >> "$hist_dir"/"$dy"_time_stamp.tmp
 
 	# Get stats and save to tmpfile
-	curl -s "http://"$vxsync_ip":9999/beanstalk/stats-tube" | python -m json.tool > "$tmpfile"
+	curl -s "http://"$vxsync_ip":PORT/beanstalk/stats-tube" | python -m json.tool > "$tmpfile"
 
 	for tube in "${tube_array[@]}"
 	do	buried_jobs=`python -c "import sys, json; print json.load(sys.stdin)["$tube"]['current-jobs-buried']" < "$tmpfile"`
@@ -150,14 +150,14 @@ get_data () {		# Get updated statistics
 
 get_stats () {		# Get Beanstalk Stats
 	# Get stats and print to screen
-	curl -s "http://"$vxsync_ip":9999/beanstalk/stats" | jq .[]
+	curl -s "http://"$vxsync_ip":PORT/beanstalk/stats" | jq .[]
 }
 
 list_tubes () {		# List all Beanstalk Tubes
 	case "$print_tubes" in
 		ubes )	# Print list of tubes with option to see more details on one
 				# Get tubes and print to screen
-				curl -s "http://"$vxsync_ip":9999/beanstalk/list-tubes" | jq .[] | sort | tr -d '"' > "$tools_dir"/tmp/list-raw.txt
+				curl -s "http://"$vxsync_ip":PORT/beanstalk/list-tubes" | jq .[] | sort | tr -d '"' > "$tools_dir"/tmp/list-raw.txt
 				line_num=1
 				while read line
 				do	echo -e "("$blue""$line_num""$reset") "$line"" >> "$tools_dir"/tmp/nbrd_list.txt
@@ -171,7 +171,7 @@ list_tubes () {		# List all Beanstalk Tubes
 				if [ "$choice" ];
 				then 	chosen_tube=`sed -n "$choice"p "$tools_dir"/tmp/list-raw.txt`
 						echo ""
-						curl -s "http://"$vxsync_ip":9999/beanstalk/stats-tube/"$chosen_tube"" | jq .[]
+						curl -s "http://"$vxsync_ip":PORT/beanstalk/stats-tube/"$chosen_tube"" | jq .[]
 						echo ""
 						echo -en "press "$blue"ENTER"$reset" to continue: "
 						read nothing
@@ -184,10 +184,10 @@ list_tubes () {		# List all Beanstalk Tubes
 				rm -rf "$tools_dir"/tmp/list-raw.txt
 				;;
 		ubesall )	# Print details on all tubes
-				curl -s "http://"$vxsync_ip":9999/beanstalk/stats-tube" | jq .[]
+				curl -s "http://"$vxsync_ip":PORT/beanstalk/stats-tube" | jq .[]
 				;;
 		* )		# Print details on specific tube
-				curl -s "http://"$vxsync_ip":9999/beanstalk/stats-tube"/"$print_tubes" | jq .
+				curl -s "http://"$vxsync_ip":PORT/beanstalk/stats-tube"/"$print_tubes" | jq .
 				;;
 	esac
 }
@@ -299,7 +299,7 @@ kick_jobs () {		# Kick buried jobs
 	case "$kick" in
 		ick )
 				# Kick ALL buried jobs
-				curl -s "http://"$vxsync_ip":9999/beanstalk/kick"
+				curl -s "http://"$vxsync_ip":PORT/beanstalk/kick"
 				# Append time_stamp file with Kick comment
 				echo -n ""$ts"|" >> "$hist_dir"/"$dy"_time_stamp.tmp
 				echo ""
@@ -318,7 +318,7 @@ kick_jobs () {		# Kick buried jobs
 						IFS=',' read -r -a jobs_array <<< "$kick"
 						for job in "${jobs_array[@]}"
 						do
-							curl -s "http://"$vxsync_ip":9999/beanstalk/kick/"$job""
+							curl -s "http://"$vxsync_ip":PORT/beanstalk/kick/"$job""
 							echo " "$job""
 						done
 						# Append time_stamp file with Kick comment
@@ -334,7 +334,7 @@ kick_jobs () {		# Kick buried jobs
 							fi
 						done
 				else 	# Found only one job
-						curl -s "http://"$vxsync_ip":9999/beanstalk/kick/"$kick""
+						curl -s "http://"$vxsync_ip":PORT/beanstalk/kick/"$kick""
 					    echo " "$kick""
 						# Append time_stamp file with Kick comment
 						echo -n ""$ts"|" >> "$hist_dir"/"$dy"_time_stamp.tmp
@@ -356,7 +356,7 @@ kick_jobs () {		# Kick buried jobs
 nokick_jobs () {		# Kick buried jobs except the tube specified
 
 	# Get list of tubes and store in tmp file
-	curl -s "http://"$vxsync_ip":9999/beanstalk/list-tubes" | jq .[] | sort | tr -d '"' > "$tools_dir"/tmp/tube-list-raw.txt
+	curl -s "http://"$vxsync_ip":PORT/beanstalk/list-tubes" | jq .[] | sort | tr -d '"' > "$tools_dir"/tmp/tube-list-raw.txt
 	# Append time_stamp file with Kick comment
 	echo -n ""$ts"|" >> "$hist_dir"/"$dy"_time_stamp.tmp
 
@@ -364,7 +364,7 @@ nokick_jobs () {		# Kick buried jobs except the tube specified
 	while read line
 	do		# Test line
 			if [[ "$line" != "$nokick"* ]];
-			then 	curl -s "http://"$vxsync_ip":9999/beanstalk/kick/"$line""
+			then 	curl -s "http://"$vxsync_ip":PORT/beanstalk/kick/"$line""
 				    echo " "$line""
 					# Update history files
 					echo -n "kick|" >> "$hist_dir"/"$line".tmp

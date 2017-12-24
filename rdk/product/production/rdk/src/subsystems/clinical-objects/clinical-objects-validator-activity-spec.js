@@ -13,8 +13,8 @@ describe('activity clinical object validator', function() {
         late.setDate(late.getDate() + 4);
 
         json = {
-            'patientUid': 'urn:va:patient:9E7A:3:3',
-            'authorUid': 'urn:va:user:9E7A:123',
+            'patientUid': 'urn:va:patient:SITE:3:3',
+            'authorUid': 'urn:va:user:SITE:123',
             'domain': 'ehmp-activity',
             'subDomain': 'request',
             'visit': {

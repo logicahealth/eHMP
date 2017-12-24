@@ -49,7 +49,7 @@ def update_out_response(action)
   out_response['taskInstanceId'] = @processinstanceid
   out_response['action'] = action
   out_response['request'] = 'test request'
-  out_response['submittedByUid'] = "urn:va:user:9E7A:#{@activity_user_id}"
+  out_response['submittedByUid'] = "urn:va:user:SITE:#{@activity_user_id}"
   out_response['submittedByName'] = ''
   out_response['submittedTimeStamp'] = "#{timestamp}"
   out_response['earliestDate'] = "#{earliest}"

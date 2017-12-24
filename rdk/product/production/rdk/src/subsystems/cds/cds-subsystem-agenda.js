@@ -20,10 +20,19 @@ var logger;
 var dbName = '_cds_agenda_';
 var jobProcessorName = 'sendRequest';
 
+var logger = {
+    trace: function() {},
+    debug: function() {},
+    info: function() {},
+    warn: function() {},
+    error: function() {},
+    fatal: function() {}
+};
+
 function init(app, subsystemLogger) {
    logger = subsystemLogger;
     if (!_.isUndefined(app, 'config.cdsMongoServer')) {
-        app.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+        app.subsystems.cds.getCDSDB(logger, dbName, null, function(error, dbConnection) {
             if (!error) {
                 initDb(app, dbConnection);
                 cdsSchedule.init(app);

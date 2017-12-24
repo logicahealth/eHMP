@@ -1,8 +1,10 @@
 define([
     'handlebars',
+    'main/ui_components/form/control/controlService',
     'main/ui_components/form/controls/_input'
 ], function(
     Handlebars,
+    ControlService,
     BaseInputControl
 ) {
     'use strict';
@@ -17,7 +19,7 @@ define([
             minimumInputLength: 1,
             buttonOptions: {}
         },
-        template: Handlebars.compile('{{ui-form-searchbar placeholder size=size value=value title=title helpMessage=helpMessage required=required buttonOptions=buttonOptions id=name icon=icon}}'),
+        template: Handlebars.compile('{{ui-form-searchbar placeholder size=size value=value title=title helpMessage=helpMessage required=required buttonOptions=buttonOptions id=name icon=icon label=label instructions=instructions}}'),
         events: _.defaults({
             "focus input": "clearInvalid",
             "click .clear-input-btn": "clearInput",
@@ -31,7 +33,13 @@ define([
             clearBtn: '.clear-input-btn',
             searchBtn: 'button:last-of-type'
         },
-        onBeforeShow: function() {
+        behaviors: _.defaults({
+            UpdateUiElements: {
+                behaviorClass: ControlService.Behaviors.UpdateUiElements
+            },
+            Tooltip: {}
+        }, BaseInputControl.prototype.behaviors),
+        onRender: function() {
             this.searchBtnEnable();
         },
         clearInput: function() {
@@ -39,8 +47,8 @@ define([
             this.ui.clearBtn.addClass('hidden');
             this.searchBtnEnable();
         },
-        clearBtnDisplay: function(){
-            if(this.ui.input.val()){
+        clearBtnDisplay: function() {
+            if (this.ui.input.val()) {
                 this.ui.clearBtn.removeClass('hidden');
             } else {
                 this.ui.clearBtn.addClass('hidden');

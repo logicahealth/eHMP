@@ -5,7 +5,7 @@
  @F361_patient @US5108 @DE3161
  Scenario: Client can request demographics in FHIR format
      Given a patient with "demographics" in multiple VistAs
-     When the client requests demographics for that patient "9E7A;229"
+     When the client requests demographics for that patient "SITE;229"
      Then a successful response is returned
      And the results contain
      	  | field 					          	            | value                    				                    |

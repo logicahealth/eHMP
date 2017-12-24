@@ -3,6 +3,19 @@
 var _ = require('lodash');
 var async = require('async');
 var handler = require('./pick-list-in-memory-rpc-call');
+var bunyan = require('bunyan');
+
+var req = {
+    app: require('./pick-list-config-mock'),
+    param: null
+};
+var logger = sinon.stub(bunyan.createLogger({
+    name: 'test-logger'
+}));
+req.logger = logger;
+req.app.logger = sinon.stub(bunyan.createLogger({
+    name: 'test-logger'
+}));
 
 function replaceArrayContents(array, newContents) {
     array.splice(0, array.length); // delete previous contents
@@ -13,12 +26,9 @@ function replaceArrayContents(array, newContents) {
 
 describe('in-memory pick-list handler', function() {
     it('responds with the correct error for a missing required parameter when passed null', function(done) {
-        var req = {
-            param: function(x) {
+        req.param = function(x) {
                 return null;
-            }
         };
-
         handler.inMemoryRpcCall(req, null, 'people-for-facility', function(err) {
             expect(err).to.be('Parameter \'facilityID\' cannot be null or empty');
             done();
@@ -26,10 +36,8 @@ describe('in-memory pick-list handler', function() {
     });
 
     it('responds with the correct error for an empty required parameter when passed emptystring', function(done) {
-        var req = {
-            param: function(x) {
-                return '';
-            }
+        req.param = function(x) {
+            return '';
         };
 
         handler.inMemoryRpcCall(req, null, 'people-for-facility', function(err) {
@@ -41,51 +49,41 @@ describe('in-memory pick-list handler', function() {
 
 describe('Load large pick-list handler', function() {
     var originalPickListConfig;
-    var mockApp = {
-        logger: {
-            info: function() {},
-            debug: function() {},
-            error: function() {}
+    var vistaSites =  {
+        'SITE': {
+            'division': [{
+                'id': '507',
+                'name': 'KODAK'
+            }, {
+                'id': '613',
+                'name': 'MARTINSBURG'
+            }, {
+                'id': '688',
+                'name': 'WASHINGTON'
+            }],
+            'foo': 'bar'
         },
-        config: {
-            jdsServer: 'jdsServer',
-            vistaSites: {
-                'C877': {
-                    'division': [{
-                        'id': '507',
-                        'name': 'KODAK'
-                    }, {
-                        'id': '613',
-                        'name': 'MARTINSBURG'
-                    }, {
-                        'id': '688',
-                        'name': 'WASHINGTON'
-                    }],
-                    'foo': 'bar'
-                },
-                '9E7A': {
-                    'division': [{
-                        'id': '500',
-                        'name': 'PANORAMA'
-                    }]
-                }
-            },
+        'SITE': {
+            'division': [{
+                'id': '500',
+                'name': 'PANORAMA'
+            }]
         }
     };
 
     var internalQueue;
 
     before(function() {
-        originalPickListConfig = handler.config.slice();
+        originalPickListConfig = req.app.config.inMemory.pickListConfig.slice();
     });
 
     after(function() {
-        replaceArrayContents(handler.config, originalPickListConfig);
+        replaceArrayContents(req.app.config.inMemory.pickListConfig, originalPickListConfig);
     });
 
     beforeEach(function() {
         internalQueue = [];
-
+        req.app.config.vistaSites = vistaSites;
         sinon.stub(async, 'queue', function() {
             return {
                 drain: function() {},
@@ -106,10 +104,10 @@ describe('Load large pick-list handler', function() {
             'requiredParams': ['facilityID'],
             'requiredPermissions': ['read-patient-record']
         };
-        replaceArrayContents(handler.config, [configItem]);
-        handler.loadLargePickLists(mockApp);
+        replaceArrayContents(req.app.config.inMemory.pickListConfig, [configItem]);
+        handler.loadLargePickLists(req.app);
         expect(internalQueue.length).to.equal(2); // one for each site
-        expect(_.isEqual(_.sortBy(_.map(internalQueue, 'site')), ['9E7A', 'C877'])).to.be.truthy();
+        expect(_.isEqual(_.sortBy(_.map(internalQueue, 'site')), ['SITE', 'SITE'])).to.be.truthy();
     });
 
     it('does not queue up fetch requests for pick-lists without a largePickListRetry setting', function() {
@@ -122,9 +120,9 @@ describe('Load large pick-list handler', function() {
             'requiredParams': ['facilityID'],
             'requiredPermissions': ['read-patient-record']
         };
-        replaceArrayContents(handler.config, [configItem]);
+        replaceArrayContents(req.app.config.inMemory.pickListConfig, [configItem]);
         expect(internalQueue.length).to.equal(0);
-        handler.loadLargePickLists(mockApp);
+        handler.loadLargePickLists(req.app);
     });
 
     it('creates a queue entry for each initial load default parameter', function() {
@@ -144,8 +142,8 @@ describe('Load large pick-list handler', function() {
                 'param2': '2B'
             }]
         };
-        replaceArrayContents(handler.config, [configItem]);
-        handler.loadLargePickLists(mockApp);
+        replaceArrayContents(req.app.config.inMemory.pickListConfig, [configItem]);
+        handler.loadLargePickLists(req.app);
         expect(internalQueue.length).to.equal(4);
 
         var siteParams = {};
@@ -162,19 +160,19 @@ describe('Load large pick-list handler', function() {
             }
             siteParams[q.site].param2.push(q.param2);
         });
-        expect(siteParams.C877).to.not.be.undefined();
-        expect(siteParams.C877.param1.length).to.equal(2);
-        expect(_.includes(siteParams.C877.param1, '1A')).to.be.truthy();
-        expect(_.includes(siteParams.C877.param1, '1B')).to.be.truthy();
-        expect(_.includes(siteParams.C877.param2, '2A')).to.be.truthy();
-        expect(_.includes(siteParams.C877.param2, '2B')).to.be.truthy();
+        expect(siteParams.SITE).to.not.be.undefined();
+        expect(siteParams.SITE.param1.length).to.equal(2);
+        expect(_.includes(siteParams.SITE.param1, '1A')).to.be.truthy();
+        expect(_.includes(siteParams.SITE.param1, '1B')).to.be.truthy();
+        expect(_.includes(siteParams.SITE.param2, '2A')).to.be.truthy();
+        expect(_.includes(siteParams.SITE.param2, '2B')).to.be.truthy();
 
-        expect(siteParams['9E7A']).to.not.be.undefined();
-        expect(siteParams['9E7A'].param1.length).to.equal(2);
-        expect(_.includes(siteParams['9E7A'].param1, '1A')).to.be.truthy();
-        expect(_.includes(siteParams['9E7A'].param1, '1B')).to.be.truthy();
-        expect(_.includes(siteParams['9E7A'].param2, '2A')).to.be.truthy();
-        expect(_.includes(siteParams['9E7A'].param2, '2B')).to.be.truthy();
+        expect(siteParams['SITE']).to.not.be.undefined();
+        expect(siteParams['SITE'].param1.length).to.equal(2);
+        expect(_.includes(siteParams['SITE'].param1, '1A')).to.be.truthy();
+        expect(_.includes(siteParams['SITE'].param1, '1B')).to.be.truthy();
+        expect(_.includes(siteParams['SITE'].param2, '2A')).to.be.truthy();
+        expect(_.includes(siteParams['SITE'].param2, '2B')).to.be.truthy();
 
     });
 
@@ -188,20 +186,20 @@ describe('Load large pick-list handler', function() {
             'needsFacilityGranularity': true,
             'requiredPermissions': ['param1']
         };
-        replaceArrayContents(handler.config, [configItem]);
-        handler.loadLargePickLists(mockApp);
+        replaceArrayContents(req.app.config.inMemory.pickListConfig, [configItem]);
+        handler.loadLargePickLists(req.app);
         expect(internalQueue.length).to.equal(4); // one for each site/division
         expect(_.isEqual(_.sortBy(_.map(internalQueue, 'facilityID')), ['500', '507', '613', '688'])).to.be.truthy();
     });
 
     it('works on a copy of the site configuration', function() {
-        var siteConfig = handler._getSiteConfig('C877', mockApp);
-        expect(siteConfig !== mockApp.config.vistaSites.C877).to.be.truthy();
-        expect(siteConfig.foo === mockApp.config.vistaSites.C877.foo).to.be.truthy();
+        var siteConfig = handler._getSiteConfig('SITE', req.app);
+        expect(siteConfig !== req.app.config.vistaSites.SITE).to.be.truthy();
+        expect(siteConfig.foo === req.app.config.vistaSites.SITE.foo).to.be.truthy();
     });
 
     it('sets division property to null in site configuration', function() {
-        var siteConfig = handler._getSiteConfig('C877', mockApp);
+        var siteConfig = handler._getSiteConfig('SITE', req.app);
         expect(siteConfig.division).to.be.null();
     });
 });

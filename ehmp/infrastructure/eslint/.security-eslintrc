@@ -1,0 +1,8 @@
+{
+    "rules": {
+        "no-unsafe-regex": 1,
+        "no-timing-attacks": 1,
+		"no-self-signed-cert-node": 0,
+        "no-self-signed-cert-mongoose": 0
+    }
+}

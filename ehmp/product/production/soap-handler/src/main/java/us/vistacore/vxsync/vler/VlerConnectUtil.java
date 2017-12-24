@@ -15,9 +15,13 @@ import oasis.names.tc.ebxml_regrep.xsd.rs._3.RegistryError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+import org.apache.commons.lang.time.DateFormatUtils;
+
 import javax.xml.bind.JAXBElement;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class VlerConnectUtil {
@@ -47,7 +51,8 @@ public class VlerConnectUtil {
     public static final String CCD_CLASS_CODE = "('34133-9^^2.16.840.1.113883.6.1')";
     public static final String RETURN_TYPE = "LeafClass";
     public static final String SLOT_STATUS_STRING = "('urn:ihe:iti:2010:StatusType:DeferredCreation','urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')";
-
+    public static final String SERVICE_START_TIME = "serviceStartTime";
+    public static final String SERVICE_STOP_TIME = "serviceStopTime";
     /**
      * Helper that generates VLER document list query.
      * @param icn Patient ICN
@@ -89,6 +94,24 @@ public class VlerConnectUtil {
             vListType.getValue().add(SLOT_STATUS_STRING);
             stEntryStatus.setValueList(vListType);
 
+            //set service start time
+            String serviceStartTime = DateFormatUtils.format(new Date(), "yyyyMMdd") + "000000";
+            SlotType1 stServiceStartTime = new SlotType1();
+            stServiceStartTime.setName(SERVICE_START_TIME);
+            ValueListType svcStrTimeVList = new ValueListType();
+            svcStrTimeVList.getValue().add(serviceStartTime);
+            stServiceStartTime.setValueList(svcStrTimeVList);
+
+            //set service stop time
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.YEAR, 2);
+            String serviceStopTime = DateFormatUtils.format(cal.getTime(), "yyyyMMdd") + "235959";
+            SlotType1 stServiceStopTime = new SlotType1();
+            stServiceStopTime.setName(SERVICE_STOP_TIME);
+            ValueListType svcStpTimeVList = new ValueListType();
+            svcStpTimeVList.getValue().add(serviceStopTime);
+            stServiceStopTime.setValueList(svcStpTimeVList);
+
             ResponseOptionType rot = new ResponseOptionType();
             rot.setReturnType(RETURN_TYPE);
             rot.setReturnComposedObjects(true);
@@ -99,6 +122,8 @@ public class VlerConnectUtil {
             aqt.getSlot().add(stClassCode);
             aqt.getSlot().add(stPatICN);
             aqt.getSlot().add(stEntryStatus);
+            aqt.getSlot().add(stServiceStartTime);
+            aqt.getSlot().add(stServiceStopTime);
             //        aqt.getSlot().add(stFormatCode);
             aqt.setId(FIND_DOCUMENTS);
             aqr.setAdhocQuery(aqt);

@@ -22,7 +22,12 @@ define([
             "alertBannerControl": ".alert-banner-container"
         },
         onRender: function() {
-            this.ui.alertBannerControl.trigger('control:icon', this.model.get('icon')).trigger('control:type', this.model.get('type')).trigger('control:title', this.model.get('title')).trigger('control:message', this.model.get('message'));
+            this.ui.alertBannerControl.trigger('control:update:config', {
+                icon: this.model.get('icon'),
+                type: this.model.get('type'),
+                title: this.model.get('title'),
+                message: this.model.get('message')
+            });
         }
     });
     var userModalView = Backbone.Marionette.LayoutView.extend({
@@ -36,7 +41,7 @@ define([
         initialize: function(options) {
             this.alertViewOptions = {};
             this.showAlertView = false;
-            if(!_.isUndefined(options.alertOptions)){
+            if (!_.isUndefined(options.alertOptions)) {
                 this.showAlertView = true;
                 this.alertViewOptions = options.alertOptions;
             }
@@ -54,7 +59,7 @@ define([
                 this.ui.EditPermissionSetsButton.prop("disabled", true);
             }
         },
-        showModal: function() {
+        showModal: function(triggerElement) {
             var modalOptions = {
                 title: ADK.UserService.getUserSession().get('facility').toUpperCase() + ' User',
                 size: 'medium',
@@ -65,14 +70,18 @@ define([
                 view: this,
                 options: modalOptions
             });
-            modalView.show();
+            var showModalOptions = {};
+            if (!_.isUndefined(triggerElement)) {
+                this.triggerElement = triggerElement;
+                showModalOptions.triggerElement = triggerElement;
+            }
+            modalView.show(showModalOptions);
         },
         events: {
             'click @ui.EditPermissionSetsButton': 'editPermissionSets'
         },
         editPermissionSets: function() {
-            this.model.set('permissions', appletUtil.getPermissions());
-            var permissionSetsSelectionView = userManagementPermissionSetSelectionView.createForm(this, this.model);
+            var permissionSetsSelectionView = userManagementPermissionSetSelectionView.createForm(this, this.model, this.triggerElement);
             ADK.UI.Modal.hide();
         }
     });

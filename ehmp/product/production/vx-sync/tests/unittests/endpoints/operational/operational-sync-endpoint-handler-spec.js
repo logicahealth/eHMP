@@ -16,7 +16,7 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var sampleOpDataStamp = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        '9E7A': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'doc-def': {
@@ -51,7 +51,7 @@ var sampleOpDataStamp = {
 var sampleOpDataStamp2 = {
     'stampTime': 20141031094920,
     'sourceMetaStamp': {
-        'C877': {
+        'SITE': {
             'stampTime': 20141031094920,
             'domainMetaStamp': {
                 'pt-select': {
@@ -74,8 +74,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -104,8 +104,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -134,8 +134,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -166,8 +166,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -198,8 +198,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -235,12 +235,12 @@ describe('operational-sync-endpoint-handler', function() {
                     expect(environment.publisherRouter.publish.calls[0].args).toBeTruthy();
                     expect(environment.publisherRouter.publish.calls[0].args[0]).toEqual({
                         "type": "vista-operational-subscribe-request",
-                        "site": "9E7A"
+                        "site": "SITE"
                     });
                     expect(environment.publisherRouter.publish.calls[1].args).toBeTruthy();
                     expect(environment.publisherRouter.publish.calls[1].args[0]).toEqual({
                         "type": "vista-operational-subscribe-request",
-                        "site": "C877"
+                        "site": "SITE"
                     });
                     done = true;
                 });
@@ -254,8 +254,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -300,8 +300,8 @@ describe('operational-sync-endpoint-handler', function() {
             var done = false;
             var config = {
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: {
                     protocol: 'http',
@@ -338,7 +338,7 @@ describe('operational-sync-endpoint-handler', function() {
                     expect(environment.publisherRouter.publish.calls[0].args).toBeTruthy();
                     expect(environment.publisherRouter.publish.calls[0].args[0]).toEqual({
                         "type": "vista-operational-subscribe-request",
-                        "site": "C877"
+                        "site": "SITE"
                     });
                     done = true;
                 });
@@ -360,7 +360,7 @@ describe('operational-sync-endpoint-handler', function() {
             }
         };
         var req = {
-            param: function() { return ['9E7A']; },
+            param: function() { return ['SITE']; },
             headers: {
                 'x-session-id': 'sessionId',
                 'x-request-id': 'requestId'

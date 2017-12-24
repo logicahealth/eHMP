@@ -1,11 +1,11 @@
 module.exports = {
     name: 'The running configuration',
     externalProtocol: 'http',
-    secret: 'mysecuresecretpasscode',
+    secret: 'PW',
     sessionLength: 900000,
     patientPhotoServer :{
         hostname: 'localhost',
-        port: 8889,
+        port: PORT,
         path: 'resource/patientphoto'
     }
 };

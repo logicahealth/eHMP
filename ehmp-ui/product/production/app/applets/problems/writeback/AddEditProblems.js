@@ -29,8 +29,7 @@ define([
                     id: 'changeProblemBtn',
                     name: 'change-problem-btn',
                     label: 'Select a new problem',
-                    type: 'button',
-                    title: 'Press enter to select a new problem'
+                    type: 'button'
                 }]
             }]
     };
@@ -42,7 +41,7 @@ define([
             control: 'container',
             extraClasses: ['row', 'left-margin-xs', 'right-margin-xs', 'all-padding-sm'],
             modelListeners: ['problemText', 'problemTerm', 'isFreeTextProblem'],
-            template: Handlebars.compile('{{#if isFreeTextProblem}}<p class="col-xs-12 left-padding-no"><strong>Entered as Freetext</strong><br />{{problemTerm}}</p><button type="button" id="ftDetailsBtn" class="btn btn-link left-padding-no" title="Press enter to view additional details"><i id="ftDetailsCaret" class="fa fa-caret-right color-primary right-margin-xs"></i>Details</button>{{/if}}')
+            template: Handlebars.compile('{{#if isFreeTextProblem}}<p class="col-xs-12 left-padding-no"><strong>Entered as Freetext</strong><br />{{problemTerm}}</p><button type="button" id="ftDetailsBtn" class="btn btn-link left-padding-no" aria-label="View additional details"><i id="ftDetailsCaret" class="fa fa-caret-right color-primary right-margin-xs"></i>Details</button>{{/if}}')
         }, {
             control: 'container',
             id: 'detailsContainer',
@@ -253,7 +252,6 @@ define([
                     split: true,
                     label: "Accept",
                     id: "addDrpDwnContainer",
-                    title: "Press enter to accept",
                     type: 'submit',
                     items: [{
                         label: "Accept",
@@ -268,7 +266,6 @@ define([
                     label: 'Save',
                     id: 'saveEditProblem',
                     type: 'submit',
-                    title: 'Press enter to save problem',
                     name: 'save-edit-btn'
                 }]
             }]
@@ -280,7 +277,7 @@ define([
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
@@ -403,7 +400,7 @@ define([
                 this.model.set({
                     'showKeepProblem': true
                 });
-                this.model.unset('problemTerm');
+                this.model.set('problemTerm', '');
                 this.workflow.goToIndex(this.workflow.model.get('steps').length - 3);
             },
             'click @ui.addBtn': function(e) {

@@ -66,21 +66,21 @@ var syncStatus1 = {
                 'syncCompleteAsOf': 20160411095621,
                 'syncCompleted': true
             },
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'eventCount': 4,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:751': {
+                            'urn:va:allergy:SITE:3:751': {
                                 'stampTime': 20050317200936,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:874': {
+                            'urn:va:allergy:SITE:3:874': {
                                 'stampTime': 20071217151354,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:986': {
+                            'urn:va:allergy:SITE:3:986': {
                                 'stampTime': 20150706153033,
                                 'stored': true
                             }
@@ -91,7 +91,7 @@ var syncStatus1 = {
                     }
                 },
                 'localId': '3',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'stampTime': 20160408113843,
                 'syncCompleteAsOf': 20160411095621,
                 'syncCompleted': true
@@ -144,13 +144,13 @@ var syncStatus2 = {
                 'syncCompleteAsOf': 20160412140317,
                 'syncCompleted': true
             },
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'eventCount': 3,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:546': {
+                            'urn:va:allergy:SITE:3:546': {
                                 'stampTime': 20060317200936,
                                 'stored': true
                             }
@@ -163,7 +163,7 @@ var syncStatus2 = {
                         'domain': 'appointment',
                         'eventCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:appointment:9E7A:3:546': {
+                            'urn:va:appointment:SITE:3:546': {
                                 'stampTime': 20060317200936,
                                 'stored': true
                             }
@@ -202,7 +202,7 @@ var simpleSyncStatus1 = {
         'icn': '10108V420871',
         'lastAccessTime': 20160412104227,
         'sourceMetaStamp': {
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
@@ -227,7 +227,7 @@ var simpleSyncStatus1 = {
                     }
                 },
                 'localId': 3,
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'stampTime': 20160412101240,
                 'syncCompleteAsOf': 20160412143126,
                 'syncCompleted': true
@@ -243,22 +243,22 @@ var allergyDomainData1 = [{
     'uid': 'urn:va:allergy:2939:19:106'
 }, {
     'data': 'someData',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'stampTime': 20160303154108,
-    'uid': 'urn:va:allergy:9E7A:3:751'
+    'uid': 'urn:va:allergy:SITE:3:751'
 }];
 
 var allergyDomainData2 = [{
     'data': 'someData',
-    'pid': '9E7A;8',
-    'uid': 'urn:va:allergy:9E7A:8:751',
+    'pid': 'SITE;8',
+    'uid': 'urn:va:allergy:SITE:8:751',
     'stampTime': 20061217151354,
 }];
 
 var consultDomainData1 = [{
     'data': 'someData',
-    'pid': '9E7A;8',
-    'uid': 'urn:va:consult:9E7A:8:751',
+    'pid': 'SITE;8',
+    'uid': 'urn:va:consult:SITE:8:751',
     'stampTime': 20061217151354
 }];
 
@@ -267,9 +267,9 @@ var updateConfig = {};
 describe('vista-site-date-resync-util.js', function() {
     describe('retrievePatientList()', function() {
         it('Normal path', function() {
-            var patientList9E7A = {
+            var patientListSITE = {
                 'data': {
-                    'items': ['9E7A;3', '9E7A;123', '9E7A;234']
+                    'items': ['SITE;3', 'SITE;123', 'SITE;234']
                 }
             };
 
@@ -284,7 +284,7 @@ describe('vista-site-date-resync-util.js', function() {
                 statusCode: 200
             }, {
                 statusCode: 200
-            }], [patientList9E7A, patientListXABY]);
+            }], [patientListSITE, patientListXABY]);
 
             var dummyVistaClient = {};
 
@@ -293,12 +293,12 @@ describe('vista-site-date-resync-util.js', function() {
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(['9E7A', 'XABY'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['SITE', 'XABY'], null, function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
-                    expect(result).toContain('9E7A;3');
-                    expect(result).toContain('9E7A;123');
-                    expect(result).toContain('9E7A;234');
+                    expect(result).toContain('SITE;3');
+                    expect(result).toContain('SITE;123');
+                    expect(result).toContain('SITE;234');
                     expect(result).toContain('XABY;4');
                     expect(result).toContain('XABY;345');
                     expect(result).toContain('XABY;456');
@@ -333,7 +333,7 @@ describe('vista-site-date-resync-util.js', function() {
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(['9E7A', 'XABY'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['SITE', 'XABY'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -360,7 +360,7 @@ describe('vista-site-date-resync-util.js', function() {
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(['9E7A'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['SITE'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -385,7 +385,7 @@ describe('vista-site-date-resync-util.js', function() {
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(['9E7A'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['SITE'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -412,12 +412,12 @@ describe('vista-site-date-resync-util.js', function() {
             }], [syncStatus1, syncStatus2]);
 
             runs(function() {
-                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3', '9E7A;8'], function(error, result) {
+                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3', 'SITE;8'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toEqual({
-                        '9E7A;3': ['allergy'],
-                        '9E7A;8': ['allergy', 'appointment']
+                        'SITE;3': ['allergy'],
+                        'SITE;8': ['allergy', 'appointment']
                     });
                 });
             });
@@ -438,11 +438,11 @@ describe('vista-site-date-resync-util.js', function() {
             }], [simpleSyncStatus1]);
 
             runs(function() {
-                resyncUtil.retrievePatientSyncDomains(null, ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncDomains(null, ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toEqual({
-                        '9E7A;3': ['allergy', 'appointment', 'consult', 'vital']
+                        'SITE;3': ['allergy', 'appointment', 'consult', 'vital']
                     });
                 });
             });
@@ -465,7 +465,7 @@ describe('vista-site-date-resync-util.js', function() {
             }], null);
 
             runs(function() {
-                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -488,7 +488,7 @@ describe('vista-site-date-resync-util.js', function() {
             }], null);
 
             runs(function() {
-                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -526,8 +526,8 @@ describe('vista-site-date-resync-util.js', function() {
             };
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var dummyJdsClient = {};
@@ -549,7 +549,7 @@ describe('vista-site-date-resync-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
@@ -592,20 +592,20 @@ describe('vista-site-date-resync-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
                         'data': 'someData',
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20160303154108,
-                        'uid': 'urn:va:allergy:9E7A:3:751'
+                        'uid': 'urn:va:allergy:SITE:3:751'
                     },
                     'metaStamp': {
                         'stampTime': jasmine.any(String),
                         'sourceMetaStamp': {
-                            '9E7A': {
-                                'pid': '9E7A;3',
+                            'SITE': {
+                                'pid': 'SITE;3',
                                 'localId': '3',
                                 'stampTime': jasmine.any(String),
                                 'domainMetaStamp': {
@@ -613,7 +613,7 @@ describe('vista-site-date-resync-util.js', function() {
                                         'domain': 'allergy',
                                         'stampTime': jasmine.any(String),
                                         'eventMetaStamp': {
-                                            'urn:va:allergy:9E7A:3:751': {
+                                            'urn:va:allergy:SITE:3:751': {
                                                 'stampTime': 20160303154108
                                             }
                                         }
@@ -652,8 +652,8 @@ describe('vista-site-date-resync-util.js', function() {
             };
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var dummyJdsClient = {};
@@ -675,7 +675,7 @@ describe('vista-site-date-resync-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
@@ -718,20 +718,20 @@ describe('vista-site-date-resync-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
                         'data': 'someData',
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20160303154108,
-                        'uid': 'urn:va:allergy:9E7A:3:751'
+                        'uid': 'urn:va:allergy:SITE:3:751'
                     },
                     'metaStamp': {
                         'stampTime': jasmine.any(String),
                         'sourceMetaStamp': {
-                            '9E7A': {
-                                'pid': '9E7A;3',
+                            'SITE': {
+                                'pid': 'SITE;3',
                                 'localId': '3',
                                 'stampTime': jasmine.any(String),
                                 'domainMetaStamp': {
@@ -739,7 +739,7 @@ describe('vista-site-date-resync-util.js', function() {
                                         'domain': 'allergy',
                                         'stampTime': jasmine.any(String),
                                         'eventMetaStamp': {
-                                            'urn:va:allergy:9E7A:3:751': {
+                                            'urn:va:allergy:SITE:3:751': {
                                                 'stampTime': 20160303154108
                                             }
                                         }
@@ -778,8 +778,8 @@ describe('vista-site-date-resync-util.js', function() {
             };
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var dummyJdsClient = {};
@@ -810,8 +810,8 @@ describe('vista-site-date-resync-util.js', function() {
             };
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var dummyJdsClient = {};

@@ -6,8 +6,8 @@ Feature: F121 - Demographics (write-back)
 
 @US1984_save_All_valid_pid
 Scenario: Updating the phone numbers in VPR format from RDK for a vlaid pid
-        Given a patient with pid "9E7A;3" has been synced through the RDK API
-        When the client saves homephone | CellPhone | WorkPhone | EmergencyPhone | KinPhone  "8586050836|8581111234|3453453456|8788786789|6783451234" for the patient "9E7A;20" in RDK format 
+        Given a patient with pid "SITE;3" has been synced through the RDK API
+        When the client saves homephone | CellPhone | WorkPhone | EmergencyPhone | KinPhone  "8586050836|8581111234|3453453456|8788786789|6783451234" for the patient "SITE;20" in RDK format 
         Then a  temporary Not implemented response is returned
     
 

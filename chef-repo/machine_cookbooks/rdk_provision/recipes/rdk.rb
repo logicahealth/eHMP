@@ -10,30 +10,45 @@ if ENV['DEV_DEPLOY']
   node.default[:rdk_provision][:rdk][:vagrant][:shared_folders].push(
     {
       :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk",
-      :guest_path => "/opt/rdk",
-      :create => true
+      :guest_path => "/opt/fetch_server",
+      :create => true,
+      :owner => 'node',
+      :group => 'node'
     },
     {
-       :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk/ccow",
-       :guest_path => "/opt/ccow",
-       :create => true
+      :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk",
+      :guest_path => "/opt/write_back",
+      :create => true,
+      :owner => 'node',
+      :group => 'node'
+    },
+    {
+      :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk",
+      :guest_path => "/opt/pick_list",
+      :create => true,
+      :owner => 'node',
+      :group => 'node'
+    },
+    {
+      :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk",
+      :guest_path => "/opt/activity_handler",
+      :create => true,
+      :owner => 'node',
+      :group => 'node'
+    },
+    {
+      :host_path => "#{ENV['HOME']}/Projects/vistacore/rdk/product/production/rdk",
+      :guest_path => "/opt/vista_aso_rejector",
+      :create => true,
+      :owner => 'node',
+      :group => 'node'
     }
   )
 end
 ######################################################## Shared Folders ########################################################
 
-version = ENV['RDK_VERSION']
-
-# deploy default of one machine named "rdk" if rdk config doesn't exist, get servers from config if config does exist
-rdk_machines = if node[:rdk_config].nil? then ["rdk"] else node[:rdk_config].keys end
-
 machine_ident = ENV['RDK_IDENT'] || "rdk"
-db_item = ENV['RDK_DB_ITEM'] || ENV['RDK_IDENT']
 
-unless db_item.nil?
-  db_attributes = Chef::EncryptedDataBagItem.load("rdk_env", db_item, node[:common][:data_bag_string])
-  node.override[:rdk_provision] = Chef::Mixin::DeepMerge.hash_only_merge(node[:rdk_provision], db_attributes["rdk_provision"]) unless db_attributes["rdk_provision"].nil?
-end
 boot_options = node[:rdk_provision][:rdk]["#{node[:machine][:driver]}".to_sym]
 node.default[:rdk_provision][:rdk][:copy_files].merge!(node[:machine][:copy_files])
 
@@ -42,14 +57,21 @@ rdk_deps = parse_dependency_versions "rdk_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
-r_list << "role[resource_server]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
+r_list << "role[vista_aso_rejector]"
 r_list << "recipe[postfix_wrapper]" if ENV.has_key?("CONFIGURE_POSTFIX")
-r_list << "recipe[rdk::clear_logs@#{rdk_deps["rdk"]}]" if node[:machine][:driver] == "aws"
-r_list << "recipe[rdk@#{rdk_deps["rdk"]}]"
+node[:rdk_provision][:rdk][:services].each do | service |
+  unless ENV[ "EXCLUDE_" + "#{service}".upcase ] == "true"
+    r_list << "role[#{service}]"
+    r_list << "recipe[#{service}::clear_logs@#{rdk_deps["#{service}"]}]" if node[:machine][:driver] == "aws"
+    r_list << "recipe[#{service}@#{rdk_deps["#{service}"]}]"
+  else
+    r_list << "recipe[#{service}::uninstall@#{rdk_deps["#{service}"]}]"
+  end
+end
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -73,6 +95,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -88,14 +111,36 @@ machine machine_name do
     data_bag_string: node[:common][:data_bag_string],
     dev_deploy: ENV['DEV_DEPLOY'] == "true" ? true : false,
     using_vagrant: node[:machine][:driver] == "vagrant",
-    rdk: {
-      profile: db_item,
+    db_env: {
+      :rdk_env => ENV['RDK_DB_ITEM']
+    },
+    fetch_server: {
       source: artifact_url(node[:rdk_provision][:artifacts][:rdk]),
       version: ENV['RDK_VERSION']
     },
+    pick_list: {
+      source: artifact_url(node[:rdk_provision][:artifacts][:rdk]),
+      version: ENV['RDK_VERSION']
+    },
+    write_back: {
+      source: artifact_url(node[:rdk_provision][:artifacts][:rdk]),
+      version: ENV['RDK_VERSION']
+    },
+    activity_handler: {
+      source: artifact_url(node[:rdk_provision][:artifacts][:rdk]),
+      version: ENV['RDK_VERSION']
+    },
+    vista_aso_rejector: {
+      source: artifact_url(node[:rdk_provision][:artifacts][:rdk])
+    },
     beats: {
       logging: node[:machine][:logging]
-  }
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
+    }
   )
   files lazy { node[:rdk_provision][:rdk][:copy_files] }
   chef_environment node[:machine][:environment]

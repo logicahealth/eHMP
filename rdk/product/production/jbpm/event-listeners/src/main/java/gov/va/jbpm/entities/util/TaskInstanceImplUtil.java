@@ -29,6 +29,7 @@ public class TaskInstanceImplUtil {
 	public static final String PERMISSION = "permission";
 	public static final String TASK_HISTORY = "taskHistory";
 	public static final String TASK_HISTORY_ACTION = "taskHistoryAction";
+	public static final String BEFORE_EARLIEST_DATE = "beforeEarliestDate";
 	private static final Logger LOGGER = Logger.getLogger(TaskInstanceImplUtil.class);
 	public static TaskInstanceImpl create(RuntimeManager runtimeManager, TaskEvent event) throws EventListenerException {
 		LOGGER.debug("Entering TaskInstanceImplUtil.create");
@@ -66,17 +67,25 @@ public class TaskInstanceImplUtil {
 		List<TaskRouteImpl> routesList = TaskRouteImplUtil.create(id, routes.toString());
 
 		WorkflowProcessInstanceImpl processInstance = getWorkflowProcessInstanceImpl(runtimeManager, processInstanceId);
-		if (processInstance == null)
+		if (processInstance == null) {
 			throw new EventListenerException("Invalid state, processInstance cannot be null");
+		}
 		processInstance.setVariable("currentTaskInstanceId", id);
 		
 		Map<String,Object> processInstanceVariables = processInstance.getVariables();
-		String icn = ProcessInstanceImplUtil.getProcInstVariableString(processInstanceVariables, ProcessInstanceImplUtil.PATIENT_ID);
+
+		/*This needs to be cleanedup in future when all activities write ICN value in AM_PROCESSINTSNACE table. Until then, ICN column in AM_TASKINSTANCE will store PID.
+		Consult activity writes PID in AM_PROCESSINTSNACE.ICN column and AM_PROCESSINTSNACE.PID will be null that's why added second line to copy patient_id*/
+		String icn = ProcessInstanceImplUtil.getProcInstVariableString(processInstanceVariables, ProcessInstanceImplUtil.PID);
+		if (icn == null || icn.isEmpty()) {
+			icn = ProcessInstanceImplUtil.getProcInstVariableString(processInstanceVariables, ProcessInstanceImplUtil.PATIENT_ID);
+		}
 		Date earliestDate = ProcessInstanceImplUtil.getProcInstVariableDate(processInstanceVariables, TaskInstanceImplUtil.EARLIEST_DATE);
 		WorkItem workItem = getWorkItem(processInstance, taskData.getWorkItemId());
 		String definitionId = extractStringParam(workItem, DEFINITION_ID);
 		String navigation = extractStringParam(workItem, NAVIGATION);
 		String permission = extractStringParam(workItem, PERMISSION);
+		boolean beforeEarliestDate = Boolean.parseBoolean(extractStringParam(workItem, BEFORE_EARLIEST_DATE));
 		
 		TaskInstanceImpl taskInstanceImpl = new TaskInstanceImpl(id ,
 				processInstanceId,
@@ -95,7 +104,11 @@ public class TaskInstanceImplUtil {
 				definitionId,
 				navigation,
 				permission,
-				routes.toString());
+				routes.toString(),
+				beforeEarliestDate);
+
+		LOGGER.debug("Creating TaskInstanceImpl " + id);
+		LOGGER.debug(taskInstanceImpl);
 		
 		return taskInstanceImpl;
 	}
@@ -141,7 +154,7 @@ public class TaskInstanceImplUtil {
 			return null;
 		}
 		if (!(obj instanceof java.lang.String)) {
-			LOGGER.warn("paramName was not a String: " + paramName);
+			LOGGER.warn(String.format("paramName was not a String: %s", paramName));
 		}
 		
 		String retvalue = (String)obj;

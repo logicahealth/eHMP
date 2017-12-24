@@ -53,7 +53,7 @@ Then(/^the client recieves (\d+) data points of type "([^"]*)"$/) do |number_of_
   source_panorama = Regexp.new("urn:va:#{arg2}")
   p source_panorama 
   source_allvalues.each do |value|
-    #if value.start_with? "urn:va:allergy:B362" #PANORAMA
+    #if value.start_with? "urn:va:allergy:SITE" #PANORAMA
     p "checking #{value}"
     unless source_panorama.match(value).nil?
       num_type_results += 1

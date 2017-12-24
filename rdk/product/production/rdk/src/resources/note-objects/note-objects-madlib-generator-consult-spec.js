@@ -80,11 +80,11 @@ describe('The note-objects-madlib-generator-consult test for', function() {
 
         it('consult parses the correct content without data', function() {
             var order = {
-                'uid': 'urn:va:ehmp-note:C877:773:92620ee6-c79e-463a-95d7-b7bf344e884a',
+                'uid': 'urn:va:ehmp-note:SITE:773:92620ee6-c79e-463a-95d7-b7bf344e884a',
             };
 
             var retVal = madlibGenerator(errorMessage, order);
-            expect(retVal).to.eql('Default clinical madlib for urn:va:ehmp-note:C877:773:92620ee6-c79e-463a-95d7-b7bf344e884a');
+            expect(retVal).to.eql('Default clinical madlib for urn:va:ehmp-note:SITE:773:92620ee6-c79e-463a-95d7-b7bf344e884a');
         });
 
     });

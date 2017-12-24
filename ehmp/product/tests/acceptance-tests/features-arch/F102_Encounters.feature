@@ -4,24 +4,24 @@ Feature: F102 Return and display of encounters
 # I have marked the Feature as @future so the background step will also not be run
 
 Background:
-	Given a patient with pid "9E7A;71" has been synced through FHIR
+	Given a patient with pid "SITE;71" has been synced through FHIR
 
 @encs_rest 
 Scenario: Client can request encounters
 	Given a patient with "encounters" in multiple VistAs
-	When the client requests encounters for the patient "9E7A;71"
+	When the client requests encounters for the patient "SITE;71"
 	Then eHMP returns "8" result(s)
 	And the results contain data group
 		| field             | value                     |
       	| stopCodeName | AUDIOLOGY                 |
-      	| uid          | urn:va:visit:9E7A:71:1995 |
+      	| uid          | urn:va:visit:SITE:71:1995 |
       	| kind         | Visit                     |
       	| dateTime     | 20000404164610            |
       	
     And the results contain data group
 		| field             | value                                      |
       	| stopCodeName | GENERAL INTERNAL MEDICINE                  |
-      	| uid          | urn:va:appointment:9E7A:71:A;2940218.09;23 |
+      	| uid          | urn:va:appointment:SITE:71:A;2940218.09;23 |
       	| kind         | Visit                                      |
       	| dateTime     | 199402180900                               |
       	| service      | MEDICINE                                   |

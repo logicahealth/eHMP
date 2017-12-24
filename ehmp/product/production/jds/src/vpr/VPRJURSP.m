@@ -25,6 +25,16 @@ QSPLIT ;; @TEST splitting query parameters
  D ASSERT(5,QRY("limit"))
  Q
  ;
+QSPLITURLENCODE ;; @TEST splitting query parameters that are URL encoded
+ N QRY,HTTPERR
+ S HTTPREQ("query")="range=%22record-enrichment%22%3E%22job%22%26limit%3D1000%26filter=lt(job.retryCount%2C5)"
+ D QSPLIT^VPRJRSP(.QRY)
+ D ASSERT($D(QRY("range")),1)
+ D ASSERT("""record-enrichment"">""job""",QRY("range"))
+ D ASSERT(1000,QRY("limit"))
+ D ASSERT("lt(job.retryCount,5)",QRY("filter"))
+ Q
+ ;
 SETREQ(METHOD,URL) ; set up a request (to emulate HTTP call)
  S HTTPREQ("method")=METHOD
  S HTTPREQ("path")=$P(URL,"?")

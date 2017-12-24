@@ -11,6 +11,9 @@
                 },
                 "laboratory": {
                     "modulePath": "clinical-objects-validator-order"
+                },
+                "discharge": {
+                    "modulePath": "clinical-objects-validator-discharge"
                 }
             }
         }

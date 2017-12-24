@@ -4,8 +4,8 @@ Feature: F420 - Enter and Store an Allergy EIE
 
 @Allergy_writeback 
 Scenario: Client should get error message when invalid local id entered for Allergy EIE
-  Given a patient with pid "9E7A;66" has been synced through VX-Sync API for "9E7A" site(s)
-  And the client requests "ALLERGIES" for the patient "9E7A;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "ALLERGIES" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When the client marked a Allergy record for patient with local id "t455" as Entered in Error
@@ -18,15 +18,15 @@ Scenario: Client should get error message when invalid local id entered for Alle
 
 # @Allergy_writeback 
 # Scenario: Client can mark a Allergy record as Entered in Error in the VistA
-  # Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  # And the client requests "ALLERGIES" for the patient "C877;66" in VPR format
+  # Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  # And the client requests "ALLERGIES" for the patient "SITE;66" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Kodak"
   # When the client mark an Allergy record as Entered in Error with comment "Test - Entered in Error"
   # #When the client marked a Allergy record for patient with local id "450" as Entered in Error
   # Then the client receive the VistA write-back response
-  # And the above "Allergy" record removed for the patient "C877;66"
-  # # And the "Allergy" record with local id "450" removed for the patient "C877;66" in VPR format
+  # And the above "Allergy" record removed for the patient "SITE;66"
+  # # And the "Allergy" record with local id "450" removed for the patient "SITE;66" in VPR format
   # And the above record dispaly in VPR format with value of
     # | field             | value        |
     # | comments.comment  | CONTAINS Test - Entered in Error |
@@ -42,15 +42,15 @@ Scenario: Client should get error message when invalid local id entered for Alle
 #   
 # @Allergy_writeback 
 # Scenario: Client can mark a Allergy record as Entered in Error in the VistA
-  # Given a patient with pid "9E7A;253" has been synced through VX-Sync API for "9E7A;C877;VLER" site(s)
-  # And the client requests "ALLERGIES" for the patient "9E7A;253" in VPR format
+  # Given a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE;SITE;VLER" site(s)
+  # And the client requests "ALLERGIES" for the patient "SITE;253" in VPR format
   # And save the totalItems
   # And a client connect to VistA using "Panorama"
   # When the client mark an Allergy record as Entered in Error with comment "Test - Entered in Error"
   # # When the client marked a Allergy record for patient with local id "873" as Entered in Error
   # Then the client receive the VistA write-back response
-  # And the above "Allergy" record removed for the patient "9E7A;253"
-  # # And the "Allergy" record with local id "873" removed for the patient "9E7A;253" in VPR format
+  # And the above "Allergy" record removed for the patient "SITE;253"
+  # # And the "Allergy" record with local id "873" removed for the patient "SITE;253" in VPR format
   # And the above record dispaly in VPR format with value of
     # | field             | value        |
     # | comments.comment  | CONTAINS Test - Entered in Error |

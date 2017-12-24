@@ -47,7 +47,7 @@ Scenario: Verify can change view of an existing applet
   Then the applet "1" Allergies Trend applet is displayed
   And the applet "2" Allergies expanded applet is displayed
   When the user edits the user defined workspace
-  And the user changes applet "1" to a "Summary View"
+  And the user changes applet "1" to a Summary View
   And the user selects done to complete customizing the user defined workspace
 
   Then the "ADDAPPLETS" screen is active

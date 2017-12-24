@@ -45,8 +45,6 @@ define([
         title: 'Delete',
         confirmButton: 'Yes',
         cancelButton: 'No',
-        confirmTitle: 'Press enter to delete',
-        cancelTitle: 'Press enter to go back'
     };
 
     var DELETE_DIALOG_ATTRIBUTES = {
@@ -114,6 +112,7 @@ define([
                 if (isAutoLoadingPayload === true) {
                     loadPayload.apply(this);
                 }
+                options.suppressBanner = true;
                 break;
             case 'draft:delete:success':
                 action = 'deleted';

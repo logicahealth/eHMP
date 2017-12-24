@@ -32,10 +32,10 @@ var patientFull = {
         value: '10110'
     }, {
         type: 'pid',
-        value: 'C877;8'
+        value: 'SITE;8'
     }, {
         type: 'pid',
-        value: '9E7A;8'
+        value: 'SITE;8'
     }]
 };
 var jds = {}; //not used in unit tests
@@ -90,6 +90,29 @@ var mviSoapResponse = {
                 }
             };
 
+var mviSoapResponseSingleId = {
+    'PRPA_IN201310UV02': {
+        controlActProcess: {
+            queryAck: {
+                queryResponseCode: {
+                    code: 'OK'
+                }
+            },
+            subject: {
+                registrationEvent: {
+                    subject1: {
+                        patient: {
+                            id: {
+                                extension: '3^PI^500^USVHA^A'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+
 //mvi(log, config.mvi, patientId, callback)
 
 describe('mvi-client.js', function() {
@@ -136,6 +159,20 @@ describe('mvi-client.js', function() {
                 expect(result.ids).toContain({
                     type: 'vhicid',
                     value: '2222'
+                });
+            });
+        });
+
+        it('parsing mvi soap response with single id', function() {
+            var mviClient = new MviClient(log, log, config, jds);
+            var mviResponse = mviSoapResponseSingleId;
+            mviClient._parseRealMVIResponse(patientFullId, mviResponse, 1, function(err, result) {
+                expect(err).toBeFalsy();
+                expect(_.isArray(result.ids)).toBeTruthy();
+                expect(result.ids.length).toEqual(1);
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: 'SITE;3'
                 });
             });
         });
@@ -544,7 +581,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mviClient = new MviClient(log, log, config, jds);
@@ -556,7 +593,7 @@ describe('mvi-client.js', function() {
             };
             mockVistaClient.childInstance = function() { return mockVistaClient; };
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -579,7 +616,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockVistaClient = {
@@ -607,7 +644,7 @@ describe('mvi-client.js', function() {
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -630,7 +667,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mviClient = new MviClient(log, log, config, jds);
@@ -644,7 +681,7 @@ describe('mvi-client.js', function() {
             };
             mockVistaClient.childInstance = function() { return mockVistaClient; };
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -665,7 +702,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mviClient = new MviClient(log, log, config, jds);
@@ -677,7 +714,7 @@ describe('mvi-client.js', function() {
             };
             mockVistaClient.childInstance = function() { return mockVistaClient; };
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -698,7 +735,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockVistaClient = {
@@ -719,7 +756,7 @@ describe('mvi-client.js', function() {
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -740,7 +777,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockVistaClient = {
@@ -761,7 +798,7 @@ describe('mvi-client.js', function() {
 
             var mviClient = new MviClient(log, log, config, mockJdsClient);
 
-            mviClient.clientMap['9E7A'] = mockVistaClient;
+            mviClient.clientMap['SITE'] = mockVistaClient;
 
             runs(function() {
                 mviClient.lookup(patientIdentifier, function(error, idsList) {
@@ -786,7 +823,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var jdsResult = {
@@ -827,7 +864,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockJdsClient = {
@@ -859,7 +896,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockJdsClient = {
@@ -891,7 +928,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockJdsClient = {
@@ -923,7 +960,7 @@ describe('mvi-client.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
 
             var mockJdsClient = {
@@ -2115,7 +2152,7 @@ describe('mvi-client.js', function() {
             var result = mviClient._createPatientIdentifierBasedOnMvi('3^PI^500^USVHA^A');
             expect(result).toBeTruthy();
             expect(result.type).toEqual('pid');
-            expect(result.value).toEqual('9E7A;3');
+            expect(result.value).toEqual('SITE;3');
         });
         it('OK: VHICID Patient Active', function(){
             var mviClient = new MviClient(log, log, config, jds);

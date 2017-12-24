@@ -20,6 +20,9 @@ define([
         routeName: 'staff',
         defaultScreen: 'provider-centric-view',
         userRequired: true,
+        icon: 'fa-user-md',
+        showWorkspaceSelector: true,
+        hideFilterInWorkspaceSelector: true,
         layout: function(workspaceModel) {
             return Layout;
         },

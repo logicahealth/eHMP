@@ -64,7 +64,7 @@ define('main/backgrid/filterTagView', [
         getTemplate: function() {
             if (this.options.onUserWorkspace) {
                 return Handlebars.compile(
-                    '<button type="button" class="btn btn-info btn-sm clear-udaf-tag" title="Press enter to remove {{name}}.">{{name}}<i class="fa fa-times-circle left-margin-xs color-white"></i></button>'
+                    '<button type="button" class="btn btn-info btn-sm clear-udaf-tag" title="Remove {{name}}">{{name}}<i class="fa fa-times-circle left-margin-xs color-white"></i></button>'
                 );
             } else {
                 return Handlebars.compile('<span class="label label-info font-size-12 inline-block-display bottom-margin-xs right-margin-xs">{{name}}</span>');

@@ -10,8 +10,8 @@ Background:
 Scenario: user selects sensitive patient
     When the user searchs My Site with search term Zzzretfivefifty
     And the user select patient name "Zzzretfivefifty, Patient"
-    And the user click on acknowledge restricted record
+    And the user clicks on acknowledge restricted record
     And the user click on Confirm Selection
     And Overview is active
-    Then the Global Header displays the user name "Zzzretfivefifty,Patient (Z2121)"
+    Then the Patient View Current Patient displays the user name "Zzzretfivefifty,Patient (Z2121)"
 

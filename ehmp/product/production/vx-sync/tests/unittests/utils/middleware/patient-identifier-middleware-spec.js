@@ -12,11 +12,11 @@ var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 var config = {
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
             'stationNumber': 500
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
             'stationNumber': 500
         }
@@ -88,7 +88,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             });
 
             runs(function() {
-                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: 'SITE;3'}}, response, next);
             });
 
             waitsFor(function() {
@@ -115,7 +115,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             });
 
             runs(function() {
-                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: 'SITE;3'}}, response, next);
             });
 
             waitsFor(function() {
@@ -142,7 +142,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             });
 
             runs(function() {
-                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: 'SITE;3'}}, response, next);
             });
 
             waitsFor(function() {
@@ -169,7 +169,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             });
 
             runs(function() {
-                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: '9E7A;3'}}, response, next);
+                verifyPatientExists.call(opts, {patientIdentifier: {type: 'pid', value: 'SITE;3'}}, response, next);
             });
 
             waitsFor(function() {
@@ -193,7 +193,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
 
         it('Rejects requests with too many parameters', function() {
             var requestParameters = {
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'icn': '10108V420871'
             };
             var response = new DummyResponse();
@@ -224,7 +224,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
 
         it('Rejects invalid ICNs', function() {
             var requestParameters = {
-                'icn': '9E7A;3'
+                'icn': 'SITE;3'
             };
             var response = new DummyResponse();
             validatePatientIdentifier.call(options, new DummyRequest(requestParameters), response, function() {});
@@ -234,13 +234,13 @@ describe('middleware/patient-identifier-middleware.js', function() {
 
         it('Appends a PID patientIdentifier json property to valid request objects', function() {
             var request = new DummyRequest({
-                'pid': '9E7A;3'
+                'pid': 'SITE;3'
             });
             var response = new DummyResponse();
             validatePatientIdentifier.call(options, request, response, function() {});
             var patientIdentifierObj = request.patientIdentifier;
             expect(patientIdentifierObj.type).toEqual('pid');
-            expect(patientIdentifierObj.value).toEqual('9E7A;3');
+            expect(patientIdentifierObj.value).toEqual('SITE;3');
         });
 
         xit('Appends an PID patientIdentifier json property to valid request objects when receiving an ICN', function() {
@@ -254,9 +254,9 @@ describe('middleware/patient-identifier-middleware.js', function() {
                 var retObj = {
                     'data': {
                         'items': [{
-                            'pid': '9E7A;3'
+                            'pid': 'SITE;3'
                         }, {
-                            'pid': 'C877;3'
+                            'pid': 'SITE;3'
                         }]
                     }
                 };
@@ -269,7 +269,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             validatePatientIdentifier.call(opts, request, response, function() {});
             var patientIdentifierObj = request.patientIdentifier;
             expect(patientIdentifierObj.type).toEqual('pid');
-            expect(patientIdentifierObj.value).toEqual('9E7A;3');
+            expect(patientIdentifierObj.value).toEqual('SITE;3');
         });
 
         it('Appends an ICN patientIdentifier json property to valid request objects because it fails to look up pid', function() {

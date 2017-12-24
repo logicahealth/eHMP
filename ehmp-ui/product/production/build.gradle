@@ -15,7 +15,29 @@ task installNpm (type: Exec) {
   workingDir "."
 }
 
-task test(dependsOn: [installNpm, grunt_test]) {
+task bundleInstallAcceptance{
+  doLast{
+    exec {
+      workingDir = "${rootDir}/tests/acceptance-tests"
+      executable = "bundle"
+      args = ['install']
+    }
+  }
+}
+
+task "rubocop"(dependsOn: bundleInstallAcceptance){
+  description 'Runs the rubocop tests.'
+  group "test"
+  doLast{
+    exec {
+      workingDir = "${rootDir}/tests/acceptance-tests"
+      executable = "bundle"
+      args = ['exec', 'rake', 'codequality']
+    }
+  }
+}
+
+task test(dependsOn: [installNpm, grunt_test, rubocop]) {
   group "Test"
   description "Run test on the applets"
 }
@@ -33,3 +55,4 @@ if (type == "dist") {
 test.dependsOn build
 grunt_optimize.mustRunAfter installNpm
 grunt_prodOptimize.mustRunAfter installNpm
+test.mustRunAfter rubocop

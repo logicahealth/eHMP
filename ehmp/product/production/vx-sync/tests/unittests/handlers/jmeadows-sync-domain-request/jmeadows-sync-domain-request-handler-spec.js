@@ -50,7 +50,7 @@ describe('jmeadows-sync-domain-request-handler.js', function() {
             runs(function() {
                 handle(dummyLogger, config, environment, {
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: 'SITE;3'
                 }, callback);
             });
 

@@ -8,7 +8,7 @@ VPRJVUP ;SLC/KCM -- Upgrade database
  ;
 UPGRADE ; upgrade JDS (assume new routines are loaded)
  N LASTVER,THISVER
- K ^XTMP("VPRJVUP")                          ; -- reset upgrade log for
+ K:$D(^XTMP("VPRJVUP")) ^XTMP("VPRJVUP")     ; -- reset upgrade log for
  S ^XTMP("VPRJVUP","odc")=""                 ;    rebuild status calls
  S ^XTMP("VPRJVUP","vpr")=""
  S ^VPRHTTP(0,"updating")=1                  ; -- set upgrade flag
@@ -21,9 +21,9 @@ UPGRADE ; upgrade JDS (assume new routines are loaded)
  W !,"Upgrading from "_LASTVER_" to "_THISVER,!
  Q
 UPGBACK ; upgrade as background process
- D FULLRBLD^VPRJ                             ; -- full rebuild of VPR and ODC
- K ^VPRHTTP(0,"updating")                    ; -- clear upgrade flag
- D GO^VPRJRCL                                ; -- start listener
+ D FULLRBLD^VPRJ                                     ; -- full rebuild of VPR and ODC
+ K:$D(^VPRHTTP(0,"updating")) ^VPRHTTP(0,"updating") ; -- clear upgrade flag
+ D GO^VPRJRCL                                        ; -- start listener
  Q
 WATCH ; watch the progress of the upgrade
  N X
@@ -41,15 +41,15 @@ TASK1 ; move JSON, template, indexing nodes out of main data global
  I '$D(^VPRPTJ("JSON")),$D(^VPRPT("JSON")) D
  . M ^VPRPTJ("JSON")=^VPRPT("JSON")  ; preserve patient data
  . K ^VPRPT("JSON")
- . K ^VPRPT("TEMPLATE")              ; we'll rebuild the rest
- . K ^VPRPT("KEY")
- . K ^VPRPT("PID")
+ . K:$D(^VPRPT("TEMPLATE")) ^VPRPT("TEMPLATE")              ; we'll rebuild the rest
+ . K:$D(^VPRPT("KEY")) ^VPRPT("KEY")
+ . K:$D(^VPRPT("PID")) ^VPRPT("PID")
  ;
  ; move the JSON into the ^VPRJDJ global
  I '$D(^VPRJDJ("JSON")),$D(^VPRJD("JSON")) D
  . M ^VPRJDJ("JSON")=^VPRJD("JSON")  ; preserve operational data
  . K ^VPRJD("JSON")
- . K ^VPRJD("TEMPLATE")
+ . K:$D(^VPRJD("TEMPLATE")) ^VPRJD("TEMPLATE")
  Q
 CNVRT61 ; Convert syncstatus objects for version 0.7-S61
  N ROOT,JSON,UID,LROOT,DFN,SITE,PID,DNM,PITER,PTUID,LOCIDS,JPID

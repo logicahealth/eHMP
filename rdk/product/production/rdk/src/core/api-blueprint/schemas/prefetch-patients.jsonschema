@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": ["patient", "outboundQueryCriteria"],
+    "properties": {
+        "patient": {
+            "type": "array",
+            "patient": {
+                "type": "object",
+                "properties": {
+                    "patientIdentifier": {
+                        "type": "string",
+                        "description": "Unique patient identifier in MVI format."
+                    },
+                    "isEhmpPatient": {
+                        "type": "boolean",
+                        "description": "Set to true if eHMP has or will pre-sync the patient for use in eHMP."
+                    }
+                }
+            }
+        },
+        "outboundQueryCriteria": {
+            "type": "object",
+            "additionalProperties" : {
+                "type": "object",
+                "properties": {
+                    "classCode": {
+                        "type": "string",
+                        "description": "Class code for destination."
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "List of valid status codes for destination."
+                    }
+                }
+            }
+        }
+    }
+}

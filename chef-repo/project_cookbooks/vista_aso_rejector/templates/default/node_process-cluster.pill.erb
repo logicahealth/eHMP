@@ -1,0 +1,22 @@
+Bluepill.application("<%= @name %>", :log_file => "/var/log/bluepill-<%= @name %>.log") do |app|
+  app.process("<%= @name %>") do |process|
+    process.working_dir = "<%= @working_directory %>"
+    process.environment = { "NODE_ENV" => "<%= node[:development] ? "development" : "production" %>" }
+    process.pid_file = "<%= @pid_directory %>/<%= @name %>.pid"
+    process.daemonize = true
+    <% if @dev_deploy %>
+    process.start_command = "/usr/local/bin/node <%= @deploy_path %>"
+    <% elsif @apm_deploy %>
+    process.start_command = "node_modules/ca-apm-probe/bin/ca-apm-run.js <%= @deploy_path %>"
+    <% else %>
+    process.start_command = "/usr/local/bin/node <%= @deploy_path %>"
+    <% end %>
+    process.stdout = "<%= @log_directory %>/<%= @name %>_stdout.log"
+    process.stderr = "<%= @log_directory %>/<%= @name %>_stderr.log"
+    process.uid = "<%= @user %>"
+    process.gid = "<%= @group %>"
+    process.start_grace_time 30.seconds
+    process.stop_grace_time 30.seconds
+    process.restart_grace_time 60.seconds
+  end
+end

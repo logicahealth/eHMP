@@ -7,6 +7,9 @@ include_recipe "apache2_wrapper"
 include_recipe "apache2::default"
 include_recipe "apache2::mod_headers"
 
+# Include worker configuration in conf-enabled
+include_recipe "apache2_wrapper::mpm_worker"
+
 apache_site "default" do
   enable false
 end

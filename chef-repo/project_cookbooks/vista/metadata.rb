@@ -4,19 +4,18 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures VistA"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.8"
+version          "2.233.18"
 
 supports "centos"
 supports "windows"
 
-depends "common", "2.1.2"
+depends "common", "2.233.5"
 
 #############################
 # 3rd party
 #############################
 depends "selinux", "=0.9.0"
 depends "apache2", "=3.0.1"
-depends "simple_iptables", "=0.7.1"
 depends "windows", "=1.37.0"
 
 #############################

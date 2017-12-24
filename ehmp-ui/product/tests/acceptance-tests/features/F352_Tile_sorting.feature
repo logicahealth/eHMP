@@ -6,14 +6,14 @@ Background:
   And Overview is active
   And the user clicks the Workspace Manager
   And the user deletes all user defined workspaces
-  And the user creates a user defined workspace named "tilesort"
+  #And the user creates a user defined workspace named "tilesort"
+  
 
 @US4513 @TC246
 Scenario: Complete drag-drop in-applet sorting for Conditions
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "problems" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  Given the user creates and views a udw with a trend "problems" applet
+
+  And Problems trend view has data rows
   And the Problems applet starts without Manual Sort
   And the user notes the order of the problems in the Problems Gist
   
@@ -24,7 +24,7 @@ Scenario: Complete drag-drop in-applet sorting for Conditions
   Then the Problems applet reports Manual sort
 
   When user refreshes Problems Applet
-  Then the Problems Gist Applet contains data rows
+  Then problems gist is loaded successfully
   And the Problems applet reports Manual sort
   And Problem column is sorted in manual order in Problems Gist
 
@@ -45,10 +45,12 @@ Scenario: Complete drag-drop in-applet sorting for Conditions
 
 @DE5953 @DE5953_problems
 Scenario: User can clear a manual sort on the problems applet
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "problems" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  # Given the user customizes the "tilesort" workspace
+  # And the user adds an trend "problems" applet to the user defined workspace
+  # And the user selects done to complete customizing the user defined workspace
+  # And the "TILESORT" screen is active
+  Given the user creates and views a udw with a trend "problems" applet
+  And Problems trend view has data rows
   And the Problems applet starts without Manual Sort
   And the user notes the order of the problems in the Problems Gist
   
@@ -65,10 +67,12 @@ Scenario: User can clear a manual sort on the problems applet
 
 @US5794 @TC248 
 Scenario: Complete drag-drop in-applet sorting for Lab Results
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "lab_results_grid" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  # Given the user customizes the "tilesort" workspace
+  # And the user adds an trend "lab_results_grid" applet to the user defined workspace
+  # And the user selects done to complete customizing the user defined workspace
+  # And the "TILESORT" screen is active
+  And the user creates and views a udw with a trend "lab_results_grid" applet
+
   And the user has selected All within the global date picker
   And the Numeric Lab Results Gist applet displays data
   And the Numeric Lab Results applet starts without Manual Sort
@@ -103,10 +107,8 @@ Scenario: Complete drag-drop in-applet sorting for Lab Results
 
 @DE5953 @DE5953_lab
 Scenario: User can clear a manual sort on the lab results applet
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "lab_results_grid" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  Given the user creates and views a udw with a trend "lab_results_grid" applet
+
   And the user has selected All within the global date picker
   And the Numeric Lab Results Gist applet displays data
   And the Numeric Lab Results applet starts without Manual Sort
@@ -125,10 +127,8 @@ Scenario: User can clear a manual sort on the lab results applet
 
 @US5819 @TC249 @DE6064
 Scenario: Complete drag-drop in-applet sorting for Vitals
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "vitals" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  And the user creates and views a udw with a trend "vitals" applet
+
   And the Vitals Gist applet starts without Manual Sort
   And the user has selected All within the global date picker
   And the Vitals Gist Applet contains data rows
@@ -162,10 +162,8 @@ Scenario: Complete drag-drop in-applet sorting for Vitals
 
 @DE5953 @DE5953_vitals
 Scenario: User can clear a manual sort on the vitals applet
-  Given the user customizes the "tilesort" workspace
-  And the user adds an trend "vitals" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "TILESORT" screen is active
+  And the user creates and views a udw with a trend "vitals" applet
+
   And the Vitals Gist applet starts without Manual Sort
   And the user has selected All within the global date picker
   And the Vitals Gist Applet contains data rows

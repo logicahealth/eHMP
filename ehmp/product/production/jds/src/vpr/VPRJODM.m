@@ -14,7 +14,7 @@ SET(ARGS,BODY)  ; Store or update a operational data mutable item based on the p
  L +^VPRJODM(SID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q ""
  TSTART
  I $O(^VPRJODM(SID,""))']"" S ^VPRJODM(0)=$G(^VPRJODM(0))+1
- K ^VPRJODM(SID)
+ K:$D(^VPRJODM(SID)) ^VPRJODM(SID)
  M ^VPRJODM(SID)=OBJECT
  TCOMMIT
  L -^VPRJODM(SID)
@@ -26,7 +26,7 @@ CLR(RESULT,ARGS)    ; Clear ALL OPERATIONAL DATA MUTABLE!!!
  L +^VPRJODM:$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q
  S VPRJA=0
  TSTART
- F  S VPRJA=$O(^VPRJODM(VPRJA)) Q:VPRJA']""  K ^VPRJODM(VPRJA)
+ F  S VPRJA=$O(^VPRJODM(VPRJA)) Q:VPRJA']""  K:$D(^VPRJODM(VPRJA)) ^VPRJODM(VPRJA)
  S ^VPRJODM(0)=0
  TCOMMIT
  L -^VPRJODM
@@ -39,7 +39,7 @@ DEL(RESULT,ARGS)    ; Delete a given operational data mutable
  I $D(^VPRJODM(ARGS("_id"))) D
  .L +^VPRJODM(ARGS("_id")):$G(^VPRCONFIG("timeout","gds"),5)
  .TSTART
- .K ^VPRJODM(ARGS("_id"))
+ .K:$D(^VPRJODM(ARGS("_id"))) ^VPRJODM(ARGS("_id"))
  .TCOMMIT
  .L -^VPRJODM(ARGS("_id"))
  S RESULT="{}"

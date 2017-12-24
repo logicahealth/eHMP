@@ -1,0 +1,53 @@
+configurations {
+    doclet
+}
+
+dependencies {
+    doclet "com.hypnoticocelot:jaxrs-doclet:0.0.3-SNAPSHOT"
+}
+
+/*
+ * Doclet-based task to generate Swagger-type documentation
+ * see https://github.com/ryankennedy/swagger-jaxrs-doclet
+ */
+task generateRestDocs(type: Javadoc) {
+    group = javadoc.group
+    description = 'Creates build-time ReST API documentation.'
+    title = null
+    source = sourceSets.main.allJava
+    classpath = files(project.sourceSets.main*.compileClasspath)
+    destinationDir = reporting.file("rest-docs")
+    options.docletpath = configurations.doclet.files.asType(List)
+    options.doclet = "com.hypnoticocelot.jaxrs.doclet.ServiceDoclet"
+    options.addStringOption("apiVersion", rootProject.version)
+    options.addStringOption("swaggerUiZipPath", "${rootDir}/../infrastructure/gradle/restdocs/swagger-ui.zip")
+
+    // The host and port of the ReST API documentation produced by this task will be hosted
+    options.addStringOption("docBasePath", "http://localhost:PORT")
+
+    // The host of the ReST endpoints
+    options.addStringOption("apiBasePath", "https://IP      ")
+    options.addStringOption("errorTags", "@status")
+}
+
+task zipRestDocs(dependsOn: generateRestDocs, type: Zip) {
+    group = javadoc.group
+    description = 'Creates a ZIP archive of ReST API documentation.'
+    classifier = 'restdocs'
+    from generateRestDocs.destinationDir
+}
+
+task restDocs(dependsOn: generateRestDocs, type: org.gradle.api.plugins.jetty.JettyRun) {
+    group = javadoc.group
+    description = 'Starts a Jetty server hosting ReST API Documentation.'
+    reload = 'automatic'
+    scanIntervalSeconds = 10
+    httpPort = PORT
+    webAppSourceDirectory = generateRestDocs.destinationDir
+    contextPath = ""
+    classpath = sourceSets.main.compileClasspath
+    doFirst {
+        println "API documentation hosted at http://localhost:$httpPort"
+        println 'Control-C to quit'
+    }
+}

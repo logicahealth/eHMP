@@ -9,7 +9,8 @@ define([
             dueDateFormatted: '',
             doneDateFormatted: '',
             typeText: '',
-            priorityText: 'None'
+            priorityText: 'None',
+            applet_id: 'cds_advice'
         },
         parse: function (response) {
             if (_.isString(response.type)) {

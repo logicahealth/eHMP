@@ -1,8 +1,7 @@
 'use strict';
 
-var asuProcess = require('../../../subsystems/asu/asu-process');
-
 var endpoint = require('./progress-notes-titles-endpoint');
+var asuProcess = endpoint._asuProcess;
 
 function dummyLogFunction(x) {
     //console.log(x);
@@ -27,8 +26,6 @@ describe('progress-notes-titles-endpoint', function() {
 
     var progressNotes = [];
 
-    var mockAsuResponses = [];
-
     beforeEach(function() {
         progressNotes = [{
             ien: '001'
@@ -36,18 +33,15 @@ describe('progress-notes-titles-endpoint', function() {
             ien: '002'
         }];
 
-        sinon.stub(asuProcess, 'evaluate', function(jsonParams, config, httpConfig, res, logger, outreceptor) {
-            outreceptor(null, mockAsuResponses);
-        });
+        sinon.stub(asuProcess, 'evaluate');
     });
 
     afterEach(function() {
         asuProcess.evaluate.restore();
-        mockAsuResponses = [];
     });
 
     it('responds correctly (and without an error) when all responses include "hasPermission = true"', function(done) {
-        mockAsuResponses = [
+        asuProcess.evaluate.callsArgWith(5, null, [
             [{
                 testId: '1',
                 hasPermission: true
@@ -55,23 +49,21 @@ describe('progress-notes-titles-endpoint', function() {
                 testId: '2',
                 hasPermission: true
             }]
-        ];
+        ]);
 
-        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, '9E7A', progressNotes, function(err, filteredResults) {
+        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, 'SITE', progressNotes, function(err, filteredResults) {
             expect(asuProcess.evaluate.calledOnce).to.be.true();
-
             expect(err).to.be.falsy();
-
             expect(filteredResults).to.be.truthy();
             expect(filteredResults.length).to.be(2);
             expect(filteredResults[0].asuApproved).to.be.true();
-
             done();
         });
     });
 
     it('responds correctly (and without an error) when a response includes "hasPermission = false"', function(done) {
-        mockAsuResponses = [
+        progressNotes.push({ien: '003'});
+        asuProcess.evaluate.callsArgWith(5, null, [
             [{
                 testId: '1',
                 hasPermission: true
@@ -82,51 +74,27 @@ describe('progress-notes-titles-endpoint', function() {
                 testId: '3',
                 hasPermission: true
             }]
-        ];
+        ]);
 
-        progressNotes.push({ien: '003'});
-
-        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, '9E7A', progressNotes, function(err, filteredResults) {
+        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, 'SITE', progressNotes, function(err, filteredResults) {
             expect(asuProcess.evaluate.calledOnce).to.be.true();
-
             expect(err).to.be.falsy();
-
             expect(filteredResults).to.be.truthy();
             expect(filteredResults.length).to.be(2);
-
             done();
         });
     });
 
     it('responds with the expected error message (and doesn\'t crash) when an asuResponse without a "hasPermission" field is received', function(done) {
-        mockAsuResponses = [
-            [{
-                testId: '1',
-                hasPermission: true
-            }], [{
-                testId: '2',
-                hasPermission: true
-            }], [{
-                testId: '3',
-                junk: 'JUNK'
-            }], [{
-                testId: '4',
-                hasPermission: true
-            }]
-        ];
-
         progressNotes.push({ien: '003'}, {ien: '004'});
-
         var expectedError = 'progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: [{"testId":"3","junk":"JUNK"}]';
+        asuProcess.evaluate.callsArgWith(5, expectedError);
 
-        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, '9E7A', progressNotes, function(err, filteredResults) {
+        endpoint._asuFilter(dummyLogger, mockConfiguration, null, null, null, null, 'SITE', progressNotes, function(err, filteredResults) {
             expect(asuProcess.evaluate.calledOnce).to.be.true();
-
             expect(filteredResults).to.be.falsy();
-
             expect(err).to.be.truthy();
-            expect(err).to.be(expectedError);
-
+            expect(err).to.match(/asuResponse didn't include a hasPermission: \[{"testId":"3","junk":"JUNK"}\]/);
             done();
         });
     });

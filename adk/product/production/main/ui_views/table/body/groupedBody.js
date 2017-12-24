@@ -15,9 +15,17 @@ define([
             '</button>'),
         tagName: 'th',
         attributes: function() {
+            var colspanValue = this.getOption('columns').length;
+            var tileOptions = this.getOption('tileOptions', {});
+            var isQuickMenuEnabled = _.get(tileOptions, 'quickMenu.enabled', false);
+
+            if (isQuickMenuEnabled) {
+                colspanValue += 1;
+            }
+
             return {
                 'scope': 'rowGroup',
-                'colspan': this.getOption('columns').length,
+                'colspan': colspanValue,
                 'id': this.getOption('groupId'),
                 'aria-expanded': 'true'
             };
@@ -47,7 +55,9 @@ define([
                 helperObj[key] = helper;
             }, {}, this));
             if (_.has(helpers, this.model.get('groupName'))) {
-                var origHelper = { originalHelper: helpers[this.model.get('groupName')] };
+                var origHelper = {
+                    originalHelper: helpers[this.model.get('groupName')]
+                };
                 Object.defineProperty(helpers, this.model.get('groupName'), {
                     get: function() {
                         return _.result(origHelper, 'originalHelper');

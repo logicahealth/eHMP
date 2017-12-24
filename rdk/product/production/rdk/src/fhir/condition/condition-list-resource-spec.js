@@ -7,10 +7,10 @@ var inputValue = require('./condition-list-resource-spec-data').inputValue;
 describe('Problem (Condition List) FHIR Resource', function() {
     var req = {
         query: {
-            'subject.identifier': '9E7A;253'
+            'subject.identifier': 'SITE;253'
         },
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -48,7 +48,7 @@ describe('Problem (Condition List) FHIR Resource', function() {
                             expect(resEncounter).to.not.be.undefined();
                             if (resEncounter !== undefined && vprP.facilityName !== undefined || vprP.facilityCode !== undefined) {
                                 expect(resEncounter.text.status).to.equal('generated');
-                                expect(resEncounter.text.div).to.equal('<div>Encounter with patient 9E7A;253</div>');
+                                expect(resEncounter.text.div).to.equal('<div>Encounter with patient SITE;253</div>');
                                 expect(resEncounter.location[0].resourceType).to.equal('Location');
                                 expect(resEncounter.location[0].identifier.value).to.equal(vprP.facilityCode);
                                 expect(resEncounter.location[0].Name).to.equal(vprP.facilityName);

@@ -51,7 +51,6 @@ define([], function() {
         extraClasses: ['signin-button', 'btn', 'btn-primary', 'btn-block'],
         required: true,
         name: 'login',
-        title: 'Press enter to sign in',
         label: 'Sign In',
         disabled: true
     }, {

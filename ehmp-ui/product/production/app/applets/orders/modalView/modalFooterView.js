@@ -101,7 +101,7 @@ define([
             var workflowOptions = {
                 size: 'medium',
                 headerOptions: {
-                    closeButtonOptions: {title: 'Press enter to cancel.'}
+                    closeButtonOptions: {title: 'Cancel'}
                 },
                 triggerElement: this.triggerElement,
                 helpMapping: 'lab_order_esig_form'

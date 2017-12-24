@@ -23,3 +23,35 @@ Then(/^the preview title is "([^"]*)"$/) do |title|
   expect(@ehmp.mdl_alert_title.visible?).to eq(true)
   expect(@ehmp.mdl_alert_title.text.upcase).to eq(title.upcase)
 end
+
+Then(/^the Preview window displays$/) do
+  ehmp = PobPreviewWorkspace.new
+  expect(ehmp.wait_for_fld_workspace_preview).to eq(true)
+  ehmp.wait_for_fld_preview_applets
+  expect(ehmp).to have_btn_close_preview
+end
+
+Then(/^the Preview window has a Customize button$/) do
+  ehmp = PobPreviewWorkspace.new
+  ehmp.wait_for_btn_customize
+  expect(ehmp).to have_btn_customize
+end
+
+When(/^the user selects the Preview window Customize button$/) do
+  ehmp = PobPreviewWorkspace.new
+  expect(ehmp.wait_for_btn_customize).to eq(true)
+  ehmp.btn_customize.click
+end
+
+When(/^the user selects the Preview link for a pre\-defined screen$/) do
+  ehmp = PobWorkspaceManager.new
+  ehmp.wait_for_fld_predefined_previews
+  expect(ehmp.fld_predefined_previews.length).to be > 0
+  ehmp.fld_predefined_previews[0].click
+end
+
+Then(/^the Preview window does not have a Customize button$/) do
+  ehmp = PobPreviewWorkspace.new
+  ehmp.wait_for_btn_customize(3)
+  expect(ehmp).to_not have_btn_customize
+end

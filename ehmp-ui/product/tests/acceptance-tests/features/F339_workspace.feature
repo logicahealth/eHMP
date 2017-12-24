@@ -1,4 +1,4 @@
-@F339   @DE3930
+@F339   @DE3930 @reg4
 Feature: User Defined Work Spaces 2 - Cloning Existing Workspaces
 
 Background:
@@ -18,8 +18,8 @@ Scenario: Verify user defined workspace displays visual indicator
 Scenario: Users can clone predefined workspace 
   Given workspace "documents-list" is listed
   When user clones the "documents-list" workspace
-  Then the user defined workspace name "documents-copy" is listed
-  When the user navigates to "#documents-copy"
+  Then the user defined workspace data screen id "documents-copy" is listed
+  When the user navigates to "#/patient/documents-copy"
   Then the "Documents Copy" screen is active
   And the active screen displays 1 applets
   And the applets are displayed are
@@ -28,34 +28,40 @@ Scenario: Users can clone predefined workspace
 
 @US4490 @US4490_userdefined
 Scenario: Users can clone user defined workspace
-  When the user clicks "Plus Button"
-  And the user clicks "Customize"
+  #When the user clicks "Plus Button"
+  #And the user clicks "Customize"
+  Given the user creates a user defined workspace named "cloneudw"
+  When the user customizes the "cloneudw" workspace
+
   And the user adds an expanded "appointments" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
-  Then the User Defined Workspace 1 is active
+
+  Then the "CLONEUDW" screen is active
+  And the active screen displays 1 applets
+
   When the user clicks the Workspace Manager
-  Then the user defined workspace name "user-defined-workspace-1" is listed
-  When user clones the "user-defined-workspace-1" workspace
-  Then the user defined workspace name "user-defined-workspace-copy" is listed
-  When the user navigates to "#user-defined-workspace-copy"
-  Then the "User Defined Workspace Copy" screen is active
+  Then the user defined workspace data screen id "cloneudw" is listed
+  When user clones the "cloneudw" workspace
+  Then the user defined workspace data screen id "cloneudw-copy" is listed
+  When the user navigates to "#/patient/cloneudw-copy"
+  Then the "CLONEUDW Copy" screen is active
   And the active screen displays 1 applets
   And the applets are displayed are
       | applet                 |
       | APPOINTMENTS & VISITS  |
 
-@US5045 
+@US5045 @DE8552
 Scenario: User Defined Work Spaces Integrated into Site Search
   Given workspace "documents-list" is listed
   And user clones the "documents-list" workspace
-  And the user defined workspace name "documents-copy" is listed
+  And the user defined workspace data screen id "documents-copy" is listed
   When the user filters the workspace manager on term "Documents"
   Then the workspace manager only displays workspaces with term "Documents"
 
 @US5043 
 Scenario: Filter in Work Space Manager To Filter By Work Space Description
   And the user creates a user defined workspace named "testdescription"
-  And the user defined workspace name "testdescription" is listed
+  And the user defined workspace data screen id "testdescription" is listed
   When the user sets the description of udw "testdescription" to "filterdescription"
   When the user filters the workspace manager on term "filterdescription"
   Then the workspace manager only displays workspaces with description "filterdescription"

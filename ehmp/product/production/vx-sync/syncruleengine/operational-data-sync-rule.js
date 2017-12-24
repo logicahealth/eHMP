@@ -35,8 +35,8 @@ function operationalDataSyncRule(log, config, environment, patientIdentifiers, e
     var patientVistaSitesToPids = {};
     _.each(patientVistaPids, function(pid) {
         var site = idUtil.extractSiteFromPid(pid.value);
-        patientVistaSitesToPids[site] = pid; //{'9E7A': '9E7A;10000', 'C877': C877;10000', etc.}
-        patientVistaSites.push(site); //['9E7A', 'C877', etc.]
+        patientVistaSitesToPids[site] = pid; //{'SITE': 'SITE;10000', 'SITE': SITE;10000', etc.}
+        patientVistaSites.push(site); //['SITE', 'SITE', etc.]
     });
 
     log.debug('operational-data-sync-rule.operationalDataSyncRule: Got patient VistA sites %j', patientVistaSites);

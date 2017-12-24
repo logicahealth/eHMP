@@ -11,6 +11,7 @@ define([
     'hbs!app/applets/search/templates/searchingTemplate'
 ], function(_, Backbone, Marionette, moment, searchResultTemplate, searchResultGroupTemplate, searchResultContentTemplate, badgeTemplate, emptyViewTemplate, searchingTemplate) {
     'use strict';
+    var COMPLEX_QUERY = '200.500.1022';
     var COMMUNITY_DOMAIN = 'Community Health Summaries';
     var TEXT_SEARCH_CHANNEL = ADK.Messaging.getChannel('search'),
         DATE_FORMAT = 'MM/DD/YYYY';
@@ -62,14 +63,8 @@ define([
         template: searchResultTemplate,
         serializeData: function() {
             var data = this.model.toJSON();
-            var replaceHighlightTags = function(highlight, limit) {
-                if (limit) {
-                    // replace only the first 3 instances
-                    var match = highlight.match(/^((?:[\s\S]*?<\/span>){1,3})/)[0] || '';
-                    var replace = match.replace(/<span /g, '<mark ').replace(/<\/span>/g, '</mark>');
-                    return highlight.replace(match, replace);
-                }
-                return highlight.replace(/<span /g, '<mark ').replace(/<\/span>/g, '</mark>');
+            var limitHighlightSnippets = function (highlight) {
+                return highlight.match(/^((?:[\s\S]*?}}){1,3})/)[0] || ''; //limit to first 3 snippets
             };
             if (data.summary) {
                 data.summary = ADK.utils.stringUtils.toTitleCase(data.summary);
@@ -79,14 +74,14 @@ define([
                 if (!_.isUndefined(highlightsObj.body)) {
                     var parsedHighlights = [];
                     _.each(highlightsObj.body, function(highlight) {
-                        parsedHighlights.push(replaceHighlightTags(highlight));
+                        parsedHighlights.push(highlight);
                     });
-                    data.highlights = '...' + parsedHighlights.join(' ...</br>...') + ' ...';
+                    data.highlights = '...' + parsedHighlights.join('\r\n') + ' ...';
                 } else {
                     data.highlights = '';
                 }
             } else if (data.highlights) {
-                data.highlights = replaceHighlightTags(data.highlights, data.domain === COMMUNITY_DOMAIN);
+                data.highlights = limitHighlightSnippets(data.highlights);
             }
             return data;
         },
@@ -164,7 +159,7 @@ define([
                     icn: currentPatient.attributes.icn,
                     pid: currentPatient.attributes.pid
                 },
-                model: this.model
+                model: this.model.clone()
             });
         }
     });
@@ -180,7 +175,7 @@ define([
             var data = this.model.toJSON();
             var groupIdPrefix = 'result-Group-';
             var groupTitlePrefix = 'result-Group-Title-';
-            var cleanGroupName = this.model.get('kind').replace(/[^a-zA-Z0-9]/g, "-");
+            var cleanGroupName = (this.model.get('kind') || '').replace(/[^a-zA-Z0-9]/g, "-");
             if (!_.isUndefined(this.model.get('collection').hasDataToFetch)) {
                 cleanGroupName = this.model.get('summary').replace(/[^a-zA-Z0-9]/g, "-");
                 groupIdPrefix = 'result-Sub-Group-';
@@ -335,9 +330,10 @@ define([
         onExpandGroup: function(event) {
             if (this.model.get('collection').hasDataToFetch) {
                 this.model.get('collection').fetchCollection({
+                    domain: this.model.get('type'),
                     drilldown_type: this.model.get('subGroupType'),
                     group_value: this.model.get('docSearchText'),
-                    searchTerm: ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm.toString().toLowerCase()
+                    searchTerm: _.get(TEXT_SEARCH_CHANNEL.request('get:current:search:term'), 'searchTerm', '').toLowerCase()
                 });
             }
             this.accordionExpandCollapse('fa-chevron-right', 'fa-chevron-down', 'collapse ', event);
@@ -423,35 +419,62 @@ define([
         isSearching: false,
         groupResultCounts: {},
         initialize: function(options) {
-            var self = this;
             var ehmpConfig = ADK.Messaging.request('ehmpConfig');
             var featureFlags = ehmpConfig.get('featureFlags');
             var trackSolrStorageBoolean = _.get(featureFlags, 'trackSolrStorage');
             this.collection = new ADK.UIResources.Fetch.TextSearch.AggregateCollection();
             this.model.set('showWarningMessage', !trackSolrStorageBoolean);
             this.listenTo(TEXT_SEARCH_CHANNEL, 'updateGroupResultCount', function(groupName, count) {
-                self.groupResultCounts[groupName] = count;
+                this.groupResultCounts[groupName] = count;
                 var showingResultsCount = 0;
-                _.each(self.groupResultCounts, function(count) {
-                    showingResultsCount += count;
+                _.each(this.groupResultCounts, function(groupCount) {
+                    showingResultsCount += groupCount;
                 });
-                self.model.set('numberOfResults', showingResultsCount);
+                this.model.set('numberOfResults', showingResultsCount);
             });
-            this.listenTo(TEXT_SEARCH_CHANNEL, 'newSearch', function() {
-                var storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
+            this.listenTo(TEXT_SEARCH_CHANNEL, 'newSearch', function(storageTextOverride) {
+                var storageText = storageTextOverride || TEXT_SEARCH_CHANNEL.request('get:storage:text');
+                if (_.isUndefined(storageText) || _.isNull(storageText)) {
+                    storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
+                }
                 if (storageText) {
+                    ADK.SessionStorage.setAppletStorageModel('search', 'searchText', storageText);
                     this.model.set('searchTerm', storageText.searchTerm);
                     this.showChildView('searchResultsRegion', new EmptyView());
-                    self.fetchNewSearchResults();
+                    this.fetchNewSearchResults();
                 }
             });
             this.listenTo(TEXT_SEARCH_CHANNEL, 'cancelCloseSearch', function() {
                 this.abortCollectionFetch();
                 ADK.Navigation.back();
             });
+            TEXT_SEARCH_CHANNEL.reply('get:current:search:term', function() {
+                var currentSearchTerm = this.model.get('searchTerm');
+                if (_.isString(currentSearchTerm)) {
+                    return {
+                        searchTerm: currentSearchTerm
+                    };
+                }
+                var sessionStorageText = _.get(ADK.SessionStorage.getAppletStorageModel('search', 'searchText'), 'searchTerm');
+                if (_.isPlainObject(sessionStorageText)) {
+                    return sessionStorageText;
+                }
+                var storageText = TEXT_SEARCH_CHANNEL.request('get:storage:text');
+                if (_.isPlainObject(storageText)) {
+                    return storageText;
+                }
+                return {
+                    searchTerm: ''
+                };
+
+            }.bind(this));
+        },
+        onBeforeDestroy: function() {
+            TEXT_SEARCH_CHANNEL.stopReplying('get:current:search:term');
         },
         onRender: function() {
             this.showChildView('loadingRegion', ADK.Views.Loading.create());
+            TEXT_SEARCH_CHANNEL.trigger('newSearch');
         },
         abortCollectionFetch: function() {
             var xhrAbort = _.get(this.collection, 'collection.xhr.abort');
@@ -472,15 +495,22 @@ define([
                         collection: this.collection
                     }
                 }));
+                if (collection.length === 0) {
+                    this.model.set('numberOfResults', 0);
+                }
                 TEXT_SEARCH_CHANNEL.trigger('newSearchComplete');
             },
             'fetch:error': function(error, response) {
                 this.isSearching = false;
                 this.$el.removeClass('percent-height-100');
-                this.removeRegion('loadingRegion');
-                this.showChildView('searchResultsRegion', ADK.Views.Error.create({
+                this.showChildView('loadingRegion', new EmptyView());
+                var errorView = ADK.Views.Error.create({
                     model: new Backbone.Model(response)
-                }));
+                });
+                if (_.get(response, 'responseJSON.code') === COMPLEX_QUERY) {
+                    errorView.model.set('message', _.get(response, 'responseJSON.message'));
+                }
+                this.showChildView('searchResultsRegion', errorView);
                 TEXT_SEARCH_CHANNEL.trigger('newSearchError');
             }
         },

@@ -11,7 +11,6 @@ var errorUtil = require(global.VX_UTILS + 'error');
 var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var metastampUtil = require(global.VX_UTILS + 'metastamp-utils');
 var uuid = require('node-uuid');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('vler-sync-request-handler.handle : received request to VLER job: %j', job);
@@ -177,7 +176,8 @@ function getVlerDocumentListConfiguration(log, config, job) {
     vlerConfig = _.defaults(vlerConfig, config.vler);
     var url = format('%s://%s:%s%s', 'http', vlerConfig.defaults.host, vlerConfig.defaults.port, vlerConfig.vlerdocument.documentListPath);
     vlerConfig.url = url;
-    vlerConfig.agentClass = VxSyncForeverAgent;
+    vlerConfig.forever = true;
+    vlerConfig.agentOptions = {maxSockets: config.handlerMaxSockets || 5};
 
     return vlerConfig;
 }

@@ -22,6 +22,7 @@ public class WriteHandler implements WorkItemHandler, Closeable {
 	private WorkItem workItem;
 	private WorkItemManager manager;
 	private static final Logger LOGGER = Logger.getLogger(WriteHandler.class);
+	
 	public WriteHandler(KieSession ksession){
 		this.ksession = ksession;		
 	}
@@ -29,10 +30,12 @@ public class WriteHandler implements WorkItemHandler, Closeable {
 	public WriteHandler(){
 	}
 
+	@Override
 	public void close() {
 		// Do nothing
 	}
 
+	@Override
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
 		this.workItem = workItem;
 		this.manager = manager;
@@ -44,27 +47,27 @@ public class WriteHandler implements WorkItemHandler, Closeable {
 			LOGGER.info("Event State Write Service WriteHandler.executeWorkItem has been called");
 
 			dataLocation  = WorkItemUtil.extractRequiredStringParam(workItem, "dataLocation");
-			LOGGER.debug("Event State Write Service WriteHandler.executeWorkItem: dataLocation=" + dataLocation);
+			LOGGER.debug(String.format("Event State Write Service WriteHandler.executeWorkItem: dataLocation=%s", dataLocation));
 
 			value  = WorkItemUtil.extractRequiredStringParam(workItem, "value");
-			LOGGER.debug("Event State Write Service WriteHandler.executeWorkItem: value=" + value);
+			LOGGER.debug(String.format("Event State Write Service WriteHandler.executeWorkItem: value=%s", value));
 
 			listenerId  = WorkItemUtil.extractRequiredLongParam(workItem, "listenerId");	
-			LOGGER.debug("Event State Write Service WriteHandler.executeWorkItem: listenerId=" + listenerId);
+			LOGGER.debug(String.format("Event State Write Service WriteHandler.executeWorkItem: listenerId=%s", listenerId));
 											
 			insertDataIntoProcessedEventStateTable(dataLocation, value, listenerId);
 
 			serviceResponse = WorkItemUtil.buildSuccessResponse();
 		}
 		catch (EhmpServicesException e) {
-			e.printStackTrace();
-			serviceResponse = e.toJsonString();
+			LOGGER.error(e.getMessage(), e);;
+			serviceResponse = e.createJsonErrorResponse();
 		} catch (Exception e) {
-			LOGGER.error("WriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
-			serviceResponse = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "WriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
+			LOGGER.error(String.format("WriteHandler.executeWorkItem: An unexpected condition has happened: "+e.getMessage()),e);
+			serviceResponse = ErrorResponseUtil.createJsonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "WriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 	
-		LOGGER.debug("Event State Write Service WriteHandler.executeWorkItem: ServiceResponse=" + serviceResponse);
+		LOGGER.debug(String.format("Event State Write Service WriteHandler.executeWorkItem: ServiceResponse=%s", serviceResponse));
 		WorkItemUtil.completeWorkItem(workItem, manager, serviceResponse);
 	}
 
@@ -99,13 +102,12 @@ public class WriteHandler implements WorkItemHandler, Closeable {
 				//Abort the calling processInstance
 				abortProcessInstance();
 				
-				String error = String.format("WriteHandler.insertDataProcessedEventStateTable - duplicate entry detected for "+
-						"DATA_LOCATION:'%s' LISTENER_ID:'%s' VALUE:'%s'",dataLocation,listenerId,value);
-				LOGGER.debug(error);
+				LOGGER.debug(String.format("WriteHandler.insertDataProcessedEventStateTable - duplicate entry detected for "+
+						"DATA_LOCATION:'%s' LISTENER_ID:'%s' VALUE:'%s'",dataLocation,listenerId,value));
 			}
 		}
 		catch(Exception e) {
-			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()); 
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e); 
 		}
 	}
 
@@ -118,11 +120,12 @@ public class WriteHandler implements WorkItemHandler, Closeable {
 		ksession.abortProcessInstance(processInstanceId);
 	}
 
-	
 	@Override
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
 		manager.abortWorkItem(workItem.getId());
 		LOGGER.debug("Event State Write Sevice WriteHandler.abortWorkItem has been called");
 	}
+
+	
 
 }

@@ -9,10 +9,13 @@ module.exports.getResourceConfig = function () {
             name: 'visits-' + visitType,
             path: '/' + visitType,
             get: getVisits.bind(null, visitType),
-            interceptors: getVisits.interceptors[visitType],
+            interceptors: {
+                synchronize: false,
+                convertPid: true
+            },
             subsystems: ['patientrecord','jds','solr','jdsSync'],
-            requiredPermissions: getVisits.permissions[visitType],
-            isPatientCentric: getVisits.isPatientCentric[visitType]
+            requiredPermissions: ['read-encounter'],
+            isPatientCentric: true
         };
     });
 };

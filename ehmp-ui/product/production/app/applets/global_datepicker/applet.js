@@ -44,7 +44,7 @@ define([
             'HiddenDiv': '.global-date-picker-popover-container'
         },
         template: LayoutTemplate,
-        className: 'global-date-picker',
+        className: 'global-date-picker left-padding-xs percent-height-100',
         regions: {
             gdrSpikeline: '@ui.Spikeline',
             globalDateRegion: '@ui.GlobalDateContainer',
@@ -96,6 +96,7 @@ define([
                 this.gdrMinimizedHeader.$el.hide();
                 this.spikeLineView.$el.hide();
                 this.ui.DateRegionMinimized.addClass('hidden');
+                this.ui.HiddenDiv.addClass('hidden');
             }
         },
         onBeforeShow: function() {
@@ -175,11 +176,11 @@ define([
     });
 
     ADK.Messaging.trigger('register:component', {
-        type: "contextNavigationItem",
-        group: ["patient", "patient-left"],
+        type: "contextHeaderItem",
+        group: ["patient", "patient-right"],
         key: "globalDatePicker",
         view: GlobalDateLayoutView,
-        orderIndex: 1
+        orderIndex: 3
     });
 
 

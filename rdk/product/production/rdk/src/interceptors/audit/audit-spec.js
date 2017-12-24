@@ -2,7 +2,7 @@
 var audit = require('./audit');
 var httpMocks = require('node-mocks-http');
 
-var patient = '9E7A;167';
+var patient = 'SITE;167';
 // var authorization = 'Basic OUU3QTtwdTEyMzQ6cHUxMjM0ISE=';
 
 function buildRequest(pid) {

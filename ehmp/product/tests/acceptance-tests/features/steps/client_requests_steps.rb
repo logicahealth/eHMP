@@ -251,6 +251,6 @@ end
 When(/^the client requests demographics from the multiple system for the patient "(.*?)" in VPR format$/) do |pid|
   base_jds_url = DefaultLogin.jds_url
   p path = "#{base_jds_url}/vpr/mpid/#{pid}"
-  # http://IP             /vpr/mpid/9E7A;100603
+  # http://IP             /vpr/mpid/SITE;100603
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end

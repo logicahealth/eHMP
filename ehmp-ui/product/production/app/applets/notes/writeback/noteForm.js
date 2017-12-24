@@ -100,7 +100,7 @@ define([
             showProgress: false,
             keyboard: true,
             headerOptions: {
-                closeButtonOptions: {title: 'Press enter to cancel.'}
+                closeButtonOptions: {title: 'Cancel'}
             },
             steps: [],
         };

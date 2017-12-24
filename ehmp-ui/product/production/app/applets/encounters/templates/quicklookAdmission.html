@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th scope="col">Date</th>
-            <th scope="col">Location</th>
+            <th scope="col">{{#if isParentTile}}Diagnosis{{else}}Location{{/if}}</th>
             <th scope="col">Facility</th>
         </tr>
     </thead>
@@ -12,7 +12,7 @@
         {{#each allGroupedEncounters}}
             <tr>
                 <td>{{showDate}}</td>
-                <td>{{locationDisplayName}}</td>
+                <td class="word-wrap-break-word">{{#if ../isParentTile}}{{reasonName}}{{else}}{{locationDisplayName}}{{/if}}</td>
                 <td>{{facilityMoniker}}</td>
             </tr>
         {{/each}}

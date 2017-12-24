@@ -8,6 +8,8 @@ var ra = require('../common/entities/radiology-objects.js'),
     nullchecker = rdk.utils.nullchecker;
 
 function getResourceConfig() {
+    //de7867 - removed the line that turned off the synchronize
+    //         interceptor from this patient centric resource
     return [{
         name: 'fhir-radiology-report',
         path: '',
@@ -15,13 +17,12 @@ function getResourceConfig() {
         interceptors: {
             audit: false,
             metrics: false,
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
+            authentication: false, // why are they skipping authentication?
+            operationalDataCheck: false // why don't they care about the operational data, they can't even log in without it?
         },
         permitResponseFormat: true,
-        requiredPermissions: [],
-        isPatientCentric: false
+        requiredPermissions: [], // why are there no required permissions?
+        isPatientCentric: false // why is this claiming to be not a patient centric endpoint? This should not be skipping patient policy checks
     }];
 }
 

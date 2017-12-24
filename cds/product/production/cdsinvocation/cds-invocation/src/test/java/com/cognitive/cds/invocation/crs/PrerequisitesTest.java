@@ -93,12 +93,12 @@ public class PrerequisitesTest {
         prereq.setRemediationQuery("orderable.sparql");
   
         // Rheumatoid Factor enterprise snomed code.
-        LabOrderableSparqlResult result = resolver.executeOrderableQuery("9E7A", prereq);
+        LabOrderableSparqlResult result = resolver.executeOrderableQuery("SITE", prereq);
         assertTrue(result.getResults().getBindings().get(0).getSiteOrderCode().getValue().equalsIgnoreCase("urn:va:oi:252"));  
         
         // C Reactive Protein snomed code.
         coding.setCode("55235003");
-        LabOrderableSparqlResult result1 = resolver.executeOrderableQuery("9E7A", prereq);
+        LabOrderableSparqlResult result1 = resolver.executeOrderableQuery("SITE", prereq);
         assertTrue(result1.getResults().getBindings().get(0).getSiteOrderCode().getValue().equalsIgnoreCase("urn:va:oi:239"));  
     }
     
@@ -112,7 +112,7 @@ public class PrerequisitesTest {
         prereq.setCoding(coding);
   
         // Rheumatoid Factor enterprise snomed code.
-        LabSparqlResults result1 = resolver.executeLabResultQuery("9E7A", prereq);
+        LabSparqlResults result1 = resolver.executeLabResultQuery("SITE", prereq);
         
         List<Binding> binding1 = result1.getResults().getBindings();
         for (Iterator<Binding> iterator = binding1.iterator(); iterator.hasNext();) {
@@ -125,7 +125,7 @@ public class PrerequisitesTest {
         
         // CRP
         coding.setCode("55235003");
-        LabSparqlResults result2 = resolver.executeLabResultQuery("9E7A", prereq);
+        LabSparqlResults result2 = resolver.executeLabResultQuery("SITE", prereq);
         
         List<Binding> binding2 = result2.getResults().getBindings();
         for (Iterator<Binding> iterator = binding2.iterator(); iterator.hasNext();) {
@@ -144,16 +144,16 @@ public class PrerequisitesTest {
 
         List<Callable<String>> threadWorkers = new ArrayList<>();
         try{
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 1, "9E7A", "415301001"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 2, "9E7A", "55235003"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 3, "C877", "415301001"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 4, "C877", "55235003"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 5, "48B0", "415301001"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 6, "48B0", "55235003"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 7, "1158", "415301001"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 8, "1158", "55235003"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 9, "9946", "415301001"));
-        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 10, "9946", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 1, "SITE", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 2, "SITE", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 3, "SITE", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 4, "SITE", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 5, "SITE", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 6, "SITE", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 7, "SITE", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 8, "SITE", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 9, "SITE", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 10, "SITE", "55235003"));
         	
             ExecutorService executor = Executors.newFixedThreadPool(threadWorkers.size());
         	executor.invokeAll(threadWorkers);

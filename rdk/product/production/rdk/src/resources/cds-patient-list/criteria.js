@@ -3,18 +3,12 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 // Database
 var dbName = 'patientlist';
 var critCollection = 'criteria';
-var thisApp;
-var testId;
-
-function init(app) {
-    thisApp = app;
-    testId = thisApp.subsystems.cds.testMongoDBId;
-}
 
 
 function computeMatch(req) {
@@ -59,11 +53,14 @@ function computeMatch(req) {
  *                  message:Criteria not found }
  *
  */
-var getCriteria = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getCriteria(req, res) {
+    req.logger.debug('criteria.getCriteria()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS criteria resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -99,8 +96,8 @@ var getCriteria = function(req, res) {
             });
         }
     });
-};
-module.exports.getCriteria = getCriteria;
+}
+
 
 /**
  * Create Criteria used in creating a Patient list Definition
@@ -146,11 +143,14 @@ module.exports.getCriteria = getCriteria;
  *
  */
 // Post to CDSInvocation MongoDB app /cds-data/criteria.js
-var postCriteria = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postCriteria(req, res) {
+    req.logger.debug('criteria.postCriteria()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS criteria resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -192,8 +192,8 @@ var postCriteria = function(req, res) {
             });
         });
     });
-};
-module.exports.postCriteria = postCriteria;
+}
+
 
 /**
  * Delete Criteria used in creating a Patient list Definition
@@ -219,11 +219,14 @@ module.exports.postCriteria = postCriteria;
  *                  message: Name or Id required }
  *
  */
-var deleteCriteria = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteCriteria(req, res) {
+    req.logger.debug('criteria.deleteCriteria()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS criteria resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -257,7 +260,9 @@ var deleteCriteria = function(req, res) {
             res.status(rdk.httpstatus.bad_request).rdkSend(message);
         }
     });
-};
-module.exports.deleteCriteria = deleteCriteria;
+}
 
-module.exports.init = init;
+
+module.exports.getCriteria = getCriteria;
+module.exports.postCriteria = postCriteria;
+module.exports.deleteCriteria = deleteCriteria;

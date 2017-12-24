@@ -22,29 +22,6 @@ directory "#{node[:workstation][:user_home]}/Projects/vistacore/.chef/keys" do
   mode "0755"
 end
 
-file "#{node[:workstation][:user_home]}/Projects/vistacore/.chef/jenkins.pem" do
-	content lazy{ File.read("/jenkins.pem") }
-  owner node[:workstation][:user]
-  mode "0755"
-  sensitive true
-  action :create
-end
-
-chef_users = ChefVault::Item.load(
-  "jenkins", "chef_users",
-  node_name: 'jenkins',
-  client_key_path: "/jenkins.pem"
-).to_hash
-
-chef_users["chef_users"].each_pair { |key_name, key_content|
-  file "#{ENV['WORKSPACE']}/.chef/#{key_name}.pem" do
-    action :create
-    content key_content
-    owner node[:workstation][:user]
-    mode '0755'
-  end
-}
-
 ssh = ChefVault::Item.load(
   "jenkins", "ssh",
   node_name: 'jenkins',

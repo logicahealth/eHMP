@@ -6,11 +6,12 @@ if( ! System.getenv().keySet().contains('WORKSPACE') ) {
 allprojects  {
 
   println "=====================================\nLOADING ALLPROJECTS BLOCK..."
-  ext.set('repo', 'releases')
   ext.set('groupId', 'us.vistacore.rdk')
   ext.set('repoVersion', getRepoVersion())
   ext.set('branchName', getCurrentBranchName())
   ext.set('currentCommitHash', getCurrentCommitHash())
+  ext.set('nexusURL', getNexusURL())
+  ext.set('uploadRepo', getNexusUploadRepository())
   ext.set('commitCountDir', projectDir)
 
   println "SETTINGS:\n   repoVersion = ${repoVersion}"
@@ -18,10 +19,8 @@ allprojects  {
   println "   currentCommitHash = ${currentCommitHash}"
 
   def repoCommitCountClosure = {
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    return proc2.text.trim()
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    return proc.text.trim()
   }
   
   def repoCommitCount = "${->repoCommitCountClosure()}"
@@ -54,6 +53,13 @@ task smokeTest{
   }
 }
 
+def getNexusURL() {
+    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+}
+
+def getNexusUploadRepository() {
+    System.env.NEXUS_UPLOAD_REPO ?: 'releases'
+}
 
 def getRepoVersion() {
     def v
@@ -92,10 +98,8 @@ def getCurrentCommitHash() {
 //set the project.version property correctly
 def getVersionByCommitCountForProject(projectString ){
     def commitCountDir = project("${projectString}").projectDir
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    version = "${getRepoVersion() + '.' + proc2.text.trim()}"
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    version = "${getRepoVersion() + '.' + proc.text.trim()}"
     return version
 }
 

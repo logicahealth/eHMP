@@ -10,6 +10,21 @@ end
 
 include_recipe 'zookeeper-cluster_wrapper'
 
+# update ownership of zookeeper home if it exists but different owner
+# directory is created with the zookeeper_config resource
+directory node['zookeeper']['home_dir'] do
+  owner node['zookeeper-cluster']['service_user']
+  group node['zookeeper-cluster']['service_group']
+  only_if { Dir.exist? node['zookeeper']['home_dir'] }
+  notifies :run, 'execute[chown contents of zookeeper home]', :immediately
+end
+
+execute 'chown contents of zookeeper home' do
+  command "chown -R #{node['zookeeper-cluster']['service_user']}:#{node['zookeeper-cluster']['service_group']} #{node['zookeeper']['home_dir']}"
+  action :nothing
+  only_if { Dir.exist? node['zookeeper']['home_dir'] }
+end
+
 zookeeper_nodes = find_multiple_nodes_by_role("zookeeper", node[:stack])
 
 # build hash of zookeeper ips
@@ -73,6 +88,7 @@ server_instances.each do |id, instance|
     binary_checksum node[:'zookeeper-cluster'][:service][:binary_checksum]
     binary_url node[:'zookeeper-cluster'][:service][:binary_url]
     install_path "#{node[:zookeeper][:base_server_dir]}-#{id}"
+    notifies :run, 'execute[chown contents of zookeeper home]', :immediately
   end
 
   template "#{node[:zookeeper][:base_server_dir]}-#{id}/#{node[:zookeeper][:conf_dir]}/log4j.properties" do

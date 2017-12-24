@@ -6,6 +6,7 @@ define([
     'app/applets/appointments/toolBar/toolBarView',
 ], function(Backbone, _, Util, ModalView, ToolBarView) {
     'use strict';
+
     //Data Grid Columns
     var dateTimeCol = {
         name: 'dateTimeFormatted',
@@ -16,8 +17,7 @@ define([
         }),
         sortValue: function(model) {
             return model.get('dateTime');
-        },
-        hoverTip: 'visits_date'
+        }
     };
     var dateTimeColFull = {
         name: 'dateTimeFormatted',
@@ -28,8 +28,7 @@ define([
         }),
         sortValue: function(model) {
             return model.get('dateTime');
-        },
-        hoverTip: 'visits_date'
+        }
     };
     var categoryCol = {
         name: 'formattedDescription',
@@ -37,8 +36,7 @@ define([
         flexWidth: 'flex-width-2_5',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2_5'
-        }),
-        hoverTip: 'visits_description'
+        })
     };
     var locationCol = {
         name: 'locationName',
@@ -55,8 +53,7 @@ define([
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2'
-        }),
-        hoverTip: 'visits_status'
+        })
     };
     var facilityCol = {
         name: 'facilityMoniker',
@@ -64,8 +61,7 @@ define([
         flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-1_5'
-        }),
-        hoverTip: 'visits_facility'
+        })
     };
 
     var typeCol = {
@@ -74,8 +70,7 @@ define([
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-2'
-        }),
-        hoverTip: 'visits_type'
+        })
     };
 
     var reasonCol = {
@@ -145,6 +140,25 @@ define([
     var GridApplet = ADK.Applets.BaseGridApplet;
 
     var AppletLayoutView = GridApplet.extend({
+        tileOptions: {
+            primaryAction: {
+                enabled: true,
+                onClick: function(params, event) {
+                    var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                    getDetailsModal(this.model, event, targetElement);
+                }
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'detailsviewbutton',
+                    onClick: function(params, event) {
+                        var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                        getDetailsModal(this.model, event, targetElement);
+                    }
+                }]
+            }
+        },
         siteHash: null,
         initialize: function(options) {
             var self = this;
@@ -208,11 +222,6 @@ define([
                 collection.fetchCollection(collection.fetchOptions);
             });
 
-            //Row click event handler
-            dataGridOptions.onClickRow = _.bind(function(model, event) {
-                this.getDetailsModal(model, event);
-            }, this);
-
             fetchOptions.criteria = {
                 filter: PARTIAL_FILTER + self.buildJdsDateFilter('dateTime') + ')',
                 customFilter: COMPLETE_FILTER,
@@ -241,24 +250,6 @@ define([
             fetchOptions.onSuccess = null;
             this.dataGridOptions.onClickRow = null;
         },
-        getDetailsModal: function(model, event) {
-            var view = new ModalView({
-                model: model
-            });
-
-            var modalOptions = {
-                'title': Util.getModalTitle(model),
-                'size': 'normal',
-                'nextPreviousCollection': this.dataGridOptions.collection
-            };
-
-            var modal = new ADK.UI.Modal({
-                view: view,
-                options: modalOptions,
-                callbackView: this
-            });
-            modal.show();
-        },
         DataGrid: ADK.Applets.BaseGridApplet.DataGrid.extend({
             DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
                 serializeModel: function() {
@@ -269,6 +260,26 @@ define([
             })
         })
     });
+
+    var getDetailsModal = function(model, event, target) {
+        var view = new ModalView({
+            model: model
+        });
+
+        var modalOptions = {
+            'title': Util.getModalTitle(model),
+            'size': 'normal',
+            'nextPreviousCollection': model.collection,
+            triggerElement: target
+        };
+
+        var modal = new ADK.UI.Modal({
+            view: view,
+            options: modalOptions,
+            callbackFunction: getDetailsModal
+        });
+        modal.show();
+    };
 
     var applet = {
         id: 'appointments',

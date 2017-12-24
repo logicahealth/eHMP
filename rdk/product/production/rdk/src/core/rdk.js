@@ -16,13 +16,15 @@ module.exports.utils.namecase = require('../utils/namecase-utils');
 module.exports.utils.RdkTimer = require('../utils/timer/timer');
 module.exports.utils.RdkError = require('../utils/errors/rdk-error');
 module.exports.utils.pjdsStore = require('../subsystems/pjds/pjds-store'); //TODO put into pjds subsystem and remove from util
+module.exports.utils.pjdsUtil = require('../utils/pjds-utility');
 module.exports.utils.results = require('../utils/result-utils');
 module.exports.utils.sensitivity = require('../utils/sensitivity-utils');
 module.exports.utils.pidValidator = require('../utils/pid-validator');
 module.exports.utils.pooledJbpmDatabase = require('../utils/oracle-connection-pool');
 module.exports.utils.locationUtil = require('../utils/location-util');
-
-module.exports.utils.authentication = require('../utils/authentication');
+module.exports.utils.authentication = require('../utils/authentication-utils');
+module.exports.utils.vistaConfig = require('../utils/rdk-vista-config-utility');
+module.exports.utils.uidUtils = require('../utils/uid-utils');
 
 module.exports.utils.jwt = {};
 module.exports.utils.jwt.addJwtHeader = require('./factory-components/rdk-jwt').addJwtHeader;

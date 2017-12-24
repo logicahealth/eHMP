@@ -2,16 +2,27 @@ ext.set('repo', uploadRepo)
 ext.set('groupId', 'us.vistacore.ehmp')
 ext.set('artifactId', 'NodeMockServices')
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 task cleanNpm(type: Exec) {
   group "NodeMockServices Tasks"
   description "clean package(s)"
   commandLine  '/bin/bash', '-l', '-c', "npm prune"
 }
 
-task installNpm(type: Exec, dependsOn: [cleanNpm]) {
-  group "NodeMockServices Tasks"
-  description "installs package(s)"
-  commandLine  '/bin/bash', '-l', '-c', "npm install"
+if(Os.isFamily(Os.FAMILY_MAC))
+{
+  task installNpm(type: Exec, dependsOn: [cleanNpm]) {
+    group "NodeMockServices Tasks"
+    description "installs package(s)"
+    commandLine  '/bin/bash', '-l', '-c', "npm install"
+  }
+} else {
+  task installNpm(type: Exec, dependsOn: [cleanNpm]) {
+    group "NodeMockServices Tasks"
+    description "installs package(s)"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm"
+  }
 }
 
 task zipNodeMockServices(type: Zip, dependsOn: [installNpm]) {

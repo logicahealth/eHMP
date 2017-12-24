@@ -4,15 +4,15 @@ Feature: F119 Searching for patient data in CPRS Default
 Background:
       #Given a patient with pid "10110V004877" has been synced through the RDK API
       #Given a patient with pid "10181V049578" has been synced through the RDK API
-      Given a patient with pid "9E7A;100022" has been synced through the RDK API
+      Given a patient with pid "SITE;100022" has been synced through the RDK API
 
 
 
 @F119_1_patientmedsearch @VPR 
 Scenario Outline: When a user searches patient's medication by text search total number of records are returned.
 #Given a patient with "this medication exists" in multiple VistAs
-#When the user searches "med" for the patient "9E7A;100022" with the "<text>" in VPR format
-When the user searches "<text>" for the patient "9E7A;100022" in VPR format
+#When the user searches "med" for the patient "SITE;100022" with the "<text>" in VPR format
+When the user searches "<text>" for the patient "SITE;100022" in VPR format
 Then the corresponding number of groups displayed is "<total_groups>"
 And the corresponding total of items in each group is "<total_items>"
 

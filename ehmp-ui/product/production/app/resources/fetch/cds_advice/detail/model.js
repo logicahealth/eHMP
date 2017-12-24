@@ -7,7 +7,7 @@ define([
 		resource: 'cds-advice-detail',
 		defaults: function() {
 			return {
-				pid: ADK.PatientRecordService.getCurrentPatient().get('pid')
+				pid: ADK.PatientRecordService.getCurrentPatient().getIdentifier()
 			};
 		},
 		initialize: function(options) {

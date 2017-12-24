@@ -1,10 +1,10 @@
 <div class="pull-left">
 {{#hasPermission 'eie-vital'}}
 	{{#if isLocalSite}}
-	<button type="button" class="btn btn-danger btn-sm" id="error" title="Press enter to mark this vital as Entered In Error." data-loading-text="<i class='fa fa-spinner fa-spin'></i> <span> Loading Data...</span>">Entered in Error</button>
+	<button type="button" class="btn btn-danger btn-sm" id="error" aria-label="Mark this vital as Entered In Error" data-loading-text="<i class='fa fa-spinner fa-spin'></i> <span> Loading Data...</span>">Mark as Entered in Error</button>
 	{{/if}}
 {{/hasPermission}}
 </div>
 <div class="pull-right">
-	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
+	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
 </div>

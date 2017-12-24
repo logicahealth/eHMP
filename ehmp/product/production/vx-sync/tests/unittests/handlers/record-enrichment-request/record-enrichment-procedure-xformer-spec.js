@@ -28,15 +28,15 @@ var originalVaProcedureRecord = {
     'lastUpdateTime': 19880805145700,
     'localId': '1;MCAR(691.6,',
     'name': 'HOLTER',
-    'pid': '9E7A;8',
+    'pid': 'SITE;8',
     'stampTime': 19880805145700,
     'statusName': 'COMPLETE',
-    'uid': 'urn:va:procedure:9E7A:8:1;MCAR(691.6,',
+    'uid': 'urn:va:procedure:SITE:8:1;MCAR(691.6,',
     'providers': [{
-        'providerUid': 'urn:va:user:9E7A:101',
+        'providerUid': 'urn:va:user:SITE:101',
         'providerName': 'PROVIDER,ONE'
     }, {
-        'providerUid': 'urn:va:user:9E7A:102',
+        'providerUid': 'urn:va:user:SITE:102',
         'providerName': 'PROVIDER,TWO'
     }],
     'earliestDate': 198808051440,
@@ -63,10 +63,10 @@ var originalVaProcedureJob = {
 };
 
 var removedRecord = {
-    'pid': '9E7A;8',
+    'pid': 'SITE;8',
     'stampTime': '20150226124943',
     'removed': true,
-    'uid': 'urn:va:procedure:9E7A:8:1;MCAR(691.6,'
+    'uid': 'urn:va:procedure:SITE:8:1;MCAR(691.6,'
 };
 
 var removedJob = {
@@ -92,7 +92,7 @@ describe('record-enrichment-procedure-xformer.js', function() {
 
                     // Root level fields
                     //------------------
-                    expect(record.providerUid).toBe('urn:va:user:9E7A:101');
+                    expect(record.providerUid).toBe('urn:va:user:SITE:101');
                     expect(record.providerName).toBe('PROVIDER,ONE');
                     expect(record.providerDisplayName).toBe('Provider,One');
                     expect(record.kind).toBe('Procedure');
@@ -229,8 +229,8 @@ describe('record-enrichment-procedure-xformer.js', function() {
                 xformer(log, config, environment, removedJob.record, function(error, record) {
                     expect(error).toBeNull();
                     expect(record).toBeTruthy();
-                    expect(record.uid).toEqual('urn:va:procedure:9E7A:8:1;MCAR(691.6,');
-                    expect(record.pid).toEqual('9E7A;8');
+                    expect(record.uid).toEqual('urn:va:procedure:SITE:8:1;MCAR(691.6,');
+                    expect(record.pid).toEqual('SITE;8');
                     expect(record.stampTime).toEqual('20150226124943');
                     expect(record.removed).toEqual(true);
                     finished = true;

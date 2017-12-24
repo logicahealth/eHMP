@@ -69,7 +69,7 @@ define([
                                 uid: model.get('uid')
                             });
 
-                            var detailModel = new ADK.UIResources.Writeback.Orders.Detail(formModel);
+                            var detailModel = new ADK.UIResources.Fetch.Orders.Detail(formModel);
                             formModel.set('action', 'Remind Me Later');
 
                             formModel.listenTo(detailModel, 'read:success', function(model, resp) {

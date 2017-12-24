@@ -10,7 +10,8 @@ var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var ErrorPublisher = require(global.VX_JOBFRAMEWORK).ErrorPublisher;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+const PjdsClientHttp = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var solrSmartClient = require('solr-smart-client');
 var Metrics = require(global.VX_UTILS + 'metrics');
 var JobUtils = require(global.VX_UTILS + 'job-utils');
@@ -19,14 +20,16 @@ var MviClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
 var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
 var logUtil = require(global.VX_UTILS + 'log');
 var yargs = require('yargs');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var VxSyncForeverAgent = require('http').Agent;
 var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
+var Auditor = require(global.VX_UTILS + 'auditor');
 
 var notEmpty = _.negate(_.isEmpty);
 
 function buildEnvironment(logger, config) {
     var metricsLog = new Metrics(config);
     var jds = new JdsClient(logger, metricsLog, config);
+    var pjdsHttp = new PjdsClientHttp(logger, metricsLog, config);
     var terminology = new TerminologyUtil(logger, metricsLog, config);
     var environment = {
         vistaClient: new VistaClient(logger, metricsLog, config, null),
@@ -35,9 +38,11 @@ function buildEnvironment(logger, config) {
         errorPublisher: {},
         mvi: new MviClient(logger, metricsLog, config, jds),
         jds: jds,
+        pjdsHttp: pjdsHttp,
+        auditor: new Auditor(),
         metrics: metricsLog,
         terminologyUtils: terminology,
-        solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, logger, new VxSyncForeverAgent()),
+        solr: solrSmartClient.createClient(logger, config.solrClient, new VxSyncForeverAgent({keepAlive: true, maxSockets: config.handlerMaxSockets || 5})),
         hdrClient: new HdrClient(logger, metricsLog, config)
     };
     environment.jobStatusUpdater = new JobStatusUpdater(logger, config, environment.jds);
@@ -51,7 +56,7 @@ function buildEnvironment(logger, config) {
 function buildOsyncEnvironment(logger, config) {
     var metricsLog = new Metrics(config.osync);
     var jds = new JdsClient(logger, metricsLog, config);
-    var pjds = new PjdsClient(logger, metricsLog, config);
+    var pjds = new PjdsClient(logger, metricsLog, config.pjds);
 
     var environment = {
         vistaClient: new VistaClient(logger, metricsLog, config.osync, null),
@@ -59,7 +64,8 @@ function buildOsyncEnvironment(logger, config) {
         publisherRouter: {},
         jds: jds,
         pjds: pjds,
-        metrics: metricsLog
+        metrics: metricsLog,
+        auditor: new Auditor()
     };
 
     environment.jobStatusUpdater = new JobStatusUpdater(logger, config.osync, environment.jds);
@@ -97,7 +103,7 @@ function parseErrorProcessorOptions(logger, config) {
         process.exit(0);
     }
 
-    var allProfileList = _.keys(config['error-processing']['profiles']);
+    var allProfileList = _.keys(config['error-processing'].profiles);
     var profiles = removeDisabledProfiles(config, allProfileList);
 
     var ignoreInvalid = parseIgnoreInvalid(argv);
@@ -119,10 +125,10 @@ function parseErrorProcessorOptions(logger, config) {
 }
 
 function removeDisabledProfiles(config, allProfileList) {
-    var profiles = config['error-processing']['profiles'] || {};
+    var profiles = config['error-processing'].profiles || {};
 
     return _.filter(allProfileList, function(name) {
-        return profiles[name] ? profiles[name]['enabled'] : false;
+        return profiles[name] ? profiles[name].enabled : false;
     });
 }
 
@@ -394,6 +400,7 @@ function parsePollerOptions(logger) {
         .string('site') // do not do the auto conversion of site value, always use string type.
         .alias('a', 'autostart')
         .alias('s', 'site')
+        .alias('mm', 'multiplemode')
         .alias('h', 'help')
         .alias('?', 'help')
         .help('h')
@@ -403,9 +410,12 @@ function parsePollerOptions(logger) {
 
     logger.info('Create pollers for sites: %s', sites);
 
+    var multipleMode = parseMultipleMode(logger, argv);
+
     return {
         sites: sites,
-        autostart: parseAutostart(logger, argv)
+        autostart: parseAutostart(logger, argv),
+        multipleMode: multipleMode
     };
 }
 
@@ -455,10 +465,32 @@ function parseAutostart(logger, argv) {
         return true;
     }
 
-    var autostart = _s.toBoolean(argv.autostart || true);
+    var autostart;
+    if (_.isBoolean(argv.autostart)) {
+        autostart = argv.autostart;
+    } else {
+        autostart = _s.toBoolean(argv.autostart || true);
+    }
     logger.info('autostart is %s', autostart ? 'ON' : 'OFF');
 
     return autostart;
+}
+
+function parseMultipleMode(logger, argv) {
+    if (!argv) {
+        return false;
+    }
+
+    var multipleMode;
+    if (_.isBoolean(argv.multiplemode)) {
+        multipleMode = argv.multiplemode;
+    } else {
+        multipleMode = _s.toBoolean(argv.multiplemode);
+    }
+
+    logger.info('multipleMode is %s', multipleMode ? 'ON' : 'OFF');
+
+    return multipleMode;
 }
 
 function parseAndApplyConfigOverride(logger, argv, config) {
@@ -510,4 +542,5 @@ module.exports.parseAutostart = parseAutostart;
 module.exports.parseSites = parseSites;
 module.exports.parseAllJobTypes = parseAllJobTypes;
 module.exports.parseIgnoreInvalid = parseIgnoreInvalid;
+module.exports.parseMultipleMode = parseMultipleMode;
 module.exports.parseSites = parseSites;

@@ -6,47 +6,50 @@ var _str = require('underscore.string');
 // do not uncomment - see DE651
 var sessionWhitelist = [
     //'corsTabs',
+    'ccowObject',
     //'dgRecordAccess',
     //'dgSecurityOfficer',
     //'dgSensitiveAccess',
-    'uid',
     'disabled',
+    'division',
     'divisionSelect',
     'duz',
     'expires',
     'facility',
-    //'username',
     'firstname',
     'lastname',
-    'preferences',
-    'permissions',
     'pcmm',
+    'permissions',
+    'preferences',
+    'provider',
     'requiresReset',
     //'rptTabs',
     'section',
     'sessionLength',
     'site',
-    'division',
     'title',
-    //'vistaKeys',
-    'ccowObject',
-    'provider'
+    'nationalAccess',
+    'uid'
+    //'username',
+    //'vistaKeys'
 ];
 
 var userListWhitelist = [
-    'uid',
+    'duz',
+    'exactMatchCount',
     'facility',
     'fname',
-    'lname',
-    'site',
-    'duz',
-    'permissionSets',
-    'title',
-    'vistaStatus',
-    'ehmpStatus',
-    'paging_data',
     'has_paging_data',
-    'exactMatchCount'
+    'lname',
+    'paging_data',
+    //'permissions', not used
+    'permissionSet',
+    //'permissionSets', not used
+    'site',
+    'status',
+    'title',
+    'uid',
+    'vistaStatus'
 ];
 
 var UserUtil = {

@@ -15,7 +15,7 @@ def artifactsToUpload = [
   fobtlabservice: [name: 'FOBTLabService', proj: ':production:jbpm:FOBTLabService', env_var: 'JBPM_FOBTLABSERVICE_VERSION'],
   tasksservice: [name: 'tasksservice', proj: ':production:jbpm:tasksservice', env_var: 'JBPM_TASKSSERVICE_VERSION'],
   ehmpservices: [name: 'EhmpServices', proj: ':production:jbpm:EhmpServices', env_var: 'JBPM_EHMPSERVICES_VERSION'],
-  sql_config: [name: 'sql_config', proj: ':production:jbpm:sql_config', env_var: 'JBPM_SQL_CONFIG_VERSION'],
+  sql_config: [name: 'sql_config', proj: ':production:oracle:sql_config', env_var: 'ORACLE_SQL_CONFIG_VERSION'],
   jbpm_utils: [name: 'JbpmUtils', proj:':production:jbpm:JbpmUtils', env_var: 'JBPM_UTILS_VERSION'],
   rdk: [name: 'rdk', proj: ':production:rdk', env_var: 'RDK_VERSION']
 ]
@@ -27,6 +27,7 @@ allprojects {
   ext.set('repoVersion', getRepoVersion())
   ext.set('branchName', getCurrentBranchName())
   ext.set('nexusURL', getNexusURL())
+  ext.set('npmRegistry', getNpmRegistry())
   ext.set('uploadRepo', getNexusUploadRepository())
   ext.set('currentCommitHash', getCurrentCommitHash())
 
@@ -37,6 +38,10 @@ allprojects {
 
 def getNexusURL() {
     System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+}
+
+def getNpmRegistry() {
+    System.env.NPM_CONFIG_REGISTRY ?: 'https://store.vistacore.us/nexus/content/repositories/npm-all/'
 }
 
 def getNexusUploadRepository() {
@@ -87,10 +92,8 @@ def getVersionByCommitCountForProject(projectString, subDir = null){
         commitCountDir = "${commitCountDir}/${subDir}"
     }
 
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    version = "${getRepoVersion() + '.' + proc2.text.trim()}"
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    version = "${getRepoVersion() + '.' + proc.text.trim()}"
     return version
 }
 
@@ -163,4 +166,3 @@ task fortifyReport << {
         }
     }
 }
-

@@ -1,14 +1,7 @@
 define([
-    'handlebars',
-    'moment',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeFields'
-], function(Handlebars, moment, AssignmentTypeFields) {
+    'handlebars'
+], function(Handlebars) {
     'use strict';
-
-    var bodyContents = [];
-    _.each(AssignmentTypeFields.getFields(), function(field) {
-        bodyContents.push(field);
-    });
 
     var FormFields = [{
         control: 'container',
@@ -34,8 +27,7 @@ define([
                         extraClasses: ['btn-primary', 'btn-sm', 'left-margin-md'],
                         id: 'activityDetails',
                         label: 'Activity Details',
-                        type: 'button',
-                        title: 'Press enter to view activity details'
+                        type: 'button'
                     }]
                 }]
             }]
@@ -113,18 +105,18 @@ define([
                     disabled: false,
                     name: 'notificationDate',
                     label: 'Notification Date',
-                    startDate: moment().format('MM/DD/YYYY'),
+                    startDate: '0d',
                     title: 'Enter in a date in the following format: MM/DD/YYYY'
                 }]
             }, {
-                control: 'container',
-                extraClasses: ['row'],
-                items: [{
-                    control: 'container',
-                    extraClasses: ['col-xs-12', 'assign-to-container'],
-                    hidden: true,
-                    items: bodyContents
-                }]
+                control: 'assignTo',
+                name: 'assignment',
+                hidden: true,
+                required: false,
+                options: {
+                    "me": false
+                },
+                extraClasses: ['bottom-padding-sm']
             }, {
                 control: 'container',
                 extraClasses: ['row'],
@@ -164,7 +156,6 @@ define([
                     extraClasses: ['btn-default', 'btn-sm'],
                     id: 'modal-cancel-button',
                     label: 'Cancel',
-                    title: 'Press enter to cancel',
                     type: 'button'
                 }, {
                     control: 'button',
@@ -174,7 +165,6 @@ define([
                     name: 'acceptButton',
                     type: 'submit',
                     disabled: true,
-                    title: 'Press enter to accept'
                 }]
             }]
         }]

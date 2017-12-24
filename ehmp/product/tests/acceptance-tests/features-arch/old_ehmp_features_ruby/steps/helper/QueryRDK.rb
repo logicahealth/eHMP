@@ -49,7 +49,7 @@ class QueryRDKSync < BuildQuery
 end
 
 class QueryRDKDomain < BuildQuery
-  # http://127.0.0.1:8888/patientrecord/domain/allergy?pid=1
+  # http://127.0.0.1:PORT/patientrecord/domain/allergy?pid=1
   def initialize(datatype, pid = nil)
     super()
     @path.concat(DefaultLogin.rdk_url)
@@ -61,7 +61,7 @@ class QueryRDKDomain < BuildQuery
 end
 
 class QueryRDK < BuildQuery
-  # http://IP             /patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:9E7A:227:16682
+  # http://IP             /patientrecord/labsbyorder?pid=11016&orderUid=urn:va:order:SITE:227:16682
   def initialize(datatype, pid, auto_acknowledge = "true")
     @path = String.new(DefaultLogin.rdk_api_url)
     @path.concat("/patientrecord/labsbyorder?pid=")

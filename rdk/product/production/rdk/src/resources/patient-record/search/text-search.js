@@ -1,6 +1,7 @@
 'use strict';
 
 var rdk = require('../../../core/rdk');
+var RdkError = rdk.utils.RdkError;
 var util = require('util');
 var querystring = require('querystring');
 var _ = require('lodash');
@@ -20,6 +21,11 @@ module.exports.description = {
 module.exports._buildSolrQuery = buildSolrQuery;
 module.exports._buildSpecializedSolrQuery = buildSpecializedSolrQuery;
 module.exports._buildDefaultQuery = buildDefaultQuery;
+module.exports._executeAndTransformSolrQuerys = executeAndTransformSolrQuerys;
+
+var timerOptions = {
+    roundTo: 5
+};
 
 /**
  * /vpr/v{apiVersion}/search
@@ -33,7 +39,7 @@ module.exports._buildDefaultQuery = buildDefaultQuery;
  * @param next
  * @returns {*}
  */
-function performTextSearch(req, res, next) {
+function performTextSearch(req, res) {
     // Parse the URL
 
     // expected query params:
@@ -45,17 +51,11 @@ function performTextSearch(req, res, next) {
     //    page      // unused
     //    start     // solr "start"
     //    limit     // solr "rows"
-
+    req.timers.start('performTextSearch', timerOptions);
     var reqQuery = req.query;
     var specializedSolrQueryStrings = [];
     var domains;
-    var patientPIDList = [];
-
-    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid) {
-        patientPIDList.push(pid);
-    });
-
-    var allPids = patientPIDList.join(' OR ');
+    var allPids = _.get(req, 'interceptorResults.patientIdentifiers.allSites', []).join(' OR ');
     req.logger.debug('reqQuery.pidJoinedList: ' + allPids);
     reqQuery.pidJoinedList = allPids;
     if (allPids.indexOf('OR') !== -1) {
@@ -102,6 +102,7 @@ function performTextSearch(req, res, next) {
             'vital',
             'lab',
             'problem',
+            'ehmp-activity',
             'vlerdocument'
         ];
     } else {
@@ -127,6 +128,7 @@ function performTextSearch(req, res, next) {
 }
 
 function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, reqQuery) {
+    req.timers.start('performTextSearch_executeSolrQuerys', timerOptions);
     async.map(specializedSolrQueryStrings,
         function(item, callback) {
             solrSimpleClient.executeSolrQuery(item, 'select', req, function(err, result) {
@@ -134,10 +136,18 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
             });
         },
         function(err, results) {
+            req.timers.stop('performTextSearch_executeSolrQuerys');
             if (err) {
-                res.status(500).rdkSend('The search could not be completed\n' + err.stack);
-                return;
+                if (err.message.includes('maxClauseCount')) {
+                    var rdkError = new RdkError({
+                        code: 'rdk.500.1022',
+                        logger: req.logger
+                    });
+                    return res.status(rdkError.status).rdkSend(rdkError);
+                }
+                return res.status(500).rdkSend('The search could not be completed\n' + err.stack);
             }
+            req.timers.start('performTextSearch_transformSolrQuerys', timerOptions);
             async.each(results, function(result, callback) {
                 if (!result.response) {
                     return callback();
@@ -167,7 +177,7 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
                     return res.status(500).rdkSend('The search could not be completed\n' + err.stack);
                 }
 
-                var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery);
+                var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(req, results, reqQuery);
                 if (hmpEmulatedResponseObject.error) {
                     req.logger.error(hmpEmulatedResponseObject, 'Error in addSpecializedResultsToResponse');
                     return res.status(500).rdkSend(hmpEmulatedResponseObject.error);
@@ -187,6 +197,9 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
                                 req.logger.debug('Asu Error: %j', error);
                                 return res.status(500).rdkSend(error);
                             } else {
+                                _.remove(response, function excludeRetracted(item) {
+                                    return item.stub === 'true' && item.status === 'RETRACTED';
+                                });
                                 hmpEmulatedResponseObject.data.items = groupByTitle(response, req.logger);
                                 res.rdkSend(hmpEmulatedResponseObject);
                             }
@@ -254,7 +267,8 @@ function buildSolrQuery(reqQuery, domain, queryParameters) {
     queryParameters = queryParameters || {};
     domain = domain || '*:*';
     var start = reqQuery.start || 0;
-    var limit = reqQuery.limit || 101;
+    var limit = reqQuery.limit || 500;
+    var hlFragsize = queryParameters['hl.fragsize'] || 45;
 
     //Default the filter query to the domain, except for the default which we expand to all domains utilizing the same query
     var fqDomain = getFilterQueryForDomain(domain);
@@ -270,7 +284,8 @@ function buildSolrQuery(reqQuery, domain, queryParameters) {
         ],
         fq: [ // filter queries
             ('pid:' + reqQuery.pidJoinedList), ('domain:' + fqDomain),
-            'domain:(NOT patient)'
+            'domain:(NOT patient)',
+            '-removed:true'
         ],
         q: reqQuery.query,
         start: start,
@@ -280,8 +295,10 @@ function buildSolrQuery(reqQuery, domain, queryParameters) {
         defType: 'synonym_edismax',
         hl: 'true',
         'hl.fl': ['summary', 'kind', 'facility_name', 'body'],
-        'hl.fragsize': 45,
-        'hl.snippets': 5
+        'hl.fragsize': hlFragsize,
+        'hl.snippets': 5,
+        'hl.simple.pre': '{{addTag "',
+        'hl.simple.post': '" "mark" "cpe-search-term-match"}}'
     };
 
     _.each(Object.keys(defaultQueryParameters), function(queryParameterType) {
@@ -327,6 +344,7 @@ function buildSpecializedSolrQuery(reqQuery, domain) {
         result: buildLabQuery,
         lab: buildLabQuery,
         problem: buildProblemQuery,
+        'ehmp-activity': buildEhmpActivityQuery,
         vlerdocument: buildDefaultQuery,
 
         //suggest: buildSuggestQuery,
@@ -357,6 +375,57 @@ function buildDefaultQuery(reqQuery, domain) {
     };
     var queryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return queryString;
+}
+
+function buildEhmpActivityQuery(reqQuery, domain) {
+    var queryParameters = {
+        fl: [
+            'domain',
+            'sub_domain',
+            'activity_process_instance_id',
+            'activity_source_facility_id',
+            'consult_name',
+            'consult_orders_override_reason',
+            'consult_orders_order_result_comment',
+            'consult_orders_conditions',
+            'consult_orders_request',
+            'consult_orders_comment',
+            'consult_orders_accepting_provider_uid',
+            'consult_orders_accepting_provider_display_name',
+            'consult_orders_order_results_order_name',
+            'consult_orders_order_results_order_status',
+            'consult_orders_accepted_date',
+            'schedules_comment',
+            'triages_comment',
+            'request_accepted_date',
+            'request_title',
+            'request_text',
+            'response_request',
+            'signals_data_comment'
+        ],
+        'hl.fl': [
+            'domain',
+            'sub_domain',
+            'consult_name',
+            'consult_orders_override_reason',
+            'consult_orders_order_result_comment',
+            'consult_orders_conditions',
+            'consult_orders_request',
+            'consult_orders_comment',
+            'consult_orders_accepting_provider_display_name',
+            'consult_orders_order_results_order_name',
+            'consult_orders_order_results_order_status',
+            'schedules_comment',
+            'triages_comment',
+            'request_title',
+            'request_text',
+            'response_request',
+            'signals_data_comment'
+        ],
+        'hl.fragsize': 200
+    };
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
+    return solrQueryString;
 }
 
 function buildMedQuery(reqQuery, domain) {
@@ -456,7 +525,6 @@ function buildLabQuery(reqQuery, domain) {
 
 function buildProblemQuery(reqQuery, domain) {
     var queryParameters = {
-        fq: ['-removed:true'],
         fl: [
             'comment',
             'icd_code',

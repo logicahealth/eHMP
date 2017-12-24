@@ -1,0 +1,15 @@
+source 'https://rubygems.org'
+
+gem "activesupport", "~> 4.1.8"
+gem "compass", "~> 0.12.2"
+gem "json", "~> 1.8.1"
+gem "mongo", "~> 2.4.1"
+gem "page-object", "~> 1.0.2"
+gem "rspec", "~> 2.14.1"
+gem "ruby-mysql", "~> 2.9.13"
+gem "spreadsheet", "~> 1.0.0"
+gem "selenium-webdriver", "~>2.48.1"
+gem "watir-webdriver", "~> 0.6.11"
+gem "ruby-oci8", "~> 2.2.1"
+gem "wrest", "~> 2.1", ">= 2.1.7"
+gem "nokogiri", "~> 1.6", ">= 1.6.8"

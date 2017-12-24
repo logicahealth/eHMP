@@ -6,12 +6,12 @@ var RpcClient = require('vista-js').RpcClient;
 
 var mock_session = {
     user: {
-        username: 'REDACTED',
-        password: 'REDACTED',
+        username: 'SITE;USER  ',
+        password: 'PW      ',
         duz: {
-            '9E7A': '10000000257'
+            'SITE': '10000000257'
         },
-        site: '9E7A'
+        site: 'SITE'
     }
 };
 
@@ -40,7 +40,7 @@ describe('writebackorder_signOrder:', function() {
                 },
                 interceptorResults: {
                     patientIdentifiers: {
-                        site: '9E7A'
+                        site: 'SITE'
                     }
                 },
                 body: {
@@ -52,33 +52,33 @@ describe('writebackorder_signOrder:', function() {
                         locationIEN: 23,
                         patientIEN: 8
                     },
-                    pid: '9E7A;8'
+                    pid: 'SITE;8'
                 },
                 logger: sinon.stub(require('bunyan').createLogger({name: 'sign-order'})),
                 app: {
                     config: {
                         rpcConfig: {
                             context: 'HMP UI CONTEXT',
-                            siteHash: '9E7A'
+                            siteHash: 'SITE'
                         },
                         vistaSites: {
-                            '9E7A': {
+                            'SITE': {
                                 name: 'PANORAMA',
                                 division: '500',
                                 host: 'IP        ',
-                                port: 9210,
+                                port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             },
-                            'C877': {
+                            'SITE': {
                                 name: 'KODAK',
                                 division: '500',
                                 host: 'IP        ',
-                                port: 9210,
+                                port: PORT,
                                 production: false,
-                                accessCode: 'REDACTED',
-                                verifyCode: 'REDACTED'
+                                accessCode: 'USER  ',
+                                verifyCode: 'PW      '
                             }
                         }
                     }

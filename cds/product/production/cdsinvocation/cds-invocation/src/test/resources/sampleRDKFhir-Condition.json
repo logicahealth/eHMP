@@ -5,7 +5,7 @@
     "link": [
         {
             "rel": "self",
-            "href": "http://127.0.0.1:8888/resource/fhir/condition?subject.identifier=10107V395912&accessCode=IP    &verifyCode=IP    !!&site=9E7A&division=500"
+            "href": "http://127.0.0.1:PORT/resource/fhir/condition?subject.identifier=10107V395912&accessCode=USER  &verifyCode=PW      &site=SITE&division=500"
         }
     ],
     "total": 11,
@@ -25,7 +25,7 @@
                     "summary": "Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)"
                 },
                 "patient": {
-                    "reference": "9E7A;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -47,12 +47,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:9E7A:32"
+                                "_id": "urn:va:location:SITE:32"
                             }
                         ]
                     },
@@ -61,7 +61,7 @@
                         "_id": "8b1e1d36-f3a5-4fc9-be95-b166544649b2",
                         "name": "VEHU,SEVEN",
                         "identifier": {
-                            "value": "urn:va:user:9E7A:20008",
+                            "value": "urn:va:user:SITE:20008",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -106,7 +106,7 @@
                     "summary": "Chronic Systolic Heart failure (ICD-9-CM 428.22)"
                 },
                 "patient": {
-                    "reference": "9E7A;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -133,12 +133,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:9E7A:23"
+                                "_id": "urn:va:location:SITE:23"
                             }
                         ]
                     },
@@ -147,7 +147,7 @@
                         "_id": "a460e904-f61a-4198-92e0-02d3c0eb94db",
                         "name": "LABTECH,SPECIAL",
                         "identifier": {
-                            "value": "urn:va:user:9E7A:11745",
+                            "value": "urn:va:user:SITE:11745",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -192,7 +192,7 @@
                     "summary": "Acute myocardial infarction, unspecified site, episode of care unspecified (ICD-9-CM 410.90)"
                 },
                 "patient": {
-                    "reference": "9E7A;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -214,12 +214,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:9E7A:23"
+                                "_id": "urn:va:location:SITE:23"
                             }
                         ]
                     },
@@ -228,7 +228,7 @@
                         "_id": "b7726460-480d-4570-d332-32b885dcaad7",
                         "name": "VEHU,SEVEN",
                         "identifier": {
-                            "value": "urn:va:user:9E7A:20008",
+                            "value": "urn:va:user:SITE:20008",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -273,7 +273,7 @@
                     "summary": "Hypertension (ICD-9-CM 401.9)"
                 },
                 "patient": {
-                    "reference": "9E7A;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -300,7 +300,7 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
@@ -313,7 +313,7 @@
                         "_id": "6249064f-bce0-4d51-8fc1-e84a2208e704",
                         "name": "VEHU,ONEHUNDRED",
                         "identifier": {
-                            "value": "urn:va:user:9E7A:10000000031",
+                            "value": "urn:va:user:SITE:10000000031",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -362,7 +362,7 @@
                     "summary": "Hyperlipidemia (ICD-9-CM 272.4)"
                 },
                 "patient": {
-                    "reference": "9E7A;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -384,7 +384,7 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient 9E7A;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
@@ -397,7 +397,7 @@
                         "_id": "06a7e86d-0fdb-4a5b-d06f-585a9a2a185f",
                         "name": "VEHU,ONEHUNDRED",
                         "identifier": {
-                            "value": "urn:va:user:9E7A:10000000031",
+                            "value": "urn:va:user:SITE:10000000031",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -539,7 +539,7 @@
                     "summary": "Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)"
                 },
                 "patient": {
-                    "reference": "C877;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -561,12 +561,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient C877;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:C877:32"
+                                "_id": "urn:va:location:SITE:32"
                             }
                         ]
                     },
@@ -575,7 +575,7 @@
                         "_id": "145ecdad-0240-43a8-ace1-e7791b2e41c7",
                         "name": "VEHU,SEVEN",
                         "identifier": {
-                            "value": "urn:va:user:C877:20008",
+                            "value": "urn:va:user:SITE:20008",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -620,7 +620,7 @@
                     "summary": "Chronic Systolic Heart failure (ICD-9-CM 428.22)"
                 },
                 "patient": {
-                    "reference": "C877;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -647,12 +647,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient C877;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:C877:23"
+                                "_id": "urn:va:location:SITE:23"
                             }
                         ]
                     },
@@ -661,7 +661,7 @@
                         "_id": "f4177528-8093-4b2d-c8e4-2a568f5cf99a",
                         "name": "LABTECH,SPECIAL",
                         "identifier": {
-                            "value": "urn:va:user:C877:11745",
+                            "value": "urn:va:user:SITE:11745",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -706,7 +706,7 @@
                     "summary": "Acute myocardial infarction, unspecified site, episode of care unspecified (ICD-9-CM 410.90)"
                 },
                 "patient": {
-                    "reference": "C877;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -728,12 +728,12 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient C877;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
                                 "resourceType": "Location",
-                                "_id": "urn:va:location:C877:23"
+                                "_id": "urn:va:location:SITE:23"
                             }
                         ]
                     },
@@ -742,7 +742,7 @@
                         "_id": "2ed74024-3c78-42f1-c230-db6c1e681036",
                         "name": "VEHU,SEVEN",
                         "identifier": {
-                            "value": "urn:va:user:C877:20008",
+                            "value": "urn:va:user:SITE:20008",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -787,7 +787,7 @@
                     "summary": "Hypertension (ICD-9-CM 401.9)"
                 },
                 "patient": {
-                    "reference": "C877;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -814,7 +814,7 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient C877;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
@@ -827,7 +827,7 @@
                         "_id": "3ef02c5f-3c17-411c-a1bd-6ef252777d80",
                         "name": "VEHU,ONEHUNDRED",
                         "identifier": {
-                            "value": "urn:va:user:C877:10000000031",
+                            "value": "urn:va:user:SITE:10000000031",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }
@@ -876,7 +876,7 @@
                     "summary": "Hyperlipidemia (ICD-9-CM 272.4)"
                 },
                 "patient": {
-                    "reference": "C877;253"
+                    "reference": "SITE;253"
                 },
                 "code": {
                     "coding": [
@@ -898,7 +898,7 @@
                         "resourceType": "Encounter",
                         "text": {
                             "status": "generated",
-                            "div": "<div>Encounter with patient C877;253</div>"
+                            "div": "<div>Encounter with patient SITE;253</div>"
                         },
                         "location": [
                             {
@@ -911,7 +911,7 @@
                         "_id": "673be663-dda3-4115-d354-aa9f57d215c1",
                         "name": "VEHU,ONEHUNDRED",
                         "identifier": {
-                            "value": "urn:va:user:C877:10000000031",
+                            "value": "urn:va:user:SITE:10000000031",
                             "system": "urn:oid:2.16.840.1.113883.6.233"
                         }
                     }

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Class name="eHMP.PrimeAutomation">
+<Description>
+Updated 1/3/2017 05:10:37 PM</Description>
+<Super>%Persistent</Super>
+<TimeCreated>64331,69803.145832</TimeCreated>
+
+<Parameter name="TotalShards">
+<Description>
+The total number of shards (used for incremental global mapping calculations)</Description>
+<Default><%= node['jds']['ecp']['shards'] %></Default>
+</Parameter>
+
+<Parameter name="Namespace">
+<Description>
+The namespace to be created </Description>
+<Default>JSONVPR</Default>
+</Parameter>
+
+<Parameter name="PrimeDatabaseName">
+<Description>
+The local default database for the namespace</Description>
+<Default>VPROPS</Default>
+</Parameter>
+
+<Parameter name="OperationalDatabaseName">
+<Description>
+The local default database for the namespace</Description>
+<Default>VPROPS</Default>
+</Parameter>
+
+<Parameter name="ECPConnectionName">
+<Description>
+The local default ECPConnectionName</Description>
+<Default>JDSSERVER</Default>
+</Parameter>
+
+<Parameter name="ECPDefaultPort">
+<Description>
+The default port for ECP connections (if not specified)</Description>
+<Default><%= node['jds']['ecp']['default_port'] %></Default>
+</Parameter>
+
+<Parameter name="ECPServers">
+<Description>
+The default port for ECP connections (if not specified)
+The semi-colon separated list of database servers</Description>
+<Default><%= @data_servers_string %></Default>
+</Parameter>
+
+<Parameter name="OperationalGlobals">
+<Description>
+The comma separated list of operational globals that only appear in the prime database</Description>
+<Default>VPRJD;VPRJDJ;VPRJDX;VPRSTATUSOD;VPRCONFIG;VPRHTTP;VPRJOB;VPRJODM;VPRJSES;VPRJUSR;VPRMETA;VPRJERR;VPRPTX;VPRJSAVT;VPRPTJ("JPID");VPRPTJ("KEY")</Default>
+</Parameter>
+
+<Parameter name="DataGlobals">
+<Description>
+The comma separated list of data globals that are indexed by JPID</Description>
+<Default>VPRPT;VPRPTJ("JSON");VPRPTJ("TEMPLATE");VPRPTI;VPRSTATUS</Default>
+</Parameter>
+
+<Method name="Run">
+<Description>
+Perform all operations for configuration</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>cleanup=0</FormalSpec>
+<Implementation><![CDATA[
+               set ns = $NAMESPACE
+               set $NAMESPACE = "%SYS"
+               If '##class(%SYS.Namespace).Exists("VPROPS") {
+               do ##class(%Library.File).CreateDirectory("/usr/jdsdbs/vprops")
+               set db=##class(SYS.Database).%New()
+               set db.Directory="<%= node['jds']['jds_database_location'] %>"
+               set db.EncryptedDB=1
+               set db.EncryptionKeyID="FB925728-1114-11E4-956B-00274DB37D00"
+               set db.Size=<%= node['jds']['ecp']['db_size'] %>
+               set db.GlobalJournalState=1
+               set db.ExpansionSize=<%= @expansion_size %>
+               set status=db.%Save()
+               set Properties("Directory")= "<%= node['jds']['jds_database_location'] %>"
+               do ##Class(Config.Databases).Create("VPROPS",.Properties)
+               kill Properties
+               set Properties("Globals")="VPROPS"
+               do ##Class(Config.Namespaces).Create("VPROPS",.Properties)
+               }
+               set status = $$$OK
+               do ..Error(status)
+               write #,"CREATED VPROPS Database in <%= node['jds']['jds_database_location'] %> ------------------------------------------------",!
+               set MapNameSP="VPROPS"
+               set Name="TMP*"
+               set Properties("Database")="CACHETEMP"
+               set stat=##class(Config.MapGlobals).Create(MapNameSP,Name,.Properties)
+               if '$$$ISOK(stat) write !,"Error="_$SYSTEM.Status.GetErrorText(stat)
+               set Name="XTMP*"
+               set Properties("Database")="CACHETEMP"
+               set stat=##class(Config.MapGlobals).Create(MapNameSP,Name,.Properties)
+               if '$$$ISOK(stat) write !,"Error="_$SYSTEM.Status.GetErrorText(stat)
+               set Name="%ut*"
+               set Properties("Database")="VPROPS"
+               set stat=##class(Config.MapGlobals).Create(MapNameSP,Name,.Properties)
+               if '$$$ISOK(stat) write !,"Error="_$SYSTEM.Status.GetErrorText(stat)
+               set Name="%ut*"
+               set Properties("Database")="VPROPS"
+               set stat=##class(Config.MapRoutines).Create(MapNameSP,Name,.Properties)
+               if '$$$ISOK(stat) write !,"Error="_$SYSTEM.Status.GetErrorText(stat)
+               set $NAMESPACE = ns QUIT
+	try {
+		if (cleanup) {
+			do ..Clear()
+		}
+
+		write !
+		set status = ..CreateServers()
+		if $$$ISERR(status) {
+			set status = $$$ERROR("Failed: Creating ECP Servers")
+			quit
+		}
+
+		write !
+		set status = ..CreateDatabases()
+		if $$$ISERR(status) {
+			set status = $$$ERROR("Failed: Creating Remote Databases")
+			quit
+		}
+
+		write !
+		set status = ..CreateNamespace(..#Namespace,..#PrimeDatabaseName)
+		if $$$ISERR(status) {
+			set status = $$$ERROR("Failed: Creating Namespace")
+			quit
+		}
+
+		set status = ..CreateMappings()
+		if $$$ISERR(status) {
+			set status = $$$ERROR("Failed: Creating Mappings")
+			quit
+		}
+	}
+	catch (ex) {
+		write !!,"------------------------------------------------------------",!
+		zwrite ex
+		write !,"------------------------------------------------------------",!
+		for ii=0:1:$STACK(-1) {
+			write $STACK(ii), " ", $STACK(ii,"PLACE"), $STACK(ii,"MCODE"),!
+		}
+	}
+
+]]></Implementation>
+</Method>
+
+<Method name="CreateVPROPS">
+<Description>
+Create operational globals database</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+		d ##class(eHMP.CreateVPROPS).Run()
+   		do ..Log("Created Ops Database.")
+    	quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateServers">
+<Description>
+Create the Servers from the Parameters</Description>
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+		set ns = $NAMESPACE
+	set $NAMESPACE = "%SYS"
+	//generate list of servers from parameters
+
+	#dim serversList=$LISTFROMSTRING(..#ECPServers, ";")
+	if ..#ECPServers = "" {
+		do ..Log("Warning: No Servers in Class Parameter ..#ECPServers")
+		quit $$$OK
+	}
+	else {
+		do ..Log("Creating ECP Server Definitions: ", $LISTLENGTH(serversList))
+	}
+	//ensure that ECP is enabled
+	kill Properties
+	set Properties("Enabled") = 1
+	do ##class(Security.Services).Modify("%Service_ECP", .Properties)
+	//ensure there are enough ECP slots (restart required)
+	set config=##Class(Config.config).Open()
+	if config.MaxServers < $LISTLENGTH(serversList) {
+		set config.MaxServers=<%= node['jds']['ecp']['max_servers'] %>
+		set config.MaxServerConn=<%= node['jds']['ecp']['max_servers_conn'] %>
+		set status = config.%Save()
+		do ..Error(status)
+		quit ..Error("Failure: Not configured for enough ECP Server Slots. Restart Required.")
+	}
+	//loop through server list
+	for ii=1:1:$LISTLENGTH(serversList) {
+		//get properties
+		set address = $LISTGET(serversList, ii)
+		set port =  ..#ECPDefaultPort
+		set name= ..#ECPConnectionName_ii
+		//split address in to address and port
+		if address [ ":" {
+			set port = $PIECE(address, ":", 2)
+			set address = $PIECE(address, ":", 1)
+		}
+		//create the ECP server and connect
+		set status = ..CreateECPServer(name, address, port)
+		if $$$ISOK(status) {
+			do ..Log("Created ECP Server ("_ii_"/"_$LISTLENGTH(serversList)_") "_name_" at "_address_":"_port)
+		}
+	}
+	if $$$ISOK(status) {
+		do ..Log("Created ECP Servers: ", ii)
+	}
+	set $NAMESPACE = ns
+	quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateECPServer">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>name:%String,address:%String,port=""</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+
+               //create properties for server
+               kill Properties
+               set Properties("Address")=address
+               set Properties("Port")=$G(port, ..#ECPDefaultPort)
+
+               //don't create if it already exists
+               if '##class(Config.ECPServers).Exists(name) {
+                              //define the server
+                              set status = ##class(Config.ECPServers).Create(name,.Properties)
+                              if ..Error(status) {
+                                             quit status
+                              }
+
+                              //connect to the server
+                              set status =  ##class(SYS.ECP).ServerAction(name,3)
+                              do ..Log("ECP Server Connection ("_name_"): "_status)
+                              if ..Error(status) {
+                                             quit status
+                              }
+
+                              //verify connection status
+                              set status = ##class(SYS.ECP).GetServerConnState(name)
+                              if (status '= 5) {
+                                             quit $$$ERROR("ECP Server ("_name_") failed to connect! Status: "_status)
+                              }
+               }
+               else {
+                              do ..Log("ECP Server, "_name_", already has an entry in the CPF file on "_address_".")
+                              quit $$$ERROR()
+               }
+
+               quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="CreateMappings">
+<Description>
+Create the mappings for all the remote databases</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               set rs = ##class(%ResultSet).%New("Config.Databases:List")
+               set status = rs.Execute()
+               while rs.%Next() {
+                              set db = rs.Get("Name")
+
+                              if (db = ..#OperationalDatabaseName) {
+                                             do ..MapOperational(db)
+                              }
+
+                              if ($EXTRACT(db, 1,3) = "DAT") {
+                                             set status = ..MapData(db)
+
+                                             if $$$ISERR(status) {
+                                                            quit
+                                             }
+                              }
+               }
+
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateDatabases">
+<Description>
+Create the remote databases </Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               do ..Log("Creating Remote Databases")
+               set rs = ##class(%ResultSet).%New("SYS.ECP:ServerList")
+               set status = rs.Execute()
+               do ..Error(status)
+               #dim count = 0
+               while rs.%Next() {
+                              set remoteServerName = rs.Get("Server Name")
+                              //only look at ECP connections to JDS Servers
+                              if (remoteServerName = "") || '(remoteServerName [ ..#ECPConnectionName) {
+                                             continue
+                              }
+                              do ..Log("Creating Remote Databases from ", remoteServerName)
+                              //delete all remote databases associated with the connection
+                              set dbs = ##class(%ResultSet).%New("SYS.Database:RemoteDatabaseList")
+                              set status = dbs.Execute(remoteServerName)
+                              while dbs.%Next() {
+                                             set db = dbs.Get("DBName")
+                                             set remoteDirectory = dbs.Get("RemoteDirectory")
+                                             //create remote databases for eHMP databases
+                                             if (db = ..#PrimeDatabaseName)||(db = ..#OperationalDatabaseName)|| ($EXTRACT(db, 1,3) = "DAT") {
+                                                            set status = ..CreateRemoteDatabase(remoteServerName, remoteDirectory, db)
+                                                            //quit if error
+                                                            if $$$ISERR(status) {
+                                                                           quit
+                                                            }
+                                                            else {
+                                                                           set count = count +1
+                                                            }
+                                             }
+                              }
+                              //quit if error
+                              if $$$ISERR(status) {
+                                             write "fail",!
+                                             quit
+                              }
+               }
+               if $$$ISOK(status) {
+                              do ..Log("Created Databases: ", count)
+               }
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateRemoteDatabase">
+<Description>
+Create a remote database</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>server:%String,directory:%String,name:%String</FormalSpec>
+<Implementation><![CDATA[
+   set status = $$$OK
+
+   kill Properties
+   set Properties("Server")=server
+   set Properties("Directory")= directory
+
+   //only create if it doesn't exist
+   if '##class(Config.Databases).Exists(name){
+                              set status = ##class(Config.Databases).Create(name,.Properties)
+                              do ..Error(status)
+                              do ..Log("Created Remote Database: ",name, " on ", server)
+   }
+   quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateNamespace">
+<Description>
+Create a Namespace with a default database (and optional routines database)</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>name,globalsDatabase,routinesDatabase</FormalSpec>
+<Implementation><![CDATA[
+	do ..Log("Creating Namespace: "_name)
+               //sanity check for namespace existence; it may not be correctly configured
+               if ##Class(Config.Namespaces).Exists(name) {
+                              do ..Log("Warning: Namespace already exists")
+                              quit $$$OK
+               }
+               //sanity check for database existence
+               if '##class(Config.Databases).Exists(globalsDatabase) {
+                              do ..Log("Warning: Database")
+                              quit $$$ERROR("Failure: Database "_globalsDatabase_" does not exist; cannot create namespace.")
+               }
+               //create the namespace
+               set Properties("Globals")=globalsDatabase
+               set Properties("Routines")=$G(routinesDatabase, globalsDatabase)
+               set status=##class(Config.Namespaces).Create(name,.Properties)
+               //report status
+               if $$$ISOK(status) {
+                              do ..Log("Created Namespace: "_name_"")
+               }
+               else {
+                              do ..Error(status)
+                              do ..Log("Failed: Namespace "_name_" could not be created")
+               }
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="MapOperational">
+<Description>
+create JDS Operational database mappings</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>OperationalDatabase</FormalSpec>
+<Implementation><![CDATA[
+               write !
+               do ..Log("Creating Operational Globals Mappings on ", OperationalDatabase)
+
+               #dim operationalGlobalsList=$LISTFROMSTRING(..#OperationalGlobals,";")
+               #dim global = ""
+
+               for ii=1:1:$LISTLENGTH(operationalGlobalsList) {
+                              set global = $LISTGET(operationalGlobalsList, ii)
+                              do ..CreateGlobalMapping(global,..#Namespace, OperationalDatabase)
+               }
+]]></Implementation>
+</Method>
+
+<Method name="MapData">
+<Description>
+Map all the databases</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>database</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+               set ns = $NAMESPACE
+               set $NAMESPACE = "%SYS"
+               do ..Log("Mapping Patient Data Globals to ", database)
+               set status = $$$OK
+               //math to calculate the range of the JPIDs
+               #dim increment = $PIECE($ZHEX("FFFFFFFF")/..#TotalShards,".")
+               #dim from=$ZCONVERT($EXTRACT(database,4,11), "L")
+               #dim to = $ZCONVERT($REPLACE($JUSTIFY($ZHEX($ZHEX(from) + increment), 8)," ", "0"),"L")
+               //include the maximum value in the last shard
+               if ($ZHEX(to) = (increment * ..#TotalShards)) {
+                              set to = "g0000000"
+               }
+               //create list of globals from parameter
+               #dim dataGlobalsList=$LISTFROMSTRING(..#DataGlobals, ";")
+               //loop through globals
+               for ii=1:1:$LISTLENGTH(dataGlobalsList) {
+                              set global = $LISTGET(dataGlobalsList, ii)
+                              set globalName = $PIECE(global, "(")
+                              set subscripts = $PIECE($PIECE(global, "(", 2),")")
+                              if subscripts '= "" {
+                                             set subscripts = subscripts_","
+                              }
+                              set mapping = globalName_"("_subscripts_""""_from_"-""):("_subscripts_""""_to_"-"")"
+                              //write mapping, !
+                              //create the global mappings
+                              set status = ..CreateGlobalMapping(mapping, ..#Namespace, database)
+                              if $$$ISERR(status) {
+                                             quit
+                              }
+               }
+               set $NAMESPACE = ns
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="CreateGlobalMapping">
+<Description>
+Create a Global Mapping</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>global,namespace,database</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+               kill Properties
+               set Properties("Database") = $G(database, ..#PrimeDatabaseName)
+               set status=##Class(Config.MapGlobals).Create($G(namespace, ..#Namespace), global, .Properties)
+               if $$$ISOK(status) {
+                              do ..Log("Mapped: "_global_"")
+               }
+               else {
+                              do ..Error(status)
+               }
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="Clear">
+<Description>
+Remove all ECP Connections/Databases, Namespaces</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               set ns = $NAMESPACE
+               set $NAMESPACE = "%SYS"
+               //clear the namespace -- must be done first
+               do ..DeleteNamespace(..#Namespace)
+               //clear the ecp servers
+               set rs = ##class(%ResultSet).%New("SYS.ECP:ServerList")
+               set status = rs.Execute()
+               do ..Error(status)
+               while rs.%Next() {
+                              set remoteServerName = rs.Get("Server Name")
+                              //only look at ECP connections to JDS Servers
+                              if (remoteServerName = "") || '(remoteServerName [ ..#ECPConnectionName) {
+                                             do ..Log("Skipping ",remoteServerName)
+                                             continue
+                              }
+                              //delete all remote databases associated with the connection
+                              set dbs = ##class(%ResultSet).%New("Config.Databases:List")
+                              set status = dbs.Execute()
+                              while dbs.%Next() {
+                                             set db = dbs.Get("Name")
+                                             if (remoteServerName '= "") && (dbs.Get("Server") = remoteServerName) {
+                                                            do ..Log("Deleting Remote Database: "_db)
+                                                            set status = ##class(Config.Databases).Delete(db)
+                                                            do ..Error(status)
+                                             }
+                              }
+                              do dbs.Close()
+                              set status =  ##class(SYS.ECP).ServerAction(remoteServerName,2)
+                              set status = ##class(Config.ECPServers).Delete(remoteServerName)
+                              if '..Error(status) {
+                                             do ..Log("Deleted ECP Server: "_remoteServerName)
+                              }
+                              //zwrite rs
+               }
+               do rs.Close()
+               set $NAMESPACE = ns
+]]></Implementation>
+</Method>
+
+<Method name="DeleteNamespace">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>name</FormalSpec>
+<Implementation><![CDATA[
+  do ..Log("Deleting Namesplace: ", name)
+               set status = $$$OK
+               if (##class(Config.Namespaces).Exists(name)) {
+                              set status = ##class(Config.Namespaces).Delete(name)
+               }
+               quit status
+]]></Implementation>
+</Method>
+
+<Method name="TestRS">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               set ns = $NAMESPACE
+               zn "%SYS"
+
+               set rs = ##class(%ResultSet).%New("Config.ECPServers:List")
+               set status = rs.Execute()
+               do ..Error(status)
+
+               write "Config.ECPServers",!
+               while rs.%Next() {
+                              write rs.Get("Name"),!
+               }
+               do rs.Close()
+
+               set rs = ##class(%ResultSet).%New("SYS.ECP:ServerList")
+               set status = rs.Execute()
+               do ..Error(status)
+
+               write "SYS.ECP",!
+               while rs.%Next() {
+                              write rs.Get("Server Name"),!
+               }
+               do rs.Close()
+
+
+
+               zn ns
+]]></Implementation>
+</Method>
+
+<Method name="Log">
+<Description>
+Output information with a timestamp</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>message...:%String</FormalSpec>
+<Implementation><![CDATA[
+
+               write $ZDT($H,3), "  "
+               for ii=1:1:$GET(message, 0) {
+                              write $GET(message(ii),"")
+               }
+               write !
+]]></Implementation>
+</Method>
+
+<Method name="Error">
+<Description>
+Output error text</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>status</FormalSpec>
+<Implementation><![CDATA[
+               if '$$$ISOK(status) {
+                              write !,"Error: "_$SYSTEM.Status.GetErrorText(status)
+               }
+
+               quit '$$$ISOK(status)
+]]></Implementation>
+</Method>
+
+<Method name="JPIDTest">
+<Implementation><![CDATA[
+
+///Create a bunch of values in ^VPRPT(JPID) to test global mappings.</Description>
+               kill ^JPID
+               for i=0:1:n {
+                              set jpid = ..JPID()
+                              set ^|..#Namespace|VPRPT(jpid) = $ZDT($H,3)
+               }
+               quit ""
+]]></Implementation>
+</Method>
+
+<Method name="JPID">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               S N="",R=""
+               F  S N=N_$R(100000) Q:$L(N)>64
+               F I=1:2:64 S R=R_$E("0123456789abcdef",($E(N,I,I+1)#16+1))
+               Q $E(R,1,8)_"-"_$E(R,9,12)_"-4"_$E(R,14,16)_"-"_$E("89ab",$E(N,17)#4+1)_$E(R,18,20)_"-"_$E(R,21,32)
+]]></Implementation>
+</Method>
+
+<Method name="Info">
+<Description>
+Informtion Method</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+///Helper method for debugging ECP issues</Description>
+               set ns = $NAMESPACE
+               write !!,"------------------------------------------------------------",!
+               write "Info for ",$SYSTEM,!
+               write $ZV,!
+               write "Class Compiled: "_$ZDT(##class(%Dictionary.CompiledClass).%OpenId(..%ClassName(1)).TimeChanged,3),!
+               write "------------------------------------------------------------",!
+               set $NAMESPACE = "%SYS"
+               set c = ##class(Config.Startup).Open()
+               write "SuperServer Port: ", c.DefaultPort,!
+               set c = ##class(Config.config).Open()
+               write "ECP Limits: ", c.MaxServers, ", ", c.MaxServerConn,!
+               do ##class(Security.Services).Get("%Service_ECP", .p)
+               write "ECP Enabled: ", p("Enabled"),!
+               write "ECP WhiteList: ", p("ClientSystems"),!
+               write "ECP Connections to Create: ",..#ECPServers,!
+               write !,"------------------------------------------------------------",!
+               write "ECP Connection Status",!
+               write "------------------------------------------------------------"
+               do ##class(%ResultSet).RunQuery("SYS.ECP","ServerList")
+               set rs = ##class(%ResultSet).%New("SYS.ECP:ServerList")
+               set status = rs.Execute()
+               do ..Error(status)
+               while rs.%Next() {
+                              write !!,"------------------------------------------------------------",!
+                              write "Databases on "_rs.Get("Server Name"),!
+                              write "------------------------------------------------------------"
+                              do ##class(%ResultSet).RunQuery("SYS.Database","RemoteDatabaseList", rs.Get("Server Name"))
+               }
+               do rs.Close()
+               write !!,"------------------------------------------------------------",!
+               write "Local Databases",!
+               write "------------------------------------------------------------"
+               do ##class(%ResultSet).RunQuery("Config.Databases","List")
+               set $NAMESPACE = ns
+]]></Implementation>
+</Method>
+
+<Method name="Count">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+               set ns = $NAMESPACE
+               set $NAMESPACE = "%SYS"
+               //clear the ecp servers
+               set rs = ##class(%ResultSet).%New("SYS.ECP:ServerList")
+               set status = rs.Execute()
+               do ..Error(status)
+               set total = 0
+               while rs.%Next() {
+                              set remoteServerName = rs.Get("Server Name")
+                              //only look at ECP connections to JDS Servers
+                              if (remoteServerName = "") || '(remoteServerName [ ..#ECPConnectionName) {
+                                             do ..Log("Skipping ",remoteServerName)
+                                             continue
+                              }
+                              set $NAMESPACE = "%SYS"
+                              set serverTotal = 0
+                              //delete all remote databases associated with the connection
+                              set dbs = ##class(%ResultSet).%New("Config.Databases:List")
+                              set status = dbs.Execute()
+                              while dbs.%Next() {
+                                             set db = dbs.Get("Name")
+                                             set dir = dbs.Get("Directory")
+                                             if (remoteServerName '= "") && (dbs.Get("Server") = remoteServerName) {
+                                                            zn "^"_remoteServerName_"^"_dir
+                                                            set count=0
+                                                            set jpid=""
+                                                            //count each manually
+
+                                                            while 1 {
+
+                                                                             s jpid=$O(^VPRPTJ("JPID",jpid))
+                                                                             q:jpid=""
+                                                                             if ($$ISJPID^|..#Namespace|VPRJPR(jpid) & (jpid'["JPID;")) {
+                                                                             set count=count+1
+                                                                             }
+                                                            }
+                                                            write remoteServerName,$C(9),db, $C(9), count,!
+                                                            set total = total + count
+                                                            set serverTotal = serverTotal + count
+                                             }
+                                             set $NAMESPACE = "%SYS"
+                              }
+                              do dbs.Close()
+                              write "Total for ",remoteServerName,": ",serverTotal,!
+               }
+               do rs.Close()
+               write "Total: ",total,!
+               set $NAMESPACE = ns
+]]></Implementation>
+</Method>
+</Class>
+</Export>

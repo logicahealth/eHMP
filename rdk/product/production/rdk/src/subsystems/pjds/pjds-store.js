@@ -13,17 +13,27 @@ var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
 var httpUtil = rdk.utils.http;
 var jdsFilter = require('jds-filter');
+var pjdsDefaults = require('./pjds-store-default-data');
 
 function buildPath(req, httpOptions, callback) {
     var key = '';
     if (httpOptions.type === 'PUT' || !_.isUndefined(httpOptions.key)) {
         key = httpOptions.key;
     }
-    var jdsResource = util.format('/' + httpOptions.store + '/' + key);
+    var jdsResource = '/' + httpOptions.store + '/' + key;
+
     if (!_.isUndefined(httpOptions.indexName)) {
-        jdsResource = util.format('/' + httpOptions.store + '/index/' + httpOptions.indexName);
+        jdsResource = '/' + httpOptions.store + '/index/' + httpOptions.indexName;
     }
-    var jdsPath = jdsResource;
+
+    if (!_.isUndefined(httpOptions.template)) {
+        if (jdsResource.slice(-1) !== '/') {
+            jdsResource += '/';
+        }
+        jdsResource += httpOptions.template;
+    }
+
+    var jdsPath = util.format(jdsResource);
     if (!_.isEmpty(httpOptions.parameters)) {
         var jdsQueryString = querystring.stringify(httpOptions.parameters);
         jdsPath += '?' + jdsQueryString;
@@ -53,12 +63,12 @@ function getResponse(req, path, httpOptions, callback) {
     httpUtil[httpOptions.type](options, function(error, response, data) {
         resultObj.statusCode = _.get(response, 'statusCode');
         resultObj.data = data;
-        if (error || resultObj.statusCode > 204) {
-            req.logger.error('Error in pjds-store: at Path: ' + path);
+        if (error || resultObj.statusCode >= 300) {
+            var msg = 'Error in pjds-store ' + httpOptions.errorMessageHeader + ', store: ' + httpOptions.store + ' and path: ' + path;
             var rdkError = new RdkError({
                 'error': error,
                 'status': resultObj.statusCode,
-                'message': 'Error in pjds-store' + httpOptions.errorMessageHeader + httpOptions.store,
+                'message': msg,
                 'logger': req.logger
             });
             callback(rdkError, resultObj, _.get(response, 'headers'));
@@ -101,12 +111,15 @@ function buildHttpOptions(callType, config, errorMessageHeader) {
     if (!_.isUndefined(config.data)) {
         httpOptions.data = config.data;
     }
+    if (!_.isUndefined(config.template)) {
+        httpOptions.template = config.template;
+    }
     return httpOptions;
 }
 
 var get = function(req, res, config, callback) {
     var httpOptions = buildHttpOptions('get', config, 'Error retrieving data from ');
-    callPJDS(req, res, httpOptions, callback);
+    callPJDS(req, null, httpOptions, callback);
 };
 var patch = function(req, res, config, callback) {
     if (_.isUndefined(config.key)) {
@@ -121,7 +134,7 @@ var patch = function(req, res, config, callback) {
         config.data.uid = config.key;
     }
     var httpOptions = buildHttpOptions('patch', config, 'Error writing data to ');
-    callPJDS(req, res, httpOptions, callback);
+    callPJDS(req, null, httpOptions, callback);
 };
 var post = function(req, res, config, callback) {
     if (_.isUndefined(config.data)) {
@@ -129,7 +142,7 @@ var post = function(req, res, config, callback) {
         return;
     }
     var httpOptions = buildHttpOptions('put', config, 'Error writing data to ');
-    callPJDS(req, res, httpOptions, callback);
+    callPJDS(req, null, httpOptions, callback);
 };
 var put = function(req, res, config, callback) {
     if (_.isUndefined(config.key)) {
@@ -144,7 +157,7 @@ var put = function(req, res, config, callback) {
         config.data.uid = config.key;
     }
     var httpOptions = buildHttpOptions('put', config, 'Error writing data to ');
-    callPJDS(req, res, httpOptions, callback);
+    callPJDS(req, null, httpOptions, callback);
 };
 var remove = function(req, res, config, callback) {
     if (_.isUndefined(config.key)) {
@@ -152,11 +165,15 @@ var remove = function(req, res, config, callback) {
         return;
     }
     var httpOptions = buildHttpOptions('delete', config, 'Error deleting data from ');
-    callPJDS(req, res, httpOptions, callback);
+    callPJDS(req, null, httpOptions, callback);
 };
 
 var parseUid = function(location) {
     return location.substr(location.lastIndexOf('/') + 1);
+};
+
+var getDefaults = function(){
+    return _.get(pjdsDefaults, 'getDefaults')();
 };
 
 var pjdsStore = {
@@ -165,7 +182,9 @@ var pjdsStore = {
     post: post,
     patch: patch,
     delete: remove,
-    parseUid: parseUid
+    parseUid: parseUid,
+    defaults: pjdsDefaults,
+    getDefaults: getDefaults
 };
 
 function createHealthcheck(storename, app, logger) {

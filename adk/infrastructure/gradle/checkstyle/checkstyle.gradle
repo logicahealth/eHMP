@@ -1,0 +1,29 @@
+// Checkstyle
+// Configuraiton docs at http://www.gradle.org/docs/current/dsl/org.gradle.api.plugins.quality.CheckstyleExtension.html
+apply plugin: 'checkstyle'
+
+ext.checkstyleConfigDir = "${projectDir}/config"
+
+checkstyle {
+    configFile =  file("${checkstyleConfigDir}/checkstyle.xml")
+    showViolations = true
+    ignoreFailures = true
+    configProperties.checkstyleConfigDir = checkstyleConfigDir
+}
+
+checkstyleMain {
+    reports {
+        include ( '**/*.java')
+        xml {
+            destination "${project.buildDir}/reports/checkstyle/main.xml"
+        }
+    }
+}
+
+checkstyleTest {
+    reports {
+        xml {
+            destination "${project.buildDir}/reports/checkstyle/test.xml"
+        }
+    }
+}

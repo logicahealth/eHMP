@@ -5,7 +5,7 @@
 # This provider uses greenletters and PTY to automate install prompts. This can cause odd character output to :log.
 #
 # Activate a key to encrypt the database
-# Set up unattended database encryptioon, also enable encryption of journal files and CacheTemp
+# Set up unattended database encryption, also enable encryption of journal files, CacheTemp, and the Audit database
 
 action :execute do
 
@@ -61,7 +61,7 @@ action :execute do
         shell.wait_for(:output, /Select option:/) do | process, match |
           process.write("1\r")
         end
-        shell.wait_for(:output, /Database encryption key file:/) do | process, match |
+        shell.wait_for(:output, /Encryption key file:/i) do | process, match |
           process.write("#{node[:jds][:cache_mgr_dir]}/#{node[:jds][:cache_key_file]}\r")
         end
         shell.wait_for(:output, /Username:/) do | process, match |
@@ -71,7 +71,7 @@ action :execute do
           process.write("#{node[:jds][:cache_key_pw]}\r")
           Chef::Log.info("Entered password")
         end
-        shell.wait_for(:output, /Database encryption key activated./) do | process, match |
+        shell.wait_for(:output, /Encryption key activated./i) do | process, match |
           Chef::Log.info("Result: :output")
         end
 
@@ -89,7 +89,10 @@ action :execute do
         shell.wait_for(:output, /Encrypt journal files\?/) do | process, match |
           process.write("Yes\r")
         end
-        shell.wait_for(:output, /Encrypt CacheTemp\?/) do | process, match |
+        shell.wait_for(:output, /Encrypt CacheTemp/i) do | process, match |
+          process.write("Yes\r")
+        end
+        shell.on(:output, /Encrypt Audit.*\?/) do | process, match |
           process.write("Yes\r")
         end
         shell.wait_for(:output, /Username:/) do | process, match |

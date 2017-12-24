@@ -75,7 +75,7 @@ public class JMXPollingService {
     //The only engine type we're currently working with is OpenCDS.
     private static final String ENGINE_TYPE = "OpenCDS";
 	
-	private int port = PORT        ;
+	private int port = PORT;
 	private long period = 60000; // 1 minute in ms
 	private MongoDbDao mongoDbDao;
 	private EngineInfoDao engineInfoDao;

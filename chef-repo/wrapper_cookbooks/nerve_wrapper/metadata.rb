@@ -4,7 +4,7 @@ maintainer_email 'vistacore@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures project specific nerve'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.1"
+version          "2.233.3"
 
 
-depends "nerve", "=2.1.1"
+depends "nerve", "=2.233.3"

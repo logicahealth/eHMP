@@ -17,7 +17,7 @@ describe('write-back orders common validator', function() {
         editLabWritebackContext.resourceId = '12345';
         detailLabWritebackContext = {};
         detailLabWritebackContext.resourceId = '45678';
-        detailLabWritebackContext.siteParam = '9E7A';
+        detailLabWritebackContext.siteParam = 'SITE';
         discontinueDetailsLabWritebackContext = {
             model: {
                 'dfn': '100716',
@@ -29,8 +29,8 @@ describe('write-back orders common validator', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    siteDfn: '9E7A:100716',
-                    site: '9E7A',
+                    siteDfn: 'SITE:100716',
+                    site: 'SITE',
                     dfn: '100716'
                 }
             }
@@ -38,8 +38,8 @@ describe('write-back orders common validator', function() {
         signDetailsLabWritebackContext = {};
         signDetailsLabWritebackContext.interceptorResults = {
             patientIdentifiers: {
-                siteDfn: '9E7A:100716',
-                site: '9E7A',
+                siteDfn: 'SITE:100716',
+                site: 'SITE',
                 dfn: '100716'
             }
         };
@@ -55,7 +55,7 @@ describe('write-back orders common validator', function() {
                 'dfn': '100716',
                 'provider': '1000000000',
                 'location': '285',
-                'eSig': 'REDACTED',
+                'eSig': 'PW      ',
                 'orderList': [{
                     'orderId': '38989;1',
                     'orderDetailHash': 'some hash value'
@@ -69,8 +69,8 @@ describe('write-back orders common validator', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    siteDfn: '9E7A:100716',
-                    site: '9E7A',
+                    siteDfn: 'SITE:100716',
+                    site: 'SITE',
                     dfn: '100716'
                 }
             }
@@ -78,14 +78,14 @@ describe('write-back orders common validator', function() {
 
         draftLabWritebackContext = {
             model: {
-                uid: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014',
-                patientUid: '9E7A;3',
+                uid: 'urn:va:ehmp-order:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014',
+                patientUid: 'SITE;3',
                 ehmpState: 'draft',
-                authorUid: 'urn:va:user:9E7A:123',
+                authorUid: 'urn:va:user:SITE:123',
                 domain: 'order',
                 subDomain: 'laboratory',
                 visit: {
-                    location: 'urn:va:location:9E7A:1',
+                    location: 'urn:va:location:SITE:1',
                     serviceCategory: 'PSB',
                     dateTime: '20160101120000'
                 },
@@ -99,8 +99,8 @@ describe('write-back orders common validator', function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    siteDfn: '9E7A:100716',
-                    site: '9E7A',
+                    siteDfn: 'SITE:100716',
+                    site: 'SITE',
                     dfn: '100716'
                 }
             }
@@ -108,22 +108,22 @@ describe('write-back orders common validator', function() {
 
         findDraftWritebackContext = {
             model: {
-                patientUid: '9E7A;100716',
+                patientUid: 'SITE;100716',
                 authorUid: 'Something',
                 domain: 'order',
                 ehmpState: 'draft'
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    siteDfn: '9E7A:100716',
-                    site: '9E7A',
+                    siteDfn: 'SITE:100716',
+                    site: 'SITE',
                     dfn: '100716'
                 }
             }
         };
 
         readDraftWritebackContext = {
-            resourceId: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014'
+            resourceId: 'urn:va:ehmp-order:SITE;3:de305d54-75b4-431b-adb2-eb6b9e546014'
         };
     });
 

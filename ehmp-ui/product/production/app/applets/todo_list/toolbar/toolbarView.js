@@ -21,7 +21,6 @@ define([
         },
 
         template: toolbarTemplate,
-        className: 'toolbar-item',
         events: {
             'change select': 'filterChange'
         },

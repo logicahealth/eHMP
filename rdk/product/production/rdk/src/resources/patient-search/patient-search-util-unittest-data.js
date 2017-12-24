@@ -16,7 +16,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0008',
                     'birthDate': '19450407',
                     'localId': '100022',
-                    'pid': '9E7A;100022',
+                    'pid': 'SITE;100022',
                     'icn': '5000000341V359724',
                     'summary': 'Bcma,Eight'
                 },
@@ -30,7 +30,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0018',
                     'birthDate': '19350407',
                     'localId': '100033',
-                    'pid': '9E7A;100033',
+                    'pid': 'SITE;100033',
                     'icn': '100031V310296',
                     'summary': 'Bcma,Eighteen-Patient'
                 },
@@ -44,7 +44,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0080',
                     'birthDate': '19350407',
                     'localId': '100095',
-                    'pid': '9E7A;100095',
+                    'pid': 'SITE;100095',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -58,7 +58,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0088',
                     'birthDate': '19350407',
                     'localId': '100104',
-                    'pid': '9E7A;100104',
+                    'pid': 'SITE;100104',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -72,7 +72,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0085',
                     'birthDate': '19350407',
                     'localId': '100100',
-                    'pid': '9E7A;100100',
+                    'pid': 'SITE;100100',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -86,7 +86,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0084',
                     'birthDate': '19350407',
                     'localId': '100099',
-                    'pid': '9E7A;100099',
+                    'pid': 'SITE;100099',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -100,7 +100,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0089',
                     'birthDate': '19350407',
                     'localId': '100103',
-                    'pid': '9E7A;100103',
+                    'pid': 'SITE;100103',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -114,7 +114,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0081',
                     'birthDate': '19350407',
                     'localId': '100096',
-                    'pid': '9E7A;100096',
+                    'pid': 'SITE;100096',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -128,7 +128,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0087',
                     'birthDate': '19350407',
                     'localId': '100102',
-                    'pid': '9E7A;100102',
+                    'pid': 'SITE;100102',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -142,7 +142,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0086',
                     'birthDate': '19350407',
                     'localId': '100101',
-                    'pid': '9E7A;100101',
+                    'pid': 'SITE;100101',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -156,7 +156,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0083',
                     'birthDate': '19350407',
                     'localId': '100098',
-                    'pid': '9E7A;100098',
+                    'pid': 'SITE;100098',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -170,7 +170,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0082',
                     'birthDate': '19350407',
                     'localId': '100097',
-                    'pid': '9E7A;100097',
+                    'pid': 'SITE;100097',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -184,7 +184,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0011',
                     'birthDate': '19350407',
                     'localId': '100025',
-                    'pid': '9E7A;100025',
+                    'pid': 'SITE;100025',
                     'icn': '5000000345V975335',
                     'summary': 'Bcma,Eleven-Patient Midden Jr'
                 },
@@ -198,7 +198,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0015',
                     'birthDate': '19350407',
                     'localId': '100030',
-                    'pid': '9E7A;100030',
+                    'pid': 'SITE;100030',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -212,7 +212,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0058',
                     'birthDate': '19350407',
                     'localId': '100073',
-                    'pid': '9E7A;100073',
+                    'pid': 'SITE;100073',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -226,7 +226,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0055',
                     'birthDate': '19350407',
                     'localId': '100070',
-                    'pid': '9E7A;100070',
+                    'pid': 'SITE;100070',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -240,7 +240,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0054',
                     'birthDate': '19350407',
                     'localId': '100069',
-                    'pid': '9E7A;100069',
+                    'pid': 'SITE;100069',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -254,7 +254,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0059',
                     'birthDate': '19350407',
                     'localId': '100074',
-                    'pid': '9E7A;100074',
+                    'pid': 'SITE;100074',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -268,7 +268,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0051',
                     'birthDate': '19350407',
                     'localId': '100066',
-                    'pid': '9E7A;100066',
+                    'pid': 'SITE;100066',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -282,7 +282,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0057',
                     'birthDate': '19350407',
                     'localId': '100072',
-                    'pid': '9E7A;100072',
+                    'pid': 'SITE;100072',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -296,7 +296,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0056',
                     'birthDate': '19350407',
                     'localId': '100071',
-                    'pid': '9E7A;100071',
+                    'pid': 'SITE;100071',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -310,7 +310,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0053',
                     'birthDate': '19350407',
                     'localId': '100068',
-                    'pid': '9E7A;100068',
+                    'pid': 'SITE;100068',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -324,7 +324,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0052',
                     'birthDate': '19350407',
                     'localId': '100067',
-                    'pid': '9E7A;100067',
+                    'pid': 'SITE;100067',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -338,7 +338,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0005',
                     'birthDate': '19350407',
                     'localId': '100019',
-                    'pid': '9E7A;100019',
+                    'pid': 'SITE;100019',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -352,7 +352,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0040',
                     'birthDate': '19350407',
                     'localId': '100055',
-                    'pid': '9E7A;100055',
+                    'pid': 'SITE;100055',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -366,7 +366,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0048',
                     'birthDate': '19350407',
                     'localId': '100063',
-                    'pid': '9E7A;100063',
+                    'pid': 'SITE;100063',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -380,7 +380,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0045',
                     'birthDate': '19350407',
                     'localId': '100060',
-                    'pid': '9E7A;100060',
+                    'pid': 'SITE;100060',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -394,7 +394,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0044',
                     'birthDate': '19350407',
                     'localId': '100059',
-                    'pid': '9E7A;100059',
+                    'pid': 'SITE;100059',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -408,7 +408,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0049',
                     'birthDate': '19350407',
                     'localId': '100064',
-                    'pid': '9E7A;100064',
+                    'pid': 'SITE;100064',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -422,7 +422,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0041',
                     'birthDate': '19350407',
                     'localId': '100056',
-                    'pid': '9E7A;100056',
+                    'pid': 'SITE;100056',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -436,7 +436,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0047',
                     'birthDate': '19350407',
                     'localId': '100062',
-                    'pid': '9E7A;100062',
+                    'pid': 'SITE;100062',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -450,7 +450,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0046',
                     'birthDate': '19350407',
                     'localId': '100061',
-                    'pid': '9E7A;100061',
+                    'pid': 'SITE;100061',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -464,7 +464,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0043',
                     'birthDate': '19350407',
                     'localId': '100058',
-                    'pid': '9E7A;100058',
+                    'pid': 'SITE;100058',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -478,7 +478,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0042',
                     'birthDate': '19350407',
                     'localId': '100057',
-                    'pid': '9E7A;100057',
+                    'pid': 'SITE;100057',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -492,7 +492,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0004',
                     'birthDate': '19350407',
                     'localId': '100018',
-                    'pid': '9E7A;100018',
+                    'pid': 'SITE;100018',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -506,7 +506,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0014',
                     'birthDate': '19350407',
                     'localId': '100028',
-                    'pid': '9E7A;100028',
+                    'pid': 'SITE;100028',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -520,7 +520,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0009',
                     'birthDate': '19350407',
                     'localId': '100023',
-                    'pid': '9E7A;100023',
+                    'pid': 'SITE;100023',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -534,7 +534,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0019',
                     'birthDate': '19350407',
                     'localId': '100034',
-                    'pid': '9E7A;100034',
+                    'pid': 'SITE;100034',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -548,7 +548,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0090',
                     'birthDate': '19350407',
                     'localId': '100105',
-                    'pid': '9E7A;100105',
+                    'pid': 'SITE;100105',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -562,7 +562,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0098',
                     'birthDate': '19350407',
                     'localId': '100113',
-                    'pid': '9E7A;100113',
+                    'pid': 'SITE;100113',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -576,7 +576,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0095',
                     'birthDate': '19350407',
                     'localId': '100110',
-                    'pid': '9E7A;100110',
+                    'pid': 'SITE;100110',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -590,7 +590,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0094',
                     'birthDate': '19350407',
                     'localId': '100109',
-                    'pid': '9E7A;100109',
+                    'pid': 'SITE;100109',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -604,7 +604,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0099',
                     'birthDate': '19350407',
                     'localId': '100114',
-                    'pid': '9E7A;100114',
+                    'pid': 'SITE;100114',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -618,7 +618,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0091',
                     'birthDate': '19350407',
                     'localId': '100106',
-                    'pid': '9E7A;100106',
+                    'pid': 'SITE;100106',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -632,7 +632,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0097',
                     'birthDate': '19350407',
                     'localId': '100112',
-                    'pid': '9E7A;100112',
+                    'pid': 'SITE;100112',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -646,7 +646,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0096',
                     'birthDate': '19350407',
                     'localId': '100111',
-                    'pid': '9E7A;100111',
+                    'pid': 'SITE;100111',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -660,7 +660,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0093',
                     'birthDate': '19350407',
                     'localId': '100108',
-                    'pid': '9E7A;100108',
+                    'pid': 'SITE;100108',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -674,7 +674,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0092',
                     'birthDate': '19350407',
                     'localId': '100107',
-                    'pid': '9E7A;100107',
+                    'pid': 'SITE;100107',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -688,7 +688,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0100',
                     'birthDate': '19350407',
                     'localId': '100115',
-                    'pid': '9E7A;100115',
+                    'pid': 'SITE;100115',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -702,7 +702,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0001',
                     'birthDate': '19350407',
                     'localId': '100015',
-                    'pid': '9E7A;100015',
+                    'pid': 'SITE;100015',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -716,7 +716,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0007',
                     'birthDate': '19350407',
                     'localId': '100021',
-                    'pid': '9E7A;100021',
+                    'pid': 'SITE;100021',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -730,7 +730,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0017',
                     'birthDate': '19350407',
                     'localId': '100032',
-                    'pid': '9E7A;100032',
+                    'pid': 'SITE;100032',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -744,7 +744,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0070',
                     'birthDate': '19350407',
                     'localId': '100085',
-                    'pid': '9E7A;100085',
+                    'pid': 'SITE;100085',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -758,7 +758,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0078',
                     'birthDate': '19350407',
                     'localId': '100093',
-                    'pid': '9E7A;100093',
+                    'pid': 'SITE;100093',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -772,7 +772,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0075',
                     'birthDate': '19350407',
                     'localId': '100090',
-                    'pid': '9E7A;100090',
+                    'pid': 'SITE;100090',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -786,7 +786,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0074',
                     'birthDate': '19350407',
                     'localId': '100089',
-                    'pid': '9E7A;100089',
+                    'pid': 'SITE;100089',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -800,7 +800,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0079',
                     'birthDate': '19350407',
                     'localId': '100094',
-                    'pid': '9E7A;100094',
+                    'pid': 'SITE;100094',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -814,7 +814,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0071',
                     'birthDate': '19350407',
                     'localId': '100086',
-                    'pid': '9E7A;100086',
+                    'pid': 'SITE;100086',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -828,7 +828,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0077',
                     'birthDate': '19350407',
                     'localId': '100092',
-                    'pid': '9E7A;100092',
+                    'pid': 'SITE;100092',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -842,7 +842,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0076',
                     'birthDate': '19350407',
                     'localId': '100091',
-                    'pid': '9E7A;100091',
+                    'pid': 'SITE;100091',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -856,7 +856,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0073',
                     'birthDate': '19350407',
                     'localId': '100088',
-                    'pid': '9E7A;100088',
+                    'pid': 'SITE;100088',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -870,7 +870,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0072',
                     'birthDate': '19350407',
                     'localId': '100087',
-                    'pid': '9E7A;100087',
+                    'pid': 'SITE;100087',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -884,7 +884,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0006',
                     'birthDate': '19350407',
                     'localId': '100020',
-                    'pid': '9E7A;100020',
+                    'pid': 'SITE;100020',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -898,7 +898,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0016',
                     'birthDate': '19350407',
                     'localId': '100031',
-                    'pid': '9E7A;100031',
+                    'pid': 'SITE;100031',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -912,7 +912,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0060',
                     'birthDate': '19350407',
                     'localId': '100075',
-                    'pid': '9E7A;100075',
+                    'pid': 'SITE;100075',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -926,7 +926,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0068',
                     'birthDate': '19350407',
                     'localId': '100083',
-                    'pid': '9E7A;100083',
+                    'pid': 'SITE;100083',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -940,7 +940,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0065',
                     'birthDate': '19350407',
                     'localId': '100080',
-                    'pid': '9E7A;100080',
+                    'pid': 'SITE;100080',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -954,7 +954,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0064',
                     'birthDate': '19350407',
                     'localId': '100079',
-                    'pid': '9E7A;100079',
+                    'pid': 'SITE;100079',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -968,7 +968,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0069',
                     'birthDate': '19350407',
                     'localId': '100084',
-                    'pid': '9E7A;100084',
+                    'pid': 'SITE;100084',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -982,7 +982,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0061',
                     'birthDate': '19350407',
                     'localId': '100076',
-                    'pid': '9E7A;100076',
+                    'pid': 'SITE;100076',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -996,7 +996,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0067',
                     'birthDate': '19350407',
                     'localId': '100082',
-                    'pid': '9E7A;100082',
+                    'pid': 'SITE;100082',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1010,7 +1010,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0066',
                     'birthDate': '19350407',
                     'localId': '100081',
-                    'pid': '9E7A;100081',
+                    'pid': 'SITE;100081',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1024,7 +1024,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0063',
                     'birthDate': '19350407',
                     'localId': '100078',
-                    'pid': '9E7A;100078',
+                    'pid': 'SITE;100078',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1038,7 +1038,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0062',
                     'birthDate': '19350407',
                     'localId': '100077',
-                    'pid': '9E7A;100077',
+                    'pid': 'SITE;100077',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1052,7 +1052,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0010',
                     'birthDate': '19350407',
                     'localId': '100024',
-                    'pid': '9E7A;100024',
+                    'pid': 'SITE;100024',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1066,7 +1066,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0013',
                     'birthDate': '19350407',
                     'localId': '100027',
-                    'pid': '9E7A;100027',
+                    'pid': 'SITE;100027',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1080,7 +1080,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0030',
                     'birthDate': '19350407',
                     'localId': '100045',
-                    'pid': '9E7A;100045',
+                    'pid': 'SITE;100045',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1094,7 +1094,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0038',
                     'birthDate': '19350407',
                     'localId': '100053',
-                    'pid': '9E7A;100053',
+                    'pid': 'SITE;100053',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1108,7 +1108,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0035',
                     'birthDate': '19350407',
                     'localId': '100050',
-                    'pid': '9E7A;100050',
+                    'pid': 'SITE;100050',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1122,7 +1122,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0034',
                     'birthDate': '19350407',
                     'localId': '100049',
-                    'pid': '9E7A;100049',
+                    'pid': 'SITE;100049',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1136,7 +1136,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0039',
                     'birthDate': '19350407',
                     'localId': '100054',
-                    'pid': '9E7A;100054',
+                    'pid': 'SITE;100054',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1150,7 +1150,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0031',
                     'birthDate': '19350407',
                     'localId': '100046',
-                    'pid': '9E7A;100046',
+                    'pid': 'SITE;100046',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1164,7 +1164,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0037',
                     'birthDate': '19350407',
                     'localId': '100052',
-                    'pid': '9E7A;100052',
+                    'pid': 'SITE;100052',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1178,7 +1178,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0036',
                     'birthDate': '19350407',
                     'localId': '100051',
-                    'pid': '9E7A;100051',
+                    'pid': 'SITE;100051',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1192,7 +1192,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0033',
                     'birthDate': '19350407',
                     'localId': '100048',
-                    'pid': '9E7A;100048',
+                    'pid': 'SITE;100048',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1206,7 +1206,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0032',
                     'birthDate': '19350407',
                     'localId': '100047',
-                    'pid': '9E7A;100047',
+                    'pid': 'SITE;100047',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1220,7 +1220,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0003',
                     'birthDate': '19350407',
                     'localId': '100017',
-                    'pid': '9E7A;100017',
+                    'pid': 'SITE;100017',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1234,7 +1234,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0012',
                     'birthDate': '19350407',
                     'localId': '100026',
-                    'pid': '9E7A;100026',
+                    'pid': 'SITE;100026',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1248,7 +1248,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0020',
                     'birthDate': '19350407',
                     'localId': '100035',
-                    'pid': '9E7A;100035',
+                    'pid': 'SITE;100035',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1262,7 +1262,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0028',
                     'birthDate': '19350407',
                     'localId': '100043',
-                    'pid': '9E7A;100043',
+                    'pid': 'SITE;100043',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1276,7 +1276,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0025',
                     'birthDate': '19350407',
                     'localId': '100040',
-                    'pid': '9E7A;100040',
+                    'pid': 'SITE;100040',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1290,7 +1290,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0024',
                     'birthDate': '19350407',
                     'localId': '100039',
-                    'pid': '9E7A;100039',
+                    'pid': 'SITE;100039',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1304,7 +1304,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0029',
                     'birthDate': '19350407',
                     'localId': '100044',
-                    'pid': '9E7A;100044',
+                    'pid': 'SITE;100044',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1318,7 +1318,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0021',
                     'birthDate': '19350407',
                     'localId': '100037',
-                    'pid': '9E7A;100037',
+                    'pid': 'SITE;100037',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1332,7 +1332,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0027',
                     'birthDate': '19350407',
                     'localId': '100042',
-                    'pid': '9E7A;100042',
+                    'pid': 'SITE;100042',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1346,7 +1346,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0026',
                     'birthDate': '19350407',
                     'localId': '100041',
-                    'pid': '9E7A;100041',
+                    'pid': 'SITE;100041',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1360,7 +1360,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0023',
                     'birthDate': '19350407',
                     'localId': '100038',
-                    'pid': '9E7A;100038',
+                    'pid': 'SITE;100038',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1374,7 +1374,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0022',
                     'birthDate': '19350407',
                     'localId': '100036',
-                    'pid': '9E7A;100036',
+                    'pid': 'SITE;100036',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 },
@@ -1388,7 +1388,7 @@ module.exports.createMassiveResponse = function() {
                     'ssn': '*****0002',
                     'birthDate': '19350407',
                     'localId': '100016',
-                    'pid': '9E7A;100016',
+                    'pid': 'SITE;100016',
                     'icn': '-1',
                     'summary': 'NO ICN'
                 }

@@ -1,17 +1,15 @@
 package gov.va.signalregistrationservice.util;
 
-import gov.va.signalregistrationservice.entities.EventListener;
-import gov.va.signalregistrationservice.entities.EventMatchAction;
-import gov.va.signalregistrationservice.entities.EventMatchCriteria;
-import gov.va.signalregistrationservice.entities.SimpleMatch;
-
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.jboss.logging.Logger;
 import org.kie.api.runtime.Environment;
@@ -22,6 +20,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import gov.va.signalregistrationservice.entities.EventListener;
+import gov.va.signalregistrationservice.entities.EventMatchAction;
+import gov.va.signalregistrationservice.entities.EventMatchCriteria;
+import gov.va.signalregistrationservice.entities.SimpleMatch;
 
 public class RegistrationUtil {
 	private static final Logger LOGGER = Logger.getLogger(RegistrationUtil.class);
@@ -119,7 +122,6 @@ public class RegistrationUtil {
 		
 		Query query = em.createNativeQuery("select ACTIVITYDB.AM_EVENT_MATCH_ACTION_ID_SEQ.nextval from dual");
 		BigDecimal eventMatchActionId = (BigDecimal)query.getSingleResult();
-		
 		em.persist(new EventMatchAction(eventMatchActionId, signalContent, signalName, processDefinitionId, version, processInstanceId));
 		return eventMatchActionId;
 	}
@@ -144,4 +146,94 @@ public class RegistrationUtil {
 		return entityManagerFactory.createEntityManager();
 	}
 	
+	
+
+	/*
+	 * Retrieve row(s) from EVENT_MATCH_ACTION for a ProcessInstance
+	 * */
+	public static List<EventMatchAction> retrieveMatchActions(EntityManager em, long processInstanceId) {
+		TypedQuery<EventMatchAction> query = em.createQuery("from EventMatchAction where eventMatchInstanceId = :processInstanceId"
+				, EventMatchAction.class)
+				.setParameter("processInstanceId", processInstanceId);
+		return query.getResultList();
+	}
+	
+
+	/*
+	 * Remove row from AM_EVENTLISTENER for a EVENT_MATCH_ACTION
+	 * */
+	public static void removeAmEventListener(EntityManager em, BigDecimal id) {
+			TypedQuery<EventListener> query = em.createQuery("from EventListener where eventMatchActionId = :eventMatchActionId"
+					, EventListener.class)
+					.setParameter("eventMatchActionId", id);
+			try {
+				EventListener row = query.getSingleResult();
+				em.remove(row);
+			}
+			catch(NoResultException nre) {
+				// Log that no row was found
+				LOGGER.debugf("A row for AM_EVENTLISTENER.EVENT_MTCH_ACTION_ID=%f was not found",id);
+			}
+			catch(Exception e) {
+				// Log the error but do not re-throw
+				LOGGER.error(e.getMessage(), e);
+			}
+	}
+	
+
+	/*
+	 * Remove row(s) from SIMPLE_MATCH for an EVENT_MATCH_ACTION
+	 * */
+	public static void removeSimpleMatchOnCriteriaId(EntityManager em, BigDecimal id) {
+		TypedQuery<SimpleMatch> query = em.createQuery("from SimpleMatch where eventMatchCriteriaId = :eventMtchCriteriaId"
+				, SimpleMatch.class)
+				.setParameter("eventMtchCriteriaId", id);
+		try {
+			query.getResultList().stream().forEach(row -> em.remove(row));
+		}
+		catch(Exception e) {
+			// Log the error but do not re-throw
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
+	
+
+	/*
+	 * Remove row from EVENT_MATCH_CRITERIA for an EVENT_MATCH_ACTION
+	 * */
+	public static void removeEventMatchCriteria(EntityManager em, BigDecimal id) {
+			TypedQuery<EventMatchCriteria> query = em.createQuery("from EventMatchCriteria where id = :id"
+					, EventMatchCriteria.class)
+					.setParameter("id", id);
+			try {
+				EventMatchCriteria row = query.getSingleResult();
+				em.remove(row);
+			}
+			catch(NoResultException nre) {
+				// Log that no row was found
+				LOGGER.debugf("A row for EVENT_MATCH_CRITERIA.ID=%f was not found",id);
+			}
+			catch(Exception e) {
+				// Log the error but do not re-throw
+				LOGGER.error(e.getMessage(), e);
+			}
+	}
+	
+
+	/*
+	 * Remove row from EVENT_MATCH_ACTION
+	 * */
+	public static void removeEventMatchAction(EntityManager em, EventMatchAction eventMatchAction) {
+			
+			try {
+				if(eventMatchAction != null) {
+					em.remove(eventMatchAction);
+				}
+			}
+			catch(Exception e) {
+				// Log the error but do not re-throw
+				LOGGER.error(e.getMessage(), e);
+			}
+	}
+
 }

@@ -14,7 +14,7 @@ end
 if in_ec2?
   fqdn = node[:cloud][:public_hostname]
 else
-  fqdn = node[:ipaddress]
+  fqdn = 'localhost'
 end
 
 directory node[:apache][:ssl_dir] do

@@ -1,0 +1,7 @@
+Automatic shut down routine for Cache ECP
+%RO on 14 Jul 2017   4:00 PM
+%ZSTOP^INT^1^62697,57204.377933^0
+%ZSTOP ;OpenM calls this routine at stop time
+SYSTEM
+ D $system.ECP.Sync()
+ QUIT

@@ -28,11 +28,12 @@ function getResourceConfig(app) {  // jshint ignore:line
         interceptors: {
             // Disabling default interceptors is not recommended unless you
             // have a good reason to.
-            authentication: false,  // disable the authentication interceptor which is enabled by default
+            authentication: false,  // disable the authentication interceptor which is
+            // enabled by default and generally a steady requirement
             jdsFilter: true  // enable the jdsFilter interceptor
         },  // incoming middleware
-        requiredPermissions: [], //required to be an array for authorization (pep)
-        isPatientCentric: true, //required to be a boolean for authorization (pep)
+        requiredPermissions: [], //required to be an array of strings for authorization (pep) permissions policy
+        isPatientCentric: true, //required to be a boolean for authorization (pep) patient policy
         subsystems: ['jds']  // external data sources that this resource depends on
     }, {
         name: 'test',  // name of the resource (relative to its family name)
@@ -40,11 +41,11 @@ function getResourceConfig(app) {  // jshint ignore:line
         post: samplePost,  // HTTP POST handler
         // put: samplePut,  // more than one HTTP method is not supported
         interceptors: {
-            jdsFilter: true,
-            synchronize: false
+            jdsFilter: true
         },  // incoming middleware,
-        requiredPermissions: ['add-test-permission'], //required to be an array for authorization (pep)
-        isPatientCentric: false, //required to be a boolean for authorization (pep)
+        requiredPermissions: ['add-test-permission'], //required to be an array of strings for
+        // authorization (pep) permissions policy
+        isPatientCentric: true, //required to be a boolean for authorization (pep) patient policy
         subsystems: ['jds']  // external data sources that this resource depends on
     }];
 }

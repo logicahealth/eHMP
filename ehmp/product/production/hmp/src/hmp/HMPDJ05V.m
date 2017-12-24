@@ -1,5 +1,5 @@
-HMPDJ05V ;SLC/MKB,ASMR/RRB - IV/Infusions;Nov 09, 2015 15:40:35
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPDJ05V ;SLC/MKB,ASMR/RRB,AFS/PB,BL,hrubovcak - IV/Infusions;Nov 09, 2015 15:40:35
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**4**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -186,8 +186,10 @@ SCH(NAME) ; -- Return other schedule info
  Q
  ;
 BCMA(RET,DFN,ORPK) ; -- administration times
+ Q:'$$PROD^XUPROD  ; DE7678, get BCMA data only in production
  Q:$G(DFN)<1  Q:$G(ORPK)<1
  N LAST,ADT,DA,CNT,X,Y,N,NODE,X0,DRUG,HMPDT
+ K ^TMP("HMPMED",$J)  ;DE8371;BL Kill off ^TMP node
  ;DE2818 begin, ^PSB(53.79) references - ICR 5909
  S LAST=$P($O(^PSB(53.79,"AORDX",DFN,ORPK,9999999),-1),".")
  S ADT=$$FMADD^XLFDT(LAST,-90) ;return most recent 90 days
@@ -216,10 +218,12 @@ BCMA(RET,DFN,ORPK) ; -- administration times
  ... S:$L(X) Y("medication",N,"name")=X
  ... S X=$P(X0,U,3) S:$L(X) Y("medication",N,"amount")=X
  ... S X=$P(X0,U,4) S:$L(X) Y("medication",N,"units")=X
- .. S CNT=CNT+1 M RET("administrations",CNT)=Y
+ .. ;BL;de8371; MED array and RET array causing store errors move to ^TMP
+ .. S CNT=CNT+1 M ^TMP("HMPMED",$J,"administrations",CNT)=Y
  ;DE2818 end, ^PSB(53.79) references - ICR 5909
  ; get next scheduled administration time
- ;D ADMIN^PSBHMP(.HMPDT,DFN,ORPK) ; <<< 12.3
- D ADMIN^PSBVPR(.HMPDT,DFN,ORPK) ; <<<< 12.3 
- S:$G(HMPDT) RET("nextAdminTime")=HMPDT
+ D:"VU"[$E($RE(ORPK)) ADMIN^PSBVPR(.HMPDT,DFN,ORPK) ; <<<< 12.3 - DE7891 - PB only get last admin time if IV or UD
+ ;DE8371;BL ensure all RET entires are stored in ^TMP return file location in RET
+ S:$G(HMPDT) ^TMP("HMPMED",$J,"nextAdminTime")=HMPDT
+ S RET="^TMP(""HMPMED"","_$J_")"
  Q

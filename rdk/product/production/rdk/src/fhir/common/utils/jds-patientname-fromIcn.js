@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 
 module.exports.get = function(icn, req, callback) {
-    //http://IP             /vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
+    //http://IP             /vpr/SITE;100013/find/patient?filter=in(pid,["SITE;100013"])
 
     var jdsServer = req.app.config.jdsServer;
     var jdsPath = '/vpr/' + icn + '/find/patient?filter=in(pid,["' + icn + '"])';

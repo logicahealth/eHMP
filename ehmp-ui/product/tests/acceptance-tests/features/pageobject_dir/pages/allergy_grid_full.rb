@@ -1,5 +1,5 @@
 class PobAllergyGridFull < SitePrism::Page
-  set_url '/#allergy-grid-full'
+  set_url '#/patient/allergy-grid-full'
   # set_url_matcher(/\/#allergy-grid-full$/)
 
   # *****************  All_Form_Elements  ******************* #

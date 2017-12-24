@@ -25,8 +25,8 @@ describe('teams-for-facility fetch list', function() {
                 abbreviation: 'ABB'
             }
         },
-        jbpm: {
-            activityDatabase: 'dummyVal'
+        oracledb: {
+            ehmpDatabase: 'dummyVal'
         }
     };
 
@@ -41,13 +41,13 @@ describe('teams-for-facility fetch list', function() {
     }];
 
     beforeEach(function() {
-        sinon.stub(pcmm, 'doQueryWithParams', function(dummyConfig, query, queryParams, callback, params) {
+        sinon.stub(pcmm, 'doExecuteProcWithParams', function(dummyConfig, query, queryParams, callback, params) {
             return callback(null, pcmmData);
         });
     });
 
     afterEach(function() {
-        pcmm.doQueryWithParams.restore();
+        pcmm.doExecuteProcWithParams.restore();
     });
 
     it('returns expected JSON', function() {

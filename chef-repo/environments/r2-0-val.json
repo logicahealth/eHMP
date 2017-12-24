@@ -1,0 +1,9 @@
+{
+  "name": "r2-0-val",
+  "description": "r2.0 Val chef environment",
+  "override_attributes": {
+    "vista": {
+      "multiple_mode": false
+    }
+  }
+}

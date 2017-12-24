@@ -1,7 +1,7 @@
 require_relative 'parent_applet.rb'
 class PobDocumentsList < PobParentApplet
-  set_url '/#documents-list'
-  set_url_matcher(/\/#documents-list/)
+  set_url '#/patient/documents-list'
+  set_url_matcher(/#\/patient\/documents-list/)
 
   applet_id = "[data-appletid=documents]"
   element :fld_documents_heading, "div[data-appletid='documents'] .applet-chrome-header"
@@ -17,9 +17,9 @@ class PobDocumentsList < PobParentApplet
 
   elements :fld_document_rows, "[data-appletid=documents] tbody tr"
   elements :fld_document_rows_date, "[data-appletid=documents] tbody > tr > td[headers^=dateDisplayview]"
-  elements :fld_document_rows_type, "[data-appletid=documents] tbody > tr > td:nth-child(3)"
-  elements :fld_document_rows_description, "[data-appletid=documents] tbody > tr > td:nth-child(2)"
-  elements :fld_document_rows_facility, "[data-appletid=documents] tbody > tr > td:nth-child(5)"
+  elements :fld_document_rows_type, "[data-appletid=documents] tbody > tr > td:nth-child(4)"
+  elements :fld_document_rows_description, "[data-appletid=documents] tbody > tr > td:nth-child(3)"
+  elements :fld_document_rows_facility, "[data-appletid=documents] tbody > tr > td:nth-child(6)"
 
   # **  COLUMN HEADERS ** #
   element :fld_header_date, "[data-appletid=documents] th[id^='dateDisplayview'] button"
@@ -45,7 +45,7 @@ class PobDocumentsList < PobParentApplet
     add_empty_infinite_scroll_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
   end
 
   def applet_loaded?

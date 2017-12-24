@@ -1,4 +1,4 @@
-@f723_pob_lab_order_write_back @DE4560 @reg3 @DE7382
+@f723_pob_lab_order_write_back @orders_applet @DE4560 @reg2 @DE7382
 
 Feature: F723 : Outpatient Labs Write Back Orders to VistA with File Locking and Order Checks
 
@@ -6,9 +6,9 @@ Feature: F723 : Outpatient Labs Write Back Orders to VistA with File Locking and
 Scenario: Validate Add Lab Order form.
 
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   Then POB user adds a new order
-  And POB add order modal detail title says "ORDER A LAB TEST"
+  Then the add order modal detail title says "ORDER A LAB TEST"
   And POB add order detail modal displays labels
   | modal_item_fields 	    	  	|
   | Available Lab Tests      		|
@@ -33,7 +33,7 @@ Scenario: Validate Add Lab Order form.
 Scenario: Create a Lab Order and accept it.
 
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   When POB user navigates to orders expanded view
   And the user takes note of number of existing orders
   And POB user adds a new order
@@ -48,34 +48,34 @@ Scenario: Create a Lab Order and accept it.
 @f723_pob_lab_order_sign @F844 @DE5618 @DE7012 @DE7080
 Scenario: Create a Lab Order and Sign it.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "USER  " verifycode as  "PW      "
   Then staff view screen is displayed
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   And POB user navigates to orders expanded view
   And POB user opens the detail view of the order "24 hr urine protein" with status "UNRELEASED"
-  Then POB user signs the order as "REDACTED"
+  Then POB user signs the order as "PW      "
   And POB user verifies order status changes to "PENDING" for the order "24 hr urine protein"
     
 @f723_pob_lab_order_discontinue @F844 @DE5618 @DE7012 @DE7080
 Scenario: Create a Lab order and discontinue it.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "REDACTED" verifycode as  "REDACTED"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "USER  " verifycode as  "PW      "
   Then staff view screen is displayed
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   And POB user navigates to orders expanded view
   And POB user opens the detail view of the order "24 hr urine protein" with status "PENDING"
   And POB user discontinues the order
   And POB user opens the detail view of the order "24 hr urine protein" with status "UNRELEASED"
-  Then POB user signs the order as "REDACTED"
+  Then POB user signs the order as "PW      "
   Then POB user verifies order status changes to "DISCONTINUED" for the order "24 hr urine protein"
   
 @f723_pob_lab_order_cancel @F844 @DE5618 @DE7012
 Scenario: Create a Lab Order and cancel it.
 
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   When POB user navigates to orders expanded view
   And the user takes note of number of existing orders
   And POB user adds a new order
@@ -90,7 +90,7 @@ Scenario: Create a Lab Order and cancel it.
 Scenario: Create a Lab Order and Save it.
 
   When user searches for and selects "twenty,inpatient"
-  Then Overview is active
+  Then Summary View is active
   And POB user adds a new order
   And POB user orders "11-DEOXYCORTISOL" lab test
   And POB user saves the order

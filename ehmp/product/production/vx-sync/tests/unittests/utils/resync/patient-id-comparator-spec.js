@@ -24,7 +24,7 @@ var requestJob= { jpid:'00000000-0000-0000-0000-000000000000',
                 requestJob: {
                     patientIdentifier:{
                         'type': 'pid',
-                        'value': '9E7A;3' }
+                        'value': 'SITE;3' }
                     }
                 };
 var job = jobUtil.createEnterpriseSyncRequest(requestJob.requestJob.patientIdentifier, requestJob.jpid, requestJob.force);
@@ -33,27 +33,27 @@ var job = jobUtil.createEnterpriseSyncRequest(requestJob.requestJob.patientIdent
 var config = {
     jds: {
         protocol: 'http',
-        host: 'REDACTED    ',
+        host: 'IP        ',
         port: PORT
     },
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
-            'host': 'REDACTED    ',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 10000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
-            'host': 'REDACTED    ',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -70,7 +70,7 @@ var config = {
 };
 
 var demographicsFromVista = {
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'birthDate': '19350407',
     'last4': '0008',
     'last5': 'E0008',
@@ -82,7 +82,7 @@ var demographicsFromVista = {
     'genderCode': 'urn:va:pat-gender:M',
     'genderName': 'Male',
     'sensitive': false,
-    'uid': 'urn:va:patient:9E7A:3:3',
+    'uid': 'urn:va:patient:SITE:3:3',
     'summary': 'Eight,Patient',
     'ssn': '666000008',
     'localId': '3'
@@ -119,7 +119,7 @@ var pidsFromMvi = [{type: 'icn', value:'10108V420871'},
             {type: 'VLER', value:'VLER;10108V420871'},
             {type: 'VHICID', value:'VHICID;10108V420871'},
             {type: 'pid', value:'FFC7;28'},
-            {type: 'pid', value:'9E7A;3'},
+            {type: 'pid', value:'SITE;3'},
             {type: 'edipi', value:'DOD;11223344'},
             {type: 'dfn', value:'dfn;99887766'}];
 
@@ -265,7 +265,7 @@ describe('patient-id-comparator.js', function() {
                         '10108V420871',
                         'HDR;10108V420871',
                         '2939;19',
-                        '9E7A;3',
+                        'SITE;3',
                         'FFC7;28',
                         'DOD;11223344',
                         'dfn;99887766']
@@ -300,8 +300,8 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420871',
                         '2939;19',
-                        '9E7A;3',
-                        'C877;77',  //*not in MVI
+                        'SITE;3',
+                        'SITE;77',  //*not in MVI
                         'FFC7;28']
                         }, {}];
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
@@ -334,7 +334,7 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420871',
                         '2939;19',
-                        '9E7A;3']
+                        'SITE;3']
                         }, {}];
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
 
@@ -367,7 +367,7 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420872',
                         '2939;19',
-                        '9E7A;3',
+                        'SITE;3',
                         'FFC7;28',
                         'DOD;11223344']
                         }, {}];
@@ -401,7 +401,7 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420871',
                         '2939;19',
-                        '9E7A;3',
+                        'SITE;3',
                         'FFC7;28',
                         'DOD;11223355']
                         },{}];
@@ -435,7 +435,7 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420871',
                         '2939;19',
-                        '9E7A;3',
+                        'SITE;3',
                         'FFC7;82']  //different
                         },{}];
             environment.jds._setResponseData(expectedJdsError, expectedJdsResponse, expectedJdsResult);
@@ -468,7 +468,7 @@ describe('patient-id-comparator.js', function() {
                     patientIdentifiers: [
                         '10108V420871',
                         '2939;19',
-                        '9E7A;3',
+                        'SITE;3',
                         'FFC7;28',
                         'dfn;112244']  //different
                         },{}];
@@ -501,7 +501,7 @@ describe('patient-id-comparator.js', function() {
                 patientIdentifiers: [
                     '10108V420871',
                     '2939;19',
-                    '9E7A;3',
+                    'SITE;3',
                     'FFC7;28',
                     'dfn;112244']  //different
             },{jobStatus: [{type: 'resync-request'}]}];

@@ -11,7 +11,7 @@ define([
         template: AlertTemplate
     });
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Ok" classes="btn-primary btn-sm alert-cancel" title="Press enter to close"}}'),
+        template: Handlebars.compile('{{ui-button "Ok" classes="btn-primary btn-sm alert-cancel"}}'),
         events: {
             'click button': function() {
                 // hide is available on the ADK.UI.Alert constructor

@@ -6,18 +6,18 @@ var jdsInput = diagnosticReportIn.inputValue;
 var _ = require('lodash');
 
 var req = {
-    '_pid': '9E7A;253',
-    originalUrl: '/fhir/patient/9E7A;253/diagnosticreport?service=SP,CP,OTH&_ack=true',
+    '_pid': 'SITE;253',
+    originalUrl: '/fhir/patient/SITE;253/diagnosticreport?service=SP,CP,OTH&_ack=true',
     headers: {
-        host: 'localhost:8888'
+        host: 'localhost:PORT'
     },
     protocol: 'http',
     query: {}
 };
 
 function testJDSPath(params, expectedQuery) {
-    var path = diagnosticReport.buildJDSPath('9E7A;253', params, 'accession');
-    expect(path).to.eql('/vpr/9E7A;253/index/accession' + expectedQuery);
+    var path = diagnosticReport.buildJDSPath('SITE;253', params, 'accession');
+    expect(path).to.eql('/vpr/SITE;253/index/accession' + expectedQuery);
 }
 
 function createParam(propName, value) {
@@ -73,8 +73,8 @@ describe('DiagnosticReport FHIR Resource', function() {
         });
         it('builds correct JDS query - service', function() {
             var serviceCategories = ['urn:va:lab-category:CY', 'urn:va:lab-category:EM', 'urn:va:lab-category:SP', 'urn:va:lab-category:AP'];
-            var path = diagnosticReport.buildJDSPath('9E7A;253', req.query, 'accession', serviceCategories);
-            expect(path).to.eql('/vpr/9E7A;253/index/accession?filter=' + encodeURIComponent('in(categoryCode,[urn:va:lab-category:CY,urn:va:lab-category:EM,urn:va:lab-category:SP,urn:va:lab-category:AP])'));
+            var path = diagnosticReport.buildJDSPath('SITE;253', req.query, 'accession', serviceCategories);
+            expect(path).to.eql('/vpr/SITE;253/index/accession?filter=' + encodeURIComponent('in(categoryCode,[urn:va:lab-category:CY,urn:va:lab-category:EM,urn:va:lab-category:SP,urn:va:lab-category:AP])'));
         });
         it('builds correct JDS query - name (LR ANATOMIC PATHOLOGY REPORT)', function() {
             testJDSPath(createParam('name', 'LR ANATOMIC PATHOLOGY REPORT'), '?filter=' + encodeURIComponent('like(categoryCode,%AP)'));
@@ -115,7 +115,7 @@ describe('DiagnosticReport FHIR conversion methods', function() {
         expect(fhirBundle.link).not.to.be.undefined();
         expect(fhirBundle.link.length).to.eql(1);
         expect(fhirBundle.link[0].relation).to.eql('self');
-        expect(fhirBundle.link[0].url).to.eql('http://localhost:8888/fhir/patient/9E7A;253/diagnosticreport?service=SP,CP,OTH&_ack=true');
+        expect(fhirBundle.link[0].url).to.eql('http://localhost:PORT/fhir/patient/SITE;253/diagnosticreport?service=SP,CP,OTH&_ack=true');
         expect(fhirBundle.total).to.eql(18);
         expect(fhirBundle.entry).not.to.be.undefined();
         expect(fhirBundle.entry.length).to.eql(18);

@@ -1,1 +1,14 @@
-VXSYNC_LOG_SUFFIX=<%= @name %> node endpoints/writeback/writeback-endpoint.js --port <%= @options[:port] %> > <%= @process_log %>
+#!/bin/bash
+export VXSYNC_LOG_SUFFIX=<%= @name %>
+<% if @app_dynamics_deploy %>
+export APPDYNAMICS_AGENT_TIER_NAME=CFSS
+export APPDYNAMICS_AGENT_NODE_NAME=<%= @name %>
+<% end %>
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_<%= @name %>"
+node_modules/ca-apm-probe/bin/ca-apm-run.js endpoints/writeback/writeback-endpoint.js --port <%= @options[:port] %> > <%= @process_log %>
+<% else %>
+node endpoints/writeback/writeback-endpoint.js --port <%= @options[:port] %> > <%= @process_log %>
+<% end %>

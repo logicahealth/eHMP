@@ -15,3 +15,4 @@ default[:vhic][:agent_options][:cert] = nil
 default[:vhic][:agent_options][:request_cert] = nil
 default[:vhic][:agent_options][:ca] = nil
 default[:vhic][:agent_options][:passphrase] = nil
+default[:vhic][:agent_options][:max_sockets] = 5

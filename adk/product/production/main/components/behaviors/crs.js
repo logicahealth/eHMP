@@ -158,7 +158,9 @@ define([
                 }
             });
             this.getOption('view').trigger('modal.show');
-            modalView.show();
+            modalView.show({
+                triggerElement: this.view.getOption('$triggerElement')
+            });
         },
         getCrs: function(itemClicked) {
             var domains = [];
@@ -166,6 +168,7 @@ define([
             domains.push(CrsUtil.domain.MEDICATION);
             domains.push(CrsUtil.domain.LABORATORY);
             domains.push(CrsUtil.domain.VITAL);
+            var self = this;
             var fetchOptions = {
                 resourceTitle: 'concept-relationships',
                 criteria: {
@@ -175,11 +178,23 @@ define([
                 },
                 cache: false,
                 onSuccess: function(collection, resp, options) {
-                    collection.trigger('crs-fetch-success', collection, resp, itemClicked);
+                    if (!_.get(collection, '_events.crs-fetch-success')) {
+                        var events = self.getOption('crsEvents');
+                        var success = _.get(events, 'crs-fetch-success', _.noop);
+                        success.call(self, collection, resp, itemClicked);
+                    } else {
+                        collection.trigger('crs-fetch-success', collection, resp, itemClicked);
+                    }
                 },
                 onError: function(collection, resp, options) {
-                    collection.trigger('crs-fetch-error', collection, resp, itemClicked);
-                },
+                    if (!_.get(collection, '_events.crs-fetch-error')) {
+                        var events = self.getOption('crsEvents');
+                        var error = _.get(events, 'crs-fetch-error', _.noop);
+                        error.call(self, collection, resp, itemClicked);
+                    } else {
+                        collection.trigger('crs-fetch-error', collection, resp, itemClicked);
+                    }
+                }
             };
             ResourceService.fetchCollection(fetchOptions, this.crsCollection);
         },

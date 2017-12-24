@@ -44,6 +44,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
         var wardsCollection = _.filter(rpcData.split(RPC_ELEMENT_DELIMITER), Boolean);
 
         // For each ward returned by the RPC, call JDS to retrieve the mixed-case location name
+
         async.eachLimit(wardsCollection, ITERATEE_LIMIT, function callJDS(ward, jdsCallback) {
             logger.debug({
                 ward: ward
@@ -61,14 +62,20 @@ module.exports.fetch = function(logger, configuration, callback, params) {
 
             http.get(jdsOptions, function processJDSResponse(jdsError, jdsResponseCode, jdsResponse) {
                 if (jdsError) {
-                    logger.debug({error: jdsError}, 'JDS returned an error');
+                    logger.debug({
+                        error: jdsError
+                    }, 'JDS returned an error');
                     return jdsCallback(jdsError);
                 }
 
                 if (_.isObject(jdsResponse)) {
                     if (jdsResponse.error) {
-                        logger.debug({error: jdsResponse.error}, 'The JDS response object contained an error');
-                        return jdsCallback(jdsResponse.error);
+                        logger.debug({
+                            error: jdsResponse.error,
+                            ward: ward
+                        }, 'The JDS response object contained an error for the ward');
+                        //continue processing the results.  Don't place wards that returned errors in the response.
+                        return jdsCallback();
                     }
 
                     if (jdsResponse.data && jdsResponse.data.items) {
@@ -84,7 +91,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
                 }
                 return jdsCallback('JDS response was not a JSON object.');
             });
-        }, function (err) {
+        }, function(err) {
             if (err) {
                 callback(err);
             }

@@ -1,5 +1,5 @@
 #Team Neptune
-@F153_community_health_summaries @US2113 @DE460 @US4283 @reg2
+@F153_community_health_summaries @CommunityHealthSummaries_applet @US2113 @DE460 @US4283 @reg4
 Feature:F153-HIE C32 - Community Health Summaries
 
 Background:

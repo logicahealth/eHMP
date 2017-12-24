@@ -30,8 +30,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Properties;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class BounceBackTest {
 		target.setType(InvocationType.Direct);
 		LinkedList<String> intents = new LinkedList<String>();
 		target.setIntentsSet(intents);
-		Properties parameters = new Properties();
+		Map<String, Object> parameters = new HashMap<>();
 
 		ResultBundle out;
 
@@ -165,7 +166,7 @@ public class BounceBackTest {
 		target.setType(InvocationType.Direct);
 		LinkedList<String> intents = new LinkedList<String>();
 		target.setIntentsSet(intents);
-		Properties parameters = new Properties();
+		Map<String, Object> parameters = new HashMap<>();
 
 		ResultBundle out;
 

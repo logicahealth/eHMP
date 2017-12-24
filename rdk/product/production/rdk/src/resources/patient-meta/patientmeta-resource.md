@@ -19,7 +19,7 @@ This resource returns a 202 response when the patient exists but no metadata has
 
             {
                 "data": {
-                    "modifiedBy": "urn:va:user:9E7A:10000000270",
+                    "modifiedBy": "urn:va:user:SITE:10000000270",
                     "modifiedOn": "2015-12-19T23:00:33.488Z",
                     "val": {
                         "this": "that"
@@ -58,7 +58,7 @@ This resource returns a 202 response when the patient exists but no metadata has
 
             {
                 "data": {
-                    "modifiedBy": "urn:va:user:9E7A:10000000270",
+                    "modifiedBy": "urn:va:user:SITE:10000000270",
                     "modifiedOn": "2015-12-19T23:00:33.488Z",
                     "val": {
                         "this": "that"

@@ -18,18 +18,20 @@ var async = require('async');
 var request = require('request');
 
 var config = require(global.VX_ROOT + 'worker-config');
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var syncApiPort = testConfig.vxsyncPort;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var solrSmartClient = require('solr-smart-client');
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
 var HdrClient = require(global.VX_SUBSYSTEMS + 'hdr/hdr-client');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var VxSyncForeverAgent = require('http').Agent;
 
 var solrRecord = {
-    'uid': 'urn:va:ehmp-activity:9E7A:19:29fe0301-14ac-4d8d-95a9-9f538866beba',
-    'pid': '9E7A;19',
+    'uid': 'urn:va:ehmp-activity:SITE:19:29fe0301-14ac-4d8d-95a9-9f538866beba',
+    'pid': 'SITE;19',
     'domain': 'ehmp-activity',
     'subDomain': 'consult',
     'consult_name': 'Rheumatology',
@@ -58,28 +60,28 @@ var solrRecord = {
 
 var solrQuery = {
     'q': 'Rheu*',
-    'fq': 'pid:9E7A;19'
+    'fq': 'pid:SITE;19'
 };
 
 /*
     *** Note ***
     This test requires a patient to be synced before it can test the utility.
-    The patient used here is 9E7A;19.
+    The patient used here is SITE;19.
     This patient will be unsynced after the test runs.
  */
 
 describe('clearPatientUtil', function() {
     it('clearPatient', function() {
 
-        var pid = '9E7A;19';
-        var solrDocumentUid = 'urn:va:ehmp-activity:9E7A:19:29fe0301-14ac-4d8d-95a9-9f538866beba';
+        var pid = 'SITE;19';
+        var solrDocumentUid = 'urn:va:ehmp-activity:SITE:19:29fe0301-14ac-4d8d-95a9-9f538866beba';
         var identifiers;
         var jpid;
 
         var environment = {
             vistaClient: new VistaClient(log, log, config, null),
             jds: new JdsClient(log, log, config),
-            solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log, new VxSyncForeverAgent()),
+            solr: solrSmartClient.createClient(log, config.solrClient, new VxSyncForeverAgent({keepAlive: true, maxSockets: config.handlerMaxSockets || 5})),
             hdrClient: new HdrClient(log, log, config)
         };
 
@@ -106,7 +108,7 @@ describe('clearPatientUtil', function() {
             var syncStatusCallResponse;
             runs(function() {
                 var options = {
-                    url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
+                    url: config.syncRequestApi.protocol + '://' + host + ':' + syncApiPort + config.syncRequestApi.patientStatusPath + '?pid=' + pid,
                     method: 'GET'
                 };
 
@@ -139,7 +141,7 @@ describe('clearPatientUtil', function() {
 
             waitsFor(function() {
                 return syncStatusCallComplete;
-            }, 'Timed out waiting for syncRequest.', 10000);
+            }, 'Timed out waiting for syncRequest sync status retrieval.', 60000);
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -158,7 +160,7 @@ describe('clearPatientUtil', function() {
         //------------------------------------------------------------------------------------------------------
         runs(function() {
             var options = {
-                url: config.syncRequestApi.protocol + '://' + host + ':' + config.syncRequestApi.port + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
+                url: config.syncRequestApi.protocol + '://' + host + ':' + syncApiPort + config.syncRequestApi.patientSyncPath + '?pid=' + pid,
                 method: 'GET'
             };
 
@@ -174,7 +176,7 @@ describe('clearPatientUtil', function() {
 
         waitsFor(function() {
             return syncRequestComplete;
-        }, 'Timed out waiting for syncRequest.', 10000);
+        }, 'Timed out waiting for syncRequest to sync patient.', 60000);
 
         // Need to wait for the sync to complete.
         //----------------------------------------
@@ -312,7 +314,7 @@ describe('clearPatientUtil', function() {
 
         waitsFor(function() {
             return solrDeleteComplete;
-        }, 'Timed out removing all patient documents from SOLR', 10000);
+        }, 'Timed out removing all patient documents from SOLR', 20000);
 
         // Query SOLR to ensure that all documents were deleted for patient
         //-----------------------------------------------------------------

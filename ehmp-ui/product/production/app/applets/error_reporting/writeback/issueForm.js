@@ -52,7 +52,6 @@ define([
                 extraClasses: ["btn-default", "btn-sm", 'cancel-button'],
                 label: "Cancel",
                 name: "error-reporter-cancel",
-                title: "Press enter to cancel.",
                 id: "error-reporter-cancel-btn",
                 type: "button"
             }, {
@@ -61,7 +60,7 @@ define([
                 label: SUBMIT_BUTTON_TEXT,
                 name: "error-reporter-sign",
                 id: "error-reporter-sign-btn",
-                title: "Press enter to send issue report."
+                title: "Send issue report."
             }]
         }]
     }];

@@ -11,8 +11,8 @@ Scenario: default patient search
     When user attempts login
         | field      | value    |
         | Facility   | PANORAMA |
-        | AccessCode | REDACTED |
-        | VerifyCode | REDACTED |
+        | AccessCode | USER     |
+        | VerifyCode | PW       |
         | SignIn     |          |
     Then the patient search screen is displayed
     And the User selects MyCPRSList

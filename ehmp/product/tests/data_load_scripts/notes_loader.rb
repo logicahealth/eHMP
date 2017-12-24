@@ -1,7 +1,7 @@
 require 'vistarpc4r'
 require 'csv'
 
-@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "REDACTED", "REDACTED", false)
+@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "USER", "PW", false)
 @broker.connect
 @broker.setContext('OR CPRS GUI CHART')
 

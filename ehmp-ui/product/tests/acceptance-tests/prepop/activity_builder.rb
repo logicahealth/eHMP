@@ -17,7 +17,7 @@ end
 
 def default_visit
   visit = {}
-  visit['location'] = "urn:va:location:9E7A:137"
+  visit['location'] = "urn:va:location:SITE:137"
   visit['serviceCategory'] = 'I'
   visit['dateTime'] = "20160812134500"
   visit

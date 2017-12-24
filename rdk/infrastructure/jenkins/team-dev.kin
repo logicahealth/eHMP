@@ -1,0 +1,10 @@
+"rdk-team-dev-build-%branch%" {
+	template = 'templates/team-dev-build.tpl'
+	description = "rdk dev build for the team branch %branch%"
+
+  gitUrl = 'https://code.vistacore.us/scm/app/rdk.git'
+	gitBranch = '%branch%'
+
+  rootDirectory = 'product'
+	gradleTasks = 'generateVersionPropertiesFile test installNpmOracleDB upload'
+}

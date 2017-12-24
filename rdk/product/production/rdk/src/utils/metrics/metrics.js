@@ -19,11 +19,6 @@ module.exports = {
             },
             {
                 host: function () {
-                    return _.get(app, 'config.solrServer.baseUrl');
-                }, name: 'solr'
-            },
-            {
-                host: function () {
                     return _.get(app, 'config.mvi.baseUrl');
                 }, name: 'mvi'
             },

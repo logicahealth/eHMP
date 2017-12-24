@@ -180,7 +180,7 @@ You can manipulate Docker volumes and networks
 
 ```ruby
 docker_network 'my_network' do
-  subnet '10.9.8.0/24'
+  subnet 'IP'
   gateway 'IP      '
 end
 
@@ -800,7 +800,7 @@ end
 docker_container 'redeployer' do
   repo 'alpine'
   tag '3.1'
-  command 'nc -ll -p 7777 -e /bin/cat'
+  command 'nc -ll -p PORT -e /bin/cat'
   port '7'
   action :run
 end

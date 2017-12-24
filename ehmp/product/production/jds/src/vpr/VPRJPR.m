@@ -405,22 +405,23 @@ JPIDIDX(JPID,ID) ; Add passed identifier to JPID index
  ; Set the JPID reverse lookup index (PID/ICN -> JPID)
  S ^VPRPTJ("JPID",ID)=JPID
  Q
+ ;
 JPIDDIDX(JPID,ID) ; Remove passed identifier from JPID index
- I JPID="" Q
- I ID="" Q
+ I JPID="" QUIT
+ I ID="" QUIT
  N PCNT
  ; Kill the JPID forward lookup index (JPID -> PID/ICN)
- K ^VPRPTJ("JPID",JPID,ID)
+ K:$D(^VPRPTJ("JPID",JPID,ID)) ^VPRPTJ("JPID",JPID,ID)
  ; Kill the JPID reverse lookup index (PID/ICN -> JPID)
- K ^VPRPTJ("JPID",ID)
-JPIDCLN
- ; Remove the existance of the JPID if no children remain
+ K:$D(^VPRPTJ("JPID",ID)) ^VPRPTJ("JPID",ID)
+ ; Remove the existence of the JPID if no children remain
  N PCNT
  I $D(^VPRPTJ("JPID",JPID))=1 D
- . K ^VPRPTJ("JPID",JPID)
+ . K:$D(^VPRPTJ("JPID",JPID)) ^VPRPTJ("JPID",JPID)
  . S PCNT=$G(^VPRPTX("count","patient","patient"),0)
  . I PCNT'=0 S ^VPRPTX("count","patient","patient")=PCNT-1
- Q
+ QUIT
+ ;
 JPID4PID(PID) ; Return JPID for a PID
  I $G(PID)="" Q "" ; Quit if PID is empty
  I $$ISJPID(PID) Q PID ; Passed PID is a JPID
@@ -482,7 +483,7 @@ ASSOCIATE(ARGS,BODY) ; Associate a PID/ICN with a JPID
  N OBJECT,ERR,JPID,UID,PID,ICN,EPID,EJPID,NEWJPID,I,CONFLICTICN,ERR
  I $G(ARGS("ewdjs"),0)=1 D
  . M OBJECT=BODY
- E  D  I $D(ERR) D SETERROR^VPRJRER(202) Q ""
+ E  D  I $D(ERR) D SETERROR^VPRJRER(202) QUIT ""
  . ; Decode Body JSON to M object
  . D DECODE^VPRJSON("BODY","OBJECT","ERR")
  ; Ensure JPID variable exists
@@ -495,11 +496,11 @@ ASSOCIATE(ARGS,BODY) ; Associate a PID/ICN with a JPID
  ; We will check the identifiers given later to check for collisions
  I JPID=""  S JPID=$$JPID
  ; Sanity check - if a client posts to a jpid and includes a different one in the body error
- I $G(ARGS("jpid"))'="",$G(OBJECT("jpid"))'="" I $G(ARGS("jpid"))'=$G(OBJECT("jpid")) D SETERROR^VPRJRER(205) Q ""
+ I $G(ARGS("jpid"))'="",$G(OBJECT("jpid"))'="" I $G(ARGS("jpid"))'=$G(OBJECT("jpid")) D SETERROR^VPRJRER(205) QUIT ""
  ; Sanity check - make sure we know jpid
- I $G(^VPRPTJ("JPID",JPID)) D SETERROR^VPRJRER(224) Q ""
+ I $G(^VPRPTJ("JPID",JPID)) D SETERROR^VPRJRER(224) QUIT ""
  ; Ensure required attributes are defined
- I '$D(OBJECT("patientIdentifiers")) D SETERROR^VPRJRER(211) Q ""
+ I '$D(OBJECT("patientIdentifiers")) D SETERROR^VPRJRER(211) QUIT ""
  ; Check to make sure we don't know these patient IDs on another patient
  S EPID=""
  F I=1:1 S EPID=$O(OBJECT("patientIdentifiers",EPID)) Q:EPID=""  D
@@ -508,21 +509,25 @@ ASSOCIATE(ARGS,BODY) ; Associate a PID/ICN with a JPID
  . ; If EJPID is blank we don't know this PID it is ok
  . I EJPID="" Q
  . ; If we have an EJPID we know this PID, ensure it matches the one on file, if it doesn't match error
- . I JPID'=EJPID D SETERROR^VPRJRER(223,"Identifier "_OBJECT("patientIdentifiers",EPID)_" Associated with "_EJPID) D JPIDCLN Q
+ . I JPID'=EJPID D
+ . . D SETERROR^VPRJRER(223,"Identifier "_OBJECT("patientIdentifiers",EPID)_" Associated with "_EJPID)
+ . . D JPIDDIDX(JPID,"JPID;"_JPID)
  ; Found a collision Error out
- I $G(HTTPERR) S EWDERR=1 Q ""
+ I $G(HTTPERR) S EWDERR=1 QUIT ""
  ;
  ; Update the indexes
- L +^VPRPTJ("JPID",JPID):$G(^VPRCONFIG("timeout","jpid"),5) E  D SETERROR^VPRJRER(502,"Error acquiring lock in ASSOCIATE") Q ""
+ L +^VPRPTJ("JPID",JPID):$G(^VPRCONFIG("timeout","jpid"),5) E  D SETERROR^VPRJRER(502,"Error acquiring lock in ASSOCIATE") QUIT ""
  ; Add patient to JPID index
  TSTART
  S EPID=""
  F I=1:1 S EPID=$O(OBJECT("patientIdentifiers",EPID)) Q:EPID=""  Q:$G(ERR)  D
  . I ($$ISPID(OBJECT("patientIdentifiers",EPID))!$$ISICN(OBJECT("patientIdentifiers",EPID))) D JPIDIDX(JPID,OBJECT("patientIdentifiers",EPID))
  . E  D SETERROR^VPRJRER(230,"Identifier "_OBJECT("patientIdentifiers",EPID)_" is invalid") S ERR=1
+ . D JPIDIDX(JPID,"JPID;"_JPID)
  TCOMMIT
  L -^VPRPTJ("JPID",JPID)
- Q "/vpr/jpid/"_JPID
+ ;
+ QUIT "/vpr/jpid/"_JPID
  ;
 DISASSOCIATE(RESULT,ARGS) ;Deassociate a PID/ICN with a JPID
  N JPID,PID,PIDS
@@ -570,7 +575,7 @@ JPIDQUERY(ARGS,BODY) ; See if list of PIDS map to the same JPID or aren't known 
  Q ""
  ;
 CLEAR() ;Clear all patient identifiers and delete all JPIDs
- K ^VPRPTJ("JPID")
+ K:$D(^VPRPTJ("JPID")) ^VPRPTJ("JPID")
  Q
  ;
 GETPTS(RESULT,ARGS) ;Return a list of patients
@@ -583,7 +588,7 @@ GETPTS(RESULT,ARGS) ;Return a list of patients
  ; Set OBJECT into ^||TMP($J)
  S OBJECT=$NA(^||TMP($J,"OBJECT"))
  ; Ensure variables are cleaned out
- K @OBJECT
+ K:$D(@OBJECT) @OBJECT
  ; Get all patients (or run filter)
  I '$D(@OBJECT) D
  . N JPID,PATIENT,PIDS
@@ -603,10 +608,10 @@ GETPTS(RESULT,ARGS) ;Return a list of patients
  . . M @OBJECT@("items",I)=PATIENT
  ; Set Result variable to global
  S RESULT=$NA(^||TMP($J,"RESULT"))
- K @RESULT
+ K:$D(@RESULT) @RESULT
  ; Encode object into JSON return
  D ENCODE^VPRJSON(OBJECT,RESULT,"ERR") ; From an array to JSON
  ; Clean up staging variable
- K @OBJECT
+ K:$D(@OBJECT) @OBJECT
  I $D(ERR) D SETERROR^VPRJRER(202) Q
  Q

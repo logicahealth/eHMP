@@ -9,7 +9,7 @@ Feature: F144 - eHMP Viewer GUI
   Scenario: When a user views, the sort order, to the order of the labs within panels, is on displayOrder
   When the client requests a response in VPR format from RDK API with the labsbypanel parameters
     | pid              | _ack     | observedFrom | observedTo | start | limit |
-    | 9E7A;1           | true     |              |            |       |       |
+    | SITE;1           | true     |              |            |       |       |
     Then a successful response is returned
     And the VPR results contain
       | field                 | value                |

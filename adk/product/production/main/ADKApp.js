@@ -17,7 +17,10 @@ define([
     'api/WorkspaceContextRepository',
     'main/accessibility/components',
     'bowser',
-    'main/collections/base'
+    'main/collections/base',
+    'main/ui_components/modal/region',
+    'main/regions/ariaHiddenRegion.js',
+    'main/ui_components/obstruction/region'
 ], function(
     Backbone,
     Marionette,
@@ -37,7 +40,10 @@ define([
     WorkspaceContextRepository,
     Accessibility,
     Bowser,
-    ADKBaseCollection
+    ADKBaseCollection,
+    ModalRegion,
+    AriaHiddenRegion,
+    ObstructionRegion
 ) {
     'use strict';
 
@@ -73,10 +79,21 @@ define([
         }
         ADKApp.router.navigate('/' + routeString);
     });
+
+
+
     ADKApp.commands.setHandler('screen:display', function(routeConfig, options) {
         _.each([ADKApp.modalRegion, ADKApp.workflowRegion, ADKApp.alertRegion], function(region) {
             if (region.hasView()) {
-                region.currentView.$el.modal('hide');
+                if (region.hasView()) {
+                    if (options.delayModalClose) {
+                        ADKApp.listenToOnce(Messaging, 'navigate.ehmp.workspace', function() {
+                            region.currentView.$el.trigger('empty.queue').modal('hide');
+                        });
+                    } else {
+                        region.currentView.$el.trigger('empty.queue').modal('hide');
+                    }
+                }
             }
         });
 
@@ -100,6 +117,15 @@ define([
         SessionStorage.delete.sessionModel('patient', false, {
             silent: true
         });
+        var isImageLoaded = true;
+        if (!patient.get('patientImage')) {
+            isImageLoaded = false;
+        }
+        var patientImageModel = new Backbone.Model({
+            image: patient.get('patientImage'),
+            isImageLoaded: isImageLoaded // TODO this should not be necessary -- just check image
+        });
+        SessionStorage.set.sessionModel('patient-image', patientImageModel);
         SessionStorage.addModel('patient', patient);
     });
 
@@ -111,20 +137,40 @@ define([
     });
 
     ADKApp.addRegions({
-        topRegion: '#top-region',
-        centerRegion: '#center-region',
-        bottomRegion: '#bottom-region',
-        modalRegion: '#modal-region',
+        skipLinkRegion: '#skipLinkRegion',
+        topRegion: {
+            el: '#top-region',
+            regionClass: AriaHiddenRegion
+        },
+        centerRegion: {
+            el: '#center-region',
+            regionClass: AriaHiddenRegion
+        },
+        bottomRegion: {
+            el: '#bottom-region',
+            regionClass: AriaHiddenRegion
+        },
+        modalRegion: {
+            el: '#modal-region',
+            regionClass: ModalRegion
+        },
         workflowRegion: '#workflow-region',
         alertRegion: '#alert-region',
         ariaLiveAssertiveRegion: '#aria-live-assertive-region',
-        ariaLivePoliteRegion: '#aria-live-polite-region'
+        ariaLivePoliteRegion: '#aria-live-polite-region',
+        obstructionRegion: {
+            el: '#obstructed-region',
+            regionClass: ObstructionRegion
+        }
     });
+
+
     Messaging.reply('get:adkApp:region', function(regionName) {
         return ADKApp[regionName];
     });
 
     Accessibility.Notification.showAriaLiveViews();
+    ADKApp.getRegion('skipLinkRegion').show(new Accessibility.SkipLinkDropdown({ collection: Accessibility.SkipLinks }));
 
     var Router = Marionette.AppRouter.extend({
         appRoutes: {

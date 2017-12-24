@@ -1,5 +1,5 @@
 When(/^the client requests documents for the patient "(.*?)" in JDS$/) do |pid|
-  # path = "http://IP             /vpr/9E7A;3/index/document"
+  # path = "http://IP             /vpr/SITE;3/index/document"
   # path = http://IP             /data/find/asu-rule
   base_jds_url = DefaultLogin.jds_url
   p jds_path = "#{base_jds_url}/vpr/#{pid}/index/document"
@@ -50,7 +50,7 @@ end
 
 def check_site_is_not_9e7a_or_c877_when_nil(json_object)
   uid_parts = json_object['uid'].split(':')
-  fail "There is no documentDefUid value for #{uid_parts[3]}" if %w[9E7A C877].include? uid_parts[3] 
+  fail "There is no documentDefUid value for #{uid_parts[3]}" if %w[SITE SITE].include? uid_parts[3] 
 end
   
 def check_documentdefuid_is_part_of_9e7a_or_c877(json_object)
@@ -58,10 +58,10 @@ def check_documentdefuid_is_part_of_9e7a_or_c877(json_object)
   # p '---------------'
   @document_def_uid = json_object['documentDefUid']
   # p @document_def_uid
-  # p @document_def_uid = "urn:va:doc-def:C877:17"
+  # p @document_def_uid = "urn:va:doc-def:SITE:17"
   documentdefuid_parts = @document_def_uid.split(':')
   site_name_part_of_documentdefuid = documentdefuid_parts[3]
-  if %w[9E7A C877].include? site_name_part_of_documentdefuid
+  if %w[SITE SITE].include? site_name_part_of_documentdefuid
     result = true
     @status_name = json_object["status"]
     # p @status_name

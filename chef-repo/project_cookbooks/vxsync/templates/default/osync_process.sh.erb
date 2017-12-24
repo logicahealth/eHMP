@@ -1,1 +1,9 @@
-node <%= @endpoint %> --port <%= @options[:port] %> > <%= @process_log %>
+#!/bin/bash
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_<%= @name %>"
+node_modules/ca-apm-probe/bin/ca-apm-run.js node <%= @endpoint %> --port <%= @options[:port] %> > <%= @process_log %>
+<% else %>
+node node <%= @endpoint %> --port <%= @options[:port] %> > <%= @process_log %>
+<% end %>

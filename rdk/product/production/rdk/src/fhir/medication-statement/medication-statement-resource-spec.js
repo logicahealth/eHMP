@@ -109,10 +109,10 @@ describe('Medication Statement FHIR Resource', function() {
 
 describe('MedicationStatement FHIR conversion methods', function() {
     var req = {
-        '_pid': '9E7A;253',
+        '_pid': 'SITE;253',
         originalUrl: '/resource/fhir/medicationstatement?subject.identifier=10107V395912',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -125,7 +125,7 @@ describe('MedicationStatement FHIR conversion methods', function() {
         expect(fhirBundle.link).to.not.be.undefined();
         expect(fhirBundle.link.length).to.equal(1);
         expect(fhirBundle.link[0].relation).to.equal('self');
-        expect(fhirBundle.link[0].url).to.equal('http://localhost:8888/resource/fhir/medicationstatement?subject.identifier=10107V395912');
+        expect(fhirBundle.link[0].url).to.equal('http://localhost:PORT/resource/fhir/medicationstatement?subject.identifier=10107V395912');
         expect(fhirBundle.total).to.equal(2);
         expect(fhirBundle.entry).to.not.be.undefined();
         expect(fhirBundle.entry.length).to.equal(2);

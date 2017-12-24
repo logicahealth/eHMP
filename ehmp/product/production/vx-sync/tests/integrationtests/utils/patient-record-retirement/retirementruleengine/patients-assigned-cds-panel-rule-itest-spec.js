@@ -27,7 +27,7 @@ oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 overAYearAgo.setDate(overAYearAgo.getDate() - 370);
 
 var patientIds = [{
-    value: '9E7A;3',
+    value: 'SITE;3',
     type: 'PID',
     cdsPanel: true,
     lastAccessed: overAYearAgo

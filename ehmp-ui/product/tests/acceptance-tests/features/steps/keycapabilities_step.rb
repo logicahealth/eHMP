@@ -41,7 +41,7 @@ class Ehmpui < ADKContainer
     add_verify(CucumberLabel.new("Coversheet"), VerifyContainsText.new, AccessHtmlElement.new(:id, "cover-sheet-button"))
     add_verify(CucumberLabel.new("All Patient"), VerifyContainsText.new, AccessHtmlElement.new(:id, "global"))
     add_verify(CucumberLabel.new("My CPRS List"), VerifyContainsText.new, AccessHtmlElement.new(:id, "myCPRSList"))
-    add_action(CucumberLabel.new("Table Filter"), ClickAction.new, AccessHtmlElement.new(:id, "grid-filter-button-numeric_lab_results_grid"))
+    add_action(CucumberLabel.new("Table Filter"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] .applet-filter-button"))
     add_action(CucumberLabel.new("Search Input"), SendKeysAction.new, AccessHtmlElement.new(:css, ".grid-filter"))
     add_action(CucumberLabel.new("Expand View"), ClickAction.new, AccessHtmlElement.new(:css, ".applet-maximize-button"))
     add_action(CucumberLabel.new("Minimize View"), ClickAction.new, AccessHtmlElement.new(:css, ".applet-minimize-button"))
@@ -101,6 +101,12 @@ def wait_until_dom_has_confirmflag_or_patientsearch(wait_until = 60)
       break
     end
     if patient_search.static_dom_element_exists?("Confirm Flag")
+      page = PobPatientSearch.new
+
+      if page.has_a_flags_back_to_top?
+        element = page.a_flags_back_to_top.native
+        element.location_once_scrolled_into_view
+      end
       expect(patient_search.perform_action("Confirm Flag")).to be_true
     end
     sleep 1
@@ -142,41 +148,6 @@ def enter_search_term(patient_search, search_value)
   expect(patient_search.perform_action("patientSearchInput", search_value)).to be_true
 end
 
-# def perform_patient_search_and_selection(search_value)
-#   DefaultLogin.logged_in = true
-#   patient_search = PatientSearch2.instance
-#   # if patient search button is found, click it to go to patient search
-#   patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
-
-#   #patient_search.wait_until_element_present("mySite", DefaultLogin.wait_time)
-#   need_refresh_de2106(patient_search)
-
-#   @ehmp = PobPatientSearch.new
-#   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-#   begin
-#     wait.until { @ehmp.screen_loaded? }
-#   rescue Exception => e
-#     raise e unless @ehmp.screen_loaded? true
-#   end
-#   enter_search_term(patient_search, search_value)
-
-#   #----------------------------#
-#   need_refresh_de2528(patient_search, search_value)
-#   expect(patient_search.wait_until_xpath_count_greater_than("Patient Search Results", 0)).to be_true
-#   #----------------------------#
-#   results = TestSupport.driver.find_elements(:xpath, "//span[contains(@class, 'patientDisplayName')]")
-#   patient_search.select_patient_in_list(0)
-#   patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
-#   expect(patient_search.static_dom_element_exists? "Confirm").to be_true
-#   results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
-#   @ehmp = PobPatientSearch.new
-#   begin
-#     @ehmp.wait_until_img_patient_visible
-#   rescue
-#     p "DE3576: img doesn't appear, try to continue anyway"
-#   end
-# end
-
 def perform_patient_search_and_selection(search_value)
   DefaultLogin.logged_in = true
   search_value.gsub!(' ', '')
@@ -202,6 +173,17 @@ def perform_patient_search_and_selection(search_value)
   my_site_tray.my_site_search_results_name[index_of].click
 end
 
+Then(/^the patient selection confirmation modal displays$/) do
+  ehmp = PobPatientSearch.new
+  expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
+end
+
+Then(/^user clicks on confirm patient button$/) do
+  ehmp = PobPatientSearch.new
+  expect(ehmp.wait_for_btn_confirmation).to eq(true), "Patient Confirmation button did not display"
+  ehmp.btn_confirmation.click
+end
+
 Given(/^user searches for and selects "(.*?)"$/) do |search_value|
   ehmp = PobPatientSearch.new
   patient_search = PatientSearch2.instance
@@ -210,9 +192,16 @@ Given(/^user searches for and selects "(.*?)"$/) do |search_value|
   expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
   ehmp.wait_for_chk_previous_workspace(2) # deliberately don't expect it
 
-  if ehmp.has_chk_previous_workspace?
-    ehmp.chk_previous_workspace.click if ehmp.chk_previous_workspace.checked?
-    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if ehmp.chk_previous_workspace.checked?
+  max_attempt = 3
+  begin
+    if ehmp.has_chk_previous_workspace?
+      ehmp.chk_previous_workspace.click if ehmp.chk_previous_workspace.checked?
+      p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if ehmp.chk_previous_workspace.checked?
+    end
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError => ee
+    max_attempt -= 1
+    retry if max_attempt >= 0
+    raise ee
   end
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
@@ -242,6 +231,8 @@ Given(/^user searches for and selects restricted patient "(.*?)"$/) do |search_v
   expect(patient_search.perform_action('ackButton')).to be_true
 
   expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
+
+  ehmp.wait_for_btn_restricted_record_ack
   ehmp.wait_for_chk_previous_workspace(2) # deliberately don't expect it
 
   if ehmp.has_chk_previous_workspace?
@@ -431,7 +422,7 @@ end
 def compare_applet_refresh_action_response(css_string, message_text)
   aa = Ehmpui.instance
   label = CucumberLabel.new("Refresh Error Message")
-  elements = AccessHtmlElement.new(:css, "[data-instanceid='#{css_string}'] .fa-exclamation-circle")
+  elements = AccessHtmlElement.new(:css, "[data-appletid='#{css_string}'] .fa-exclamation-circle")
   aa.add_verify(label, VerifyContainsText.new, elements)
   expect(aa.perform_verification("Refresh Error Message", message_text, 5)).to eq(false)  
 end

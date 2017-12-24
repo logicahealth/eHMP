@@ -16,10 +16,13 @@ import gov.va.kie.utils.WorkItemUtil;
 
 public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Cacheable {
 	private static final Logger LOGGER = Logger.getLogger(ClinicalObjectReadHandler.class);
+
+	@Override
 	public void close() {
 		//Ignored
 	}
 
+	@Override
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
 		LOGGER.info("ClinicalObjectReadHandler.abortWorkItem has been called");
 	}
@@ -27,6 +30,7 @@ public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Ca
 	/**
 	 * Reads the clinical object from pJDS and then completes WorkItem (the response is contained in ServiceResponse).
 	 */
+	@Override
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
 		String response = null;
 		
@@ -35,17 +39,18 @@ public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Ca
 			String pId = WorkItemUtil.extractRequiredStringParam(workItem, "pid");
 			String uId = WorkItemUtil.extractRequiredStringParam(workItem, "uid");
 			
-			LOGGER.debug("ClinicalObjectReadHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
+			LOGGER.debug(String.format("ClinicalObjectReadHandler.executeWorkItem pId = %s, uId = %s", pId, uId));
 			
 			ResourceUtil resUtil = new ResourceUtil();
 			// Read clinical object from pJDS
 			response = resUtil.invokeGetResource(pId, uId);
-			LOGGER.debug("ClinicalObjectReadHandler.executeWorkItem response = " + response);
+			LOGGER.debug(String.format("ClinicalObjectReadHandler.executeWorkItem response = %s", response));
 		} catch (EhmpServicesException e) {
-			response = e.toJsonString();
+			response = e.createJsonErrorResponse();
+			LOGGER.error(String.format("ClinicalObjectReadHandler.executeWorkItem: "+e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage(), e);
-			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
+			LOGGER.error(String.format("ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: "+ e.getMessage(), e));
+			response = ErrorResponseUtil.createJsonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

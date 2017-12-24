@@ -19,7 +19,7 @@ public class ResourceUtil extends RdkResourceUtil {
 	 public String invokePostResource(Object notificationId, String jsonBody) throws EhmpServicesException {
 		String resourceUrl = null;
 		if (notificationId != null) {
-			LOGGER.debug("invokePostResource to resolve Notification with notificationId = " + notificationId.toString());
+			LOGGER.debug(String.format("invokePostResource to resolve Notification with notificationId = %s", notificationId));
 			resourceUrl = getRDKUrl(RDK_FETCHSERVER_CONFIG).concat(notificationsResolveResource);
 			resourceUrl = resourceUrl + notificationId.toString() + "/resolved";
 		} else {

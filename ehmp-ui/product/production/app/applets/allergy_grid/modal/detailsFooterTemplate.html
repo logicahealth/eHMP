@@ -1,12 +1,12 @@
 <div class="pull-left">
 	{{#hasPermission 'eie-allergy'}}
 		{{#if data}}
-			<button type="button" class="btn btn-primary btn-sm" id="error" title="Press enter to remove allergy as entered in error.">Entered in Error</button>
+			<button type="button" class="btn btn-primary btn-sm" id="error" aria-label="Remove allergy as entered in error.">Mark as Entered in Error</button>
 		{{else}}
 			<p class="color-pure-black"><strong>Only data originating in your facility may be edited.</strong></p>
 		{{/if}}
 	{{/hasPermission}}
 </div>
 <div class="pull-right">
-	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
+	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
 </div>

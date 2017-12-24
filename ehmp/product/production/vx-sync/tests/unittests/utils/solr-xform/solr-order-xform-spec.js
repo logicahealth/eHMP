@@ -30,17 +30,17 @@ describe('solr-order-xform.js', function() {
                 'lastUpdateTime': '20000520040000',
                 'localId': '12540',
                 'locationName': 'ICU/CCU',
-                'locationUid': 'urn:va:location:9E7A:8',
+                'locationUid': 'urn:va:location:SITE:8',
                 'name': 'GLUCOSE',
                 'oiCode': 'urn:va:oi:291',
                 'oiName': 'GLUCOSE',
                 'oiPackageRef': '175;99LRT',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'providerDisplayName': 'Vehu,Eight',
                 'providerName': 'VEHU,EIGHT',
-                'providerUid': 'urn:va:user:9E7A:20010',
+                'providerUid': 'urn:va:user:SITE:20010',
                 'results': [{
-                    'uid': 'urn:va:lab:9E7A:3:CH;6999478.96;2'
+                    'uid': 'urn:va:lab:SITE:3:CH;6999478.96;2'
                 }],
                 'service': 'LR',
                 'stampTime': '20000520040000',
@@ -50,7 +50,7 @@ describe('solr-order-xform.js', function() {
                 'statusVuid': 'urn:va:vuid:4501088',
                 'stop': '200005211010',
                 'summary': 'GLUCOSE BLOOD   SERUM WC LB #1933\r\n',
-                'uid': 'urn:va:order:9E7A:3:12540'
+                'uid': 'urn:va:order:SITE:3:12540'
             };
             var solrRecord = xformer(vprRecord, log);
 

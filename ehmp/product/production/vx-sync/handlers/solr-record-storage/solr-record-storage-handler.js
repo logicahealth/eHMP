@@ -144,17 +144,20 @@ function trackSolrStorage(log, config, environment, record, handlerCallback) {
         log.debug('solr-record-storage-handler.trackSolrStorage: JDS response code: %s', (response ? response.statusCode : undefined));
         if (error) {
             environment.metrics.warn('Notify JDS status of Solr Storage in Error', metricsObj);
-            errorMessage = util.format('solr-record-storage-handler.trackSolrStorage: Error encountered when notifying JDS status of Solr storage. error: %s; response: %j; body: %j', error, response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            errorMessage = util.format('solr-record-storage-handler.trackSolrStorage: Error encountered when notifying JDS status of Solr storage. error: %s; response: %j; record: %j', error, response, record);
             log.error(errorMessage);
             return handlerCallback(errorUtil.createTransient('Unable to notify JDS status of Solr storage', errorMessage));
         } else if (response.statusCode !== 201) {
             environment.metrics.warn('Notify JDS status of Solr Storage in Error', metricsObj);
-            errorMessage = util.format('solr-record-storage-handler.trackSolrStorage: Unexpected statusCode received when notifying JDS Status of Solr storage. error: (no error received); response: %j; body: %j', response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            errorMessage = util.format('solr-record-storage-handler.trackSolrStorage: Unexpected statusCode received when notifying JDS Status of Solr storage. error: (no error received); response: %j; record: %j', response, record);
             log.error(errorMessage);
             return handlerCallback(errorUtil.createTransient('Unable to notify JDS status of Solr storage', errorMessage));
         } else {
             environment.metrics.warn('Notify JDS status of Solr Storage', metricsObj);
-            log.debug('solr-record-storage-handler.trackSolrStorage: Notify JDS status of Solr Storage success!  error: (no error received); response: %j; body: %j', response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            log.debug('solr-record-storage-handler.trackSolrStorage: Notify JDS status of Solr Storage success!  error: (no error received); response: %j; record: %j', response, record);
             return handlerCallback(null, 'success');
         }
     });

@@ -107,7 +107,7 @@ define([
             return res;
         },
         serializeModel: function(model) {
-            var field = _.defaultsDeep(this.field.toJSON(), this.defaults);
+            var field = _.defaultsDeep(this.field.toJSON(), _.result(this, 'defaults'));
             var attributes = model.toJSON();
             var attrArr = field.name.split('.');
             var name = attrArr.shift();
@@ -227,7 +227,8 @@ define([
         events: {
             'changeDate @ui.datepickerInput': function(event) {
                 this.listenToOnce(this._flexibleInternalModel, 'change', _.partialRight(this.onFlexibleInternalModelChange, {
-                    shouldShow: false
+                    shouldShow: false,
+                    shouldAnnounce: false
                 }));
                 this.triggerMethod('flexible-date-selected', event, this.ui.datepickerInput.val());
             },
@@ -272,10 +273,6 @@ define([
             CommonInputViewPrototype.initialize.apply(this, arguments);
             this._flexibleInternalModel = options._flexibleInternalModel;
             this.datepickerExternalModel = options.datepickerExternalModel;
-            this.defaults = _.defaults({
-                    title: 'Enter date in text or numerical format.'
-                },
-                this.defaults);
             this.datepickerOptions = _.defaults({
                     orientation: 'auto bottom',
                     inputmask: '',
@@ -316,6 +313,7 @@ define([
             options = _.extend({
                 shouldShow: true
             }, options);
+            var shouldAnnounce = !!_.get(options, 'shouldAnnounce', true);
             var shouldShowTooltip = options.shouldShow;
             var parsedDate = this._flexibleInternalModel.get('parsedDate');
             var isOutOfRange = this._flexibleInternalModel.get('outOfRange');
@@ -328,18 +326,18 @@ define([
                     this.ui.flexibleInput.attr('title', this.field.get('title') || this.defaults.title);
                 } else if (isOutOfRange) {
                     this.updateTooltipText('Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
-                    this.announceParseChange('Date out of range. Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
+                    this.announceParseChange('Date out of range. Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'), shouldAnnounce);
                 } else if ((_.isBoolean(parsedDate) && !parsedDate) || (_.isBoolean(adequatelyPrecise) && !adequatelyPrecise)) {
                     this.updateTooltipText('Invalid Date Format');
                     // might need to say what the acceptable formats are
-                    this.announceParseChange('Invalid Date Format. Date must be in a format specified in the help button above.');
+                    this.announceParseChange('Invalid Date Format. Date must be in a format specified in the help button above.', shouldAnnounce);
                 } else {
                     this.updateTooltipText('Invalid Date');
-                    this.announceParseChange('Invalid Date. Enter another date');
+                    this.announceParseChange('Invalid Date. Enter another date', shouldAnnounce);
                 }
             } else {
                 this.updateTooltipText(this._flexibleInternalModel.get('parsedDate'));
-                this.announceParseChange('Date converted to: ' + this._flexibleInternalModel.get('parsedDate'));
+                this.announceParseChange('Date converted to: ' + this._flexibleInternalModel.get('parsedDate'), shouldAnnounce);
             }
             if (shouldShowTooltip) {
                 this.showTooltip();
@@ -360,11 +358,13 @@ define([
         showTooltip: function() {
             this.ui.flexibleInput.tooltip('show');
         },
-        announceParseChange: function(announcement) {
-            Accessibility.Notification.new({
-                'type': 'Assertive',
-                'message': announcement
-            });
+        announceParseChange: function(announcement, shouldAnnounce) {
+            if (shouldAnnounce !== false) {
+                Accessibility.Notification.new({
+                    'type': 'Assertive',
+                    'message': announcement
+                });
+            }
         },
         getValueFromDOM: function() {
             var value = this.$el.find('input.flexible-input').val();
@@ -546,20 +546,22 @@ define([
     };
 
     var DatepickerControl = ControlService.LayoutViewControl.extend({
-        defaults: {
-            type: 'text',
-            label: '',
-            startDate: '01/01/1900',
-            endDate: new Moment().add(100, 'years').format('MM/DD/YYYY'),
-            outputFormat: 'MM/DD/YYYY',
-            displayFormat: 'MM/DD/YYYY',
-            extraClasses: [],
-            helpMessage: '',
-            title: 'Enter in a date in the following format, MM/DD/YYYY',
-            inputFormatRestriction: /^((?:\d{4}|\d{1,2}\/(\d{4}|\d{1,2})|\d{1,2}\/\d{1,2}\/(?:\d{2}){1,2})|(?:[tn]|(?:today|now))(?:[+-]|[+-]\d{1,3}(?:m)?)?|(?:yesterday|tomorrow))$/,
-            flexible: false,
-            datepickerOptions: {},
-            minPrecision: 'year' // day, month, year -> in order from most to least precise
+        defaults: function() {
+            return {
+                type: 'text',
+                label: '',
+                startDate: '01/01/1900',
+                endDate: new Moment().add(100, 'years').format('MM/DD/YYYY'),
+                outputFormat: 'MM/DD/YYYY',
+                displayFormat: 'MM/DD/YYYY',
+                extraClasses: [],
+                helpMessage: '',
+                title: this.field.get('flexible') ? 'Enter date in text or numerical format.' : 'Enter in a date in the following format, MM/DD/YYYY',
+                inputFormatRestriction: /^((?:\d{4}|\d{1,2}\/(\d{4}|\d{1,2})|\d{1,2}\/\d{1,2}\/(?:\d{2}){1,2})|(?:[tn]|(?:today|now))(?:[+-]|[+-]\d{1,3}(?:m)?)?|(?:yesterday|tomorrow))$/,
+                flexible: false,
+                datepickerOptions: {},
+                minPrecision: 'year' // day, month, year -> in order from most to least precise
+            };
         },
         getTemplate: function() {
             if (this.field.get('flexible')) {
@@ -666,8 +668,8 @@ define([
             this.isFlexible = this.field.get('flexible');
             this.isFlexible = _.isBoolean(this.isFlexible) && this.isFlexible;
             this._datepickerInternalModel = new Backbone.Model({
-                startDate: this.formatDate(this.field.get('startDate') || (_.isObject(legacyDatepickerOptions) && !_.isUndefined(legacyDatepickerOptions.startDate) ? legacyDatepickerOptions.startDate : this.defaults.startDate)),
-                endDate: this.formatDate(this.field.get('endDate') || (_.isObject(legacyDatepickerOptions) && !_.isUndefined(legacyDatepickerOptions.endDate) ? legacyDatepickerOptions.endDate : this.defaults.endDate)),
+                startDate: this.formatDate(_.isObject(legacyDatepickerOptions) && !_.isUndefined(legacyDatepickerOptions.startDate) ? legacyDatepickerOptions.startDate : this.field.get('startDate') || this.defaults.startDate),
+                endDate: this.formatDate(_.isObject(legacyDatepickerOptions) && !_.isUndefined(legacyDatepickerOptions.endDate) ? legacyDatepickerOptions.endDate : this.field.get('endDate') || this.defaults.endDate),
                 outputFormat: this.field.get('outputFormat') || this.defaults.outputFormat
             });
             this.datepickerExternalModel = new Backbone.Model({

@@ -68,7 +68,7 @@ describe 'f144_patient_record_cwad_spec.rb', acceptance: true do
     end
 
     it '. site' do
-      response = rdk_fetch(@command, 'pid' => 'C877;3')
+      response = rdk_fetch(@command, 'pid' => 'SITE;3')
 
       expect(response.code).to eq(200)
       # display_items(response.body, 'kind')
@@ -88,7 +88,7 @@ describe 'f144_patient_record_cwad_spec.rb', acceptance: true do
     end
 
     it '. with site' do |example|
-      response = rdk_fetch(@command, 'pid' => '9E7A;100816')
+      response = rdk_fetch(@command, 'pid' => 'SITE;100816')
 
       expect(response.code).to eq(200)
       # display_items(response.body, 'kind')
@@ -116,7 +116,7 @@ describe 'f144_patient_record_cwad_spec.rb', acceptance: true do
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command, 'pid' => 'C877;848484')
+      response = rdk_fetch(@command, 'pid' => 'SITE;848484')
 
       expect(response.code).to eq(404)
     end

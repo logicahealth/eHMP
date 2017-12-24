@@ -12,10 +12,10 @@ describe('last-workspace', function() {
         req = {
             session: {
                 user: {
-                    site: '9E7A',
+                    site: 'SITE',
                     uid: '10000000270',
                     duz: {
-                        '9E7A': '10000000270',
+                        'SITE': '10000000270',
                     },
                 }
             },
@@ -23,7 +23,7 @@ describe('last-workspace', function() {
                 name: 'get-last-workspace'
             })),
             parameters: {
-                pid: '9E7A;10000000270'
+                pid: 'SITE;10000000270'
             }
         };
         req.param = function(param) {

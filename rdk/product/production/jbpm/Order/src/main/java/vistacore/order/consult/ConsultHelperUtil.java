@@ -155,7 +155,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultOrderData.setVisit(consultOrder.getVisit());
 			consultOrderData.setOrderResultComment(consultOrder.getOrderResultComment());
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 		
 		return consultOrderData;
@@ -192,13 +192,30 @@ public class ConsultHelperUtil implements java.io.Serializable {
 					}
 					try {
 						String orderableString = consultOrderObject.getString("orderable");
-						LOGGER.debug("ConsultHelperUtil.saveClinicalObject: orderableString: " + orderableString);
+						LOGGER.debug(String.format("ConsultHelperUtil.saveClinicalObject: orderableString: %s", orderableString));
 						JSONObject orderable = new JSONObject(orderableString);
 						consultOrderObject.put("orderable", orderable);
 					} catch (JSONException e) {
 						// ignore, orderable may not exists
 					}
 				}
+				
+				//convert all signal data into JSON object
+				JSONArray signals = dataElement.getJSONArray("signals");
+				JSONObject signalObject;
+				JSONObject signalDataJson;
+				int signalsSize = signals.length();
+				for (int i=0; i<signalsSize; i++) {
+					try {
+						signalObject = signals.getJSONObject(i);
+						signalDataJson = new JSONObject(signalObject.get("data").toString());
+						signalObject.put("data", signalDataJson);
+					} catch (JSONException e) {
+						// ignore, if there is no data element, nothing needs to be changed
+					}
+					
+				}
+				
 			}
 			catch (JSONException e) {
 				// ignore
@@ -210,7 +227,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				workflowProcessInstance.setVariable("consultClinicalObjectJSON", consultClinicalObjectJSON);
 			}
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.saveClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.saveClinicalObject: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -266,7 +283,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("tmp_triageAssignee", "");		
 			workflowProcessInstance.setVariable("schedulingAssignment", schedulingAssignment);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.setTriageAndSchedulingTaskRoutes: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.setTriageAndSchedulingTaskRoutes: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -517,7 +534,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String cdsIntentResult = WorkflowProcessInstanceUtil.getOptionalString(workflowProcessInstance, "cdsIntentResult");
 
 			consultClinicalObject.setData(ccData);
-			consultOrderData = ConsultHelperUtil.buildConsultOrder(consultClinicalObject, consultOrder, orderable, cdsIntentResult, providerUid, providerName);
+			consultOrderData = buildConsultOrder(consultClinicalObject, consultOrder, orderable, cdsIntentResult, providerUid, providerName);
 			//The following 2 variables are only needed at the start of the activity and will be reset to blank after the first save.
 			//JBPM truncates them to 255 characters before persisting them which causes the users to receive them back as malformatted JSON.
 			//they will be restored from the first consultOrder saved in the consultOrders array in buildConsultOrder funtion.
@@ -533,9 +550,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.prepareClinicalObject: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.prepareClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.prepareClinicalObject: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -583,11 +600,11 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (JsonSyntaxException e) {
-			LOGGER.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened with json: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened with json: %s", e.getMessage()), e);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.updateClinicalObject: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.updateClinicalObject: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -623,7 +640,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.checkPrerequisites: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.checkPrerequisites: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -643,7 +660,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			if (preReqOrders !=null && preReqOrders.size() > 0) {
 			  for (ConsultPreReqOrder t_order : preReqOrders) {
 			   	if (((t_order.getSignalRegistered() != null && !t_order.getSignalRegistered()) || t_order.getSignalRegistered() == null) && OrderStatus.ORDER_STATUS_ORDER.equalsIgnoreCase(t_order.getStatus()) && !isEmptyString(t_order.getUid())) {
-			      LOGGER.debug("ConsultHelperUtil.prepareLabResultListeners: Registering Lab Results Signal for: " + t_order.getOrderName());
+			      LOGGER.debug(String.format("ConsultHelperUtil.prepareLabResultListeners: Registering Lab Results Signal for: %s", t_order.getOrderName()));
 			      t_order.setSignalRegistered(true);
 			      completed = false;
 			      String content = "{\"s_preReqOrders\":{\"objectType\":\"consultPreReqOrder\", \"uid\":\"{{uid}}\", \"status\":\"{{data.statusCode}}\"}}";
@@ -659,7 +676,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			}
 			workflowProcessInstance.setVariable("signalsRegistered", completed);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.prepareLabResultListeners: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.prepareLabResultListeners: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -747,9 +764,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.savePendingMilestone: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.savePendingMilestone: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.savePendingMilestone: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -928,9 +945,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 
 			workflowProcessInstance.signalEvent("triageStarted", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.triageCompleted: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.triageCompleted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.triageCompleted: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -965,9 +982,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.noResponseReceived: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: %s", e.getMessage()), e);		
 		}
 	}
 
@@ -999,9 +1016,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				workflowProcessInstance.setVariable("tmp_notificationJSON","");
 			}
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.noResponseReceived: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.noResponseReceived: An unexpected condition has happened: %s", e.getMessage()), e);
 		}	
 			
 	}
@@ -1119,9 +1136,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.patientContactManager: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.patientContactManager: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.patientContactManager: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1318,9 +1335,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.schedulingCompleted: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.schedulingCompleted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.schedulingCompleted: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1377,7 +1394,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String providerUid = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "providerUid");
 			String providerName = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "providerName");
 			consultClinicalObject.setData(ccData);
-			ConsultOrderData consultOrderData = ConsultHelperUtil.buildConsultOrder(consultClinicalObject, consultOrder, orderable, cdsIntentResult, providerUid, providerName);
+			ConsultOrderData consultOrderData = buildConsultOrder(consultClinicalObject, consultOrder, orderable, cdsIntentResult, providerUid, providerName);
 			consultOrders.add(consultOrderData);
 			ccData.setConsultOrders(consultOrders);
 
@@ -1401,9 +1418,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 				}
 			}
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.updateActivityNOrder: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.updateActivityNOrder: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.updateActivityNOrder: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1459,9 +1476,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.setOrderAsDeleted: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.setOrderAsDeleted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.setOrderAsDeleted: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1494,9 +1511,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			consultClinicalObject.setData(ccData);
 			saveClinicalObject(workflowProcessInstance, consultClinicalObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.setOrderAsDeleted: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.setActivityHealthInfo: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.setActivityHealthInfo: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 	
@@ -1512,8 +1529,8 @@ public class ConsultHelperUtil implements java.io.Serializable {
 	}
 
 	/**
-	 * Sets activity as unhealthy when scheduling is late to start
 	 * Called from: Activity Health - Late Scheduling  (script)
+	 * Sets activity as unhealthy when scheduling is late to start
 	 * @param processInstance	a reference to the running process instance
 	 */
 	public static void lateSchedulingSet(ProcessInstance processInstance) {
@@ -1579,7 +1596,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String earlyDateString = earlyDate.toString(ISODateTimeFormat.dateTimeNoMillis());
 			workflowProcessInstance.setVariable("earliestDate", earlyDateString);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.setTaskDates: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.setTaskDates: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1611,10 +1628,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String earlyDateString = earlyDate.toString(ISODateTimeFormat.dateTimeNoMillis());
 			workflowProcessInstance.setVariable("earliestDate", earlyDateString );
 		} catch (OrderException e) {
-			//Error was already logged
-		}
-		 catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.setCompleteTaskDates: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.setCompleteTaskDates: %s", e.getMessage()), e);
+		} catch (Exception e) {
+			LOGGER.error(String.format("ConsultHelperUtil.setCompleteTaskDates: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 	
@@ -1645,23 +1661,24 @@ public class ConsultHelperUtil implements java.io.Serializable {
 						String uidString = uid.getAsString();
 						workflowProcessInstance.setVariable("clinicalObjectUid", uidString);
 					} else {
-						LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
+						LOGGER.warn(String.format("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: %s",
+								serviceResponse));
 						workflowProcessInstance.setVariable("formAction", "Error");
 					}
 				} else {
-				LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: " + serviceResponse);
+				LOGGER.warn(String.format("ConsultHelperUtil.onExitSaveClinicalObject: Process Failed to save to pJDS and will be aborted: %s", serviceResponse));
 				workflowProcessInstance.setVariable("formAction", "Error");
 				}
 			} else {
-				LOGGER.warn("ConsultHelperUtil.onExitSaveClinicalObject: serviceResponseObject is NULL or not an object. Process will be aborted: " + serviceResponse);
+				LOGGER.warn(String.format("ConsultHelperUtil.onExitSaveClinicalObject: serviceResponseObject is NULL or not an object. Process will be aborted: %s", serviceResponse));
 				workflowProcessInstance.setVariable("formAction", "Error");
 			}
 		} catch (JsonSyntaxException e) {
-			LOGGER.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened with json: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened with json: %s", e.getMessage()), e);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.onExitSaveClinicalObject: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitSaveClinicalObject: An unexpected condition has happened: %s", e.getMessage()));
 		}
 	}
 
@@ -1700,9 +1717,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			"}";
 			workflowProcessInstance.setVariable("tmp_noteObject",newNoteObject);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.onEntrySaveNoteObject: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onEntrySaveNoteObject: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onEntrySaveNoteObject: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1744,9 +1761,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			
 			workflowProcessInstance.setVariable("tmp_notificationJSON",jsonString);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.processDiscontinuedNotification: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.processDiscontinuedNotification: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.processDiscontinuedNotification: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1778,9 +1795,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			String tmp_pastLatestDateTimer = "" + days + tmp_pastLatestDateTimerUnits;
 			workflowProcessInstance.setVariable("tmp_pastLatestDateTimer",tmp_pastLatestDateTimer);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.latestDateTimer: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.latestDateTimer: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.latestDateTimer: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1821,9 +1838,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("activityHealthDescription","");
 			workflowProcessInstance.setVariable("formAction",action);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.onExitTriage: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitTriage: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitTriage: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1841,7 +1858,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistory",noTaskHistoryText);
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitSign: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitSign: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1858,7 +1875,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistoryAction","Accepted");
 			setTriageAndSchedulingTaskRoutes(processInstance);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitAccept: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitAccept: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1919,9 +1936,9 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			}
 			workflowProcessInstance.signalEvent("schedulingStarted", null);
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.onExitScheduling: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitScheduling: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitScheduling: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1941,7 +1958,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 			workflowProcessInstance.signalEvent("completionStarted", null);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitComplete: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitComplete: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1961,7 +1978,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			workflowProcessInstance.setVariable("taskHistoryAction",noTaskHistoryActionText);
 			workflowProcessInstance.setVariable("tmp_notificationJSON","{\"userId\": \"" + (String)workflowProcessInstance.getVariable("reviewAssignment") + "\"}");
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.onExitReview: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.onExitReview: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 
@@ -1970,20 +1987,20 @@ public class ConsultHelperUtil implements java.io.Serializable {
 		WorkflowProcessInstance workflowProcessInstance = (WorkflowProcessInstance) processInstance;
 		try {
 			String serviceResponse = WorkflowProcessInstanceUtil.getRequiredString(workflowProcessInstance, "serviceResponse");
-			LOGGER.debug("ConsultHelperUtil.processNotificationWriteResponse: serviceResponse: " + serviceResponse);
+			LOGGER.debug(String.format("ConsultHelperUtil.processNotificationWriteResponse: serviceResponse: %s", serviceResponse));
 
 			JsonParser parser = new JsonParser();
 			JsonObject serviceResponseJson = parser.parse(serviceResponse).getAsJsonObject();		
 			String notificationid = GenericUtils.getOptionalJsonElementValueAsString(serviceResponseJson, "notificationid");
 			workflowProcessInstance.setVariable("tmp_notificationId", notificationid);
-			LOGGER.debug("NotificationId: "+ notificationid);
+			LOGGER.debug(String.format("NotificationId: %s", notificationid));
 		} catch (JsonSyntaxException e) {
-			LOGGER.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened with json. Could not get notificationId: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened with json. Could not get notificationId: %s", e.getMessage()), e);
 			workflowProcessInstance.setVariable("tmp_notificationId", "");
 		} catch (OrderException e) {
-			//Error was already logged
+			LOGGER.error(String.format("ConsultHelperUtil.processNotificationWriteResponse: %s", e.getMessage()), e);
 		} catch (Exception e) {
-			LOGGER.error("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("ConsultHelperUtil.processNotificationWriteResponse: An unexpected condition has happened: %s", e.getMessage()), e);
 		}
 	}
 	
@@ -2014,7 +2031,7 @@ public class ConsultHelperUtil implements java.io.Serializable {
 			
 			return iConsultOrderUrgency;
 		}
-		LOGGER.info("***** ConsultHelperUtil.setUrgency: Exiting setUrgency - there was no consultOrder ");
+		LOGGER.debug("***** ConsultHelperUtil.setUrgency: Exiting setUrgency - there was no consultOrder ");
 		return null;
 	}
 	

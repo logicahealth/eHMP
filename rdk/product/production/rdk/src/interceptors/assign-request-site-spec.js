@@ -23,21 +23,21 @@ function reqTestUrl(site, reqUserSessionSite, reqPatientSite, configSite) {
     var res = {};
     var req = createRequest(site, reqUserSessionSite, reqPatientSite, configSite);
     assignRequestSite(req, res, next);
-    expect(req.site).to.equal('9E7A');
+    expect(req.site).to.equal('SITE');
 }
 
 describe('Assign Request Site Interceptor', function() {
     it('when request site property is already set', function() {
-        reqTestUrl('9E7A', null, null, null);
+        reqTestUrl('SITE', null, null, null);
     });
     it('when request site property is set with the user session site property', function() {
-        reqTestUrl(null,'9E7A', null, null);
+        reqTestUrl(null,'SITE', null, null);
     });
     it('when request site property is set with the patient id siteDfn from a pid run through convert-id interceptor', function() {
-        reqTestUrl(null, null,'9E7A', null);
+        reqTestUrl(null, null,'SITE', null);
     });
     it('when request site property is set with the first element of the app config vistaSites property', function() {
-        reqTestUrl(null, null, null, '9E7A');
+        reqTestUrl(null, null, null, 'SITE');
     });
     it('when request site property is never assigned', function() {
         var next = function() {};

@@ -42,7 +42,16 @@ define([
             var model = params.model;
             var title =  model.get('typeName') + ' - ' + model.get('specimen');
 
+            var $el = _.get(params, '$el');
+            if ($el) {
+                var type = $el[0].type;
+                if (type !== 'button') {
+                    $el = $el.find('.dropdown--quickmenu > button');
+                }
+            }
+
             var modalOptions = {
+                'triggerElement': $el,
                 'fullScreen': params.isFullscreen,
                 'size': "xlarge",
                 'title': title
@@ -63,7 +72,8 @@ define([
                 showProgress: false,
                 keyboard: true,
                 steps: [],
-                title: 'Create Note Object'
+                title: 'Create Note Object',
+                triggerElement: _.get(params, '$el')
             };
 
             ADK.utils.writebackUtils.handleVisitWorkflow(options, AddSelectVisit);

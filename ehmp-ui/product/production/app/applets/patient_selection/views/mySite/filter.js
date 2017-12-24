@@ -24,98 +24,78 @@ define([
     var MySiteAllSearchForm = ADK.UI.Form.extend({
         _trayKeys: [],
         fields: [{
-            control: 'container',
+            control: 'fieldset',
+            legend: 'My Site, Search group',
+            srOnlyLegend: true,
             extraClasses: ['flex-display', 'flex-direction-row', 'search-bar'],
             items: [{
                 control: 'searchbar',
                 name: 'patientSelectionMySiteSearchText',
-                placeholder: 'My Site Patient Search (Ex: S1234 or Smith, John...)',
-                label: 'Patient Selection - My Site Patient Search',
+                placeholder: 'Search My Site',
+                label: 'Search Patients',
                 srOnlyLabel: true,
                 buttonOptions: {
                     type: 'submit',
-                    title: 'Press enter to view patient results.'
+                    title: 'View results',
+                    extraClasses: ['btn-default', 'background-color-grey-lightest'],
+                    attributes: 'aria-label="My Site Search" aria-expanded="false" data-toggle="sidebar-tray"'
                 },
-                type: 'search',
                 minimumInputLength: 0,
                 extraClasses: ['flex-width-1'],
-                title: 'Enter either first letter of last name and last four of social security number, or generic name.'
+                instructions: 'Enter either first letter of last name and last four of social security number, or generic name. (Ex: S1234 or Smith, John...)'
             }]
         }],
+        ui: {
+            trayToggle: '[data-toggle="sidebar-tray"]'
+        },
         events: {
-            'submit': function(event) {
-                event.preventDefault();
-                if (this.model.isValid()) {
-                    this.model.set({
-                        persistedSearchText: this.model.get('patientSelectionMySiteSearchText'),
-                        persist: true
-                    });
-                    this.stopListeningMySitetrayOpen();
-                    this.onSearch();
-                    this.listenToMySiteTrayOpen();
+            'submit': 'onSearch',
+            'click @ui.trayToggle': 'onSearch',
+            'form:view:updated:bound:ui:elements': function(e) {
+                e.stopImmediatePropagation();
+                this.$el.trigger(this.getOption('_eventPrefix') + ':view:update:bound:ui:elements');
+                var isTrayOpen = ADK.Messaging.request('tray:patientSelection:mySite:trayView').isOpen();
+                this.ui.trayToggle.attr('aria-expanded', isTrayOpen);
+            },
+            'focusout': function(e) {
+                if (_.isNull(e.relatedTarget) || !_.isEmpty(this.$(e.relatedTarget))) return; // Not losing focus
+                if (_.isEqual(this.ui.trayToggle.attr('aria-expanded'), "true")) {
+                    this.setSearchBarToCurrentSearch();
+                    this.ui.trayToggle.prop('disabled', true);
                 } else {
-                    this.transferFocusToFirstError();
+                    this.clearSearchBar();
                 }
             }
         },
-        modelEvents: {
-            'change.inputted:patientSelectionMySiteSearchText': function(){
-                this.model.set('persist', false);
-            }
-        },
-        onSearch: function() {
-            ADK.Messaging.getChannel('patient-selection-mySite').trigger('execute-search', this.model.get('patientSelectionMySiteSearchText').trim());
-        },
-        onInitialize: function(){
-            this.listenToOnce(this.model, 'change:patientSelectionMySiteSearchText', this.initiateTextPersistance);
-        },
-        initiateTextPersistance: function(){
-            this.listenToMySiteTrayOpen();
-            this._trayKeys = ADK.Messaging.getChannel('patient-selection').request('tray-keys');
-            this._trayKeys = _.without(this._trayKeys, 'mySite');
-            _.each(this._trayKeys, this.registerTrayClickListener, this);
-        },
-        onBeforeDestroy: function(){
-            this.stopListeningMySitetrayOpen();
-            _.each(this._trayKeys, this.unRegisterTrayClickListener, this);
-        },
-        registerTrayClickListener: function(key){
-            if (_.isString(key)){
-                this.listenTo(ADK.Messaging.getChannel('patient-selection-'+key), 'patientSearchTray.show', this.clearSearchBar);
-            }
-        },
-        unRegisterTrayClickListener: function(key){
-            if (_.isString(key)){
-                this.stopListening(ADK.Messaging.getChannel('patient-selection-'+key), 'patientSearchTray.show', this.clearSearchBar);
-            }
-        },
-        listenToMySiteTrayOpen: function(){
-             this.listenTo(ADK.Messaging.getChannel('patient-selection-mySite'), 'patientSearchTray.show', this.populateSearchBar);
-        },
-        stopListeningMySitetrayOpen: function(){
-            this.stopListening(ADK.Messaging.getChannel('patient-selection-mySite'), 'patientSearchTray.show', this.populateSearchBar);
-        },
-        populateSearchBar: function(){
-            var persistedSearchText = this.model.get('persistedSearchText');
-            this.model.set('patientSelectionMySiteSearchText', persistedSearchText);
-        },
-        clearSearchBar: function(){
-            if (this.model.get('persist')){
-                var persistedSearchText = this.model.get('patientSelectionMySiteSearchText');
-                this.model.set({
-                    persistedSearchText: persistedSearchText,
-                    patientSelectionMySiteSearchText: null,
-                    persist: false
-                });
+        onSearch: function(event, options) {
+            if (_.get(options, 'tray.toggle', false)) return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (this.model.isValid()) {
+                var searchString = this.model.get('patientSelectionMySiteSearchText').trim();
+                this.model.set('currentSearch', searchString);
+                ADK.Messaging.getChannel(this.getOption('eventChannelName') + '-mySite').trigger('execute-search', searchString);
             } else {
-                this.model.set('patientSelectionMySiteSearchText', null);
+                this.transferFocusToFirstError();
             }
-        }
+        },
+        onInitialize: function() {
+            this.listenTo(ADK.Messaging.getChannel(this.getOption('eventChannelName') + '-mySite'), this.getOption('_eventPrefix') + '.hide', this.clearSearchBar);
+        },
+        setSearchBarToCurrentSearch: function() {
+            this.model.set('patientSelectionMySiteSearchText', this.model.get('currentSearch'));
+        },
+        clearSearchBar: function() {
+            this.model.set('patientSelectionMySiteSearchText', null);
+        },
+        className: 'adk-form form-container bottom-border-grey'
     });
 
     var MySiteAllSearchView = Backbone.Marionette.ItemView.extend({
+        eventChannelName: 'patient-selection',
+        _eventPrefix: 'patientSearchTray',
         template: false,
-        className: 'patient-selection--my-site-search--input percent-width-75',
+        className: 'patient-selection--my-site-search--input top-padding-sm bottom-padding-lg',
         initialize: function() {
             this._regionManager = new Backbone.Marionette.RegionManager();
             var SearchRegion = Backbone.Marionette.Region.extend({
@@ -126,8 +106,17 @@ define([
             });
         },
         onBeforeShow: function() {
+            var fields = _.set(MySiteAllSearchForm.prototype.fields, '[0].items[0].buttonOptions.id', this.model.get('tray_id'));
+            var collectionLength = this.getOption('collectionLength');
+            var index = this.getOption('index');
+            if(collectionLength && index){
+                fields = _.set(fields, '[0].legend', 'My Site, ' + index + ' of ' + collectionLength + ', Search group');
+            }
             this._regionManager.get('searchRegion').show(new MySiteAllSearchForm({
-                model: new SearchModel()
+                model: new SearchModel(),
+                eventChannelName: this.getOption('eventChannelName'),
+                _eventPrefix: this.getOption('_eventPrefix'),
+                fields: fields
             }));
         },
         onBeforeDestroy: function() {

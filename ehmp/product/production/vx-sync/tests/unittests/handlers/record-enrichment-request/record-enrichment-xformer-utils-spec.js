@@ -20,17 +20,17 @@ describe('record-enrichment-xformer-utils.js', function() {
 	describe('getSummary()', function() {
 		it('Happy Path', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1'
+				uid: 'urn:va:allergy:SITE:3:1'
 			};
 			var summary = recEnrichXformerUtil.getSummary('Allergy', record);
-			expect(summary).toEqual('Allergy{uid=\'urn:va:allergy:9E7A:3:1\'}');
+			expect(summary).toEqual('Allergy{uid=\'urn:va:allergy:SITE:3:1\'}');
 		});
 		it('No summary name', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1'
+				uid: 'urn:va:allergy:SITE:3:1'
 			};
 			var summary = recEnrichXformerUtil.getSummary(null, record);
-			expect(summary).toEqual('{uid=\'urn:va:allergy:9E7A:3:1\'}');
+			expect(summary).toEqual('{uid=\'urn:va:allergy:SITE:3:1\'}');
 		});
 		it('No record', function() {
 			var summary = recEnrichXformerUtil.getSummary('Allergy', null);
@@ -45,7 +45,7 @@ describe('record-enrichment-xformer-utils.js', function() {
 	describe('recordContainsCode()', function() {
 		it('Code existed in record.', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1',
+				uid: 'urn:va:allergy:SITE:3:1',
 				codes: [{
 					code: 'someCode',
 					system: 'SomeCodeSystem',
@@ -75,7 +75,7 @@ describe('record-enrichment-xformer-utils.js', function() {
 		});
 		it('Code does not exist in record.', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1',
+				uid: 'urn:va:allergy:SITE:3:1',
 				codes: [{
 					code: 'someCode',
 					system: 'SomeCodeSystem',
@@ -98,7 +98,7 @@ describe('record-enrichment-xformer-utils.js', function() {
 	describe('retrieveMappedTerminoloyCodeInfo()', function() {
 		it('Record did not contain code - doing a terminology lookup.', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1',
+				uid: 'urn:va:allergy:SITE:3:1',
 				codes: [{
 					code: 'someCode',
 					codeSystem: 'SomeCodeSystem',
@@ -133,7 +133,7 @@ describe('record-enrichment-xformer-utils.js', function() {
 		});
 		it('Record already contained code - doing a terminology lookup.', function() {
 			var record = {
-				uid: 'urn:va:allergy:9E7A:3:1',
+				uid: 'urn:va:allergy:SITE:3:1',
 				codes: [{
 					code: 'someCode',
 					system: 'SomeCodeSystem',

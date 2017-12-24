@@ -33,7 +33,7 @@ platforms:
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-3be4bc52
-#     username: REDACTED
+#     username: USER    
 #     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 - name: fedora-19

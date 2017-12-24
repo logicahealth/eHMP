@@ -117,7 +117,7 @@ Gets the count for global notification list based on the given user id
 			        "description": "workflow: lab order management"
 			    },
 			    "referenceId": "task123",
-			    "patientId": "9E7A;253",
+			    "patientId": "SITE;253",
 			    "message": {
 			        "subject": "Order lab",
 			        "body": "Finish ordering your lab"

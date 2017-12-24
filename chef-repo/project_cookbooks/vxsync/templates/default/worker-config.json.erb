@@ -3,6 +3,24 @@
   "vxsync": {
     "trackSolrStorage": <%= @vxsync['vxsync']['trackSolrStorage'] %>,
     "configRefresh": <%= @vxsync['vxsync']['config_refresh'] %>,
+    "environmentName": "<%= @environment_name %>",
+    <% if !@app_dynamics.nil? %>
+    "appDynamicsProfile": {
+        "controllerHostName": "<%= @app_dynamics['app_dynamics']['controller_host_name'] %>",
+        "controllerPort": "<%= @app_dynamics['app_dynamics']['controller_port'] %>",
+        "accountName": "<%= @app_dynamics['app_dynamics']['agent_account_name'] %>",
+        "accountAccessKey": "<%= @app_dynamics['app_dynamics']['agent_account_access_key'] %>",
+        "applicationName": "<%= @app_dynamics['app_dynamics']['agent_application_name'] %>",
+        "proxyAutolaunchDisabled": "<%= @node['app_dynamics']['proxy']['proxyAutolaunchDisabled'] %>",
+        "proxyCtrlDir": "<%= @node['app_dynamics']['proxy']['ctl_dir']%>",
+        "noNodeNameSuffix": "<%= @node['app_dynamics']['proxy']['noNodeNameSuffix'] %>"
+    },
+    <% end %>
+    "pollerIgnoreDuplicateErrorTime": <%= @vxsync['vxsync']['poller']['ignore_duplicate_error_time'] %>,
+    "shutdownTimeout": {
+      "pollerHost": <%= @vxsync['vxsync']['shutdown_timeout']['poller_host_millis'] %>,
+      "subscriberHost": <%= @vxsync['vxsync']['shutdown_timeout']['subscriber_host_millis'] %>
+    },
     "rules": {
       "accept-all": {
       },
@@ -37,6 +55,7 @@
     "retrySync": {"maxRetries": 3},
     "trackErrorsByMetastamp": ["record-enrichment", "store-record", "solr-record-storage", "event-prioritization-request", "vler-xform-vpr"],
     "endpointMaxSockets": <%= @vxsync['vxsync']['endpoint_max_sockets'] %>,
+    "handlerMaxSockets": <%= @vxsync['vxsync']['handler_max_sockets'] %>,
     "maxMetastampSize": 10485760,
     "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
@@ -56,7 +75,8 @@
           "stationNumber": "<%= site_info['vista']['station_number'] %>",
           "localAddress": "localhost",
           "connectTimeout": <%= site_info['vista']['connect_timeout'] %>,
-          "sendTimeout": <%= site_info['vista']['send_timeout'] %>
+          "sendTimeout": <%= site_info['vista']['send_timeout'] %>,
+          "multipleMode": <%= site_info['vista']['multiple_mode'] %>
       }<% end %>
     },
     "vista": {
@@ -93,8 +113,8 @@
     },
     "syncRequestApi": {
         "protocol": "http",
-        "host": "127.0.0.1",
-        "port": <%= @vxsync['vxsync']['web_service_port'] %>,
+        "host": "localhost",
+        "port": <%= @vxsync_sync_port %>,
         "patientSyncPath": "/sync/doLoad",
         "patientSyncDemoPath": "/sync/demographicSync",
         "patientUnsyncPath": "/sync/clearPatient",
@@ -333,10 +353,14 @@
             "path": "/hdr/getData?domain=allergy"
         }
     },
+    "vlerSelector": "<%= @vxsync['vxsync']['vler_selector'] %>",
     "vler": {
         "domains": [
             "vlerdocument"
         ],
+        "compression": {
+            "minSize": <%= @vxsync['vxsync']['lzma_min_size'] %>
+        },
         "disabled": <%= !@vler_enabled %>,
         "defaults": {
             "host": "localhost",
@@ -349,6 +373,38 @@
             "documentListPath": "/vler/documentList",
             "documentPath": "/vler/document"
         }
+    },
+    "vlerdas": {
+        "domains": [
+            "vlerdocument"
+        ],
+        "disabled": <%= !@vlerdas_enabled %>,
+        "defaults": {
+            "host": "<%= @das['ipaddress'] %>",
+            "port": "<%= @das['das']['vlerdas']['port'] %>",
+            "protocol": "<%= @das['das']['vlerdas']['protocol'] %>",
+            "timeout": <%= @das['das']['vlerdas']['timeout'] %>
+        },
+        "vlerdocument": {
+            "subscribe": "<%= @das['das']['vlerdas']['subscribe']['path'] %>",
+            "readDocPath": "<%= @das['das']['vlerdas']['read_doc_path']['path'] %>",
+            "ping": "<%= @das['das']['vlerdas']['ping']['path'] %>"
+        },
+        "vlerFormData": {
+          "org": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['org'] %>",
+          "roleCode": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['role_code'] %>",
+          "purposeCode": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['purpose_code'] %>",
+          "vaFacilityCode": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['va_facility_code'] %>",
+          "familyName": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['family_name'] %>",
+          "givenName": "<%= @vxsync['vxsync']['vlerdas']['vler_form_data']['given_name'] %>"
+        },
+        "notificationCallback": {
+            "protocol": "<%= @vxsync['vxsync']['vlerdas']['notification_callback']['protocol'] if @vxsync['vxsync']['vlerdas']['notification_callback']['environment'] === 'development' %>",
+            "host": "<%= @vxsync['ipaddress'] if @vxsync['vxsync']['vlerdas']['notification_callback']['environment'] === 'development' %>",
+            "port": "<%= @vxsync['vxsync']['web_service_port'] if @vxsync['vxsync']['vlerdas']['notification_callback']['environment'] === 'development' %>",
+            "path": "/vlerdas/notification"
+        },
+        "queryDurationDays": <%= @vxsync['vxsync']['vlerdas']['query_duration_days'] %>
     },
     "recordEnrichment": {
         "domains": [
@@ -623,6 +679,17 @@
             "workerCount": <%= @vxsync['vxsync']['profile']['vler']['vler-xform-vpr']['worker_count'] %>
           }
         },
+        "vlerdas": {
+          "vler-das-sync-request": {
+            "workerCount": <%= @vxsync['vxsync']['profile']['vlerdas']['vler-das-sync-request']['worker_count'] %>
+          },
+          "vler-das-doc-retrieve": {
+            "workerCount": <%= @vxsync['vxsync']['profile']['vlerdas']['vler-das-doc-retrieve']['worker_count'] %>
+          },
+          "vler-das-xform-vpr": {
+            "workerCount": <%= @vxsync['vxsync']['profile']['vlerdas']['vler-das-xform-vpr']['worker_count'] %>
+          }
+        },
         "pgd": {
           "pgd-sync-request": {
             "workerCount": <%= @vxsync['vxsync']['profile']['worker_count'] %>
@@ -684,10 +751,218 @@
           "patient-record-retirement": {
             "workerCount": <%= @vxsync['vxsync']['profile']['retirement']['patient-record-retirement']['worker_count'] %>
           }
+        },
+        "notification": {
+          "sync-notification": {
+            "workerCount": <%= @vxsync['vxsync']['profile']['notification']['sync-notification']['worker_count'] %>
+          }
         }
       }
     },
     "parallelPublish": 20,
+    <% if @vxsync_environments %>
+    "vxsyncEnvironments": {
+      <% @vxsync_environments.each_with_index do |vxsync_environment, outer_index| %>
+      <% vxsync_environment['vxsync']['vxsync_applications'].each_with_index do |application, inner_index| %>
+      "<%= "#{vxsync_environment['machinename']}_#{application}" %>": {
+        "vxsync": {
+          "beanstalk": {
+            "repoUniversal": {
+              "priority": <%= vxsync_environment['vxsync']['beanstalk_priority'] %>,
+              "delay": <%= vxsync_environment['vxsync']['beanstalk_delay'] %>,
+              "ttr": <%= vxsync_environment['vxsync']['beanstalk_ttr'] %>,
+              "timeout": <%= vxsync_environment['vxsync']['beanstalk_timeout'] %>,
+              "initMillis": <%= vxsync_environment['vxsync']['beanstalk_init_millis'] %>,
+              "maxMillis": <%= vxsync_environment['vxsync']['beanstalk_max_millis'] %>,
+              "incMillis": <%= vxsync_environment['vxsync']['beanstalk_inc_millis'] %>
+            },
+            "repoDefaults": {
+              "host": "<%= vxsync_environment['ipaddress'] %>",
+              "port": <%= vxsync_environment['beanstalk'][application]['beanstalk_processes']["jobrepo_#{application}"]['config']['port'] %>,
+              "tubename": "<%= vxsync_environment['beanstalk'][application]['beanstalk_processes']["jobrepo_#{application}"]['config']['tube_name'] %>",
+              "tubePrefix": "<%= vxsync_environment['beanstalk'][application]['beanstalk_processes']["jobrepo_#{application}"]['config']['tube_prefix'] %>",
+              "jobTypeForTube": <%= vxsync_environment['beanstalk'][application]['beanstalk_processes']["jobrepo_#{application}"]['config']['job_type'] %>
+            },
+            "jobTypes": {
+              <% if application == 'vista' %>
+              "vista-record-processor-request": {},
+              "operational-store-record": {},
+              <% end %>
+              <% if application == 'client' %>
+              "enterprise-sync-request": {},
+              "vista-operational-subscribe-request": {},
+              <% @vista_sites.each do |site_info| %>
+              "vista-<%= site_info['vista']['site_id'] %>-subscribe-request": {},
+              <% end %>
+              "jmeadows-sync-request": {},
+              "jmeadows-sync-allergy-request": {},
+              "jmeadows-sync-appointment-request": {},
+              "jmeadows-sync-consult-request": {},
+              "jmeadows-sync-demographics-request": {},
+              "jmeadows-sync-dischargeSummary-request": {},
+              "jmeadows-sync-encounter-request": {},
+              "jmeadows-sync-immunization-request": {},
+              "jmeadows-sync-lab-request": {},
+              "jmeadows-sync-medication-request": {},
+              "jmeadows-sync-note-request": {},
+              "jmeadows-sync-order-request": {},
+              "jmeadows-sync-problem-request": {},
+              "jmeadows-sync-progressNote-request": {},
+              "jmeadows-sync-radiology-request": {},
+              "jmeadows-sync-vital-request": {},
+              "jmeadows-xform-allergy-vpr": {},
+              "jmeadows-xform-appointment-vpr": {},
+              "jmeadows-xform-consult-vpr": {},
+              "jmeadows-xform-demographics-vpr": {},
+              "jmeadows-xform-dischargeSummary-vpr": {},
+              "jmeadows-xform-encounter-vpr": {},
+              "jmeadows-xform-immunization-vpr": {},
+              "jmeadows-xform-lab-vpr": {},
+              "jmeadows-xform-medication-vpr": {},
+              "jmeadows-xform-note-vpr": {},
+              "jmeadows-xform-order-vpr": {},
+              "jmeadows-xform-problem-vpr": {},
+              "jmeadows-xform-progressNote-vpr": {},
+              "jmeadows-xform-radiology-vpr": {},
+              "jmeadows-xform-vital-vpr": {},
+              "jmeadows-pdf-document-transform": {},
+              "jmeadows-document-retrieval": {},
+              "jmeadows-cda-document-conversion": {},
+              "hdr-sync-request": {},
+              "hdr-sync-allergy-request": {},
+              "hdr-sync-appointment-request": {},
+              "hdr-sync-consult-request": {},
+              "hdr-sync-cpt-request": {},
+              "hdr-sync-document-request": {},
+              "hdr-sync-image-request": {},
+              "hdr-sync-immunization-request": {},
+              "hdr-sync-lab-request": {},
+              "hdr-sync-med-request": {},
+              "hdr-sync-order-request": {},
+              "hdr-sync-patient-request": {},
+              "hdr-sync-pov-request": {},
+              "hdr-sync-problem-request": {},
+              "hdr-sync-procedure-request": {},
+              "hdr-sync-surgery-request": {},
+              "hdr-sync-visit-request": {},
+              "hdr-sync-vital-request": {},
+              "hdr-xform-allergy-vpr": {},
+              "hdr-xform-appointment-vpr": {},
+              "hdr-xform-consult-vpr": {},
+              "hdr-xform-cpt-vpr": {},
+              "hdr-xform-document-vpr": {},
+              "hdr-xform-image-vpr": {},
+              "hdr-xform-immunization-vpr": {},
+              "hdr-xform-lab-vpr": {},
+              "hdr-xform-med-vpr": {},
+              "hdr-xform-order-vpr": {},
+              "hdr-xform-patient-vpr": {},
+              "hdr-xform-pov-vpr": {},
+              "hdr-xform-problem-vpr": {},
+              "hdr-xform-procedure-vpr": {},
+              "hdr-xform-surgery-vpr": {},
+              "hdr-xform-visit-vpr": {},
+              "hdr-xform-vital-vpr": {},
+              "vler-sync-request": {},
+              "vler-xform-vpr": {},
+              "vler-das-sync-request": {},
+              "vler-das-doc-retrieve": {},
+              "vler-das-xform-vpr": {},
+              "pgd-sync-request": {},
+              "pgd-xform-vpr": {},
+              <% @hdr_sites.each do |hdr_site| %>
+                <% hdr_site['hdr']['hdr_sites'].each do |site| %>
+              "vistahdr-<%= site['site_id'] %>-subscribe-request":{},
+                <% end %>
+              <% end %>
+              <% end %>
+              "error-request": {},
+              "record-enrichment": {
+                "tubeDetails": [
+                  {
+                    "ratio": 5000,
+                    "priority": {
+                      "startValue": 1,
+                      "endValue": 20
+                    }
+                  },
+                  {
+                    "ratio": 3000,
+                    "priority": {
+                      "startValue": 21,
+                      "endValue": 40
+                    }
+                  },
+                  {
+                    "ratio": 2000,
+                    "priority": {
+                      "startValue": 41,
+                      "endValue": 60
+                    }
+                  },
+                  {
+                    "ratio": 1000,
+                    "priority": {
+                      "startValue": 61,
+                      "endValue": 80
+                    }
+                  },
+                  {
+                    "ratio": 500,
+                    "priority": {
+                      "startValue": 81,
+                      "endValue": 100
+                    }
+                  }]
+              },
+              "store-record": {},
+              "solr-record-storage": {},
+              "event-prioritization-request": {},
+              "publish-data-change-event": {},
+              "activity-management-event": {},
+              "resync-request": {
+                  "delay": 30
+              },
+              "record-update": {
+                  "host": "<%= vxsync_environment['ipaddress'] %>",
+                  "port": 4999
+              },
+              "patient-record-retirement": {},
+              "sync-notification": {}
+            }
+          }
+        },
+        "osync": {
+          "beanstalk": {
+            "repoUniversal": {
+                "priority": 10,
+                "delay": 0,
+                "ttr": <%= vxsync_environment['osync']['beanstalk_ttr'] %>,
+                "timeout": 10,
+                "initMillis": 1000,
+                "maxMillis": 15000,
+                "incMillis": 1000
+            },
+            "repoDefaults": {
+                "host": "<%= vxsync_environment['ipaddress'] %>",
+                "port": <%= vxsync_environment['osync']['processes']['opportunistic_sync_jobrepo']['config']['port'] %>,
+                "tubename": "osync",
+                "tubePrefix": "osync-",
+                "jobTypeForTube": true
+            },
+            "jobTypes": {
+                "admissions": {},
+                "appointments": {},
+                "sync": {},
+                "patientlist": {}
+            }
+          }
+        }
+      }<%= ',' unless inner_index == (vxsync_environment['vxsync']['vxsync_applications'].size - 1) && outer_index == (@vxsync_environments.size - 1) %>
+      <% end %>
+      <% end %>
+    },
+    <% end %>
     "beanstalk": {
       "repoUniversal": {
         "priority": <%= @vxsync['vxsync']['beanstalk_priority'] %>,
@@ -700,192 +975,110 @@
     },
     "repoDefaults": {
         "host": "127.0.0.1",
-        "port": <%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['port'] %>,
-        "tubename": "<%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['tube_name'] %>",
-        "tubePrefix": "<%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['tube_prefix'] %>",
-        "jobTypeForTube": <%= @vxsync['vxsync']['beanstalk_processes']['jobrepo']['config']['job_type'] %>
+        "port": <%= @beanstalk_port %>,
+        "tubename": "<%= @vxsync['beanstalk']['tube_name'] %>",
+        "tubePrefix": "<%= @vxsync['beanstalk']['tube_prefix'] %>",
+        "jobTypeForTube": <%= @vxsync['beanstalk']['job_type'] %>
     },
       "jobTypes": {
-        "error-request": {
-        },
-
-        "enterprise-sync-request": {
-        },
-        "vista-operational-subscribe-request": {
-        },
+        "error-request": {},
+        "enterprise-sync-request": {},
+        "vista-operational-subscribe-request": {},
         <% @vista_sites.each do |site_info| %>
-        "vista-<%= site_info['vista']['site_id'] %>-subscribe-request": {
-        },
+        "vista-<%= site_info['vista']['site_id'] %>-subscribe-request": {},
         <% end %>
-        "jmeadows-sync-request": {
-        },
-        "jmeadows-sync-allergy-request": {
-        },
-        "jmeadows-sync-appointment-request": {
-        },
-        "jmeadows-sync-consult-request": {
-        },
-        "jmeadows-sync-demographics-request": {
-        },
-        "jmeadows-sync-dischargeSummary-request": {
-        },
-        "jmeadows-sync-encounter-request": {
-        },
-        "jmeadows-sync-immunization-request": {
-        },
-        "jmeadows-sync-lab-request": {
-        },
-        "jmeadows-sync-medication-request": {
-        },
-        "jmeadows-sync-note-request": {
-        },
-        "jmeadows-sync-order-request": {
-        },
-        "jmeadows-sync-problem-request": {
-        },
-        "jmeadows-sync-progressNote-request": {
-        },
-        "jmeadows-sync-radiology-request": {
-        },
-        "jmeadows-sync-vital-request": {
-        },
-        "jmeadows-xform-allergy-vpr": {
-        },
-        "jmeadows-xform-appointment-vpr": {
-        },
-        "jmeadows-xform-consult-vpr": {
-        },
-        "jmeadows-xform-demographics-vpr": {
-        },
-        "jmeadows-xform-dischargeSummary-vpr": {
-        },
-        "jmeadows-xform-encounter-vpr": {
-        },
-        "jmeadows-xform-immunization-vpr": {
-        },
-        "jmeadows-xform-lab-vpr": {
-        },
-        "jmeadows-xform-medication-vpr": {
-        },
-        "jmeadows-xform-note-vpr": {
-        },
-        "jmeadows-xform-order-vpr": {
-        },
-        "jmeadows-xform-problem-vpr": {
-        },
-        "jmeadows-xform-progressNote-vpr": {
-        },
-        "jmeadows-xform-radiology-vpr": {
-        },
-        "jmeadows-xform-vital-vpr": {
-        },
-        "jmeadows-pdf-document-transform": {
-        },
-        "jmeadows-document-retrieval": {
-        },
-        "jmeadows-cda-document-conversion": {
-        },
-        "hdr-sync-request": {
-        },
-        "hdr-sync-allergy-request": {
-        },
-        "hdr-sync-appointment-request": {
-        },
-        "hdr-sync-consult-request": {
-        },
-        "hdr-sync-cpt-request": {
-        },
-        "hdr-sync-document-request": {
-        },
-        "hdr-sync-image-request": {
-        },
-        "hdr-sync-immunization-request": {
-        },
-        "hdr-sync-lab-request": {
-        },
-        "hdr-sync-med-request": {
-        },
-        "hdr-sync-order-request": {
-        },
-        "hdr-sync-patient-request": {
-        },
-        "hdr-sync-pov-request": {
-        },
-        "hdr-sync-problem-request": {
-        },
-        "hdr-sync-procedure-request": {
-        },
-        "hdr-sync-surgery-request": {
-        },
-        "hdr-sync-visit-request": {
-        },
-        "hdr-sync-vital-request": {
-        },
-        "hdr-xform-allergy-vpr": {
-        },
-        "hdr-xform-appointment-vpr": {
-        },
-        "hdr-xform-consult-vpr": {
-        },
-        "hdr-xform-cpt-vpr": {
-        },
-        "hdr-xform-document-vpr": {
-        },
-        "hdr-xform-image-vpr": {
-        },
-        "hdr-xform-immunization-vpr": {
-        },
-        "hdr-xform-lab-vpr": {
-        },
-        "hdr-xform-med-vpr": {
-        },
-        "hdr-xform-order-vpr": {
-        },
-        "hdr-xform-patient-vpr": {
-        },
-        "hdr-xform-pov-vpr": {
-        },
-        "hdr-xform-problem-vpr": {
-        },
-        "hdr-xform-procedure-vpr": {
-        },
-        "hdr-xform-surgery-vpr": {
-        },
-        "hdr-xform-visit-vpr": {
-        },
-        "hdr-xform-vital-vpr": {
-        },
-        "vler-sync-request": {
-        },
-        "vler-xform-vpr": {
-        },
-        "pgd-sync-request": {
-        },
-        "pgd-xform-vpr": {
-        },
+        "jmeadows-sync-request": {},
+        "jmeadows-sync-allergy-request": {},
+        "jmeadows-sync-appointment-request": {},
+        "jmeadows-sync-consult-request": {},
+        "jmeadows-sync-demographics-request": {},
+        "jmeadows-sync-dischargeSummary-request": {},
+        "jmeadows-sync-encounter-request": {},
+        "jmeadows-sync-immunization-request": {},
+        "jmeadows-sync-lab-request": {},
+        "jmeadows-sync-medication-request": {},
+        "jmeadows-sync-note-request": {},
+        "jmeadows-sync-order-request": {},
+        "jmeadows-sync-problem-request": {},
+        "jmeadows-sync-progressNote-request": {},
+        "jmeadows-sync-radiology-request": {},
+        "jmeadows-sync-vital-request": {},
+        "jmeadows-xform-allergy-vpr": {},
+        "jmeadows-xform-appointment-vpr": {},
+        "jmeadows-xform-consult-vpr": {},
+        "jmeadows-xform-demographics-vpr": {},
+        "jmeadows-xform-dischargeSummary-vpr": {},
+        "jmeadows-xform-encounter-vpr": {},
+        "jmeadows-xform-immunization-vpr": {},
+        "jmeadows-xform-lab-vpr": {},
+        "jmeadows-xform-medication-vpr": {},
+        "jmeadows-xform-note-vpr": {},
+        "jmeadows-xform-order-vpr": {},
+        "jmeadows-xform-problem-vpr": {},
+        "jmeadows-xform-progressNote-vpr": {},
+        "jmeadows-xform-radiology-vpr": {},
+        "jmeadows-xform-vital-vpr": {},
+        "jmeadows-pdf-document-transform": {},
+        "jmeadows-document-retrieval": {},
+        "jmeadows-cda-document-conversion": {},
+        "hdr-sync-request": {},
+        "hdr-sync-allergy-request": {},
+        "hdr-sync-appointment-request": {},
+        "hdr-sync-consult-request": {},
+        "hdr-sync-cpt-request": {},
+        "hdr-sync-document-request": {},
+        "hdr-sync-image-request": {},
+        "hdr-sync-immunization-request": {},
+        "hdr-sync-lab-request": {},
+        "hdr-sync-med-request": {},
+        "hdr-sync-order-request": {},
+        "hdr-sync-patient-request": {},
+        "hdr-sync-pov-request": {},
+        "hdr-sync-problem-request": {},
+        "hdr-sync-procedure-request": {},
+        "hdr-sync-surgery-request": {},
+        "hdr-sync-visit-request": {},
+        "hdr-sync-vital-request": {},
+        "hdr-xform-allergy-vpr": {},
+        "hdr-xform-appointment-vpr": {},
+        "hdr-xform-consult-vpr": {},
+        "hdr-xform-cpt-vpr": {},
+        "hdr-xform-document-vpr": {},
+        "hdr-xform-image-vpr": {},
+        "hdr-xform-immunization-vpr": {},
+        "hdr-xform-lab-vpr": {},
+        "hdr-xform-med-vpr": {},
+        "hdr-xform-order-vpr": {},
+        "hdr-xform-patient-vpr": {},
+        "hdr-xform-pov-vpr": {},
+        "hdr-xform-problem-vpr": {},
+        "hdr-xform-procedure-vpr": {},
+        "hdr-xform-surgery-vpr": {},
+        "hdr-xform-visit-vpr": {},
+        "hdr-xform-vital-vpr": {},
+        "vler-sync-request": {},
+        "vler-xform-vpr": {},
+        "vler-das-sync-request": {},
+        "vler-das-doc-retrieve": {},
+        "vler-das-xform-vpr": {},
+        "pgd-sync-request": {},
+        "pgd-xform-vpr": {},
         "record-enrichment": {
         	"tubeDetails": [{"ratio": 5000, "priority": {"startValue": 1, "endValue": 20}}, {"ratio": 3000, "priority": {"startValue": 21, "endValue": 40}}, {"ratio": 2000, "priority": {"startValue": 41, "endValue": 60}}, {"ratio": 1000, "priority": {"startValue": 61, "endValue": 80}}, {"ratio": 500, "priority": {"startValue": 81, "endValue": 100}}]
         },
-        "store-record": {
-        },
-        "solr-record-storage": {
-        },
-        "event-prioritization-request": {
-        },
+        "store-record": {},
+        "solr-record-storage": {},
+        "event-prioritization-request": {},
         <% @hdr_sites.each do |hdr_site| %>
         <% hdr_site['hdr']['hdr_sites'].each do |site| %>
         "vistahdr-<%= site['site_id'] %>-subscribe-request" :{
         },
         <% end %>
         <% end %>
-        "vista-record-processor-request": {
-        },
-        "operational-store-record": {
-        },
-        "publish-data-change-event": {
-        },
-        "activity-management-event": {
-        },
+        "vista-record-processor-request": {},
+        "operational-store-record": {},
+        "publish-data-change-event": {},
+        "activity-management-event": {},
         "resync-request": {
             "delay": 30
         },
@@ -893,8 +1086,8 @@
             "host": "127.0.0.1",
             "port": 4999
         },
-        "patient-record-retirement": {
-        }
+        "patient-record-retirement": {},
+        "sync-notification": {}
       }
     },
     <% if @vxsync['vxsync']['publish_tubes'] %>
@@ -914,7 +1107,9 @@
               "order",
               "ehmp-order",
               "ehmp-activity",
-              "ehmp-note"
+              "ehmp-note",
+              "visit",
+              "discharge"
             ]
           }
         }
@@ -931,12 +1126,27 @@
             "protocol": "http",
             "host": "<%= @pjds['ipaddress'] %>",
             "port": "<%= @pjds['jds']['cache_listener_ports']['vxsync'] %>",
-            "timeout": <%= @vxsync['vxsync']['jds_timeout'] %>
-        },
+            "timeout": <%= @vxsync['vxsync']['jds_timeout'] %>,
 
+            "ip_address": "<%= @pjds['ipaddress'] %>",
+            "tcp_port": <%= @pjds['jds']['ecp']['default_port'] %>,
+            "username": "<%= @osync1_username %>",
+            "password": "<%= @osync1_password %>",
+            "namespace": "<%= @pjds['jds']['cache_namespace'] %>"
+        },
         "solrClient": {
-            "core": "vpr",
-            "zooKeeperConnection": "<%= @solr['vx_solr']['zookeeper']['zookeeper_connection'] %>"
+            "childInstanceEnabled": <%= @vxsync['vxsync']['log_level']['solr_client']['child_instance_enabled'] %>,
+            "dataTimeoutMillis": <%= @node['solr_client']['data_timeout_millis'] %>,
+            "waitLoopDelayMillis": <%= @node['solr_client']['wait_loop_delay_millis'] %>,
+            "requeryLoopDelayMillis": <%= @node['solr_client']['requery_loop_delay_millis'] %>,
+            "core": "<%= @node['solr_client']['core'] %>",
+            "zooKeeperConnection": "<%= @zookeeper['zookeeper']['zookeeper_connection'] %>",
+            "path": "<%= @node['solr_client']['path'] %>",
+            "nodeEventLogLevel": "<%= @vxsync['vxsync']['log_level']['solr_client']['node_event'] %>",
+            "zookeeperEventLogLevel": "<%= @vxsync['vxsync']['log_level']['solr_client']['zookeeper_event'] %>",
+            "zooKeeperOptions": {
+                "retries": <%= @node['solr_client']['zookeeper_options']['retries'] %>
+            }
         },
 
         "solr-xform": {
@@ -962,7 +1172,8 @@
             "lncPath": "/term/lnc",
             "drugPath": "/term/drug",
             "jlvPath": "/term/jlv",
-            "jlvListPath": "/term/jlvList"
+            "jlvListPath": "/term/jlvList",
+            "terminologyPing": "/term/ping"
         },
     "documentStorage": {
       "staging": {
@@ -977,12 +1188,13 @@
     },
 
     "error-processing": {
+      "errorRetryLimit": <%= @vxsync['error_processing']['error_retry_limit'] %>,
       "jdsGetErrorLimit" : <%= @vxsync['error_processing']['jdsGetErrorLimit'] %>,
       "profiles": {
         "catastrophic-recovery": {
           "enabled": <%= @vxsync['error_processing']['profiles']['catastrophic_recovery']['enabled'] %>,
           "ignoreSeverity": true,
-          "loopDelayMillis": <%= @vxsync['error_processing']['loop_delay_millis'] %>,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['catastrophic_recovery']['loop_delay_millis'] %>,
           "jobTypes": [
             "error-request",
             "operational-store-record",
@@ -1068,13 +1280,17 @@
             "jmeadows-sync-request",
             "vler-sync-request",
             "vler-xform-vpr",
-            "enterprise-sync-request"
+            "vler-das-sync-request",
+            "vler-das-doc-retrieve",
+            "vler-das-xform-vpr",
+            "enterprise-sync-request",
+            "sync-notification"
           ]
         },
         "record-enrichment": {
           "enabled": <%= @vxsync['error_processing']['profiles']['record_enrichment']['enabled'] %>,
           "ignoreSeverity": true,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['record_enrichment']['loop_delay_millis'] %>,
           "jobTypes": [
             "record-enrichment"
           ]
@@ -1082,14 +1298,14 @@
         "activity-management": {
           "enabled": <%= @vxsync['error_processing']['profiles']['activity_management']['enabled'] %>,
           "ignoreSeverity": true,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['activity_management']['loop_delay_millis'] %>,
           "jobTypes": [
             "activity-management-event"
           ]
         },
         "jmeadows": {
           "enabled": <%= @vxsync['error_processing']['profiles']['jmeadows']['enabled'] %>,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['jmeadows']['loop_delay_millis'] %>,
           "jobTypes": [
             "jmeadows-sync-request",
 
@@ -1128,7 +1344,7 @@
         },
         "hdr": {
           "enabled": <%= @vxsync['error_processing']['profiles']['hdr']['enabled'] %>,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['hdr']['loop_delay_millis'] %>,
           "jobTypes": [
             "hdr-sync-request",
 
@@ -1171,15 +1387,24 @@
         },
         "vler": {
           "enabled": <%= @vxsync['error_processing']['profiles']['vler']['enabled'] %>,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['vler']['loop_delay_millis'] %>,
           "jobTypes": [
             "vler-sync-request",
             "vler-xform-vpr"
           ]
         },
+        "vlerdas": {
+          "enabled": <%= @vxsync['error_processing']['profiles']['vlerdas']['enabled'] %>,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['vlerdas']['loop_delay_millis'] %>,
+          "jobTypes": [
+            "vler-das-sync-request",
+            "vler-das-doc-retrieve",
+            "vler-das-xform-vpr"
+          ]
+        },
         "pgd": {
           "enabled": <%= @vxsync['error_processing']['profiles']['pgd']['enabled'] %>,
-          "loopDelayMillis": 30000,
+          "loopDelayMillis": <%= @vxsync['error_processing']['profiles']['pgd']['loop_delay_millis'] %>,
           "jobTypes": [
             "pgd-sync-request",
             "pgd-xform-vpr"
@@ -1203,10 +1428,7 @@
         "name": "root",
         "streams": [{
             "level": "<%= @vxsync['vxsync']['log_level']['loggers']['root'] %>",
-            "type": "rotating-file",
-            "path": "<%= @log_pattern %>",
-            "period": "1d",
-            "count": 7
+            "path": "<%= @log_pattern %>"
         }]
       }
     ],
@@ -1225,8 +1447,8 @@
         "syncPriority": 50,
         "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
         "configRefresh": <%= @vxsync['osync']['config_refresh'] %>,
-        "syncUrl": "http://<%= @vxsync['ipaddress'] %>:<%= @vxsync['vxsync']['web_service_port'] %>/sync/doLoad",
-        "statusUrl": "http://<%= @vxsync['ipaddress'] %>:<%= @vxsync['vxsync']['web_service_port'] %>/sync/status",
+        "syncUrl": "http://localhost:<%= @vxsync_sync_port %>/sync/doLoad",
+        "statusUrl": "http://localhost:<%= @vxsync_sync_port %>/sync/status",
         "mixedEnvironmentMode": <%= @vxsync['osync']['mixedEnvironmentMode'] %>,
         "activeUserThresholdDays": 30,
         "handlerProfiles": {
@@ -1280,28 +1502,19 @@
             "name": "root",
             "streams": [{
                 "level": "<%= @vxsync['osync']['log_level']['loggers']['root'] %>",
-                "type": "rotating-file",
-                "path": "/var/log/osync/osync.log",
-                "period": "1d",
-                "count": 7
+                "path": "/var/log/osync/osync.log"
             }]
         }, {
             "name": "valid_patients",
             "streams": [{
                 "level": "<%= @vxsync['osync']['log_level']['loggers']['valid_patients'] %>",
-                "type": "rotating-file",
-                "path": "/var/log/osync/osync_valid_patients.log",
-                "period": "1d",
-                "count": 7
+                "path": "/var/log/osync/osync_valid_patients.log"
             }]
         }, {
             "name": "results",
             "streams": [{
                 "level": "<%= @vxsync['osync']['log_level']['loggers']['results'] %>",
-                "type": "rotating-file",
-                "path": "/var/log/osync/osync_results.log",
-                "period": "1d",
-                "count": 7
+                "path": "/var/log/osync/osync_results.log"
             }]
         }],
         "metrics": [{
@@ -1318,6 +1531,7 @@
       },
       "lastAccessed": 180,
       "utilityLogLevel": "warn"
-    }
+    },
+    "syncNotifications": <%= @vxsync['vxsync']['syncNotifications'].to_json %>
   }
 }

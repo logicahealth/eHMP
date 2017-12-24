@@ -9,8 +9,22 @@ define([
     'main/api/WorkspaceFilters',
     'api/ResourceService',
     'api/SessionStorage',
-    'main/components/views/appletViews/TileSortManager'
-], function(Backbone, $, _, Handlebars, Gridster, Messaging, UserDefinedScreens, WorkspaceFilters, ResourceService, SessionStorage, TileSortManager) {
+    'main/components/views/appletViews/TileSortManager',
+    'hbs!main/components/applets/view_switchboard/switchTemplate'
+], function(
+    Backbone,
+    $,
+    _,
+    Handlebars,
+    Gridster,
+    Messaging,
+    UserDefinedScreens,
+    WorkspaceFilters,
+    ResourceService,
+    SessionStorage,
+    TileSortManager,
+    switchTemplate
+) {
     'use strict';
 
     function saveGridsterAppletsConfig(callback) {
@@ -54,7 +68,7 @@ define([
         className: 'viewType-optionsBox col-xs-3 text-center',
         initialize: function() {
             var displayType = getViewTypeDisplay(this.model.get('type'));
-            this.template = Handlebars.compile('<button type="button" aria-label="Press enter to select ' + displayType + ' view." class="btn btn-icon options-box {{type}}" data-viewtype="{{type}}"></button><p class="top-margin-xs">' + _.capitalize(displayType) + ' View</p>');
+            this.template = Handlebars.compile('<button type="button" aria-label="Select ' + displayType + ' view" class="btn btn-icon options-box {{type}}" data-viewtype="{{type}}"></button><p class="top-margin-xs">' + _.capitalize(displayType) + ' View</p>');
 
             var offset = this.model.get('paddingOffset');
             if (offset !== 0 && !_.isUndefined(offset)) {
@@ -190,12 +204,17 @@ define([
                 $(this.displayRegion.el).attr('data-view-type', viewType);
             } else {
                 var displayType = getViewTypeDisplay(model.get('type'));
-                var appletHtml = '<button type="button" aria-label="Press enter to open view options." class="btn btn-icon edit-applet applet-options-button"><i class="fa fa-cog"></i></button><br><h5 class="applet-title all-margin-no all-padding-no">' + this.appletTitle + '</h5><span class="right-padding-lg">' + _.capitalize(displayType) + '</span>';
-                appletHtml += '<span class="gs-resize-handle gs-resize-handle-both"></span><span class="gs-resize-handle gs-resize-handle-both"></span>';
+                var title = this.appletTitle;
                 NoSwitchView = NoSwitchView.extend({
-                    template: _.template(appletHtml)
+                    template: switchTemplate
                 });
-                this.displayRegion.show(new NoSwitchView());
+
+                this.displayRegion.show(new NoSwitchView({
+                    model: new Backbone.Model({
+                        display: displayType,
+                        title: title
+                    })
+                }));
             }
             var callback = function() {
                 if (self.onChangeView) {
@@ -219,7 +238,7 @@ define([
             containerElement.find('.applet-options-button').focus();
         },
         addLi: function(collectionView, buffer, options) {
-            collectionView.$el.append(buffer).append('<li class="col-xs-' + options.width + ' ' + options.divClass + '-box text-center"><button type="button" aria-label="Press enter to remove applet." class="btn btn-icon options-box ' + options.divClass + '" data-viewtype="' + options.dataViewType + '"><i class="' + options.iconClass + '"></i></button><p>' + options.buttonText + '</p></li>');
+            collectionView.$el.append(buffer).append('<li class="col-xs-' + options.width + ' ' + options.divClass + '-box text-center"><button type="button" aria-label="Remove applet" class="btn btn-icon options-box ' + options.divClass + '" data-viewtype="' + options.dataViewType + '"><i class="' + options.iconClass + '"></i></button><p>' + options.buttonText + '</p></li>');
         },
         forceInlineWidgetBounds: function($widget, minSize, maxSize) {
             $widget.data('minSizex', minSize.x).attr('data-min-sizex', minSize.x);

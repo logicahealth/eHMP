@@ -40,44 +40,18 @@ def choose_encounter_location
   expect(aa.perform_action("select cardiology", '')).to be_true
 end
 
-Then(/^Encounter section is available to choose$/) do
-  aa = EncounterFormData.instance
-  expect(aa.wait_until_action_element_visible("Set Encounter Section", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Encounter Title", "No visit set")).to be_true
-end
-
-Then(/^the user selects change current encounter$/) do
-  aa = EncounterFormData.instance
-  expect(aa.perform_action("Set Encounter Section", '')).to be_true
-end
-
 Then(/^user chooses to set a new visit$/) do
   aa = EncounterFormData.instance
   expect(aa.perform_action("New Visit", '')).to be_true
-end
-
-Then(/^the set visit button is disabled$/) do
-  aa = EncounterFormData.instance
-  expect(aa.get_element("set visit").attribute("disabled")).to be_true
 end
 
 Then(/^user chooses new encounter location$/) do
   choose_encounter_location
 end
 
-Then(/^the set visit button is enabled$/) do
-  aa = EncounterFormData.instance
-  expect(aa.get_element("set visit").attribute("disabled")).to be_false
-end
-
 Then(/^user selects set to apply changes$/) do
   aa = EncounterFormData.instance
   expect(aa.perform_action("set visit", '')).to be_true
-end
-
-Then(/^new encounter is set$/) do
-  aa = EncounterFormData.instance
-  expect(aa.perform_verification("Encounter Location", "Cardiology")).to be_true
 end
 
 Then(/^user chooses to set a clinic appointments$/) do

@@ -358,7 +358,7 @@ define([
         orderIndex: 10,
         view: trayView,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista();
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista();
         }
     });
     return EncountersDefaultTrayView;

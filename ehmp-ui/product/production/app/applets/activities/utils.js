@@ -11,7 +11,6 @@ define([
                 control: 'select',
                 name: 'primarySelection',
                 label: 'Filter activities by:',
-                title: 'Use up and down arrows to view options and then press enter to select.',
                 srOnlyLabel: true,
                 pickList: [{
                     label: 'Activities Related to Me',

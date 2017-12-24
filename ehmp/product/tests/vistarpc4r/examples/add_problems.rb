@@ -4,13 +4,13 @@
 # require './../lib/vistarpc4r/vista_rpc'
 # require './../lib/vistarpc4r/rpc_broker_connection'
 # 
-# broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'REDACTED', 'REDACTED', false)
+# broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', PORT, 'USER  ', 'PW      ', false)
 # 
 # broker.connect
 # p "The RPC Broker Connection status is #{broker.isConnected}"
 # 
 # #broker = RPCBrokerConnection.new('192.168.1.20', 9270, 'sys.admin', 'vista!123')
-# # broker = RPCBrokerConnection.new('IP        ', PORT, 'REDACTED', 'REDACTED', false)
+# # broker = RPCBrokerConnection.new('IP        ', PORT, 'USER  ', 'PW      ', false)
 # 
 # # broker.connect
 # broker.setContext('OR CPRS GUI CHART')

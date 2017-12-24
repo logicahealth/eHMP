@@ -3,13 +3,31 @@
  */
 
 /*jslint node: true, nomen: true, unparam: true */
-/*global jquery, $, _, define, Marionette, describe, it, expect, beforeEach, spyOn */
+/*global jquery, $, _, define, Marionette, describe, it, expect, beforeEach, spyOn, spyOnEvent, afterEach, afterAll */
 
 'use strict';
 
 // Jasmine Unit Testing Suite
-define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api/UIComponents', 'jasminejquery'],
-    function(Messaging, $, Handlebars, Backbone, Marionette, UI) {
+define([
+        'api/Messaging',
+        'jquery',
+        'handlebars',
+        'backbone',
+        'marionette',
+        'main/UILibrary',
+        'main/ui_components/modal/region',
+        'api/UIComponents',
+        'jasminejquery'
+    ],
+    function(
+        Messaging,
+        $,
+        Handlebars,
+        Backbone,
+        Marionette,
+        UI,
+        ModalRegion
+    ) {
         var testLayoutView,
             $testLayoutView,
             modalShowView,
@@ -41,35 +59,37 @@ define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main
         var TestLayoutView = Backbone.Marionette.LayoutView.extend({
             template: Handlebars.compile('<test id="modal-region"></test>'),
             regions: {
-                'modalRegion': '#modal-region'
+                modalRegion: {
+                    el: '#modal-region',
+                    regionClass: ModalRegion
+                }
             },
             initialize: function() {
                 var self = this;
-                Messaging.reply('get:adkApp:region', function() {  // component show() expects a region handed back
+                Messaging.reply('get:adkApp:region', function() { // component show() expects a region handed back
                     return self.getRegion('modalRegion');
                 });
             },
             onRender: function() {
-                $('body').append(this.$el);  // for component view to be inserted here on show()
+                $('body').append(this.$el); // for component view to be inserted here on show()
             }
         });
 
         function showModal(modalOptions) {
             modalView = new UI.Modal({ view: modalShowView, options: modalOptions });
-            modalView.show();  // inserted into modalRegion of rendered testLayoutView
+            modalView.show(); // inserted into modalRegion of rendered testLayoutView
 
             $testLayoutView = testLayoutView.$el;
-            $testLayoutView.find('.modal.fade').removeClass('fade');  // don't have to wait for Modal.hide()
+            $testLayoutView.find('.modal.fade').removeClass('fade'); // don't have to wait for Modal.hide()
         }
 
         describe('A modal component', function() {
             afterAll(function() {
-                Messaging.reset('get:adkApp:region');  // prevent listener from persisting throughout remaining unit tests
+                Messaging.reset('get:adkApp:region'); // prevent listener from persisting throughout remaining unit tests
             });
             afterEach(function() {
-                UI.Modal.hide();  // remove #mainModalDialog
-                $testLayoutView.remove();  // remove #modal-region
-                //$( "div[class|='modal'],test[id|='modal']" ).remove();  // same as two above
+                UI.Modal.hide(); // remove #mainModalDialog
+                $testLayoutView.remove(); // remove #modal-region
             });
 
             describe('basic', function() {
@@ -87,7 +107,6 @@ define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main
                     UI.Modal.hide();
 
                     expect(spy).toHaveBeenTriggered();
-                    expect($testLayoutView.find('#modal-region')).toBeEmpty();
                 });
 
                 it('show() creates correct modal-related classes and ids', function() {
@@ -99,14 +118,14 @@ define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main
                 });
 
                 describe('options', function() {
-                    describe('headerView', function () {
-                        it('false: modal contains header built from modalOptions.title', function () {
+                    describe('headerView', function() {
+                        it('false: modal contains header built from modalOptions.title', function() {
                             modalOptions.headerView = false;
                             showModal(modalOptions);
                             expect($testLayoutView.find('.modal-title')).toContainText(modalOptions.title);
 
                         });
-                        it('true: modal contains header built from HeaderView', function () {
+                        it('true: modal contains header built from HeaderView', function() {
                             modalOptions.headerView = HeaderView;
 
                             showModal(modalOptions);
@@ -115,19 +134,19 @@ define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main
                     });
 
                     describe('footerView', function() {
-                        it('false: modal contains .modal-footer built from default', function () {
+                        it('false: modal contains .modal-footer built from default', function() {
                             modalOptions.footerView = false;
                             showModal(modalOptions);
                             expect($testLayoutView.find('.modal-content #modal-footer')).toHaveLength(1);
-                            expect($testLayoutView.find('.modal-footer')).toContainHtml('<button type="button" data-dismiss="modal" id="modal-close-button" title="Press enter to close." class="btn btn-default btn-sm">Close</button>');
+                            expect($testLayoutView.find('.modal-footer')).toContainHtml('<button type="button" data-dismiss="modal" id="modal-close-button" class="btn btn-default btn-sm">Close</button>');
                         });
-                        it('true: modal contains .modal-footer built from FooterView', function () {
+                        it('true: modal contains .modal-footer built from FooterView', function() {
                             modalOptions.footerView = FooterView;
                             showModal(modalOptions);
                             expect($testLayoutView.find('.modal-content #modal-footer')).toHaveLength(1);
                             expect($testLayoutView.find('.modal-footer')).toContainHtml(footerViewTemplate);
                         });
-                        it('none: modal contains no footer', function () {
+                        it('none: modal contains no footer', function() {
                             modalOptions.footerView = 'none';
                             showModal(modalOptions);
                             expect($testLayoutView.find('#modal-footer')).toHaveClass('hidden');
@@ -135,7 +154,7 @@ define(['api/Messaging', 'jquery', 'handlebars', 'backbone', 'marionette', 'main
                     });
 
                     describe('backdrop', function() {
-                        it('false: modal does not contain backdrop', function () {
+                        it('false: modal does not contain backdrop', function() {
                             modalOptions.backdrop = false;
                             showModal(modalOptions);
                             expect($('body').find('.modal-backdrop')).toHaveLength(0);

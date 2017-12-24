@@ -52,7 +52,8 @@ module.exports = [{
         synchronize: false
     },
     requiredPermissions: [],
-    isPatientCentric: false
+    isPatientCentric: false,
+    bypassCsrf: true
 }, {
     name: 'authentication-external-systems-destroy-session',
     path: '/systems/external',

@@ -108,7 +108,7 @@ define(['backbone', ], function(Backbone) {
     };
 
     CRS.removeStyle = function(view) {
-        if (_.isUndefined(view)) {
+        if (_.isUndefined(view) || !_.get(document, ['head', 'children', CSS_TAG_NAME], false)) {
             return;
         }
 
@@ -120,7 +120,7 @@ define(['backbone', ], function(Backbone) {
         CRS.activeItems = [];
         CRS.activeItemOn = -1;
 
-        var crsStyle = view.$el.closest('html').find('head #' + CSS_TAG_NAME);
+        var crsStyle = $('head #' + CSS_TAG_NAME);
         if (crsStyle.length > 0) {
             crsStyle.remove();
         }

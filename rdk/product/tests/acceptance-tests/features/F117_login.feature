@@ -3,9 +3,9 @@ Feature: provide login services.
 
 @site_list
 Scenario: Client will be able to retrieve site list without authentication
-	When client requests the authentication list without authentication
+	When client requests the facility list without authentication
 	Then a successful response is returned
-	And the authentication list response contains fields
+	And the facility list response contains fields
 		| field    | value  |
 		| name     | IS_SET |
 		| division | IS_SET |

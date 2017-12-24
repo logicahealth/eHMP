@@ -9,7 +9,8 @@ require('../../../../env-setup');
 
 var _ = require('underscore');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 config.terminology.host = vx_sync_ip;
@@ -27,11 +28,11 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 
 var originalVaDocumentRecord = {
     'documentClass': 'PROGRESS NOTES',
-    'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+    'documentDefUid': 'urn:va:doc-def:SITE:1632',
     'documentTypeCode': 'D',
     'documentTypeName': 'Advance Directive',
     'encounterName': '20 MINUTE May 16, 2007',
-    'encounterUid': 'urn:va:visit:9E7A:3:5670',
+    'encounterUid': 'urn:va:visit:SITE:3:5670',
     'amended': 20070516095030,
     'entered': 20070516095030,
     'facilityCode': 500,
@@ -43,7 +44,7 @@ var originalVaDocumentRecord = {
         'name': 'CONSULT NOTE',
         'vuid': 'urn:va:vuid:4706090'
     },
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'referenceDateTime': 200705160950,
     'stampTime': 20070516095030,
     'status': 'COMPLETED',
@@ -51,39 +52,39 @@ var originalVaDocumentRecord = {
         'clinicians': [{
             'name': 'LABTECH,FIFTYNINE',
             'role': 'AU',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'LABTECH,FIFTYNINE',
             'role': 'S',
             'signature': 'FIFTYNINE LABTECH',
             'signedDateTime': 20070516095031,
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'LABTECH,SIXTY',
             'role': 'ATT',
-            'uid': 'urn:va:user:9E7A:10000000060'
+            'uid': 'urn:va:user:SITE:10000000060'
         }, {
             'name': 'LABTECH,SIXTYONE',
             'role': 'C',
             'signature': 'SIXTYONE LABTECH',
             'signedDateTime': 20070516095030,
-            'uid': 'urn:va:user:9E7A:10000000061'
+            'uid': 'urn:va:user:SITE:10000000061'
         }, {
             'name': 'LABTECH,FIFTYNINE',
             'role': 'ES',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }, {
             'name': 'MG',
             'role': 'E',
-            'uid': 'urn:va:user:9E7A:10000000049'
+            'uid': 'urn:va:user:SITE:10000000049'
         }],
         'content': '   VistA Imaging - Scanned Document\r\n',
         'enteredDateTime': 200705160949,
         'dateTime': 200705160950,
         'status': 'COMPLETED',
-        'uid': 'urn:va:document:9E7A:3:3853'
+        'uid': 'urn:va:document:SITE:3:3853'
     }],
-    'uid': 'urn:va:document:9E7A:3:3853'
+    'uid': 'urn:va:document:SITE:3:3853'
 };
 var originalVaDocumentJob = {
     record: originalVaDocumentRecord

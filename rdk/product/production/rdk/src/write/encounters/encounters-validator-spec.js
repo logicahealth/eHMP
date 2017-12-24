@@ -12,7 +12,7 @@ describe('encounters writeback validator', function() {
         writebackContext.model = {
             'patientDFN': '3',
             'isInpatient': '0',
-            'locationUid': 'urn:va:location:9E7A:32',
+            'locationUid': 'urn:va:location:SITE:32',
             'encounterDateTime': '201512061112',
             'primaryProviderIEN': '991',
             'isPrimaryProvider': '0'

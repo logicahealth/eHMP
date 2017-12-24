@@ -41,7 +41,7 @@ Feature: F302 - Enhance Care Team Header
 
   @F302-3.2_PatientCareTeamDetailsKodak @US5256 @DE1309
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "TWENTYTHREE,PATIENT"
     And "Current Patient:" is displayed as "Twentythree, patient"
@@ -61,7 +61,7 @@ Feature: F302 - Enhance Care Team Header
 
 @F302-3.1_PatientCareTeamDetailsKodak @US5256 @DE1309 @non_default_login @DE4009
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
     And "Current Patient:" is displayed as "Twentythree, Inpatient"

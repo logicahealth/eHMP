@@ -14,6 +14,9 @@ app.register('/progress-notes-titles-asu-filtered', ROOT + '/src/write/pick-list
 require('../src/write/pick-list/pick-list-in-memory-rpc-call').loadLargePickLists(app);
 
 var port = app.config.appServer.port;
+
+app.logger.info('UV_THREADPOOL_SIZE = %s', process.env.UV_THREADPOOL_SIZE);
+
 var server = app.rdkListen(port, function() {
     var address = server.address();
     app.logger.info('Writeback Pick List Service listening at http://%s:%s', address.host, address.port);

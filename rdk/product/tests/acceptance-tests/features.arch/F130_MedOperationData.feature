@@ -14,9 +14,9 @@ Feature: F130 Non-VA Medications (write-back)
 
   @MedicationListbyCount  @US1963 @US2624 @onc
   Scenario: List of medications beginning witn "ALC" in alphabetical order and count 10 (10 itmes starts with name = ALC)
-    Given a patient with pid "9E7A;271" has been synced through the RDK API
+    Given a patient with pid "SITE;271" has been synced through the RDK API
     # /resource/writeback/med/searchlist?param={"search":"alc","count":"10"}
-    Then the client Search  Medication List begin with ALC for the patient "9E7A;271" and "path" in VPR format
+    Then the client Search  Medication List begin with ALC for the patient "SITE;271" and "path" in VPR format
     Then a successful response is returned
       And the VPR results contain
         |name |ALCAINE            |
@@ -41,9 +41,9 @@ Feature: F130 Non-VA Medications (write-back)
 
   @MedicationScheduleList @US1963 @onc
   Scenario: Testing random Medication Schedule list
-    Given a patient with pid "9E7A;271" has been synced through the RDK API
+    Given a patient with pid "SITE;271" has been synced through the RDK API
     # /resource/writeback/med/schedule?param={"dfn":"100695","locien":"0"}
-    Then the client Search  Medication Schedule for the patient "9E7A;271" and "path" in VPR format
+    Then the client Search  Medication Schedule for the patient "SITE;271" and "path" in VPR format
     Then a successful response is returned
     And the VPR results contain
       |name |   Q3H   | 
@@ -96,9 +96,9 @@ Feature: F130 Non-VA Medications (write-back)
 
   @MedicationByDefaults @US1963 @onc
   Scenario: Selecting Default Medication Name
-    Given a patient with pid "9E7A;271" has been synced through the RDK API
+    Given a patient with pid "SITE;271" has been synced through the RDK API
     # /resource/writeback/med/defaults?param={"oi":"1348","pstype":"X","orvp": 100695,"needpi":"Y", "pkiactiv":"Y"}
-    Then the client Search  Default Medication for the patient "9E7A;271" and "path" in VPR format
+    Then the client Search  Default Medication for the patient "SITE;271" and "path" in VPR format
     Then a successful response is returned
     And the VPR results contain
       |type |   display   | 

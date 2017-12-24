@@ -6,6 +6,7 @@ define([
     var Roles = ADK.Resources.Picklist.Collection.extend({
         resource: 'write-pick-list-roles-for-team',
         model: Role,
+        comparator: 'name',
         params: function(method, options) {
             return {
                 teamID: options.teamID || ''

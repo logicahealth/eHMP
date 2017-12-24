@@ -26,7 +26,7 @@ function getDocumentImages(req, res) {
     vix.getImagesForDocument(req, function(error, response) {
         if (error) {
             var imageError = new Error(error);
-            return res.status(httpstatus.bad_request).rdkSend(imageError);
+            return res.status(httpstatus.internal_server_error).rdkSend(imageError);
         }
         return res.status(httpstatus.ok).rdkSend(response);
     });

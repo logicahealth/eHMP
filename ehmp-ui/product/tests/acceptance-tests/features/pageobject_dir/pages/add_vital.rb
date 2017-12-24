@@ -3,7 +3,7 @@
 class AddVitalModal < SitePrism::Page
   element :btn_expand_collapse_button, ".expandCollapseAll button"
   element :fld_temp_location, "#temperature-location-po"
-  element :fld_modal_title, '#main-workflow-label-Enter-Vitals'
+  element :fld_modal_title, '[id^=main-workflow-label-view]'
 
   element :fld_bp_input, "[name='bpInputValue']"
   element :rbn_bp_unavailable, "[name='bp-radio-po'][value='Unavailable']"
@@ -62,4 +62,20 @@ class AddVitalModal < SitePrism::Page
   element :rbn_cg_cm, "[name='circumValue-radio-units'][value='cm']"
   element :fld_cg_site, "[id^='cg-site-po']"
   element :fld_cg_location, "[id^='cg-location-po']"
+
+  element :fld_error, 'span.help-block.error'
+
+  def map_elements
+    vital_elements = {}
+    vital_elements['Respiration Input Box'] = fld_resp_input
+    vital_elements['PO Input Box'] = fld_pulseox_input 
+    vital_elements['PO Supplemental Oxygen Flow Rate Input Box'] = fld_pulseox_suppox
+    vital_elements['BP Input Box'] = fld_bp_input
+    vital_elements['Temp Input Box'] = fld_temp_input
+    vital_elements['Temp Location Drop Down'] = fld_temp_location
+    vital_elements['Pulse Input Box'] = fld_pulse_input
+    vital_elements['Pulse Method Drop Down'] = fld_pulse_method
+    vital_elements['Pulse Position Drop Down'] = fld_pulse_position
+    vital_elements
+  end
 end

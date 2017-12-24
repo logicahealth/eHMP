@@ -60,9 +60,9 @@ def start_activity_payload(pid)
   @activity_user_id = user_id
 
   # TODO: HOW TO HANDLE THE VISIT HARD CODED
-                              #{"deploymentId"=>"VistaCore:Order", "processDefId"=>"Order.Request", "parameter"=>{"requestActivity"=>{"objectType"=>"requestActivity", "patientUid"=>"urn:va:patient:9E7A:3:3", "authorUid"=>"urn:va:user:9E7A:10000000016", "creationDateTime"=>"20160815000000", "domain"=>"ehmp-activity", "subDomain"=>"request", "visit"=>{"location"=>"urn:va:location:9E7A:195", "serviceCategory"=>"I", "dateTime"=>"20160812134500", "locationDesc"=>"Cardiology"}, "ehmpState"=>"accepted", "displayName"=>"Test ", "referenceId"=>"", "instanceName"=>"Test", "data"=>{"activity"=>{"objectType"=>"activity", "deploymentId"=>"VistaCore:", "processDefinitionId"=>"Order.Request", "processInstanceId"=>"", "state"=>"accepted", "initiator"=>"10000000016", "assignTo"=>"Person", "timeStamp"=>"", "urgency"=>"9", "assignedTo"=>"9E7A;10000000270", "instanceName"=>"TestAddRequ", "domain"=>"Request", "sourceFacilityId"=>"500", "destinationFacilityId"=>"500", "type"=>"Order"}, "signals"=>[], "requests"=>{"objectType"=>"request", "taskinstanceId"=>"", "urgency"=>"routine", "earliestDate"=>"20160816000000", "latestDate"=>"20160915000000", "title"=>"TestAddRequest 2016-08-15 13:17:25", "assignTo"=>"Person", "request"=>"TestAddRequest 2016-08-15 13:17:25", "submittedByUid"=>"urn:va:user:9E7A:10000000016", "submittedByName"=>"TDNURSE,ONE", "submittedTimeStamp"=>"2016-08-15T13:17:25.475Z", "visit"=>{"location"=>"urn:va:location:9E7A:195", "serviceCategory"=>"I", "dateTime"=>"20160812134500", "locationDesc"=>"Cardiology"}, "route"=>{"facility"=>"500", "facilityName"=>"", "person"=>"9E7A;10000000270", "personName"=>"USER, PANORAMA"}}, "responses"=>[]}}, "icn"=>"9E7A;3", "pid"=>"9E7A;3", "instanceName"=>"TestAddRequest 2016-08-15 13:17:25", "formAction"=>"accepted", "urgency"=>"9", "subDomain"=>"Request", "assignedTo"=>"9E7A;10000000270", "type"=>"Order", "facility"=>"500", "destinationFacility"=>"500", "description"=>"TestDesc 2016-08-15 13:17:25"}}
-                             #{"deploymentId":"VistaCore:Order:",  "processDefId":"Order.Request","parameter":{"requestActivity":{"objectType":"requestActivity","patientUid":"urn:va:patient:9E7A:3:3","authorUid":"urn:va:user:9E7A:10000000016",                              "creationDateTime":"20160816000000","domain":"ehmp-activity","subDomain":"request","visit":{"location":"urn:va:location:9E7A:195","serviceCategory":"I","dateTime":"20160812134500","locationDesc":"Cardiology"},"ehmpState":"accepted","displayName":"Test","referenceId":"","instanceName":"TestAddRe","data":{"activity":{"objectType":"activity","deploymentId":"VistaCore:Order","processDefinitionId":"Order.Request","processInstanceId":"","state":"accepted","initiator":"10000000016","timeStamp":"","urgency":"9","assignedTo":"9E7A;10000000270","instanceName":"TestAddRequest 2016-","domain":"Request","sourceFacilityId":"500","destinationFacilityId":"500","type":"Order","assignTo":"Person"},"signals":[],"requests":[{"objectType":"request","taskinstanceId":"","urgency":"routine","earliestDate":"20160817000000","latestDate":"20160916000000","title":"TestAd","request":"TestAddRequest 2016-08-16 14:12:14","submittedByUid":"urn:va:user:9E7A:10000000016","submittedByName":"TDNURSE,ONE","submittedTimeStamp":"2016-08-16T14:12:14.653Z","visit":{"location":"urn:va:location:9E7A:195","serviceCategory":"I","dateTime":"20160812134500","locationDesc":"Cardiology"},"assignTo":"Person","route":{"facility":"500","facilityName":"","person":"9E7A;10000000270","personName":"USER, PANORAMA"}}],"responses":[]}},"icn":"9E7A;3","pid":"9E7A;3","instanceName":"TestAddRequest 2016-08-16 14:12:14","formAction":"accepted","urgency":"9","subDomain":"Request","assignedTo":"9E7A;10000000270","type":"Order","facility":"500","destinationFacility":"500","description":"TestDesc 2016-08-16 14:12:14"}}
-  payload_json = JSON.parse(%Q[{"deploymentId":"#{@deployment_id}","processDefId":"Order.Request","parameter":{"requestActivity":{"objectType":"requestActivity","patientUid":"urn:va:patient:#{facility}:#{patient_id}:#{patient_id}","authorUid":"urn:va:user:9E7A:#{user_id}","creationDateTime":"#{tomorrow}","domain":"ehmp-activity","subDomain":"request","visit":{"location":"urn:va:location:9E7A:158","serviceCategory":"X","dateTime":"20140814130730","locationDesc":"7A GEN MED"},"ehmpState":"accepted","displayName":"#{title}","referenceId":"","instanceName":"#{title}","data":{"activity":{"objectType":"activity","deploymentId":"#{@deployment_id}","processDefinitionId":"Order.Request","processInstanceId":"","state":"accepted","initiator":"#{user_id}","assignTo":"Me","timeStamp":"","urgency":9,"assignedTo":"9E7A;#{user_id}","instanceName":"#{title}","domain":"Request","sourceFacilityId":"500","type":"Order"},"signals":[],                                                "requests":[{"objectType":"request","taskinstanceId":"","urgency":"routine","earliestDate":"#{tomorrow}","latestDate":"#{nextmonth}","title":"#{title}","assignTo":"Me","submittedByUid":"urn:va:user:9E7A:#{user_id}","submittedByName":"USER,PANORAMA","submittedTimeStamp":"#{timestamp}","visit":{"location":"urn:va:location:9E7A:158","serviceCategory":"X","dateTime":"20140814130730","locationDesc":"7A GEN MED"}}],"responses":[]}},"icn":"#{pid}","pid":"#{pid}","instanceName":"#{title}","formAction":"accepted","urgency":"9","subDomain":"Request","assignedTo":"9E7A;#{user_id}","type":"Order","facility":"9E7A","description":"Test Description."}}]).to_json
+                              #{"deploymentId"=>"VistaCore:Order", "processDefId"=>"Order.Request", "parameter"=>{"requestActivity"=>{"objectType"=>"requestActivity", "patientUid"=>"urn:va:patient:SITE:3:3", "authorUid"=>"urn:va:user:SITE:10000000016", "creationDateTime"=>"20160815000000", "domain"=>"ehmp-activity", "subDomain"=>"request", "visit"=>{"location"=>"urn:va:location:SITE:195", "serviceCategory"=>"I", "dateTime"=>"20160812134500", "locationDesc"=>"Cardiology"}, "ehmpState"=>"accepted", "displayName"=>"Test ", "referenceId"=>"", "instanceName"=>"Test", "data"=>{"activity"=>{"objectType"=>"activity", "deploymentId"=>"VistaCore:", "processDefinitionId"=>"Order.Request", "processInstanceId"=>"", "state"=>"accepted", "initiator"=>"10000000016", "assignTo"=>"Person", "timeStamp"=>"", "urgency"=>"9", "assignedTo"=>"SITE;10000000270", "instanceName"=>"TestAddRequ", "domain"=>"Request", "sourceFacilityId"=>"500", "destinationFacilityId"=>"500", "type"=>"Order"}, "signals"=>[], "requests"=>{"objectType"=>"request", "taskinstanceId"=>"", "urgency"=>"routine", "earliestDate"=>"20160816000000", "latestDate"=>"20160915000000", "title"=>"TestAddRequest 2016-08-15 13:17:25", "assignTo"=>"Person", "request"=>"TestAddRequest 2016-08-15 13:17:25", "submittedByUid"=>"urn:va:user:SITE:10000000016", "submittedByName"=>"TDNURSE,ONE", "submittedTimeStamp"=>"2016-08-15T13:17:25.475Z", "visit"=>{"location"=>"urn:va:location:SITE:195", "serviceCategory"=>"I", "dateTime"=>"20160812134500", "locationDesc"=>"Cardiology"}, "route"=>{"facility"=>"500", "facilityName"=>"", "person"=>"SITE;10000000270", "personName"=>"USER, PANORAMA"}}, "responses"=>[]}}, "icn"=>"SITE;3", "pid"=>"SITE;3", "instanceName"=>"TestAddRequest 2016-08-15 13:17:25", "formAction"=>"accepted", "urgency"=>"9", "subDomain"=>"Request", "assignedTo"=>"SITE;10000000270", "type"=>"Order", "facility"=>"500", "destinationFacility"=>"500", "description"=>"TestDesc 2016-08-15 13:17:25"}}
+                             #{"deploymentId":"VistaCore:Order:",  "processDefId":"Order.Request","parameter":{"requestActivity":{"objectType":"requestActivity","patientUid":"urn:va:patient:SITE:3:3","authorUid":"urn:va:user:SITE:10000000016",                              "creationDateTime":"20160816000000","domain":"ehmp-activity","subDomain":"request","visit":{"location":"urn:va:location:SITE:195","serviceCategory":"I","dateTime":"20160812134500","locationDesc":"Cardiology"},"ehmpState":"accepted","displayName":"Test","referenceId":"","instanceName":"TestAddRe","data":{"activity":{"objectType":"activity","deploymentId":"VistaCore:Order","processDefinitionId":"Order.Request","processInstanceId":"","state":"accepted","initiator":"10000000016","timeStamp":"","urgency":"9","assignedTo":"SITE;10000000270","instanceName":"TestAddRequest 2016-","domain":"Request","sourceFacilityId":"500","destinationFacilityId":"500","type":"Order","assignTo":"Person"},"signals":[],"requests":[{"objectType":"request","taskinstanceId":"","urgency":"routine","earliestDate":"20160817000000","latestDate":"20160916000000","title":"TestAd","request":"TestAddRequest 2016-08-16 14:12:14","submittedByUid":"urn:va:user:SITE:10000000016","submittedByName":"TDNURSE,ONE","submittedTimeStamp":"2016-08-16T14:12:14.653Z","visit":{"location":"urn:va:location:SITE:195","serviceCategory":"I","dateTime":"20160812134500","locationDesc":"Cardiology"},"assignTo":"Person","route":{"facility":"500","facilityName":"","person":"SITE;10000000270","personName":"USER, PANORAMA"}}],"responses":[]}},"icn":"SITE;3","pid":"SITE;3","instanceName":"TestAddRequest 2016-08-16 14:12:14","formAction":"accepted","urgency":"9","subDomain":"Request","assignedTo":"SITE;10000000270","type":"Order","facility":"500","destinationFacility":"500","description":"TestDesc 2016-08-16 14:12:14"}}
+  payload_json = JSON.parse(%Q[{"deploymentId":"#{@deployment_id}","processDefId":"Order.Request","parameter":{"requestActivity":{"objectType":"requestActivity","patientUid":"urn:va:patient:#{facility}:#{patient_id}:#{patient_id}","authorUid":"urn:va:user:SITE:#{user_id}","creationDateTime":"#{tomorrow}","domain":"ehmp-activity","subDomain":"request","visit":{"location":"urn:va:location:SITE:158","serviceCategory":"X","dateTime":"20140814130730","locationDesc":"7A GEN MED"},"ehmpState":"accepted","displayName":"#{title}","referenceId":"","instanceName":"#{title}","data":{"activity":{"objectType":"activity","deploymentId":"#{@deployment_id}","processDefinitionId":"Order.Request","processInstanceId":"","state":"accepted","initiator":"#{user_id}","assignTo":"Me","timeStamp":"","urgency":9,"assignedTo":"SITE;#{user_id}","instanceName":"#{title}","domain":"Request","sourceFacilityId":"500","type":"Order"},"signals":[],                                                "requests":[{"objectType":"request","taskinstanceId":"","urgency":"routine","earliestDate":"#{tomorrow}","latestDate":"#{nextmonth}","title":"#{title}","assignTo":"Me","submittedByUid":"urn:va:user:SITE:#{user_id}","submittedByName":"USER,PANORAMA","submittedTimeStamp":"#{timestamp}","visit":{"location":"urn:va:location:SITE:158","serviceCategory":"X","dateTime":"20140814130730","locationDesc":"7A GEN MED"}}],"responses":[]}},"icn":"#{pid}","pid":"#{pid}","instanceName":"#{title}","formAction":"accepted","urgency":"9","subDomain":"Request","assignedTo":"SITE;#{user_id}","type":"Order","facility":"SITE","description":"Test Description."}}]).to_json
 end
 
 When(/^the client starts an activity on patient "([^"]*)"$/) do |pid|
@@ -103,7 +103,7 @@ def request_activities_instances_available(user, table)
 end
 
 When(/^the client requests open activities for the staff context$/) do |table|
-  request_activities_instances_available "REDACTED", table
+  request_activities_instances_available "PW         ", table
 end
 
 When(/^the clicent requests open activities for the patient context$/) do |table|
@@ -166,7 +166,22 @@ When(/^the user tdnurse has started an activity assigned to a person with parame
     parameters[parameter] = value
   end
   payload_json = start_person_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, headers)
+end
+
+When(/^the user tdnurse has started an activity assigned to a person in the future with parameters$/) do |table|
+  request = RDKQuery.new('activities-start')
+  headers = {}
+  headers['Content-Type'] = "application/json"
+  path = request.path
+
+  parameters = {}
+  table.rows.each do | parameter, value |
+    parameters[parameter] = value
+  end
+  parameters["earliestDate"] = Date.today.next.next.strftime("%Y%m%d040000")
+  payload_json = start_person_activity(parameters).to_json
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, headers)
 end
 
 Given(/^the user "([^"]*)" has started an activity assigned to a person with parameters$/) do |user, table|
@@ -194,7 +209,7 @@ Given(/^the user tdnurse has started an activity for any team with parameters$/)
     parameters[parameter] = value
   end
   payload_json = start_anyteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, headers)
 end
 
 Given(/^the user tdnurse has started an activity for my teams with parameters$/) do |table|
@@ -208,7 +223,7 @@ Given(/^the user tdnurse has started an activity for my teams with parameters$/)
     parameters[parameter] = value
   end
   payload_json = start_myteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, headers)
 end
 
 Given(/^the user tdnurse has started an activity assigned to me with parameters$/) do |table|
@@ -220,12 +235,17 @@ Given(/^the user tdnurse has started an activity assigned to me with parameters$
     parameters[parameter] = value
   end
   payload_json = start_activity_assignedtome(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, TaskHelper.headers)
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, TaskHelper.headers)
 end
 
 Given(/^the user "([^"]*)" has started a consult with parameters$/) do |user, table|
   expect(@deployment_id).to_not be_nil
   activities_start_call user, table
+end
+
+Given(/^the user "([^"]*)" has started a discharge with parameters$/) do |user, table|
+  expect(@deployment_id).to_not be_nil
+  discharge_start_call user, table
 end
 
 Given(/^the user tdnurse has started an activity for Patient's Teams with parameters$/) do |table|
@@ -239,7 +259,7 @@ Given(/^the user tdnurse has started an activity for Patient's Teams with parame
     parameters[parameter] = value
   end
   payload_json = start_patientteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "SITE;USER    ", "PW      ", payload_json, headers)
 end
 
 def all_values_in_set(response_body, fieldsource)
@@ -295,7 +315,7 @@ Then(/^the activity response only contains activities started by pu(\d+)$/) do |
   expect(source_allvalues_names).to include('USER,PANORAMA') if source_allvalues_names.length > 0
 
   expect(source_allvalues_id.length).to_not be > 1, "expected only 1 created by name, received #{source_allvalues_id.length} (#{source_allvalues_id})"
-  expect(source_allvalues_id).to include('9E7A;10000000270') if source_allvalues_names.length > 0
+  expect(source_allvalues_id).to include('SITE;10000000270') if source_allvalues_names.length > 0
 end
 
 Then(/^the activity response only contains activities started by tdnurse$/) do
@@ -306,7 +326,7 @@ Then(/^the activity response only contains activities started by tdnurse$/) do
   expect(source_allvalues_names).to include('TDNURSE,ONE')
 
   expect(source_allvalues_id.length).to eq(1), "expected only 1 created by name, received #{source_allvalues_id.length} (#{source_allvalues_id})"
-  expect(source_allvalues_id).to include('9E7A;10000000016')
+  expect(source_allvalues_id).to include('SITE;10000000016')
 end
 
 Given(/^the successful response contains a processInstanceId$/) do

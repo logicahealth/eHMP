@@ -158,10 +158,10 @@ function callRPCRecursively(logger, configuration, rpcName, parse, retValue, sea
                 obj = rpcData;
             }
 
-            var localStartName = obj.length > 0 ? _.get(_.last(obj), searchStringFieldName).toUpperCase() : null;
+            var localStartName = obj.length > 0 ? _.get(_.last(obj), searchStringFieldName) : null;
 
             var callAgain = false;
-            if (obj.length >= MAX_RPC_RESULTS_RETURNED) {
+            if (localStartName !== searchString && obj.length >= MAX_RPC_RESULTS_RETURNED) {
                 callAgain = true;
             }
 

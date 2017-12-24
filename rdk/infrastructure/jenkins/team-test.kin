@@ -1,0 +1,7 @@
+"rdk-team-test-build-%branch%" {
+  template = 'templates/team-test-build.tpl'
+	description = "team test build for %branch%"
+
+  gitUrl = 'https://code.vistacore.us/scm/app/rdk.git'
+	gitBranch = '%branch%'
+}

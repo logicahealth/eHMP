@@ -17,9 +17,9 @@ var EWD = {
   server: {
     ewdjs: {
       host: 'localhost',
-      port: 8080,
+      port: PORT,
       ssl: false,
-      secretKey: '$keepSecret!',
+      secretKey: 'PW',
       accessId: 'JdsClient',
       authenticate: false
     }

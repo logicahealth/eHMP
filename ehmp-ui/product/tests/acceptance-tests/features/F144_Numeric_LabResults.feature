@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults  @reg2
+@F144 @F144_numericlabresults  @Lab_Results @reg2
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 @F144_numericlabresults_buttons

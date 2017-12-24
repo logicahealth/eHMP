@@ -16,12 +16,12 @@ describe('Vitals FHIR Resource', function() {
                 'facilityName': 'CAMP MASTER',
                 'statusName': 'COMPLETE',
                 'imagingTypeUid': 'urn:va:imaging-Type:GENERAL RADIOLOGY',
-                'locationUid': 'urn:va:location:9E7A:40',
+                'locationUid': 'urn:va:location:SITE:40',
                 'hasImages': false,
                 'imageLocation': 'RADIOLOGY MAIN FLOOR',
-                'uid': 'urn:va:image:9E7A:253:7059382.8387-1',
+                'uid': 'urn:va:image:SITE:253:7059382.8387-1',
                 'summary': 'RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS',
-                'pid': '9E7A;253',
+                'pid': 'SITE;253',
                 'localId': '7059382.8387-1',
                 'typeName': 'RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS',
                 'dateTime': '199406171612',
@@ -32,14 +32,14 @@ describe('Vitals FHIR Resource', function() {
                     'providerName': 'PROVIDER,FIFTY',
                     'providerDisplayName': 'Provider,Fifty',
                     'summary': 'ProcedureProvider{uid=\'null\'}',
-                    'providerUid': 'urn:va:user:9E7A:1595'
+                    'providerUid': 'urn:va:user:SITE:1595'
                 }],
                 'providerName': 'PROVIDER,FIFTY',
                 'providerDisplayName': 'Provider,Fifty',
                 'results': [{
                     'localTitle': 'ANKLE 2 VIEWS',
-                    'uid': 'urn:va:document:9E7A:253:7059382.8387-1',
-                    'summary': 'ProcedureResult{uid=\'urn:va:document:9E7A:253:7059382.8387-1\'}'
+                    'uid': 'urn:va:document:SITE:253:7059382.8387-1',
+                    'summary': 'ProcedureResult{uid=\'urn:va:document:SITE:253:7059382.8387-1\'}'
                 }],
                 'verified': true,
                 'name': 'ANKLE 2 VIEWS',
@@ -53,10 +53,10 @@ describe('Vitals FHIR Resource', function() {
         }
     };
     var req = {
-        '_pid': '9E7A;253',
-        originalUrl: '/fhir/diagnosticreport?subject.identifier=9E7A;253&domain=rad',
+        '_pid': 'SITE;253',
+        originalUrl: '/fhir/diagnosticreport?subject.identifier=SITE;253&domain=rad',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };

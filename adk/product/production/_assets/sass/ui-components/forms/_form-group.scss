@@ -42,35 +42,43 @@
     }
 }
 //for searchbar elements
-.form-group--searchbar .input-group {
-    width: 100%;
-    input.form-control:not(:first-child):not(:last-child) {
-        padding-right: 18px;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
+.form-group--searchbar {
+    .instructions {
+        margin-left: -10px;
+        margin-top: -5px;
+        height: 15px;
+        width: 10px;
     }
-    .clear-input-btn {
-        position: absolute;
-        left: -18px;
-        z-index: 2;
-        height: 100%;
-    }
-    > .input-group-addon:last-of-type {
-        background-color: inherit;
-        position: relative;
-        padding: 0;
-        button:last-of-type {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-    }
-    &.submit-hidden {
-        input.form-control {
-            border-radius: 4px;
+    .input-group {
+        width: 100%;
+        input.form-control:not(:first-child):not(:last-child) {
+            padding-right: 18px;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
         }
         .clear-input-btn {
-            left: inherit;
-            right: 2px;
+            position: absolute;
+            left: -18px;
+            z-index: 2;
+            height: 100%;
+        }
+        > .input-group-addon:last-of-type {
+            background-color: inherit;
+            position: relative;
+            padding: 0;
+            button:last-of-type {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        }
+        &.submit-hidden {
+            input.form-control {
+                border-radius: 4px;
+            }
+            .clear-input-btn {
+                left: inherit;
+                right: 2px;
+            }
         }
     }
 }

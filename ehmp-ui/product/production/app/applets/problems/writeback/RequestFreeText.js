@@ -27,7 +27,6 @@ define([
                     label: 'Keep Previous Problem Name',
                     type: 'button',
                     hidden: true,
-                    title: 'Press enter to keep the previous problem name'
                 }]
 
             }]
@@ -144,7 +143,7 @@ define([
         tagName: 'p'
     });
     var CancelFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to continue."}}'),
+        template: Handlebars.compile('{{ui-button "No" classes="btn-default"}}{{ui-button "Yes" classes="btn-primary"}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();

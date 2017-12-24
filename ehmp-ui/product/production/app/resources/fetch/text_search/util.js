@@ -10,7 +10,9 @@ define([
     //things are sequential so if no month, no day
     var searchUtil = {
         getKeywords: function() {
-            var keywords = ADK.SessionStorage.getAppletStorageModel('search', 'searchText').searchTerm.toString().toLowerCase();
+            var TEXT_SEARCH_CHANNEL = ADK.Messaging.getChannel('search');
+            var storageText = TEXT_SEARCH_CHANNEL.request('get:current:search:term');
+            var keywords = _.get(storageText, 'searchTerm', '').toLowerCase();
             keywords = keywords.split(' ');
             _.each(keywords, function(kw) {
                 var singularizedKeywords = ADK.utils.stringUtils.singularize(kw);
@@ -28,13 +30,25 @@ define([
         },
         getHighlights: function(highlightedText) {
             var highlights = [];
-            var regex = new RegExp('<span class="cpe-search-term-match">(.*?)<\/span>', 'g');
+            var markStart = '{{addTag \"';
+            var markEnd = '\" \"mark\" \"cpe-search-term-match\"}}';
+            var regex = new RegExp(markStart + '(.*?)' + markEnd, 'g');
             var match = regex.exec(highlightedText);
             while (match) {
                 highlights.push(match[1].toString().trim());
                 match = regex.exec(highlightedText);
             }
             return _.uniq(highlights);
+        },
+        getADKHighlights: function(text, keywords, useTitleCase) {
+            var textToHighlight = text || '';
+            if (useTitleCase === true) {
+                textToHighlight = ADK.utils.stringUtils.toTitleCase(text);
+            }
+            if (!_.isEmpty(keywords)) {
+                return ADK.utils.stringUtils.addSearchResultElementHighlighting(textToHighlight, keywords);
+            }
+            return textToHighlight;
         },
         doDatetimeConversion: function(datetimeNum, overrideFormat) {
             var returnValue = {
@@ -75,7 +89,7 @@ define([
             return returnValue;
         },
         baseModelParse: function(response) {
-            response.displayTitle = _.camelCase(response.localTitle);
+            response.displayTitle = ADK.utils.stringUtils.toTitleCase(response.localTitle);
             var highlightedWhere = _.get(response, 'highlights.where'),
                 highlightedDomain = _.get(response, 'highlights.kind'),
                 highlightedSummary = _.get(response, 'highlights.summary'),
@@ -84,18 +98,41 @@ define([
                 datetime = this.doDatetimeConversion(response.datetime),
                 count = 1, // default result count
                 highlights = '';
+
             if (typeof(response.count) !== 'undefined') {
                 count = parseInt(response.count);
             }
+            response.useDomain = true;
             if (typeof(response.highlights) !== 'undefined') {
-                var AllHighlights = _.values(_.omit(response.highlights, ['summary', 'where', 'kind']));
-                _.each(AllHighlights, function(highlight) {
-                    var currentHighlight = highlight.toString().replace(/\uFFFD/g, "");
-                    highlights = highlights + "... " + currentHighlight + " ...<br>";
-                });
+                if (response.type === 'ehmp-activity') {
+                    response.useDomain = false;
+                    var highlightedSummaryResponse = '';
+                    if (response.sub_domain === 'request') {
+                        highlightedSummaryResponse = _.last(_.get(response, 'highlights.request_title')) || response.summary || '';
+                    } else {
+                        highlightedSummaryResponse = _.get(response, 'highlights.consult_name') || response.summary || '';
+                        if (_.isArray(highlightedSummaryResponse)) {
+                            highlightedSummaryResponse = highlightedSummaryResponse[0];
+                        }
+                    }
+                    highlightedSummary = ADK.utils.stringUtils.toTitleCase(highlightedSummaryResponse);
+                }
+                var AllHighlights = _.values(_.omit(response.highlights, ['summary', 'where', 'kind', 'request_title', 'consult_name']));
+                var highlightsArray = [];
+                var parseHighlights = function(highlightsList) {
+                    _.each(highlightsList, function(highlight) {
+                        if (_.isArray(highlight)) {
+                            return parseHighlights(highlight);
+                        }
+                        var currentHighlight = highlight.toString().replace(/\uFFFD/g, "");
+                        highlightsArray.push("... " + currentHighlight + " ...");
+                    });
+                };
+                parseHighlights(AllHighlights);
+                highlights = highlightsArray.join('\r\n');
             }
 
-            var kind = response.kind.toLowerCase();
+            var kind = (response.kind || '').toLowerCase();
             if ((kind === 'laboratory' || (datetime.display === null || datetime.display === "" || datetime.display === "Unknown")) && response.observed !== undefined) {
                 datetime = this.doDatetimeConversion(response.observed);
             }
@@ -110,25 +147,28 @@ define([
                 var subGroupList = '';
                 var groupOnText = summary;
                 var docSearchText = summary; //default
+                var groupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(summary, this.getKeywords());
+
                 if (type === 'problem') {
-                    groupOnText = response.icd_code;
+                    groupOnText = response.icd_code; //allowing the undefined value here, which indicates they were grouped by the lack of an icd code.
                     docSearchText = response.icd_code;
+                    if(!response.icd_code){
+                        groupName = 'Terminology Not Defined';
+                    }
                 }
                 var subGroupType = type;
                 if (kind === 'surgical pathology') {
                     subGroupType = kind;
                     groupOnText = response.group_name;
                     docSearchText = response.group_name;
-
                 }
 
                 //Documents should search by the local_title, not the summary, which can be a calculated value
                 if (type === 'document') {
                     docSearchText = response.local_title;
                 }
-                var highlightedSubGroupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(summary, this.getKeywords());
                 response.summary = summary;
-                response.groupName = highlightedSubGroupName;
+                response.groupName = groupName;
                 response.datetime = datetime.display;
                 response.datetimeSort = datetime.sort;
                 response.count = count;
@@ -140,11 +180,14 @@ define([
                 response.collection = new ADK.UIResources.Fetch.TextSearch.DocumentDrilldownCollection({});
             } else {
                 if (highlightedSummary) {
-                    var fullSummaryHl = "";
-                    _.each(highlightedSummary, function(highlightedSummaryItem) {
-                        fullSummaryHl = fullSummaryHl + highlightedSummaryItem.toString().replace(/\uFFFD/g, "");
-                    });
-                    highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summary, this.getHighlights(fullSummaryHl));
+                    /*ignore if highlightedSummary exists but is not an array */
+                    if (_.isArray(highlightedSummary)) {
+                        var fullSummaryHl = "";
+                        _.each(highlightedSummary, function(highlightedSummaryItem) {
+                            fullSummaryHl = fullSummaryHl + highlightedSummaryItem.toString().replace(/\uFFFD/g, "");
+                        });
+                        highlightedSummary = this.getADKHighlights(summary, this.getHighlights(fullSummaryHl), true);
+                    }
                 } else {
                     var summaryPlus = summary;
 
@@ -154,13 +197,18 @@ define([
                             summaryPlus = response.problem_status + '(' + response.acuity_name + '): ' + summary;
                         }
                     }
-                    highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summaryPlus, this.getKeywords());
+                    highlightedSummary = this.getADKHighlights(summaryPlus, this.getKeywords(), true);
                 }
                 if (!highlightedWhere && response.where) {
-                    highlightedWhere = ADK.utils.stringUtils.addSearchResultElementHighlighting(response.where, this.getKeywords());
+                    highlightedWhere = this.getADKHighlights(response.where, this.getKeywords(), false);
                 }
+
+                if (response.vlerDoc && response.institution) {
+                    response.institution = this.getADKHighlights(response.institution, this.getKeywords(), false);
+                }
+                
                 if (!highlightedDomain && response.kind) {
-                    highlightedDomain = ADK.utils.stringUtils.addSearchResultElementHighlighting(response.kind, this.getKeywords());
+                    highlightedDomain = this.getADKHighlights(response.kind, this.getKeywords(), false);
 
                 }
                 response.summary = summary;

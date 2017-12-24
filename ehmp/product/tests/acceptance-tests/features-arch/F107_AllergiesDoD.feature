@@ -7,13 +7,13 @@
     And the results contain data group
       | field            | value                                      |
       | summary          | PENICILLIN                                 |
-      | uid              | urn:va:allergy:9E7A:3:751                  |
+      | uid              | urn:va:allergy:SITE:3:751                  |
       | drugClasses.name | PENICILLINS AND BETA-LACTAM ANTIMICROBIALS |
       | reactions.name   | ITCHING,WATERING EYES                      |
     And the results contain data group
       | field          | value                     |
       | summary        | CHOCOLATE                 |
-      | uid            | urn:va:allergy:9E7A:3:874 |
+      | uid            | urn:va:allergy:SITE:3:874 |
       | reactions.name | DIARRHEA                  |
     And the results contain data group
       | field             | value                            |

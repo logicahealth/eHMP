@@ -6,7 +6,7 @@ var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 var nc = require('namecase');
 
-function dodOrderToVPR(dodRecord, edipi) {
+function dodOrderToVPR(logger, dodRecord, edipi) {
     var vprOrder = {};
 
     vprOrder.codes = xformUtils.transformCodes(dodRecord.codes);
@@ -24,7 +24,7 @@ function dodOrderToVPR(dodRecord, edipi) {
 
     // Empty string is intended here
     if (!_.isNull(dodRecord.status) && !_.isUndefined(dodRecord.status)) {
-        vprOrder.statusName = new String(dodRecord.status);
+        vprOrder.statusName = String(dodRecord.status);
     } else {
         vprOrder.statusName = '';
     }

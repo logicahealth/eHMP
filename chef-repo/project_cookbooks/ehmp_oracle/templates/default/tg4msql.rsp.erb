@@ -1,0 +1,278 @@
+
+###############################################################################
+## Copyright(c) Oracle Corporation 2007,2014. All rights reserved.           ##
+##                                                                           ##
+## Specify values for the variables listed below to customize                ##
+## your installation.                                                        ##
+##                                                                           ##
+## Each variable is associated with a comment. The comment                   ##
+## can help to populate the variables with the appropriate                   ##
+## values.							             ##
+##                                                                           ##
+###############################################################################
+
+
+#-------------------------------------------------------------------------------
+# Do not change the following system generated value.
+#-------------------------------------------------------------------------------
+oracle.install.responseFileVersion=/oracle/install/rspfmt_tginstall_response_schema_v12.1.0
+
+#-------------------------------------------------------------------------------
+# This variable holds the hostname of the system as set by the user.
+# It can be used to force the installation to use an alternative
+# hostname rather than using the first hostname found on the system
+# (e.g., for systems with multiple hostnames and network interfaces).
+#-------------------------------------------------------------------------------
+ORACLE_HOSTNAME=<%= node['hostname'] %>
+
+#-------------------------------------------------------------------------------
+# Unix group to be set for the inventory directory.
+#-------------------------------------------------------------------------------
+UNIX_GROUP_NAME=<%= @unix_group_name %>
+#-------------------------------------------------------------------------------
+# Inventory location.
+#-------------------------------------------------------------------------------
+INVENTORY_LOCATION=<%= node[node['ehmp_oracle']['oracle_service']]['ora_inventory'] %>
+#-------------------------------------------------------------------------------
+# Specify the languages in which the components will be installed.
+#
+# en   : English                  ja   : Japanese
+# fr   : French                   ko   : Korean
+# ar   : Arabic                   es   : Latin American Spanish
+# bn   : Bengali                  lv   : Latvian
+# pt_BR: Brazilian Portuguese     lt   : Lithuanian
+# bg   : Bulgarian                ms   : Malay
+# fr_CA: Canadian French          es_MX: Mexican Spanish
+# ca   : Catalan                  no   : Norwegian
+# hr   : Croatian                 pl   : Polish
+# cs   : Czech                    pt   : Portuguese
+# da   : Danish                   ro   : Romanian
+# nl   : Dutch                    ru   : Russian
+# ar_EG: Egyptian                 zh_CN: Simplified Chinese
+# en_GB: English (Great Britain)  sk   : Slovak
+# et   : Estonian                 sl   : Slovenian
+# fi   : Finnish                  es_ES: Spanish
+# de   : German                   sv   : Swedish
+# el   : Greek                    th   : Thai
+# iw   : Hebrew                   zh_TW: Traditional Chinese
+# hu   : Hungarian                tr   : Turkish
+# is   : Icelandic                uk   : Ukrainian
+# in   : Indonesian               vi   : Vietnamese
+# it   : Italian
+#
+# all_langs   : All languages
+#
+# Specify value as the following to select any of the languages.
+# Example : SELECTED_LANGUAGES=en,fr,ja
+#
+# Specify value as the following to select all the languages.
+# Example : SELECTED_LANGUAGES=all_langs
+#-------------------------------------------------------------------------------
+SELECTED_LANGUAGES=en
+
+#-------------------------------------------------------------------------------
+# Complete path of the Oracle Home
+#-------------------------------------------------------------------------------
+ORACLE_HOME=<%= @oracle_home %>
+
+#-------------------------------------------------------------------------------
+# Complete path of the Oracle Base.
+#-------------------------------------------------------------------------------
+ORACLE_BASE=<%= node["#{node['ehmp_oracle']['oracle_service']}"]['base'] %>
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.customComponents
+#Datatype   : StringList
+#Description: List of dependent components that need to be installed along with
+#             this product. Customer can change this list to suit their needs.
+#
+#             The following choices are available:
+#             oracle.rdbms.tg4ifmx - Oracle Database Gateway for Informix
+#             oracle.rdbms.tg4sybs - Oracle Database Gateway for Sybase
+#             oracle.rdbms.tg4msql - Oracle Database Gateway for Microsoft SQL Server
+#             oracle.rdbms.tg4tera - Oracle Database Gateway for Teradata
+#             oracle.pg4appc       - Oracle Database Gateway for APPC
+#             oracle.rdbms.tg4db2  - Oracle Database Gateway for DRDA
+#             oracle.pg4mq         - Oracle Database Gateway for WebSphere MQ
+#             oracle.rdbms.hsodbc  - Oracle Database Gateway for ODBC
+#	      oracle.rdbms.drdaas  - Oracle Database Provider for DRDA
+#
+#Example    : oracle.install.tg.customComponents={oracle.rdbms.tg4ifmx:12.1.0.2.0,oracle.rdbms.tg4sybs:12.1.0.2.0,oracle.pg4appc:12.1.0.2.0,oracle.pg4mq:12.1.0.2.0,oracle.rdbms.drdaas:12.1.0.2.0}
+#Component  : oracle.tg
+#------------------------------------------------------------------------------
+oracle.install.tg.customComponents={oracle.rdbms.tg4msql:12.1.0.2.0}
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.ifmxConStr
+#Datatype   : StringList
+#Description: This variable is only required when installing the
+#             oracle.rdbms.tg4ifmx component.
+#
+#             The user input values for the details of the Informix database.
+#             This is a stringlist containing the following information in the
+#             same order:
+#             1. Informix Database Server Host Name
+#             2. Informix Database Server Port Number
+#             3. Informix Server Name
+#             4. Informix Database Name
+#
+#Example    : oracle.install.tg.ifmxConStr={svr1,1234,isvr,idb}
+#Component  : oracle.rdbms.tg4ifmx
+#------------------------------------------------------------------------------
+oracle.install.tg.ifmxConStr=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.msqlConStr
+#Datatype   : StringList
+#Description: This variable is only required when installing the
+#             oracle.rdbms.tg4msql component.
+#
+#             The user input values for the details of the Microsoft SQL Sever
+#             database.  This is a stringlist containing the following
+#             information in the same order:
+#             1. SQL Server Database Server Host Name
+#             2. SQL Server Database Server Port Number
+#             3. SQL Server Server Name
+#             4. SQL Server Database Name
+#
+#Example    : oracle.install.tg.msqlConStr={svr1,1234,msvr,mdb}
+#Component  : oracle.rdbms.tg4msql
+#------------------------------------------------------------------------------
+oracle.install.tg.msqlConStr={<%= @mssql['ipaddress'] %>,<%= @mssql['port'] %>,<%= @mssql['server_name'] %>,<%= @mssql['server_database_name'] %>}
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.sybsConStr
+#Datatype   : StringList
+#Description: This variable is only required when installing the
+#             oracle.rdbms.tg4sybs component.
+#
+#             The user input values for the details of the Sybase database.
+#             This is a stringlist containing the following information in the
+#             same order:
+#             1. Sybase Database Server Host Name
+#             2. Sybase Database Server Port Number
+#             3. Sybase Database Name
+#
+#Example    : oracle.install.tg.sybsConStr={host1,123,sdb}
+#Component  : oracle.rdbms.tg4sybs
+#------------------------------------------------------------------------------
+oracle.install.tg.sybsConStr=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.teraConStr
+#Datatype   : StringList
+#Description: This variable is only required when installing the
+#             oracle.rdbms.tg4tera component.
+#
+#             The user input values for the details of the Teradata database.
+#             This is a stringlist containing the following information in the
+#             same order:
+#             1. Teradata Database Server Host IP or Alias
+#             2. Teradata Database Server Port Number
+#             3. Teradata Database Name
+#             4. Teradata TD_ICU_DATA Path
+#             5. Teradata COPLIB Path
+#             6. Teradata COPERR Path
+#
+#Example    : oracle.install.tg.teraConStr={svr1,1234,tdb,/opt/teradata/tdicu/lib,/usr/lib,/usr/lib}
+#Component  : oracle.rdbms.tg4tera
+#------------------------------------------------------------------------------
+oracle.install.tg.teraConStr=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.db2ConStr
+#Datatype   : StringList
+#Description: This variable is only required when installing the
+#             oracle.rdbms.tg4db2 component.
+#
+#             The user input values for the details of the DB2 UDB database.
+#             This is a stringlist containing the following information in the
+#             same order;
+#             1. DB2 UDB Server Host Name
+#             2. DB2 UDB DRDA Server Listener Port Number
+#             3. DB2 UDB Database Name
+#             4. DB2 UDB Target Type:
+#                  ZOS - DB2 UDB running on z/OS
+#                  IOS - DB2 UDB running on iSeries or AS/400 machines
+#                  LUW - DB2 UDB running on Linux, Unix, or Windows
+#
+#Example    : oracle.install.tg.db2ConStr={svr1,12345,udb,LUW}
+#Component  : oracle.rdbms.tg4db2
+#------------------------------------------------------------------------------
+oracle.install.tg.db2ConStr=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.appc.protocol
+#Datatype   : Number
+#Description: If PG4APPC communicates with OLTP via SNA then it is SNA.
+#             If it communicates through TCP/IP, then it is TCPIP.
+#Example    : oracle.install.tg.appc.protocol=SNA
+#Component  : oracle.pg4appc
+#------------------------------------------------------------------------------
+oracle.install.tg.appc.protocol=TCPIP
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.wbsp.remote.str
+#Datatype   : StringList
+#Description: if "Local" is selected on "Oracle Procedural Gateway for
+#             Websphere MQ Linux release 12.1.0.0.1" screen, then value={}
+#             if "Remote' is selected on "Oracle Procedural Gateway for
+#             Websphere MQ Linux release 12.1.0.0.1" screen, then
+#             value={queue manager, channel}
+#Component  : oracle.pg4mq
+#------------------------------------------------------------------------------
+oracle.install.tg.wbsp.remote.str={}
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.wbsp.location
+#Datatype   : Number
+#Description: LOCAL if "Local" is selected on "Oracle Procedural Gateway for
+#             websphere MQ Linux release 12.1.0.0.1" screen. Otherwise REMOTE
+#             if "Remote" is selected.
+#Example    : oracle.install.tg.wbsp.location=LOCAL
+#Component  : oracle.pg4mq
+#------------------------------------------------------------------------------
+oracle.install.tg.wbsp.location=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.wbsp.local.queuemgr
+#Datatype   : String
+#Description: Contains the value of "Queue Manager"
+#Component  : oracle.pg4mq
+#------------------------------------------------------------------------------
+#oracle.install.tg.wbsp.local.queuemgr=
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.drdaas.hostName
+#Datatype   : String
+#Description: Specify the host name or IP address of the DRDA AS Listener.
+#Component  : oracle.rdbms.drdaas
+#------------------------------------------------------------------------------
+oracle.install.tg.drdaas.hostName=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.drdaas.mapName
+#Datatype   : String
+#Description: Specify the Relational Database Map Name for the DRDA AS Listener.
+#Component  : oracle.rdbms.drdaas
+#------------------------------------------------------------------------------
+oracle.install.tg.drdaas.mapName=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.drdaas.portNumber
+#Datatype   : int
+#Description: Specify the port number of the DRDA AS Listener.
+#Component  : oracle.rdbms.drdaas
+#------------------------------------------------------------------------------
+oracle.install.tg.drdaas.portNumber=
+
+#------------------------------------------------------------------------------
+#Name       : oracle.install.tg.drdaas.connectionDescriptor
+#Datatype   : String
+#Description: Specify the connection descriptor to use to connect to the Oracle Database.   Acceptable values are:
+#         oracle_sid
+#         TNS(tnsnamesentry)  (eg: TNS(orcl) )
+#         "TNS-Descriptor"      (eg:"(DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=drdaas))(CONNECT_DATA=(SERVICE_NAME=drdaas.us.oracle.com)))")
+# Default: 'oracle_sid'
+#Component  : oracle.rdbms.drdaas
+#------------------------------------------------------------------------------
+oracle.install.tg.drdaas.connectionDescriptor=

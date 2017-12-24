@@ -4,19 +4,12 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var utils = require('./utils.js');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 // Database
 var dbName = 'patientlist';
 var defCollection = 'definitions';
-var thisApp;
-
-var testId;
-
-function init(app) {
-    thisApp = app;
-    testId = thisApp.subsystems.cds.testMongoDBId;
-}
 
 
 // ////////////////////
@@ -42,17 +35,20 @@ function init(app) {
  *                    this definition template", "expression": "{and: [ {or:
  *                    ['A.A','B.B'], {'A.A'} ]}", "date":
  *                    "2015-03-10T12:54:54.035Z", "scope": "private", "owner":
- *                    "REDACTED", "_id": "54fee99e1e3bdef211534bbb" } ] }
+ *                    "PW         ", "_id": "54fee99e1e3bdef211534bbb" } ] }
  * @apiError (Error 404) . Definition not found
  * @apiErrorExample Error-Response: HTTP/1.1 404 Not Found { status: 404
  *                  message: Definition not found }
  *
  */
-var getDefinition = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getDefinition(req, res) {
+    req.logger.debug('definition.getDefinition()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS definition resource is unavailable.');
     }
-   thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -97,8 +93,8 @@ var getDefinition = function(req, res) {
             });
         }
     });
-};
-module.exports.getDefinition = getDefinition;
+}
+
 
 /**
  * Create a Definition to be used in the selection of patients
@@ -117,7 +113,7 @@ module.exports.getDefinition = getDefinition;
  *                    this definition template", "expression": "{and: [ {or:
  *                    ['A.A','B.B'], {'A.A'} ]}", "date":
  *                    "2015-03-10T12:54:54.035Z", "scope": "private", "owner":
- *                    "REDACTED", "_id": "54fee99e1e3bdef211534bbb" } }
+ *                    "PW         ", "_id": "54fee99e1e3bdef211534bbb" } }
  *
  * @apiError (Error 400) {json} error Definition document (request body) must be
  *           defined
@@ -145,11 +141,14 @@ module.exports.getDefinition = getDefinition;
  *                  500 message: system or database error message }
  *
  */
-var postDefinition = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postDefinition(req, res) {
+    req.logger.debug('definition.postDefinition');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS definition resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -212,8 +211,8 @@ var postDefinition = function(req, res) {
             });
         });
     });
-};
-module.exports.postDefinition = postDefinition;
+}
+
 
 /**
  * Delete Definition used in the selection of patients
@@ -241,11 +240,14 @@ module.exports.postDefinition = postDefinition;
  *                  message: Name or Id required }
  *
  */
-var deleteDefinition = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteDefinition(req, res) {
+    req.logger.debug('definition.deleteDefinition()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS definition resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -279,8 +281,8 @@ var deleteDefinition = function(req, res) {
             return res.status(rdk.httpstatus.bad_request).rdkSend(message);
         }
     });
-};
-module.exports.deleteDefinition = deleteDefinition;
+}
+
 
 /**
  * Copy a Definition used in the selection of patients
@@ -303,7 +305,7 @@ module.exports.deleteDefinition = deleteDefinition;
  *    "expression": "{and: [ {or: ['A.A','B.B'], {'A.A'} ]}",
  *    "date":"2015-03-10T12:54:54.035Z",
  *    "scope": "private",
- *    "owner": "REDACTED",
+ *    "owner": "PW         ",
  *    "_id": "54fee99e1e3bdef211534bbb" }
  * }
  *
@@ -323,11 +325,14 @@ module.exports.deleteDefinition = deleteDefinition;
  *  { status:500 message: system or database error message }
  *
  */
-var copyDefinition = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function copyDefinition(req, res) {
+    req.logger.debug('definition.copyDefinition()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS definition resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -391,6 +396,10 @@ var copyDefinition = function(req, res) {
             });
         });
     });
-};
+}
+
+
+module.exports.getDefinition = getDefinition;
+module.exports.postDefinition = postDefinition;
+module.exports.deleteDefinition = deleteDefinition;
 module.exports.copyDefinition = copyDefinition;
-module.exports.init = init;

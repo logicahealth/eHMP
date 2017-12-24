@@ -1,0 +1,915 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>1744. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>1744. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:28 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>1744.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\ehmp-ui\ehmp-ui\product\tests\acceptance-tests\features\steps</td> 
+     <td>table_steps.rb</td> 
+     <td>Thu Sep 21 21:08:16 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\ehmp-ui\ehmp-ui\product\tests\acceptance-tests\features\steps</td> 
+     <td>table_steps.rb</td> 
+     <td>Tue Oct 10 18:19:03 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1744.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">2</td> 
+     <td style="text-align: right;">286</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">1</td> 
+     <td style="text-align: right;">2</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1744.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1744.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>1744.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;avoid_</span> <span class="U2">block_nest</span> <span class="U2">ing(row_de</span> <span class="U2">fined_in_c</span> <span class="U2">ucumber,&nbsp;c</span> <span class="U2">ols_displa</span> <span class="U2">yed_in_bro</span> <span class="U2">wser)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;for&nbsp;col_</span> <span class="U2">index&nbsp;in&nbsp;0</span> <span class="U2">..row_defi</span> <span class="U2">ned_in_cuc</span> <span class="U2">umber.leng</span> <span class="U2">th&nbsp;-&nbsp;1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#p&nbsp;"co</span> <span class="U2">mparing&nbsp;#{</span> <span class="U2">row_define</span> <span class="U2">d_in_cucum</span> <span class="U2">ber[col_in</span> <span class="U2">dex]}&nbsp;to&nbsp;#</span> <span class="U2">{cols_disp</span> <span class="U2">layed_in_b</span> <span class="U2">rowser[col</span> <span class="U2">_index].at</span> <span class="U2">tribute("i</span> <span class="U2">nnerHTML")</span> <span class="U2">.strip}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;row</span> <span class="U2">_defined_i</span> <span class="U2">n_cucumber</span> <span class="U2">[col_index</span> <span class="U2">]&nbsp;==&nbsp;cols_</span> <span class="U2">displayed_</span> <span class="U2">in_browser</span> <span class="U2">[col_index</span> <span class="U2">].attribut</span> <span class="U2">e("innerHT</span> <span class="U2">ML").strip</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matc</span> <span class="U2">hed&nbsp;=&nbsp;true</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matc</span> <span class="U2">hed&nbsp;=&nbsp;fals</span> <span class="U2">e</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brea</span> <span class="U2">k</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;#i</span> <span class="U2">f</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end&nbsp;#for</span> <span class="U2">&nbsp;col_index</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;return&nbsp;m</span> <span class="U2">atched</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;avoid_</span> <span class="U2">block_nest</span> <span class="U2">ing_text(r</span> <span class="U2">ow_defined</span> <span class="U2">_in_cucumb</span> <span class="U2">er,&nbsp;cols_d</span> <span class="U2">isplayed_i</span> <span class="U2">n_browser)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;error_me</span> <span class="U2">ssage&nbsp;=&nbsp;[]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;for&nbsp;col_</span> <span class="U2">index&nbsp;in&nbsp;0</span> <span class="U2">..row_defi</span> <span class="U2">ned_in_cuc</span> <span class="U2">umber.leng</span> <span class="U2">th&nbsp;-&nbsp;1</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;p</span> <span class="U2">&nbsp;"comparin</span> <span class="U2">g&nbsp;#{row_de</span> <span class="U2">fined_in_c</span> <span class="U2">ucumber[co</span> <span class="U2">l_index]}&nbsp;</span> <span class="U2">to&nbsp;#{cols_</span> <span class="U2">displayed_</span> <span class="U2">in_browser</span> <span class="U2">[col_index</span> <span class="U2">].text}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;error_</span> <span class="U2">message.pu</span> <span class="U2">sh("compar</span> <span class="U2">ing&nbsp;#{row_</span> <span class="U2">defined_in</span> <span class="U2">_cucumber[</span> <span class="U2">col_index]</span> <span class="U2">}&nbsp;to&nbsp;#{col</span> <span class="U2">s_displaye</span> <span class="U2">d_in_brows</span> <span class="U2">er[col_ind</span> <span class="U2">ex].text}"</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;cols_d</span> <span class="U2">isplayed_i</span> <span class="U2">n_browser[</span> <span class="U2">col_index]</span> <span class="U2">.location_</span> <span class="U2">once_scrol</span> <span class="U2">led_into_v</span> <span class="U2">iew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;row</span> <span class="U2">_defined_i</span> <span class="U2">n_cucumber</span> <span class="U2">[col_index</span> <span class="U2">]&nbsp;==&nbsp;cols_</span> <span class="U2">displayed_</span> <span class="U2">in_browser</span> <span class="U2">[col_index</span> <span class="U2">].text</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matc</span> <span class="U2">hed&nbsp;=&nbsp;true</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matc</span> <span class="U2">hed&nbsp;=&nbsp;fals</span> <span class="U2">e</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brea</span> <span class="U2">k</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;#i</span> <span class="U2">f</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end&nbsp;#for</span> <span class="U2">&nbsp;col_index</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;p&nbsp;error_</span> <span class="U2">message&nbsp;un</span> <span class="U2">less&nbsp;match</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;return&nbsp;m</span> <span class="U2">atched</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">class&nbsp;Tabl</span> <span class="U2">eContainer</span> <span class="U2">&nbsp;&lt;&nbsp;AccessB</span> <span class="U2">rowserV2</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;include&nbsp;</span> <span class="U2">Singleton</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;def&nbsp;init</span> <span class="U2">ialize</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;super</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Care&nbsp;</span> <span class="U2">team</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Care&nbsp;Team</span> <span class="U2">&nbsp;Details")</span> <span class="U2">,&nbsp;VerifyCo</span> <span class="U2">ntainsText</span> <span class="U2">.new,&nbsp;Acce</span> <span class="U2">ssHtmlElem</span> <span class="U2">ent.new(:c</span> <span class="U2">ss,&nbsp;"#pati</span> <span class="U2">entDemogra</span> <span class="U2">phic-provi</span> <span class="U2">derInfo&nbsp;.t</span> <span class="U2">able&nbsp;tbody</span> <span class="U2">&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Orde</span> <span class="U2">rs</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Orders&nbsp;Ap</span> <span class="U2">plet"),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:css,&nbsp;</span> <span class="U2">"[data-app</span> <span class="U2">letid=orde</span> <span class="U2">rs]&nbsp;.data-</span> <span class="U2">grid&nbsp;table</span> <span class="U2">&nbsp;tbody&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Nume</span> <span class="U2">ric&nbsp;Lab&nbsp;Re</span> <span class="U2">sults</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Lab&nbsp;Detai</span> <span class="U2">l"),&nbsp;Verif</span> <span class="U2">yContainsT</span> <span class="U2">ext.new,&nbsp;A</span> <span class="U2">ccessHtmlE</span> <span class="U2">lement.new</span> <span class="U2">(:css,&nbsp;"#m</span> <span class="U2">odal-body&nbsp;</span> <span class="U2">.table-res</span> <span class="U2">ponsive&nbsp;tb</span> <span class="U2">ody"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Lab&nbsp;Histo</span> <span class="U2">ry"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:css,&nbsp;"#</span> <span class="U2">modal-body</span> <span class="U2">&nbsp;.data-gri</span> <span class="U2">d&nbsp;table&nbsp;tb</span> <span class="U2">ody&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Numeric&nbsp;L</span> <span class="U2">ab&nbsp;Results</span> <span class="U2">&nbsp;Applet"),</span> <span class="U2">&nbsp;VerifyCon</span> <span class="U2">tainsText.</span> <span class="U2">new,&nbsp;Acces</span> <span class="U2">sHtmlEleme</span> <span class="U2">nt.new(:cs</span> <span class="U2">s,&nbsp;"[data-</span> <span class="U2">appletid=l</span> <span class="U2">ab_results</span> <span class="U2">_grid]&nbsp;.ba</span> <span class="U2">ckgrid&nbsp;tbo</span> <span class="U2">dy&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Comple</span> <span class="U2">te&nbsp;Table&nbsp;-</span> <span class="U2">&nbsp;Numeric&nbsp;L</span> <span class="U2">ab&nbsp;Results</span> <span class="U2">&nbsp;applet"),</span> <span class="U2">&nbsp;VerifyCon</span> <span class="U2">tainsText.</span> <span class="U2">new,&nbsp;Acces</span> <span class="U2">sHtmlEleme</span> <span class="U2">nt.new(:cs</span> <span class="U2">s,&nbsp;"[data-</span> <span class="U2">appletid=l</span> <span class="U2">ab_results</span> <span class="U2">_grid]&nbsp;tab</span> <span class="U2">le"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ac</span> <span class="U2">tion(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Numeri</span> <span class="U2">c&nbsp;Lab&nbsp;Resu</span> <span class="U2">lts&nbsp;Applet</span> <span class="U2">&nbsp;-&nbsp;Disable</span> <span class="U2">d&nbsp;Next&nbsp;Pag</span> <span class="U2">e&nbsp;Arrow"),</span> <span class="U2">&nbsp;ClickActi</span> <span class="U2">on.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:css,&nbsp;"[da</span> <span class="U2">ta-appleti</span> <span class="U2">d=lab_resu</span> <span class="U2">lts_grid]&nbsp;</span> <span class="U2">.backgrid-</span> <span class="U2">paginator&nbsp;</span> <span class="U2">.disabled&nbsp;</span> <span class="U2">a[title=\"</span> <span class="U2">Next\"]"))</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ac</span> <span class="U2">tion(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Contro</span> <span class="U2">l&nbsp;-&nbsp;Numeri</span> <span class="U2">c&nbsp;Lab&nbsp;Resu</span> <span class="U2">lts&nbsp;Applet</span> <span class="U2">&nbsp;-&nbsp;Next&nbsp;Pa</span> <span class="U2">ge&nbsp;Arrow")</span> <span class="U2">,&nbsp;ClickAct</span> <span class="U2">ion.new,&nbsp;A</span> <span class="U2">ccessHtmlE</span> <span class="U2">lement.new</span> <span class="U2">(:css,&nbsp;"[d</span> <span class="U2">ata-applet</span> <span class="U2">id=lab_res</span> <span class="U2">ults_grid]</span> <span class="U2">&nbsp;.backgrid</span> <span class="U2">-paginator</span> <span class="U2">&nbsp;li&nbsp;a[titl</span> <span class="U2">e=\"Next\"</span> <span class="U2">]"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Activ</span> <span class="U2">e&nbsp;Medicati</span> <span class="U2">ons</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Active&nbsp;&amp;&nbsp;</span> <span class="U2">Recent&nbsp;Med</span> <span class="U2">ications&nbsp;A</span> <span class="U2">pplet"),&nbsp;V</span> <span class="U2">erifyConta</span> <span class="U2">insText.ne</span> <span class="U2">w,&nbsp;AccessH</span> <span class="U2">tmlElement</span> <span class="U2">.new(:css,</span> <span class="U2">&nbsp;"#activeM</span> <span class="U2">eds-interv</span> <span class="U2">entions-gi</span> <span class="U2">st-items&nbsp;d</span> <span class="U2">iv.gist-it</span> <span class="U2">em"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Active&nbsp;Me</span> <span class="U2">dications&nbsp;</span> <span class="U2">Applet"),&nbsp;</span> <span class="U2">VerifyCont</span> <span class="U2">ainsText.n</span> <span class="U2">ew,&nbsp;Access</span> <span class="U2">HtmlElemen</span> <span class="U2">t.new(:css</span> <span class="U2">,&nbsp;"#active</span> <span class="U2">Meds-inter</span> <span class="U2">ventions-g</span> <span class="U2">ist-items&nbsp;</span> <span class="U2">div.gist-i</span> <span class="U2">tem"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Immun</span> <span class="U2">ization&nbsp;Gi</span> <span class="U2">st</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Immunizat</span> <span class="U2">ion&nbsp;Gist&nbsp;A</span> <span class="U2">pplet"),&nbsp;V</span> <span class="U2">erifyConta</span> <span class="U2">insText.ne</span> <span class="U2">w,&nbsp;AccessH</span> <span class="U2">tmlElement</span> <span class="U2">.new(:css,</span> <span class="U2">&nbsp;"[data-ap</span> <span class="U2">pletid=imm</span> <span class="U2">unizations</span> <span class="U2">]&nbsp;.data-gr</span> <span class="U2">id&nbsp;table&nbsp;t</span> <span class="U2">body&nbsp;tr"))</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Immun</span> <span class="U2">ization&nbsp;Gi</span> <span class="U2">st&nbsp;hover&nbsp;t</span> <span class="U2">able</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Immunizat</span> <span class="U2">ion&nbsp;Gist&nbsp;H</span> <span class="U2">over&nbsp;Table</span> <span class="U2">"),&nbsp;Verify</span> <span class="U2">ContainsTe</span> <span class="U2">xt.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:xpath,&nbsp;"/</span> <span class="U2">/table[@id</span> <span class="U2">='urn:va:i</span> <span class="U2">mmunizatio</span> <span class="U2">n:2939:57:</span> <span class="U2">44']/tbody</span> <span class="U2">/descendan</span> <span class="U2">t::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Docum</span> <span class="U2">ents&nbsp;Gist</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Documents</span> <span class="U2">&nbsp;Gist&nbsp;Appl</span> <span class="U2">et"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:css,&nbsp;"#</span> <span class="U2">data-grid-</span> <span class="U2">documents&nbsp;</span> <span class="U2">tbody&nbsp;tr")</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Aller</span> <span class="U2">y&nbsp;Gist</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Allergy&nbsp;A</span> <span class="U2">pplet"),&nbsp;V</span> <span class="U2">erifyConta</span> <span class="U2">insText.ne</span> <span class="U2">w,&nbsp;AccessH</span> <span class="U2">tmlElement</span> <span class="U2">.new(:css,</span> <span class="U2">&nbsp;"#data-gr</span> <span class="U2">id-allergy</span> <span class="U2">_grid&nbsp;tbod</span> <span class="U2">y&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Probl</span> <span class="U2">ems&nbsp;Gist&nbsp;Q</span> <span class="U2">uick&nbsp;View&nbsp;</span> <span class="U2">table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">68</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">add_verify</span> <span class="U2">(CucumberL</span> <span class="U2">abel.new("</span> <span class="U2">Rows&nbsp;-&nbsp;Pro</span> <span class="U2">blems&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;Table"),</span> <span class="U2">&nbsp;VerifyCon</span> <span class="U2">tainsText.</span> <span class="U2">new,&nbsp;Acces</span> <span class="U2">sHtmlEleme</span> <span class="U2">nt.new(:xp</span> <span class="U2">ath,&nbsp;"//ta</span> <span class="U2">ble[@id='u</span> <span class="U2">rn_va_prob</span> <span class="U2">lem_</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">_711_141']</span> <span class="U2">/tbody/des</span> <span class="U2">cendant::t</span> <span class="U2">r"))</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Stack</span> <span class="U2">ed&nbsp;Graph&nbsp;Q</span> <span class="U2">uick&nbsp;View&nbsp;</span> <span class="U2">Table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Stacked&nbsp;G</span> <span class="U2">raph&nbsp;Quick</span> <span class="U2">&nbsp;View&nbsp;Tabl</span> <span class="U2">e"),&nbsp;Verif</span> <span class="U2">yContainsT</span> <span class="U2">ext.new,&nbsp;A</span> <span class="U2">ccessHtmlE</span> <span class="U2">lement.new</span> <span class="U2">(:xpath,&nbsp;"</span> <span class="U2">//*[@id='u</span> <span class="U2">rn:va:vita</span> <span class="U2">l:DOD:0000</span> <span class="U2">000003:100</span> <span class="U2">0000582']/</span> <span class="U2">tbody/tr")</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Visits</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Visits"),&nbsp;</span> <span class="U2">VerifyCont</span> <span class="U2">ainsText.n</span> <span class="U2">ew,&nbsp;Access</span> <span class="U2">HtmlElemen</span> <span class="U2">t.new(:xpa</span> <span class="U2">th,&nbsp;"//tab</span> <span class="U2">le[@id='en</span> <span class="U2">countersTo</span> <span class="U2">oltipVisit</span> <span class="U2">s']/tbody/</span> <span class="U2">descendant</span> <span class="U2">::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Visit&nbsp;Type</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Visit&nbsp;Type</span> <span class="U2">"),&nbsp;Verify</span> <span class="U2">ContainsTe</span> <span class="U2">xt.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:xpath,&nbsp;"/</span> <span class="U2">/table[@id</span> <span class="U2">='encounte</span> <span class="U2">rs-Visit-G</span> <span class="U2">ENERALINTE</span> <span class="U2">RNALMEDICI</span> <span class="U2">NE']/tbody</span> <span class="U2">/descendan</span> <span class="U2">t::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Procedure</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Procedures</span> <span class="U2">"),&nbsp;Verify</span> <span class="U2">ContainsTe</span> <span class="U2">xt.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:xpath,&nbsp;"/</span> <span class="U2">/table[@id</span> <span class="U2">='encounte</span> <span class="U2">rsTooltipP</span> <span class="U2">rocedures'</span> <span class="U2">]/tbody/de</span> <span class="U2">scendant::</span> <span class="U2">tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Procedure&nbsp;</span> <span class="U2">Name</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Procedure&nbsp;</span> <span class="U2">Name"),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:xpath</span> <span class="U2">,&nbsp;"//table</span> <span class="U2">[@id='enco</span> <span class="U2">unters-Pro</span> <span class="U2">cedure-PUL</span> <span class="U2">MONARYFUNC</span> <span class="U2">TIONINTERP</span> <span class="U2">RET']/tbod</span> <span class="U2">y/descenda</span> <span class="U2">nt::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">ts"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:xpath,&nbsp;</span> <span class="U2">"//table[@</span> <span class="U2">id='encoun</span> <span class="U2">tersToolti</span> <span class="U2">pAppointme</span> <span class="U2">nts']/tbod</span> <span class="U2">y/descenda</span> <span class="U2">nt::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">t&nbsp;Type</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">t&nbsp;Type"),&nbsp;</span> <span class="U2">VerifyCont</span> <span class="U2">ainsText.n</span> <span class="U2">ew,&nbsp;Access</span> <span class="U2">HtmlElemen</span> <span class="U2">t.new(:xpa</span> <span class="U2">th,&nbsp;"//tab</span> <span class="U2">le[@id='en</span> <span class="U2">counters-A</span> <span class="U2">ppointment</span> <span class="U2">-GENERALIN</span> <span class="U2">TERNALMEDI</span> <span class="U2">CINE']/tbo</span> <span class="U2">dy/descend</span> <span class="U2">ant::tr"))</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">t</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Admissions</span> <span class="U2">"),&nbsp;Verify</span> <span class="U2">ContainsTe</span> <span class="U2">xt.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:xpath,&nbsp;"/</span> <span class="U2">/table[@id</span> <span class="U2">='encounte</span> <span class="U2">rsTooltipA</span> <span class="U2">dmissions'</span> <span class="U2">]/tbody/de</span> <span class="U2">scendant::</span> <span class="U2">tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Encou</span> <span class="U2">nters&nbsp;Gist</span> <span class="U2">&nbsp;Quick&nbsp;Vie</span> <span class="U2">w&nbsp;table&nbsp;-&nbsp;</span> <span class="U2">Appointmen</span> <span class="U2">t&nbsp;Type</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Encounter</span> <span class="U2">s&nbsp;Gist&nbsp;Qui</span> <span class="U2">ck&nbsp;View&nbsp;-&nbsp;</span> <span class="U2">Diagnosis"</span> <span class="U2">),&nbsp;VerifyC</span> <span class="U2">ontainsTex</span> <span class="U2">t.new,&nbsp;Acc</span> <span class="U2">essHtmlEle</span> <span class="U2">ment.new(:</span> <span class="U2">xpath,&nbsp;"//</span> <span class="U2">table[@id=</span> <span class="U2">'encounter</span> <span class="U2">s-Admissio</span> <span class="U2">n-OBSERVAT</span> <span class="U2">ION']/tbod</span> <span class="U2">y/descenda</span> <span class="U2">nt::tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Activ</span> <span class="U2">e&nbsp;Problems</span> <span class="U2">&nbsp;expand&nbsp;vi</span> <span class="U2">ew&nbsp;table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Active&nbsp;Pr</span> <span class="U2">oblems&nbsp;App</span> <span class="U2">let"),&nbsp;Ver</span> <span class="U2">ifyContain</span> <span class="U2">sText.new,</span> <span class="U2">&nbsp;AccessHtm</span> <span class="U2">lElement.n</span> <span class="U2">ew(:css,&nbsp;"</span> <span class="U2">[data-appl</span> <span class="U2">etid=probl</span> <span class="U2">ems]&nbsp;table</span> <span class="U2">&nbsp;tbody&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Activitie</span> <span class="U2">s&nbsp;Applet")</span> <span class="U2">,&nbsp;VerifyCo</span> <span class="U2">ntainsText</span> <span class="U2">.new,&nbsp;Acce</span> <span class="U2">ssHtmlElem</span> <span class="U2">ent.new(:c</span> <span class="U2">ss,&nbsp;"[data</span> <span class="U2">-appletid=</span> <span class="U2">activities</span> <span class="U2">]&nbsp;table&nbsp;tb</span> <span class="U2">ody&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Patie</span> <span class="U2">nt&nbsp;Header&nbsp;</span> <span class="U2">Phone&nbsp;Grou</span> <span class="U2">p&nbsp;Quick&nbsp;Lo</span> <span class="U2">ok&nbsp;table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Phone&nbsp;Gro</span> <span class="U2">up&nbsp;QuickLo</span> <span class="U2">ok"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:css,&nbsp;"#</span> <span class="U2">ql-phone-t</span> <span class="U2">able-conta</span> <span class="U2">iner&nbsp;table</span> <span class="U2">&nbsp;tbody&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Address&nbsp;G</span> <span class="U2">roup&nbsp;Quick</span> <span class="U2">Look"),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:css,&nbsp;</span> <span class="U2">"#pt-addre</span> <span class="U2">ss-row-con</span> <span class="U2">tainer&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Next&nbsp;Of&nbsp;K</span> <span class="U2">in&nbsp;Group&nbsp;Q</span> <span class="U2">uickLook")</span> <span class="U2">,&nbsp;VerifyCo</span> <span class="U2">ntainsText</span> <span class="U2">.new,&nbsp;Acce</span> <span class="U2">ssHtmlElem</span> <span class="U2">ent.new(:c</span> <span class="U2">ss,&nbsp;"#nok-</span> <span class="U2">contact-ro</span> <span class="U2">w-containe</span> <span class="U2">r&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Email&nbsp;Gro</span> <span class="U2">up&nbsp;QuickLo</span> <span class="U2">ok"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:css,&nbsp;"#</span> <span class="U2">pt-email-r</span> <span class="U2">ow-contain</span> <span class="U2">er&nbsp;tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Emergency</span> <span class="U2">&nbsp;Contact&nbsp;G</span> <span class="U2">roup&nbsp;Quick</span> <span class="U2">Look"),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:css,&nbsp;</span> <span class="U2">"#em-conta</span> <span class="U2">ct-row-con</span> <span class="U2">tainer&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Care&nbsp;Team</span> <span class="U2">&nbsp;Quicklook</span> <span class="U2">"),&nbsp;Verify</span> <span class="U2">ContainsTe</span> <span class="U2">xt.new,&nbsp;Ac</span> <span class="U2">cessHtmlEl</span> <span class="U2">ement.new(</span> <span class="U2">:css,&nbsp;"#pa</span> <span class="U2">tientDemog</span> <span class="U2">raphic-pro</span> <span class="U2">viderInfo&nbsp;</span> <span class="U2">.popover-c</span> <span class="U2">ontent&nbsp;.ta</span> <span class="U2">ble&nbsp;tbody&nbsp;</span> <span class="U2">tr"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;News</span> <span class="U2">feed&nbsp;/&nbsp;Tim</span> <span class="U2">e&nbsp;table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Newsfeed&nbsp;</span> <span class="U2">Applet"),&nbsp;</span> <span class="U2">VerifyCont</span> <span class="U2">ainsText.n</span> <span class="U2">ew,&nbsp;Access</span> <span class="U2">HtmlElemen</span> <span class="U2">t.new(:css</span> <span class="U2">,&nbsp;"#conten</span> <span class="U2">t-region&nbsp;[</span> <span class="U2">data-apple</span> <span class="U2">tid=newsfe</span> <span class="U2">ed]&nbsp;.data-</span> <span class="U2">grid&nbsp;table</span> <span class="U2">&nbsp;tbody&nbsp;tr"</span> <span class="U2">))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Newsfeed&nbsp;</span> <span class="U2">Applet&nbsp;dat</span> <span class="U2">a"),&nbsp;Verif</span> <span class="U2">yContainsT</span> <span class="U2">ext.new,&nbsp;A</span> <span class="U2">ccessHtmlE</span> <span class="U2">lement.new</span> <span class="U2">(:css,&nbsp;"#c</span> <span class="U2">ontent-reg</span> <span class="U2">ion&nbsp;[data-</span> <span class="U2">appletid=n</span> <span class="U2">ewsfeed]&nbsp;.</span> <span class="U2">data-grid&nbsp;</span> <span class="U2">table&nbsp;tbod</span> <span class="U2">y&nbsp;tr.selec</span> <span class="U2">table"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Newsfeed&nbsp;</span> <span class="U2">Applet&nbsp;gro</span> <span class="U2">ups"),&nbsp;Ver</span> <span class="U2">ifyContain</span> <span class="U2">sText.new,</span> <span class="U2">&nbsp;AccessHtm</span> <span class="U2">lElement.n</span> <span class="U2">ew(:css,&nbsp;'</span> <span class="U2">#content-r</span> <span class="U2">egion&nbsp;[dat</span> <span class="U2">a-appletid</span> <span class="U2">=newsfeed]</span> <span class="U2">&nbsp;.data-gri</span> <span class="U2">d&nbsp;table&nbsp;tr</span> <span class="U2">.groupByHe</span> <span class="U2">ader'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;Docu</span> <span class="U2">ments&nbsp;/&nbsp;Ti</span> <span class="U2">me&nbsp;table</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Documents</span> <span class="U2">&nbsp;Applet"),</span> <span class="U2">&nbsp;VerifyCon</span> <span class="U2">tainsText.</span> <span class="U2">new,&nbsp;Acces</span> <span class="U2">sHtmlEleme</span> <span class="U2">nt.new(:cs</span> <span class="U2">s,&nbsp;"#conte</span> <span class="U2">nt-region&nbsp;</span> <span class="U2">[data-appl</span> <span class="U2">etid=docum</span> <span class="U2">ents]&nbsp;.dat</span> <span class="U2">a-grid&nbsp;tab</span> <span class="U2">le&nbsp;tbody&nbsp;t</span> <span class="U2">r"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Documents</span> <span class="U2">&nbsp;Applet&nbsp;da</span> <span class="U2">ta"),&nbsp;Veri</span> <span class="U2">fyContains</span> <span class="U2">Text.new,&nbsp;</span> <span class="U2">AccessHtml</span> <span class="U2">Element.ne</span> <span class="U2">w(:css,&nbsp;"#</span> <span class="U2">content-re</span> <span class="U2">gion&nbsp;[data</span> <span class="U2">-appletid=</span> <span class="U2">documents]</span> <span class="U2">&nbsp;.data-gri</span> <span class="U2">d&nbsp;table&nbsp;tb</span> <span class="U2">ody&nbsp;tr.sel</span> <span class="U2">ectable"))</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew("Rows&nbsp;-</span> <span class="U2">&nbsp;Documents</span> <span class="U2">&nbsp;Applet&nbsp;gr</span> <span class="U2">oups"),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:css,&nbsp;</span> <span class="U2">'#content-</span> <span class="U2">region&nbsp;[da</span> <span class="U2">ta-appleti</span> <span class="U2">d=document</span> <span class="U2">s]&nbsp;.data-g</span> <span class="U2">rid&nbsp;table&nbsp;</span> <span class="U2">tr.groupBy</span> <span class="U2">Header'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Probl</span> <span class="U2">ems</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew('Rows&nbsp;-</span> <span class="U2">&nbsp;Problems&nbsp;</span> <span class="U2">Gist&nbsp;Apple</span> <span class="U2">t'),&nbsp;Verif</span> <span class="U2">yContainsT</span> <span class="U2">ext.new,&nbsp;A</span> <span class="U2">ccessHtmlE</span> <span class="U2">lement.new</span> <span class="U2">(:css,&nbsp;"[d</span> <span class="U2">ata-applet</span> <span class="U2">id='proble</span> <span class="U2">ms']&nbsp;.gist</span> <span class="U2">-item"))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew('Rows&nbsp;-</span> <span class="U2">&nbsp;Vitals&nbsp;Ap</span> <span class="U2">plet'),&nbsp;Ve</span> <span class="U2">rifyContai</span> <span class="U2">nsText.new</span> <span class="U2">,&nbsp;AccessHt</span> <span class="U2">mlElement.</span> <span class="U2">new(:css,&nbsp;</span> <span class="U2">'[data-app</span> <span class="U2">letid=vita</span> <span class="U2">ls]&nbsp;.data-</span> <span class="U2">grid&nbsp;table</span> <span class="U2">&nbsp;tr.select</span> <span class="U2">able'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#Appoi</span> <span class="U2">ntments</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;add_ve</span> <span class="U2">rify(Cucum</span> <span class="U2">berLabel.n</span> <span class="U2">ew('Rows&nbsp;-</span> <span class="U2">&nbsp;Appointme</span> <span class="U2">nt&nbsp;Applet'</span> <span class="U2">),&nbsp;VerifyC</span> <span class="U2">ontainsTex</span> <span class="U2">t.new,&nbsp;Acc</span> <span class="U2">essHtmlEle</span> <span class="U2">ment.new(:</span> <span class="U2">css,&nbsp;'[dat</span> <span class="U2">a-appletid</span> <span class="U2">=appointme</span> <span class="U2">nts]&nbsp;.data</span> <span class="U2">-grid&nbsp;tabl</span> <span class="U2">e&nbsp;tbody&nbsp;tr</span> <span class="U2">.selectabl</span> <span class="U2">e'))</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end&nbsp;#&nbsp;in</span> <span class="U2">itialize</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;########</span> <span class="U2">##########</span> <span class="U2">######&nbsp;fun</span> <span class="U2">ctions&nbsp;###</span> <span class="U2">##########</span> <span class="U2">##########</span> <span class="U2">#</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;verify</span> <span class="U2">_single_ro</span> <span class="U2">w(table_na</span> <span class="U2">me,&nbsp;expect</span> <span class="U2">ed_row)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@tc&nbsp;=&nbsp;Ta</span> <span class="U2">bleContain</span> <span class="U2">er.instanc</span> <span class="U2">e</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;expected</span> <span class="U2">_first_row</span> <span class="U2">&nbsp;=&nbsp;expecte</span> <span class="U2">d_row.rows</span> <span class="U2">[0]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;rows_key</span> <span class="U2">&nbsp;=&nbsp;"Rows&nbsp;-</span> <span class="U2">&nbsp;#{table_n</span> <span class="U2">ame}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@tc.wait</span> <span class="U2">_until_act</span> <span class="U2">ion_elemen</span> <span class="U2">t_visible(</span> <span class="U2">rows_key,&nbsp;</span> <span class="U2">15)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;actual_f</span> <span class="U2">irst_row&nbsp;=</span> <span class="U2">&nbsp;@tc.get_e</span> <span class="U2">lements(ro</span> <span class="U2">ws_key)[0]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;actual_f</span> <span class="U2">irst_row_c</span> <span class="U2">ells&nbsp;=&nbsp;act</span> <span class="U2">ual_first_</span> <span class="U2">row.find_e</span> <span class="U2">lements(:c</span> <span class="U2">ss,&nbsp;"td")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;for&nbsp;i&nbsp;in</span> <span class="U2">&nbsp;0...expec</span> <span class="U2">ted_first_</span> <span class="U2">row.size&nbsp;d</span> <span class="U2">o</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;verify</span> <span class="U2">_elements_</span> <span class="U2">equal(expe</span> <span class="U2">cted_first</span> <span class="U2">_row[i],&nbsp;a</span> <span class="U2">ctual_firs</span> <span class="U2">t_row_cell</span> <span class="U2">s[i].text)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">141</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">142</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">143</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;########</span> <span class="U2">##########</span> <span class="U2">######&nbsp;The</span> <span class="U2">n&nbsp;########</span> <span class="U2">##########</span> <span class="U2">######</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">144</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

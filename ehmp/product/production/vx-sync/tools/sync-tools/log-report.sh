@@ -53,7 +53,7 @@ do
 		echo "         usage [ -history ]"
 		echo ""
 		echo -e ""$bold"-l"$normal"       Full path of Log(s) to search. Default = all eHMP logs"
-		echo "         usage [ -l \"/opt/vxsync/logs/vxsync-pollerHost-9E7A.log*\"              ]"
+		echo "         usage [ -l \"/opt/vxsync/logs/vxsync-pollerHost-SITE.log*\"              ]"
 		echo "               [ -l \"/opt/vxsync/logs/*\"                                        ]"
 		echo "               [ -l \"/opt/vxsync/logs/* /opt/soap_handler/*.log\" ]"
 		echo "               [ -l \"/var/log/bluepill*\"                                        ]"

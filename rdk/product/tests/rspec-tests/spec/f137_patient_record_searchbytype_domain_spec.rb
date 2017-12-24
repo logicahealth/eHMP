@@ -73,7 +73,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. site' do
       response = rdk_fetch(@command_lab,
-                           'pid' => 'C877;3',
+                           'pid' => 'SITE;3',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)
@@ -84,7 +84,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. with site' do
       response = rdk_fetch(@command_lab,
-                           'pid' => '9E7A;100816',
+                           'pid' => 'SITE;100816',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)
@@ -105,7 +105,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command_lab,
-                           'pid' => 'C877;848484',
+                           'pid' => 'SITE;848484',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)
@@ -146,7 +146,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. same localId, different site' do
       response = rdk_fetch(@command_lab,
-                           'pid' => 'C877;100599',
+                           'pid' => 'SITE;100599',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)
@@ -155,7 +155,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
       verify_response_contains([%w(totalItems 0)], response.body)
 
       response = rdk_fetch(@command_lab,
-                           'pid' => '9E7A;100599',
+                           'pid' => 'SITE;100599',
                            'type' => 'HGB')
 
       # puts "response.code=[#{response.code}]"
@@ -167,7 +167,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. just site' do
       response = rdk_fetch(@command_lab,
-                           'pid' => '9E7A',
+                           'pid' => 'SITE',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)
@@ -177,7 +177,7 @@ describe 'f137_patient_record_searchbytype_domain_spec.rb', debug: true do
 
     it '. site with null localid' do
       response = rdk_fetch(@command_lab,
-                           'pid' => '9E7A;',
+                           'pid' => 'SITE;',
                            'type' => 'HGB')
       # puts "response.code=[#{response.code}]"
       # dump(response.body)

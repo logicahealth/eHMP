@@ -1,0 +1,15 @@
+$admin-primary:         		#076F7D;
+$admin-primary-dark:         	#05434B;
+$admin-primary-light:     		#E4EFEC;
+
+$admin-primary-light-alt:       #CAE0DA;
+$admin-primary-lighter:       	#E2F3F8;
+$admin-primary-lightest:		#F3F5F7;
+
+$admin-secondary:      			#328443;
+$admin-secondary-light:      	#E4EFEC;
+$admin-secondary-dark:			#256632;
+
+.admin-context {
+	@include context-theme($admin-primary,$admin-primary-dark,$admin-primary-light,$admin-primary-light-alt,$admin-primary-lighter,$admin-primary-lightest,$admin-secondary,$admin-secondary-light,$admin-secondary-dark);
+}

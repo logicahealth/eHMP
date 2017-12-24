@@ -66,7 +66,7 @@ describe('API Blueprint resource registration', function() {
 
         apiBlueprint.registerResource('/test/:pid/example', markdownPath, false);
 
-        apiBlueprint.jsonDocumentationForPath('/test/9E7A;123/example', function(error, jsonDocs) {
+        apiBlueprint.jsonDocumentationForPath('/test/SITE;123/example', function(error, jsonDocs) {
             expect(error).to.be.falsy();
             expect(jsonDocs).to.be.an.object();
             done();

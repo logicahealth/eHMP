@@ -78,7 +78,7 @@ define([], function() {
         getCommentBubble: function(response) {
             if (!_.isEmpty(response.comments)) {
                 response.commentBubble = _.any(response.comments, function(commentObj) {
-                    return (commentObj.comment && commentObj.comment.length > 0);
+                    return (commentObj.comment && commentObj.comment.trim().length > 0);
                 });
             }
 

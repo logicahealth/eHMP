@@ -7,20 +7,13 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var utils = require('./utils.js');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 var http = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
 
 var dbName = 'patientlist';
 var patCollection = 'patientlist';
-var thisApp;
-
-var testId;
-
-function init(app) {
-    thisApp = app;
-    testId = thisApp.subsystems.cds.testMongoDBId;
-}
 
 
 // /////////////
@@ -55,7 +48,7 @@ function init(app) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "REDACTED"
+ *                         "PW         "
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -65,7 +58,7 @@ function init(app) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "REDACTED",
+ *             "owner": "PW         ",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -80,11 +73,14 @@ function init(app) {
  *  "message": "Patientlist not found" }
  *
  */
-var getPatientList = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getPatientList(req, res) {
+    req.logger.debug('patient-list.getPatientList()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -126,8 +122,8 @@ var getPatientList = function(req, res) {
             });
         }
     });
-};
-module.exports.getPatientList = getPatientList;
+}
+
 
 /**
  * Create Patientlist used in processing
@@ -159,7 +155,7 @@ module.exports.getPatientList = getPatientList;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "REDACTED"
+ *                         "PW         "
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -169,7 +165,7 @@ module.exports.getPatientList = getPatientList;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "REDACTED",
+ *             "owner": "PW         ",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -201,11 +197,14 @@ module.exports.getPatientList = getPatientList;
  *
  *
  */
-var postPatientlist = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postPatientlist(req, res) {
+    req.logger.debug('patient-list.postPatientlist()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -277,8 +276,8 @@ var postPatientlist = function(req, res) {
             });
         });
     });
-};
-module.exports.postPatientlist = postPatientlist;
+}
+
 
 /**
  * Delete Patientlist used in processing
@@ -302,11 +301,14 @@ module.exports.postPatientlist = postPatientlist;
  * { status: 404 message: Patientlist not found }
  *
  */
-var deletePatientlist = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deletePatientlist(req, res) {
+    req.logger.debug('patient-list.deletePatientlist()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -336,8 +338,8 @@ var deletePatientlist = function(req, res) {
             return res.status(status).rdkSend(message);
         });
     });
-};
-module.exports.deletePatientlist = deletePatientlist;
+}
+
 
 /**
  * Add a patient to Patientlist
@@ -365,11 +367,14 @@ module.exports.deletePatientlist = deletePatientlist;
  *                  message: Source Patientlist not found }
  *
  */
-var addPatient = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function addPatient(req, res) {
+    req.logger.debug('patient-list.addPatient()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -425,8 +430,8 @@ var addPatient = function(req, res) {
             });
         });
     });
-};
-module.exports.addPatient = addPatient;
+}
+
 
 /**
  * Remove a patient from Patientlist
@@ -459,11 +464,14 @@ module.exports.addPatient = addPatient;
  *                  500 message: system or database error message }
  *
  */
-var removePatient = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function removePatient(req, res) {
+    req.logger.debug('patient-list.removePatient()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -520,13 +528,13 @@ var removePatient = function(req, res) {
             });
         });
     });
-};
-module.exports.removePatient = removePatient;
+}
+
 
 /**
  * Checks if a patient is a member of any patient list
  *
- * @api {get} /resource/cds/patient/list/status?type=pid&value=9E7A;100001 Get Membership Status
+ * @api {get} /resource/cds/patient/list/status?type=pid&value=SITE;100001 Get Membership Status
  *
  * @apiName checkPatientMembershipStatus
  * @apiGroup Patient List
@@ -547,11 +555,14 @@ module.exports.removePatient = removePatient;
  * { status: 500 message: system or database error message }
  *
  */
-var checkPatientMembershipStatus = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function checkPatientMembershipStatus(req, res) {
+    req.logger.debug('patient-list.checkPatientMembershipStatus()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -574,7 +585,9 @@ var checkPatientMembershipStatus = function(req, res) {
 
         http.get(options, function(error, response, result) {
             if (error) {
-                req.logger.error({error: error}, 'patient-list.checkPatientMembershipStatus error');
+                req.logger.error({
+                    error: error
+                }, 'patient-list.checkPatientMembershipStatus error');
                 return res.status(rdk.httpstatus.ok).rdkSend('false');
             }
 
@@ -589,7 +602,9 @@ var checkPatientMembershipStatus = function(req, res) {
             //2) keep a master list of patients with a counter to be incremented or decremented each time a patient is
             //added to or removed from a list.
             var matchStatement = {
-                patients: {$in: patientIdentifiers}
+                patients: {
+                    $in: patientIdentifiers
+                }
             };
             dbConnection.collection(patCollection).findOne(matchStatement, function(err, result) {
                 if (err) {
@@ -600,7 +615,7 @@ var checkPatientMembershipStatus = function(req, res) {
             });
         });
     });
-};
+}
 module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
 
 /**
@@ -631,7 +646,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "REDACTED"
+ *                         "PW         "
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -641,7 +656,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "REDACTED",
+ *             "owner": "PW         ",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -663,11 +678,14 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  * { status: 500 message: Internal Server Error }
  *
  */
-var copyPatientlist = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function copyPatientlist(req, res) {
+    req.logger.debug('patient-list.copyPatientlist()');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS patient list resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -729,7 +747,12 @@ var copyPatientlist = function(req, res) {
             });
         });
     });
-};
-module.exports.copyPatientlist = copyPatientlist;
+}
 
-module.exports.init = init;
+
+module.exports.getPatientList = getPatientList;
+module.exports.postPatientlist = postPatientlist;
+module.exports.deletePatientlist = deletePatientlist;
+module.exports.addPatient = addPatient;
+module.exports.removePatient = removePatient;
+module.exports.copyPatientlist = copyPatientlist;

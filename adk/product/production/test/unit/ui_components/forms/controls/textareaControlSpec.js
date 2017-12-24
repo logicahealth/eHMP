@@ -82,6 +82,14 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                 placeholder: "Enter text...",
                 title: "Enter message here"
             },
+            textareaControlDefinition_10 = {
+                control: "textarea",
+                name: "textareaValue",
+                label: "textarea label",
+                placeholder: "Enter text...",
+                readonly: true,
+                charCount: false
+            },
             formModel_1 = new Backbone.Model(),
             formModel_2 = new Backbone.Model({
                 textareaValue: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit ex purus, quis cursus augue tempor vitae. Integer commodo tincidunt.'
@@ -213,6 +221,23 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
 
                 it("has correct attribute", function() {
                     expect($testPage.find('textarea')).toHaveAttr('required', 'required');
+                });
+            });
+            describe("readonly", function() {
+                beforeEach(function() {
+                    testPage = new TestView({
+                        view: new UI.Form({
+                            model: formModel_1,
+                            fields: [textareaControlDefinition_10]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                });
+
+                it("has correct attribute", function() {
+                    expect($testPage.find('textarea')).toHaveAttr('readonly', 'readonly');
                 });
             });
             describe("set cols and rows", function() {
@@ -394,6 +419,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                         hidden: true,
                         disabled: true,
                         required: true,
+                        readonly: true,
                         title: 'newTitle',
                         maxlength: 10,
                         rows: 4,
@@ -402,6 +428,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                     expect($testPage.find('.textareaValue')).toHaveClass('hidden');
                     expect($testPage.find('textarea')).toHaveAttr('disabled');
                     expect($testPage.find('textarea')).toHaveAttr('required');
+                    expect($testPage.find('textarea')).toHaveAttr('readonly');
                     expect($testPage.find('textarea')).toHaveAttr('title', 'newTitle');
                     expect($testPage.find('textarea')).toHaveAttr('maxlength', '10');
                     expect($testPage.find('textarea')).toHaveAttr('rows', '4');
@@ -410,6 +437,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                         hidden: false,
                         disabled: false,
                         required: false,
+                        readonly: false,
                         title: '',
                         maxlength: 100,
                         rows: 7,
@@ -418,6 +446,7 @@ define(["jquery", "handlebars", "backbone", "marionette", "main/UILibrary", "api
                     expect($testPage.find('.textareaValue')).not.toHaveClass('hidden');
                     expect($testPage.find('textarea')).not.toHaveAttr('disabled');
                     expect($testPage.find('textarea')).not.toHaveAttr('required');
+                    expect($testPage.find('textarea')).not.toHaveAttr('readonly');
                     expect($testPage.find('textarea')).not.toHaveAttr('title');
                     expect($testPage.find('textarea')).toHaveAttr('maxlength', '100');
                     expect($testPage.find('textarea')).toHaveAttr('rows', '7');

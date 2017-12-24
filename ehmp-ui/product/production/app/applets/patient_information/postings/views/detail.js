@@ -84,24 +84,24 @@ define([
                 this.emptyViewOptions = {
                     errorCode: 'undefined'
                 };
-                var filterString;
+                var range;
                 var sort = function(item) {
                     var enteredDate = moment(item.get('entered'), 'YYYYMMDDHHmmss').valueOf();
                     return -enteredDate;
                 };
 
                 if (options.cwadIdentifier === 'crisis notes') {
-                    filterString = 'ilike(kind,"%Crisis%")';
+                    range = 'Crisis Note';
                     this.cwadfCode = 'C';
                     this.childViewOptions.template = DirectiveDetails;
                     this.setupNoteListener();
                 } else if (options.cwadIdentifier === 'warnings') {
-                    filterString = 'ilike(kind,"%Warning%")';
+                    range = 'Clinical Warning';
                     this.childViewOptions.template = DirectiveDetails;
                     this.cwadfCode = 'W';
                     this.setupNoteListener();
                 } else if (options.cwadIdentifier === 'allergies') {
-                    filterString = 'ilike(kind,"%Allergy%"),not(exists(removed),eq(removed,"false"))';
+                    range = 'Allergy/Adverse Reaction';
                     this.childViewOptions.template = AllergiesDetailsTemplate;
                     this.cwadfCode = 'A';
                     sort = function(a, b) {
@@ -119,18 +119,18 @@ define([
                         this.updatePostingsDetails();
                     });
                 } else if (options.cwadIdentifier === 'directives') {
-                    filterString = 'ilike(kind,"%Directive%")';
+                    range = 'Advance Directive';
                     this.childViewOptions.template = DirectiveDetails;
                     this.cwadfCode = 'D';
                     this.setupNoteListener();
                 } else {
-                    filterString = '';
+                    range = '';
                     this.childViewOptions.template = Handlebars.compile('Empty');
                 }
                 var fetchOptions = {
                     resourceTitle: 'patient-record-cwad',
                     criteria: {
-                        'filter': filterString
+                        range: range
                     },
                     cache: false,
                     collectionConfig: {

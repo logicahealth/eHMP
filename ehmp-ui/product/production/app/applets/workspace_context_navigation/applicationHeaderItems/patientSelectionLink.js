@@ -17,7 +17,7 @@ define([
         tagName: 'li',
         className: 'patient-selection-link-style',
         template: Handlebars.compile([
-            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to return to patient search and choose another patient" {{/if}}id="patientSearchButton" class="context-navigation-link{{#if isActive}} active{{/if}}">',
+            '{{#if isActive}}<p {{else}}<a href="#" title="Return to patient search and choose another patient" {{/if}}id="patientSearchButton" class="context-navigation-link{{#if isActive}} active{{/if}}">',
             '<i class="fa fa-user font-size-15" aria-hidden="true"></i><i class="fa fa-search" aria-hidden="true"></i> Patient Selection',
             '{{#if isActive}}</p>{{else}}</a>{{/if}}'
         ].join('\n')),

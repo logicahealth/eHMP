@@ -71,7 +71,8 @@ define([
                 criteria: {
                     "query": options.searchTerm,
                     "group.field": group_field,
-                    "group.value": options.group_value
+                    "group.value": options.group_value,
+                    "domain": options.domain
                 },
                 cache: false,
                 patient: ADK.PatientRecordService.getCurrentPatient(),

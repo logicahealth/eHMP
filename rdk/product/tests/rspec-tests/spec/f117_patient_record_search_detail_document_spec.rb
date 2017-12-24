@@ -94,9 +94,9 @@ describe 'f117_patient_record_search_detail_document_spec.rb', debug: true do
       expect(items.size).to eq(@all_match_count)
     end
 
-    it '. site C877' do
+    it '. site SITE' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;3',
+                           'pid' => 'SITE;3',
                            'query' => 'document',
                            'group.field' => 'local_title',
                            'group.value' => 'ADVANCE%20DIRECTIVE')
@@ -108,9 +108,9 @@ describe 'f117_patient_record_search_detail_document_spec.rb', debug: true do
       expect(items.size).to eq(2)
     end
 
-    it '. site 9E7A' do
+    it '. site SITE' do
       response = rdk_fetch(@command,
-                           'pid' => '9E7A;3',
+                           'pid' => 'SITE;3',
                            'query' => 'document',
                            'group.field' => 'local_title',
                            'group.value' => 'ADVANCE%20DIRECTIVE')
@@ -136,7 +136,7 @@ describe 'f117_patient_record_search_detail_document_spec.rb', debug: true do
 
     it '. not found in site' do
       response = rdk_fetch(@command,
-                           'pid' => 'C877;848484',
+                           'pid' => 'SITE;848484',
                            'query' => 'document',
                            'group.field' => 'local_title',
                            'group.value' => 'ADVANCE%20DIRECTIVE')

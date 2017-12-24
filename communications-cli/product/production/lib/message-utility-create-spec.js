@@ -40,7 +40,7 @@ describe('Creates Messages', function() {
         it('should return error if JSON is not valid', function(){
             createMessage._validateAndSerializeContentData('{"foo" "bar"}', function(error, result){
                 expect(error).be.not.null();
-                expect(error).be.eql('Malformed JSON: SyntaxError: Unexpected string');
+                expect(error).be.include('Malformed JSON: SyntaxError: Unexpected string');
                 expect(result).be.undefined();
             });
         });

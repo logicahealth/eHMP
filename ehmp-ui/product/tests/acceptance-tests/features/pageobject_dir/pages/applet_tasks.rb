@@ -7,25 +7,30 @@ class PobTasksApplet < PobParentApplet
   
   elements :tbl_task_headers, "#data-grid-todo_list [data-header-instanceid]"
   elements :tbl_task_rows, "[data-appletid='todo_list'] table tbody tr.selectable"
-  elements :fld_col_status_data, "#data-grid-todo_list tr.selectable td:nth-child(10)"
-  elements :fld_col_task_name_data, "#data-grid-todo_list tr.selectable td:nth-child(7)"
+  elements :fld_col_status_data, "[data-appletid='todo_list'] table tr.selectable td:nth-child(10)"
+  elements :fld_col_task_name_data, "[data-appletid='todo_list'] table tr.selectable td:nth-child(7)"
   elements :fld_display_options, "#todo_list-status-options option"
   elements :fld_assigned_to_options, "#todo_list-assigned-to-options option"
-  elements :fld_col_assigned_to_data, "#data-grid-todo_list tr.selectable td:nth-child(9)"
-  elements :fld_created_on_dates_patient_view, "#data-grid-todo_list tbody tr.selectable td:nth-child(12)"
-  elements :fld_created_on_dates_provider_view, "#data-grid-todo_list tbody tr.selectable td:nth-child(13)"
+  elements :fld_col_assigned_to_data, "[data-appletid='todo_list'] tr.selectable td:nth-child(9)"
+  elements :fld_created_on_dates_patient_view, "[data-appletid='todo_list'] tbody tr.selectable td:nth-child(12)"
+  elements :fld_created_on_dates_provider_view, "[data-appletid='todo_list'] tbody tr.selectable td:nth-child(13)"
+  elements :fld_earliest_date_column_data, "[data-appletid='todo_list'] tbody tr.selectable td:nth-child(5)"
   
   element :fld_task_name_header, "[data-header-instanceid='todo_list-TASKNAMEFORMATTED'] a"
+  element :fld_created_on_header, "[data-header-instanceid='todo_list-createdOn'] a"
+  element :fld_earliest_date_header, "[data-header-instanceid='todo_list-DUEDATEFORMATTED'] a"
   element :ddl_assigned_to, "#todo_list-assigned-to-options"
   element :ddl_display_options, "#todo_list-status-options"
   element :ddl_action, ".action select"
   element :fld_task_filter_button, "#input-filter-search-todo_list"
-  element :task_applet_gdf, "#grid-filter-todo_list .grid-filter-daterange"
+  element :task_applet_gdf, "[data-appletid='todo_list'] .grid-applet-panel .grid-filter-daterange"
       
   element :btn_unlock, "#unlockBtn"
   element :btn_activity_details, "#activDetailBtn"
   element :btn_close, "#closeBtn"
   element :btn_accept, "#responseAcceptButton"
+  element :btn_gototask, ".gototask-button-toolbar"
+  elements :btn_action, ".actionbutton-container .btn-action-arrow"
     
   
   def initialize
@@ -36,6 +41,7 @@ class PobTasksApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_expanded_applet_fields appletid_css
+    add_toolbar_buttons appletid_css
   end
 
   def applet_loaded?(allow_errors = DefaultLogin.local_testrun)

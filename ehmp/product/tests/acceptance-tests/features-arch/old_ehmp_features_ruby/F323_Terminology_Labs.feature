@@ -7,7 +7,7 @@ Feature: F323  Normalization of Labs (Chem/Hem) Data
 @terminology_labs_ch @VPR
 Scenario: An authorized user can access VA Laboratory Chem and see standardized LOINC values when defined through VPR API
 	Given a patient with "labs" in multiple VistAs
-	And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "9E7A" site(s)
+	And a patient with pid "5000000341V359724" has been synced through VX-Sync API for "SITE" site(s)
   	When the client requests "labs" for the patient "5000000341V359724" in VPR format 
   	Then the VPR results contain "labs" terminology from "DOD Ncid and LOINC"
   	  | field         | value                                                             |
@@ -73,5 +73,5 @@ Scenario: An authorized user can access DoD Laboratory Chem and see standardized
 
 #TestNote: 
 #	* We could not test Lab MI in VPR format because it's not available through VPR.       
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
       

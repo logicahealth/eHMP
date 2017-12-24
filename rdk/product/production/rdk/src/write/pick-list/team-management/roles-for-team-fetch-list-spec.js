@@ -25,13 +25,13 @@ describe('roles fetch list', function() {
                 abbreviation: 'ABB'
             }
         },
-        jbpm: {
-            activityDatabase: 'dummyVal'
+        oracledb: {
+            ehmpDatabase: 'dummyVal'
         }
     };
 
     var params = {
-        pcmmDbConfig: 'dummyVal'
+        ehmpDatabase: 'dummyVal'
     };
 
     var pcmmData = [{
@@ -43,13 +43,13 @@ describe('roles fetch list', function() {
     }];
 
     beforeEach(function() {
-        sinon.stub(pcmm, 'doQueryWithParams', function(dummyConfig, query, queryParams, callback) {
+        sinon.stub(pcmm, 'doExecuteProcWithParams', function(dummyConfig, query, queryParams, callback) {
             return callback(null, pcmmData);
         });
     });
 
     afterEach(function() {
-        pcmm.doQueryWithParams.restore();
+        pcmm.doExecuteProcWithParams.restore();
     });
 
     it('returns expected JSON', function() {

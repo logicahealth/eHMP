@@ -17,7 +17,6 @@ define([
 	var facilityCol = {
         name: 'facilityMoniker',
         label: 'Facility',
-        hoverTip: 'healthSummaries_facility',
         template: Handlebars.compile('{{facilityMoniker}}'),
         flexWidth: 'flex-width-date',
         cell: Backgrid.HandlebarsCell.extend ({
@@ -53,7 +52,6 @@ define([
 	var isPrimaryCol = {
         name: 'isPrimary',
         label: 'Primary',
-        hoverTip: 'healthSummaries_isPrimary',
         cell: 'boolean',
         renderable: false
 	};
@@ -61,7 +59,6 @@ define([
     var reportIdCol = {
         name: 'reportID',
         label: 'Report ID',
-        hoverTip: 'healthSummaries_reportID',
         cell: 'number',
         renderable: false
     };
@@ -70,7 +67,6 @@ define([
         name: 'hsReport',
         label: 'Report',
         cell: "handlebars",
-        hoverTip: 'healthSummaries_report',
         template: Handlebars.compile('{{hsReport}}'),
         sortable: true,
         groupable: true,
@@ -107,9 +103,22 @@ define([
             var appletOptions = {
                 columns : summaryColumns,
                 groupable : true,
-                onClickRow: function(model, event) {
-                    event.preventDefault();
-                    AppletUiHelper.getDetailView(model, appletOptions.collection);
+                tileOptions: {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: function(params) {
+                                AppletUiHelper.getDetailView(params.model, params.collection, params.$el);
+                            }
+                        }]
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: function(params) {
+                            AppletUiHelper.getDetailView(params.model, params.collection, params.$el);
+                        }
+                    }
                 }
             };
 

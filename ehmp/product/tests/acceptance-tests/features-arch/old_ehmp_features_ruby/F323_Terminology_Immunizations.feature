@@ -8,7 +8,7 @@ Feature: F323  Normalization of Immunizations Data
   @terminology_immunizations @VPR
   Scenario: An authorized user can access VA Immunization Data and see standardized CVX values when defined through VPR API
     Given a patient with "immunizations" in multiple VistAs
-    And a patient with pid "10108V420871" has been synced through VX-Sync API for "9E7A" site(s)
+    And a patient with pid "10108V420871" has been synced through VX-Sync API for "SITE" site(s)
 	When the client requests "immunizations" for the patient "10108V420871" in VPR format  
     Then the VPR results contain "immunizations" terminology from "(CPT to CVX (VA))"
       | field         	| value       										|

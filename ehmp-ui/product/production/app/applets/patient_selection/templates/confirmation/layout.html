@@ -1,11 +1,3 @@
-<div class="confirmHeader">
-    <div class="help-icon-div"></div>
-    {{#unless hideCloseX}}
-    <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
-        <i class="fa fa-times fa-lg"></i>
-    </button>
-    {{/unless}}
-</div>
 <div class="fixedHeightZone confirmation">
     <div class="patientInfo">
         <div id="patient-image-container" class="patient-detail-head">
@@ -15,13 +7,9 @@
             <div aria-hidden="true" class="patient-image" id="patient-image"></div>
             {{/if}}
         </div>
-        <div class="patientName">{{formatName displayName ',' ', '}}</div>
+        <div class="patientName font-size-20 color-primary-dark top-margin-md bottom-margin-md text-center">{{formatName displayName ',' ', '}}</div>
         <div class="patient-detail-body">
-            {{#if sensitive}}
-            <div class="row">
-                <div class="col-xs-offset-4 col-xs-4 text-center background-color-pure-white color-red bottom-margin-md font-size-14 sensitive-patient"><span class="sr-only">Sensitive info: </span>*SENSITIVE*</div>
-            </div>
-            {{/if}}
+            <div class="sensitive-text-container"></div>
             <div class="row">
                 <div class="col-xs-6 infoLabelStyle">DOB:</div>
                 <div class="col-xs-6" id="confirm_birthDate">{{formatDate birthDate "MM/DD/YYYY"}}</div>
@@ -46,15 +34,6 @@
             {{/if}}
         </div>
     </div>
-    {{#if navigationOn}} {{#if workspaceContext}}
-    <div class="previous-workspace-confirmation">
-        <div class="checkbox">
-            <label for="previousWorkspace">
-                <input type="checkbox" id="previousWorkspace" name="previousWorkspace" title="Press spacebar to toggle checkbox."> Resume most recent workspace for this patient
-            </label>
-        </div>
-    </div>
-    {{/if}} {{/if}}
     <div class="hidden" id="screenReaderSyncing">
         Syncing patient data...
     </div>
@@ -63,18 +42,5 @@
     </div>
     <div class="hidden" id="fetchingPatientRecords">
         Fetching new patient records...
-    </div>
-    <div class="confirmation-div">
-        <button type="button" id="confirmationButton" class="confirm btn btn-success btn-block btn-lg" data-loading-text="<i class='fa fa-spinner fa-spin right-margin-xs'></i><span aria-live='assertive'>Loading Patient Data</span>" data-sync-text="<i class='fa fa-spinner fa-spin right-margin-xs'></i><span aria-live='assertive'>Syncing Patient Data...</span>" data-ccow-text="<i class='fa fa-spinner fa-spin right-margin-xs'></i><span aria-live='assertive'>Fetching New Patient Records...</span>" title="Press enter to confirm selection">Confirm Selection</button>
-
-        <div id="ccowVisitHomePageContainer" class="hidden top-margin-sm">
-            <button type="button" id="ccowVisitHomePageBtn" class="confirm btn btn-primary btn-block btn-lg" data-sync-text="<span>Fetch Records in the Background</span>" title="Press enter to visit the home page">Visit Home Page</button>
-        </div>
-
-        {{#if displayBreakClinicalLink}}
-            <div class="text-center">
-                <button type="button" id="breakContextButton" class="btn btn-link top-margin-xs font-size-13 confirm" title="Click to break Clinical link"><strong>Break Clinical link</strong></button>
-            </div>
-        {{/if}}
     </div>
 </div>

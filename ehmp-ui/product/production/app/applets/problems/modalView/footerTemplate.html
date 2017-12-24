@@ -8,8 +8,8 @@
 <div class="pull-right">
     {{#hasPermission 'edit-condition-problem'}}
     	{{#if siteCodeMatches}}
-    		{{ui-button "Edit" classes="btn btn-primary btn-sm" title="Press enter to edit" id="editBtn"}}
+    		{{ui-button "Edit" classes="btn btn-primary btn-sm" id="editBtn"}}
     	{{/if}}
 	{{/hasPermission}}
-    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
+    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
 </div>

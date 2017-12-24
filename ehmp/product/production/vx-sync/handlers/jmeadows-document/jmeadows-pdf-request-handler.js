@@ -9,7 +9,6 @@ var mkdirp = require('mkdirp');
 var docUtil = require(global.VX_UTILS + 'doc-utils');
 var Buffer = require('buffer').Buffer;
 var inspect = require('util').inspect;
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug(format('jmeadows-pdf-request-handler.handle : received request to JMeadows PDF handler %s', job));
@@ -105,7 +104,8 @@ function getHttpConfig(log, config, job) {
     domainConfig = _.defaults(domainConfig, config.jmeadows.defaults);
     var url = format('%s://%s:%s%s', domainConfig.protocol || 'http', domainConfig.host, domainConfig.port, domainConfig.path);
     domainConfig.url = url;
-    domainConfig.agentClass = VxSyncForeverAgent;
+    domainConfig.forever = true;
+    domainConfig.agentOptions = {maxSockets: config.handlerMaxSockets || 5};
     //encoding needs to be null so body will be of type Buffer, instead of the default, which is string
     domainConfig.encoding = null;
 

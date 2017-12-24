@@ -1,21 +1,7 @@
-Then(/^the staff view screen displays My Site in the sidebar tray$/) do
-  staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_my_site).to eq(true), "Unselected My Site button is not visible"
-  expect(staff_view.wait_for_btn_open_my_site).to eq(true)
-  expect(staff_view.btn_open_my_site.text.upcase).to eq("MY SITE")
-end
-
 Then(/^the staff view screen displays My Site search input box$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
-end
-
-When(/^the user opens the My Site tray$/) do
-  staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_my_site).to eq(true), "Unselected My Site button is not visible"
-  expect(staff_view.wait_for_btn_open_my_site).to eq(true), "Button to open My Site tray is not visible"
-  staff_view.btn_open_my_site.click
-  expect(staff_view.wait_for_open_my_site).to eq(true), "My Site tray did not open"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
 end
 
 Then(/^the My Site tray displays instruction "([^"]*)"$/) do |instruction|
@@ -29,27 +15,29 @@ Then(/^the My Site tray displays a close x button$/) do
   expect(my_site_tray.wait_for_btn_search_tray_close).to eq(true), "X (close) button in tray header did not display"
 end
 
-Then(/^the staff view My Site search input box placeholder text is "([^"]*)"$/) do |arg1|
+Then(/^the staff view My Site search input box placeholder text is "([^"]*)"$/) do |placeholder|
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
-  expect(staff_view.fld_my_site_input[:placeholder].upcase).to eq('MY SITE PATIENT SEARCH (EX: S1234 OR SMITH, JOHN...)')
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
+  expect(staff_view.patient_search_tray.fld_my_site_input[:placeholder].upcase).to eq(placeholder.upcase)
 end
 
 def search_with_button(search_term)
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
-  expect(staff_view.wait_for_btn_my_site_search).to eq(true), "My Site search button is not visible"
-  staff_view.fld_my_site_input.set search_term
-  staff_view.btn_my_site_search.click
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_my_site_search).to eq(true), "My Site search button is not visible"
+  staff_view.patient_search_tray.fld_my_site_input.set search_term
+  staff_view.patient_search_tray.btn_my_site_search.click
 end
 
 def search_with_enter(search_term)
-  my_site_tray = PobStaffView.new
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "My Site search input box is not visible"
 
-  staff_view.fld_my_site_input.set search_term
-  staff_view.fld_my_site_input.native.send_keys(:enter)
+  staff_view.patient_search_tray.fld_my_site_input.set search_term
+  staff_view.patient_search_tray.fld_my_site_input.native.send_keys(:enter)
 end
 
 When(/^the user searchs My Site with search term (.*)$/) do |search_term|
@@ -73,15 +61,22 @@ When(/^the user searches My Site by keyboard ENTER$/) do
 end
 
 Then(/^the My Site Tray displays$/) do
-  my_site_tray = PobStaffView.new
-  expect(my_site_tray.wait_for_open_my_site).to eq(true), "Expected My Site tray to display"
-  expect(my_site_tray.wait_for_btn_search_tray_close).to eq(true), "Excpected My Site tray header to contain a close (x) button"
+  staff_view = PobStaffView.new
+  expect(staff_view.wait_for_btn_search_tray_close).to eq(true), "Excpected My Site tray header to contain a close (x) button"
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected My Site tray title to display"
+end
+
+Then(/^the My Site Tray title is "([^"]*)"$/) do |title|
+  staff_view = PobStaffView.new
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected My Site tray title to display"
+  expect(staff_view.fld_tray_title.text.upcase).to eq(title.upcase)
 end
 
 Then(/^the My Site Tray contains search results$/) do
   my_site_tray = PobStaffView.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => 45)
   begin
-    wait_until { my_site_tray.my_site_search_results_dob.length > 0 }
+    wait.until { my_site_tray.my_site_search_results_dob.length > 0 }
   rescue Exception => e
     p "My Site Tray did not display any search results"
     raise e
@@ -123,11 +118,11 @@ end
 
 Then(/^the My Site Tray table headers are$/) do |table|
   my_site_tray = PobStaffView.new
-  my_site_tray.wait_for_my_site_search_results_headers
-  num_headers = my_site_tray.my_site_search_results_headers.length
+  my_site_tray.wait_for_fld_search_result_headers
+  num_headers = my_site_tray.fld_search_result_headers.length
   expect(num_headers).to eq(table.rows.length), "Expected #{table.rows.length} table headers to be displayed on tray.  There are #{num_headers}"
   table.rows.each do | header |
-    expect(object_exists_in_list(my_site_tray.my_site_search_results_headers, header[0])).to eq(true), "Expected header #{header[0]} to be displayed."
+    expect(object_exists_in_list(my_site_tray.fld_search_result_headers, header[0])).to eq(true), "Expected header #{header[0]} to be displayed."
   end
 end
 
@@ -193,3 +188,55 @@ Then(/^the My Site Tray gender search results are in terms Male, Female or Unkno
     expect(genders).to include temp_gender
   end
 end
+
+Then(/^the Patient Search input box displays an i icon$/) do
+  page = PobStaffView.new
+  expect(page).to have_patient_search_tray
+  page.patient_search_tray.wait_for_icon_instructions
+  expect(page.patient_search_tray).to have_icon_instructions
+end
+
+Then(/^when the user hovers over the Patient Search i icon$/) do
+  page = PobStaffView.new
+  expect(page).to have_patient_search_tray
+  expect(page.patient_search_tray).to have_icon_instructions
+
+  tooltips = ToolTips.new
+  num_visible_tooltips = tooltips.fld_tooltips.length
+  page.patient_search_tray.icon_instructions.hover
+  wait_until { tooltips.fld_tooltips.length > num_visible_tooltips }
+end
+
+When(/^the user closes the My Site tray$/) do
+  my_site_tray = PobStaffView.new
+  expect(my_site_tray.wait_for_btn_search_tray_close).to eq(true), "X (close) button in tray header did not display"
+  my_site_tray.btn_search_tray_close.click
+  my_site_tray.wait_until_btn_search_tray_close_invisible
+  my_site_tray.wait_until_fld_tray_title_invisible
+end
+
+Then(/^the Patient header button is not highlighted$/) do
+  page = PobHeaderFooter.new
+  active_class = 'ACTIVE'
+  page.wait_for_btn_patients
+  expect(page).to have_btn_patients
+  expect(page).to_not have_fld_patients
+end
+
+Then(/^the staff view My Site search input box is clear$/) do
+  my_site_tray = PobStaffView.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+  expect(my_site_tray.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "expected a my site input box"
+  begin
+    wait.until { my_site_tray.patient_search_tray.fld_my_site_input.value.length == 0 }
+  rescue
+    expect(my_site_tray.patient_search_tray.fld_my_site_input.value.length).to eq(0), "Expected my site input box to be blank and it was not"
+  end
+end
+
+Then(/^the staff view My Site search input is populated$/) do
+  my_site_tray = PobStaffView.new
+  expect(my_site_tray.patient_search_tray.wait_for_fld_my_site_input).to eq(true), "expected a my site input box"
+  expect(my_site_tray.patient_search_tray.fld_my_site_input.value.length).to be > 0, "Expected my site input box to contain a value and it did not"
+end
+

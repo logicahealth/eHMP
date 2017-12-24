@@ -72,7 +72,7 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'fieldset',
-                legend: 'Enter the patient\'s first name, last name, and SSN to enable search.<span class="sr-only">Press Alt + M to view main menu</span>',
+                legend: 'Enter the patient\'s first name, last name, and SSN to enable search.',
                 extraClasses: ['col-xs-12'],
                 items: {
                     control: 'container',
@@ -84,7 +84,8 @@ define([
                         label: 'Last Name',
                         extraClasses: ['flex-width-1', 'right-padding-md'],
                         title: 'Enter in patient\'s last name',
-                        required: true
+                        required: true,
+                        changeEvent: 'input'
                     }, {
                         control: 'input',
                         name: 'firstName',
@@ -92,7 +93,8 @@ define([
                         label: 'First Name',
                         extraClasses: ['flex-width-1', 'right-padding-md'],
                         title: 'Enter in patient\'s first name',
-                        required: true
+                        required: true,
+                        changeEvent: 'input'
                     }, {
                         control: "datepicker",
                         name: "dob",
@@ -108,13 +110,13 @@ define([
                         label: 'SSN',
                         extraClasses: ['flex-width-1', 'right-padding-md'],
                         title: 'Enter in patient\'s 9 digit social security number without dashes',
-                        required: true
+                        required: true,
+                        changeEvent: 'input'
                     }, {
                         control: 'button',
                         type: 'submit',
                         label: 'Search',
-                        extraClasses: ['btn-primary', 'left-margin-md', 'top-margin-md'],
-                        title: 'Press enter to search and then press ALT + U to view results'
+                        extraClasses: ['btn-primary', 'left-margin-md', 'top-margin-md']
                     }]
                 }
             }]
@@ -130,7 +132,7 @@ define([
             }
         },
         onSearch: function() {
-            ADK.Messaging.getChannel('patient-selection-nationwide').trigger('execute-search', this.model);
+            ADK.Messaging.getChannel(this.getOption('eventChannelName')).trigger('execute-search', this.model);
         },
         onRenderCollection: function() {
             this.bindUIElements();
@@ -148,7 +150,7 @@ define([
     var NationwideFilterView = Backbone.Marionette.ItemView.extend({
         template: false,
         className: 'bottom-margin-lg',
-        initialize: function() {
+        initialize: function(options) {
             this._regionManager = new Backbone.Marionette.RegionManager();
             var SearchRegion = Backbone.Marionette.Region.extend({
                 el: this.$el
@@ -158,9 +160,9 @@ define([
             });
         },
         onBeforeShow: function() {
-            this._regionManager.get('searchRegion').show(new NationwideSearchForm({
+            this._regionManager.get('searchRegion').show(new NationwideSearchForm(_.extend({}, this.options, {
                 model: new SearchModel()
-            }));
+            })));
         },
         onBeforeDestroy: function() {
             this._regionManager.destroy();

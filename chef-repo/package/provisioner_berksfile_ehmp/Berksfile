@@ -1,0 +1,5 @@
+source :chef_server
+
+solver :ruby, :required
+
+cookbook 'ehmp_provision', "=#{ENV['EHMP_PROVISION']}"

@@ -2,11 +2,11 @@ require 'json'
 
 def define_var
   @clinical_wrapper = [
-    ['patientUid', 'urn:va:patient:9E7A:3:3'],
-    ['authorUid', 'urn:va:user:9E7A:10000000270'],
+    ['patientUid', 'urn:va:patient:SITE:3:3'],
+    ['authorUid', 'urn:va:user:SITE:10000000270'],
     ['domain', 'ehmp-activity'],
     ['subDomain', 'request'],
-    ['visit.location', '9E7A;3'],
+    ['visit.location', 'SITE;3'],
     ['visit.serviceCategory', 'D'],
     ['visit.dateTime', '20140814130730'],
     ['ehmpState', 'draft'],

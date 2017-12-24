@@ -9,7 +9,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,patient"
 	And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Patient (T0023)"
+    And the Patient View Current Patient displays the user name "Twentythree,Patient (T0023)"
 
 	And user selects Patient Demographic drop down
     Then the Patient's Home Phone is in acceptable format
@@ -23,7 +23,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Patient (T0023)"
+    And the Patient View Current Patient displays the user name "Twentythree,Patient (T0023)"
 	And user selects Patient Demographic drop down
 	Then the Patient's Home Address value is displayed
     And the Patient's Email value is displayed
@@ -49,7 +49,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,inpatient"
 	And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Inpatient (T0823)"
+    And the Patient View Current Patient displays the user name "Twentythree,Inpatient (T0823)"
     And user selects Patient Demographic drop down
     Then the Patient's Home Address value is displayed
     And the Patient's Email value is displayed
@@ -71,11 +71,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
 	And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Inpatient (T0823)"
+    And the Patient View Current Patient displays the user name "Twentythree,Inpatient (T0823)"
 	And Cover Sheet is active
 	And user selects Patient Demographic drop down
 	Then the Patient's Work Phone is in acceptable format
@@ -90,11 +90,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103 @future @DE4560
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
     And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Inpatient (T0823)"
+    And the Patient View Current Patient displays the user name "Twentythree,Inpatient (T0823)"
     And user selects Patient Demographic drop down
     Then the Patient's Veteran status value is displayed
     And the Patient's Marital status value is displayed
@@ -102,11 +102,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,patient"
 	And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Patient (T0023)"
+    And the Patient View Current Patient displays the user name "Twentythree,Patient (T0023)"
 	And user selects Patient Demographic drop down
 	Then the Patient's Work Phone is in acceptable format
     And the Patient's Temporary Home Address value is displayed
@@ -120,11 +120,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
     And user searches for and selects "twentythree,patient"
     And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Patient (T0023)"
+    And the Patient View Current Patient displays the user name "Twentythree,Patient (T0023)"
     And user selects Patient Demographic drop down
     Then the Patient's Veteran status value is displayed
     And the Patient's Marital status value is displayed

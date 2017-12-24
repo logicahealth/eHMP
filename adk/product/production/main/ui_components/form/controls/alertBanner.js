@@ -22,7 +22,7 @@ define([
             '{{#if dismissible}} alert-dismissible{{/if}}' +
             ' alert-user all-margin-no top-margin-sm bottom-margin-sm">' +
             '{{#if dismissible}}' +
-            '<button type="button" class="close" title="Press enter to close this alert.">',
+            '<button type="button" class="close" title="Close alert">',
             '<span aria-hidden="true">&times;</span>',
             '</button>' +
             '{{/if}}',

@@ -5,7 +5,7 @@
         "lastUpdated":"2015-04-08T14:18:42.864"
     },
     "type":"searchset",
-    "base":"http://127.0.0.1:8888/resource/fhir/",
+    "base":"http://127.0.0.1:PORT/resource/fhir/",
     "total":3,
     "entry":[
         {
@@ -58,7 +58,7 @@
                 "identifier":[
                     {
                         "system":"http://vistacore.us/fhir/id/uid",
-                        "value":"urn:va:patient:9E7A:253:253"
+                        "value":"urn:va:patient:SITE:253:253"
                     },
                     {
                         "use":"official",
@@ -71,7 +71,7 @@
                     },
                     {
                         "system":"http://vistacore.us/fhir/id/pid",
-                        "value":"9E7A;253"
+                        "value":"SITE;253"
                     },
                     {
                         "system":"http://vistacore.us/fhir/id/lrdfn",
@@ -175,7 +175,7 @@
                     {
                         "use":"official",
                         "system":"http://vistacore.us/fhir/id/uid",
-                        "value":"urn:va:factor:9E7A:253:25"
+                        "value":"urn:va:factor:SITE:253:25"
                     }
                 ],
                 "subject":{
@@ -212,7 +212,7 @@
                     {
                         "use":"official",
                         "system":"http://vistacore.us/fhir/id/uid",
-                        "value":"urn:va:factor:C877:253:25"
+                        "value":"urn:va:factor:SITE:253:25"
                     }
                 ],
                 "subject":{

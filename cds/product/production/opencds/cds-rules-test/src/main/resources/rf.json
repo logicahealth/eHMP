@@ -11,7 +11,7 @@
                         "id": "6b6eb2e8-379c-4c0c-9352-c22ae5580716",
                         "resourceType": "Specimen",
                         "subject": {
-                            "reference": "Patient/9E7A;100262"
+                            "reference": "Patient/SITE;100262"
                         },
                         "type": {
                             "text": "SERUM"
@@ -88,7 +88,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#groupUid",
-                        "valueString": "urn:va:accession:9E7A:100262:CH;6839570.909463"
+                        "valueString": "urn:va:accession:SITE:100262:CH;6839570.909463"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#kind",
@@ -104,7 +104,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#pid",
-                        "valueString": "9E7A;100262"
+                        "valueString": "SITE;100262"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#qualifiedName",
@@ -140,7 +140,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#orderUid",
-                        "valueString": "urn:va:order:9E7A:100262:40987"
+                        "valueString": "urn:va:order:SITE:100262:40987"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#lnccodes[0]",
@@ -150,7 +150,7 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:lab:9E7A:100262:CH;6839570.909463;500032"
+                        "value": "urn:va:lab:SITE:100262:CH;6839570.909463;500032"
                     }
                 ],
                 "issued": "2016-04-28T13:06:00Z",
@@ -193,10 +193,10 @@
                 ],
                 "status": "final",
                 "subject": {
-                    "reference": "Patient/9E7A;100262"
+                    "reference": "Patient/SITE;100262"
                 },
                 "text": {
-                    "div": "<div>Collected: 2016-04-28T13:05:00Z<br/>Report Released: 2016-04-28T13:06:00Z<br/>Accession: urn:va:accession:9E7A:100262:CH;6839570.909463<br/>Test: RHEUMATOID FACTOR<br/>Result: 1234 undefined<br/>Specimen: SERUM<br/>Performing Lab: CAMP MASTER<br/>\t\t<br/></div>",
+                    "div": "<div>Collected: 2016-04-28T13:05:00Z<br/>Report Released: 2016-04-28T13:06:00Z<br/>Accession: urn:va:accession:SITE:100262:CH;6839570.909463<br/>Test: RHEUMATOID FACTOR<br/>Result: 1234 undefined<br/>Specimen: SERUM<br/>Performing Lab: CAMP MASTER<br/>\t\t<br/></div>",
                     "status": "generated"
                 }
             }
@@ -211,7 +211,7 @@
                         "id": "4d5eb36b-af2d-4f1b-b3c8-f86c32305afd",
                         "resourceType": "Specimen",
                         "subject": {
-                            "reference": "Patient/9E7A;100262"
+                            "reference": "Patient/SITE;100262"
                         },
                         "type": {
                             "text": "PLASMA"
@@ -313,7 +313,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#groupUid",
-                        "valueString": "urn:va:accession:9E7A:100262:CH;6969569.868955"
+                        "valueString": "urn:va:accession:SITE:100262:CH;6969569.868955"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#high",
@@ -333,7 +333,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#pid",
-                        "valueString": "9E7A;100262"
+                        "valueString": "SITE;100262"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#qualifiedName",
@@ -377,7 +377,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#orderUid",
-                        "valueString": "urn:va:order:9E7A:100262:14536"
+                        "valueString": "urn:va:order:SITE:100262:14536"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#lnccodes[0]",
@@ -387,7 +387,7 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:lab:9E7A:100262:CH;6969569.868955;430"
+                        "value": "urn:va:lab:SITE:100262:CH;6969569.868955;430"
                     }
                 ],
                 "issued": "2003-04-29T17:10:00Z",
@@ -430,10 +430,10 @@
                 ],
                 "status": "final",
                 "subject": {
-                    "reference": "Patient/9E7A;100262"
+                    "reference": "Patient/SITE;100262"
                 },
                 "text": {
-                    "div": "<div>Collected: 2003-04-29T17:10:00Z<br/>Report Released: 2003-04-29T17:10:00Z<br/>Accession: urn:va:accession:9E7A:100262:CH;6969569.868955<br/>Test: PROTIME<br/>Result: 11.9 SEC.<br/>Low: 10 SEC.<br/>High: 15 SEC.<br/>Specimen: PLASMA<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\t<br/>\t\t<br/></div>",
+                    "div": "<div>Collected: 2003-04-29T17:10:00Z<br/>Report Released: 2003-04-29T17:10:00Z<br/>Accession: urn:va:accession:SITE:100262:CH;6969569.868955<br/>Test: PROTIME<br/>Result: 11.9 SEC.<br/>Low: 10 SEC.<br/>High: 15 SEC.<br/>Specimen: PLASMA<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\t<br/>\t\t<br/></div>",
                     "status": "generated"
                 }
             }
@@ -448,7 +448,7 @@
                         "id": "d25a6e71-bb20-418d-bfca-bf65fa9c28c3",
                         "resourceType": "Specimen",
                         "subject": {
-                            "reference": "Patient/9E7A;100262"
+                            "reference": "Patient/SITE;100262"
                         },
                         "type": {
                             "text": "SERUM"
@@ -550,7 +550,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#groupUid",
-                        "valueString": "urn:va:accession:9E7A:100262:CH;6969569.868956"
+                        "valueString": "urn:va:accession:SITE:100262:CH;6969569.868956"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#high",
@@ -570,7 +570,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#pid",
-                        "valueString": "9E7A;100262"
+                        "valueString": "SITE;100262"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#qualifiedName",
@@ -614,7 +614,7 @@
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#orderUid",
-                        "valueString": "urn:va:order:9E7A:100262:14535"
+                        "valueString": "urn:va:order:SITE:100262:14535"
                     },
                     {
                         "url": "http://vistacore.us/fhir/extensions/lab#lnccodes[0]",
@@ -624,7 +624,7 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:lab:9E7A:100262:CH;6969569.868956;6"
+                        "value": "urn:va:lab:SITE:100262:CH;6969569.868956;6"
                     }
                 ],
                 "issued": "2003-04-29T17:10:00Z",
@@ -667,10 +667,10 @@
                 ],
                 "status": "final",
                 "subject": {
-                    "reference": "Patient/9E7A;100262"
+                    "reference": "Patient/SITE;100262"
                 },
                 "text": {
-                    "div": "<div>Collected: 2003-04-29T17:10:00Z<br/>Report Released: 2003-04-29T17:10:00Z<br/>Accession: urn:va:accession:9E7A:100262:CH;6969569.868956<br/>Test: POTASSIUM<br/>Result: 5.1 meq/L<br/>Low: 3.8 meq/L<br/>High: 5.3 meq/L<br/>Specimen: SERUM<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\t<br/>\t\t<br/></div>",
+                    "div": "<div>Collected: 2003-04-29T17:10:00Z<br/>Report Released: 2003-04-29T17:10:00Z<br/>Accession: urn:va:accession:SITE:100262:CH;6969569.868956<br/>Test: POTASSIUM<br/>Result: 5.1 meq/L<br/>Low: 3.8 meq/L<br/>High: 5.3 meq/L<br/>Specimen: SERUM<br/>Performing Lab: ALBANY VA MEDICAL CENTER<br/>\t\t<br/>\t\t<br/></div>",
                     "status": "generated"
                 }
             }

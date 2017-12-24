@@ -16,14 +16,14 @@ var buildJobTaskList = recordUpdateUtils.buildJobTaskList;
 
 describe('record-update-utils.js', function() {
     var pidsToResyncDomains = {
-        '9E7A;1': ['med', 'consult'],
-        'C877;8': ['allergy'],
+        'SITE;1': ['med', 'consult'],
+        'SITE;8': ['allergy'],
     };
 
     describe('getPatientIdentifierFromRecordPid()', function() {
         it('tests that correct result is produced', function() {
-            expect(getPatientIdentifierFromRecordPid('9E7A;3')).toEqual({
-                value: '9E7A;3',
+            expect(getPatientIdentifierFromRecordPid('SITE;3')).toEqual({
+                value: 'SITE;3',
                 type: 'pid'
             });
 
@@ -36,7 +36,7 @@ describe('record-update-utils.js', function() {
 
     describe('createErrorStatus()', function() {
         var operation = 'an action';
-        var pid = '9E7A;3';
+        var pid = 'SITE;3';
         var domain = 'allergy';
         var detail = 'Error occurred while trying to do something';
 
@@ -77,33 +77,33 @@ describe('record-update-utils.js', function() {
     });
 
     describe('addIncompleteDomain()', function() {
-        var pid = '9E7A;3';
+        var pid = 'SITE;3';
         var domain = 'allergy';
 
         it('tests null or undefined incomplete object works', function() {
             expect(addIncompleteDomain(undefined, pid, domain)).toEqual({
-                '9E7A;3': ['allergy']
+                'SITE;3': ['allergy']
             });
 
             expect(addIncompleteDomain(null, pid, domain)).toEqual({
-                '9E7A;3': ['allergy']
+                'SITE;3': ['allergy']
             });
         });
 
         it('tests adds to new pid', function() {
             expect(addIncompleteDomain({
-                '9E7A;1': ['allergy']
+                'SITE;1': ['allergy']
             }, pid, domain)).toEqual({
-                '9E7A;1': ['allergy'],
-                '9E7A;3': ['allergy']
+                'SITE;1': ['allergy'],
+                'SITE;3': ['allergy']
             });
         });
 
         it('tests adds to existing pid', function() {
             expect(addIncompleteDomain({
-                '9E7A;3': ['consult']
+                'SITE;3': ['consult']
             }, pid, domain)).toEqual({
-                '9E7A;3': ['consult', 'allergy']
+                'SITE;3': ['consult', 'allergy']
             });
         });
     });
@@ -111,7 +111,7 @@ describe('record-update-utils.js', function() {
     describe('buildPidStats()', function() {
         it('tests that correct result is produced', function() {
             // expect(buildPidStats(pidsToResyncDomains)).toEqual(jasmine.objectContaining({
-            //     '9E7A;1': {
+            //     'SITE;1': {
             //         domainsComplete: [],
             //         jobsPublished: 0,
             //         referenceInfo: {
@@ -120,7 +120,7 @@ describe('record-update-utils.js', function() {
             //             requestId: jasmine.any(String)
             //         }
             //     },
-            //     'C877;8': {
+            //     'SITE;8': {
             //         domainsComplete: [],
             //         jobsPublished: 0,
             //         referenceInfo: {
@@ -131,14 +131,14 @@ describe('record-update-utils.js', function() {
             //     }
             // }));
             expect(buildPidStats(pidsToResyncDomains)).toEqual(jasmine.objectContaining({
-                '9E7A;1': {
+                'SITE;1': {
                     domainsComplete: [],
                     jobsPublished: 0,
                     referenceInfo: {
                         requestId: jasmine.any(String)
                     }
                 },
-                'C877;8': {
+                'SITE;8': {
                     domainsComplete: [],
                     jobsPublished: 0,
                     referenceInfo: {
@@ -153,13 +153,13 @@ describe('record-update-utils.js', function() {
         it('tests that correct result is produced', function() {
             expect(buildPidToDomainComboList(pidsToResyncDomains)).toEqual(
                 [{
-                    pid: '9E7A;1',
+                    pid: 'SITE;1',
                     domain: 'med'
                 }, {
-                    pid: '9E7A;1',
+                    pid: 'SITE;1',
                     domain: 'consult'
                 }, {
-                    pid: 'C877;8',
+                    pid: 'SITE;8',
                     domain: 'allergy'
                 }]
             );

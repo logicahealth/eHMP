@@ -25,10 +25,9 @@
 package com.cognitivemedicine.metricsservice.client;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.junit.Ignore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.cognitivemedicine.metricsservice.model.Dashboard;
 import com.cognitivemedicine.metricsservice.model.Metric;
@@ -44,8 +43,7 @@ import junit.framework.TestSuite;
  */
 @Ignore("This is a service integration test suite")
 public class MetricsServiceClientTest extends TestCase {
-	private Logger logger = Logger.getLogger(MetricsServiceClient.class
-			.getName());
+	private Logger logger = LoggerFactory.getLogger(MetricsServiceClient.class);
 
 	/**
 	 * Create the test case
@@ -66,7 +64,7 @@ public class MetricsServiceClientTest extends TestCase {
 
 	public void testCrudDashboards() throws RdkTimeoutException {
 		MetricsServiceClient client = new MetricsServiceClient(
-				"http://localhost:8888/resource", "metrics");
+				"http://localhost:PORT/resource", "metrics");
 
 		// TEST CREATE
 		Dashboard newDashboard = new Dashboard();
@@ -98,7 +96,7 @@ public class MetricsServiceClientTest extends TestCase {
 		// TEST UPDATE
 		newDashboard.setDescription("This is an updated description");
 		String retVal = client.updateDashboard(newDashboard);
-		logger.log(Level.INFO, "getMetricDefinitionsResponse: \n" + retVal);
+		logger.info( "getMetricDefinitionsResponse: \n" + retVal);
 
 		newDashboard = client.getDashboard(newDashboard.get_id());
 		assertTrue(newDashboard.getDescription().equals(
@@ -106,7 +104,7 @@ public class MetricsServiceClientTest extends TestCase {
 
 		// TEST DELETE
 		String deleteStatus = client.deleteDashboard(newDashboard.get_id());
-		logger.log(Level.INFO, "getMetricDefinitionsResponse: \n"
+		logger.info( "getMetricDefinitionsResponse: \n"
 				+ deleteStatus);
 		assertTrue(deleteStatus != null && deleteStatus.length() > 0);
 
@@ -125,7 +123,7 @@ public class MetricsServiceClientTest extends TestCase {
 
 	public void testCrudDefinition() throws RdkTimeoutException {
 		MetricsServiceClient client = new MetricsServiceClient(
-				"http://localhost:8888/resource", "metrics");
+				"http://localhost:PORT/resource", "metrics");
 
 		// TEST CREATE
 		Metric newDefinition = new Metric();
@@ -159,7 +157,7 @@ public class MetricsServiceClientTest extends TestCase {
 
 		// TEST DELETE
 		String deleteStatus = client.deleteDefinition(newDefinition.get_id());
-		logger.log(Level.INFO, "getMetricDefinitionsResponse: \n"
+		logger.info( "getMetricDefinitionsResponse: \n"
 				+ deleteStatus);
 		assertTrue(deleteStatus != null && deleteStatus.length() > 0);
 
@@ -180,7 +178,7 @@ public class MetricsServiceClientTest extends TestCase {
 
 	public void testCrudGroups() throws RdkTimeoutException {
 		MetricsServiceClient client = new MetricsServiceClient(
-				"http://localhost:8888/resource", "metrics");
+				"http://localhost:PORT/resource", "metrics");
 
 		// TEST CREATE
 		MetricGroup newGroup = new MetricGroup();
@@ -207,13 +205,13 @@ public class MetricsServiceClientTest extends TestCase {
 		// TEST UPDATE - TODO not supported yet
 		// newGroup.setDescription("This is an updated description");
 		// String retVal = client.updateMetricGroup(newGroup);
-		// logger.log(Level.INFO, "getMetricDefinitionsResponse: \n" + retVal);
+		// logger.info( "getMetricDefinitionsResponse: \n" + retVal);
 		//
 		// assertTrue(newGroup.getDescription().equals("This is an updated description"));
 
 		// TEST DELETE
 		String deleteStatus = client.deleteMetricGroup(newGroup.get_id());
-		logger.log(Level.INFO, "getMetricDefinitionsResponse: \n"
+		logger.info( "getMetricDefinitionsResponse: \n"
 				+ deleteStatus);
 		assertTrue(deleteStatus != null && deleteStatus.length() > 0);
 
@@ -235,7 +233,7 @@ public class MetricsServiceClientTest extends TestCase {
 	// public void testApp()
 	// {
 	// MetricsServiceClient client = new
-	// MetricsServiceClient("http://localhost:8888/resource/metrics");
+	// MetricsServiceClient("http://localhost:PORT/resource/metrics");
 	// client.getRoles();
 	// client.getUserRoles();
 	// client.getMetricDefinitions();

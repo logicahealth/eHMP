@@ -15,7 +15,7 @@ Scenario: Client can request procedures
 	And the results contain data group
       | field          | value                                 |
       | name           | HOLTER                                |
-      | uid            | urn:va:procedure:9E7A:8:1;MCAR(691.6, |
+      | uid            | urn:va:procedure:SITE:8:1;MCAR(691.6, |
       | facilityName   | CAMP MASTER                           |
       | facilityCode   | 500                                   |
       | dateTime       | 198808051457                          |
@@ -28,7 +28,7 @@ Scenario: Client can request procedures
 	And the results contain data group
       | field          | value                                |
       | name           | COLONOSCOPY                          |
-      | uid            | urn:va:procedure:9E7A:8:41;MCAR(699, |
+      | uid            | urn:va:procedure:SITE:8:41;MCAR(699, |
       | facilityName   | CAMP MASTER                          |
       | facilityCode   | 500                                  |
       | dateTime       | 199603181418                         |

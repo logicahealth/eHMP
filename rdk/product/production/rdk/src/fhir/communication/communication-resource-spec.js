@@ -22,7 +22,7 @@ describe('Communications Resource', function() {
         _.set(req, 'param', {});
         _.set(req, 'query', {});
         _.set(req, 'session.user.uid', 'a:b:c:d');
-        _.set(req, 'app.config.jbpm.communicationsDatabase', dbConfig);
+        _.set(req, 'app.config.oracledb.communicationsDatabase', dbConfig);
         _.set(req, 'logger.debug', _.noop);
         _.set(req, 'logger.info', _.noop);
     }
@@ -201,6 +201,19 @@ describe('Communications Resource', function() {
             });
 
             communication._getCommunications(req, res);
+        });
+
+        it('handles a get connection error', function() {
+            sinon.stub(oracleConnectionPool, 'getPool').callsFake(function(req, dbConfig, callback) {
+                callback(null, {
+                    getConnection: function(callback) {
+                        return callback({message: 'the connection failed'});
+                    }
+                });
+            });
+            sinon.spy(res, 'status');
+            communication._getAttachment(req, res);
+            expect(res.status.calledWith(500)).to.be.true();
         });
     });
 });

@@ -15,7 +15,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
 	Then the VPR results contain:
                                                       
       | field              | value			       								  |
-      | uid                      | urn:va:lab:9E7A:227:CH;6949681.966383;2                  |
+      | uid                      | urn:va:lab:SITE:227:CH;6949681.966383;2                  |
       | typeName           | GLUCOSE          									  |
       | typeName           | GLUCOSE          									  |
       # The following fields are commented out because S65 removed the VUID which broke LOINC codes
@@ -32,7 +32,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
       | statusName         | completed 											  |
       | specimen		   | SERUM  											  |
       | groupName     	   | CH 0317 234 										  |
-      | groupUid           | urn:va:accession:9E7A:227:CH;6949681.966383 		  |	
+      | groupUid           | urn:va:accession:SITE:227:CH;6949681.966383 		  |	
       |labOrderId          | 2790  												  |
       | localId			   | CH;6949681.966383;2 								  |
       | summary			   | GLUCOSE (SERUM) 310<em>H*</em> mg/dL 				  |
@@ -57,7 +57,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
 	  | field                | values               							  |
       | typeName             | PROTIME   			 				  			  |      
       | typeCode             | urn:va:ien:60:467:73   							  |
-      | orderUid             | urn:va:order:9E7A:227:16688        				  |
+      | orderUid             | urn:va:order:SITE:227:16688        				  |
 		   
 @f100_2_labs_ch_vpr @vpr
 Scenario: Client can request Lab (Chem/Hem) results in VPR format
@@ -69,7 +69,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
 	Then the VPR results contain:
                                                       
       | field              | value			       								  |
-      | uid                      | urn:va:lab:C877:227:CH;6949681.966383;2                  |
+      | uid                      | urn:va:lab:SITE:227:CH;6949681.966383;2                  |
       | typeName           | GLUCOSE          									  |
       | typeName           | GLUCOSE          									  |
       # The following fields are commented out because S65 removed the VUID which broke LOINC codes
@@ -86,7 +86,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
       | statusName         | completed 											  |
       | specimen		   | SERUM  											  |
       | groupName     	   | CH 0317 234 										  |
-      | groupUid           | urn:va:accession:C877:227:CH;6949681.966383 		  |	
+      | groupUid           | urn:va:accession:SITE:227:CH;6949681.966383 		  |	
       |labOrderId          | 2790  												  |
       | localId			   | CH;6949681.966383;2 								  |
       | summary			   | GLUCOSE (SERUM) 310<em>H*</em> mg/dL 				  |
@@ -111,7 +111,7 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
 	  | field                | values               							  |
       | typeName             | PROTIME   			 				  			  |
       | typeCode             | urn:va:ien:60:467:73   							  |
-      | orderUid             | urn:va:order:C877:227:16688        				  |
+      | orderUid             | urn:va:order:SITE:227:16688        				  |
 
 # following 2 scenarios are checking for another patient for return of labs results.
 # only few fields are checked to validate data integrity.
@@ -119,14 +119,14 @@ Scenario: Client can request Lab (Chem/Hem) results in VPR format
 @f100_3_labs_ch_vpr @vpr
 Scenario: Client can request lab (Chem/Hem) results in VPR format
 	Given a patient with "lab  results" in multiple VistAs
-      Given a patient with pid "9E7A;100184" has been synced through Admin API
-	When the client requests labs for the patient "9E7A;100184" in VPR format
+      Given a patient with pid "SITE;100184" has been synced through Admin API
+	When the client requests labs for the patient "SITE;100184" in VPR format
 	Then the client receives 7 VPR "VistA" result(s)
 	Then the client receives 7 VPR "panorama" result(s)
 	Then the VPR results contain:
 	
 		| field					| value						|
-		| pid					| 9E7A;100184				|
+		| pid					| SITE;100184				|
 		| groupName				| CH 0429 152				|
 		| facilityCode			| 500						|
 		| facilityName			| CAMP MASTER				|
@@ -147,14 +147,14 @@ Scenario: Client can request lab (Chem/Hem) results in VPR format
 @f100_4_labs_ch_vpr @vpr
 Scenario: Client can request lab (Chem/Hem) results in VPR format
 	Given a patient with "lab  results" in multiple VistAs
-      Given a patient with pid "C877;21" has been synced through Admin API
-	When the client requests labs for the patient "C877;21" in VPR format
+      Given a patient with pid "SITE;21" has been synced through Admin API
+	When the client requests labs for the patient "SITE;21" in VPR format
 	Then the client receives 23 VPR "VistA" result(s)
 	Then the client receives 23 VPR "kodak" result(s)
 	Then the VPR results contain:
 	
 		| field					| value						|
-		| pid					| C877;21					|
+		| pid					| SITE;21					|
 		| labOrderId			| 2013						|
 		| groupName				| CH 0917 1					|
 		| facilityCode			| 500						|
@@ -177,8 +177,8 @@ Scenario: Client can request lab (Chem/Hem) results in VPR format
 @f100_5_labs_ch_neg_vpr
 Scenario: Negative scenario.  Client can request lab results in VPR format
 Given a patient with "No lab results" in multiple VistAs
-Given a patient with pid "1006184063V088473" has been synced through Admin API
-When the client requests labs for the patient "1006184063V088473" in VPR format
+Given a patient with pid "DNS       V088473" has been synced through Admin API
+When the client requests labs for the patient "DNS       V088473" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed
 

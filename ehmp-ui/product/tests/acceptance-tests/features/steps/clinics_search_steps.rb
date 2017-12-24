@@ -4,14 +4,14 @@ Then(/^the user opens clinic search tray$/) do
   expect(clinic.wait_for_btn_open_clinics_search).to eq(true), "button to open clinics tray"
   clinic.btn_open_clinics_search.click
   expect(clinic.wait_for_open_clinics_search).to eq(true), "clinics search tray is open"
+  clinic.wait_for_fld_disabled_clinics_location(15) # deliberately not verifying the outcome
+  expect(clinic.wait_for_fld_clinics_location(60)).to eq(true), "enabled clinic location dropdown did not display"
   begin
     wait = Selenium::WebDriver::Wait.new(:timeout => 10)
     wait.until { clinic.fld_clinics_location_options.length > 0 }
   rescue
     expect(clinic.fld_clinics_location_options.length).to be > 0, "Expected more then 0 clinic location options"
-  end
-  clinic.wait_for_fld_disabled_clinics_location(15) # deliberately not verifying the outcome
-  expect(clinic.wait_for_fld_clinics_location(30)).to eq(true), "enabled clinic location dropdown did not display"
+  end  
 end  
 
 Then(/^clinics tray heading is clinics$/) do
@@ -84,12 +84,6 @@ Then(/^user enters "([^"]*)" in the drop down field$/) do |arg1|
   @ehmp = PobCommonElements.new
   expect(@ehmp.wait_for_fld_pick_list_input).to eq(true)
   @ehmp.fld_pick_list_input.set arg1
-end
-
-Then(/^user selects camp and pen from the dropdown$/) do
-  clinic = PobClinicsSearch.new
-  expect(clinic.wait_for_ddl_clinics_location_compandpen).to eq(true)
-  clinic.ddl_clinics_location_compandpen.click
 end
 
 Then(/^user selects minusSevenDays from the predefined dates$/) do
@@ -407,3 +401,21 @@ Then(/^the clinics Tray gender search results are in terms Male, Female or Unkno
   end
 end
 
+When(/^the user selects a clinics without patients$/) do
+  clinic = PobClinicsSearch.new
+  attempt_num_clinics = 531
+  clinics_contains_no_resluts = false
+  for i in 0..attempt_num_clinics
+    expect(clinic.wait_for_btn_clinics_location).to eq(true)
+    clinic.btn_clinics_location.click
+    expect(clinic.wait_for_fld_clinics_location_options).to eq(true)
+    wait_until { clinic.fld_clinics_location_options.length > 0 }
+    num_clinics = clinic.fld_clinics_location_options
+    break if num_clinics.length <= i
+    p "attempt to click #{num_clinics[i].text}"
+    num_clinics[i].click
+    clinics_contains_no_resluts = clinic.wait_for_tbl_clinics_error
+    break if clinics_contains_no_resluts
+  end
+  expect(clinics_contains_no_resluts).to eq(true), "Could not find a clinics without patients, searched #{attempt_num_clinics} clinics"
+end

@@ -1,20 +1,20 @@
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
-var synchronize = require('./synchronize');
+let _ = require('lodash');
+let moment = require('moment');
+let synchronize = require('./synchronize');
 
 describe('synchronize.js', function() {
     describe('isPid()', function() {
         it('tests that a valid pid passes', function() {
-            expect(synchronize._isPid('9E7A;3')).to.equal(true);
+            expect(synchronize._isPid('SITE;3')).to.equal(true);
         });
         it('tests that an invalid pid fails', function() {
             expect(synchronize._isPid()).to.equal(false);
             expect(synchronize._isPid(null)).to.equal(false);
             expect(synchronize._isPid('')).to.equal(false);
             expect(synchronize._isPid('10108V420871')).to.equal(false);
-            expect(synchronize._isPid('9E7A;')).to.equal(false);
+            expect(synchronize._isPid('SITE;')).to.equal(false);
             expect(synchronize._isPid(';3')).to.equal(false);
             expect(synchronize._isPid('DOD;1234')).to.equal(false);
         });
@@ -31,7 +31,7 @@ describe('synchronize.js', function() {
             expect(synchronize._isIcn('10108V')).to.equal(false);
             expect(synchronize._isIcn('V420871')).to.equal(false);
             expect(synchronize._isIcn('10108420871')).to.equal(false);
-            expect(synchronize._isIcn('9E7A;3')).to.equal(false);
+            expect(synchronize._isIcn('SITE;3')).to.equal(false);
         });
     });
 
@@ -46,23 +46,23 @@ describe('synchronize.js', function() {
             expect(synchronize._isEdipi('1234')).to.equal(false);
             expect(synchronize._isEdipi(';1234')).to.equal(false);
             expect(synchronize._isEdipi('DOD;')).to.equal(false);
-            expect(synchronize._isEdipi('9E7A;3')).to.equal(false);
+            expect(synchronize._isEdipi('SITE;3')).to.equal(false);
             expect(synchronize._isEdipi('10108420871')).to.equal(false);
         });
     });
 
     describe('minMoment()', function() {
-        var moment1 = moment().subtract(2, 'hour');
-        var moment2 = moment().subtract(1, 'hour');
-        var moment3 = moment();
+        let moment1 = moment().subtract(2, 'hour');
+        let moment2 = moment().subtract(1, 'hour');
+        let moment3 = moment();
 
-        var date1 = moment1.toDate();
-        var date2 = moment2.toDate();
-        var date3 = moment3.toDate();
+        let date1 = moment1.toDate();
+        let date2 = moment2.toDate();
+        let date3 = moment3.toDate();
 
-        var timestamp1 = moment1.valueOf();
-        var timestamp2 = moment2.valueOf();
-        var timestamp3 = moment3.valueOf();
+        let timestamp1 = moment1.valueOf();
+        let timestamp2 = moment2.valueOf();
+        let timestamp3 = moment3.valueOf();
 
         it('tests that empty and invalid values return undefined', function() {
             expect(synchronize._minMoment()).to.be.undefined();
@@ -97,17 +97,17 @@ describe('synchronize.js', function() {
     });
 
     describe('maxMoment()', function() {
-        var moment1 = moment().subtract(2, 'hour');
-        var moment2 = moment().subtract(1, 'hour');
-        var moment3 = moment();
+        let moment1 = moment().subtract(2, 'hour');
+        let moment2 = moment().subtract(1, 'hour');
+        let moment3 = moment();
 
-        var date1 = moment1.toDate();
-        var date2 = moment2.toDate();
-        var date3 = moment3.toDate();
+        let date1 = moment1.toDate();
+        let date2 = moment2.toDate();
+        let date3 = moment3.toDate();
 
-        var timestamp1 = moment1.valueOf();
-        var timestamp2 = moment2.valueOf();
-        var timestamp3 = moment3.valueOf();
+        let timestamp1 = moment1.valueOf();
+        let timestamp2 = moment2.valueOf();
+        let timestamp3 = moment3.valueOf();
 
         it('tests that empty and invalid values return undefined', function() {
             expect(synchronize._maxMoment()).to.be.undefined();
@@ -143,7 +143,7 @@ describe('synchronize.js', function() {
 
     describe('isInterceptorDisabled()', function() {
         it('tests that anything except disabled flag set to true returns false ', function() {
-            var config;
+            let config;
             expect(synchronize._isInterceptorDisabled(config)).to.equal(false);
 
             config = {};
@@ -166,7 +166,7 @@ describe('synchronize.js', function() {
         });
 
         it('tests that disabled flag set to true returns true', function() {
-            var config = {
+            let config = {
                 interceptors: {
                     synchronize: {
                         disabled: true
@@ -180,17 +180,17 @@ describe('synchronize.js', function() {
 
     describe('isErrorCooldownTimeoutExceeded()', function() {
         it('tests that timeout not exceeded returns false', function() {
-            var errorCooldownMinIntervalMillis = 1000 * 60;
-            var startTime = moment().subtract(errorCooldownMinIntervalMillis / 1000 / 2, 'second');
-            var now = moment();
+            let errorCooldownMinIntervalMillis = 1000 * 60;
+            let startTime = moment().subtract(errorCooldownMinIntervalMillis / 1000 / 2, 'second');
+            let now = moment();
 
             expect(synchronize._isErrorCooldownTimeoutExceeded(startTime, errorCooldownMinIntervalMillis, now)).to.equal(false);
         });
 
         it('tests that timeout exceeded returns true', function() {
-            var syncExistsWaitDelayMillis = 1000 * 60;
-            var startTime = moment().subtract(syncExistsWaitDelayMillis / 1000 * 2, 'second');
-            var now = moment();
+            let syncExistsWaitDelayMillis = 1000 * 60;
+            let startTime = moment().subtract(syncExistsWaitDelayMillis / 1000 * 2, 'second');
+            let now = moment();
 
             expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(true);
         });
@@ -198,34 +198,34 @@ describe('synchronize.js', function() {
 
     describe('isSyncExistDelayAtTimeout()', function() {
         it('tests that timeout not exceeded returns false', function() {
-            var startTime = moment().subtract(10, 'minute');
-            var syncExistsWaitDelayMillis = 1000 * 60 * 60;
-            var now = moment();
+            let startTime = moment().subtract(10, 'minute');
+            let syncExistsWaitDelayMillis = 1000 * 60 * 60;
+            let now = moment();
 
             expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(false);
         });
 
         it('tests that timeout exceeded returns true', function() {
-            var startTime = moment().subtract(1, 'day');
-            var syncExistsWaitDelayMillis = 1000 * 60 * 60;
-            var now = moment();
+            let startTime = moment().subtract(1, 'day');
+            let syncExistsWaitDelayMillis = 1000 * 60 * 60;
+            let now = moment();
 
             expect(synchronize._isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis, now)).to.equal(true);
         });
     });
 
     describe('isSyncLastUpdateTimeoutExceeded()', function() {
-        var inactivityTimeoutMillis = 1000 * 60 * 60 * 24;
-        var now = Date.now();
+        let inactivityTimeoutMillis = 1000 * 60 * 60 * 24;
+        let now = Date.now();
 
-        var incomplete_all_sites_1 = {
+        let incomplete_all_sites_1 = {
             icn: '',
             latestEnterpriseSyncRequestTimestamp: 1462820945431,
             latestJobTimestamp: 1462820945431,
             sites: {
-                '9E7A': {
+                'SITE': {
                     latestJobTimestamp: 1462820945431,
-                    pid: '9E7A;3',
+                    pid: 'SITE;3',
                     sourceStampTime: '',
                     syncCompleted: false
                 }
@@ -233,21 +233,21 @@ describe('synchronize.js', function() {
             syncCompleted: false
         };
 
-        var incomplete_all_sites_2 = {
+        let incomplete_all_sites_2 = {
             icn: '10108V420871',
             latestEnterpriseSyncRequestTimestamp: 1462820952440,
             latestJobTimestamp: 1462820970870,
             latestSourceStampTime: 20160509150922,
             sites: {
-                '9E7A': {
+                'SITE': {
                     latestJobTimestamp: 1462820966830,
-                    pid: '9E7A;3',
+                    pid: 'SITE;3',
                     sourceStampTime: 20160509150922,
                     syncCompleted: false
                 },
-                C877: {
+                SITE: {
                     latestJobTimestamp: 1462820970870,
-                    pid: 'C877;3',
+                    pid: 'SITE;3',
                     sourceStampTime: 20160509150917,
                     syncCompleted: false
                 },
@@ -280,10 +280,10 @@ describe('synchronize.js', function() {
         });
 
         it('tests that inactivity period less than timeout returns false', function() {
-            var non_timeout_1 = _.clone(incomplete_all_sites_1);
+            let non_timeout_1 = _.clone(incomplete_all_sites_1);
             non_timeout_1.latestJobTimestamp = moment(now).subtract(1, 'hour').valueOf();
 
-            var non_timeout_2 = _.clone(incomplete_all_sites_2);
+            let non_timeout_2 = _.clone(incomplete_all_sites_2);
             non_timeout_2.latestJobTimestamp = moment(now).subtract(1, 'hour').format('YYYYMMDDHHmmss');
 
             expect(synchronize._isSyncLastUpdateTimeoutExceeded(non_timeout_1, inactivityTimeoutMillis, now)).to.equal(false);
@@ -292,22 +292,22 @@ describe('synchronize.js', function() {
     });
 
     describe('isOneSiteCompleted()', function() {
-        var simpleSyncStatus = {
+        let simpleSyncStatus = {
             data: {
                 icn: '10108V420871',
                 latestEnterpriseSyncRequestTimestamp: 1471616762518,
                 latestJobTimestamp: 1471616762518,
                 latestSourceStampTime: 20160819101156,
                 sites: {
-                    '9E7A': {
+                    'SITE': {
                         latestJobTimestamp: 1471616762518,
-                        pid: '9E7A;3',
+                        pid: 'SITE;3',
                         sourceStampTime: 20160817124027,
                         syncCompleted: true
                     },
-                    C877: {
+                    SITE: {
                         latestJobTimestamp: 1471616762518,
-                        pid: 'C877;3',
+                        pid: 'SITE;3',
                         sourceStampTime: 20160817124043,
                         syncCompleted: true
                     },
@@ -336,8 +336,8 @@ describe('synchronize.js', function() {
 
         it('tests that all true values returns true', function() {
             simpleSyncStatus.data.syncCompleted = true;
-            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
-            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites['SITE'].syncCompleted = true;
+            simpleSyncStatus.data.sites.SITE.syncCompleted = true;
             simpleSyncStatus.data.sites.DOD.syncCompleted = true;
             simpleSyncStatus.data.sites.HDR.syncCompleted = true;
             simpleSyncStatus.data.sites.VLER.syncCompleted = true;
@@ -347,8 +347,8 @@ describe('synchronize.js', function() {
 
         it('tests that all true values except base level attribute returns true', function() {
             simpleSyncStatus.data.syncCompleted = false;
-            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
-            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites['SITE'].syncCompleted = true;
+            simpleSyncStatus.data.sites.SITE.syncCompleted = true;
             simpleSyncStatus.data.sites.DOD.syncCompleted = true;
             simpleSyncStatus.data.sites.HDR.syncCompleted = true;
             simpleSyncStatus.data.sites.VLER.syncCompleted = true;
@@ -358,8 +358,8 @@ describe('synchronize.js', function() {
 
         it('tests that single true value returns true', function() {
             simpleSyncStatus.data.syncCompleted = false;
-            simpleSyncStatus.data.sites['9E7A'].syncCompleted = false;
-            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites['SITE'].syncCompleted = false;
+            simpleSyncStatus.data.sites.SITE.syncCompleted = true;
             simpleSyncStatus.data.sites.DOD.syncCompleted = true;
             simpleSyncStatus.data.sites.HDR.syncCompleted = true;
             simpleSyncStatus.data.sites.VLER.syncCompleted = true;
@@ -369,8 +369,8 @@ describe('synchronize.js', function() {
 
         it('tests that multiple true values returns true', function() {
             simpleSyncStatus.data.syncCompleted = false;
-            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
-            simpleSyncStatus.data.sites.C877.syncCompleted = false;
+            simpleSyncStatus.data.sites['SITE'].syncCompleted = true;
+            simpleSyncStatus.data.sites.SITE.syncCompleted = false;
             simpleSyncStatus.data.sites.DOD.syncCompleted = true;
             simpleSyncStatus.data.sites.HDR.syncCompleted = false;
             simpleSyncStatus.data.sites.VLER.syncCompleted = false;
@@ -380,8 +380,8 @@ describe('synchronize.js', function() {
 
         it('tests that all false values returns false', function() {
             simpleSyncStatus.data.syncCompleted = false;
-            simpleSyncStatus.data.sites['9E7A'].syncCompleted = false;
-            simpleSyncStatus.data.sites.C877.syncCompleted = false;
+            simpleSyncStatus.data.sites['SITE'].syncCompleted = false;
+            simpleSyncStatus.data.sites.SITE.syncCompleted = false;
             simpleSyncStatus.data.sites.DOD.syncCompleted = false;
             simpleSyncStatus.data.sites.HDR.syncCompleted = false;
             simpleSyncStatus.data.sites.VLER.syncCompleted = false;
@@ -396,22 +396,22 @@ describe('synchronize.js', function() {
     });
 
     describe('isEverySiteInError()', function() {
-        var simpleSyncStatus = {
+        let simpleSyncStatus = {
             data: {
                 icn: '10108V420871',
                 latestEnterpriseSyncRequestTimestamp: 1471616762518,
                 latestJobTimestamp: 1471616762518,
                 latestSourceStampTime: 20160819101156,
                 sites: {
-                    '9E7A': {
+                    'SITE': {
                         latestJobTimestamp: 1471616762518,
-                        pid: '9E7A;3',
+                        pid: 'SITE;3',
                         sourceStampTime: 20160817124027,
                         syncCompleted: false
                     },
-                    C877: {
+                    SITE: {
                         latestJobTimestamp: 1471616762518,
-                        pid: 'C877;3',
+                        pid: 'SITE;3',
                         sourceStampTime: 20160817124043,
                         syncCompleted: false
                     },
@@ -440,8 +440,8 @@ describe('synchronize.js', function() {
 
         it('tests that no error values returns false', function() {
             delete simpleSyncStatus.data.hasError;
-            delete simpleSyncStatus.data.sites['9E7A'].hasError;
-            delete simpleSyncStatus.data.sites.C877.hasError;
+            delete simpleSyncStatus.data.sites['SITE'].hasError;
+            delete simpleSyncStatus.data.sites.SITE.hasError;
             delete simpleSyncStatus.data.sites.DOD.hasError;
             delete simpleSyncStatus.data.sites.HDR.hasError;
             delete simpleSyncStatus.data.sites.VLER.hasError;
@@ -451,8 +451,8 @@ describe('synchronize.js', function() {
 
         it('tests that only overall error returns false', function() {
             simpleSyncStatus.data.hasError = true;
-            delete simpleSyncStatus.data.sites['9E7A'].hasError;
-            delete simpleSyncStatus.data.sites.C877.hasError;
+            delete simpleSyncStatus.data.sites['SITE'].hasError;
+            delete simpleSyncStatus.data.sites.SITE.hasError;
             delete simpleSyncStatus.data.sites.DOD.hasError;
             delete simpleSyncStatus.data.sites.HDR.hasError;
             delete simpleSyncStatus.data.sites.VLER.hasError;
@@ -462,8 +462,8 @@ describe('synchronize.js', function() {
 
         it('tests that any false value returns false', function() {
             simpleSyncStatus.data.hasError = true;
-            delete simpleSyncStatus.data.sites['9E7A'].hasError;
-            simpleSyncStatus.data.sites.C877.hasError = true;
+            delete simpleSyncStatus.data.sites['SITE'].hasError;
+            simpleSyncStatus.data.sites.SITE.hasError = true;
             simpleSyncStatus.data.sites.DOD.hasError = true;
             simpleSyncStatus.data.sites.HDR.hasError = true;
             simpleSyncStatus.data.sites.VLER.hasError = true;
@@ -473,8 +473,8 @@ describe('synchronize.js', function() {
 
         it('tests that all errors returns true', function() {
             simpleSyncStatus.data.hasError = true;
-            simpleSyncStatus.data.sites['9E7A'].hasError = true;
-            simpleSyncStatus.data.sites.C877.hasError = true;
+            simpleSyncStatus.data.sites['SITE'].hasError = true;
+            simpleSyncStatus.data.sites.SITE.hasError = true;
             simpleSyncStatus.data.sites.DOD.hasError = true;
             simpleSyncStatus.data.sites.HDR.hasError = true;
             simpleSyncStatus.data.sites.VLER.hasError = true;
@@ -494,23 +494,5 @@ describe('synchronize.js', function() {
                 }
             })).to.equal(false);
         });
-    });
-
-    describe('intercept()', function() {
-        it('tests...', function() {
-            expect(_.isFunction(synchronize)).to.equal(true);
-        });
-    });
-
-    describe.skip('clearThenSyncPatient()', function() {
-        it('', function() {});
-    });
-
-    describe.skip('syncPatient()', function() {
-        it('', function() {});
-    });
-
-    describe.skip('waitForFullPatientSync()', function() {
-        it('', function() {});
     });
 });

@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {},
+    "id": "http://example.com/example.json",
+    "properties": {
+        "data": {
+            "id": "/properties/data",
+            "properties": {
+                "items": {
+                    "id": "/properties/data/properties/items",
+                    "items": {
+                        "id": "/properties/data/properties/items/items",
+                        "properties": {
+                            "description": {
+                                "id": "/properties/data/properties/items/items/properties/description",
+                                "type": "string"
+                            },
+                            "label": {
+                                "id": "/properties/data/properties/items/items/properties/label",
+                                "type": "string"
+                            },
+                            "permissions": {
+                                "id": "/properties/data/properties/items/items/properties/permissions",
+                                "items": {
+                                    "id": "/properties/data/properties/items/items/properties/permissions/items",
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "status": {
+                                "id": "/properties/data/properties/items/items/properties/status",
+                                "type": "string"
+                            },
+                            "uid": {
+                                "id": "/properties/data/properties/items/items/properties/uid",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "status": {
+            "id": "/properties/status",
+            "type": "integer"
+        },
+        "statusCode": {
+            "id": "/properties/statusCode",
+            "type": "integer"
+        }
+    },
+    "type": "object"
+}

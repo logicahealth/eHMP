@@ -31,8 +31,8 @@ function getPatientCwad(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
     }
 
-    var jdsResource = '/vpr/' + pid + '/index/cwad';
-    var jdsQuery = _.pick(req.query, 'start', 'limit', 'filter', 'order');
+    var jdsResource = '/vpr/' + pid + '/index/cwad-kind';
+    var jdsQuery = _.pick(req.query, 'start', 'limit', 'range', 'filter', 'order');
     var jdsPath = jdsResource + '?' + querystring.stringify(jdsQuery);
 
     var options = _.extend({}, req.app.config.jdsServer, {

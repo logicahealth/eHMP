@@ -12,18 +12,18 @@ var raPending = {
 };
 
 //------------------------------------------------------------------------
-// REF:  https://wiki.vistacore.us/display/VACORE/Request+Activity+-+Clinical+Object+Storage+Structure
+// REF:  https://wiki.vistacore.us/display/DNS RE/Request+Activity+-+Clinical+Object+Storage+Structure
 // An active Clinical Object request that is directed at another person
 //------------------------------------------------------------------------
 var raActive =
 {
-    'uid' : 'urn:va:ehmp-activity:9E7A:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
-    'patientUid' : 'urn:va:patient:9E7A:3:3',
-    'authorUid' : 'urn:va:user:9E7A:10000000270',
+    'uid' : 'urn:va:ehmp-activity:SITE:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
+    'patientUid' : 'urn:va:patient:SITE:3:3',
+    'authorUid' : 'urn:va:user:SITE:10000000270',
     'domain' : 'ehmp-activity',
     'subDomain' : 'request',
     'visit' : {
-        'locationUid' : 'urn:va:location:9E7A:38',
+        'locationUid' : 'urn:va:location:SITE:38',
         'serviceCategory' : 'PSB',
         'dateTime' : 20160101080000
     },
@@ -37,7 +37,7 @@ var raActive =
             'processDefinitionId' : 'Order:Request',
             'processInstanceId' : 123,
             'state' : 'complete:request completed',
-            'initiator' : 'urn:va:patient:9E7A:3',
+            'initiator' : 'urn:va:patient:SITE:3',
             'timeStamp' : '20160420000000',
             'urgency' : 'Urgent', // Latest Urgency for this activity
             'assignTo' : 'My Teams', // Latest Assigned to
@@ -78,11 +78,11 @@ var raActive =
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
                     'request' : 'This is my request',
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160420000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -119,11 +119,11 @@ var raActive =
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
                     'request' : 'This is my request',
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160509000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -162,11 +162,11 @@ var raActive =
                         }],
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160421066000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160091080000
                     }
@@ -207,11 +207,11 @@ var raActive =
                         ],
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160421008000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160100000000
                     }
@@ -246,11 +246,11 @@ var raActive =
                         } ],
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160510000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -261,13 +261,13 @@ var raActive =
 
 var raActiveWithMissingDataForDefault =
 {
-    'uid' : 'urn:va:ehmp-activity:9E7A:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
-    'patientUid' : 'urn:va:patient:9E7A:3:3',
-    'authorUid' : 'urn:va:user:9E7A:10000000270',
+    'uid' : 'urn:va:ehmp-activity:SITE:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
+    'patientUid' : 'urn:va:patient:SITE:3:3',
+    'authorUid' : 'urn:va:user:SITE:10000000270',
     'domain' : 'ehmp-activity',
     'subDomain' : 'request',
     'visit' : {
-        'locationUid' : 'urn:va:location:9E7A:38',
+        'locationUid' : 'urn:va:location:SITE:38',
         'serviceCategory' : 'PSB',
         'dateTime' : 20160101080000
     },
@@ -281,7 +281,7 @@ var raActiveWithMissingDataForDefault =
             'processDefinitionId' : 'Order:Request',
             'processInstanceId' : 123,
             'state' : 'complete:request completed',
-            'initiator' : 'urn:va:patient:9E7A:3',
+            'initiator' : 'urn:va:patient:SITE:3',
             'timeStamp' : '20160420000000',
             'urgency' : 'Urgent', // Latest Urgency for this activity
             'assignTo' : 'My Teams', // Latest Assigned to
@@ -322,11 +322,11 @@ var raActiveWithMissingDataForDefault =
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
                     'request' : '',  // <----- SHOULD RESULT IN NULL ON MADLIB
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160420000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -363,11 +363,11 @@ var raActiveWithMissingDataForDefault =
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
                     'request' : 'This is my request',
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160509000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -409,11 +409,11 @@ var raActiveWithMissingDataForDefault =
                         ],
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160421066000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160091080000
                     }
@@ -451,11 +451,11 @@ var raActiveWithMissingDataForDefault =
                          ],
                          'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160421008000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160100000000
                     }
@@ -489,11 +489,11 @@ var raActiveWithMissingDataForDefault =
                         ],
                         'routingCode' : '[TF: Primary Care(104)/TR:Nurse Practitioner (93)]'
                     },
-                    'submittedByUid' : 'urn:va:user:9E7A:10000000270',
+                    'submittedByUid' : 'urn:va:user:SITE:10000000270',
                     'submittedByName' : 'Panorama,User',
                     'submittedTimeStamp' : '20160425000000',
                     'visit' : {
-                        'locationUid' : 'urn:va:location:9E7A:38',
+                        'locationUid' : 'urn:va:location:SITE:38',
                         'serviceCategory' : 'PSB',
                         'dateTime' : 20160101080000
                     }
@@ -502,14 +502,14 @@ var raActiveWithMissingDataForDefault =
 };
 
 var noteTemplate = {
-        'uid': 'urn:va:ehmp-activity:9E7A:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
-        'patientUid': 'urn:va:patient:9E7A:3:3',
-        'authorUid': 'urn:va:user:9E7A:10000000270',
+        'uid': 'urn:va:ehmp-activity:SITE:3:e06c8148-80f0-47c0-907a-3bb739ac2808',
+        'patientUid': 'urn:va:patient:SITE:3:3',
+        'authorUid': 'urn:va:user:SITE:10000000270',
         'domain': 'ehmp-activity',
         'subDomain': 'request',
         'visit' :
         {
-            'locationUid': 'urn:va:location:9E7A:38',
+            'locationUid': 'urn:va:location:SITE:38',
             'serviceCategory': 'PSB',
             'dateTime': 20160101080000
         },

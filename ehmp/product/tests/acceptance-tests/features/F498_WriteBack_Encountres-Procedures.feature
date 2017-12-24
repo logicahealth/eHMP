@@ -5,8 +5,8 @@ Feature: F413 - Enter, Store Encounter Form - Procedures(CPT)
 
 @writeback 
 Scenario: Client can write to the VistA and add CPT records
-  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;2939;FFC7;VLER" site(s)
-  And the client requests "CPT" for the patient "C877;253" in VPR format
+  Given a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE;SITE;2939;FFC7;VLER" site(s)
+  And the client requests "CPT" for the patient "SITE;253" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When the client add new CPT record using Encounter Form for patient with DFN "253" enter
@@ -20,7 +20,7 @@ Scenario: Client can write to the VistA and add CPT records
     | comment         | Test: this Actinomyces Antibody |
     
   Then the client receive the VistA write-back response
-  And the new "CPT" record added for the patient "C877;253" in VPR format
+  And the new "CPT" record added for the patient "SITE;253" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field           | value                         |
     | name            | ANTINOMYCES ANTIBODY          |
@@ -33,8 +33,8 @@ Scenario: Client can write to the VistA and add CPT records
 	
 @writeback 
 Scenario: Client can write to the VistA and add CPT records
-	Given a patient with pid "9E7A;66" has been synced through VX-Sync API for "9E7A" site(s)
-	And the client requests "CPT" for the patient "9E7A;66" in VPR format
+	Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+	And the client requests "CPT" for the patient "SITE;66" in VPR format
 	And save the totalItems
 	And a client connect to VistA using "Panorama"
 	When the client add new CPT record using Encounter Form for patient with DFN "66" enter
@@ -48,7 +48,7 @@ Scenario: Client can write to the VistA and add CPT records
 		| comment			    | Test: this ANESTH HEART/LUNG TRANSPLNT |
 		
 	Then the client receive the VistA write-back response
-	And the new "CPT" record added for the patient "9E7A;66" in VPR format
+	And the new "CPT" record added for the patient "SITE;66" in VPR format
 	And the new write back record dispaly in VPR format with value of
 		| field 			    | value 			                  |
 		| name			      | ANESTH HEART/LUNG TRANSPLNT 	|
@@ -72,7 +72,7 @@ Scenario: Client can write to the VistA and add CPT records
     | comment         | Test: this ANESTH HEART/LUNG TRANSPLNT |
     
   Then the client receive the VistA write-back response
-  And the new "CPT" record added for the patient "9E7A;66" in VPR format
+  And the new "CPT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field           | value                         |
     | name            | ANESTH HEART/LUNG TRANSPLNT   |
@@ -96,7 +96,7 @@ Scenario: Client can write to the VistA and add CPT records
     | comment         | Test: Surgical Repositioning of Teeth |
     
   Then the client receive the VistA write-back response
-  And the new "CPT" record added for the patient "9E7A;66" in VPR format
+  And the new "CPT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field           | value                         |
     | name            | REPOSITIONING OF TEETH        |
@@ -109,8 +109,8 @@ Scenario: Client can write to the VistA and add CPT records
  
 @writeback 
 Scenario: Client should get error message if some invalid data entered to the VistA and add CPT records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "CPT" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "CPT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Panorama"
   #wrong CPT code

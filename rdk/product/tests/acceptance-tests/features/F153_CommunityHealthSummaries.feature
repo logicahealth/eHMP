@@ -6,9 +6,9 @@ Feature:F153-HIE C32 - Community Health Summaries
 @US2113 @US4283
 Scenario: Verify Community Health Summary Applet data call
   # 10108V420871 = Eight,Patient
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   #When the client requests allergies for the patient "5000000341V359724" in VPR format
-  When the client requests COMMUNITY HEALTH SUMMARIES for the patient "9E7A;3" with parameters
+  When the client requests COMMUNITY HEALTH SUMMARIES for the patient "SITE;3" with parameters
    | label  | value |
    | callType | vler_list |
  Then a successful response is returned

@@ -4,43 +4,57 @@
 #
 
 # General Configuration
+default[:vxsync][:user] = 'node'
+default[:vxsync][:group] = 'node'
 default[:vxsync][:start_vxsync_services] = true
 default[:vxsync][:filename] = 'vxsync.zip'
 default[:vxsync][:artifact_path] = "#{Chef::Config['file_cache_path']}/#{node[:vxsync][:filename]}"
 default[:vxsync][:web_service_port] = 8080
 default[:vxsync][:endpoint_max_sockets] = 5
+default[:vxsync][:handler_max_sockets] = 5
 default[:vxsync][:config_refresh] = 60000
 default[:vxsync][:max_file_size] = 20000000
-default[:vxsync][:vxsync_applications] = ["client", "vista"]
+default[:vxsync][:vxsync_applications] = ["vista", "client"]
 default[:vxsync][:clear_logs] = nil
+default[:vxsync][:lzma_min_size] = 1887430
+
+# Logrotate configuration
+default[:vxsync][:logrotate][:name] = 'vxsync_logs'
+default[:vxsync][:logrotate][:log_directory] = '/var/log/vxsync/*.log'
+default[:vxsync][:logrotate][:rotate] = 10
+default[:vxsync][:logrotate][:options] = %w{missingok compress delaycompress copytruncate notifempty dateext}
+default[:vxsync][:logrotate][:frequency] = 'daily'
+default[:vxsync][:logrotate][:dateformat] = '-%Y%m%d%s'
+
+default[:vxsync][:audit][:logrotate][:name] = 'vxsync_audit_logs'
+default[:vxsync][:audit][:logrotate][:log_directory] = '/var/log/vxsync/audit/*.log'
+default[:vxsync][:audit][:logrotate][:rotate] = 10
+default[:vxsync][:audit][:logrotate][:options] = %w{missingok compress delaycompress copytruncate notifempty dateext}
+default[:vxsync][:audit][:logrotate][:frequency] = 'daily'
+default[:vxsync][:audit][:logrotate][:dateformat] = '-%Y%m%d%s'
 
 # JDS Configuration
 default[:vxsync][:jds_timeout] = 300000
+
+# PJDS Configuration
+default[:vxsync][:pjds][:username] = "osync1"
 
 # Solr Configuration
 default[:vxsync][:trackSolrStorage] = true
 
 # Beanstalk Configuration
 default[:vxsync][:beanstalk_ttr] = 120
-default[:vxsync][:beanstalk_version] = "1.10-2.el6"
 default[:vxsync][:beanstalk_priority] = 10
 default[:vxsync][:beanstalk_delay] = 0
 default[:vxsync][:beanstalk_timeout] = 10
 default[:vxsync][:beanstalk_init_millis] = 1000
 default[:vxsync][:beanstalk_max_millis] = 15000
 default[:vxsync][:beanstalk_inc_millis] = 1000
-default[:vxsync][:beanstalk_processes] = {
-  :jobrepo => {
-    :template => "job_repo.sh.erb",
-    :config => {
-      :port => 5000,
-      :tube_name => "vx-sync",
-      :tube_prefix => "vxs-",
-      :job_type => "true",
-      :max_file_size => node[:vxsync][:max_file_size]
-    }
-  }
-}
+
+# Shutdown Timeout Configuration
+default[:vxsync][:shutdown_timeout][:poller_host_millis] = 30000
+default[:vxsync][:shutdown_timeout][:subscriber_host_millis] = 30000
+default[:vxsync][:shutdown_timeout][:all_timeout_seconds] = 31
 
 # Publish Tube Configuration
 default[:vxsync][:publish_tubes] = true
@@ -50,7 +64,7 @@ default[:vxsync][:ods_attempts] = 10
 default[:vxsync][:ods_delay] = 30
 default[:vxsync][:default_expiration] = 3600000
 default[:vxsync][:dod_expiration] = 3600000
-default[:vxsync][:site_list] = ["9E7A", "C877"]
+default[:vxsync][:site_list] = ["SITE", "SITE"]
 
 # HDR Configuration
 default[:vxsync][:hdr_enabled] = true
@@ -62,11 +76,11 @@ default[:vxsync][:jds_timeout] = 300000
 default[:vxsync][:activity_filter_sites] = nil
 default[:vxsync][:hdr_blacklist_sites] = [
   {
-    "site_hash" => "2927",
+    "site_hash" => "SITE",
     "station_number" => 202
   },
   {
-    "site_hash" => "A8C2",
+    "site_hash" => "SITE",
     "station_number" => 504
   }
 ]
@@ -75,20 +89,51 @@ default[:vxsync][:log_level][:error_handling] = "debug"
 default[:vxsync][:log_level][:loggers] = {
   :root => "warn"
 }
+default[:vxsync][:log_level][:solr_client][:node_event] = "warn"
+default[:vxsync][:log_level][:solr_client][:zookeeper_event] = "warn"
+default[:vxsync][:log_level][:solr_client][:child_instance_enabled] = false
+
+# APM attirbutes
+default[:vxsync][:enable_apm] = false
+default[:vxsync][:apm][:probe_name] = "VFSS"
+
+# app_dynamics attributes
+default[:vxsync][:enable_app_dynamics] = false
+default[:vxsync][:app_dynamics][:agent_tier_name] = "VXSYNC"
 
 # DoD Configuration
 default[:vxsync][:jmeadows_enabled] = true
 default[:vxsync][:jmeadows_timeout] = 60000
 
+# VLER type selection
+default[:vxsync][:vler_selector] = 'vler'
+
 # Vler Configuration
 default[:vxsync][:vler_enabled] = true
 default[:vxsync][:vler_timeout] = 60000
+
+# VlerDas Configuration
+default[:vxsync][:vlerdas_enabled] = true
+default[:vxsync][:vlerdas][:query_duration_days] = 180
+default[:vxsync][:vlerdas][:vler_form_data][:org] = 'eHMP'
+default[:vxsync][:vlerdas][:vler_form_data][:role_code] = '112247003'
+default[:vxsync][:vlerdas][:vler_form_data][:purpose_code] = 'TREATMENT'
+default[:vxsync][:vlerdas][:vler_form_data][:va_facility_code] = '459CH'
+default[:vxsync][:vlerdas][:vler_form_data][:family_name] = 'May'
+default[:vxsync][:vlerdas][:vler_form_data][:given_name] = 'John'
+default[:vxsync][:vlerdas][:notification_callback][:protocol] = 'http'
+# Should be set to 'development' for development, test and build environments
+# Should be set to 'production' for all other environments
+default[:vxsync][:vlerdas][:notification_callback][:environment] = 'development'
 
 # MVI Configuration
 default[:vxsync][:mvi_timeout] = 60000
 
 # Terminology Configuration
 default[:vxsync][:terminology_timeout] = 60000
+
+# VistaRecordPoller - duplicate error time window in seconds
+default[:vxsync][:poller][:ignore_duplicate_error_time] = 1800
 
 default[:terminology][:nexus_base_url] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/hmp/termdb"
 default[:terminology][:home_dir] = '/opt/terminology'
@@ -185,21 +230,25 @@ default[:vxsync][:profile][:hdr][:'hdr-xform-visit-vpr'][:worker_count] = node[:
 
 default[:vxsync][:profile][:vistaProcessor][:'vista-record-processor-request'][:worker_count] = 4
 
-default[:vxsync][:profile][:vler][:'vler-sync-request'][:worker_count] = 5
-default[:vxsync][:profile][:vler][:'vler-xform-vpr'][:worker_count] = 5
+default[:vxsync][:profile][:vler][:'vler-sync-request'][:worker_count] = 3
+default[:vxsync][:profile][:vler][:'vler-xform-vpr'][:worker_count] = 3
+
+default[:vxsync][:profile][:vlerdas][:'vler-das-sync-request'][:worker_count] = 1
+default[:vxsync][:profile][:vlerdas][:'vler-das-doc-retrieve'][:worker_count] = 2
+default[:vxsync][:profile][:vlerdas][:'vler-das-xform-vpr'][:worker_count] = 2
 
 default[:vxsync][:profile][:document][:'jmeadows-pdf-document-transform'][:worker_count] = node[:vxsync][:profile][:worker_count]
 default[:vxsync][:profile][:document][:'jmeadows-document-retrieval'][:worker_count] = node[:vxsync][:profile][:worker_count]
 default[:vxsync][:profile][:document][:'jmeadows-cda-document-conversion'][:worker_count] = node[:vxsync][:profile][:worker_count]
 
-default[:vxsync][:profile][:'jds-storage'][:'store-record'][:worker_count] = 5
+default[:vxsync][:profile][:'jds-storage'][:'store-record'][:worker_count] = 8
 default[:vxsync][:profile][:'jds-storage'][:'operational-store-record'][:worker_count] = 8
 
-default[:vxsync][:profile][:'solr-storage'][:'solr-record-storage'][:worker_count] = 5
+default[:vxsync][:profile][:'solr-storage'][:'solr-record-storage'][:worker_count] = 8
 
 default[:vxsync][:profile][:enrichment][:'record-enrichment'][:worker_count] = 3
 
-default[:vxsync][:profile][:prioritization][:'event-prioritization-request'][:worker_count] = 8
+default[:vxsync][:profile][:prioritization][:'event-prioritization-request'][:worker_count] = 4
 
 default[:vxsync][:profile][:publish][:'publish-data-change-event'][:worker_count] = node[:vxsync][:profile][:worker_count]
 
@@ -209,83 +258,43 @@ default[:vxsync][:profile][:update][:'record-update'][:worker_count] = node[:vxs
 
 default[:vxsync][:profile][:retirement][:'patient-record-retirement'][:worker_count] = node[:vxsync][:profile][:worker_count]
 
-default[:osync][:profile][:worker_count] = 1
-default[:osync][:profile][:primary][:'admissions'][:worker_count] = node[:osync][:profile][:worker_count]
-default[:osync][:profile][:primary][:'appointments'][:worker_count] = node[:osync][:profile][:worker_count]
-default[:osync][:profile][:primary][:'sync'][:worker_count] = 6
-default[:osync][:profile][:primary][:'patientlist'][:worker_count] = 4
+default[:vxsync][:profile][:notification][:'sync-notification'][:worker_count] = node[:vxsync][:profile][:worker_count]
 
-# SOAP Handler Configuration
-default[:soap_handler][:filename] = 'soap_handler.jar'
-default[:soap_handler][:artifact_path] = "#{Chef::Config['file_cache_path']}/#{node[:soap_handler][:filename]}"
-default[:soap_handler][:home_dir] = '/opt/soap_handler'
-default[:soap_handler][:service_name] = 'soap_handler'
-default[:soap_handler][:config_file] = "#{node[:soap_handler][:home_dir]}/config.json"
-default[:soap_handler][:server_port] = "5400"
-default[:soap_handler][:admin_port] = "5401"
+# The uv_threadpool_size sets the number of threads to be utilized by a node process to handle async requests.
+# The uv_threadpool_size has a maximum of 128
+# Although initially identified in relation to rdk oracle connection pooling, this value may have impact on performance
+# in relation to other async actions as well
+#
+# Although initially identified in relation to rdk oracle connection pooling, be aware that uv_threadpool_size is not
+# just related to Oracle connection pools, it can affect other aysnc operations as well, particularly those involving
+# native code modules. However, documentation is sparse and online reading conflicting so it is unclear if filesystem
+# and general network operations are affected.  Adding to confusion is the strategies have changed under different node releases.
+default[:vxsync][:uv_threadpool_size] = 4
 
-default[:soap_handler][:security][:trust_store] = nil
-default[:soap_handler][:security][:trust_store_pw] = nil
-default[:soap_handler][:security][:key_store] = nil
-default[:soap_handler][:security][:key_store_pw] = nil
-
-default[:soap_handler][:log_level] = "INFO"
-
+#Sync Notifications
+default[:vxsync][:syncNotifications] = {
+  :discharge => {
+    :dataDomain => "discharge"
+  }
+}
 
 # Error Processing Configuration
 default[:error_processing][:jdsGetErrorLimit] = 1000
 default[:error_processing][:loop_delay_millis] = 30000
+default[:error_processing][:error_retry_limit] = 5
 default[:error_processing][:profiles][:catastrophic_recovery][:enabled] = false
-default[:error_processing][:profiles][:record_enrichment][:enabled] = false
+default[:error_processing][:profiles][:catastrophic_recovery][:loop_delay_millis] = 30000
+default[:error_processing][:profiles][:record_enrichment][:enabled] = true
+default[:error_processing][:profiles][:record_enrichment][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:activity_management][:enabled] = false
+default[:error_processing][:profiles][:activity_management][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:jmeadows][:enabled] = false
+default[:error_processing][:profiles][:jmeadows][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:hdr][:enabled] = false
+default[:error_processing][:profiles][:hdr][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:vler][:enabled] = false
+default[:error_processing][:profiles][:vler][:loop_delay_millis] = 30000
+default[:error_processing][:profiles][:vlerdas][:enabled] = false
+default[:error_processing][:profiles][:vlerdas][:loop_delay_millis] = 30000
 default[:error_processing][:profiles][:pgd][:enabled] = false
-
-# Opportunistic Sync (osync) Configuration
-default[:osync][:source] = nil
-default[:osync][:home] = '/opt/vxsync_client'
-default[:osync][:config] = nil
-default[:osync][:service] = 'osync'
-default[:osync][:log_directory] = "/var/log/osync"
-default[:osync][:log_level][:loggers] = {
-  :root => "debug",
-  :valid_patients => "debug",
-  :results => "debug"
-}
-default[:osync][:config_file] = "#{node[:osync][:home]}/worker-config.json"
-default[:osync][:bluepill_log_directory] = "#{node[:osync][:log_directory]}/bluepill"
-default[:osync][:config_refresh] = 0
-default[:osync][:max_file_size] = 2000000
-default[:osync][:beanstalk_ttr] = 60
-default[:osync][:mixedEnvironmentMode] = true
-default[:osync][:client][:active_user_run][:enabled] = true
-default[:osync][:client][:active_user_run][:minute] = '20'
-default[:osync][:client][:active_user_run][:hour] = '0'
-default[:osync][:client][:active_user_run][:weekday] = '*'
-default[:osync][:client][:active_user_run][:log_file] = 'osync-active-user-list-run.log'
-default[:osync][:client][:active_user_cleanup][:enabled] = true
-default[:osync][:client][:active_user_cleanup][:minute] = '15'
-default[:osync][:client][:active_user_cleanup][:hour] = '0'
-default[:osync][:client][:active_user_cleanup][:weekday] = '*'
-default[:osync][:client][:active_user_cleanup][:log_file] = 'osync-active-user-list-cleanup.log'
-
-default[:osync][:processes] = {
-  :opportunistic_sync_jobrepo => {
-    :template => "osync_job_repo.sh.erb",
-    :config => {
-      :port => 5001,
-      :max_file_size => node[:osync][:max_file_size]
-    }
-  },
-  :'osync-subscriber_host' => {
-    :template => "osync_subscriber_host.sh.erb",
-    :endpoint => "osync-subscriberHost.js",
-    :config => {
-      :profile => "primary"
-    }
-  }
-}
-default[:osync][:appointment_scheduling] = {}
-default[:osync][:admissions] = {}
+default[:error_processing][:profiles][:pgd][:loop_delay_millis] = 30000

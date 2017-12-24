@@ -8,15 +8,15 @@ Feature: F100 Return of IV medication results in FHIR format
 @f100_1_iv_medication_fhir @fhir
 Scenario: Client can request IV Medications in FHIR format
 Given a patient with "IV medication results" in multiple VistAs
-Given a patient with pid "9E7A;17" has been synced through Admin API
-When the client requests in-patient medication results for the patient "9E7A;17" in FHIR format
+Given a patient with pid "SITE;17" has been synced through Admin API
+When the client requests in-patient medication results for the patient "SITE;17" in FHIR format
 Then a successful response is returned
 Then the client receives 5 FHIR "VistA" result(s)
 And the client receives 5 FHIR "panorama" result(s)
 And the FHIR results contain "medication administration results"                                                    
 	| field														| panorama_value										|
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:17							|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:17							|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 3V;I													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -26,20 +26,20 @@ And the FHIR results contain "medication administration results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:105903003										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:9E7A:923									|
+	| content.contained.extension.valueString					| urn:va:user:SITE:923									|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| PROGRAMMER,TWENTYEIGHT								|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.contained.extension.valueString					| urn:va:order:9E7A:17:7418.1							|
+	| content.contained.extension.valueString					| urn:va:order:SITE:17:7418.1							|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Infusion									|
-	| content.contained.identifier.value						| urn:va:user:9E7A:983									|
+	| content.contained.identifier.value						| urn:va:user:SITE:983									|
 	| content.contained.name.text								| PROVIDER,ONE											|
 	| content.contained.type.text								| V														|
 	#uid field
-	#| content.contained.identifier.value						| urn:va:med:9E7A:17:7418.1								|
+	#| content.contained.identifier.value						| urn:va:med:SITE:17:7418.1								|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 1997-12-11T16:23:00									|
 	| content.contained.patient.reference						| IS_SET												|
@@ -81,15 +81,15 @@ And the FHIR results contain "medication administration results"
 @f100_2_iv_medication_fhir @fhir
 Scenario: Client can request IV Medications in FHIR format
 Given a patient with "IV medication results" in multiple VistAs
-Given a patient with pid "C877;17" has been synced through Admin API
-When the client requests in-patient medication results for the patient "C877;17" in FHIR format
+Given a patient with pid "SITE;17" has been synced through Admin API
+When the client requests in-patient medication results for the patient "SITE;17" in FHIR format
 Then a successful response is returned
 Then the client receives 5 FHIR "VistA" result(s)
 And the client receives 5 FHIR "kodak" result(s)
 And the FHIR results contain "medication administration results"                                                    
 	| field														| kodak_value					     					|
 	# following fields are from Medication Prescription resource type.
-	| content.identifier.value									| CONTAINS urn:va:med:C877:17							|
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:17							|
 	| content.contained.extension.url 							| http://vistacore.us/fhir/extensions/med#localId		|
 	| content.contained.extension.valueString					| 3V;I													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medStatus		|
@@ -99,20 +99,20 @@ And the FHIR results contain "medication administration results"
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#medType		|
 	| content.contained.extension.valueString					| urn:sct:105903003										|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistUid	|
-	| content.contained.extension.valueString					| urn:va:user:C877:923									|
+	| content.contained.extension.valueString					| urn:va:user:SITE:923									|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#pharmacistName|
 	| content.contained.extension.valueString					| PROGRAMMER,TWENTYEIGHT								|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#supply		|
 	| content.contained.extension.valueString					| false													|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#orderUid		|
-	| content.contained.extension.valueString					| urn:va:order:C877:17:7418.1							|
+	| content.contained.extension.valueString					| urn:va:order:SITE:17:7418.1							|
 	| content.contained.extension.url							| http://vistacore.us/fhir/extensions/med#kind			|
 	| content.contained.extension.valueString					| Medication, Infusion									|
-	| content.contained.identifier.value						| urn:va:user:C877:983									|
+	| content.contained.identifier.value						| urn:va:user:SITE:983									|
 	| content.contained.name.text								| PROVIDER,ONE											|
 	| content.contained.type.text								| V														|
 	#uid field
-	#| content.contained.identifier.value						| urn:va:med:C877:17:7418.1								|
+	#| content.contained.identifier.value						| urn:va:med:SITE:17:7418.1								|
 	| content.contained.status									| completed												|
 	| content.contained.dateWritten								| 1997-12-11T16:23:00									|
 	| content.contained.patient.reference						| IS_SET												|
@@ -165,8 +165,8 @@ And the client receives 4 FHIR "panorama" result(s)
 And the FHIR results contain "medication administration results" 
 
 	| field														| value									|
-	| content.identifier.value									| CONTAINS urn:va:med:9E7A:301:			|
-#	| content.contained.identifier.value						| CONTAINS urn:va:med:9E7A:301			|		
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:301:			|
+#	| content.contained.identifier.value						| CONTAINS urn:va:med:SITE:301			|		
 	| content.contained.product.form.text						| IS_NOT_SET							|
 	| content.contained.dosageInstruction.text					| IS_NOT_SET							|	
 	| content.contained.type.text								| V										|
@@ -192,8 +192,8 @@ And the client receives 4 FHIR "kodak" result(s)
 And the FHIR results contain "medication administration results" 
 
 	| field														| value									|
-	| content.identifier.value									| CONTAINS urn:va:med:C877:301			|
-#	| content.contained.identifier.value						| CONTAINS urn:va:med:C877:301			|	
+	| content.identifier.value									| CONTAINS urn:va:med:SITE:301			|
+#	| content.contained.identifier.value						| CONTAINS urn:va:med:SITE:301			|	
 	| content.contained.product.form.text						| IS_NOT_SET							|
 	| content.contained.dosageInstruction.text					| IS_NOT_SET							|	
 	| content.contained.type.text								| V										|
@@ -211,8 +211,8 @@ And the FHIR results contain "medication administration results"
 @f100_5_iv_medication_neg_fhir
 Scenario: Negative scenario.  Client can request medication results in FHIR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests in-patient medication results for the patient "9E7A;100184" in FHIR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests in-patient medication results for the patient "SITE;100184" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed	
 	

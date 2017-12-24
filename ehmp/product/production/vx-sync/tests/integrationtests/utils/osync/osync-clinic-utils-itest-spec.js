@@ -14,7 +14,7 @@ var log = require(global.VX_DUMMIES + '/dummy-logger');
 // });
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var OsyncClinicUtils = require(global.VX_UTILS + 'osync/osync-clinic-utils');
 
 var config = JSON.parse(JSON.stringify(require(global.VX_ROOT + 'worker-config')));
@@ -26,7 +26,8 @@ var clearTubes = require(global.VX_INTTESTS + 'framework/handler-test-framework'
 var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
 
 var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
 
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
@@ -34,7 +35,7 @@ var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 function buildEnvironment(log, config) {
 	return {
 		jds: new JdsClient(log, log, config),
-		pjds: new PjdsClient(log, log, config),
+		pjds: new PjdsClient(log, log, config.pjds),
 		jobStatusUpdater: {
 			createJobStatus: function(job, callback) {
 				callback();

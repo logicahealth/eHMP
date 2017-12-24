@@ -6,17 +6,17 @@ var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 
-function getResourceConfig() {
+//refer to ./example-basic-resource for more details
+function getResourceConfig(app) {
     return [{
         name: 'test-vista',
         path: '/test/vista',
         get: exampleVistaGet,
         interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
+            operationalDataCheck: false
         },
         subsystems: [],
-        requiredPermissions: [],
+        requiredPermissions: ['example-permission', 'additional-example-permission'],
         isPatientCentric: true
     }];
 }
@@ -26,7 +26,7 @@ function exampleVistaGet(req, res) {
     if(nullchecker.isNullish(req.interceptorResults.patientIdentifiers.dfn)){
         return res.status(500).rdkSend('Missing required patient identifiers');
     }
-    var vistaSite = '9E7A';
+    var vistaSite = 'SITE';
     var patientDfn = '3';
     req.audit.patientId = vistaSite + ';' + patientDfn;
     req.audit.logCategory = 'RETRIEVE';

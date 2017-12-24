@@ -13,8 +13,8 @@ var log = {
 
 var config = {
     vistaSites: {
-        '9E7A': {},
-        'C877': {}
+        'SITE': {},
+        'SITE': {}
     },
     recordRetirement: {
         jds: {
@@ -43,7 +43,7 @@ describe('patients-assigned-cds-panel-rule', function() {
     it('Normal path: all patients have expired and all patients exist in CDS panel', function() {
         var done = false;
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             cdsPanel: true,
             lastAccessed: overAYearAgo
@@ -77,7 +77,7 @@ describe('patients-assigned-cds-panel-rule', function() {
     it('Normal path: one patient has expired and all patients exist in CDS panel', function() {
         var done = false;
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             cdsPanel: true,
             lastAccessed: oneDayAgo
@@ -112,7 +112,7 @@ describe('patients-assigned-cds-panel-rule', function() {
     it('Normal path: one patient has expired and only that patient exists in CDS panel', function() {
         var done = false;
         var patientIds = [{
-            value: '9E7A;3',
+            value: 'SITE;3',
             type: 'PID',
             cdsPanel: false,
             lastAccessed: oneDayAgo

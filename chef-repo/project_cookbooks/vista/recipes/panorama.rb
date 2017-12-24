@@ -28,21 +28,21 @@ end
 vista_new_person "create_leipr_proxy_user" do
   log node[:vista][:chef_log]
   action :create
-  access_code "REDACTED"
-  verify_code "REDACTED"
+  access_code "USER  "
+  verify_code "PW"
   full_name "User,LEIPR"
   initial "LU"
   keys ["XUPROGMODE", "XUPROG"]
 end
 
-# See https://wiki.vistacore.us/display/DNS  E/Agilex+Sample+Personas
+# See https://wiki.vistacore.us/display/DNS RE/Agilex+Sample+Personas
 # These users represent clinicans and other end-users of eHMP.
 persona_users = [
   # example of dynamic user
   # {
   #   # Proxy user, but also used for end-user testing
-  #   :access_code => 'REDACTED',
-  #   :verify_code => 'REDACTED',
+  #   :access_code => 'USER  ',
+  #   :verify_code => 'PW      ',
   #   :full_name => 'User,Panorama',
   #   :ssn => '666441233',
   #   :initial => 'PU',
@@ -76,6 +76,32 @@ persona_users.each do | persona |
     eie_allowed persona[:allergy_eie_allowed]
     not_if { node[:vista][:no_reset] }
   end
+end
+
+# Removes the Preferred Editor (31.3 field) to prevent ScreenMan from
+# being used for data input.
+vista_mumps_block "Remove preferred editor from programmer user" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S FDA(1,200,\"1,\",31.3)=\"@\"",
+    "D UPDATE^DIE(,\"FDA(1)\")"
+  ]
+  log node[:vista][:chef_log]
+  not_if { node[:vista][:no_reset] }
+end
+
+vista_mumps_block "Remove invalid ^DGPM (patient movement) pointer" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  command [
+    "S ^DPT(101042,.1)=\"\"",
+    "S ^DPT(101042,.102)=\"\""
+  ]
+  log node[:vista][:chef_log]
+  not_if { node[:vista][:no_reset] }
 end
 
 include_recipe "vista::patient_ids"

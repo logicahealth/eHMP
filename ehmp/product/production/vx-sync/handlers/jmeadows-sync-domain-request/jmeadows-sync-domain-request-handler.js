@@ -9,7 +9,7 @@ var errorUtil = require(global.VX_UTILS + 'error');
 var format = require('util').format;
 var inspect = require(global.VX_UTILS + 'inspect');
 var uuid = require('node-uuid');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
+var auditor = new Auditor();
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('jmeadows-sync-domain-request-handler.handle: Received request to JMeadows (%s) %j', job.dataDomain, job);
@@ -28,8 +28,8 @@ function handle(log, config, environment, job, handlerCallback) {
     environment.metrics.debug('JMeadows domain sync',metricsObj);
     metricsObj.timer='stop';
 
-    var auditor = environment.auditor || new Auditor(config, job.dataDomain);
-    if (auditor.audit(job.patientIdentifier.value) === 'NO_PATH') {
+    var handlerAuditor = environment.auditor || auditor;
+    if (handlerAuditor.getAuditLogger(config, job.dataDomain).audit(job.patientIdentifier.value) === 'NO_PATH') {
         log.warn('jmeadows-sync-domain-request-handler.handle: No auditPath configured.  Auditing logs will not be available.');
     }
 
@@ -85,7 +85,8 @@ function getDomainConfiguration(log, config, job) {
     domainConfig = _.defaults(domainConfig, config.jmeadows.defaults);
     var url = format('%s://%s:%s%s', domainConfig.protocol || 'http', domainConfig.host, domainConfig.port, domainConfig.path);
     domainConfig.url = url;
-    domainConfig.agentClass = VxSyncForeverAgent;
+    domainConfig.forever = true;
+    domainConfig.agentOptions = {maxSockets: config.handlerMaxSockets || 5};
 
     return domainConfig;
 }

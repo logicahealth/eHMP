@@ -1,59 +1,48 @@
-<div role="row" class="table-row" {{#if userWorkspace}}draggable="true"{{/if}}>
+<div role="row" class="table-row" {{#if userWorkspace}}draggable="true"{{/if}}  data-toggle="popover" data-content="{{tooltip}}">
+    <!-- tile button wrapped in a role="gridcell" div will be injected here -->
 {{#if vitalColumns}}
-    <div role="presentation" class="selectable">
-        <div role="gridcell" class="table-cell border-vertical">
-            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
-            <div role="presentation" class="toolbar-container"></div>
-            <span class="sr-only">{{fullName}}</span>
-            <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{{descriptionColumn}}}</span>
-        </div>
+    <div role="gridcell" class="table-cell border-vertical">
+        <span class="sr-only">{{fullName}}</span>
+        <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{{descriptionColumn}}}</span>
     </div>
-    <div data-group-instanceid="quickDraw_{{displayName}}" role="presentation" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{fullName}}. Button.">
-        {{#if result}}
-            {{#if isValid}}
-                <div role="gridcell" class="table-cell border-vertical">
-                    <div data-cell-instanceid="time_since_{{displayName}}">
-                        {{result}}
-                    {{#if units}} {{units}}{{/if}}
-                    {{#if metricResult}}
-                        <span class="smallergreyText">{{metricResult}}{{#if metricUnits}} {{metricUnits}}{{/if}}</span>
-                    {{/if}}
-                    </div>
+    {{#if result}}
+        {{#if isValid}}
+            <div role="gridcell" class="table-cell border-vertical">
+                <div data-cell-instanceid="time_since_{{displayName}}">
+                    {{result}}
+                {{#if units}} {{units}}{{/if}}
+                {{#if metricResult}}
+                    <span class="smallergreyText">{{metricResult}}{{#if metricUnits}} {{metricUnits}}{{/if}}</span>
+                {{/if}}
                 </div>
-            {{else}}
-                <div data-cell-instanceid="time_since_{{displayName}}" role="gridcell" class="table-cell border-vertical">{{result}}</div>
-            {{/if}}
-            <div data-cell-instanceid="encounter_count_{{displayName}}" role="gridcell" class="table-cell flex-width-0_5">
-                <span class="sr-only">{{numericTime}}</span>
-                {{timeSince}}</div>
-            <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell">
-                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
             </div>
         {{else}}
-            <span role="gridcell" class="table-cell no-record background-color-grey-lightest">No Records Found</span>
+            <div data-cell-instanceid="time_since_{{displayName}}" role="gridcell" class="table-cell border-vertical">{{result}}</div>
         {{/if}}
-    </div>
-{{else}}
-    <div role="presentation" class="selectable">
-        <div role="gridcell" class="table-cell border-vertical">
-            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
-            <div role="presentation" class="toolbar-container"></div>
-            <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>
+        <div data-cell-instanceid="encounter_count_{{displayName}}" role="gridcell" class="table-cell flex-width-0_5">
+            <span class="sr-only">{{numericTime}}</span>
+            {{timeSince}}</div>
+        <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell flex-width-1_5">
+            {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
         </div>
+    {{else}}
+        <span role="gridcell" class="table-cell no-record background-color-grey-lightest flex-width-3_5">No Records Found</span>
+    {{/if}}
+{{else}}
+    <div role="gridcell" class="table-cell border-vertical">
+        <span data-cell-instanceid="problem_name_{{displayName}}" data-cell-tilesort="tilesort">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>
     </div>
-    <div data-group-instanceid="quickDraw_{{displayName}}" role="application" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{typeName}}. Button.">
-        {{#if result}}
-            <div data-cell-instanceid="time_since_{{displayName}}" class="table-cell border-vertical">{{result}} {{units}}</div>
-            <div data-cell-instanceid="encounter_count_{{displayName}}"  class="table-cell flex-width-0_5">
-                <span class="sr-only">{{numericTime}}</span>
-                {{timeSince}}
-            </div>
-            <div data-cell-instanceid="graph_{{displayName}}" class="table-cell">
-                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
-            </div>
-        {{else}}
-            <span  class="table-cell no-record background-color-grey-lightest">No Records Found</span>
-        {{/if}}
-    </div>
+    {{#if result}}
+        <div data-cell-instanceid="time_since_{{displayName}}" role="gridcell" class="table-cell border-vertical">{{result}} {{units}}</div>
+        <div data-cell-instanceid="encounter_count_{{displayName}}" role="gridcell" class="table-cell flex-width-0_5">
+            <span class="sr-only">{{numericTime}}</span>
+            {{timeSince}}
+        </div>
+        <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell flex-width-1_5">
+            {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation uniqueName}}}
+        </div>
+    {{else}}
+        <span role="gridcell" class="table-cell no-record background-color-grey-lightest">No Records Found</span>
+    {{/if}}
 {{/if}}
 </div>

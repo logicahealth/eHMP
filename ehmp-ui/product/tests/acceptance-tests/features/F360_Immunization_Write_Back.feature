@@ -1,4 +1,4 @@
-@f360_immunization_write_back  @future @DE4560
+@f360_immunization_write_back @immunization_applet @future @DE4560
 
 Feature: F360 : Enter and Store Immunizations
 

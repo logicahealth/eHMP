@@ -4,7 +4,6 @@ require('../../env-setup');
 var _ = require('underscore');
 var request = require('request');
 var async = require('async');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
 
 
 var argv = require('yargs')
@@ -57,7 +56,8 @@ function runSingleTask(url, timeout, iter, verbose, callback) {
   var options = {
     url: url,
     timeout: timeout,
-    agentClass: VxSyncForeverAgent
+    forever: true,
+    agentOptions: {maxSockets: 5}
   };
 
   request(options, function(error, response, body) {

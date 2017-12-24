@@ -1,0 +1,25 @@
+#skipLinkRegion .dropdown {
+    position: absolute;
+	left: 0px;
+	top: -40px;
+	z-index: 1200;
+    transition: top .1s ease-out, background .5s linear;
+    &.focused {
+    	top: 0px;
+    	transition: top .1s ease-in, background .5s linear;
+    }
+}
+.skip-link-dropdown-menu {
+    width: inherit;
+    padding: 0;
+    ul {
+        margin: 0;
+        li {
+            background-color: #ffffcc;
+        }
+    }
+}
+
+.skip-link-navigation-highlight {
+    border: 3px dashed red;
+}

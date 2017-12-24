@@ -8,9 +8,9 @@ default[:cds_provision][:cds][:copy_files] = {}
 #######################################################################################################################
 # cds specific aws configuration options
 default[:cds_provision][:cds][:aws][:instance_type] = "m3.medium"
-default[:cds_provision][:cds][:aws][:subnet] = "subnet-213b2256"
-default[:cds_provision][:cds][:aws][:ssh_username] = "REDACTED"
-default[:cds_provision][:cds][:aws][:ssh_keyname] = "REDACTED"
+default[:cds_provision][:cds][:aws][:subnet] = "DNS"
+default[:cds_provision][:cds][:aws][:ssh_username] = "USER    "
+default[:cds_provision][:cds][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:cds_provision][:cds][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:cds_provision][:cds][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

@@ -9,8 +9,8 @@ Feature: F119 Searching for patient's medication in CPRS Default
 
 Scenario Outline: When a user searches patient's medication by text search total number of records are returned.
 Given a patient with "this medication exists" in multiple VistAs
-Given a patient with pid "9E7A;737" has been synced through Admin API
-When the user searches medication for the patient "9E7A;737" with the "<text>" in VPR format
+Given a patient with pid "SITE;737" has been synced through Admin API
+When the user searches medication for the patient "SITE;737" with the "<text>" in VPR format
 Then corresponding matching records totaling "<total>" are displayed
 
 

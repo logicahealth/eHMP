@@ -1,86 +1,56 @@
-class ReportsGistContainer <  AllApplets
-  include Singleton
-  attr_reader :appletid
-  def initialize
-    super
-    @appletid = 'reports'
-    appletid_css = '[data-appletid=reports]'
-    add_verify(CucumberLabel.new("Reports Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=reports] .panel-title"))
-    add_action(CucumberLabel.new("Procedure"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*[@data-row-instanceid='urn-va-procedure-9E7A-65-5-MCAR(699,']/td[1]"))
-    add_verify(CucumberLabel.new("ReportsGridVisible"), VerifyText.new, AccessHtmlElement.new(:id, "data-grid-reports"))
-    add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:link_text, "Date"))
-    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:link_text, "Type")) 
-    add_verify(CucumberLabel.new("Entered By"), VerifyText.new, AccessHtmlElement.new(:link_text, "Entered By"))
-    @@reports_applet_data_grid_rows = AccessHtmlElement.new(:xpath, "//table[@id='data-grid-reports']/descendant::tr")
-    add_verify(CucumberLabel.new("Number of Report Applet Rows"), VerifyXpathCount.new(@@reports_applet_data_grid_rows), @@reports_applet_data_grid_rows)                 
-    add_action(CucumberLabel.new('Empty Report Gist Row'), ClickAction.new, AccessHtmlElement.new(:css, '#data-grid-reports tr.empty'))
-
-    @@group_row = AccessHtmlElement.new(:css, "#data-grid-reports tr.groupByHeader")
-    add_verify(CucumberLabel.new("Rows - Group"), VerifyXpathCount.new(@@group_row), @@group_row)                 
-    @@selectable_row = AccessHtmlElement.new(:css, "#data-grid-reports tr.selectable")
-    add_verify(CucumberLabel.new("Rows - Selectable"), VerifyXpathCount.new(@@selectable_row), @@selectable_row)   
-    add_action(CucumberLabel.new("Filter input"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#grid-filter-reports input"))              
-   
-    # first reports row
-    add_action(CucumberLabel.new('First Reports Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='reports'] [data-row-instanceid='urn-va-surgery-9E7A-65-28']"))
-    add_applet_buttons appletid_css
-    add_text_filter appletid_css
-  end
-
-  def applet_grid_loaded
-    return true if am_i_visible? 'Empty Report Gist Row'
-    return TestSupport.driver.find_elements(:css, '#data-grid-reports tr.selectable').length > 0
-  rescue => e 
-    p e
-    false
-  end
+def verify_applet_title(applet_class, expected_title)
+  applet_class.wait_for_fld_applet_title
+  expect(applet_class).to have_fld_applet_title
+  expect(applet_class.fld_applet_title.text.upcase).to eq(expected_title.upcase)
 end
 
 Then(/^user sees Reports Gist$/) do  
-  aa = ReportsGistContainer.instance  
-  expect(aa.wait_until_action_element_visible("Reports Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Reports Title", "REPORTS")).to be_true
+  applet = PobReportsApplet.new
+  verify_applet_title applet, 'REPORTS'
+
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { aa.applet_grid_loaded }
+  wait.until { applet.applet_loaded? }
 end
 
 When(/^the Reports Gist Applet table contains headers$/) do |table|
-  aa = ReportsGistContainer.instance 
-  expect(aa.wait_until_action_element_visible("ReportsGridVisible", DefaultLogin.wait_time)).to be_true
-    
-  table.rows.each do |row|
-    expect(aa.perform_verification('Date', row[0])).to be_true, "The header #{row[0]} is not present in the reports gist"
-    expect(aa.perform_verification('Type', row[1])).to be_true, "The header #{row[1]} is not present in the reports gist"
-    expect(aa.perform_verification('Entered By', row[2])).to be_true, "The header #{row[2]} is not present in the reports gist"
+  applet = PobReportsApplet.new
+  applet.wait_for_summary_tbl_headers
+  expect(applet.summary_tbl_headers.length).to be > 0
+  header_text = applet.summary_tbl_headers.map { |element| element.text.upcase.sub('SORTABLE COLUMN', '').strip }
+  table.headers.each do | expected_header |
+    expect(header_text).to include expected_header.upcase
   end
 end
 
 Then(/^title of the Reports Applet says "(.*?)"$/) do |_arg1|
-  aa = ReportsGistContainer.instance  
-  expect(aa.wait_until_action_element_visible("Reports Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Reports Title", "REPORTS")).to be_true
+  applet = PobReportsApplet.new
+  verify_applet_title applet, _arg1
 end
 
 Then(/^the Reports Gist table contains "([^"]*)" Type\(s\)$/) do |arg1|
-  # //*[@id='data-grid-reports']/descendant::tr[contains(@class, 'selectable')]/descendant::td[2 and contains(string(), 'Procedure')]
-  report_gist = ReportsGistContainer.instance 
-  element = AccessHtmlElement.new(:xpath, "//*[@id='data-grid-reports']/descendant::tr[contains(@class, 'selectable')]/descendant::td[2 and contains(string(), '#{arg1}')]")
-  report_gist.add_verify(CucumberLabel.new('Report Type'), VerifyXpathCount.new(element), element)
-  expect(report_gist.wait_until_xpath_count_greater_than('Report Type', 0, 60)).to eq(true), "Type Column did not contain a #{arg1}"
+  applet = PobReportsApplet.new
+  applet.type_elements arg1
+  expect(applet.report_summary_type_rows.length).to be > 0, "Expected Reports applet to display reports of type #{arg1}, but it did not"
 end
 
 Then(/^the expanded Reports Applet is displayed$/) do
-  aa = ReportsGistContainer.instance
   expected_screen = 'Reports'
-  expect(aa.perform_verification('Screenname', "#{expected_screen}")).to eq(true), "Expected screenname to be #{expected_screen}"
-  expect(aa.wait_until_action_element_visible("Reports Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Reports Title", 'REPORTS')).to be_true
+
+  applet = PobReportsApplet.new
+
+  applet.wait_for_menu
+  expect(applet).to have_menu
+  applet.menu.wait_for_fld_screen_name
+  expect(applet.menu).to have_fld_screen_name
+  expect(applet.menu.fld_screen_name.text.upcase).to eq(expected_screen.upcase)
+
+  verify_applet_title applet, 'reports'
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until {  aa.applet_grid_loaded }
+  wait.until { applet.applet_loaded? }
 end
 
 Then(/^the Reports Gist Applet contains data rows$/) do
-  compare_item_counts("#data-grid-reports tr.selectable", 1)
+  compare_item_counts("[data-appletid=reports] .data-grid table tr.selectable", 1)
 end
 
 When(/^user refreshes Reports Gist Applet$/) do
@@ -92,7 +62,7 @@ Then(/^the message on the Reports Gist Applet does not say "(.*?)"$/) do |messag
 end
 
 When(/^the Reports Gist Applet expand view contains data rows$/) do
-  compare_item_counts("#data-grid-reports tr")
+  compare_item_counts("[data-appletid=reports] .data-grid table  tr")
 end
 
 When(/^user refreshes Reports Gist Applet expand view$/) do
@@ -104,33 +74,41 @@ Then(/^the message on the Reports Gist Applet expand view does not say "(.*?)"$/
 end
 
 When(/^the user filters the Reports Gist Applet by text "([^"]*)"$/) do |search_field|
-  report_gist = ReportsGistContainer.instance
+  applet = PobReportsApplet.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  row_count = report_gist.get_elements('Rows - Selectable').length
-  expect(report_gist.wait_until_action_element_visible("Filter input", DefaultLogin.wait_time)).to be_true
-  expect(report_gist.perform_action("Filter input", search_field)).to be_true
-  wait.until { row_count != report_gist.get_elements('Rows - Selectable').length }
+  row_count = applet.tbl_reports.length
+
+  applet.btn_applet_filter_toggle.click unless applet.fld_applet_text_filter.visible?
+  applet.wait_until_fld_applet_text_filter_visible
+  applet.fld_applet_text_filter.set search_field
+  applet.fld_applet_text_filter.native.send_keys :enter
+
+  wait.until { row_count != applet.tbl_reports.length }
 end
 
 Then(/^the Reports Gist table only diplays rows including text "([^"]*)"$/) do |input_text|
-  report_gist = ReportsGistContainer.instance
+  applet = PobReportsApplet.new
   upper = input_text.upcase
   lower = input_text.downcase
-  path =  "//table[@id='data-grid-reports']/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
+  path =  "//div[@data-appletid='reports']//table/descendant::td[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::tr"
 
   p path
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).length
   wait = Selenium::WebDriver::Wait.new(:timeout => 30)
-  wait.until { rows_containing_filter_text == report_gist.get_elements('Rows - Selectable').length }
-  row_count = report_gist.get_elements('Rows - Selectable').length 
+  begin
+    wait.until { rows_containing_filter_text == applet.tbl_reports.length }
+  rescue => e
+    p e
+  end
+  row_count = applet.tbl_reports.length 
   expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
 end
 
 When(/^the user views the details for the first "([^"]*)" Report$/) do |arg1|
-  xpath = "//table[@id='data-grid-reports']/descendant::td[contains(string(), '#{arg1}')]"
-  report_gist = ReportsGistContainer.instance
-  report_gist.add_action(CucumberLabel.new('open modal'), ClickAction.new, AccessHtmlElement.new(:xpath, xpath))
-  expect(report_gist.perform_action('open modal')).to eq(true)
+  applet = PobReportsApplet.new
+  applet.type_elements arg1
+  expect(applet.report_summary_type_rows.length).to be > 0, "Expected Reports applet to display reports of type #{arg1}, but it did not"
+  applet.report_summary_type_rows.first.click
 end
 
 Then(/^the Report Detail modal displays$/) do |table|
@@ -142,18 +120,73 @@ Then(/^the Report Detail modal displays$/) do |table|
 end
 
 When(/^the user views the first Report detail view$/) do
-  report_modal = ReportsGistContainer.instance
-  expect(report_modal.wait_until_xpath_count_greater_than('Number of Report Applet Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(report_modal.perform_action('First Reports Row')).to eq(true)
+  applet = PobReportsApplet.new
+  applet.wait_for_tbl_reports
+  expect(applet.tbl_reports.length).to be > 0, "Test requires at least 1 row to be displayed"
+  applet.tbl_reports.first.click
 end
 
 When(/^the user clicks the control Expand View in the Reports Gist applet$/) do
-  report_modal = ReportsGistContainer.instance
-  expect(report_modal.perform_action('Control - applet - Expand View')).to eq(true)
+  applet = PobReportsApplet.new
+  applet.wait_for_btn_applet_expand_view
+  expect(applet).to have_btn_applet_expand_view
+  applet.btn_applet_expand_view.click
+  applet.wait_for_btn_applet_minimize
 end
 
 When(/^the user opens the Report Gist Applet filter$/) do
-  report_gist_applet = ReportsGistContainer.instance
-  expect(report_gist_applet.perform_action('Control - applet - Filter Toggle')).to eq(true)
-  report_gist_applet.wait_until_action_element_visible('Filter Field')
+  applet = PobReportsApplet.new
+  expect(applet).to have_btn_applet_filter_toggle
+  applet.btn_applet_filter_toggle.click
+
+  applet.wait_until_fld_applet_text_filter_visible
+end
+
+Then(/^the Reports applet will initially be sorted and group by date$/) do
+  applet = PobReportsApplet.new
+  applet.wait_for_tbl_group_headers
+  expect(applet.tbl_group_headers.length).to be > 0
+  group_headers = applet.tbl_group_visible_headers
+  group_headers.each do | header |
+    expect(header).to match(/[a-zA-Z]+ \d{4}/)
+  end
+  group_dates = group_headers.map { |element|Date.strptime(element, "%B %Y") }
+  expect(group_dates).to eq(group_dates.sort.reverse)
+end
+
+When(/^the user sorts the Reports applet on column (\d+)$/) do |arg1|
+  applet = PobReportsApplet.new
+  header_index = arg1.to_i - 1 # convert from how humans count to how arrays count
+  expect(applet.wait_for_summary_tbl_headers).to eq(true)
+  expect(applet.summary_tbl_headers.length).to be > 0, "No headers were displayed"
+  expect(applet.summary_tbl_headers.length).to be > header_index, "number of headers (#{applet.summary_tbl_headers.length}) is less then sort variable (#{header_index})"
+
+  p "sorting on header #{applet.summary_tbl_headers[header_index].text}"
+  applet.summary_tbl_headers[header_index].click
+end
+
+Then(/^the Reports applet is sorted by column (\d+) asc$/) do |arg1|
+  applet = PobReportsApplet.new
+  col_index = arg1.to_i + 1 # account for hidden, quick menu icon col
+  text = applet.column_text col_index
+  expect(text).to eq(text.sort)
+end
+
+Then(/^the Reports applet is sorted by column (\d+) desc$/) do |arg1|
+  applet = PobReportsApplet.new
+  col_index = arg1.to_i + 1 # account for hidden, quick menu icon col
+  text = applet.column_text col_index
+  expect(text).to eq(text.sort.reverse)
+end
+
+Then(/^the Reports applet is grouped by column (\d+) data$/) do |arg1|
+  applet = PobReportsApplet.new
+  col_index = arg1.to_i + 1 # account for hidden, quick menu icon col
+  text = applet.column_text col_index
+  text_set = Set.new(text)
+  expect(applet.tbl_group_headers.length).to be > 0
+  group_headers = applet.tbl_group_visible_headers
+  text_set.each do | expected_header |
+    expect(group_headers).to include expected_header
+  end
 end

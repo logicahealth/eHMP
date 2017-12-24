@@ -91,9 +91,9 @@
   </Proxy>
 
   <Proxy balancer://rdk-cluster-r2.0>
-<% @rdk_members.each do |member| %>
-  <% member['rdk']['services']['fetch_server']['processes'].times do |index| %>
-    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['fetch_server']['port']-index)%>
+<% @fetch_server_members.each do |member| %>
+  <% member['fetch_server']['service_config']['processes'].times do |index| %>
+    BalancerMember <%= member['fetch_server']['protocol']%>://<%= member['ipaddress']%>:<%= (member['fetch_server']['service_config']['port']-index)%>
   <% end %>
 <% end %>
 
@@ -105,9 +105,9 @@
   </Proxy>
 
   <Proxy balancer://write-back-cluster-r2.0>
-<% @rdk_members.each do |member| %>
-  <% member['rdk']['services']['write_back']['processes'].times do |index| %>
-    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['write_back']['port']-index)%>
+<% @write_back_members.each do |member| %>
+  <% member['write_back']['service_config']['processes'].times do |index| %>
+    BalancerMember <%= member['write_back']['protocol']%>://<%= member['ipaddress']%>:<%= (member['write_back']['service_config']['port']-index)%>
   <% end %>
 <% end %>
 
@@ -119,9 +119,9 @@
   </Proxy>
 
   <Proxy balancer://pick-list-cluster-r2.0>
-<% @rdk_members.each do |member| %>
-  <% member['rdk']['services']['pick_list']['processes'].times do |index| %>
-    BalancerMember <%= member['rdk']['protocol']%>://<%= member['ipaddress']%>:<%= (member['rdk']['services']['pick_list']['port']-index)%>
+<% @pick_list_members.each do |member| %>
+  <% member['pick_list']['service_config']['processes'].times do |index| %>
+    BalancerMember <%= member['pick_list']['protocol']%>://<%= member['ipaddress']%>:<%= (member['pick_list']['service_config']['port']-index)%>
   <% end %>
 <% end %>
 
@@ -167,7 +167,10 @@
 <% else %>
   RewriteRule ^/$ /r2.0/ [R=302,L]
 <% end %>
+  RewriteRule ^/documentation$ /r2.0/documentation/ [R=302,L]
+  RewriteRule ^/documentation/(.*)$ /r2.0/documentation/$1 [R=302,L]
   RewriteRule ^/(r1.2|r2.0)$ /$1/ [R=301,L]
+  RewriteRule ^/(r1.2|r2.0)/documentation$ /$1/documentation/ [R=301,L]
 
   RewriteRule ^/_assets/(.*)$ /r2.0/_assets/$1 [PT,L]
 
@@ -204,7 +207,7 @@
   ErrorLog logs/ssl_error.log
   TransferLog logs/ssl_access.log
   CustomLog logs/ssl_request_log \
-    "%a %s %{rdk.sid}C %t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %B %D \"%{User-agent}i\""
+      "%a %s %{<%= node[:ehmp_balancer][:rdk_cookie] %>}C %{X-Request-ID}o %t %{BALANCER_WORKER_NAME}e %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %B %D \"%{User-agent}i\""
   LogFormat "%{Referer}i -> %U%q" referer
   CustomLog logs/ssl_referer.log referer
 </VirtualHost>

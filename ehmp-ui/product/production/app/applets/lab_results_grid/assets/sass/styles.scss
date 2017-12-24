@@ -2,39 +2,31 @@
     .js-has-panel {
         cursor: pointer;
     }
-    .applet-chrome-body .gridContainer .grid-container>div .data-grid > table {
+    .applet-chrome-body .gridContainer .grid-container > div .data-grid > table {
         &.backgrid {
             tr {
                 td.expanded-row {
                     padding: 0 0 7px 0;
-                }
-            }
-        }
-        td.expanded-row {
-            .lab-results-table-container {
-                box-shadow: 0 2px 2px rgba(0,0,0,.12);
-            }
-            table.table {
-                thead {
-                    padding: 0;
-                }
-                tbody {
-                    overflow: hidden !important;
-                }
-                tr {
-                    th:nth-child(1),
-                    td:nth-child(1) {
-                        flex: 2;
-                        padding-left: 75px;
-                    }
-                    th:nth-child(2),
-                    td:nth-child(2) {
-                        flex: none;
-                        width: 31px;
-                    }
-                    th:nth-child(5),
-                    td:nth-child(5) {
-                        flex: 1.5;
+                    .lab-results-table-container {
+                        box-shadow: 0 2px 2px rgba(0,0,0,.12);
+                        table.table {
+                            tr {
+                                th:nth-child(1),
+                                td:nth-child(1) {
+                                    flex: none;
+                                    margin-left: 20px;
+                                }
+                                th:nth-child(2),
+                                td:nth-child(2) {
+                                    flex: 2;
+                                    padding-left: 10px;
+                                }
+                                th:nth-child(5),
+                                td:nth-child(5) {
+                                    flex: 1.5;
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -2,10 +2,10 @@ class PobClinicsSearch < SitePrism::Page
   set_url '#/staff/provider-centric-view'
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
-  element :open_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(4).open"
-  element :closed_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(4):not(.open)"
+  element :open_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(5).open"
+  element :closed_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(5):not(.open)"
   # *****************  All_Button_Elements  ******************* #
-  element :btn_open_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(4) button[id^='tray']"
+  element :btn_open_clinics_search, ".patient-search-tray-list li.sidebar:nth-of-type(5) button[id^='tray']"
   element :btn_close_clinics_search_x, "li.sidebar.open .close-tray"
   element :btn_clinics_helpicon, "li.sidebar.open .panel-heading button.help-icon-link"
   element :btn_clinics_location, "li.sidebar.open .select2-selection__arrow"

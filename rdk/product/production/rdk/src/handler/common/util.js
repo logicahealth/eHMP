@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
+var clinicalObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
 
@@ -10,6 +10,7 @@ var domainList = [
     'appointment',
     'consult',
     'cpt',
+    'discharge',
     'document',
     'vlerdocument',
     'exam',
@@ -34,7 +35,7 @@ var domainList = [
     'vital'
 ];
 
-function isValidRequest (job, type, log, callback) {
+function isValidRequest(job, type, log, callback) {
     if (_.isEmpty(job) || _.isNull(job) || _.isUndefined(job)) {
         return callback('Job was empty, null, or undefined');
     }
@@ -42,19 +43,19 @@ function isValidRequest (job, type, log, callback) {
         return callback('Incorrect job type');
     }
     if (_.isUndefined(job.record)) {
-        return callback('post data is undefined!');
+        return callback('job record is undefined');
     }
     if (_.isEmpty(job.record)) {
-        return callback('post data is empty');
+        return callback('job record is empty');
     }
 
-    log.debug(type + '-handler.isValidRequest end');
+    log.debug(type + '-handler.isValidRequest found valid request');
     return callback(null);
 }
 
 function setupIdLogger(job, log) {
     //based on rdk-framework-middleware:addLoggerToRequest function
-    if(!_.isUndefined(job) && !_.isNull(job)) {
+    if (!_.isUndefined(job) && !_.isNull(job)) {
         var idLogger = log.child({
             requestId: _.get(job, 'referenceInfo.requestId', undefined),
             sid: _.get(job, 'referenceInfo.sessionId', undefined)
@@ -65,17 +66,7 @@ function setupIdLogger(job, log) {
     return log;
 }
 
-function isSecondarySitePid (job, log) {
-    var pid = job.patientIdentifier.value;
-    var isSecondarySite = true;
-    if (pidValidator.isPrimarySite(pid) || pidValidator.isIcn(pid)) {
-        log.debug('Job request is not for secondary sites');
-        isSecondarySite = false;
-    }
-    return isSecondarySite;
-}
-
-function isVPRObject (uid, type, log) {
+function isVPRObject(uid, type, log) {
     log.debug(type + '-handler.isVPRObject beginning with uid: %s', uid);
     var uidParts = uid.split(':');
 
@@ -98,14 +89,14 @@ function findClinicalObject(referenceId, patientUid, config, type, log, loadRefe
 
     log.debug(type + '-handler.findClinicalObject - before making call ');
 
-    clincialObjectsSubsystem.find(log, config, clinicalObjectFilter, loadReference, function(err, response) {
+    clinicalObjectsSubsystem.find(log, config, clinicalObjectFilter, loadReference, function(err, response) {
         if (err) {
             if (err[0].toLowerCase().indexOf('not found') > -1) {
-                log.debug('There is no clinical object  in JDS ');
+                log.debug('There is no clinical object in JDS');
                 return callback(null, {});
             }
 
-            log.warn('clincialObjectsSubsystem error: ', err);
+            log.warn('clinicalObjectsSubsystem error: ', err);
             return callback(err, null);
         }
 
@@ -142,8 +133,8 @@ function buildClinicalObject(job, log) {
     clinicalObject.pid = pid;
     clinicalObject.ehmpState = 'active';
     clinicalObject.visit = {
-        'location': null,
-        'serviceCategory': null,
+        'location': job.record.locationUid,
+        'serviceCategory': job.record.service,
         'dateTime': job.record.entered
     };
     clinicalObject.createdDateTime = job.record.lastUpdateTime;
@@ -152,7 +143,7 @@ function buildClinicalObject(job, log) {
     return clinicalObject;
 }
 
-function constructPatientUid (pid, log) {
+function constructPatientUid(pid, log) {
     log.debug('In constructPatientUid ', pid);
     var patientUid = 'urn:va:patient:';
 
@@ -162,8 +153,12 @@ function constructPatientUid (pid, log) {
         var site = pid.substring(0, pid.indexOf(';'));
         patientUid = patientUid + site + ':' + dfn + ':' + dfn;
     } else {
+        /**
+         * TODO This might not be a valid PID at all. Just because
+         * it's not a primary site doesnt mean that it's a valid ICN.
+         */
         log.debug('constructPatientUid icn ');
-        patientUid = patientUid + 'ICN'  + ':' + pid + ':' + pid;
+        patientUid = patientUid + 'ICN' + ':' + pid + ':' + pid;
     }
     return patientUid;
 }
@@ -173,5 +168,4 @@ module.exports.setupIdLogger = setupIdLogger;
 module.exports.isVPRObject = isVPRObject;
 module.exports.findClinicalObject = findClinicalObject;
 module.exports.buildClinicalObject = buildClinicalObject;
-module.exports.isSecondarySitePid = isSecondarySitePid;
 module.exports.constructPatientUid = constructPatientUid;

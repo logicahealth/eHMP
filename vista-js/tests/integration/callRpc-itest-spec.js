@@ -10,11 +10,11 @@ var logger = require('bunyan').createLogger({
 var wConfig = require('./config');
 var callRpc = require('../../src/RpcClient').RpcClient.callRpc;
 
-var config = _.defaults(wConfig.vistaSites['9E7A'], {
+var config = _.defaults(wConfig.vistaSites['SITE'], {
 	host: 'IP        ',
 	port: PORT,
-	accessCode: 'REDACTED',
-	verifyCode: 'REDACTED',
+	accessCode: 'USER  ',
+	verifyCode: 'PW      ',
 	context: 'HMP SYNCHRONIZATION CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',

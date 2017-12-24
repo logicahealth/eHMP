@@ -3,7 +3,7 @@ var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var http = rdk.utils.http;
 var fs = require('fs');
-var _s = require('underscore.string');
+var _s = require('sprintf-js');
 var parseString = require('xml2js').parseString;
 var mvi = require('../../subsystems/mvi-subsystem');
 var crypto = require('crypto');
@@ -50,7 +50,7 @@ function getResourceConfig() {
  */
 function getPatientPhoto(req, res) {
 
-    if (_.isUndefined(req.param('pid'))) {
+    if (_.isUndefined(_.get(req.params, 'pid') || _.get(req.body, 'pid') || _.get(req.query, 'pid'))) {
         return res.status(rdk.httpstatus.bad_request).send('Missing parameter. Please include a pid parameter.');
     }
 
@@ -154,7 +154,7 @@ function getImageUsingMVI(req, res) {
 
     //Build the full patient identifier so we can pass it into MVI
     //Use either fully qualified ICN or EDIPI
-    var pid = req.param('pid');
+    var pid = (_.get(req.params, 'pid') || _.get(req.body, 'pid') || _.get(req.query, 'pid'));
     var requestedMviId = '';
     if (pidValidator.isIcn(pid)) {
         requestedMviId = pid + ICN_PID_QUALIFIER;

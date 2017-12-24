@@ -1,2 +1,6 @@
 **/target
 **/bin
+**/build
+**/.project
+**/.settings
+**/btm*.tlog

@@ -11,33 +11,33 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | field                                                           | value                 |
       | uid                                                             | urn:va:syncstatus:OPD |
       | syncOperationalComplete											| true					|
-      | operationalSyncStatus.domainExpectedTotals.doc-def:9E7A.count 	| 691 					|
-      | operationalSyncStatus.domainExpectedTotals.labgroup:9E7A.count 	| 16 					|
-      | operationalSyncStatus.domainExpectedTotals.asu-class:9E7A.count | 119 					|
-      | operationalSyncStatus.domainExpectedTotals.asu-rule:9E7A.count 	| 179 					|
-      | operationalSyncStatus.domainExpectedTotals.labpanel:9E7A.count 	| 141 					|
-      | operationalSyncStatus.domainExpectedTotals.location:9E7A.count 	| 417 					|
-      | operationalSyncStatus.domainExpectedTotals.orderable:9E7A.count | 4800 					|
-      | operationalSyncStatus.domainExpectedTotals.pt-select:9E7A.count | 1620 					|
-      | operationalSyncStatus.domainExpectedTotals.quick:9E7A.count 	| 434 					|
-      | operationalSyncStatus.domainExpectedTotals.route:9E7A.count 	| 259 					|
-      | operationalSyncStatus.domainExpectedTotals.schedule:9E7A.count 	| 51 					|
-      | operationalSyncStatus.domainExpectedTotals.user:9E7A.count 		| IS_SET 					|    
+      | operationalSyncStatus.domainExpectedTotals.doc-def:SITE.count 	| 691 					|
+      | operationalSyncStatus.domainExpectedTotals.labgroup:SITE.count 	| 16 					|
+      | operationalSyncStatus.domainExpectedTotals.asu-class:SITE.count | 119 					|
+      | operationalSyncStatus.domainExpectedTotals.asu-rule:SITE.count 	| 179 					|
+      | operationalSyncStatus.domainExpectedTotals.labpanel:SITE.count 	| 141 					|
+      | operationalSyncStatus.domainExpectedTotals.location:SITE.count 	| 417 					|
+      | operationalSyncStatus.domainExpectedTotals.orderable:SITE.count | 4800 					|
+      | operationalSyncStatus.domainExpectedTotals.pt-select:SITE.count | 1620 					|
+      | operationalSyncStatus.domainExpectedTotals.quick:SITE.count 	| 434 					|
+      | operationalSyncStatus.domainExpectedTotals.route:SITE.count 	| 259 					|
+      | operationalSyncStatus.domainExpectedTotals.schedule:SITE.count 	| 51 					|
+      | operationalSyncStatus.domainExpectedTotals.user:SITE.count 		| IS_SET 					|    
       
   And the operational sync results contain different domains from "Kodak site"
       | field                                                           | value                 |
-      | operationalSyncStatus.domainExpectedTotals.doc-def:C877.count 	| 691 					|
-      | operationalSyncStatus.domainExpectedTotals.labgroup:C877.count 	| 16 					|
-      | operationalSyncStatus.domainExpectedTotals.asu-class:C877.count | 119 					|
-      | operationalSyncStatus.domainExpectedTotals.asu-rule:C877.count 	| 179 					|
-      | operationalSyncStatus.domainExpectedTotals.labpanel:C877.count 	| 141 					|
-      | operationalSyncStatus.domainExpectedTotals.location:C877.count 	| 417 					|
-      | operationalSyncStatus.domainExpectedTotals.orderable:C877.count | 4800 					|
-      | operationalSyncStatus.domainExpectedTotals.pt-select:C877.count | 1620 					|
-      | operationalSyncStatus.domainExpectedTotals.quick:C877.count 	| 434 					|
-      | operationalSyncStatus.domainExpectedTotals.route:C877.count 	| 259 					|
-      | operationalSyncStatus.domainExpectedTotals.schedule:C877.count 	| 51 					|
-      | operationalSyncStatus.domainExpectedTotals.user:C877.count 		| IS_SET 					|  
+      | operationalSyncStatus.domainExpectedTotals.doc-def:SITE.count 	| 691 					|
+      | operationalSyncStatus.domainExpectedTotals.labgroup:SITE.count 	| 16 					|
+      | operationalSyncStatus.domainExpectedTotals.asu-class:SITE.count | 119 					|
+      | operationalSyncStatus.domainExpectedTotals.asu-rule:SITE.count 	| 179 					|
+      | operationalSyncStatus.domainExpectedTotals.labpanel:SITE.count 	| 141 					|
+      | operationalSyncStatus.domainExpectedTotals.location:SITE.count 	| 417 					|
+      | operationalSyncStatus.domainExpectedTotals.orderable:SITE.count | 4800 					|
+      | operationalSyncStatus.domainExpectedTotals.pt-select:SITE.count | 1620 					|
+      | operationalSyncStatus.domainExpectedTotals.quick:SITE.count 	| 434 					|
+      | operationalSyncStatus.domainExpectedTotals.route:SITE.count 	| 259 					|
+      | operationalSyncStatus.domainExpectedTotals.schedule:SITE.count 	| 51 					|
+      | operationalSyncStatus.domainExpectedTotals.user:SITE.count 		| IS_SET 					|  
       
 
   

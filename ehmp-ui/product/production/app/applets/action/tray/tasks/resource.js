@@ -20,7 +20,9 @@ define([
         DEFINITIONID: 'taskDefinitionId',
         CLINICALOBJECTUID: 'clinicalObjectUid',
         INSTANCENAME: 'instanceName',
-        PERMISSION: 'permission'
+        PERMISSION: 'permission',
+        BEFOREEARLIESTDATE: 'beforeEarliestDate',
+        hasPermissions: 'hasPermissions'
     };
     var FIND_ATTRIBUTES_MAP = {
         id: 'taskId',
@@ -112,7 +114,7 @@ define([
         initialize: function() {
             var patient = ADK.PatientRecordService.getCurrentPatient();
             if (!_.isUndefined(patient)) {
-                this.patientId = patient.get('pid');
+                this.patientId = patient.getIdentifier();
             }
         },
         fetch: function() {

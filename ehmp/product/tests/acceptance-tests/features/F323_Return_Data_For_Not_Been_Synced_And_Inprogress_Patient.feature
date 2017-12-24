@@ -5,10 +5,10 @@ Feature: F323-3  Return Data for a patient that has a sync in progress and has n
       
 @inprogress_sync_patient
 Scenario: An user can get sync status request for the patient that has a sync in progress and has never fully been synced before
-	Given a patient with pid "9E7A;1" has not been synced through VX-Sync API for "9E7A" site(s)
-	When the client requests sync status for patient with pid "9E7A;1"
+	Given a patient with pid "SITE;1" has not been synced through VX-Sync API for "SITE" site(s)
+	When the client requests sync status for patient with pid "SITE;1"
 	Then the client receives "Patient identifier not found" message in the "body" attribute 
-	When the client requests sync process for patient with pid "9E7A;1" through VX-Sync API
-	And the client requests sync status for patient with pid "9E7A;1"
+	When the client requests sync process for patient with pid "SITE;1" through VX-Sync API
+	And the client requests sync status for patient with pid "SITE;1"
 	Then the client receives the data stored for that patient along with currently sync in progress status 
 	

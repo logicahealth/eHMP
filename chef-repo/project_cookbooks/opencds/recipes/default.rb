@@ -4,6 +4,7 @@
 #
 
 include_recipe 'java_wrapper'
+include_recipe 'ehmp_synapse'
 include_recipe 'opencds::tomcat'
 include_recipe 'opencds::deploy_knowledge_repo'
 include_recipe 'opencds::configure_war'

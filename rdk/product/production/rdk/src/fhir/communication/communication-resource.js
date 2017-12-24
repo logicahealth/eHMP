@@ -92,11 +92,11 @@ var PREFERENCE_WHITE_LIST = ['http://ehmp.DNS   /messageCategories/announcements
  *  END;
  */
 function getCommunications(req, res) {
-    var dbConfig = _.get(req, 'app.config.jbpm.communicationsDatabase');
+    var dbConfig = _.get(req, 'app.config.oracledb.communicationsDatabase');
     if (!dbConfig) {
         var unavailableError = new RdkError({
             logger: req.logger,
-            code: 'jbpm.503.1000'
+            code: 'oracledb.503.1000'
         });
         return res.status(unavailableError.status).rdkSend(unavailableError.error);
     }
@@ -134,7 +134,7 @@ function getCommunications(req, res) {
     oracleConnectionPool.getPool(req, dbConfig, function getPool(err, pool) {
         if (err) {
             var error = new RdkError({
-                code: 'jbpm.500.1000',
+                code: 'oracledb.500.1000',
                 logger: req.logger,
                 error: _.get(err, 'message', 'Failed to get resource from connection pool')
             });
@@ -144,7 +144,7 @@ function getCommunications(req, res) {
             if (err) {
                 req.logger.debug('failed to connection to oracle');
                 var error = new RdkError({
-                    code: 'jbpm.500.1000',
+                    code: 'oracledb.500.1000',
                     logger: req.logger,
                     error: _.get(err, 'message', 'Failed to open oracle connection')
                 });
@@ -159,7 +159,7 @@ function getCommunications(req, res) {
                 if (err) {
                     oracleConnectionPool.doClose(req, connection);
                     var connectionError = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: _.get(err, 'message', 'Failed to execute get user preferences')
                     });
@@ -171,7 +171,7 @@ function getCommunications(req, res) {
                     oracleConnectionPool.doClose(req, connection);
                     req.logger.debug('clob was not returned');
                     var undefinedError = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: _.get(err, 'message', 'Did not receive a clob buffer object')
                     });
@@ -183,7 +183,7 @@ function getCommunications(req, res) {
                     oracleConnectionPool.doClose(req, connection);
                     req.logger.debug('The connection to the CLOB was interrupted');
                     var clobError = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: _.get(err, 'message', 'Clob read error')
                     });
@@ -218,11 +218,11 @@ function getCommunications(req, res) {
  * END;
  */
 function getAttachment(req, res) {
-    var dbConfig = _.get(req, 'app.config.jbpm.communicationsDatabase');
+    var dbConfig = _.get(req, 'app.config.oracledb.communicationsDatabase');
     if (!dbConfig) {
         var unavailableError = new RdkError({
             logger: req.logger,
-            code: 'jbpm.503.1000'
+            code: 'oracledb.503.1000'
         });
         return res.status(unavailableError.status).rdkSend(unavailableError.error);
     }
@@ -233,7 +233,7 @@ function getAttachment(req, res) {
     oracleConnectionPool.getPool(req, dbConfig, function getPool(err, pool) {
         if (err) {
             var error = new RdkError({
-                code: 'jbpm.500.1000',
+                code: 'oracledb.500.1000',
                 logger: req.logger,
                 error: _.get(err, 'message', 'Failed to get resource from connection pool')
             });
@@ -262,7 +262,7 @@ function getAttachment(req, res) {
                     var message = _.get(err, 'message', '');
                     if (_.contains(message, NO_DATA_ERROR_CODE)) {
                         var noDataError = new RdkError({
-                            code: 'jbpm.404.1000',
+                            code: 'oracledb.404.1000',
                             logger: req.logger,
                             error: message
                         });
@@ -270,7 +270,7 @@ function getAttachment(req, res) {
                     }
 
                     var error = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: message
                     });
@@ -282,7 +282,7 @@ function getAttachment(req, res) {
                 if (_.isUndefined(blob) || !_.isFunction(_.get(blob, 'on'))) {
                     oracleConnectionPool.doClose(req, connection);
                     var undefinedError = new RdkError({
-                        code: 'jbpm.404.1000',
+                        code: 'oracledb.404.1000',
                         logger: req.logger,
                         error: 'Blob not returned'
                     });
@@ -293,7 +293,7 @@ function getAttachment(req, res) {
                 blob.on('err', function(err) {
                     oracleConnectionPool.doClose(req, connection);
                     var blobError = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: _.get(err, 'message', 'Blob read error')
                     });
@@ -337,11 +337,11 @@ function getAttachment(req, res) {
  * END;
  */
 function postUserPreferences(req, res) {
-    var dbConfig = _.get(req, 'app.config.jbpm.communicationsDatabase');
+    var dbConfig = _.get(req, 'app.config.oracledb.communicationsDatabase');
     if (!dbConfig) {
         var unavailableError = new RdkError({
             logger: req.logger,
-            code: 'jbpm.503.1000'
+            code: 'oracledb.503.1000'
         });
         return res.status(unavailableError.status).rdkSend(unavailableError.error);
     }
@@ -373,7 +373,7 @@ function postUserPreferences(req, res) {
     oracleConnectionPool.getPool(req, dbConfig, function getPool(err, pool) {
         if (err) {
             var error = new RdkError({
-                code: 'jbpm.500.1000',
+                code: 'oracledb.500.1000',
                 logger: req.logger,
                 error: _.get(err, 'message', 'Could not get resource from connection pool')
             });
@@ -382,7 +382,7 @@ function postUserPreferences(req, res) {
         pool.getConnection(function getConnection(err, connection) {
             if (err) {
                 var error = new RdkError({
-                    code: 'jbpm.500.1000',
+                    code: 'oracledb.500.1000',
                     logger: req.logger,
                     error: _.get(err, 'message', 'Was not able to establish oracle connection')
                 });
@@ -401,7 +401,7 @@ function postUserPreferences(req, res) {
                 if (err) {
                     oracleConnectionPool.doClose(req, connection);
                     var error = new RdkError({
-                        code: 'jbpm.500.1000',
+                        code: 'oracledb.500.1000',
                         logger: req.logger,
                         error: _.get(err, 'message', 'Failed to execute update users preferences')
                     });

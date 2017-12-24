@@ -2,7 +2,7 @@ current_dir = File.dirname(__FILE__)
 log_level                :info
 log_location             STDOUT
 node_name                "jenkins"
-client_key               "#{ENV['HOME']}/Projects/vistacore/.chef/jenkins.pem"
+client_key               "#{ENV['HOST_KEY_PATH']}"
 chef_server_url          "https://pantry.vistacore.us/organizations/vistacore"
 ssl_verify_mode          :verify_none
 cache_type               'BasicFile'

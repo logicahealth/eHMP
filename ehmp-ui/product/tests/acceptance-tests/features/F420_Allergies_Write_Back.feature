@@ -1,4 +1,4 @@
-@f420_allergies_write_back  @future @DE4560 @debug @DE7307 @DE7381
+@f420_allergies_write_back @allergies_applet  
 
 Feature: F420 : Enter and Store an Allergy including Entered in Error
 
@@ -13,7 +13,7 @@ Scenario: Validate add allergy form head fields
   And the allergy detail modal displays expected elements
   And add allergy detail modal displays buttons "Add" and "Cancel"
   
-@f420_2_add_allergy_historical @DE5088
+@f420_2_add_allergy_historical @DE5088 @future @DE4560 @debug @DE7307 @DE7381
 Scenario: Create a new allergy and Save it.
 
   # Given user is logged into eHMP-UI
@@ -30,7 +30,7 @@ Scenario: Create a new allergy and Save it.
   And verifies the above "CHOCOLATE LAXATIVE" allergy is added to patient record 
   And user opens allergy row "CHOCOLATE LAXATIVE" and marks as "entered in error"  
   
-@f420_2_add_allergy_observed
+@f420_2_add_allergy_observed @future @DE4560 @debug @DE7307 @DE7381
 Scenario: Create a new allergy and Save it.
   Given user searches for and selects "twenty,inpatient"
   And Cover Sheet is active and ready for write back tests

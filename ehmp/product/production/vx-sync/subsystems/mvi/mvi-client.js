@@ -10,7 +10,6 @@ var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var uuid = require('node-uuid');
 
 var VistaClient = require(global.VX_SUBSYSTEMS + 'vista/vista-client');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var moment = require('moment');
 
@@ -104,7 +103,8 @@ MviClient.prototype.lookupWithDemographics = function(patientIdentifier, demogra
         var options = {
             url: url,
             timeout: self.mviConfig.timeout,
-            agentClass: VxSyncForeverAgent
+            forever: true,
+            agentOptions: {maxSockets: self.rootConfig.handlerMaxSockets || 5}
         };
 
         self.metrics.warn('Global MVI getCorrespondingIds Request', {
@@ -321,7 +321,13 @@ MviClient.prototype._parseRealMVIResponseWithDemographics = function(queryPatien
     switch (responseCode) {
         case 'OK':
             try {
-                var mviPatientIds = data.controlActProcess.subject.registrationEvent.subject1.patient.id || [];
+                var mviPatientIds = [];
+                var mviPatient = data.controlActProcess.subject.registrationEvent.subject1.patient;
+                if (_.isArray(mviPatient.id)) {
+                    mviPatientIds = mviPatient.id;
+                } else if (!_.isUndefined(mviPatient.id)) {
+                    mviPatientIds.push(mviPatient.id);
+                }
                 idList = _.pluck(mviPatientIds, 'extension');
                 var mviResponse = self._makePatientIdentifiersMVIResponse(queryPatientIdentifier, idList, process);
                 if (mviResponse) {
@@ -720,6 +726,7 @@ MviClient.prototype._needToVerifyEDIPIOnlyDemographics = function(demographics, 
 };
 
 MviClient.prototype.verifyEDIPIOnlyDemograpics = function (demographics, patientIdentifier, callback) {
+    var self = this;
     var verified;
     this.attendedSearch(demographics, function (err, mviResults){
         if (!err && _.isArray(mviResults) && !_.isEmpty(mviResults) ) {
@@ -735,7 +742,7 @@ MviClient.prototype.verifyEDIPIOnlyDemograpics = function (demographics, patient
                 return callback(null, {ids: [patientIdentifier], skipResyncCheck: true});
             }
             else {
-                this.log.warn('MviClient.verifyEDIPIOnlyDemograpics: Could not find matching id %j with demographics %j in %j', patientIdentifier, demographics, mviResults);
+                self.log.warn('MviClient.verifyEDIPIOnlyDemograpics: Could not find matching id %j with demographics %j in %j', patientIdentifier, demographics, mviResults);
             }
         }
         return callback('MVI could not find patient');
@@ -796,7 +803,8 @@ MviClient.prototype.attendedSearch = function(demographics, callback) {
         url: mviAttendedSearchUrl,
         json: postBody,
         timeout: self.mviConfig.timeout,
-        agentClass: VxSyncForeverAgent
+        forever: true,
+        agentOptions: {maxSockets: self.rootConfig.handlerMaxSockets || 5}
     };
 
     self.metrics.warn('Global MVI attendedSearch Request', {
@@ -972,17 +980,18 @@ MviClient.prototype._makeAttendedSearchMVIResponse = function (attendedSearchRes
 
 // Check to see if each attendedSearch result is a valid format.
 MviClient.prototype._isValidAttendedSearchResult = function (searchResult) {
+    var self = this;
     if (!searchResult || !searchResult.registrationEvent || !searchResult.registrationEvent.subject1 || !searchResult.registrationEvent.subject1.patient) {
-        this.log.warn('MviClient._isValidAttendedSearchResult: Missing registrationEvent or registrationEvent.subject1, registrationEvent.subject1.patient fields');
+        self.log.warn('MviClient._isValidAttendedSearchResult: Missing registrationEvent or registrationEvent.subject1, registrationEvent.subject1.patient fields');
         return false;
     }
     var patientInfo = searchResult.registrationEvent.subject1.patient;
     if (!patientInfo.id || !patientInfo.id.extension) { // missing id & extension information.
-        this.log.warn('MviClient._isValidAttendedSearchResult: Missing id or id.extension under subject1');
+        self.log.warn('MviClient._isValidAttendedSearchResult: Missing id or id.extension under subject1');
         return false;
     }
     if (!patientInfo.patientPerson) {
-        this.log.warn('MviClient._isValidAttendedSearchResult: Missing patientPersion under subject1');
+        self.log.warn('MviClient._isValidAttendedSearchResult: Missing patientPersion under subject1');
         return false;
     }
     return true;

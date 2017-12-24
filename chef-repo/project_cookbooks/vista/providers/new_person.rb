@@ -15,7 +15,7 @@ def init_shell(shell)
   end
 
   # if there are more then one screen of SOUNDEX matches
-  shell.on(:output, /Enter RETURN to continue/) do | process, match |
+  shell.on(:output, /Type <Enter> to continue or '\^' to exit/) do | process, match |
     process.write("\r")
   end
 

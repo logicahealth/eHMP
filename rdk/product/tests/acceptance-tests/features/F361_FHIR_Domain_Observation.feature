@@ -4,7 +4,7 @@ Feature: F361 FHIR Domain - Observation
  Scenario: Client can request vitals BP in FHIR format
      Given a patient with "vitals" in multiple VistAs
      #And a patient with pid "5000000217V519385" has been synced through the RDK API
- 	   When the "observation" is requested for patient "9E7A;271"
+ 	   When the "observation" is requested for patient "SITE;271"
      Then a successful response is returned
      And the FHIR results contain "observation"
      	| field 											                | value 								                |
@@ -20,7 +20,7 @@ Feature: F361 FHIR Domain - Observation
       | resource.reliability                        | unknown                               |
       | resource.identifier.use                     | official                              |
       | resource.identifier.system                  | CONTAINS http://vistacore.us/fhir/id/uid |
-      | resource.identifier.value                   | CONTAINS urn:va:vital:9E7A:271:12489  |
+      | resource.identifier.value                   | CONTAINS urn:va:vital:SITE:271:12489  |
       | resource.subject.reference                  | Patient/271                         |
       | resource.performer.display                  | ABILENE (CAA)                         |
       # ------------ CHECKING ORGANIZATION CONTAINED RESOURCE ----------------------
@@ -35,7 +35,7 @@ Feature: F361 FHIR Domain - Observation
  Scenario: Client can request vitals in FHIR format
      Given a patient with "vitals" in multiple VistAs
      #And a patient with pid "5000000217V519385" has been synced through the RDK API
-     When the "observation" is requested for patient "9E7A;271"
+     When the "observation" is requested for patient "SITE;271"
      Then a successful response is returned
      And the FHIR results contain "observation"
         | field                                       | value                                 |

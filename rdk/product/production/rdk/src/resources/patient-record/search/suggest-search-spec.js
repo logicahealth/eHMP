@@ -164,7 +164,7 @@ describe('suggest-search', function() {
             .get('/solr/vpr/suggest?q=pencollin&requestId=&wt=json')
             .reply(200, createDefaultSolrSuggestResponse());
         nock(SOLR_BASE_URL)
-            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*pencollin*&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax&requestId=&wt=json')
+            .get('/solr/vpr/select?q=pencollin&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&facet.limit=5&requestId=&wt=json')
             .reply(200, {});
 
 
@@ -208,7 +208,7 @@ describe('suggest-search', function() {
             .get('/solr/vpr/suggest?q=pencollin&requestId=&wt=json')
             .reply(200, createDefaultSolrSuggestResponse());
         nock(SOLR_BASE_URL)
-            .get('/solr/vpr/select?fl=qualified_name%2Cmed_drug_class_name&fq=domain%3Amed&q=*Pencollin*&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&synonyms=true&defType=synonym_edismax&requestId=&wt=json')
+            .get('/solr/vpr/select?q=Pencollin&rows=0&facet=true&facet.pivot=med_drug_class_name%2Cqualified_name&facet.limit=5&requestId=&wt=json')
             .reply(200, {});
 
 

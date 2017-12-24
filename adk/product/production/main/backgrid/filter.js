@@ -88,7 +88,7 @@ define([
                     return;
                 }
                 var searchText = this.searchBox().val().trim();
-                if (searchText.length === 0) {
+                if (searchText.length < 3) {
                     return;
                 }
                 var filterTerms = searchText.split(' ');

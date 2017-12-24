@@ -24,11 +24,8 @@ describe('Metrics spec', function() {
                 jbpm: {
                     baseUrl: 'https://256.256.256.2'
                 },
-                solrServer: {
-                    baseUrl: '256.256.256.3'
-                },
                 vistaSites: {
-                    '9E7A': {
+                    'SITE': {
                         name: 'PANORAMA',
                         host: 'IP        '
                     }
@@ -52,7 +49,7 @@ describe('Metrics spec', function() {
 
     it('handle outgoing start with unknown host', function() {
         var data = metrics.handleOutgoingStart({
-            url: 'http://1.1.1.1:9080/something'
+            url: 'http://1.1.1.1:PORT/something'
         }, logger);
 
         expect(data.isType('outgoing'));
@@ -69,7 +66,7 @@ describe('Metrics spec', function() {
         expect(data.hostName).to.equal('mvi');
     });
 
-    it('handle outgoing start with 9E7A vista host', function() {
+    it('handle outgoing start with SITE vista host', function() {
         var data = metrics.handleOutgoingStart({
             baseUrl: 'http://IP             ',
             url: '/path'

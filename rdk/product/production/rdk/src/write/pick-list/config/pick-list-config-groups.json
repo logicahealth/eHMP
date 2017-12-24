@@ -1,8 +1,0 @@
-{
-    "name": "Configuration data for pick-list groups",
-    "pickListConfig": [{
-        "name": "orderables",
-        "modulePath": "orderables/orderables-fetch-group",
-        "requiredPermissions": ["read-orderable"]
-    }]
-}

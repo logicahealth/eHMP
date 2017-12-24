@@ -5,7 +5,7 @@ Feature:F226 - Enter Plain Text Basic Progress Notes  (TIU)
 
 @F226_1_List_Of_Notes_Titles_based_on_ASU_Rules @US10978
 Scenario: Filter Note Titles Pick-lists with New RPC based on ASU Rules
-  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "9E7A;nurse18"
+  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "SITE;USER   "
       | paramter name | value         |
       | docStatus      | UNTRANSCRIBED |
       | actionNames    | ENTRY         |
@@ -31,7 +31,7 @@ Scenario: Filter Note Titles Pick-lists with New RPC based on ASU Rules
 
 @F226_2_List_Of_Notes_Titles_based_on_ASU_Rules @US10978
 Scenario: Filter Note Titles Pick-lists with New RPC based on ASU Rules
-  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "REDACTED"
+  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "SITE;USER  "
       | paramter name  | value         |
       | docStatus      | UNTRANSCRIBED |
       | actionNames    | ENTRY         |

@@ -6,8 +6,8 @@ var rdk = require('../../../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
 var RdkTimer = rdk.utils.RdkTimer;
 var RdkError = rdk.utils.RdkError;
+var authUtils = rdk.utils.authentication;
 var userUtil = require('../../user/user-whitelist');
-var authUtils = require('../../../subsystems/authentication/utils');
 var vistaConnect = require('../../../subsystems/authentication/modules/vista-connection');
 var vistaUserClass = require('../../../subsystems/authentication/modules/vista-user-class');
 var vistaUserInfo = require('../../../subsystems/authentication/modules/vista-user-info');
@@ -53,7 +53,8 @@ var getSession = function(req, res) {
         _.isEmpty(site) ||
         _.isEmpty(division)) {
         errorObj = new RdkError({
-            'code': 'rdk.400.1001'
+            code: 'rdk.400.1001',
+            logger: req.logger
         });
         return handleLoginAttempt(req, res, {
             timer: elapsedAuthentication,
@@ -65,7 +66,8 @@ var getSession = function(req, res) {
     var vistaSites = _.get(req, 'app.config.vistaSites', {});
     if (_.isEmpty(vistaSites[site])) {
         errorObj = new RdkError({
-            'code': 'rdk.400.1002'
+            code: 'rdk.400.1002',
+            logger: req.logger
         });
         return handleLoginAttempt(req, res, {
             timer: elapsedAuthentication,
@@ -137,11 +139,6 @@ var getSession = function(req, res) {
                     data: data
                 });
             },
-            function getPJDSPermissions(data, authorizationCB) {
-                return pjdsUserData.getPermissionsData(req, res, authorizationCB, {
-                    data: data
-                });
-            },
             function saveUserToJDS(data, saveUserJDSCallback) {
                 return osyncUsers.saveOsyncUsers(req, res, saveUserJDSCallback, {
                     site: site,
@@ -184,9 +181,10 @@ var handleLoginAttempt = function(req, res, params) {
         }
         //exit early on errors
         if (err) {
-            if (err.log) {
-                err.log(req.logger);
+            if (!(err instanceof RdkError)) {
+                req.logger.error(err);
             }
+            // todo: destroy the session at VistA if we made it that far
             req.session.destroy(); // todo: find a cleaner way to handle invalid logins destroying the session
             return res.status(err.status || 500).rdkSend(err);
         }
@@ -273,7 +271,8 @@ var authenticationCallback = function(err, result, params) {
     //Deny Users with no permission sets EHMP access
     if (_.size(result.permissions) < 1) {
         errorObj = new RdkError({
-            'code': 'rdk.403.1001'
+            code: 'rdk.403.1001',
+            logger: req.logger
         });
         return handleLoginAttempt(req, res, {
             timer: timer,

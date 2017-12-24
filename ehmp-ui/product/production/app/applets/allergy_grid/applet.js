@@ -17,16 +17,14 @@ define([
     var summaryColumns = [{
         name: 'summary',
         label: 'Allergen Name',
-        cell: 'string',
-        hoverTip: 'allergies_allergenName'
+        cell: 'string'
     }, {
         name: 'reaction',
         label: 'Reaction',
         flexWidth: 'flex-width-1',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-1'
-        }),
-        hoverTip: 'allergies_reaction'
+        })
     }, {
         name: 'acuityName',
         label: 'Severity',
@@ -35,26 +33,22 @@ define([
             '{{#if acuityName}}',
             '<span class="label label-{{#if severe}}error{{else if moderate}}warning{{else}}info{{/if}}">{{acuityName}}</span>',
             '{{/if}}'
-            ].join('\n')),
-        hoverTip: 'allergies_severity'
+            ].join('\n'))
     }];
 
     var fullScreenColumns =
         summaryColumns.concat([{
             name: 'drugClassesNames',
             label: 'Drug Class',
-            cell: 'string',
-            hoverTip: 'allergies_drugClass'
+            cell: 'string'
         }, {
             name: 'originatorName',
             label: 'Entered By',
-            cell: 'string',
-            hoverTip: 'allergies_enteredBy'
+            cell: 'string'
         }, {
             name: 'facilityName',
             label: 'Facility',
-            cell: 'string',
-            hoverTip: 'allergies_facility'
+            cell: 'string'
         }, {
             name: 'comments',
             label: '',
@@ -78,11 +72,14 @@ define([
         flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-1_5'
-        }),
-        hoverTip: 'allergies_standardizedAllergen'
+        })
     });
 
-    var getDetailsModal = function(model, collection) {
+    var getDetailsModal = function(model, collection, triggerElement) {
+        if (triggerElement && triggerElement.is('li')) {
+            triggerElement = triggerElement.find('.dropdown--quickmenu > button');
+        }
+
         var view = new ModalView({
             model: model,
             collection: collection
@@ -91,6 +88,7 @@ define([
         var modalOptions = {
             title: Util.getModalTitle(model),
             nextPreviousCollection: collection,
+            triggerElement: triggerElement,
             footerView: ModalFooterView.extend({
                 model: model
             })
@@ -135,6 +133,22 @@ define([
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         className: 'app-size',
+        tileOptions: {
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'infobutton'
+                }, {
+                    type: 'detailsviewbutton'
+                }]
+            },
+            primaryAction: {
+                enabled: true,
+                onClick: function(params) {
+                    getDetailsModal(params.model, params.collection, params.$el);
+                }
+            }
+        },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var fetchOptionsConfig = {
@@ -151,10 +165,6 @@ define([
                 fetchOptions: dataGridOptions.collection.getFetchOptions(fetchOptionsConfig)
             };
 
-            dataGridOptions.toolbarOptions = {
-                buttonTypes: ['infobutton', 'detailsviewbutton'],
-            };
-
             if (this.columnsViewType === "summary") {
                 dataGridOptions.columns = summaryColumns;
             } else {
@@ -164,20 +174,14 @@ define([
 
             dataGridOptions.collection.fetchCollection(fetchOptionsConfig);
 
-            if (ADK.UserService.hasPermission('add-allergy') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('add-allergy') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 dataGridOptions.onClickAdd = function(event) {
                     event.preventDefault();
                     handleClickAdd();
                 };
             }
 
-            //Row click event handler
-            dataGridOptions.onClickRow = function(model) {
-                getDetailsModal(model, this.collection);
-            };
-
             this.dataGridOptions = dataGridOptions;
-
             this.listenTo(ADK.Messaging.getChannel(ALLERGY_GRID), 'refreshGridView', function() {
                 this.refresh({});
             });
@@ -203,7 +207,7 @@ define([
     var searchAppletChannel = ADK.Messaging.getChannel(ALLERGY_GRID);
     searchAppletChannel.on('detailView', function(params) {
         var collection = params.collection || params.model.collection;
-        getDetailsModal(params.model, collection);
+        getDetailsModal(params.model, collection, params.$el);
     });
     var channel = ADK.Messaging.getChannel(ALLERGY_GRID);
     channel.reply('detailView', function(params) {
@@ -249,7 +253,7 @@ define([
                 collection: allergies.fetchCollection(fetchOptionsConfig)
             };
 
-            if (ADK.UserService.hasPermission('add-allergy') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('add-allergy') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 this.appletOptions.onClickAdd = function(event) {
                     handleClickAdd(event);
                 };
@@ -295,7 +299,7 @@ define([
         label: 'Allergy',
         onClick: handleClickAdd,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-allergy');
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-allergy');
         }
     });
 

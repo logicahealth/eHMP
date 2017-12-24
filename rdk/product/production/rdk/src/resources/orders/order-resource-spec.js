@@ -41,14 +41,14 @@ describe('Orders resource getOrders', function() {
             limit: '',
             order: '',
             filter: '',
-            pid: '9E7A;3'
+            pid: 'SITE;3'
         };
         req.session = {
             user: {
-                site: '9E7A',
+                site: 'SITE',
                 duz: {
-                    '9E7A': '10000000270',
-                    'C77A': 'duz2'
+                    'SITE': '10000000270',
+                    'SITE': 'duz2'
                 },
             }
         };
@@ -62,10 +62,10 @@ describe('Orders resource getOrders', function() {
         req.logger = logger;
         req.interceptorResults = {
             patientIdentifiers: {
-                site: '9E7A',
+                site: 'SITE',
                 dfn: '3',
                 icn: '321V123',
-                uids: ['urn:va:patient:9E7A:3:3', 'urn:va:patient:icn:321V123:321V123']
+                uids: ['urn:va:patient:SITE:3:3', 'urn:va:patient:icn:321V123:321V123']
             }
         };
 
@@ -98,7 +98,7 @@ describe('Orders resource getOrders', function() {
 
     it('identifies missing patient uid for sitedfn', function() {
         delete req.interceptorResults.patientIdentifiers.icn;
-        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:C877:33:33', 'urn:va:patient:icn:321V123:321V123'];
+        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:SITE:33:33', 'urn:va:patient:icn:321V123:321V123'];
         clinicalObjectsResources._getOrders(req, res);
         expect(spyStatus.calledWith(412)).to.be.true();
         expect(res.rdkSend.calledWith('Patient uid not found in interceptor results uids array')).to.be.true();
@@ -106,7 +106,7 @@ describe('Orders resource getOrders', function() {
 
     it('identifies missing patient uid for when missing dfn and icn not found in uids', function() {
         delete req.interceptorResults.patientIdentifiers.dfn;
-        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:C877:3:3', 'urn:va:patient:icn:3213V1233:3213V1233'];
+        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:SITE:3:3', 'urn:va:patient:icn:3213V1233:3213V1233'];
         clinicalObjectsResources._getOrders(req, res);
         expect(spyStatus.calledWith(412)).to.be.true();
         expect(res.rdkSend.calledWith('Patient uid not found in interceptor results uids array')).to.be.true();
@@ -115,7 +115,7 @@ describe('Orders resource getOrders', function() {
     it('identifies missing patient uid for when missing site and icn', function() {
         delete req.interceptorResults.patientIdentifiers.site;
         delete req.interceptorResults.patientIdentifiers.icn;
-        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:C877:3:3', 'urn:va:patient:icn:3211V123:3211V123'];
+        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:SITE:3:3', 'urn:va:patient:icn:3211V123:3211V123'];
         clinicalObjectsResources._getOrders(req, res);
         expect(spyStatus.calledWith(412)).to.be.true();
         expect(res.rdkSend.calledWith('Patient uid not found in interceptor results uids array')).to.be.true();
@@ -124,7 +124,7 @@ describe('Orders resource getOrders', function() {
     it('identifies missing patient uid for icn when missing site and dfn', function() {
         delete req.interceptorResults.patientIdentifiers.dfn;
         delete req.interceptorResults.patientIdentifiers.site;
-        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:C877:3:3', 'urn:va:patient:icn:321V321:321V321'];
+        req.interceptorResults.patientIdentifiers.uids = ['urn:va:patient:SITE:3:3', 'urn:va:patient:icn:321V321:321V321'];
         clinicalObjectsResources._getOrders(req, res);
         expect(spyStatus.calledWith(412)).to.be.true();
         expect(res.rdkSend.calledWith('Patient uid not found in interceptor results uids array')).to.be.true();

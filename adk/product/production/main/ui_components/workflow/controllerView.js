@@ -55,7 +55,9 @@ define([
             }
             return item.get('view').extend({
                 className: function() {
-                    return item.get('view').prototype.className() + ' hidden';
+                    var protoClassName = item.get('view').prototype.className;
+                    return (_.isFunction(protoClassName) ? protoClassName.apply(this, arguments) :
+                        _.isString(protoClassName) ? protoClassName : '') + ' hidden';
                 }
             });
         },
@@ -82,38 +84,38 @@ define([
             }
             return false;
         },
-        goToNext: function() {
+        goToNext: function(options) {
             var currentIndex = this.model.get('currentIndex');
             if (this.checkIndex(currentIndex + 1)) {
                 this.model.set('currentIndex', currentIndex + 1);
                 this._getImmediateChildren()[currentIndex].$el.addClass('hidden');
-                this.callBeforeShowStepMethod(this._getImmediateChildren()[currentIndex + 1].beforeGoingToStep);
                 this._getImmediateChildren()[currentIndex + 1].$el.removeClass('hidden');
+                this.callBeforeShowStepMethod(this._getImmediateChildren()[currentIndex + 1].beforeGoingToStep, options);
                 this.parentViewInstance.handleChangeToTrayContainer(true);
                 return true;
             }
             return false;
         },
-        goToPrevious: function() {
+        goToPrevious: function(options) {
             var currentIndex = this.model.get('currentIndex');
             if (this.checkIndex(currentIndex - 1)) {
                 this.model.set('currentIndex', currentIndex - 1);
                 this._getImmediateChildren()[currentIndex].$el.addClass('hidden');
-                this.callBeforeShowStepMethod(this._getImmediateChildren()[currentIndex - 1].beforeGoingToStep);
                 this._getImmediateChildren()[currentIndex - 1].$el.removeClass('hidden');
+                this.callBeforeShowStepMethod(this._getImmediateChildren()[currentIndex - 1].beforeGoingToStep, options);
                 this.parentViewInstance.handleChangeToTrayContainer(true);
                 return true;
             }
             return false;
         },
-        goToIndex: function(indexToGoTo) {
+        goToIndex: function(indexToGoTo, options) {
             if (this.checkIndex(indexToGoTo)) {
                 var self = this;
                 this.model.set('currentIndex', indexToGoTo);
                 _.each(this._getImmediateChildren(), function(child, index) {
                     if (index === indexToGoTo) {
-                        self.callBeforeShowStepMethod(child.beforeGoingToStep);
                         child.$el.removeClass('hidden');
+                        self.callBeforeShowStepMethod(child.beforeGoingToStep, options);
                     } else {
                         child.$el.addClass('hidden');
                     }
@@ -123,10 +125,15 @@ define([
             }
             return false;
         },
-        callBeforeShowStepMethod: function(beforeShowMethod) {
-            this.setHeaderOptionsForNewStep(this.collection.at(this.model.get('currentIndex')));
+        callBeforeShowStepMethod: function(beforeShowMethod, options) {
+            var newStep = this.collection.at(this.model.get('currentIndex'));
+            this.setHeaderOptionsForNewStep(newStep);
+            var nextView = this._getImmediateChildren()[this.model.get('currentIndex')];
+            if (nextView instanceof Backbone.View) {
+                nextView.triggerMethod('before:step:show', options);
+            }
             if (_.isFunction(beforeShowMethod)) {
-                _.bind(beforeShowMethod, this.parentViewInstance)();
+                beforeShowMethod.call(this.parentViewInstance, options);
             }
         },
         setHeaderOptionsForNewStep: function(stepModel) {
@@ -137,9 +144,16 @@ define([
             this.parentViewInstance.changeHeaderActionItems(_.get(newHeaderOptions, 'actionItems'));
             this.parentViewInstance.changeHeaderCloseButtonOptions(_.get(newHeaderOptions, 'closeButtonOptions'));
             this.parentViewInstance.changeHeaderIcon(_.get(newHeaderOptions, 'icon'));
+            this.parentViewInstance.changeHeaderShowClose(_.get(newHeaderOptions, 'showCloseButton'));
         },
         close: function() {
             this.parentViewInstance.close();
+        },
+        onDestroy: function() {
+            var triggerElement = _.get(this, 'parentViewInstance.options.triggerElement');
+            if (triggerElement) {
+                $(triggerElement).focus();
+            }
         }
     });
     return WorkflowControllerView;

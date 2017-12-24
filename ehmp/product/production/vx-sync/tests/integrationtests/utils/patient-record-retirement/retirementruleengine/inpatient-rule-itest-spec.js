@@ -22,7 +22,7 @@ var patientIdentifiers = [{
 var thirtyDaysAgo = 30 * 24 * 60 * 60 * 1000;
 
 var patientIds = [{
-    value: '9E7A;3',
+    value: 'SITE;3',
     type: 'PID',
     inpatient: true,
     dischargeDate: 'Wed Sep 24 2014 14:58:49 GMT-0600 (MDT)'

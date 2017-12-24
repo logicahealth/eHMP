@@ -5,7 +5,7 @@ var uidUtils = require(global.VX_UTILS + 'uid-utils');
 var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 
-function dodRadiologyToVPR(dodRadiology, edipi){
+function dodRadiologyToVPR(logger, dodRadiology, edipi){
     var vprImage = {};
 
     vprImage.codes = xformUtils.transformCodes(dodRadiology.codes);

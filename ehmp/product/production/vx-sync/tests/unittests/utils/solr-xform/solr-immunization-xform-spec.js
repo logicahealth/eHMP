@@ -13,9 +13,11 @@ var xformer = require(global.VX_UTILS + 'solr-xform/solr-immunization-xform');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 
 describe('solr-immunization-xform.js', function() {
-    describe('Transformer', function() {
-        it('Happy Path', function() {
-            var vprRecord = {
+    describe('Transformer', function () {
+        var vprRecord;
+
+        beforeEach(function () {
+            vprRecord = {
                 'codes': [
                     {
                         'code': 'C0008299',
@@ -28,8 +30,8 @@ describe('solr-immunization-xform.js', function() {
                     'name': 'CHOCOLATE'
                 }],
                 'entered': '200712171515',
-                'enteredByUid': 'urn:va:user:9E7A:100',
-                'verifiedByUid': 'urn:va:user:9E7A:101',
+                'enteredByUid': 'urn:va:user:SITE:100',
+                'verifiedByUid': 'urn:va:user:SITE:101',
                 'facilityCode': '500',
                 'facilityName': 'CAMP MASTER',
                 'historical': true,
@@ -38,12 +40,12 @@ describe('solr-immunization-xform.js', function() {
                 'localId': '876',
                 'mechanism': 'ALLERGY',
                 'originatorName': 'PROVIDER,ONE',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'reference': '3;GMRD(120.82,',
                 'stampTime': '20071217151553',
                 'summary': 'CHOCOLATE',
                 'typeName': 'DRUG, FOOD',
-                'uid': 'urn:va:immunization:9E7A:8:876',
+                'uid': 'urn:va:immunization:SITE:8:876',
                 'verified': '20071217151553',
                 'verifierName': '<auto-verified>',
                 'comments': [{
@@ -53,16 +55,19 @@ describe('solr-immunization-xform.js', function() {
                 'name':'INFLUENZA, UNSPECIFIED FORMULATION',
                 'cptCode':'urn:cpt:90658',
                 'cptName':'FLU VACCINE 3 YRS & > IM',
-                'performerUid':'urn:va:user:C877:1',
+                'performerUid':'urn:va:user:SITE:1',
                 'performerName':'PROGRAMMER,ONE',
-                'locationUid':'urn:va:location:C877:32',
+                'locationUid':'urn:va:location:SITE:32',
                 'locationName':'PRIMARY CARE',
-                'encounterUid':'urn:va:visit:C877:8:10579',
+                'encounterUid':'urn:va:visit:SITE:8:10579',
                 'encounterName':'PRIMARY CARE May 16, 2014',
 
                 'severityName': 'SEVERE'
 
             };
+        });
+
+        it('Happy Path', function() {
             var solrRecord = xformer(vprRecord, log);
 
             // Verify Common Fields
@@ -91,8 +96,13 @@ describe('solr-immunization-xform.js', function() {
             expect(solrRecord.location_name).toBe(vprRecord.locationName);
             expect(solrRecord.encounter_uid).toEqual([vprRecord.encounterUid]);
             expect(solrRecord.encounter_name).toEqual([vprRecord.encounterName]);
+            expect(solrRecord.removed).toBeUndefined();
+        });
 
-
+        it('Removed', function () {
+            vprRecord.removed = true;
+            var solrRecord = xformer(vprRecord, log);
+            expect(solrRecord.removed).toBe('true');
         });
     });
 });

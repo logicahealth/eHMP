@@ -17,7 +17,8 @@ var testHandler = require(global.VX_INTTESTS + 'framework/handler-test-framework
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 var handler = require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-request-handler');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 
 describe('record-enrichment-request-handler.js', function() {
     var jpid = '00000000-0000-0000-0000-000000000000';
@@ -27,7 +28,7 @@ describe('record-enrichment-request-handler.js', function() {
         jobId: rootJobId,
         rootJobId: rootJobId
     };
-    var patientIdentifier = patientIdUtil.create('pid', '9E7A;3');
+    var patientIdentifier = patientIdUtil.create('pid', 'SITE;3');
     var allergyRecord = {
         'drugClasses': [{
             'code': 'AM114',
@@ -42,7 +43,7 @@ describe('record-enrichment-request-handler.js', function() {
         'localId': 751,
         'mechanism': 'PHARMACOLOGIC',
         'originatorName': 'VEHU,EIGHT',
-        'pid': '9E7A;3',
+        'pid': 'SITE;3',
         'products': [{
             'name': 'PENICILLIN',
             'vuid': 'urn:va:vuid:'
@@ -55,7 +56,7 @@ describe('record-enrichment-request-handler.js', function() {
         'stampTime': 20050317200936,
         'summary': 'PENICILLIN',
         'typeName': 'DRUG',
-        'uid': 'urn:va:allergy:9E7A:3:751',
+        'uid': 'urn:va:allergy:SITE:3:751',
         'verified': 20050317200936,
         'verifierName': '<auto-verified>'
     };

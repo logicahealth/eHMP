@@ -29,9 +29,9 @@ module.exports.getResourceConfig = function() {
 function getUserLastTitle(req, res) {
     var logger = req.logger;
     var appConfig = req.app.config;
-    logger.debug({user: user}, 'user');
     var user = req.session.user;
-    var userUid = 'urn:va:user:' + user.site + ':' + user.duz[user.site];
+    logger.debug({ user: user }, 'user');
+    var userUid = user.uid || 'urn:va:user:' + user.site + ':' + user.duz[user.site];
     var jdsResource = '/vpr/all/index/document-author?range=' +userUid;
     var jdsQuery = {
         filter: jdsFilter.build([

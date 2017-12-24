@@ -191,7 +191,8 @@ Then(/^the Coversheet Vitals table displays no data for$/) do |table|
 end
 
 Then(/^the Vitals Gist Applet contains data rows$/) do
-  compare_item_counts("[data-appletid=vitals] div.gist-item")
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_until_applet_gist_loaded
 end
 
 When(/^user refreshes Vitals Gist Applet$/) do
@@ -221,6 +222,13 @@ end
 Then(/^the user sorts the Vitals Gist grid by "([^"]*)"$/) do |arg1|
   label = "#{arg1} Header Sort"
   expect(VitalsGist.instance.perform_action(label)).to eq(true)
+end
+
+Then(/^the user sorts the Vitals Gist grid by Type$/) do 
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_fld_vitals_type_header
+  expect(ehmp).to have_fld_vitals_type_header
+  ehmp.fld_vitals_type_header.click
 end
 
 Then(/^the Vitals gist is sorted in alphabetic order based on Type$/) do
@@ -255,11 +263,6 @@ Then(/^a popover toolbar displays buttons$/) do |table|
   end
 end
 
-When(/^the user clicks "([^"]*)" vital result column$/) do |arg1|
-  column = "#{arg1} results"
-  expect(VitalsGist.instance.perform_action(column)).to eq(true)
-end
-
 Then(/^a quickview displays table with headers$/) do |table|
   vitals = VitalsGist.instance
   table.rows.each do | header |
@@ -269,10 +272,10 @@ Then(/^a quickview displays table with headers$/) do |table|
 end
 
 When(/^the user views the first Vitals Gist detail view$/) do
-  vitals = VitalsGist.instance
-  expect(vitals.wait_until_xpath_count_greater_than('Vitals Gist Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  expect(vitals.perform_action('First Vitals Row')).to eq(true), "Could not select first vital row"
-  expect(vitals.perform_action('Detail View Button')).to eq(true), "Could not select detail view icon"
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_fld_vitals_gist
+  expect(ehmp.fld_vitals_gist.length).to be > 0
+  ehmp.fld_vitals_gist[0].click
 end
 
 Given(/^the user notes the order of the vitals in the Vitals Gist$/) do
@@ -287,18 +290,23 @@ When(/^the user clicks the first row in the Vitals Gist applet$/) do
   ehmp = PobVitalsApplet.new
   ehmp.wait_for_fld_vital_names
   expect(ehmp.fld_vital_names.length).to be > 2, "This test has a prerequestite requirement that the patient used has more then 2 vital results. There are currently only #{ehmp.fld_vital_names.length}"
-  ehmp.fld_vital_names.first.click
-  ehmp.wait_for_fld_toolbar
-  expect(ehmp).to have_fld_toolbar
+  ehmp.fld_vital_names.first.hover
+  ehmp.wait_for_fld_toolbar_visible
+  expect(ehmp).to have_fld_toolbar_visible
+  ehmp.fld_toolbar_visible.click
 end
 
 Then(/^Vital Type column is sorted in manual order in Vitals Gist$/) do
   ehmp = PobVitalsApplet.new
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
 
-  ehmp.wait_for_fld_vital_names
+  expect(ehmp.wait_for_fld_vital_names(20)).to eq(true)
   expect(@manual_vitals_order).to_not be_nil, "Expected manual sort order to be saved in a previous step"
-  wait.until { (ehmp.gist_vital_names_only <=> @manual_vitals_order) == 0 }
+  begin
+    wait.until { (ehmp.gist_vital_names_only <=> @manual_vitals_order) == 0 }
+  rescue => e
+    p "Error waiting: #{e}"
+  end
   expect(ehmp.gist_vital_names_only).to eq(@manual_vitals_order)
 end
 
@@ -345,20 +353,6 @@ Then(/^a quickview displays a vitals table with expected headers$/) do
   expect(ehmp.quickview_tbl_th_facility.text.upcase).to eq(expected_text), "Expected the header text to be #{expected_text} but it was #{ehmp.quickview_tbl_th_facility.text.upcase}"
 end
 
-When(/^the user views the first Vitals Gist quicklook table via the toolbar$/) do
-  ehmp = PobVitalsApplet.new
-  ehmp.wait_for_fld_vital_names
-  expect(ehmp.fld_vital_names.length).to be > 0
-  ehmp.fld_vital_names[0].click
-  ehmp.wait_until_fld_toolbar_visible
-  ehmp.wait_for_btn_quick_view
-  expect(ehmp).to have_btn_quick_view
-  ehmp.btn_quick_view.click
-  ehmp.wait_for_fld_vital_quickview_popover
-  expect(ehmp).to have_fld_vital_quickview_popover
-  ehmp.wait_until_fld_vital_quickview_popover_visible
-end
-
 Then(/^the Vitals Gist Applet contains buttons Refresh, Help and Expand$/) do
   ehmp = PobVitalsApplet.new
   ehmp.wait_for_btn_applet_refresh
@@ -369,3 +363,4 @@ Then(/^the Vitals Gist Applet contains buttons Refresh, Help and Expand$/) do
   expect(ehmp).to have_btn_applet_help
   expect(ehmp).to have_btn_applet_expand_view
 end
+

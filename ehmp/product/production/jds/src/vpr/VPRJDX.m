@@ -1,22 +1,27 @@
 VPRJDX ;SLC/KCM -- Index a JSON object
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
-INDEX(KEY,OLDOBJ,NEWOBJ) ; Index this object identified by its KEY
+INDEX(KEY,OLDOBJ,NEWOBJ,INDEX) ; Index this object identified by its KEY
+ ; @param {string} KEY - The identifier (UID) of the operational data item
+ ; @param {array} [.OLDOBJ] - Old operatonal data to remove from index
+ ; @param {array} .NEWOBJ - New operatonal data to add to index
+ ; @param {string} [INDEX=""] - A list of one or more comma-delimited index names to reindex, or if omitted or empty, reindex all
  N IDXCOLL,IDXNAME
  ; Currently assuming UID is urn:va:collection:vistaAccount:...
  ; For example:  urn:va:fresh:93EF
  S IDXCOLL=$P(KEY,":",3)
  S IDXNAME="" F  S IDXNAME=$O(^VPRMETA("collection",IDXCOLL,"index",IDXNAME)) Q:IDXNAME=""  D
+ . I $G(INDEX)'="",(","_INDEX_",")'[IDXNAME Q
  . N IDXMETA
  . M IDXMETA=^VPRMETA("index",IDXNAME,"collection",IDXCOLL)
  . I IDXMETA("method")="tally" D TALLY Q
  . I IDXMETA("method")="attr"  D ATTRIB Q
  S IDXNAME="" F  S IDXNAME=$O(^VPRMETA("collection",IDXCOLL,"link",IDXNAME)) Q:IDXNAME=""  D
+ . I $G(INDEX)'="",(","_INDEX_",")'[IDXNAME Q
  . N IDXMETA
  . M IDXMETA=^VPRMETA("link",IDXNAME,"collection",IDXCOLL)
  . D REVERSE
  D COUNTS
- Q
+ QUIT
  ;
  ; ----- Maintain counts of objects -----
  ;
@@ -59,7 +64,7 @@ KTALLY(OBJECT) ; Decrement a tally index
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
  . S TALLY=$I(^VPRJDX("tally",IDXNAME,VALUES(I,1)),-1)
- . I ^VPRJDX("tally",IDXNAME,VALUES(I,1))=0 K ^VPRJDX("tally",IDXNAME,VALUES(I,1))
+ . I $G(^VPRJDX("tally",IDXNAME,VALUES(I,1)))=0 K:$D(^VPRJDX("tally",IDXNAME,VALUES(I,1))) ^VPRJDX("tally",IDXNAME,VALUES(I,1))
  Q
  ;
  ; ----- Index Logic: attributes -----
@@ -96,8 +101,8 @@ KATTRIB(OBJECT) ; Kill attribute based index
  I $L(IDXMETA("review")) D
  . N REVTM
  . S REVTM=$G(^VPRJDX("keyReview",KEY,IDXNAME)) Q:'$L(REVTM)
- . K ^VPRJDX("keyReview",KEY,IDXNAME)
- . K ^VPRJDX("review",REVTM,KEY,IDXNAME)
+ . K:$D(^VPRJDX("keyReview",KEY,IDXNAME)) ^VPRJDX("keyReview",KEY,IDXNAME)
+ . K:$D(^VPRJDX("review",REVTM,KEY,IDXNAME)) ^VPRJDX("review",REVTM,KEY,IDXNAME)
  ;
  I IDXMETA("levels")=0  D KA0  Q
  ;
@@ -111,25 +116,25 @@ SA0 ; unsorted list set logic
  S ^VPRJDX("attr",IDXNAME,KEY)=""
  Q
 KA0 ; unsorted list kill logic
- K ^VPRJDX("attr",IDXNAME,KEY)
+ K:$D(^VPRJDX("attr",IDXNAME,KEY)) ^VPRJDX("attr",IDXNAME,KEY)
  Q
 SA1 ; one attribute set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRJDX("attr",IDXNAME,VALUES(I,1),KEY,I)=""
  Q
 KA1 ; one attribute kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRJDX("attr",IDXNAME,VALUES(I,1),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRJDX("attr",IDXNAME,VALUES(I,1),KEY,I)) ^VPRJDX("attr",IDXNAME,VALUES(I,1),KEY,I)
  Q
 SA2 ; two attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
  Q
 KA2 ; two attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)) ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
  Q
 SA3 ; three attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
  Q
 KA3 ; three attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)) ^VPRJDX("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
  Q
  ;
 REVERSE ; REV index
@@ -148,5 +153,5 @@ KREVERSE(OBJECT) ; Kill a relation link index
  Q:$D(OBJECT)<10
  N VALUES,I
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K ^VPRJDX("rev",VALUES(I,1),IDXNAME,KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(^VPRJDX("rev",VALUES(I,1),IDXNAME,KEY,I)) ^VPRJDX("rev",VALUES(I,1),IDXNAME,KEY,I)
  Q

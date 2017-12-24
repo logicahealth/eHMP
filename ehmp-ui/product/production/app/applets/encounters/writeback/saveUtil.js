@@ -118,7 +118,7 @@ define([
                     ].join('\n'))
                 });
                 var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'].join('\n')),
+                    template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm"}}']),
                     events: {
                         'click button': function() {
                             ADK.UI.Alert.hide();

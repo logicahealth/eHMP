@@ -61,9 +61,6 @@ function callRpcRecursively(logger, configuration, retValue, searchString, callb
             var last = _.last(clinicsCollection);
             var lastSplit = last.split(RPC_FIELD_DELIMITER);
             lastResponseName = lastSplit[1];
-            if (lastResponseName) {
-                lastResponseName = lastResponseName.toUpperCase();
-            }
         }
         var clinics = [];
 

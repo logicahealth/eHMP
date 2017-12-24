@@ -7,14 +7,13 @@ define([
     'hbs!app/applets/stackedGraph/list/stackedGraphViewTemplate',
     'app/applets/stackedGraph/list/chartsCompositeView',
     'app/applets/medication_review/medicationCollectionHandler',
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderCollection',
     'app/applets/medication_review/appletHelper',
     'app/applets/stackedGraph/utils/utils',
     'typeahead',
     'highcharts-more',
     'app/applets/medication_review/applet',
     'app/applets/lab_results_grid/applet'
-], function(Backbone, Marionette, _, Highcharts, moment, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedicationCollection, AppletHelper, MedsResource, Utils) {
+], function(Backbone, Marionette, _, Highcharts, moment, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, AppletHelper, MedsResource, Utils) {
     "use strict";
 
     return Backbone.Marionette.LayoutView.extend({
@@ -90,8 +89,8 @@ define([
                 });
 
                 var footerView = Backbone.Marionette.ItemView.extend({
-                    template: _.template('<button type="button" class="btn btn-default btn-sm" title="Press enter to go back" data-dismiss="modal">No</button>' +
-                        '<button type="button" class="btn btn-danger btn-sm" title="Press enter to delete" data-dismiss="modal">Yes</button>'),
+                    template: _.template('<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>' +
+                        '<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Yes</button>'),
                     events: {
                         'click .btn-danger': 'deleteGraph',
                         'click .btn-default': 'cancelDelete'
@@ -153,21 +152,25 @@ define([
                         }
                     },
                     findFocusEl: function() {
-                        var activeRow = this.model.get('activeEl');
-                        var nextRow = activeRow.next();
-                        if (activeRow.siblings('[tabindex]').length === 0) {
-                            return this.model.get('picklistBtnEl');
-                        } else if (nextRow.attr('tabindex') === '0') {
-                            return nextRow;
+                        var quickMenuSelector = '.dropdown--quickmenu > button';
+                        var activeRow = this.model.get('activeEl').closest('.gist-item');
+                        var nextRow = activeRow.next('.gist-item');
+                        if (nextRow.length > 0) {
+                            return nextRow.find(quickMenuSelector);
                         } else {
-                            return activeRow.prev();
+                            var prevRow = activeRow.prev('.gist-item');
+                            if (prevRow.length > 0) {
+                                return prevRow.find(quickMenuSelector);
+                            } else {
+                                return this.model.get('picklistBtnEl');
+                            }
                         }
                     }
                 });
 
                 var footerModel = new Backbone.Model({
-                    activeEl: this.$('.toolbar-active'),
-                    picklistBtnEl: this.$el.closest('[data-appletid="stackedGraph"]').find('[data-toggle="dropdown"]')
+                    activeEl: response.$el,
+                    picklistBtnEl: this.$el.closest('[data-appletid="stackedGraph"]').find('.stacked-graph-filter-button')
                 });
 
                 var modal = new ADK.UI.Alert({
@@ -235,7 +238,7 @@ define([
                         var MedModel = Backbone.Model.extend({
                             parse: AppletHelper.parseMedResponse
                         });
-                        var GroupedMedCollection = MedicationCollection.extend({
+                        var GroupedMedCollection = ADK.UIResources.Fetch.MedicationReview.Collection.extend({
                             model: MedModel
                         });
                         var medCollection = new GroupedMedCollection();

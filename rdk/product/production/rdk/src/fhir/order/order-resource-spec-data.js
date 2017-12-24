@@ -19,9 +19,9 @@ var jdsData = {
             'providerDisplayName': 'Labtech,Seventeen',
             'service': 'LR',
             'kind': 'Laboratory',
-            'uid': 'urn:va:order:C877:8:32989',
+            'uid': 'urn:va:order:SITE:8:32989',
             'summary': 'HDL BLOOD SERUM WC LB #17333\r\n',
-            'pid': '9E7A;253',
+            'pid': 'SITE;253',
             'localId': '32989',
             'locationName': 'GENERAL MEDICINE',
             'oiCode': 'urn:va:oi:357',
@@ -29,19 +29,19 @@ var jdsData = {
             'stop': '201003231254',
             'statusCode': 'urn:va:order-status:comp',
             'statusVuid': 'urn:va:vuid:4501088',
-            'providerUid': 'urn:va:user:C877:20364',
+            'providerUid': 'urn:va:user:SITE:20364',
             'providerName': 'LABTECH,SEVENTEEN',
-            'locationUid': 'urn:va:location:C877:23',
+            'locationUid': 'urn:va:location:SITE:23',
             'clinicians': [{
                 'name': 'LABTECH,SEVENTEEN',
                 'role': 'S',
                 'signedDateTime': 199912291525,
-                'uid': 'urn:va:user:C877:20364'
+                'uid': 'urn:va:user:SITE:20364'
             }],
             'results': [{
-                'uid': 'urn:va:lab:C877:8:CH;6908797.899993;80'
+                'uid': 'urn:va:lab:SITE:8:CH;6908797.8PORT3;80'
             }, {
-                'uid': 'urn:va:lab:C877:8:CH;6908797.899993;81'
+                'uid': 'urn:va:lab:SITE:8:CH;6908797.8PORT3;81'
             }]
         }, {
             'facilityCode': '998',
@@ -68,7 +68,7 @@ var jdsData = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11515',
+                'uid': 'urn:va:order:SITE:8:11515',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1333\r\n<Discharge>\r\n',
                 'localId': '11515',
                 'locationName': '5 WEST PSYCH',
@@ -77,9 +77,9 @@ var jdsData = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -93,7 +93,7 @@ var jdsData = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11516',
+                'uid': 'urn:va:order:SITE:8:11516',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1336\r\n<Discharge>\r\n',
                 'localId': '11516',
                 'locationName': '5 WEST PSYCH',
@@ -102,9 +102,9 @@ var jdsData = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -118,7 +118,7 @@ var jdsData = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11517',
+                'uid': 'urn:va:order:SITE:8:11517',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1339\r\n<Discharge>\r\n',
                 'localId': '11517',
                 'locationName': '5 WEST PSYCH',
@@ -127,9 +127,9 @@ var jdsData = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -143,7 +143,7 @@ var jdsData = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11518',
+                'uid': 'urn:va:order:SITE:8:11518',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1342\r\n<Discharge>\r\n',
                 'localId': '11518',
                 'locationName': '5 WEST PSYCH',
@@ -152,14 +152,14 @@ var jdsData = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }],
             'kind': 'Laboratory',
-            'uid': 'urn:va:order:9E7A:8:11514',
+            'uid': 'urn:va:order:SITE:8:11514',
             'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD LC Q6H\r\n',
-            'pid': '9E7A;253',
+            'pid': 'SITE;253',
             'localId': '11514',
             'locationName': '5 WEST PSYCH',
             'oiCode': 'urn:va:oi:384',
@@ -167,14 +167,14 @@ var jdsData = {
             'stop': '200203141653',
             'statusCode': 'urn:va:order-status:dc',
             'statusVuid': 'urn:va:vuid:4500704',
-            'providerUid': 'urn:va:user:9E7A:11712',
+            'providerUid': 'urn:va:user:SITE:11712',
             'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-            'locationUid': 'urn:va:location:9E7A:66',
+            'locationUid': 'urn:va:location:SITE:66',
             'clinicians': [{
                 'name': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
                 'role': 'S',
                 'signedDateTime': 199912291525,
-                'uid': 'urn:va:user:9E7A:11712'
+                'uid': 'urn:va:user:SITE:11712'
             }]
         }]
     }
@@ -211,7 +211,7 @@ var jdsSingleRecord = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11515',
+                'uid': 'urn:va:order:SITE:8:11515',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1333\r\n<Discharge>\r\n',
                 'localId': '11515',
                 'locationName': '5 WEST PSYCH',
@@ -220,9 +220,9 @@ var jdsSingleRecord = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -236,7 +236,7 @@ var jdsSingleRecord = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11516',
+                'uid': 'urn:va:order:SITE:8:11516',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1336\r\n<Discharge>\r\n',
                 'localId': '11516',
                 'locationName': '5 WEST PSYCH',
@@ -245,9 +245,9 @@ var jdsSingleRecord = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -261,7 +261,7 @@ var jdsSingleRecord = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11517',
+                'uid': 'urn:va:order:SITE:8:11517',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1339\r\n<Discharge>\r\n',
                 'localId': '11517',
                 'locationName': '5 WEST PSYCH',
@@ -270,9 +270,9 @@ var jdsSingleRecord = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }, {
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -286,7 +286,7 @@ var jdsSingleRecord = {
                 'providerDisplayName': 'Provider,Twohundredninetyseven',
                 'service': 'LR',
                 'kind': 'Laboratory',
-                'uid': 'urn:va:order:9E7A:8:11518',
+                'uid': 'urn:va:order:SITE:8:11518',
                 'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD WC LB #1342\r\n<Discharge>\r\n',
                 'localId': '11518',
                 'locationName': '5 WEST PSYCH',
@@ -295,14 +295,14 @@ var jdsSingleRecord = {
                 'stop': '200203141653',
                 'statusCode': 'urn:va:order-status:dc',
                 'statusVuid': 'urn:va:vuid:4500704',
-                'providerUid': 'urn:va:user:9E7A:11712',
+                'providerUid': 'urn:va:user:SITE:11712',
                 'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-                'locationUid': 'urn:va:location:9E7A:66'
+                'locationUid': 'urn:va:location:SITE:66'
             }],
             'kind': 'Laboratory',
-            'uid': 'urn:va:order:9E7A:8:11514',
+            'uid': 'urn:va:order:SITE:8:11514',
             'summary': 'CBC & DIFF (WITH MORPHOLOGY) BLOOD LC Q6H\r\n',
-            'pid': '9E7A;253',
+            'pid': 'SITE;253',
             'localId': '11514',
             'locationName': '5 WEST PSYCH',
             'oiCode': 'urn:va:oi:384',
@@ -310,14 +310,14 @@ var jdsSingleRecord = {
             'stop': '200203141653',
             'statusCode': 'urn:va:order-status:dc',
             'statusVuid': 'urn:va:vuid:4500704',
-            'providerUid': 'urn:va:user:9E7A:11712',
+            'providerUid': 'urn:va:user:SITE:11712',
             'providerName': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
-            'locationUid': 'urn:va:location:9E7A:66',
+            'locationUid': 'urn:va:location:SITE:66',
             'clinicians': [{
                 'name': 'PROVIDER,TWOHUNDREDNINETYSEVEN',
                 'role': 'S',
                 'signedDateTime': 199912291525,
-                'uid': 'urn:va:user:9E7A:11712'
+                'uid': 'urn:va:user:SITE:11712'
             }]
         }]
     }

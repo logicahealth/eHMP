@@ -464,9 +464,28 @@ Then(/^user searches for "(.*?)" with no duplicates in the results dropdown$/) d
 end
 
 Then(/^the modal contains highlighted "(.*?)"$/) do |searchterm|
-  driver = TestSupport.driver
-  no_elem = []
-  expect(driver.find_element(:xpath, "//*[@id='modal-body']//mark[@class='cpe-search-term-match']").text == searchterm)
+  ehmp = PobRecordSearch.new
+  ehmp.wait_for_modal_search_term_highlights(20)
+  expect(ehmp).to have_modal_search_term_highlights
+  elements = ehmp.modal_search_term_highlights
+  verify_highlights(elements, searchterm)
+end
+
+Then(/^the text search results containing search term "([^"]*)" are highlighted$/) do |searchterm|
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_search_term_match_visible(20)
+  elements = ehmp.search_term_match
+  verify_highlights(elements, searchterm)
+end
+
+def verify_highlights(elements, searchterm)
+  highlights = []
+  elements.each do |element|
+    highlights << element.text.upcase
+  end
+  #p highlights
+  expect(highlights.length).to be > 0, "Expected at least 1 highlighted text '#{text}'"
+  expect(highlights).to include searchterm.upcase
 end
 
 Then(/^community health summaries modal contains term "([^"]*)" as highlighted$/) do |text|
@@ -520,7 +539,60 @@ Then(/^user selects the close icon in serach record workspace$/) do
   ehmp.btn_text_search_close.click
 end
 
+Then(/^there exists a main group "([^"]*)"$/) do | main_group |
+  ehmp = PobRecordSearch.new
+  ehmp.expand_main_group(main_group)
+  expect(ehmp).to have_fld_main_group_title
+end
 
+When(/^the text search main group Consult result display valid titles$/) do
+  @ehmp = PobRecordSearch.new
+  @ehmp.main_group_results('Consult')
+  @ehmp.wait_until_fld_maingroup_titles_visible
+  title_elements = @ehmp.fld_maingroup_titles
+  expect(title_elements.length).to be > 0
+  title_elements.each do | title |
+    #p title.text
+    expect(@ehmp.consult_titles).to include title.text.upcase
+  end
+end
 
+When(/^the text search main group Request Activity result displays titles$/) do
+  @ehmp = PobRecordSearch.new
+  @ehmp.main_group_results('RequestActivity')
+  @ehmp.wait_until_fld_maingroup_titles_visible
+  title_elements = @ehmp.fld_maingroup_titles
+  expect(title_elements.length).to be > 0
+  title_elements.each do | title |
+  # p title.text
+    expect(title).to_not be_nil, "#{title} not present"
+  end
+end
 
+Then(/^the text search main group "([^"]*)" results display$/) do |groupontext, table|
+  @ehmp = PobRecordSearch.new
+  helper = HelperMethods.new
+  @ehmp.main_group_results(groupontext)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5) 
+  wait.until { @ehmp.fld_maingroup_dates.length > 0 }
+  
+  facility_elements = @ehmp.fld_maingroup_facilities
+  expect(facility_elements.length).to be > 0
+  facility_elements.each do | facility |
+    expect(@ehmp.ehmp_facilities).to include facility.text.upcase
+  end
+  
+  date_elements = @ehmp.fld_maingroup_dates
+  date_elements.each do | date_element |
+    # p date_element.text
+    next if date_element.text.upcase.eql?('UNKNOWN')
+    expect(helper.date_only? date_element.text).to eq(true), "Date not in correct format: #{date_element.text}"
+  end
+end
 
+Then(/^user searches for "([^"]*)" with timestamp appended$/) do |text_term|
+  ehmp = PobRecordSearch.new
+  #p text_term + ' ' + @text_search_term
+  perform_search(text_term + ' ' + @text_search_term)
+  ehmp.wait_for_fld_main_group(30)
+end

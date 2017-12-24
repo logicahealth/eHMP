@@ -6,7 +6,6 @@ var _ = require('lodash');
 var pickListGroups = require('./pick-list-groups');
 
 var log = sinon.stub(require('bunyan').createLogger({ name: 'pick-list-groups' }));
-//var log = require('bunyan').createLogger({ name: 'pick-list-groups' }); //Uncomment this line (and comment above) to see output in IntelliJ console
 
 var configuration = {
     environment: 'development',
@@ -14,35 +13,35 @@ var configuration = {
     generalPurposeJdsServer: {
         baseUrl: 'http://IP             '
     },
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost',
     vistaSites: {
-        '9E7A': {
+        'SITE': {
             'name': 'PANORAMA',
             'environment': 'development',
             'division': '500',
             'host': 'IP        ',
             'localIP': 'IP      ',
             'localAddress': 'localhost',
-            'port': 9210,
+            'port': PORT,
             'production': false,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'infoButtonOid': '1.3.6.1.4.1.3768'
         },
-        'C877': {
+        'SITE': {
             'name': 'KODAK',
             'environment': 'development',
             'division': '507',
             'host': 'IP        ',
             'localIP': 'IP      ',
             'localAddress': 'localhost',
-            'port': 9210,
+            'port': PORT,
             'production': false,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'infoButtonOid': '1.3.6.1.4.1.3768'
         }
     }
@@ -77,7 +76,7 @@ describe('pick-list groups manager', function() {
                     return 'lab-order-orderable-items';
                 }
                 if (x === 'site') {
-                    return '9E7A';
+                    return 'SITE';
                 }
                 if (x === 'labType') {
                     return 'S.LAB';
@@ -87,7 +86,7 @@ describe('pick-list groups manager', function() {
             query: {}
         };
 
-        pickListGroups.getPickListGroup(req, '9E7A', 'dummygroupname', function(err, result) {
+        pickListGroups.getPickListGroup(req, 'SITE', 'dummygroupname', function(err, result) {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();

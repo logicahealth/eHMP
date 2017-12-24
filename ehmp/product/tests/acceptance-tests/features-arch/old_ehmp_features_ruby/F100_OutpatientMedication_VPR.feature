@@ -14,7 +14,7 @@ Then the client receives 2 VPR "VistA" result(s)
 Then the client receives 1 VPR "panorama" result(s)
 And the VPR results contain "outpatient medication results"                                                      
       | field                               | panorama_value                                      |
-      | uid                                 | urn:va:med:9E7A:100817:27831                        |
+      | uid                                 | urn:va:med:SITE:100817:27831                        |
       | summary                             | LISINOPRIL 10MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY |
       | pid                                 | CONTAINS ;100817                                         |
       | facilityCode                        | 500                                                 |
@@ -55,12 +55,12 @@ And the VPR results contain "outpatient medication results"
       | dosages.relativeStop                | 527040                                              |
       | dosages.scheduleFreq                | 720                                                 |
       | orders.summary                      | MedicationOrder{uid='null'}                         |
-      | orders.orderUid                     | urn:va:order:9E7A:100817:27831                      |
+      | orders.orderUid                     | urn:va:order:SITE:100817:27831                      |
       | orders.prescriptionId               | 500605                                              |
       | orders.ordered                      | 200908101738                                        |
-      | orders.providerUid                  | urn:va:user:9E7A:20010                              |
+      | orders.providerUid                  | urn:va:user:SITE:20010                              |
       | orders.providerName                 | VEHU,EIGHT                                          |
-      | orders.pharmacistUid                | urn:va:user:9E7A:20117                              |
+      | orders.pharmacistUid                | urn:va:user:SITE:20117                              |
       | orders.pharmacistName               | PHARMACIST,THREE                                    |
       | orders.fillCost                     | 3.75                                                |
       | orders.quantityOrdered              | 60                                                  |
@@ -93,15 +93,15 @@ And the VPR results contain "outpatient medication results"
 @f100_2_out_medication_vpr @vpr
 Scenario: Client can request Outpatient Medications in VPR format
 Given a patient with "outpatient medication results" in multiple VistAs
-Given a patient with pid "9E7A;1" has been synced through Admin API
-When the client requests medications for the patient "9E7A;1" in VPR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests medications for the patient "SITE;1" in VPR format
 Then a successful response is returned
 Then the client receives 109 VPR "VistA" result(s)
 Then the client receives 109 VPR "panorama" result(s)
 And the VPR results contain "outpatient medication results"     
       | field                               | panorama_value                                      |
       | orders.locationName                 | GEN MED                                             | 
-      | orders.locationUid                  | urn:va:location:9E7A:9                              |
+      | orders.locationUid                  | urn:va:location:SITE:9                              |
 And the VPR results contain "outpatient medication results" 
       | releaseDate                         | 20000216                                            |
       
@@ -115,7 +115,7 @@ Then the client receives 2 VPR "VistA" result(s)
 Then the client receives 1 VPR "kodak" result(s)
 And the VPR results contain "outpatient medication results"                                                      
       | field                               | kodak_value                                         |
-      | uid                                 | urn:va:med:C877:100817:27831                        |
+      | uid                                 | urn:va:med:SITE:100817:27831                        |
       | summary                             | LISINOPRIL 10MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY |
       | pid                                 | CONTAINS ;100817                                    |
       | facilityCode                        | 500                                                 |
@@ -156,12 +156,12 @@ And the VPR results contain "outpatient medication results"
       | dosages.relativeStop                | 527040                                              |
       | dosages.scheduleFreq                | 720                                                 |
       | orders.summary                      | MedicationOrder{uid='null'}                         |
-      | orders.orderUid                     | urn:va:order:C877:100817:27831                      |
+      | orders.orderUid                     | urn:va:order:SITE:100817:27831                      |
       | orders.prescriptionId               | 500605                                              |
       | orders.ordered                      | 200908101738                                        |
-      | orders.providerUid                  | urn:va:user:C877:20010                              |
+      | orders.providerUid                  | urn:va:user:SITE:20010                              |
       | orders.providerName                 | VEHU,EIGHT                                          |
-      | orders.pharmacistUid                | urn:va:user:C877:20117                              |
+      | orders.pharmacistUid                | urn:va:user:SITE:20117                              |
       | orders.pharmacistName               | PHARMACIST,THREE                                    |
       | orders.fillCost                     | 3.75                                                |
       | orders.quantityOrdered              | 60                                                  |
@@ -194,15 +194,15 @@ And the VPR results contain "outpatient medication results"
 @f100_4_out_medication_vpr @vpr
 Scenario: Client can request Outpatient Medications in VPR format
 Given a patient with "outpatient medication results" in multiple VistAs
-Given a patient with pid "C877;1" has been synced through Admin API
-When the client requests medications for the patient "C877;1" in VPR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests medications for the patient "SITE;1" in VPR format
 Then a successful response is returned
 Then the client receives 109 VPR "VistA" result(s)
 Then the client receives 109 VPR "kodak" result(s)
 And the VPR results contain "outpatient medication results"     
       | field                               | kodak_value                                         |
       | orders.locationName                 | GEN MED                                             | 
-      | orders.locationUid                  | urn:va:location:C877:9                              |
+      | orders.locationUid                  | urn:va:location:SITE:9                              |
 And the VPR results contain "outpatient medication results" 
       | releaseDate                         | 20000216                                            |
 
@@ -212,15 +212,15 @@ And the VPR results contain "outpatient medication results"
 @f100_5_out_medication_vpr @vpr
 Scenario: Client can request Outpatient Medications in VPR format
 Given a patient with "outpatient medication results" in multiple VistAs
-Given a patient with pid "9E7A;167" has been synced through Admin API
-When the client requests medications for the patient "9E7A;167" in VPR format
+Given a patient with pid "SITE;167" has been synced through Admin API
+When the client requests medications for the patient "SITE;167" in VPR format
 Then a successful response is returned
 Then the client receives 3 VPR "VistA" result(s)
 Then the client receives 3 VPR "panorama" result(s)
 And the VPR results contain "outpatient medication results"   
 
 	| field									| value										|
-	| pid									| 9E7A;167									|
+	| pid									| SITE;167									|
 	| facilityCode							| 500										|
 	| facilityName							| CAMP MASTER								|
 	| productFormName						| SUPP,RTL									|
@@ -246,15 +246,15 @@ And the VPR results contain "outpatient medication results"
 @f100_6_out_medication_vpr @vpr
 Scenario: Client can request Outpatient Medications in VPR format
 Given a patient with "outpatient medication results" in multiple VistAs
-Given a patient with pid "C877;167" has been synced through Admin API
-When the client requests medications for the patient "C877;167" in VPR format
+Given a patient with pid "SITE;167" has been synced through Admin API
+When the client requests medications for the patient "SITE;167" in VPR format
 Then a successful response is returned
 Then the client receives 3 VPR "VistA" result(s)
 Then the client receives 3 VPR "kodak" result(s)
 And the VPR results contain "outpatient medication results"   
 
 	| field									| value										|
-	| pid									| C877;167									|
+	| pid									| SITE;167									|
 	| facilityCode							| 500										|
 	| facilityName							| CAMP BEE									|
 	| productFormName						| SUPP,RTL									|
@@ -282,8 +282,8 @@ And the VPR results contain "outpatient medication results"
 @f100_7_out_medication_neg_vpr
 Scenario: Negative scenario.  Client can request medication results in VPR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests medications for the patient "9E7A;100184" in VPR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests medications for the patient "SITE;100184" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed
 	

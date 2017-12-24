@@ -92,8 +92,8 @@ define([
 
                 view.collection.add([{
                     'description': 'This is 2nd testing text row 1',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121018',
                     'name': 'Branch of Service',
                     'version': '2.0.r01',
@@ -101,8 +101,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 2',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121055',
                     'name': 'Years of Service',
                     'version': '2.0.r01',
@@ -110,8 +110,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 3',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121115',
                     'name': 'Areas of Service',
                     'version': '2.0.r01',
@@ -119,8 +119,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 4',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121137',
                     'name': 'Occupational Specialties',
                     'version': '2.0.r01',
@@ -144,8 +144,8 @@ define([
 
                 mockView.collection.add([{
                     'description': 'This is 2nd testing text row 1',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121018',
                     'name': 'Branch of Service',
                     'version': '2.0.r01',
@@ -153,8 +153,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 2',
-                    'siteHash': 'C877',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121055',
                     'name': 'Years of Service',
                     'version': '2.0.r01',
@@ -162,8 +162,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 3',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121115',
                     'name': 'Areas of Service',
                     'version': '2.0.r01',
@@ -172,7 +172,7 @@ define([
                 }, {
                     'description': 'This is 2nd testing text row 4',
                     'siteHash': 'C874',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121137',
                     'name': 'Occupational Specialties',
                     'version': '2.0.r01',
@@ -186,7 +186,7 @@ define([
                     'name': 'KODAK',
                     'division': '507',
                     'production': false,
-                    'siteCode': 'C877'
+                    'siteCode': 'SITE'
                 }, {
                     'name': 'MARTINSBURG',
                     'division': '613',
@@ -196,7 +196,7 @@ define([
                     'name': 'PANORAMA',
                     'division': '500',
                     'production': false,
-                    'siteCode': '9E7A'
+                    'siteCode': 'SITE'
                 }, {
                     'name': 'WASHINGTON',
                     'division': '688',
@@ -229,7 +229,7 @@ define([
                     'name': 'KODAK',
                     'division': '507',
                     'production': false,
-                    'siteCode': 'C877'
+                    'siteCode': 'SITE'
                 }, {
                     'name': 'MARTINSBURG',
                     'division': '613',
@@ -239,7 +239,7 @@ define([
                     'name': 'PANORAMA',
                     'division': '500',
                     'production': false,
-                    'siteCode': '9E7A'
+                    'siteCode': 'SITE'
                 }, {
                     'name': 'WASHINGTON',
                     'division': '688',
@@ -267,8 +267,8 @@ define([
 
                 mockView.collection.add([{
                     'description': 'This is 2nd testing text row 1',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121018',
                     'name': 'Branch of Service',
                     'version': '2.0.r01',
@@ -276,8 +276,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 2',
-                    'siteHash': 'C877',
-                    'touchedBy': 'urn:va:user:9E7A:10000000236',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000236',
                     'touchedOn': '20161212121055',
                     'name': 'Years of Service',
                     'version': '2.0.r01',
@@ -285,8 +285,8 @@ define([
                     '_labelsForSelectedValues': {}
                 }, {
                     'description': 'This is 2nd testing text row 3',
-                    'siteHash': '9E7A',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'siteHash': 'SITE',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121115',
                     'name': 'Areas of Service',
                     'version': '2.0.r01',
@@ -295,7 +295,7 @@ define([
                 }, {
                     'description': 'This is 2nd testing text row 4',
                     'siteHash': 'C874',
-                    'touchedBy': 'urn:va:user:9E7A:10000000235',
+                    'touchedBy': 'urn:va:user:SITE:10000000235',
                     'touchedOn': '20161212121137',
                     'name': 'Occupational Specialties',
                     'version': '2.0.r01',
@@ -304,10 +304,10 @@ define([
                 }]);
 
                 userCollection = new Backbone.Collection([{
-                    'uid': 'urn:va:user:9E7A:10000000235',
+                    'uid': 'urn:va:user:SITE:10000000235',
                     'name': 'EHMP,UATTHREE'
                 }, {
-                    'uid': 'urn:va:user:9E7A:10000000236',
+                    'uid': 'urn:va:user:SITE:10000000236',
                     'name': 'EHMP,UATTWO'
                 }]);
             });
@@ -322,7 +322,7 @@ define([
             });
 
             it('expect MetaCollection to be processed with touchedByName of empty string when uid is not found', function() {
-                userCollection.at(0).set('uid', 'urn:va:user:9E7A:10000000232');
+                userCollection.at(0).set('uid', 'urn:va:user:SITE:10000000232');
                 MilitaryHistoryApplet.viewTypes[1].view.prototype.userCollectionEvents.sync.call(mockView, userCollection);
 
                 expect(mockView.collection.at(0).get('touchedByName')).toEqual('UATTWO EHMP');

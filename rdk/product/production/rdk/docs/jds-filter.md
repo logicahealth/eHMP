@@ -113,7 +113,7 @@ JDS filter objects look like:
 [
   ['between', 'observedDate', '20140830', '20140930'],
   ["or",
-    ['in', 'facilityCode', ['9E7A', 'C877']],
+    ['in', 'facilityCode', ['SITE', 'SITE']],
     ['eq', 'status', 'ACTIVE']
   ]
 ]
@@ -124,7 +124,7 @@ The equivalent JDS query string would look like:
 ```
 between("observedDate","20140830","20140930"),
 or(
-  in("facilityCode",["9E7A","C877"]),
+  in("facilityCode",["SITE","SITE"]),
   eq("status","ACTIVE")
   )
 ```

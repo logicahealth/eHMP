@@ -251,7 +251,7 @@ define([
                             }, {
                                 control: 'container',
                                 extraClasses: ['form-group', 'instructions-container'],
-                                template: '<p class="faux-label top-margin-sm bottom-margin-xs">Instructions</p> <div class="control inline-display button-control action-instructions"><button type="button" class="btn btn-icon btn-sm" title="Press enter to view instructions for consults" data-instructions class="btn btn-info btn-sm"><i class="fa fa-file-text-o font-size-14"></i> Instructions</button></div>'
+                                template: '<p class="faux-label top-margin-sm bottom-margin-xs">Instructions</p> <div class="control inline-display button-control action-instructions"><button type="button" class="btn btn-icon btn-sm" aria-label="Instructions for consults" data-instructions class="btn btn-info btn-sm"><i class="fa fa-file-text-o font-size-14"></i> Instructions</button></div>'
                             }, {
                                 control: 'container',
                                 template: '<h5 class="bottom-border-grey-darker">Pre-Requisites</h5>',
@@ -437,7 +437,6 @@ define([
                                     title: 'Delete',
                                     eventToTrigger: 'consult-add-confirm-delete',
                                     message: 'Are you sure you want to delete?',
-                                    confirmButtonTitle: 'Press enter to delete'
                                 }
                             },
                             label: 'Delete',
@@ -454,7 +453,6 @@ define([
                         },
                         label: 'Cancel',
                         name: 'consultAddConfirmCancel',
-                        title: 'Press enter to cancel',
                         extraClasses: ['btn-default', 'btn-sm']
                     }, {
                         control: 'button',
@@ -462,21 +460,19 @@ define([
                         id: 'consult-add-save-button',
                         label: 'Draft',
                         type: 'button',
-                        title: 'Press enter to save as draft and close'
+                        title: 'Save as draft and close'
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                         id: 'consult-add-begin-workup-button',
                         label: 'Begin Workup',
-                        type: 'button',
-                        title: 'Press enter to begin workup'
+                        type: 'button'
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                         id: 'consult-add-accept-button',
                         label: 'Accept',
-                        type: 'button',
-                        title: 'Press enter to accept'
+                        type: 'button'
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
@@ -484,8 +480,7 @@ define([
                         label: 'Accept',
                         type: 'button',
                         hidden: true,
-                        disabled: true,
-                        title: 'Press enter to accept'
+                        disabled: true
                     }]
                 }]
             }]

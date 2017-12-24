@@ -42,8 +42,6 @@ BLD4TLT(OBJECT,VALUES,TAG) ; build instance values given lines of template
  N I,X,LINES,CLTN,SPEC
  S I=0 F  S I=I+1,X=$P($T(@TAG+I),";;",2,99) Q:X="zzzzz"  S LINES(I)=X
  D BLDSPEC^VPRJCD("template",.LINES,.SPEC,.CLTN)
- ;W ! ZW SPEC ZW CLTN
- ;D GETVALS^VPRJCV(.OBJECT,.VALUES,.CSPEC)
  Q
 TLTVALS ;; TEST set values for templates
  ;;unit-test-instance
@@ -145,7 +143,6 @@ IDXNEST ;; @TEST indexing values where there are descendent multiples
  S FIELDS(0,1)="ary1[].val/P"
  S FIELDS(0,2)="ary1[].ary2[].val/P"
  D BLD4IDX(.OBJECT,.VALUES,.FIELDS)
- ;W ! ZW VALUES
  Q
 IDXNEST2 ;; @TEST indexing values with various ancestry paths
  N OBJECT,VALUES,FIELDS
@@ -167,7 +164,6 @@ IDXNEST2 ;; @TEST indexing values with various ancestry paths
  S FIELDS(0,3)="one[].two[].y/P"
  S FIELDS(0,4)="one[].two[].five[].w/P"
  D BLD4IDX(.OBJECT,.VALUES,.FIELDS)
- ;W ! ZW VALUES
  Q
 SETVALM ;; @TEST set values for deeper hierarchies like microbiology
  N OBJECT,VALUES,FIELDS

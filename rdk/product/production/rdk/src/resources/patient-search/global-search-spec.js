@@ -2,6 +2,7 @@
 
 var search = require('./global-search');
 var fs = require('fs');
+var moment = require('moment');
 var _ = require('lodash');
 var loadXML1305File = function(path, xml1305FilesObj, property) {
     fs.readFile(__dirname + path, function(error, results) {
@@ -325,6 +326,50 @@ describe('Global Search', function() {
             expect(typeof req.session.globalSearchParams).to.equal('object');
             expect(Object.keys(req.session.globalSearchParams).length).to.be.above(0);
             expect(search._checkInvalidGlobalSearchParameters(req.session.globalSearchParams)).to.be.falsy();
+        });
+    });
+    describe('1305 XML Parameter Substitution', function(){
+        it('tests that values are filled in as expected', function(){
+            var req = {
+                session: {
+                    user: {
+                        firstname: 'userfirst',
+                        lastname: 'userlast'
+                    }
+                },
+                query: {
+                    ssn: '123456789',
+                    dob: {format: function(){return '19691009';}},
+                    fname: 'queryfirst',
+                    lname: 'querylast'
+                },
+                app: {
+                    config: {
+                        mvi: {
+                            senderCode: 'sendcode',
+                            search: {
+                                path: 'searchpath'
+                            }
+                        }
+                    }
+                },
+                logger: sinon.stub(require('bunyan').createLogger({
+                    name: 'global-search-spec'
+                }))
+            };
+
+            var httpConfig = search._getMVISoapRequestHTTPConfig(req, req.query, xml1305ActualFiles);
+            var now = moment().format('YYYYMMDDHHmmssZZ');
+
+            var spy = sinon.spy();
+            spy(httpConfig.body);
+            sinon.assert.neverCalledWith(spy, sinon.match('id extension="MCID-%(msgID)s"'));
+            sinon.assert.calledWith(spy, sinon.match('<creationTime value="'+now+'"/>'));
+            sinon.assert.calledWith(spy, sinon.match('<given>queryfirst</given>'));
+            sinon.assert.calledWith(spy, sinon.match('<family>querylast</family>'));
+            sinon.assert.calledWith(spy, sinon.match('<livingSubjectId>\n    <value extension="123456789" root="2.16.840.1.113883.4.1" />\n    <semanticsText>SSN</semanticsText>\n</livingSubjectId>'));
+            sinon.assert.calledWith(spy, sinon.match('<livingSubjectBirthTime>\n    <value value="19691009" />\n    <semanticsText>Date of Birth</semanticsText>\n</livingSubjectBirthTime>'));
+            sinon.assert.calledWith(spy, sinon.match('<modifyCode code="MVI.COMP1"/>'));
         });
     });
     describe('Global Search Patient Demographic With ICN', function() {

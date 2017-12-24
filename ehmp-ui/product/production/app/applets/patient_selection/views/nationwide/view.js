@@ -21,7 +21,7 @@ define([
         },
         initialize: function() {
             this.bindEntityEvents(this.collection, this.patientRecordResultsCollectionEvents);
-            this.listenTo(ADK.Messaging.getChannel('patient-selection-nationwide'), 'execute-search', this.executeSearch);
+            this.listenTo(ADK.Messaging.getChannel(this.getOption('eventChannelName')), 'execute-search', this.executeSearch);
             this.setEmpty();
         },
         onBeforeShow: function() {
@@ -37,7 +37,7 @@ define([
             }
             var searchOptions = {
                 resourceTitle: 'search-global-search',
-                criteria: this.getGlobalSearchCriteria(model),
+                criteria: fetchCriteria,
                 fetchType: 'POST',
                 viewModel: {
                     defaults: {
@@ -93,7 +93,7 @@ define([
                 result[newKey] = newValue;
 
             });
-
+            
             if (!!criteria['name.first'] &&  !!criteria['name.last'] && !!criteria.ssn) {
                 criteria.triggerSearch = true;
                 return criteria;

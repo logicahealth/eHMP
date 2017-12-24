@@ -71,7 +71,7 @@ describe 'f664_patient_record_labs_by_panel_spec.rb', acceptance: true do
     end
 
     it '. site/dfn' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;1')
+      response = rdk_fetch(@command, 'pid' => 'SITE;1')
       # puts response.code
       # dump(response.body)
 
@@ -90,7 +90,7 @@ describe 'f664_patient_record_labs_by_panel_spec.rb', acceptance: true do
     end
 
     it '. not found in site' do
-      response = rdk_fetch(@command, 'pid' => '9E7A;848484')
+      response = rdk_fetch(@command, 'pid' => 'SITE;848484')
       expect(response.code).to eq(404)
     end
 

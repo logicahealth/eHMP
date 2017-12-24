@@ -4,39 +4,39 @@ Feature: F664 RDK Enhancements - PSI 9
 
 @F664_PatientRecord_Search_Text_Scenario_1 @US17119
 Scenario: Search Text of lower case single word
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   And solrSyncStatus is true
-  When the client searches text for pid "9E7A;3" and query "blood"
+  When the client searches text for pid "SITE;3" and query "blood"
   Then a successful response is returned
   And the response contains at least 27 items
 
 @F664_PatientRecord_Search_Text_Scenario_2
 Scenario: Search Text of site with upper case word
-  When the client searches text for pid "9E7A;3" and query "BLOOD"
+  When the client searches text for pid "SITE;3" and query "BLOOD"
   Then a successful response is returned
   And the response contains at least 27 items
 
 @F664_PatientRecord_Search_Text_Scenario_3
 Scenario: Search Text of multiple words
-  Given a patient with pid "9E7A;253" has been synced through the RDK API
-  When the client searches text for pid "9E7A;253" and query "brain imaging"
+  Given a patient with pid "SITE;253" has been synced through the RDK API
+  When the client searches text for pid "SITE;253" and query "brain imaging"
   Then a successful response is returned
   And the response contains at least 4 items
 
 @F664_PatientRecord_Search_Text_Scenario_4
 Scenario: Search Text of non-existing pid
-  When the client searches text for pid "9E7A;8484" and query "blood"
+  When the client searches text for pid "SITE;8484" and query "blood"
   Then a non-found response is returned
 
 @F664_PatientRecord_Search_Text_Scenario_6 @DE2243
 Scenario: Search Text of words with many synonyms
-  Given a patient with pid "9E7A;253" has been synced through the RDK API
-  When the client searches text for pid "9E7A;253" and query "m head ct scan"
+  Given a patient with pid "SITE;253" has been synced through the RDK API
+  When the client searches text for pid "SITE;253" and query "m head ct scan"
   Then a internal server error response is returned
 
 @F664_PatientRecord_Search_Text_Scenario_7 @WRM
 Scenario Outline: Search Text in supported domains
-  When the client searches text for pid "9E7A;3" and query "<query_text>" and types "<types>"
+  When the client searches text for pid "SITE;3" and query "<query_text>" and types "<types>"
   Then a successful response is returned
   And the response contains at least <total_items> items
 
@@ -52,7 +52,7 @@ Scenario Outline: Search Text in supported domains
 
 @F664_PatientRecord_Search_Text_Scenario_8
 Scenario Outline: Search Text in unsupported domains
-  When the client searches text for pid "9E7A;253" and query "blood" and types "<types>"
+  When the client searches text for pid "SITE;253" and query "blood" and types "<types>"
   Then a bad request response is returned
 
     Examples:

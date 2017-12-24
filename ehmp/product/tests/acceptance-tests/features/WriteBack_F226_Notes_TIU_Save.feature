@@ -3,8 +3,8 @@ Feature: F226 - Enter Plain Text Basic Progress Notes (TIU)
 
 @writeback 
 Scenario: Client can write to the VistA and add Notes records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "DOCUMENT" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "DOCUMENT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   And the client create new Note Stub record for patient with DFN "66" enter
@@ -14,7 +14,7 @@ Scenario: Client can write to the VistA and add Notes records
       | reference_date   | 20151020.145115             |
       | comment          | This is a sample stub note. |
   And the client receive the VistA write-back response
-  And the new "DOCUMENT" record added for the patient "C877;66" in VPR format
+  And the new "DOCUMENT" record added for the patient "SITE;66" in VPR format
   And save the local id from VistA write-back response
   When the client update the above TIU Note record for patient with DFN "66" enter
       | field            | value                       |
@@ -32,7 +32,7 @@ Scenario: Client can write to the VistA and add Notes records
       | comment          | This is a sample TIU note.  |
   
   Then the client receive the VistA write-back response
-  And the update "DOCUMENT" write back record for the patient "C877;66" dispaly in VPR format with value of
+  And the update "DOCUMENT" write back record for the patient "SITE;66" dispaly in VPR format with value of
     | field             | value                               |
     | localId           | Above local id                      |
     | kind              | Progress Note                       |
@@ -45,7 +45,7 @@ Scenario: Client can write to the VistA and add Notes records
     
   When the client use the vx-sync write-back to save the record
   Then the responce is successful
-  And the update "DOCUMENT" write back record for the patient "C877;66" dispaly in VPR format with value of
+  And the update "DOCUMENT" write back record for the patient "SITE;66" dispaly in VPR format with value of
     | field             | value                               |
     | localId           | Above local id                      |
     | localTitle        | PRIMARY CARE GENERAL NOTE           |
@@ -68,8 +68,8 @@ Scenario: Client can write to the VistA and add Notes records
   
 @writeback 
 Scenario: Client can write to the VistA and add Notes records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "DOCUMENT" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "DOCUMENT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When the client create new Note Stub record for patient with DFN "66" enter
@@ -84,7 +84,7 @@ Scenario: Client can write to the VistA and add Notes records
       | service_category | H                           |
       | comment          | This is a sample stub note. |
   Then the client receive the VistA write-back response
-  And the new "DOCUMENT" record added for the patient "C877;66" in VPR format
+  And the new "DOCUMENT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field             | value                               |
     | kind              | Progress Note                       |
@@ -100,8 +100,8 @@ Scenario: Client can write to the VistA and add Notes records
 
 @writeback 
 Scenario: Client can write to the VistA and add Notes records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "DOCUMENT" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "DOCUMENT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When the client create new Note Stub record for patient with DFN "66" enter
@@ -116,7 +116,7 @@ Scenario: Client can write to the VistA and add Notes records
       | service_category | H                           |
       | comment          | This is a sample stub note. |
   Then the client receive the local id from VistA write-back response
-  And the new "DOCUMENT" record added for the patient "C877;66" in VPR format
+  And the new "DOCUMENT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field           | value                         |
     | kind            | Progress Note          |
@@ -147,8 +147,8 @@ Scenario: Client can write to the VistA and add Notes records
 
 @writeback 
 Scenario: Client can write to the VistA and add Notes records
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "DOCUMENT" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "DOCUMENT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Kodak"
   When the client create new Note Stub record for patient with DFN "66" enter
@@ -162,7 +162,7 @@ Scenario: Client can write to the VistA and add Notes records
       | service_category | H                           |
       | comment          | This is a sample stub note. |
   Then the client receive the VistA write-back response
-  And the new "DOCUMENT" record added for the patient "C877;66" in VPR format
+  And the new "DOCUMENT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field             | value                               |
     | kind              | Progress Note                       |
@@ -177,8 +177,8 @@ Scenario: Client can write to the VistA and add Notes records
   
 @writeback 
 Scenario: Client can write to the VistA and add Notes records
-  Given a patient with pid "9E7A;66" has been synced through VX-Sync API for "9E7A" site(s)
-  And the client requests "DOCUMENT" for the patient "9E7A;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "DOCUMENT" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Panorama"
   When the client create new Note Stub record for patient with DFN "66" enter
@@ -192,7 +192,7 @@ Scenario: Client can write to the VistA and add Notes records
       | service_category | 1043                           |
       | comment          | This is a sample stub note. |
   Then the client receive the VistA write-back response
-  And the new "DOCUMENT" record added for the patient "9E7A;66" in VPR format
+  And the new "DOCUMENT" record added for the patient "SITE;66" in VPR format
   And the new write back record dispaly in VPR format with value of
     | field             | value                  |
     | documentClass     | PROGRESS NOTES         |

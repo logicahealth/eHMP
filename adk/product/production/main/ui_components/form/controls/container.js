@@ -15,9 +15,9 @@ define([
             extraClasses: []
         },
         behaviors: _.defaults({
-          NestableContainer: {
-            behaviorClass: ControlService.Behaviors.NestableContainer
-          }
+            NestableContainer: {
+                behaviorClass: ControlService.Behaviors.NestableContainer
+            }
         }, _.omit(ControlService.CompositeViewControl.prototype.behaviors, ['DefaultClasses', 'ErrorMessages'])),
         template: Handlebars.compile(''),
         initialize: function(options) {
@@ -32,7 +32,7 @@ define([
             }
             var items = this.field.get("items") || this.defaults.items;
             if (!(items instanceof Backbone.Collection))
-                items = new ControlService.Fields(items);
+                items = new ControlService.Fields(items, { formView: _.get(this, 'field.formView') });
             this.items = items;
             this.collection = this.items;
 
@@ -80,7 +80,7 @@ define([
             "control:items": function(event, arrayValue) {
                 var items = arrayValue || this.defaults.items;
                 if (!(items instanceof Backbone.Collection))
-                    items = new ControlService.Fields(items);
+                    items = new ControlService.Fields(items, { formView: _.get(this, 'field.formView') });
                 this.items = items;
                 this.collection.set(this.items.models);
                 event.stopPropagation();

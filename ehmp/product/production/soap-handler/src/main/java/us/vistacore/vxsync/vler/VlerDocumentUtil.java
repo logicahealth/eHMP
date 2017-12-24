@@ -140,19 +140,18 @@ public class VlerDocumentUtil {
      */
     protected static Document parseXMLDocument(byte[] xmlDocumentBytes) {
         try {
-
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-            DocumentBuilder builder = factory.newDocumentBuilder();
             factory.setFeature("http://xml.org/sax/features/validation", true);
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 
+            DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource is = new InputSource(new ByteArrayInputStream(xmlDocumentBytes));
-
             return builder.parse(is);
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
+            LOG.error("VlerDocumentUtil.parseXMLDocument() unable to parse document: " + new String(xmlDocumentBytes), e);
             throw new VlerDocumentUtilException("An error occurred while parsing XML string.", e);
         }
 

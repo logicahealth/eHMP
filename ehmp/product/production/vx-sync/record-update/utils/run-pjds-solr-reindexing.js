@@ -33,7 +33,7 @@ var log = require('bunyan').createLogger({
 
 var environment = {
     jds: new JdsClient(log, log, config),
-    pjds: new PjdsClient(log, log, config),
+    pjdsHttp: new PjdsClient(log, log, config),
     metrics: log
 };
 
@@ -119,7 +119,7 @@ function processPatients(patientIds) {
             var childLog = log.child(patientReferenceInfo);
             var childEnvironement = {
                 jds: environment.jds.childInstance(childLog),
-                pjds: environment.pjds.childInstance(childLog),
+                pjdsHttp: environment.pjdsHttp.childInstance(childLog),
                 metrics: childLog
             };
 

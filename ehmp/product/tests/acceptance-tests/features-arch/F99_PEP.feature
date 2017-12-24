@@ -6,23 +6,23 @@ Feature: F99 Policy Decision Point Integration (Access Control)s
 @US810
 Scenario: Client gets a sensitive patient warning (break the glass scenario) when requesting demographics for a sensitive patient
 	Given a patient with "demographics" in multiple VistAs
-	When the client requests demographics for that patient "9E7A;167"
+	When the client requests demographics for that patient "SITE;167"
 	Then a temporary redirect response is returned
 
 
 @US810
 Scenario: Client can break the glass after being warned when requesting demographics for a sensitive patient
 	Given a patient with "demographics" in multiple VistAs
-	When the client requests demographics for that patient "9E7A;167"
+	When the client requests demographics for that patient "SITE;167"
 	Then a temporary redirect response is returned
-	When the client breaks glass and repeats a request for demographics for that patient "9E7A;167"
+	When the client breaks glass and repeats a request for demographics for that patient "SITE;167"
 	Then a successful response is returned
 
       
 @US810
 Scenario: Non-CPRS user cannot access patient demographics
 	Given a patient with "demographics" in multiple VistAs
-	When a user "9E7A;DNS   " with password "REDACTED" requests demographics for that patient "10105V001065"
+	When a user "SITE;USER  " with password "USER  !!" requests demographics for that patient "10105V001065"
 	Then a forbidden response is returned
 
 

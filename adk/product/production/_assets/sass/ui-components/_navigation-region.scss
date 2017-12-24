@@ -1,15 +1,26 @@
-$xs: 5px;
-.provider-centric-header {
-      background-color: $pure-white;
-}
-#navigation-region {
+#context-header-region {
     background: $pure-white;
-    padding: $xs 12px;
+    padding: 0px 12px;
     min-height: 37px;
+    box-shadow: 0px 1px 4px 1px $grey;
+    .context-header-bar-wrapper {
+        -ms-flex-pack: space-between;
+        justify-content: space-between;
+        .context-header-bar {
+            &.right {
+                flex-grow: 1;
+                flex-shrink: 0;
+                > .nav {
+                    margin: 0 0 0 auto;
+                    max-width: 1000px;
+                }
+            }
+        }
+    }
 }
 
 @media (min-width: 768px) {
-    #navigation-region .navbar-right {
+    #context-header-region .navbar-right {
         margin-right: 0px;
     }
 }

@@ -8,7 +8,7 @@ var config = require(global.VX_ROOT + 'worker-config.json').vxsync;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
 var solrSmartClient = require('solr-smart-client');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
+var VxSyncForeverAgent = require('http').Agent;
 var domainUtil = require(global.VX_UTILS + 'domain');
 var solrReindexingUtil = require(global.VX_UTILS + 'solr-reindexing-util');
 
@@ -35,9 +35,9 @@ var logger = require('bunyan').createLogger({
 
 var environment = {
     jds: new JdsClient(logger, logger, config),
-    pjds: new PjdsClient(logger, logger, config),
+    pjdsHttp: new PjdsClient(logger, logger, config),
     metrics: logger,
-    solr: solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, logger, new VxSyncForeverAgent())
+    solr: solrSmartClient.createClient(logger, config.solrClient, new VxSyncForeverAgent({keepAlive: true, maxSockets: config.handlerMaxSockets || 5}))
 };
 
 var reindexingConfig = {

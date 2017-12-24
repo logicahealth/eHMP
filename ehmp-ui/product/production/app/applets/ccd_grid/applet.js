@@ -18,8 +18,7 @@ define([
         }),
         sortValue: function(model) {
             return model.get('ccdDateTime');
-        },
-        hoverTip: 'chs_date'
+        }
     };
     var dateCol = {
         name: 'referenceDateDisplay',
@@ -30,20 +29,17 @@ define([
         }),
         sortValue: function(model) {
             return model.get('ccdDateTime');
-        },
-        hoverTip: 'chs_date'
+        }
     };
     var authorCol = {
         name: 'authorDisplayName',
         label: 'Authoring Institution',
-        cell: 'string',
-        hoverTip: 'chs_authoringinstitution'
+        cell: 'string'
     };
     var descCol = {
         name: 'summary',
         label: 'Description',
-        cell: 'string',
-        hoverTip: 'chs_description'
+        cell: 'string'
     };
     var summaryColumns = [dateCol, authorCol];
 
@@ -63,6 +59,44 @@ define([
                 }
             };
             var dataGridOptions = {};
+            var getDetailsView = function(params) {
+                var modalViewOptions = {
+                    model: params.model,
+                    collection: dataGridOptions.collection,
+                    initCount: 0
+                };
+
+                var view = new ModalView(modalViewOptions);
+
+                var modalOptions = {
+                    'size': 'xlarge',
+                    'headerView': ModalHeader.extend({
+                        model: params.model,
+                        theView: view,
+                        initCount: 0
+                    }),
+                    triggerElement: params.$el
+                };
+
+                var modal = new ADK.UI.Modal({
+                    view: view,
+                    options: modalOptions
+                });
+                modal.show();
+            };
+            this.tileOptions = {
+                quickMenu: {
+                    enabled: true,
+                    buttons: [{
+                        type: 'detailsviewbutton',
+                        onClick: getDetailsView
+                    }]
+                },
+                primaryAction: {
+                    enabled: true,
+                    onClick: getDetailsView
+                }
+            };
             dataGridOptions.filterEnabled = true; //Defaults to true
             dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name'); //Defaults to all columns
             if (this.columnsViewType === 'summary') {
@@ -76,31 +110,6 @@ define([
             dataGridOptions.enableModal = true;
             dataGridOptions.collection = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
             dataGridOptions.collection.fetchCollection(fetchOptionsConfig);
-
-            dataGridOptions.onClickRow = function(model, event) {
-                event.preventDefault();
-                var view = new ModalView({
-                    model: model,
-                    target: event.currentTarget,
-                    collection: dataGridOptions.collection,
-                    initCount: 0
-                });
-
-                var modalOptions = {
-                    'size': 'xlarge',
-                    'headerView': ModalHeader.extend({
-                        model: model,
-                        theView: view,
-                        initCount: 0
-                    })
-                };
-
-                var modal = new ADK.UI.Modal({
-                    view: view,
-                    options: modalOptions
-                });
-                modal.show();
-            };
 
             this.dataGridOptions = dataGridOptions;
             this._super.initialize.call(this, arguments);
@@ -152,6 +161,7 @@ define([
 
         var data = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
         return {
+            size: "xlarge",
             view: ModalView.extend({
                 initialize: function() {
                     this.highlights = this.model.get('highlights');

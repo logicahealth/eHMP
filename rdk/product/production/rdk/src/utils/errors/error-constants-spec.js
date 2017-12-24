@@ -27,4 +27,6 @@ describe('Error Constants', function() {
     testConstant('jmeadows', 301);
     testConstant('solr', 302);
     testConstant('mvi', 303);
+    testConstant('vvs', 400);
+    testConstant('pps', 401);
 });

@@ -1,4 +1,3 @@
-/* global ADK */
 define([
     'underscore',
     'moment',
@@ -37,7 +36,7 @@ define([
             _.set(response, 'shortName', shortName);
             _.set(response, 'specimenForTrend', specimenForTrend);
             _.set(response, 'normalizedName', normalizedName);
-
+            ADK.Enrichment.addFacilityMoniker(response);
             return response;
         },
         /**

@@ -12,54 +12,51 @@ define([
     'use strict';
 
     var WorkspaceEditorButton = Backbone.Marionette.ItemView.extend({
+        tagName: 'li',
         template: Handlebars.compile([
-            '{{#if shouldShow}}',
-            '<div class="left-padding-xs">',
-            '<button type="button" class="btn btn-primary workspace-editor-trigger-button workspace-manager-btn" title="Press enter to open the workspace editor.">',
-            '<i class="fa fa-pencil font-size-14"></i>',
-            '</button>',
-            '</div>',
-            '{{/if}}'
+            '<a{{#if isEnabled}} href="#"{{else}} aria-disabled="true"{{/if}} class="workspace-editor-option right-padding-xs left-padding-xs" tabindex="-1" role="menuitem">',
+            '<span class="flex-display">',
+            '<i class="right-padding-sm top-padding-xs fa {{#if isEnabled}}fa-pencil{{else}}fa-lock{{/if}}"></i> ',
+            '<span class="word-break-break-word white-space">{{#if isEnabled}}Customize this workspace{{else}}This workspace is locked and cannot be customized{{/if}}</span>',
+            '</span>',
+            '</a>',
         ].join('\n')),
         templateHelpers: function() {
-            var self = this;
             return {
-                'shouldShow': function() {
-                    return self.shouldShowModel.get('show');
-                }
+                'isEnabled': this.shouldBeEnabledModel.get('enabled')
             };
         },
-        className: 'btn-group',
         ui: {
-            'WorkspaceEditorButton': '.workspace-editor-trigger-button'
+            'WorkspaceEditor': 'a:not([aria-disabled])'
         },
         events: {
-            'click @ui.WorkspaceEditorButton': 'openAddApplets'
+            'click @ui.WorkspaceEditor': 'openAddApplets'
         },
         initialize: function() {
-            this.shouldShowModel = new Backbone.Model({
-                show: this.shouldShow()
+            this.shouldBeEnabledModel = new Backbone.Model({
+                enabled: this.isEnabled()
             });
             this.listenTo(ADK.WorkspaceContextRepository.currentWorkspaceAndContext, 'change:workspace', function(model, newWorkspace) {
-                this.shouldShowModel.set('show', this.shouldShow());
+                this.shouldBeEnabledModel.set('enabled', this.isEnabled());
             });
-            this.listenTo(this.shouldShowModel, 'change:show', this.render);
+            this.listenTo(this.shouldBeEnabledModel, 'change:enabled', this.render);
         },
-        shouldShow: function(){
-            var show = ADK.WorkspaceContextRepository.currentWorkspace.get('predefined');
-            return _.isBoolean(show) ? !show : false;
+        isEnabled: function() {
+            var enabled = ADK.WorkspaceContextRepository.currentWorkspace.get('predefined');
+            return _.isBoolean(enabled) ? !enabled : false;
         },
         openAddApplets: function(e) {
+            e.preventDefault();
             var channel = ADK.Messaging.getChannel('addAppletsChannel');
-            channel.trigger('addApplets');
+            channel.trigger('addApplets', { triggerElement: this.getOption('optionsButton') });
         }
     });
     ADK.Messaging.trigger('register:component', {
-        type: "contextNavigationItem",
-        group: ["patient","patient-right"],
+        type: "workspaceSelectorOption",
+        group: ["patient"],
         key: "workspaceEditorButton",
         view: WorkspaceEditorButton,
-        orderIndex: 5,
+        orderIndex: 10
     });
 
     return WorkspaceEditorButton;

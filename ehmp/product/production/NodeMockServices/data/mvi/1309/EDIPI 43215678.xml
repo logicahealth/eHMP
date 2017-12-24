@@ -54,11 +54,11 @@
             </registrationEvent>
         </subject>
         <queryAck>
-            <queryId root="1.2.840.114350.1.13.99999.4567.34" extension="MCID-YOUR_IDENTIFIER_001"/>
+            <queryId root="1.2.840.114350.1.13.PORT9.4567.34" extension="MCID-YOUR_IDENTIFIER_001"/>
             <queryResponseCode code="OK"/>
         </queryAck>
         <queryByParameter>
-            <queryId root="1.2.840.114350.1.13.99999.4567.34" extension="MCID-YOUR_IDENTIFIER_001"/>
+            <queryId root="1.2.840.114350.1.13.PORT9.4567.34" extension="MCID-YOUR_IDENTIFIER_001"/>
             <statusCode code="new"/>
             <responsePriorityCode code="I"/>
             <parameterList>

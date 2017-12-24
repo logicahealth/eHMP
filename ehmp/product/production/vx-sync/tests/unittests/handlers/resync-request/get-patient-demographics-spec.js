@@ -14,18 +14,18 @@ var config = {
 };
 
 var demographicsData = {
-    "apiVersion": "1.0",
-    "data": {
-        "updated": 20160216141659,
-        "totalItems": 2,
-        "currentItemCount": 2,
-        "items": [
+    'apiVersion': '1.0',
+    'data': {
+        'updated': 20160216141659,
+        'totalItems': 2,
+        'currentItemCount': 2,
+        'items': [
             {
-                "pid": "9343;23",
-                "displayName": "Ten,Patient"},
+                'pid': '9343;23',
+                'displayName': 'Ten,Patient'},
             {
-                "pid": "DOD;443343",
-                "displayName": "Ten,Patient"}
+                'pid': 'DOD;443343',
+                'displayName': 'Ten,Patient'}
         ]
     }};
 
@@ -33,7 +33,7 @@ describe('When get patient demographics', function() {
     var environment, job, callback, called, calledError;
 
     beforeEach(function() {
-        job = {"patientIdentifier": {"type": "icn", "value": "10110V004877"}};
+        job = {'patientIdentifier': {'type': 'icn', 'value': '10110V004877'}};
 
         environment = {jds: new JdsClientDummy(log, config)};
 
@@ -43,68 +43,53 @@ describe('When get patient demographics', function() {
         };
     });
 
-    it('verify icn demographics added to job', function() {
+    it('verify icn demographics added to job', function(done) {
         environment.jds._setResponseData([null], [{statusCode: 200}], demographicsData);
 
-        getDemographics.loadDemographics(environment, log, job, callback)
-
-        waitsFor(function() {return called;}, 'should be called', 100);
-
-        runs(function() {
-            expect(calledError).toBeFalsy();
+        getDemographics.loadDemographics(environment, log, job, function(error){
+            expect(error).toBeFalsy();
             expect(job.demographics).toBeDefined();
             expect(job.demographics.pid).toBe('9343;23');
+            done();
         });
     });
 
-    it('verify dod demographics added to job', function() {
+    it('verify dod demographics added to job', function(done) {
         environment.jds._setResponseData([null], [{statusCode: 200}], demographicsData);
-        var dodJob = {"patientIdentifier": {"type": "pid", "value": "DOD;443343"}}
+        var dodJob = {'patientIdentifier': {'type': 'pid', 'value': 'DOD;443343'}};
 
-        getDemographics.loadDemographics(environment, log, dodJob, callback)
-
-        waitsFor(function() {return called;}, 'should be called', 100);
-
-        runs(function() {
-            expect(calledError).toBeFalsy();
+        getDemographics.loadDemographics(environment, log, dodJob, function(error){
+            expect(error).toBeFalsy();
             expect(dodJob.demographics).toBeDefined();
             expect(dodJob.demographics.pid).toBe('DOD;443343');
+            done();
         });
     });
 
-    it('verify error returned if no demographics found', function() {
+    it('verify error returned if no demographics found', function(done) {
         environment.jds._setResponseData([null], [{statusCode: 200}], {});
 
-        getDemographics.loadDemographics(environment, log, job, callback)
-
-        waitsFor(function() {return called;}, 'should be called', 100);
-
-        runs(function() {
-            expect(calledError).not.toBeFalsy();
+        getDemographics.loadDemographics(environment, log, job, function(error){
+            expect(error).not.toBeFalsy();
+            done();
         });
     });
 
-    it('verify error returned if error returned from jds', function() {
-        environment.jds._setResponseData(["Connection Error"], [null], null);
+    it('verify error returned if error returned from jds', function(done) {
+        environment.jds._setResponseData(['Connection Error'], [null], null);
 
-        getDemographics.loadDemographics(environment, log, job, callback)
-
-        waitsFor(function() {return called;}, 'should be called', 100);
-
-        runs(function() {
-            expect(calledError).not.toBeFalsy();
+        getDemographics.loadDemographics(environment, log, job, function(error){
+            expect(error).not.toBeFalsy();
+            done();
         });
     });
 
-    it('verify error returned if error response returned from jds', function() {
+    it('verify error returned if error response returned from jds', function(done) {
         environment.jds._setResponseData([null], [{statusCode: 500}], {error: 'error'});
 
-        getDemographics.loadDemographics(environment, log, job, callback)
-
-        waitsFor(function() {return called;}, 'should be called', 100);
-
-        runs(function() {
-            expect(calledError).not.toBeFalsy();
+        getDemographics.loadDemographics(environment, log, job, function(error){
+            expect(error).not.toBeFalsy();
+            done();
         });
     });
 });

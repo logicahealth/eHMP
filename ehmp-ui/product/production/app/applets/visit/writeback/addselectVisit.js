@@ -384,7 +384,6 @@ define([
                 type: 'submit',
                 id: 'viewEncounters-btn',
                 label: 'Set',
-                title: 'Press enter to confirm.',
                 disabled: true,
                 extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                 name: 'set'
@@ -653,7 +652,7 @@ define([
                         ].join('\n'))
                     });
                     var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                        template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'].join('\n')),
+                        template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm"}}']),
                         events: {
                             'click button': function() {
                                 ADK.UI.Alert.hide();
@@ -946,8 +945,7 @@ define([
             // appointments
             var criteria = ADK.SessionStorage.get.sessionModel('user', 'SessionStorage');
             var site = criteria.get("site");
-            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-            var currentPatientPID = currentPatient.get('pid');
+            var currentPatientPID = ADK.PatientRecordService.getCurrentPatient().getIdentifier();
             var fromDate = this.model.get('clinicAppointmentsFromDate');
             var toDate = this.model.get('clinicAppointmentsThroughDate');
             var appointmentsCriteria = {

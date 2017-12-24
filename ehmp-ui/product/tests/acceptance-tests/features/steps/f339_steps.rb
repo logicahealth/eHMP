@@ -1,186 +1,219 @@
-class WorkspaceManager2 < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    workspace_list = AccessHtmlElement.new(:css, 'div.workspace-table div.table-row')
-    add_verify(CucumberLabel.new('Workspace List'), VerifyXpathCount.new(workspace_list), workspace_list)
+class WorkspaceActions
+  extend ::RSpec::Matchers
 
-    # Predefined workspaces
-    add_predefinded_workspace('Coversheet', 'cover-sheet')
-    add_predefinded_workspace('Timeline', 'news-feed')
-    add_predefinded_workspace('Overview', 'overview')
-    add_predefinded_workspace('Meds Review', 'medication-review')
-    add_predefinded_workspace('Documents', 'documents-list')
-    add_predefinded_workspace('Summary', 'summary')
-
-    # user defined workspace
-    add_verify(CucumberLabel.new('User Defined Workspace 1'), HasFocus.new('#title-user-defined-workspace-1'), AccessHtmlElement.new(:css, '[data-screen-id=user-defined-workspace-1]'))
-    add_action(CucumberLabel.new('User Defined Workspace 1 title'), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, '#title-user-defined-workspace-1'))
-    add_verify(CucumberLabel.new('User Defined Workspace astrik'), VerifyText.new, AccessHtmlElement.new(:css, '[data-screen-id=user-defined-workspace-1] .fa-asterisk'))
+  def self.workspace_manager_displayed
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @ehmp = PobWorkspaceManager.new
+    @ehmp.wait_for_fld_workspace_manager_title
+    expect(@ehmp.has_fld_workspace_manager_title?).to eq(true)
+    wait_for_jquery_to_return
+    wait.until { @ehmp.fld_all_screens.length > 0 }
+    wait_for_screen_clear
   end
 
-  def add_predefinded_workspace(label, id)
-    add_verify(CucumberLabel.new(label), VerifyText.new, AccessHtmlElement.new(:css, "[data-screen-id=#{id}]"))
-    add_verify(CucumberLabel.new("#{label} lock"), VerifyText.new, AccessHtmlElement.new(:css, "[data-screen-id=#{id}] div.table-cell:nth-child(8) i.fa-lock"))
+  def self.workspace_editor_displayed
+    page = WorkspaceEditor.new
+    page.wait_for_editor_window
+    page.wait_for_window_title
+    page.wait_for_btn_accept
+    page.wait_for_fld_applet_carousel
+    page.wait_for_fld_visual_boundary
+
+    expect(page).to have_editor_window
+    expect(page).to have_window_title
+    expect(page).to have_btn_accept
+    expect(page).to have_fld_applet_carousel
+    expect(page).to have_fld_visual_boundary
+  end
+
+  def self.perform_udw_delete(screenid)
+    p "deleting udw #{screenid}"
+    manager = PobWorkspaceManager.new
+    manager.add_user_defined_workspace_elements screenid
+    expect(manager).to have_btn_delete
+    manager.btn_delete.click
+
+    alert = PobAlert.new
+    expect(alert.wait_for_btn_delete).to eq(true)
+    alert.btn_delete.click
+    begin
+      alert.wait_until_btn_delete_invisible
+      true
+    rescue Exception => e
+      p "Error deleting UDW: #{e}"
+      false
+    end
+  end
+
+  def self.delete_first_udw
+    manager = PobWorkspaceManager.new
+    first_uwd = manager.fld_userdefined_screens.first
+    return perform_udw_delete first_uwd['data-screen-id']
+  end
+
+  def open_workspace_management_applet
+    p "open_workspace_management_applet"
+    manager = PobWorkspaceManager.new
+    @ehmp = PobCommonElements.new
+    expect(@ehmp.has_btn_workspace_manager?).to eq(true)
+    @ehmp.btn_workspace_manager.click
+
+    manager.wait_for_fld_applet
+    expect(manager).to have_fld_applet
   end
 end
 
 When(/^the Workspace Manager is displayed$/) do
-  elements = WorkspaceManager2.instance
-  @ehmp = PobWorkspaceManager.new
-  expect(@ehmp.has_fld_workspace_manager_title?).to eq(true)
-  expect(elements.wait_until_xpath_count_greater_than('Workspace List'))
+  WorkspaceActions.workspace_manager_displayed
 end
 
 When(/^the predefined screens have a visual indicator indicating they are locked$/) do |table|
-  elements = WorkspaceManager2.instance
-  table.rows.each do | row |
-    expect(elements.static_dom_element_exists? row[0]).to eq(true), "#{row[0]} screen does not exist"
-    expect(elements.static_dom_element_exists? "#{row[0]} lock").to eq(true), "#{row[0]} screen does not display lock icon"
+  page = PobWorkspaceManager.new
+  page.wait_for_fld_predefined_screens
+  table.rows.each do | label, value |
+    page.add_predefined_workspace(value)
+    expect(page).to have_predefined_row, "Did not find a row for #{label}"
+    expect(page).to have_predefined_delete_lock, "Did not find lock for #{label}"
   end
-  # #cover-sheet div.table-cell:nth-child(9) i.fa-lock
 end
 
 When(/^the user creates a user defined workspace$/) do
-  screen_manager = ScreenManager.instance
-  workspace_manager = WorkspaceManager.instance
+  manager = PobWorkspaceManager.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
 
-  num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
-  expect(screen_manager.perform_action("Plus Button")).to be_true, "Error when attempting to click Add Workspace"
-  workspace_manager.wait_until_xpath_count_greater_than('ud workspace count', num_user_defined_workspace)
-  new_num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
+  num_user_defined_workspace = manager.fld_userdefined_screens.length
+  manager.wait_for_btn_add_workspace
+  expect(manager).to have_btn_add_workspace
+  manager.btn_add_workspace.click
+  wait.until { manager.fld_userdefined_screens.length > num_user_defined_workspace }
+  new_num_user_defined_workspace = manager.fld_userdefined_screens.length
   expect(num_user_defined_workspace + 1).to eq(new_num_user_defined_workspace), 'New workspace was not added'
 end
 
 Then(/^the new user defined workspace title edit box has focus$/) do
+  page = PobWorkspaceManager.new
   driver = TestSupport.driver
-  # p driver.switch_to().active_element()
-  # p driver.find_element(:id, 'tile-user-defined-workspace-1')
-  expect(driver.switch_to.active_element).to eq(driver.find_element(:id, 'title-user-defined-workspace-1'))
+
+  page.add_user_defined_workspace_elements(PobWorkspaceManager.default_new_uwd)
+  page.wait_for_input_title
+  expect(page).to have_input_title
+  expect(driver.switch_to.active_element).to eq(page.input_title.native)
 end
 
 When(/^the user removes the content in the title field$/) do
-  elements = WorkspaceManager2.instance
-  expect(elements.perform_action('User Defined Workspace 1 title', '')).to eq(true)
+  page = PobWorkspaceManager.new
+
+  page.add_user_defined_workspace_elements(PobWorkspaceManager.default_new_uwd)
+  page.wait_for_input_title
+  expect(page).to have_input_title
+
+  page.input_title.native.send_keys [:end]
+  page.input_title.native.send_keys [:shift, :home], :backspace
 end
 
 Then(/^an icon displays indicating a required field$/) do
-  elements = WorkspaceManager2.instance
-  expect(elements.wait_until_element_present('User Defined Workspace astrik')).to eq(true)
+  page = PobWorkspaceManager.new
+  page.add_user_defined_workspace_elements(PobWorkspaceManager.default_new_uwd)
+  page.wait_for_required_astrik
+  expect(page).to have_required_astrik
 end
 
 When(/^the user attempts to delete the user defined workspace named "(.*?)"$/) do |element_id|
-  elements = WorkspaceManager.instance
   p "delete workspace #{element_id}"
-  elements.add_action(CucumberLabel.new('Delete workspace'), ClickAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{element_id}] button.delete-worksheet"))
-  expect(elements.perform_action('Delete workspace')).to eq(true)
-end
-
-Then(/^an alert saying "(.*?)" contains$/) do |arg1, table|
-  elements = WorkspaceManager.instance
-  expect(elements.perform_verification('Alert title', arg1)).to eq(true)
-  table.rows.each do | row |
-    expect(elements.wait_until_element_present("Alert Confirm #{row[0]}")).to eq(true)
-  end
+  page = PobWorkspaceManager.new
+  page.add_user_defined_workspace_elements element_id
+  expect(page).to have_btn_delete
+  page.btn_delete.click
 end
 
 When(/^the user chooses to cancel the Delete Workspace action$/) do
-  elements = WorkspaceManager.instance
-  expect(elements.perform_action('Alert Confirm Cancel')).to eq(true)
+  alert = PobAlert.new
+  alert.wait_for_btn_cancel
+  expect(alert).to have_btn_cancel
+  alert.btn_cancel.click
 end
 
 Then(/^the alert closes$/) do
-  elements = WorkspaceManager.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds # wait until list opens
-  wait.until { (elements.am_i_visible? 'Alert title') == false } # wait until specific list element is shown
-  sleep 10
+  alert = PobAlert.new
+  alert.wait_until_mdl_alert_title_invisible
 end
 
 When(/^the user chooses to complete the Delete Workspace action$/) do
-  elements = WorkspaceManager.instance
-  expect(elements.perform_action('Alert Confirm Delete')).to eq(true)
+  alert = PobAlert.new
+  expect(alert).to have_btn_delete
+  alert.btn_delete.click
+  wait_for_screen_clear
 end
 
 Then(/^the user defined workspace named "(.*?)" is not listed$/) do |arg1|
-  elements = WorkspaceManager.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds # wait until list opens
-  elements.add_action(CucumberLabel.new("#{arg1} workspace"), ClickAction.new, AccessHtmlElement.new(:css, "##{arg1}"))
-  wait.until { (elements.am_i_visible? "#{arg1} workspace") == false } # wait until specific list element is shown
+  page = PobWorkspaceManager.new
+  all_screens = page.fld_all_screens
+  all_data_screen_ids = all_screens.map { |element| element['data-screen-id'] }
+  expect(all_data_screen_ids).to_not include arg1
+  expect(page.all_titles).to_not include arg1
 end
 
 When(/^the user creates a user defined workspace and sets the title to a string of length 30$/) do
   title = "aaaaabbbbbaaaaabbbbbaaaaabbbbb"
   expect(title.length).to eq(30)
   @title = title
-  workspace_manager = WorkspaceManager.instance
-  navigation = Navigation.instance
-  screen_manager = ScreenManager.instance
-  workspace_name = title
 
-  open_workspace_management_applet unless workspace_manager.am_i_visible? 'Workspace Manager applet'
-  num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  page = PobWorkspaceManager.new
 
-  expect(screen_manager.perform_action("Plus Button")).to be_true, "Error when attempting to click Add Workspace"
-
-  workspace_manager.wait_until_xpath_count_greater_than('ud workspace count', num_user_defined_workspace)
-  new_num_user_defined_workspace = workspace_manager.get_elements("ud workspace count").size
+  num_user_defined_workspace = page.fld_userdefined_screens.length
+  expect(page.wait_for_btn_add_workspace).to eq(true)
+  page.btn_add_workspace.click
+  wait.until { page.fld_userdefined_screens.length > num_user_defined_workspace }
+  new_num_user_defined_workspace = page.fld_userdefined_screens.length
   expect(num_user_defined_workspace + 1).to eq(new_num_user_defined_workspace), 'New workspace was not added'
 
-  new_ws_id = workspace_manager.get_elements("ud workspace count")[-1].attribute('data-screen-id')
-  
-  workspace_manager.add_action(CucumberLabel.new('workspace title input'), SelectAllSendKeysAndEnterActionNoClear.new, AccessHtmlElement.new(:css, "[data-screen-id=#{new_ws_id}] input"))
-
-  workspace_manager.add_verify(CucumberLabel.new("#{workspace_name} workspace"), VerifyValue.new, AccessHtmlElement.new(:css, "[data-screen-id=#{workspace_name.downcase}] .editor-title input"))
-  
-  expect(workspace_manager.perform_action('workspace title input', workspace_name)).to eq(true)
+  new_ws_id = page.fld_userdefined_screens.last['data-screen-id']
+  page.add_user_defined_workspace_elements new_ws_id
+  expect(page).to have_input_title
+  page.input_title.native.send_keys [:shift, :home], :backspace
+  page.input_title.native.send_keys @title
+  page.input_title.native.send_keys :enter
+  wait_for_screen_clear
 end
 
 Then(/^the user defined workspace name is listed$/) do
   expect(@title).to_not be_nil
 
-  elements = WorkspaceManager.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds # wait until list opens
-  elements.add_action(CucumberLabel.new("#{@title} workspace"), ClickAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{@title}]"))
-  wait.until { method_and_print @title }
+  page = PobWorkspaceManager.new
+  expect(page.screens_with_editable_titles).to include @title
 end
 
-def method_and_print(arg1)
-  elements = WorkspaceManager.instance
-  driver = TestSupport.driver
-  what = driver.find_elements(:css, 'div.user-defined')
-  what.each do | ele |
-    p ele.attribute('id')
+Then(/^the user defined workspace data screen id "(.*?)" is listed$/) do |arg1|
+  page = PobWorkspaceManager.new
+  start_time = Time.now
+  wait_for = 5
+  all_data_screen_ids = []
+  begin
+    all_screens = page.fld_all_screens
+    all_data_screen_ids = all_screens.map { |element| element['data-screen-id'] }
+    expect(all_data_screen_ids).to include arg1
+    p all_data_screen_ids.to_s
+    wait_for_jquery_to_return
+  rescue Exception => e
+    retry if Time.now < start_time + wait_for
+    p "failed: #{all_data_screen_ids}"
+    raise e
   end
-  (elements.am_i_visible? "#{arg1} workspace")
-end
-
-Then(/^the user defined workspace name "(.*?)" is listed$/) do |arg1|
-  elements = WorkspaceManager.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds # wait until list opens
-  elements.add_action(CucumberLabel.new("#{arg1} workspace"), ClickAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{arg1}]"))
-  # wait.until { (elements.am_i_visible? "#{arg1} workspace") } # wait until specific list element is shown
-  wait.until { method_and_print arg1 }
-end
-
-def workspace_is_active(workspace_id)
-  elements = WorkspaceManager.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => 10)
-  elements.add_verify(CucumberLabel.new("#{workspace_id} default workspace"), VerifyText.new, AccessHtmlElement.new(:css, "[data-screen-id=#{workspace_id}] .default-workspace-btn i.madeDefault"))
-  wait.until { elements.am_i_visible? "#{workspace_id} default workspace" }
-  true
-rescue
-  false
 end
 
 When(/^the user sets the "(.*?)" as the active workspace$/) do |arg1|
-  elements = WorkspaceManager.instance
-  elements.add_action(CucumberLabel.new("set #{arg1} default workspace"), ClickAction.new, AccessHtmlElement.new(:css, "[data-screen-id=#{arg1}] .default-workspace-btn"))
-  expect(elements.perform_action("set #{arg1} default workspace")).to eq(true)
-  expect(workspace_is_active(arg1)).to eq(true)
+  page = PobWorkspaceManager.new
+  expect(page.click_workspace_default(arg1)).to eq(true)
+  p page.default_workspace['data-screen-id']
+  expect(page.default_workspace['data-screen-id']).to eq(arg1)
 end
 
 Then(/^the workspace named "(.*?)" is the active workspace$/) do |arg1|
-  expect(workspace_is_active(arg1)).to eq(true)
+  page = PobWorkspaceManager.new
+
+  p page.default_workspace['data-screen-id']
+  expect(page.default_workspace['data-screen-id']).to eq(arg1)
 end
 
 Then(/^the title cannot be changed for predefined screens$/) do |table|
@@ -215,12 +248,6 @@ Then(/^an alert with the title "(.*?)" displays$/) do |title|
   @ehmp.wait_until_mdl_alert_region_visible
   @ehmp.wait_until_mdl_alert_title_visible
   expect(@ehmp.mdl_alert_title.text.upcase).to have_text(title.upcase)
-end
-
-Then(/^the Workspace Manager title is "([^"]*)"$/) do |title|
-  @ehmp = PobWorkspaceManager.new unless @ehmp.is_a? PobWorkspaceManager
-  expect(@ehmp.has_fld_workspace_manager_title?).to eq(true)
-  expect(@ehmp.fld_workspace_manager_title.text.downcase).to eq(title.downcase)
 end
 
 Then(/^the Workspace Manager displays a Close button$/) do

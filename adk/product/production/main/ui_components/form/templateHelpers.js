@@ -41,11 +41,13 @@ define([
         return (_.isUndefined(bool) ? undefined : !bool);
     });
     Handlebars.registerHelper("include", function(list, value, options) {
+        var stringValue = value;
+        if (stringValue) stringValue = stringValue.toString();
         if (_.isString(list)) {
-            return (list === value) ? options.fn(this) : options.inverse(this);
+            return (list === stringValue) ? options.fn(this) : options.inverse(this);
         }
 
-        if (_.includes(list, value)) {
+        if (_.includes(list, stringValue)) {
             return options.fn(this);
         } else {
             return options.inverse(this);
@@ -57,8 +59,9 @@ define([
             options = options.hash || {};
             var hbEscape = Handlebars.Utils.escapeExpression;
 
-            var forID, srOnlyLabel, extraClasses, content, extraClassLogic, classString;
+            var forID, srOnlyLabel, extraClasses, content, extraClassLogic, classString, id;
             forID = options.forID || "";
+            id = options.id || "";
             srOnlyLabel = (_.isBoolean(options.srOnlyLabel) ? options.srOnlyLabel : false);
             extraClasses = (_.isArray(options.classes) ? hbEscape(options.classes.toString().replace(/,/g, ' ')) : hbEscape(options.classes || ""));
             content = options.content || "";
@@ -67,7 +70,9 @@ define([
             classString = _.isEmpty(classString) ? '' : ' class="'+classString+'"';
 
             var htmlString = [
-                '<label for="' + forID + '"' + classString + '>',
+                '<label for="' + forID + '"' + classString +
+                (_.isEmpty(id) ? '' : ' id="' + id + '"') +
+                '>',
                 (content ? content +'\n' : '') +
                 (srOnlyLabel ? '<span class="sr-only">' + labelText + '</span>': labelText),
                 '</label>'
@@ -124,10 +129,13 @@ define([
             options = options.hash || {};
             var hbEscape = Handlebars.Utils.escapeExpression;
 
-            var title, value, helpMessage, size, id, extraClasses, standAloneForm, required, disabled, errorMessageClass, buttonOptions, icon;
+            var label, title, value, helpMessage, size, id, extraClasses, standAloneForm, required, disabled, errorMessageClass, buttonOptions, icon, instructions;
             placeholderText = hbEscape(placeholderText || "");
+            label = hbEscape(options.label || "");
             title = hbEscape(options.title || placeholderText);
+            label = label.length > 0 ? label : (placeholderText.length > 0 ? placeholderText : title.length > 0 ? title : 'Search');
             value = options.value || "";
+            instructions = hbEscape(options.instructions || "");
             helpMessage = options.helpMessage || "";
             size = hbEscape(parseInt(options.size) || 12);
             id = hbEscape(root.id || options.id || "defaultResponsiveSearchBar");
@@ -139,19 +147,20 @@ define([
             errorMessageClass = ClassDefinitions.helpMessageClassName ? ' class="'+ClassDefinitions.helpMessageClassName+'"' : '';
             buttonOptions = _.extend({
                 type: 'button',
-                title: 'Press enter to search, then view results below',
+                title: 'Search for results',
                 id: id + 'Btn',
                 srOnlyLabel: true,
                 icon: 'fa-search',
                 extraClasses: "",
-                label: 'search',
-                hidden: false
+                label: 'Search',
+                hidden: false,
+                attributes: ''
             },options.buttonOptions, {
                 size: size,
                 disabled: disabled
             });
             buttonOptions.extraClasses = (_.isArray(buttonOptions.extraClasses) ? hbEscape(buttonOptions.extraClasses.toString().replace(/,/g, ' ')) : hbEscape(buttonOptions.extraClasses || ""));
-            buttonOptions.classes = buttonOptions.extraClasses + ' box-shadow-no text-search btn btn-primary btn-sm';
+            buttonOptions.classes = 'box-shadow-no text-search btn btn-sm ' + (buttonOptions.extraClasses || 'btn-primary');
             var showSubmit = _.isBoolean(buttonOptions.hidden) ? !buttonOptions.hidden : true;
             var showClearButton = _.isString(value) && !_.isEmpty(value);
             buttonOptions = {
@@ -167,9 +176,10 @@ define([
 
             var htmlString = [
                 (standAloneForm ? '<form action="#" method="post">' : ''),
-                '<div class="row"><div class="col-xs-' + size + ' ' + extraClasses + '">',
+                '<div class="row"><div class="flex-display col-xs-' + size + ' ' + extraClasses + '">',
+                (instructions ? '<button type="button" class="btn btn-icon all-padding-no instructions" id="instructions-'+ id +'" data-toggle="tooltip" data-trigger="hover focus" data-original-title="' + instructions + '"><i class="fa fa-info-circle"></i><span class="sr-only">' + instructions + '</span></button>' : ''),
                 '<div class="input-group'+(showSubmit ? '': ' submit-hidden')+'">',
-                Handlebars.helpers['ui-form-label'].apply(this, [(placeholderText.length > 0 ? placeholderText : title.length > 0 ? title : 'Search'), labelOptions]),
+                Handlebars.helpers['ui-form-label'].apply(this, [label, labelOptions]),
 
                 (icon ?
                 '<div class="input-icon--left" aria-hidden="true">' +
@@ -178,14 +188,16 @@ define([
 
 
                 '<input type="text" class="form-control" autocomplete="off" placeholder="' + placeholderText + '" title="' + title + '" ' +
+                (instructions ? 'aria-describedby="instructions-'+ id +'"' : '') +
                 (disabled ? ' disabled' : '') +
                 (required ? ' required' : '') +
-                ' id="' + id + '" value="' + value + '" />',
+                ' id="' + id + '" value="' + value + '" '+
+                '/>',
                 (showSubmit ? '<div class="input-group-addon">': ''),
-                Handlebars.helpers['ui-button'].apply(this, ['Clear', {
+                Handlebars.helpers['ui-button'].apply(this, ['', {
                     hash: {
                         classes: 'clear-input-btn btn-icon btn-sm color-grey-darkest' + (showClearButton ? '' : ' hidden'),
-                        title: 'Press enter to clear search text',
+                        title: 'Clear search text',
                         icon: 'fa fa-times',
                         srOnlyLabel: true
                     }
@@ -198,7 +210,6 @@ define([
                 '</div>',
                 '</div>', (standAloneForm ? '</form>' : '')
             ].join("\n");
-
             return new Handlebars.SafeString(htmlString);
         }
     };

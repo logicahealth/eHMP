@@ -19,8 +19,8 @@ var RpcParameter = require('./RpcParameter').RpcParameter;
 var defaultConfig = {
     // host: 'IP        ',
     // port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     context: 'VPR UI CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',

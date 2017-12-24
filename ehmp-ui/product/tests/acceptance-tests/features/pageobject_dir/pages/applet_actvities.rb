@@ -9,15 +9,18 @@ class PobActivitesApplet < PobParentApplet
 
   # *****************  All_Field_Elements  ******************* #
   element :fld_consult_modal_title, "[class='panel-title-label']"
-  elements :tbl_activity_rows, "[data-appletid='activities'] tbody tr"  
+  elements :tbl_activity_rows, "[data-appletid='activities'] tbody tr:not(.empty)"  
   elements :fld_add_activities, "#collapse-items-activities li"
-  elements :fld_activity_type, "#data-grid-activities > tbody > tr > td:nth-child(4)"
+  elements :fld_activity_type, "[data-appletid=activities] table > tbody > tr > td:nth-child(5)"
   element :fld_domain_header, "[data-header-instanceid='activities-DOMAIN'] a"
-  elements :fld_domain_column_data, "#data-grid-activities tr.selectable td:nth-child(4)"
+  elements :fld_domain_column_data, "[data-appletid=activities] table tr.selectable td:nth-child(5)"
   element :fld_search_activity, "[id='input-filter-search-activities']"
-  elements :fld_activity_headers, "#data-grid-activities thead tr th"
-  elements :fld_activity_mode_column_data, "#data-grid-activities tr.selectable td:nth-child(11)"
-  elements :fld_activity_created_by_column_data, "#data-grid-activities tr.selectable td:nth-child(8)"
+  elements :fld_activity_headers, "[data-appletid=activities] table thead tr th"
+  elements :fld_activity_mode_column_data, "[data-appletid=activities] table tr.selectable td:nth-child(12)"
+  elements :fld_activity_created_by_column_data, "[data-appletid=activities] table tr.selectable td:nth-child(9)"
+  element :fld_activity_created_on, "[data-header-instanceid='activities-createdOn'] a"
+  elements :fld_activity_created_on_column_data, "[data-appletid=activities] table tr.selectable td:nth-child(11)"
+  elements :fld_activity_column_data, "[data-appletid=activities] table tr.selectable td:nth-child(4)"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_activity_filter, "[id='grid-filter-button-activities']"
@@ -33,6 +36,8 @@ class PobActivitesApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_expanded_applet_fields appletid_css
+    add_toolbar_buttons appletid_css
+    add_text_filter_elements appletid_css
   end
 
   def applet_loaded?(allow_errors = DefaultLogin.local_testrun)

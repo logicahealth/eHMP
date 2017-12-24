@@ -17,7 +17,8 @@ define([
         RIGHT_ARROW_KEY = 39,
         DOWN_ARROW_KEY = 40,
         ENTER_KEY = 13,
-        SPACE_BAR = 32;
+        SPACE_BAR = 32,
+        ESCAPE_KEY = 27;
     var SelectedRowItemView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile([
             '<div class="table-cell{{#each itemColumn.columnClasses}} {{this}}{{/each}}">{{label}}</div>' +
@@ -29,16 +30,13 @@ define([
             '</div>' +
             '{{/if}}' +
             '<div class="table-cell pixel-width-57 text-right">' +
-            '<button type="button" class="btn btn-link add-remove-btn all-padding-no color-red-dark checked-{{value}}" title="Press enter to remove {{label}}.">Remove</button>' +
+            '<button type="button" class="btn btn-link add-remove-btn all-padding-no color-red-dark checked-{{value}}" aria-label="Remove {{label}}">Remove</button>' +
             '</div>'
         ].join("\n")),
         templateHelpers: function() {
-            var self = this;
             return {
-                enablePopovers: function() {
-                    return _.isObject(self.field.get('detailsPopoverOptions'));
-                }
-            };
+              enablePopovers: _.isObject( this.field.get('detailsPopoverOptions') )
+           };
         },
         className: 'table-row',
         events: {
@@ -109,7 +107,7 @@ define([
                     }
                 }, detailsPopoverOptions), {
                     control: 'popover',
-                    label: 'Press enter to view details and then press T to access the table.',
+                    label: 'View details. Use Alt + P to access details when expanded.',
                     srOnlyLabel: true,
                     name: 'detailsPopoverValue',
                     icon: 'fa-file-text-o',
@@ -274,16 +272,23 @@ define([
             '<div class="table-cell pixel-width-57 text-right">' +
             '<button tabindex="-1" type="button" ' +
                 'class="btn btn-link add-remove-btn all-padding-no checked-{{value}}' +'{{#if value}} color-grey-darkest{{/if}}" ' +
-                'title="Press enter to {{#if value}}remove{{else}}add{{/if}} {{label}}.">{{#if value}}Remove{{else}}Add{{/if}}' +
+                'aria-label="{{#if value}}Remove{{else}}Add{{/if}} {{label}}">{{#if value}}Remove{{else}}Add{{/if}}' +
             '</button>' +
             '</div>'
         ].join("\n")),
+        templateHelpers: function() {
+            return {
+              enablePopovers: _.isObject( this.field.get('detailsPopoverOptions') )
+           };
+        },
         className: 'table-row',
         attributes: function(){
+            var detailsText = !!this.getOption('field').get('detailsPopoverOptions') ? '. Use Right arrow to open additional details and then Alt + P to access content' : '';
             return {
                 'role': 'option',
                 'id': this.cid,
-                'aria-selected': this.model.get('booleanValue')
+                'aria-selected': this.model.get('booleanValue'),
+                'aria-label': this.model.get(this.getOption('attributeMapping').label) + detailsText 
             };
         },
         events: {
@@ -338,7 +343,7 @@ define([
                     }
                 }, detailsPopoverOptions), {
                     control: 'popover',
-                    label: 'Press enter to view details and then press T to access the table.',
+                    label: 'Item has additional details',
                     srOnlyLabel: true,
                     name: 'detailsPopoverValue',
                     icon: 'fa-file-text-o',
@@ -372,7 +377,7 @@ define([
             var popoverId = this.$('.popover-control button').attr('aria-describedby');
             var popover = $('#' + popoverId);
             var isPopoverElement = false;
-            if (!_.isUndefined(e)) {
+            if (!_.isUndefined(e) && !_.isEmpty(popover)) {
                 isPopoverElement = $.contains(popover.get(0), e.relatedTarget);
             }
             if (this.enablePopovers && !isPopoverElement) {
@@ -385,14 +390,6 @@ define([
             this.model.set(this.attributeMapping.value, value);
             this.buildPopover();
             this.$el.trigger('mssbs.change.user.input');
-        },
-        templateHelpers: function() {
-            var self = this;
-            return {
-                enablePopovers: function() {
-                    return _.isObject(self.field.get('detailsPopoverOptions'));
-                }
-            };
         },
         serializeModel: function(model) {
             var self = this;
@@ -428,11 +425,11 @@ define([
             '<label for="available-{{clean-for-id label}}-modifiers-filter-results" class="sr-only">Available {{label}} Filter</label>',
             '<i class="fa fa-filter"></i>',
             '<input id="available-{{clean-for-id label}}-modifiers-filter-results" type="text" class="form-control input-sm filter" placeholder="Filter {{label}}" ',
-                'role="combobox" aria-owns="{{listboxId}}" aria-expanded="true" aria-autocomplete="list" aria-activedescendant="" name="available-{{clean-for-id label}}-filter" ',
-                'title="Enter text to filter the {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}. Use the up and down arrow keys to cycle through the list of {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}available {{label}}{{/if}}.{{#if detailsPopoverOptions}} Use the right arrow key to view details.{{/if}}"/>',
-            '<button class="clear-input hidden btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear text">',
+                'role="combobox" aria-describedby="{{clean-for-id label}}Description" aria-controls="{{listboxId}}" aria-expanded="true" aria-autocomplete="list" aria-activedescendant="" name="available-{{clean-for-id label}}-filter" />',
+            '<button class="clear-input hidden btn btn-icon btn-sm color-grey-darkest" type="button" title="Clear filter text" aria-label="Clear filter text">',
             '<i class="fa fa-times"></i>',
             '</button>',
+            '<div id="{{clean-for-id label}}Description" class="sr-only" aria-hidden="true">Use the down arrow key to browse results. You can select more than one.</div>',
             '<span class="loading hidden"><i class="fa fa-spinner fa-spin"></i></span>',
             '</div>',
             '</div>',
@@ -511,7 +508,7 @@ define([
                         if (triggeredFromPopover && !isAltOrCtrl) {
                             this.ui.FilterInput.focus();
                         } else {
-                            this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
+                            this.$el.find('.table-row:not(.active) .popover-control button').trigger('control:popover:hidden', true);
                             this.toggleDetailsPopoverOnSelectedRow();
                         }
                     }
@@ -535,9 +532,13 @@ define([
                         itemColumnTitle = itemColumnTitle.columnTitle || 'selected ' + this.model.get('label');
                         Accessibility.Notification.new({
                             'type': 'Assertive',
-                            'message': modelToChange.get(this.attributeMapping.label) + ' has been' + actionVerb + itemColumnTitle + ' list.'
+                            'message': modelToChange.get(this.attributeMapping.label) + actionVerb + itemColumnTitle + ' list.'
                         });
                     }
+                } else if (event.keyCode === ESCAPE_KEY && this.$('.popover-shown').length > 0) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.$('button.popover-shown').popover('hide');
                 } else {
                     if (accessPopoverContent) {
                         if (this._currentRowId != -1) {
@@ -644,10 +645,6 @@ define([
                 var actionVerb = modelToChange.get(this.attributeMapping.value) ? ' remove from the ' : ' add to the ',
                     itemColumnTitle = this.model.get('itemColumn') || {};
                 itemColumnTitle = itemColumnTitle.columnTitle || 'selected ' + this.model.get('label');
-                Accessibility.Notification.new({
-                    'type': 'Assertive',
-                    'message': this.collection.at(indexToSelect).get(this.attributeMapping.label) + '. Press enter to' + actionVerb + itemColumnTitle + ' list or press right arrow to view more details.'
-                });
             }
         },
         toggleDetailsPopoverOnSelectedRow: function(event) {
@@ -689,13 +686,13 @@ define([
                 }
                 Accessibility.Notification.new({
                     'type': 'Assertive',
-                    'message': "'" + filterString + "' has been used to filter the " + itemColumnTitle + ". There are now " + this.collection.length + " " + itemColumnTitle + " in the list."
+                    'message': itemColumnTitle + " filtered using: " + filterString + ". " + this.collection.length + " results."
                 });
             } else {
                 this.resetItems();
                 Accessibility.Notification.new({
                     'type': 'Assertive',
-                    'message': "The filter has been removed from the " + itemColumnTitle + " list. There are now " + this.collection.length + " " + itemColumnTitle + " in the list."
+                    'message': "No filter applied. Showing all " + this.collection.length + " " + itemColumnTitle + "."
                 });
             }
             this._lastInputString = filterString;
@@ -838,6 +835,13 @@ define([
         onTogglePopover: function(childView) {
             var clickedPopover = childView.$('.popover-control > button');
             clickedPopover.popover('toggle');
+
+            if(clickedPopover.hasClass('popover-shown')){
+                Accessibility.Notification.new({
+                    'type': 'Assertive',
+                    'message': childView.model.get(childView.attributeMapping.label) + ' details expanded. Use Alt + P to access details.'
+                });
+            } 
         },
         serializeModel: function(model, moreOptions) {
             var field = this.field.toJSON(),

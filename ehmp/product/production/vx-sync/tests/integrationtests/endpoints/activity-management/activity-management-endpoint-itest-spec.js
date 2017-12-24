@@ -4,12 +4,14 @@ require('../../../../env-setup');
 
 var request = require('request');
 var _ = require('underscore');
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
+var vx_sync_port = testConfig.vxsyncPort;
 
 var httpConfig = {
     path: '/activity-management-event',
     method: 'POST',
-    port: '8080',
+    port: vx_sync_port,
     host: vx_sync_ip,
     json: true,
     timeout: 60000
@@ -19,7 +21,7 @@ httpConfig.url = 'http://' + vx_sync_ip + ':' + httpConfig.port + httpConfig.pat
 
 describe('activity-management-endpoint.js', function() {
     beforeEach(function() {
-        // httpConfig.qs = _.clone(query);
+
     });
     it('Error Path: GET to POST endpoint', function() {
         var testConfig = _.extend({}, httpConfig);
@@ -58,12 +60,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -86,12 +88,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -114,12 +116,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -142,12 +144,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -170,12 +172,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -198,9 +200,9 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject'
         };
@@ -222,13 +224,13 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E'
             }
         };
@@ -250,13 +252,13 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -279,13 +281,13 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:user:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:user:SITE:3:3',
+            authorUid: 'urn:va:user:SITE',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }
@@ -308,8 +310,8 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:user:9E7A:3:3',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:user:SITE:3:3',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
@@ -335,12 +337,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 dateTime: '20160118123000'
             }
         };
@@ -362,12 +364,12 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E'
             }
         };
@@ -389,13 +391,13 @@ describe('activity-management-endpoint.js', function() {
         var testConfig = _.extend({}, httpConfig);
         var complete = false;
         var postBody = {
-            uid: 'urn:va:ehmp:9E7A:3:751',
-            patientUid:  'urn:va:patient:9E7A:3:3',
-            authorUid: 'urn:va:user:9E7A:123:123',
+            uid: 'urn:va:ehmp:SITE:3:751',
+            patientUid:  'urn:va:patient:SITE:3:3',
+            authorUid: 'urn:va:user:SITE:123:123',
             domain: 'ehmp-order',
             subDomain: 'noteObject',
             visit: {
-                location: 'urn:va:location:9E7A:1',
+                location: 'urn:va:location:SITE:1',
                 serviceCategory: 'E',
                 dateTime: '20160118123000'
             }

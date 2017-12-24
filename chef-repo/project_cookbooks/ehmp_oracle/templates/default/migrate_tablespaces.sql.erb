@@ -1,0 +1,92 @@
+SET SERVEROUTPUT ON
+DECLARE
+  PROCEDURE move_tables(
+    i_username varchar2,
+    i_tablespace varchar2,
+    i_index_tablespace varchar2)
+  IS
+    table_name varchar2(30);
+    index_name varchar2(30);
+  BEGIN
+    IF i_tablespace IS NOT NULL THEN
+      --migrate tables
+      FOR t IN (SELECT owner, table_name, tablespace_name
+                FROM dba_tables
+                WHERE owner = upper(i_username) AND
+                      tablespace_name <> upper(i_tablespace))
+      LOOP
+        table_name := t.table_name;
+        BEGIN
+          execute immediate 'ALTER TABLE '||i_username||'.'||t.table_name||' MOVE TABLESPACE '||upper(i_tablespace);
+          EXCEPTION
+            WHEN OTHERS THEN
+              DBMS_OUTPUT.PUT_LINE('WARNING - COULD NOT MOVE TABLESPACE FOR TABLE '||i_username||'.'||table_name||' '||SQLCODE||' '||SQLERRM);
+        END;
+        --migrate/rebuild indexes invalidated by table move
+        FOR ti IN (SELECT i.owner, i.index_name, i.tablespace_name, i.index_type, l.table_name, l.column_name
+                   FROM dba_indexes i
+                   LEFT JOIN dba_lobs l ON i.index_name = l.index_name
+                   WHERE i.owner = t.owner AND
+                         i.table_name = t.table_name)
+        LOOP
+          index_name := ti.index_name;
+          BEGIN
+            IF ti.index_type = 'LOB' THEN
+              execute immediate 'ALTER TABLE '||ti.owner||'.'||ti.table_name||' MOVE LOB ('||ti.column_name||') STORE AS (TABLESPACE '||upper(i_tablespace)||')';
+            ELSE
+              execute immediate 'ALTER INDEX '||ti.owner||'.'||ti.index_name||' REBUILD TABLESPACE '||upper(NVL(i_index_tablespace, i_tablespace));
+            END IF;
+            EXCEPTION
+              WHEN OTHERS THEN
+                DBMS_OUTPUT.PUT_LINE('WARNING - COULD NOT MOVE TABLESPACE FOR INDEX '||i_username||'.'||index_name||' '||SQLCODE||' '||SQLERRM);
+          END;
+        END LOOP;
+      END LOOP;
+    END IF;
+
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('WARNING - MIGRATE TABLESPACES MOVE_TABLES FAILED FOR '||i_username||'.'||table_name||' '||SQLCODE||' '||SQLERRM);
+  END;
+
+  PROCEDURE move_indexes(
+    i_username varchar2,
+    i_index_tablespace varchar2)
+  IS
+    index_name varchar2(30);
+  BEGIN
+    IF i_index_tablespace IS NOT NULL THEN
+      FOR i IN (SELECT owner, index_name, tablespace_name 
+                FROM dba_indexes
+                WHERE owner = upper(i_username) AND 
+                      tablespace_name <> upper(i_index_tablespace) AND
+                      index_type <> 'LOB')
+      LOOP
+        index_name := i.index_name;
+        BEGIN
+          execute immediate 'ALTER INDEX '||i.owner||'.'||i.index_name||' REBUILD TABLESPACE '||upper(i_index_tablespace);
+          EXCEPTION
+            WHEN OTHERS THEN
+              DBMS_OUTPUT.PUT_LINE('WARNING - COULD NOT MOVE TABLESPACE FOR INDEX '||i_username||'.'||index_name||' '||SQLCODE||' '||SQLERRM);
+        END;
+      END LOOP;
+    END IF;
+
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('WARNING - MIGRATE TABLESPACES MOVE_INDEXES FAILED FOR '||i_username||'.'||index_name||' '||SQLCODE||' '||SQLERRM);
+  END;
+
+BEGIN
+<%
+@users.each do |name, properties| 
+if properties['tablespace']
+%>
+move_tables('<%= properties['username'] %>', '<%= properties['tablespace'] %>', '<%= properties['index_tablespace'] %>');
+move_indexes('<%= properties['username'] %>', '<%= properties['index_tablespace'] %>');
+<%
+end
+end
+%>
+END;
+/

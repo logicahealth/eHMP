@@ -3,6 +3,92 @@ logrotate Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 logrotate cookbook.
 
+v2.2.0
+------
+# Compatibility Notes
+
+The `compat_resource` dependency was removed. This means we now
+require Chef 12.5 or higher. It also means we now better support Chef
+13.
+
+# Enhancements
+
+- The global configuration now supports scripts.
+- The package install action (upgrade by default) is now configurable
+  via an attribute.
+- The development environment now more closely follows modern cookbook
+  practices.
+
+# Bug Fixes
+
+- ChefSpec matcher now correctly calls ChefSpec.define_matcher.
+-
+# Contributors
+
+- Austin Heiman
+- Baptiste Courtois
+- Bogdan Katynski
+- Thomas Dziedzic
+- Tim Smith
+
+v2.1.0
+------
+
+# Bug Fixes
+
+- Restore `cookbook` parameter for `logrotate_app` resource due to
+  popular demand.
+
+- Add a `template_name` parameter to replace the 1.x `template`
+  parameter. The name `template` can't be used inside a resource
+  without conflicting with an attribute of the same name.
+
+- Fix exception when `options` specified as a string rather than an
+  array
+
+v2.0.0
+------
+
+- Convert the logrotate_app definition to a resource
+- Accept all options included in logrotate 3.9.2
+
+# Known incompatibilities
+
+- The `cookbook` parameter to `logrotate_app` is no longer accepted.
+
+
+v1.9.2
+------
+
+## Bug Fixes
+
+- Fix deprecation warnings from ChefSpec
+
+v1.9.1
+------
+
+## Bug Fixes
+
+- Fixes regression in the sharedscripts logrotate_app
+  parameter (Bug #69)
+
+v1.9.0
+------
+
+### Improvements
+
+- All configuration options from the logrotate 3.8.8 manual page can
+be used by the global configuration and the logrotate_app
+definition.
+
+- Berkshelf is no longer a development dependency of the
+logrotate cookbook.
+
+- Rubocop lint failures have been resolved.
+
+
+
+
 v1.8.0
 ------
 

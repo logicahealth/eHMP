@@ -17,7 +17,7 @@ Scenario: Client can request Orders in VPR format
 	And the VPR results contain "order results"                                                      
   
 	   | field                                    | panorama_value                                         | 
-	   | uid                                      | urn:va:order:9E7A:100125:14268                         |
+	   | uid                                      | urn:va:order:SITE:100125:14268                         |
 	   | summary                                  | CONTAINS Cleanse wound with betadine and cover with    |
 	   | pid                                      | CONTAINS ;100125                                             |
 	   | localId                                  | 14268                                                  |
@@ -31,28 +31,28 @@ Scenario: Client can request Orders in VPR format
 	   | statusCode                               | urn:va:order-status:actv                               |
 	   | statusName                               | ACTIVE                                                 |
 	   | statusVuid                               | urn:va:vuid:4500659                                    |
-	   | providerUid                              | urn:va:user:9E7A:20001                                 |
+	   | providerUid                              | urn:va:user:SITE:20001                                 |
 	   | providerName                             | VEHU,ONE                                               |
 	   | providerDisplayName                      | Vehu,One                                               |
 	   | service                                  | OR                                                     |
 	   | kind                                     | Nursing Order                                          |
-	   | locationUid                              | urn:va:location:9E7A:5                                 |
+	   | locationUid                              | urn:va:location:SITE:5                                 |
 	   | clinicians.name                          | VEHU,ONE                                               |
 	   | clinicians.role                          | S                                                      |
 	   | clinicians.signedDateTime                | 200304272024                                           |
-	   | clinicians.uid                           | urn:va:user:9E7A:20001                                 |
+	   | clinicians.uid                           | urn:va:user:SITE:20001                                 |
 	   
 @f114_2_order_vpr @vpr
 Scenario: Client can request Orders in VPR format
 	Given a patient with "order results" in multiple VistAs
-	Given a patient with pid "9E7A;164" has been synced through Admin API
-	When the client requests order results for the patient "9E7A;164" in VPR format
+	Given a patient with pid "SITE;164" has been synced through Admin API
+	When the client requests order results for the patient "SITE;164" in VPR format
 	Then a successful response is returned
 	Then the client receives 13 VPR "VistA" result(s)
 	Then the client receives 13 VPR "panorama" result(s)
 	And the VPR results contain "order results"
 		| field										| panorama_value							|
-		| children.uid    							| urn:va:order:9E7A:164:10805				|
+		| children.uid    							| urn:va:order:SITE:164:10805				|
 		| children.summary							| CONTAINS CALCIUM BLOOD   SERUM WC LB		|
 		| children.localId							| 10805										|
 		| children.facilityCode						| 515.6										|
@@ -69,12 +69,12 @@ Scenario: Client can request Orders in VPR format
 		| children.statusCode						| urn:va:order-status:pend					|
 		| children.statusName						| PENDING									|
 		| children.statusVuid						| urn:va:vuid:4501114						|
-		| children.providerUid						| urn:va:user:9E7A:11710					|
+		| children.providerUid						| urn:va:user:SITE:11710					|
 		| children.providerName						| PROVIDER,TWOHUNDREDNINETYFIVE				|
 		| children.providerDisplayName				| Provider,Twohundredninetyfive				|
 		| children.service							| LR										|
 		| children.kind								| Laboratory								|
-		| children.locationUid						| urn:va:location:9E7A:9					|
+		| children.locationUid						| urn:va:location:SITE:9					|
 
 @f114_3_order_vpr @vpr
 Scenario: Client can request Orders in VPR format
@@ -87,7 +87,7 @@ Scenario: Client can request Orders in VPR format
 	And the VPR results contain "order results"                                                      
 	  
 	   | field                                    | kodak_value                                            | 
-	   | uid                                      | urn:va:order:C877:100125:14268                         |
+	   | uid                                      | urn:va:order:SITE:100125:14268                         |
 	   | summary                                  | CONTAINS Cleanse wound with betadine and cover with    |
 	   | pid                                      | CONTAINS ;100125                                       |
 	   | localId                                  | 14268                                                  |
@@ -101,28 +101,28 @@ Scenario: Client can request Orders in VPR format
 	   | statusCode                               | urn:va:order-status:actv                               |
 	   | statusName                               | ACTIVE                                                 |
 	   | statusVuid                               | urn:va:vuid:4500659                                    |
-	   | providerUid                              | urn:va:user:C877:20001                                 |
+	   | providerUid                              | urn:va:user:SITE:20001                                 |
 	   | providerName                             | VEHU,ONE                                               |
 	   | providerDisplayName                      | Vehu,One                                               |
 	   | service                                  | OR                                                     |
 	   | kind                                     | Nursing Order                                          |
-	   | locationUid                              | urn:va:location:C877:5                                 |
+	   | locationUid                              | urn:va:location:SITE:5                                 |
 	   | clinicians.name                          | VEHU,ONE                                               |
 	   | clinicians.role                          | S                                                      |
 	   | clinicians.signedDateTime                | 200304272024                                           |
-	   | clinicians.uid                           | urn:va:user:C877:20001                                 |
+	   | clinicians.uid                           | urn:va:user:SITE:20001                                 |
 	   
 @f114_4_order_vpr @vpr
 Scenario: Client can request Orders in VPR format
 	Given a patient with "order results" in multiple VistAs
-	Given a patient with pid "C877;164" has been synced through Admin API
-	When the client requests order results for the patient "C877;164" in VPR format
+	Given a patient with pid "SITE;164" has been synced through Admin API
+	When the client requests order results for the patient "SITE;164" in VPR format
 	Then a successful response is returned
 	Then the client receives 13 VPR "VistA" result(s)
 	Then the client receives 13 VPR "kodak" result(s)
 	And the VPR results contain "order results"
 		| field										| kodak_value								|
-		| children.uid    							| urn:va:order:C877:164:10805				|
+		| children.uid    							| urn:va:order:SITE:164:10805				|
 		| children.summary							| CONTAINS CALCIUM BLOOD   SERUM WC LB		|
 		| children.localId							| 10805										|
 		| children.facilityCode						| 515.6										|
@@ -139,12 +139,12 @@ Scenario: Client can request Orders in VPR format
 		| children.statusCode						| urn:va:order-status:pend					|
 		| children.statusName						| PENDING									|
 		| children.statusVuid						| urn:va:vuid:4501114						|
-		| children.providerUid						| urn:va:user:C877:11710					|
+		| children.providerUid						| urn:va:user:SITE:11710					|
 		| children.providerName						| PROVIDER,TWOHUNDREDNINETYFIVE				|
 		| children.providerDisplayName				| Provider,Twohundredninetyfive				|
 		| children.service							| LR										|
 		| children.kind								| Laboratory        						|
-		| children.locationUid						| urn:va:location:C877:9					|
+		| children.locationUid						| urn:va:location:SITE:9					|
 	
 # following 2 scenarios are checking for another patient for return of order results.
 # only few fields are checked to validate data integrity.
@@ -152,18 +152,18 @@ Scenario: Client can request Orders in VPR format
 @f114_5_order_vpr @vpr
 Scenario: Client can request the orders results in VPR format
 	Given a patient with "order results" in multiple VistAs
-	Given a patient with pid "9E7A;100184" has been synced through Admin API
-	When the client requests order results for the patient "9E7A;100184" in VPR format
+	Given a patient with pid "SITE;100184" has been synced through Admin API
+	When the client requests order results for the patient "SITE;100184" in VPR format
 	Then a successful response is returned
 	Then the client receives 7 VPR "VistA" result(s)
 	Then the client receives 7 VPR "panorama" result(s)
 	And the VPR results contain "order results"                                                      
 	  
 	   | field                                    | panorama_value                                      | 
-	#   | uid                                      | urn:va:order:9E7A:100184:13194                      |
-	   | uid									  | CONTAINS urn:va:order:9E7A:100184					|
+	#   | uid                                      | urn:va:order:SITE:100184:13194                      |
+	   | uid									  | CONTAINS urn:va:order:SITE:100184					|
 	   | summary                                  | CONTAINS UPPER GI WITH KUB						    |
-	   | pid                                      | 9E7A;100184                                         |
+	   | pid                                      | SITE;100184                                         |
 	   | facilityCode                             | 500                                                 |
 	   | facilityName                             | CAMP MASTER                                       	|
 	   | locationName                             | GENERAL MEDICINE                                    |
@@ -171,7 +171,7 @@ Scenario: Client can request the orders results in VPR format
 	   | entered                                  | 200304151745                                        |
 	   | start                                    | 20030415	                                        |
 	   | displayGroup                             | RAD                                                 |
-	   | providerUid                              | urn:va:user:9E7A:20015                              |
+	   | providerUid                              | urn:va:user:SITE:20015                              |
 	   | providerName                             | VEHU,FIFTEEN                                        |
 	   | kind                                     | Radiology		                                    |
 	   | clinicians.name                          | VEHU,FIFTEEN                                        |
@@ -181,18 +181,18 @@ Scenario: Client can request the orders results in VPR format
 @f114_6_order_vpr @vpr
 Scenario: Client can request the orders results in VPR format
 	Given a patient with "order results" in multiple VistAs
-	Given a patient with pid "C877;167" has been synced through Admin API
-	When the client requests order results for the patient "C877;167" in VPR format
+	Given a patient with pid "SITE;167" has been synced through Admin API
+	When the client requests order results for the patient "SITE;167" in VPR format
 	Then a successful response is returned
 	Then the client receives 3 VPR "VistA" result(s)
 	Then the client receives 3 VPR "kodak" result(s)
 	And the VPR results contain "order results"                                                      
 	  
 	   | field                                    | panorama_value                                      | 
-	#   | uid                                     | urn:va:order:C877:100184:13194                      |
-	   | uid									  | CONTAINS urn:va:order:C877:167						|
+	#   | uid                                     | urn:va:order:SITE:100184:13194                      |
+	   | uid									  | CONTAINS urn:va:order:SITE:167						|
 	   | summary                                  | CONTAINS ALBUTEROL INHALER Use					    |
-	   | pid                                      | C877;167                        	                |
+	   | pid                                      | SITE;167                        	                |
 	   | facilityCode                             | 500                                                 |
 	   | facilityName                             | CAMP BEE                                      		|
 	   | locationName                             | GENERAL MEDICINE                                    |
@@ -200,7 +200,7 @@ Scenario: Client can request the orders results in VPR format
 	   | entered                                  | 200001261419                                        |
 	   | start                                    | 20000126	                                        |
 	   | displayGroup                             | O RX                                                |
-	   | providerUid                              | urn:va:user:C877:923                                |
+	   | providerUid                              | urn:va:user:SITE:923                                |
 	   | providerName                             | PROGRAMMER,TWENTYEIGHT         	                    |
 	   | kind                                     | Medication, Outpatient                              |
 	   | clinicians.name                          | PROGRAMMER,TWENTYEIGHT                              |
@@ -212,7 +212,7 @@ Scenario: Client can request the orders results in VPR format
 @f114_7_order_neg_vpr	
 Scenario: Negative scenario.  Client can request the orders results in VPR format
 	Given a patient with "no order results" in multiple VistAs
-	Given a patient with pid "9E7A;100084" has been synced through Admin API
-	When the client requests order results for the patient "9E7A;100084" in VPR format
+	Given a patient with pid "SITE;100084" has been synced through Admin API
+	When the client requests order results for the patient "SITE;100084" in VPR format
 	Then a successful response is returned
 	Then corresponding matching records totaling "0" are displayed

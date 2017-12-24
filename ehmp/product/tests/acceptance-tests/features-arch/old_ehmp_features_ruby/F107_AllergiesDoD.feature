@@ -38,7 +38,7 @@ Scenario: Client can request DoD allergies in FHIR format
     Then the VPR results contain
       | field             | panorama_value                 |
       | summary           | CHOCOLATE                      |
-      | uid               | urn:va:allergy:9E7A:100716:972 |
+      | uid               | urn:va:allergy:SITE:100716:972 |
       | pid               | CONTAINS ;100716               |
       | facilityCode      | 500                            |
       | facilityName      | CAMP MASTER                    |

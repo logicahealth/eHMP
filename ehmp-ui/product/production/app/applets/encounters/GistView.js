@@ -40,6 +40,34 @@ define([
         });
     };
 
+    var mapQuicklook = function(model) {
+        var kind = model.get('kind');
+        if (!_.isString(kind)) {
+            return '';
+        }
+
+        var isParentTile = !_.isUndefined(model.get('subKindCollection'));
+        var recentJSON = mapRecent(model.get('recent'));
+        var serializedResult = {
+            id: 'encountersTooltip' + kind + 's',
+            allGroupedEncounters: recentJSON,
+            isParentTile: isParentTile
+        };
+
+        switch (kind.toLowerCase()) {
+            case 'admission':
+                return quicklookAdmission(serializedResult);
+            case 'appointment':
+                return quicklookAppointment(serializedResult);
+            case 'procedure':
+                return quicklookProcedure(serializedResult);
+            case 'visit':
+                return quicklookVisit(serializedResult);
+            default:
+                return '';
+        }
+    };
+
     var noRecords = Backbone.Marionette.ItemView.extend({
         template: _.template('<p class="top-padding-xs left-padding-xs color-grey-darkest">No Records Found</p>'),
         attributes: {
@@ -56,40 +84,45 @@ define([
     });
 
     var EventGistRowItem = ADK.Views.EventGist.getRowItem().extend({
-        ui: {
-            popoverEl: '[data-toggle=popover]'
+        behaviors: {
+            QuickLooks: {}
         },
-        mapRecent: mapRecent,
-        mapQuicklook: function(model) {
-            var kind = model.get('kind');
-            if (!_.isString(kind)) return '';
-
-            var recentJSON = mapRecent(model.get('recent'));
-            var serializedResult = {
-                id: 'encountersTooltip' + kind + 's',
-                allGroupedEncounters: recentJSON
-            };
-
-            switch (kind.toLowerCase()) {
-                case 'admission':
-                    return quicklookAdmission(serializedResult);
-                case 'appointment':
-                    return quicklookAppointment(serializedResult);
-                case 'procedure':
-                    return quicklookProcedure(serializedResult);
-                case 'visit':
-                    return quicklookVisit(serializedResult);
+        tileOptions: {
+            primaryAction: {
+                enabled: true,
+                onClick: function(event, model) {
+                    var channel = ADK.Messaging.getChannel('enc_detail_v_a');
+                    var targetElement = this.$el.find('.dropdown--quickmenu > button');
+                    var params = {
+                        $el: targetElement,
+                        model: model,
+                        collection: _.get(model, 'collection')
+                    };
+                    channel.trigger('detailView', params);
+                }
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'detailsviewbutton'
+                }, {
+                    type: 'editviewbutton',
+                    shouldShow: false
+                }]
             }
         },
+        mapRecent: mapRecent,
         serializeData: function() {
             //serialize 'subkind'
             var modelJSON = this.model.toJSON();
             var groupName = modelJSON[util.FILTER_FIELD];
             modelJSON.groupName = groupName;
-            if (!modelJSON.count) modelJSON.count = this.model.get('collection').length;
+            if (!modelJSON.count) {
+                modelJSON.count = this.model.get('collection').length;
+            }
             modelJSON.encounterCount = modelJSON.count;
             modelJSON.timeSince = modelJSON.timeSinceLast;
-            modelJSON.tooltip = this.mapQuicklook(this.model);
+            modelJSON.tooltip = mapQuicklook(this.model);
             modelJSON.id = util.stripCharacters(groupName);
             modelJSON.elKind = util.stripCharacters(modelJSON.kind);
             modelJSON.displayName = modelJSON.id;
@@ -113,7 +146,7 @@ define([
         },
         childEvents: _.extend({
             'dom:refresh': function(child) {
-                if(this._isAnimationFinished) { //for sorting or re-rendering of children if container is already open
+                if (this._isAnimationFinished) { //for sorting or re-rendering of children if container is already open
                     this.setChartData(child);
                 } else {
                     this.listenToOnce(ADK.Messaging.getChannel('encounters_internal'), 'renderChart', _.partial(this.setChartData, child));
@@ -140,6 +173,9 @@ define([
     });
 
     var ExpandableItem = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            QuickLooks: {}
+        },
         initialize: function() {
             var model = this.model;
             var appletConfig = this.getOption('appletConfig');
@@ -150,7 +186,7 @@ define([
                     id: appletConfig.id
                 },
                 showInfoButton: false,
-                gistHeaders: gistConfig.gistHeaders[(model.get('kind').toLowerCase())],
+                gistHeaders: gistConfig.gistHeaders[((model.get('kind') || '').toLowerCase())],
                 gistModel: gistConfig.gistModel,
                 collection: this.collection,
                 binningOptions: {
@@ -171,9 +207,8 @@ define([
         },
         attributes: function() {
             return {
-                'data-group-instanceid': 'panel-' + util.stripCharacters(this.model.get('kind')),
+                'data-group-instanceid': 'panel-' + util.stripCharacters(this.model.get('kind') || ''),
                 'role': 'tab',
-                'class': 'table-row-toolbar'
             };
         },
         regions: {
@@ -222,14 +257,12 @@ define([
             this.ui.caret.addClass('fa-caret-down').removeClass('fa-caret-right');
         },
         ui: {
-            popoverEl: '[data-toggle=popover]',
             caret: '.left-side .fa'
         },
         events: {
-            'click .left-side': 'onClickLeftSide',
-            'click .right-side': 'onClickRightSide',
-            'keydown .right-side': function(evt) {
-                if (evt.which == 13) {
+            'click .whole-row': 'onClick',
+            'keydown .whole-row': function(evt) {
+                if (evt.which === 13) {
                     this.$(evt.currentTarget).click();
                 }
             },
@@ -244,7 +277,9 @@ define([
         serializeModel: function() {
             //serialize 'kind'
             var modelJSON = this.model.toJSON();
-            if (!_.isString(modelJSON.kind)) return modelJSON;
+            if (!_.isString(modelJSON.kind)) {
+                return modelJSON;
+            }
 
             //controls switch block in template for quicklook rendering
             modelJSON[modelJSON.kind.toLowerCase()] = true;
@@ -254,7 +289,10 @@ define([
             this.filteredSet = collection.filter(this.getOption('childFilter'));
             modelJSON.count = this.filteredSet.length;
 
-            modelJSON.recent = this.mapRecent(this.filteredSet.slice(0, 5));
+            var reversedFilterSet = this.filteredSet.slice(-5);
+            reversedFilterSet = reversedFilterSet.reverse();
+
+            modelJSON.recent = this.mapRecent(reversedFilterSet);
 
             var timeSinceLast;
             var mostRecentDateTimeModel = _.max(this.filteredSet, function(model) {
@@ -267,59 +305,17 @@ define([
                 timeSinceLast = ADK.utils.getTimeSince(timeSinceModel.get('dateTime')).timeSince;
             }
             modelJSON.timeSinceLast = timeSinceLast;
-            modelJSON.kindPlural = modelJSON.kind+'s';
+            modelJSON.kindPlural = modelJSON.kind + 's';
             modelJSON.elKind = util.stripCharacters(modelJSON.kind);
+            modelJSON.tooltip = mapQuicklook(this.model);
 
             return modelJSON;
         },
-        createPopover: function() {
-            this.ui.popoverEl.popup({
-                trigger: 'click',
-                container: 'body',
-                placement: 'bottom',
-                title: 'Title',
-                delay: 0,
-                template: '<div class="popover popover--gist-popover" role="tooltip" aria-live="assertive"><div class="popover-title all-padding-xs"></div><div class="popover-content"></div></div>'
-            });
-
-            //TODO:  There are bugs in this implementation
-            //Resizing the window doesn't close the popover or adjust it
-            //It doesn't account for the popover being close to the bottom of the window
-            this.ui.popoverEl.on('shown.bs.popover', _.bind(function() {
-                this.ui.popoverEl.focus();
-                this.ui.popoverEl.on('blur', _.bind(function() {
-                    this.ui.popoverEl.popup('hide');
-                }, this));
-                this.ui.popoverEl.on('keydown', function(e) {
-                    var isEscKey = (e.keyCode === 27);
-                    if (isEscKey) {
-                        e.stopPropagation();
-                        $(e.target).closest('[data-toggle="popover"]').popup('hide');
-                        $(e.target).closest('[data-toggle="popover"]').focus();
-                    }
-                });
-            }, this));
-        },
-        onClickRightSide: function(event) {
-            if (_.isUndefined(this.ui.popoverEl.attr('aria-describedby'))) {
-                var eventTarget = this.$(event.target);
-                eventTarget.trigger('click');
-            } else {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-            }
-        },
-        onClickLeftSide: function(event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            this.$('[data-toggle=popover]').popover('hide');
+        onClick: function(event) {
             this.$('.panel-collapse').collapse('toggle');
 
-            var expandedAttr = this.$(event.currentTarget).attr('aria-expanded') === 'true' ? false : true;
-            var msg = expandedAttr ? 'collapse' : 'expand';
-            msg = 'Press enter to ' + msg + ' ' + this.model.get('kind') + ' accordion.';
-            this.$(event.currentTarget).attr('aria-expanded', expandedAttr);
-            this.$(event.currentTarget).attr('title', msg);
+            var expandedAttr = this.$('.btn-accordion').attr('aria-expanded') === 'true' ? false : true;
+            this.$('.btn-accordion').attr('aria-expanded', expandedAttr);
         },
         displayChart: function() {
             chartUtil.chartDataBinning({
@@ -338,7 +334,6 @@ define([
             this.displayChart();
         },
         onRender: function() {
-            this.createPopover();
             this.chartPointer = chartUtil.showChart(this);
         },
         onBeforeRender: function() {
@@ -352,13 +347,6 @@ define([
                     chart.destroy();
                 }
             }
-            this.cleanupPopover();
-        },
-        cleanupPopover: function() {
-            var $popover = this.$('[data-toggle="popover"]');
-            $popover.off('shown.bs.popover');
-            $popover.off('hidden.bs.popover');
-            $popover.popover('destroy');
         }
     });
 
@@ -385,12 +373,16 @@ define([
             if (fullCollection instanceof Backbone.Collection) {
                 var filter = this.getOption('childFilter');
                 fullCollection.each(function(model) {
-                    if (_.isFunction(filter) && !filter(model)) return;
+                    if (_.isFunction(filter) && !filter(model)) {
+                        return;
+                    }
                     if (!firstModel) {
                         firstModel = model;
                         return;
                     }
-                    if (firstModel.get('dateTime') > model.get('dateTime')) firstModel = model;
+                    if (firstModel.get('dateTime') > model.get('dateTime')) {
+                        firstModel = model;
+                    }
                 });
             }
 
@@ -400,7 +392,9 @@ define([
         onCustomFilter: function onCustomFilter(search) {
             this.options.childFilter = function(model) {
                 var key = util.FILTER_FIELD;
-                if (model instanceof Backbone.Model) return search.test(model.get(key));
+                if (model instanceof Backbone.Model) {
+                    return search.test(model.get(key));
+                }
                 return search.test(model[key]);
             };
         },

@@ -66,27 +66,16 @@ function suggestSearch(req, res) {
         }, {
             method: 'suggest',
             query: {
-                q: suggestQuery,
-                //                fq: [
-                //                        'pid:' + reqQuery.pid
-                //                ],
+                q: suggestQuery
             }
         }, {
-            method: 'select',
+            method: 'select',                                               // This query will perform a faceted search using the default main query
             query: {
-                fl: [ // select these fields
-                    'qualified_name',
-                    'med_drug_class_name'
-                ],
-                fq: [ // filter queries
-                    'domain:' + 'med'
-                ],
-                q: '*' + escapedQuery + '*',
-                rows: 0,
-                facet: 'true',
-                'facet.pivot': 'med_drug_class_name,qualified_name',
-                synonyms: 'true',
-                defType: 'synonym_edismax'
+                q: solrSimpleClient.escapeQueryChars(reqQuery.query, true), // Search for the query string (preserving wildcards and case)
+                rows: 0,                                                    // and do not return records (only facets)
+                facet: 'true',                                              // and perform a faceted search
+                'facet.pivot': 'med_drug_class_name,qualified_name',        //   grouping by medication fields
+                'facet.limit': 5                                            //   and limit to top 5 results
             }
         }
     ];

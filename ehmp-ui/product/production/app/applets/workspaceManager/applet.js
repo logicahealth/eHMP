@@ -49,14 +49,14 @@ define([
 
     (function initMessaging() {
         var channel = ADK.Messaging.getChannel('workspaceManagerChannel');
-        channel.on('workspaceManager', function() {
+        channel.on('workspaceManager', function(modalShowOptions) {
             var view = new ADK.UI.FullScreenOverlay({
                 view: new AppletLayoutView(),
                 options: {
                     'callShow': true
                 }
             });
-            view.show();
+            view.show(modalShowOptions);
         });
     })();
 

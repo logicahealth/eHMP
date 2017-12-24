@@ -5,7 +5,9 @@ require('../env-setup');
 var _ = require('underscore');
 var request = require('request');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
+var vx_sync_port = testConfig.vxsyncPort;
 
 describe('end-to-end', function() {
     it('works', function() {
@@ -14,7 +16,7 @@ describe('end-to-end', function() {
             completedStamp;
         runs(function() {
             request({
-                'url': 'http://' + vx_sync_ip + ':8080/sync/doLoad?pid=9E7A;3'
+                'url': 'http://' + vx_sync_ip + ':'+vx_sync_port+'/sync/doLoad?pid=SITE;3'
             }, function() {
                 finished = true;
             });
@@ -26,7 +28,7 @@ describe('end-to-end', function() {
 
         var checkStatus = function() {
             request({
-                'url': 'http://' + vx_sync_ip + ':8080/sync/status?pid=9E7A;3'
+                'url': 'http://' + vx_sync_ip + ':'+vx_sync_port+'/sync/status?pid=SITE;3'
             }, function(error, response, body) {
                 body = JSON.parse(body);
 
@@ -69,7 +71,7 @@ describe('end-to-end', function() {
 
             expect(completedMetaStamp.sourceMetaStamp).not.toBeUndefined();
 
-            expect(completedMetaStamp.sourceMetaStamp['9E7A']).not.toBeUndefined();
+            expect(completedMetaStamp.sourceMetaStamp['SITE']).not.toBeUndefined();
             expect(completedMetaStamp.sourceMetaStamp.DOD).not.toBeUndefined();
         });
     });

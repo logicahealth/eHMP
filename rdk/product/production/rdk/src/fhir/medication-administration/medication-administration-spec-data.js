@@ -151,14 +151,14 @@ var jdsInput = {
                         'fillsAllowed': 0,
                         'fillsRemaining': 0,
                         'locationName': 'GENERAL MEDICINE',
-                        'locationUid': 'urn:va:location:9E7A:23',
-                        'orderUid': 'urn:va:order:9E7A:8:35739',
+                        'locationUid': 'urn:va:location:SITE:23',
+                        'orderUid': 'urn:va:order:SITE:8:35739',
                         'ordered': '201405281627',
                         'pharmacistName': 'PROGRAMMER,ONE',
-                        'pharmacistUid': 'urn:va:user:9E7A:1',
+                        'pharmacistUid': 'urn:va:user:SITE:1',
                         'prescriptionId': 500983,
                         'providerName': 'PROVIDER,SEVENTYTHREE',
-                        'providerUid': 'urn:va:user:9E7A:1999',
+                        'providerUid': 'urn:va:user:SITE:1999',
                         'quantityOrdered': '11',
                         'summary': 'MedicationOrder{uid=\'\'}',
                         'vaRouting': 'W'
@@ -167,7 +167,7 @@ var jdsInput = {
                 'overallStart': '20140528',
                 'overallStop': '20140627',
                 'patientInstruction': '',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'productFormName': 'TAB',
                 'products': [
                     {
@@ -199,7 +199,7 @@ var jdsInput = {
                 'summary': 'PREDNISONE 20MG TAB (EXPIRED)\n TAKE THREE TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE TWO AND ONE-HALF TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE TWO TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE AND ONE-HALF TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE TABLET BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE-HALF TABLET BY MOUTH EVERY DAY FOR 2 DAYS',
                 'supply': false,
                 'type': 'Prescription',
-                'uid': 'urn:va:med:9E7A:8:35739',
+                'uid': 'urn:va:med:SITE:8:35739',
                 'units': 'MG',
                 'vaStatus': 'EXPIRED',
                 'vaType': 'O'
@@ -237,20 +237,20 @@ var jdsInput = {
                 'orders': [
                     {
                         'locationName': '5 WEST PSYCH',
-                        'locationUid': 'urn:va:location:9E7A:66',
-                        'orderUid': 'urn:va:order:9E7A:8:12004',
+                        'locationUid': 'urn:va:location:SITE:66',
+                        'orderUid': 'urn:va:order:SITE:8:12004',
                         'ordered': '200002101046',
                         'pharmacistName': 'PROGRAMMER,TWENTYEIGHT',
-                        'pharmacistUid': 'urn:va:user:9E7A:923',
-                        'predecessor': 'urn:va:med:9E7A:8:10769',
+                        'pharmacistUid': 'urn:va:user:SITE:923',
+                        'predecessor': 'urn:va:med:SITE:8:10769',
                         'providerName': 'PROGRAMMER,TWENTYEIGHT',
-                        'providerUid': 'urn:va:user:9E7A:923',
+                        'providerUid': 'urn:va:user:SITE:923',
                         'summary': 'MedicationOrder{uid=\'\'}'
                     }
                 ],
                 'overallStart': '200002101300',
                 'overallStop': '200002222300',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'productFormName': 'TAB',
                 'products': [
                     {
@@ -283,7 +283,7 @@ var jdsInput = {
                 'stopped': '200002222300',
                 'summary': 'FUROSEMIDE TAB (EXPIRED)\n Give: ',
                 'supply': false,
-                'uid': 'urn:va:med:9E7A:8:12004',
+                'uid': 'urn:va:med:SITE:8:12004',
                 'vaStatus': 'EXPIRED',
                 'vaType': 'I'
             },
@@ -319,20 +319,20 @@ var jdsInput = {
                 'orders': [
                     {
                         'locationName': '5 WEST PSYCH',
-                        'locationUid': 'urn:va:location:9E7A:66',
-                        'orderUid': 'urn:va:order:9E7A:8:11129',
+                        'locationUid': 'urn:va:location:SITE:66',
+                        'orderUid': 'urn:va:order:SITE:8:11129',
                         'ordered': '199912221430',
                         'pharmacistName': 'RADTECH,SEVENTEEN',
-                        'pharmacistUid': 'urn:va:user:9E7A:11733',
-                        'predecessor': 'urn:va:med:9E7A:8:11127',
+                        'pharmacistUid': 'urn:va:user:SITE:11733',
+                        'predecessor': 'urn:va:med:SITE:8:11127',
                         'providerName': 'PROGRAMMER,TWENTYEIGHT',
-                        'providerUid': 'urn:va:user:9E7A:923',
+                        'providerUid': 'urn:va:user:SITE:923',
                         'summary': 'MedicationOrder{uid=\'\'}'
                     }
                 ],
                 'overallStart': '199912222100',
                 'overallStop': '200001212359',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'products': [
                     {
                         'drugClassCode': 'urn:vadc:CN101',
@@ -381,7 +381,7 @@ var jdsInput = {
                 'stopped': '200001212359',
                 'summary': 'MORPHINE SO4 15MG/ML INJ 50 MG in DEXTROSE 5% INJ,BAG,1000ML  (EXPIRED)\nINFUSE OVER 35 MIN. Q8H ',
                 'supply': false,
-                'uid': 'urn:va:med:9E7A:8:11129',
+                'uid': 'urn:va:med:SITE:8:11129',
                 'vaStatus': 'EXPIRED',
                 'vaType': 'V'
             }

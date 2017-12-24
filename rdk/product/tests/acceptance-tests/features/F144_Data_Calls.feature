@@ -3,14 +3,14 @@ Feature: F144 - eHMP viewer GUI - Allergies
 
 @F144_ClinicalReminders
 Scenario: eHMP viewer GUI - F144_ClinicalReminders
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests clinical reminders for the patient "9E7A;100022"
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests clinical reminders for the patient "SITE;100022"
   Then a successful response is returned
 
 @F295_Encounters @US3706
 Scenario: F295 - Encounters Applet
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests encounters for the patient "9E7A;100022"
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests encounters for the patient "SITE;100022"
   Then a successful response is returned
   Then the VPR results contain
     | field 	| value 		|
@@ -23,8 +23,8 @@ Scenario: F295 - Encounters Applet
   
 #@F295_Encounters @US3706
 #Scenario: F295 - Encounters Applet
-#  Given a patient with pid "9E7A;164" has been synced through the RDK API
-#  When the client requests encounters for the patient "9E7A;164"
+#  Given a patient with pid "SITE;164" has been synced through the RDK API
+#  When the client requests encounters for the patient "SITE;164"
 #  Then a successful response is returned
 #  Then the VPR results contain
 #    | field | value |
@@ -33,8 +33,8 @@ Scenario: F295 - Encounters Applet
 
 @F295_Encounters @US3706
 Scenario: F295 - Encounters Applet
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests encounters for the patient "9E7A;100022"
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests encounters for the patient "SITE;100022"
   Then a successful response is returned
   Then the VPR results contain
     | field 	| value |
@@ -43,8 +43,8 @@ Scenario: F295 - Encounters Applet
 
 @F144_Immunizations @F281 @US2171
 Scenario:  F144 - eHMP viewer GUI - Immunizations
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
-  When the client requests immunizations for the patient "9E7A;3"
+  Given a patient with pid "SITE;3" has been synced through the RDK API
+  When the client requests immunizations for the patient "SITE;3"
   Then a successful response is returned
     And the Immunization result contain                                         
       | name             | Tdap     |
@@ -57,9 +57,9 @@ Scenario:  F144 - eHMP viewer GUI - Immunizations
 
 @F144_allergy_applet @US2801
 Scenario: Verify Allergy Applet data call
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
   #When the client requests allergies for the patient "5000000341V359724" in VPR format
-  When the client requests allergies for the patient "9E7A;100022" with parameters
+  When the client requests allergies for the patient "SITE;100022" with parameters
    | label  | value |
    | filter | ne(removed, true) |
  Then a successful response is returned
@@ -86,8 +86,8 @@ Scenario: Verify Allergy Applet data call
 
 @F144_problems_applet @US2411
 Scenario: Verify Problem Applet data call
- Given a patient with pid "9E7A;3" has been synced through the RDK API
- When the client requests problems/conditions for the patient "9E7A;3" with parameters
+ Given a patient with pid "SITE;3" has been synced through the RDK API
+ When the client requests problems/conditions for the patient "SITE;3" with parameters
    | label  | value |
    | filter | ne(removed, true) |
     Then a successful response is returned
@@ -114,8 +114,8 @@ Scenario: Verify Problem Applet data call
 
 @F294_report_applet @F294_report_applet_procedure @US4157
 Scenario: View procedure in reports gist
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests the REPORTS for the patient "9E7A;100022" with parameters
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests the REPORTS for the patient "SITE;100022" with parameters
   | label         |  value           |
   | FILTER_DATE   | 19350407-TODAY |
   | FILTER        | not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))) |
@@ -129,8 +129,8 @@ Scenario: View procedure in reports gist
 
 @F294_report_applet @F294_report_applet_consult @US4157
 Scenario: View Consult in reports gist
-  Given a patient with pid "9E7A;229" has been synced through the RDK API
-  When the client requests the REPORTS for the patient "9E7A;229" with parameters
+  Given a patient with pid "SITE;229" has been synced through the RDK API
+  When the client requests the REPORTS for the patient "SITE;229" with parameters
   | label         |  value           |
   | FILTER_DATE   | 19350407-TODAY |
   | FILTER        | not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))) |
@@ -141,11 +141,11 @@ Scenario: View Consult in reports gist
    | field | value |
    | kind  | Consult |
 
-#9E7A;100022
+#SITE;100022
 @F294_report_applet @F294_report_applet_Imaging @US4157
 Scenario: View Imaging in reports gist
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests the REPORTS for the patient "9E7A;100022" with parameters
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests the REPORTS for the patient "SITE;100022" with parameters
   | label         |  value           |
   | FILTER_DATE   | 19350407-TODAY |
   | FILTER        | not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))) |
@@ -158,8 +158,8 @@ Scenario: View Imaging in reports gist
 
 @F294_report_applet @F294_report_applet_Laboratory @US4157
 Scenario: View Laboratory Report in reports gist
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests the REPORTS for the patient "9E7A;100022" with parameters
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests the REPORTS for the patient "SITE;100022" with parameters
   | label         |  value           |
   | FILTER_DATE   | 19350407-TODAY |
   | FILTER        | not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE"))) |
@@ -172,8 +172,8 @@ Scenario: View Laboratory Report in reports gist
 
 @F280_Vitals_Gist @US4259
 Scenario: View Vitals in gist view
-  Given a patient with pid "9E7A;8" has been synced through the RDK API
-  When the client requests the VITALS for the patient "9E7A;8" with parameters
+  Given a patient with pid "SITE;8" has been synced through the RDK API
+  When the client requests the VITALS for the patient "SITE;8" with parameters
   | label         |  value           |
   | FILTER        | and(ne(removed, true) |
   | FILTER_DATE   | 19350407-TODAY |
@@ -234,8 +234,8 @@ Scenario: View Vitals in gist view
 
 @F280_Vitals_Gist @US4259
 Scenario: View Vitals in gist view
-  Given a patient with pid "9E7A;231" has been synced through the RDK API
-  When the client requests the VITALS for the patient "9E7A;231" with parameters
+  Given a patient with pid "SITE;231" has been synced through the RDK API
+  When the client requests the VITALS for the patient "SITE;231" with parameters
   | label         |  value           |
   | FILTER        | and(ne(removed, true) |
   | FILTER_DATE   | 19350407-TODAY |
@@ -300,8 +300,8 @@ Scenario: View Vitals in gist view
 @F281_ActiveMeds
 Scenario: Active Meds on overview
   # 10188V866369 = Eightyeight,Patient
-  Given a patient with pid "9E7A;100608" has been synced through the RDK API
-  When the client requests medications for Active Medications applet for the patient "9E7A;100608"
+  Given a patient with pid "SITE;100608" has been synced through the RDK API
+  When the client requests medications for Active Medications applet for the patient "SITE;100608"
   Then a successful response is returned
   Then the VPR results contain
     | field | value |
@@ -310,8 +310,8 @@ Scenario: Active Meds on overview
 
 @F280 @US4258
 Scenario: Lab Results Gist on overview
-  Given a patient with pid "9E7A;231" has been synced through the RDK API
-  When the client requests lab results for Lab Results Gist applet for the patient "9E7A;231"
+  Given a patient with pid "SITE;231" has been synced through the RDK API
+  When the client requests lab results for Lab Results Gist applet for the patient "SITE;231"
   Then a successful response is returned
   Then the VPR results contain
     | field | value |
@@ -319,8 +319,8 @@ Scenario: Lab Results Gist on overview
 
 @DE1757
 Scenario: Narrative Lab Results 
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
-  When the client requests narrative lab results for the patient "9E7A;3"
+  Given a patient with pid "SITE;3" has been synced through the RDK API
+  When the client requests narrative lab results for the patient "SITE;3"
   Then a successful response is returned
   Then the VPR results contain
       | field    | value                    |

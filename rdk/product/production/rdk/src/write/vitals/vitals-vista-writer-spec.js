@@ -77,7 +77,7 @@ describe('vitals write-back writer', function() {
             var model = {
                 'dateTime': '20150511',
                 'dfn': '3',
-                'locationUid': 'urn:va:location:9E7A:67',
+                'locationUid': 'urn:va:location:SITE:67',
                 'enterdByIEN' : '87',
                 'vitals': [
                     {
@@ -105,7 +105,7 @@ describe('vitals write-back writer', function() {
             var model = {
                 'dateTime': '20150620',
                 'dfn': '3',
-                'locationUid': 'urn:va:location:9E7A:67',
+                'locationUid': 'urn:va:location:SITE:67',
                 'enterdByIEN' : '87',
                 'vitals': [
                     {

@@ -63,10 +63,10 @@ describe('Medication Administration FHIR Resource', function() {
 
 describe('Medication Administration FHIR conversion methods', function() {
     var req = {
-        '_pid': '9E7A;8',
+        '_pid': 'SITE;8',
         originalUrl: '/resource/fhir/medicationadministration?subject.identifier=10110V004877',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -81,7 +81,7 @@ describe('Medication Administration FHIR conversion methods', function() {
         expect(fhirBundle.link).not.to.be.undefined();
         expect(fhirBundle.link.length).to.eql(1);
         expect(fhirBundle.link[0].relation).to.eql('self');
-        expect(fhirBundle.link[0].url).to.eql('http://localhost:8888/resource/fhir/medicationadministration?subject.identifier=10110V004877');
+        expect(fhirBundle.link[0].url).to.eql('http://localhost:PORT/resource/fhir/medicationadministration?subject.identifier=10110V004877');
         expect(fhirBundle.total).to.eql(3);
         expect(fhirBundle.entry).not.to.be.undefined();
         expect(fhirBundle.entry.length).to.eql(3);

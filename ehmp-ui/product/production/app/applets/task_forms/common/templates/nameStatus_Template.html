@@ -7,15 +7,24 @@
 {{/if}}
 <div class="row">
     <div class="col-xs-8">
-        <h5 class="font-size-16">{{#if healthIndicator}}<i class="fa fa-lg fa-flag color-primary right-padding-sm" data-toggle="tooltip" data-placement="right" title="{{healthIndicatorReason}}"></i>{{/if}}{{instanceName}}</h5>
+        <h5 class="font-size-20 all-margin-no top-margin-xs color-pure-black bottom-padding-xs">{{highlightText instanceName}}</h5>
+        {{#if healthIndicator}}
+        <h5 class="font-size-14 color-primary all-margin-no all-padding-no">
+            <i class="fa fa-flag right-margin-xs"></i> {{healthIndicatorReason}}
+        </h5>
+        {{/if}}
     </div>
     <div class="col-xs-4 text-right top-margin-lg">
     	<span class="btn btn-icon top-padding-no" data-toggle="tooltip" data-placement="bottom" title="{{activityDescription}}">
     		<i class="fa fa-info-circle font-size-16"></i>
     	</span>
+        {{#if stateDescription}}
     	<span class="sr-only">{{stateDescription}}</span>
-    	<h5 class="text-uppercase font-size-16 inline-display">{{state}}<br />
-    		<small class="color-pure-black"><strong>{{substate}}</strong></small>
+        {{else}}
+        <span class="sr-only">{{activityDescription}}</span>
+        {{/if}}
+    	<h5 class="text-uppercase font-size-16 inline-display">{{highlightText state}}<br />
+    		<small class="color-pure-black"><strong>{{highlightText substate}}</strong></small>
     	</h5>
     </div>
 </div>

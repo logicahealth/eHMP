@@ -1,9 +1,9 @@
-@F414 @F414-4 @DE4560 @reg3
+@F414 @F414-4 @DE4560 @reg2
 Feature: Enter and Store A Problem List - add a Freetext problem to the patient's problem list
 
 Background:
   Given user searches for and selects "TWENTY,INPATIENT"
-  And Overview is active
+  Then Summary View is active
   And the user navigates to expanded problems applet
   And the user takes note of number of existing problems
   And user attempts to add a problem from problem applet header

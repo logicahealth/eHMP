@@ -3,7 +3,7 @@ Feature: Home Page usability (Staff View) - Standardize patient search resource 
 
 @TC6822_1
 Scenario: Standardize the no results response for patient search resources - My CPRS list
-  When the client "REDACTED" requests CPRS list patient search results
+  When the client "SITE;USER  " requests CPRS list patient search results
   Then a successful response is returned
   And the response message is "No results found. Please make sure your CPRS Default Search is configured properly."
 
@@ -17,7 +17,7 @@ Scenario: Standardize the no results response for patient search resources - My 
 # if they perform a patient search with the provided credentials ( in rdk or ui ) then this test will start failing
 @TC6822_3 @future
 Scenario: Standardize the no results response for patient search resources - Recent Patients
-  When the client "REDACTED" requests Recent Patient patient search results
+  When the client "SITE;USER  " requests Recent Patient patient search results
   Then a successful response is returned
   And the response message is "No results found."
 

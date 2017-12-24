@@ -104,6 +104,11 @@ define([
             }
         },
         onBeforeShow: function() {
+            requestAnimationFrame(_.bind(function() {
+                this.configureContainers();
+            }, this));
+        },
+        configureContainers: function() {
             this.createViews();
             this.appletDiv.show(this.viewToDisplay);
 
@@ -213,7 +218,7 @@ define([
                 this.buttonCollection.add(new ButtonViewModel({
                     id: 'filter-button',
                     instanceId: this.model.get('instanceId'),
-                    buttonMsg: 'Press enter to collapse filter.',
+                    buttonMsg: 'Filter. Expanded.',
                     view: FilterButtonView.extend({
                         filterView: _.get(this, 'appletView.filterView', _.get(this, 'appletView.filterDateRangeView', null))
                     })
@@ -257,6 +262,8 @@ define([
                 this.$el.find(".panel-title").addClass("col-xs-12 text-center");
             }
             this.switchboardContainer.reset();
+            var appletInstanceId = this.model.get('instanceId');
+            WorkspaceFilters.onAppletFilterCollectionChanged(appletInstanceId, this.refreshAppletTitleColor, this);
         },
         resetButtons: function() {
             this.buttonCollection.reset();
@@ -400,7 +407,8 @@ define([
             $('.popover').popover('hide');
             $('.tooltip').tooltip('hide');
             var workspaceId = ADK.Messaging.request('get:current:screen').config.id,
-                instanceId = this.options.appletConfig.instanceId;
+                instanceId = this.options.appletConfig.instanceId,
+                fromPredefinedFilter = _.get(this, 'options.appletConfig.predefinedFilter', false);
 
             var filterName = this.$('.applet-filter-title').text();
             ADK.SessionStorage.setAppletStorageModel(instanceId, 'filterName', filterName, true, workspaceId);
@@ -424,7 +432,8 @@ define([
 
             Navigation.navigate(maximizeScreenId, {
                 fromMinimizedToMaximized: true,
-                textFilter: filterText
+                textFilter: filterText,
+                fromPredefinedFilter: fromPredefinedFilter
             });
         },
         minimizeApplet: function(event) {
@@ -479,7 +488,7 @@ define([
             this.$el.find(".applet-chrome-body").addClass("hide");
             this.$el.find(".switchboard-container").removeClass("hide");
             this.toggleClasses_SwitchBoard_show_hide();
-            this.$('.options-panel').append('<li><button type="button" title="Press enter to close." class="applet-exit-options-button btn btn-sm btn-icon"><i class="fa fa-close"></i></button></li>');
+            this.$('.options-panel').append('<li><button type="button" title="Close" aria-label="Close options" class="applet-exit-options-button btn btn-sm btn-icon"><i class="fa fa-close"></i></button></li>');
             this.$('.options-panel li:first button:first').focus();
         },
         closeSwitchboard: function(event) {

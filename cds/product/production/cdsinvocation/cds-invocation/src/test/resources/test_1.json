@@ -5,7 +5,7 @@
     "link": [
         {
             "relation": "self",
-            "url": "http://127.0.0.1:8888/resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=IP    &verifyCode=IP    !!&site=9E7A&division=500"
+            "url": "http://127.0.0.1:PORT/resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=USER  &verifyCode=PW      &site=SITE&division=500"
         }
     ],
     "total": 36,
@@ -19,14 +19,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:27957"
+                        "value": "urn:va:med:SITE:253:27957"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -39,14 +39,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:28057"
+                        "value": "urn:va:med:SITE:253:28057"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -59,14 +59,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:27957"
+                        "value": "urn:va:med:SITE:253:27957"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -79,14 +79,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:28057"
+                        "value": "urn:va:med:SITE:253:28057"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -99,14 +99,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:27857"
+                        "value": "urn:va:med:SITE:253:27857"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -119,14 +119,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:27857"
+                        "value": "urn:va:med:SITE:253:27857"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -139,14 +139,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:21166"
+                        "value": "urn:va:med:SITE:253:21166"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -159,14 +159,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:21167"
+                        "value": "urn:va:med:SITE:253:21167"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -179,14 +179,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:21168"
+                        "value": "urn:va:med:SITE:253:21168"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -199,14 +199,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:21166"
+                        "value": "urn:va:med:SITE:253:21166"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -219,14 +219,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:21167"
+                        "value": "urn:va:med:SITE:253:21167"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -239,14 +239,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:21168"
+                        "value": "urn:va:med:SITE:253:21168"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -259,14 +259,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:18071"
+                        "value": "urn:va:med:SITE:253:18071"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -279,14 +279,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:18073"
+                        "value": "urn:va:med:SITE:253:18073"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -299,14 +299,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:18074"
+                        "value": "urn:va:med:SITE:253:18074"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -319,14 +319,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:18071"
+                        "value": "urn:va:med:SITE:253:18071"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -339,14 +339,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:18073"
+                        "value": "urn:va:med:SITE:253:18073"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -359,14 +359,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:18074"
+                        "value": "urn:va:med:SITE:253:18074"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -379,14 +379,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:17202"
+                        "value": "urn:va:med:SITE:253:17202"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -399,14 +399,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:17202"
+                        "value": "urn:va:med:SITE:253:17202"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -419,14 +419,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:17262"
+                        "value": "urn:va:med:SITE:253:17262"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -439,14 +439,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:17263"
+                        "value": "urn:va:med:SITE:253:17263"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -459,14 +459,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:17262"
+                        "value": "urn:va:med:SITE:253:17262"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -479,14 +479,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:17263"
+                        "value": "urn:va:med:SITE:253:17263"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -499,14 +499,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:16958"
+                        "value": "urn:va:med:SITE:253:16958"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -519,14 +519,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:16958"
+                        "value": "urn:va:med:SITE:253:16958"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -539,14 +539,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:16959"
+                        "value": "urn:va:med:SITE:253:16959"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -559,14 +559,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:16981"
+                        "value": "urn:va:med:SITE:253:16981"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -579,14 +579,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:16959"
+                        "value": "urn:va:med:SITE:253:16959"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -599,14 +599,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:16981"
+                        "value": "urn:va:med:SITE:253:16981"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -619,14 +619,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:15229"
+                        "value": "urn:va:med:SITE:253:15229"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -639,14 +639,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:15230"
+                        "value": "urn:va:med:SITE:253:15230"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -659,14 +659,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:15229"
+                        "value": "urn:va:med:SITE:253:15229"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -679,14 +679,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:15230"
+                        "value": "urn:va:med:SITE:253:15230"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -699,14 +699,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:9E7A:253:12725"
+                        "value": "urn:va:med:SITE:253:12725"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         },
@@ -719,14 +719,14 @@
                 "identifier": [
                     {
                         "system": "urn:oid:2.16.840.1.113883.6.233",
-                        "value": "urn:va:med:C877:253:12725"
+                        "value": "urn:va:med:SITE:253:12725"
                     }
                 ]
             },
             "link": [
                 {
                     "relation": "self",
-                    "url": "http://127.0.0.1:8888/fhir/diagnosticreport/@null"
+                    "url": "http://127.0.0.1:PORT/fhir/diagnosticreport/@null"
                 }
             ]
         }

@@ -4,17 +4,17 @@ Feature: F102 Return and display of labs
 # I have marked the Feature as @future so the background step will also not be run
 
 Background:
-	Given a patient with pid "9E7A;71" has been synced through FHIR
+	Given a patient with pid "SITE;71" has been synced through FHIR
 
 @labs_rest 
 Scenario: Client can request Labs
 	Given a patient with "labs" in multiple VistAs
-	When the client requests Labs for the patient "9E7A;71"
+	When the client requests Labs for the patient "SITE;71"
 	Then eHMP returns "17" result(s)
 	And the results contain data group
 		| field    | value                                  |
      	| summary  | GLUCOSE (BLOOD) 121 MG/DL              |
-      	| uid      | urn:va:lab:9E7A:71:CH;7028782.924588;2 |
+      	| uid      | urn:va:lab:SITE:71:CH;7028782.924588;2 |
       	| result   | 121		                             |
       	| specimen | BLOOD                                  |
       	| high     | 128                                    |
@@ -23,7 +23,7 @@ Scenario: Client can request Labs
     And the results contain data group
 		| field    | value                                  |
       	| summary  | CHLORIDE (BLOOD) canc                  |
-      	| uid      | urn:va:lab:9E7A:71:CH;7028783.855185;7 |
+      	| uid      | urn:va:lab:SITE:71:CH;7028783.855185;7 |
       	| result   | canc                                   |
       	| specimen | BLOOD                                  |
       	

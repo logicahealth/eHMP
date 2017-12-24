@@ -19,15 +19,8 @@ include_recipe "apache2::mod_rewrite"
 include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_wsgi"
 
-# Set selinux to permissive and install iptables
+# Set selinux to permissive
 include_recipe "selinux::permissive"
-include_recipe "simple_iptables"
-
-# Configure iptables to allow https connections
-simple_iptables_rule "http" do
-  rule [ "--proto tcp --dport 443" ]
-  jump "ACCEPT"
-end
 
 # Install dos2unix
 case node[:platform]

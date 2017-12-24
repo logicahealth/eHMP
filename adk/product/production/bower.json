@@ -29,7 +29,7 @@
     "backgrid-moment-cell": "~0.3.5",
     "bootstrap": "3.3.5",
     "bootstrap-datepicker": "~1.6.1",
-    "font-awesome": "~4.6.0",
+    "font-awesome": "~4.7.0",
     "backbone": "1.2.3",
     "backbone-sorted-collection": "0.3.8",
     "backbone.radio": "0.6.0",

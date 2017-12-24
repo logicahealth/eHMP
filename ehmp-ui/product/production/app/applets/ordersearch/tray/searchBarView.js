@@ -12,7 +12,7 @@ define([
             '<div class="input-group submit-hidden">',
             '<label class="sr-only">{{screenReaderLabel}} for="searchInput"</label>',
             '<input type="search" id="searchInput" class="form-control" placeholder="{{placeholder}}" title="{{instructions}}"/>',
-            '<button type="button" class="clear-input-btn btn btn-icon btn-sm color-grey-darkest hidden" title="Press enter to clear search text" data-search-action="clear"><i class="fa fa-times color-grey-darkest"></i></button>',
+            '<button type="button" class="clear-input-btn btn btn-icon btn-sm color-grey-darkest hidden" title="Clear search text" data-search-action="clear"><i class="fa fa-times color-grey-darkest"></i></button>',
             '</div>'
         ].join('\n')),
         templateHelpers: function() {

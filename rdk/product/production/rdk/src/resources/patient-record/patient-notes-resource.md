@@ -51,7 +51,7 @@ Get note UID associated with a consult UID
 
             {
                 "data": {
-                    "noteClinicalObjectUid": "urn:va:ehmp-note:9E7A;3:98a309a4-1b97-4b35-b66a-0d631cac6512"
+                    "noteClinicalObjectUid": "urn:va:ehmp-note:SITE;3:98a309a4-1b97-4b35-b66a-0d631cac6512"
                 },
                 "status": 200
             }

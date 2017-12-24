@@ -6,40 +6,37 @@
 // These tests only verify that the functions execute without errors. Verifying that inserting,
 // finding, and deleting data is a manual process.
 
-var SolrSmartClient = require('../../solr-smart-client').SolrSmartClient;
-var initClient = require('../../solr-smart-client').initClient;
-var createClient = require('../../solr-smart-client').createClient;
+const bunyan = require('bunyan');
 
-var _ = require('underscore');
+const SolrSmartClient = require('../../solr-smart-client').SolrSmartClient;
+const createClient = require('../../solr-smart-client').createClient;
 
-var solrClient = null;
-var finished = false;
+const _ = require('underscore');
 
-var config = {
-  solrClient: {
-    timeoutMillis: 3000,
-    core: 'vpr',
-    path: '/live_nodes',
-    zooKeeperConnection: 'IP             '
-  }
-};
+const PATH = '/collections/vpr/state.json';
+const CORE = 'vpr';
 
-// Use this logger to prevent logging output during testing
-var logger = {
-  trace: _.noop,
-  debug: _.noop,
-  info: _.noop,
-  warn: _.noop,
-  error: _.noop,
-  fatal: _.noop,
-  child: function() { return this; }
-};
+const logger = bunyan.createLogger({
+  name: 'test',
+  level: 'debug',
+  // comment out the next three lines to see logger output
+  streams: [{
+    path: '/dev/null',
+  }]
+});
 
-// Use this logger for debugging
-// var logger = require('bunyan').createLogger({
-//  name: 'test',
-//  level: 'debug'
-// });
+let solrSmartClient = null;
+let finished = false;
+
+function getConfig(config) {
+  return _.defaults(config || {}, {
+    dataTimeoutMillis: 3000,
+    core: CORE,
+    path: PATH,
+    zooKeeperConnection: 'IP             ',
+  });
+}
+
 
 describe('solr-smart-client', function() {
   beforeEach(function() {
@@ -47,76 +44,105 @@ describe('solr-smart-client', function() {
   });
 
   describe('General Initialization/Startup', function() {
-    it('tests create solr client with old factory function', function() {
-      solrClient = initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, logger);
-      expect(solrClient).not.toBeUndefined();
-      expect(solrClient).not.toBeNull();
+    it('tests creating solr client with factory function', function() {
+      solrSmartClient = createClient(logger, getConfig());
+      expect(solrSmartClient).not.toBeUndefined();
+      expect(solrSmartClient).not.toBeNull();
     });
 
-    it('tests create solr client with new factory function', function() {
-      solrClient = createClient(logger, config.solrClient);
-      expect(solrClient).not.toBeUndefined();
-      expect(solrClient).not.toBeNull();
+    it('tests creating solr client with constructor function', function() {
+      solrSmartClient = new SolrSmartClient(logger, getConfig());
+      expect(solrSmartClient).not.toBeUndefined();
+      expect(solrSmartClient).not.toBeNull();
     });
 
-    it('testscreate solr client with constructor function', function() {
-      solrClient = new SolrSmartClient(logger, config.solrClient);
-      expect(solrClient).not.toBeUndefined();
-      expect(solrClient).not.toBeNull();
+    it('tests that a childInstance is created when childInstanceEnabled === true', function() {
+      solrSmartClient = new SolrSmartClient(logger, getConfig({
+        childInstanceEnabled: true
+      }));
+      let childLogger = logger.child();
+      let childInstance = solrSmartClient.childInstance(childLogger);
+      expect(childInstance).not.toBe(solrSmartClient);
     });
 
-    it('creates a childInstance', function() {
-      solrClient = new SolrSmartClient(logger, config.solrClient);
-      var childLogger = logger.child();
-      var childInstance = solrClient.childInstance(childLogger);
-      expect(childInstance).not.toBe(solrClient);
-      expect(childInstance.zkClient).toEqual(solrClient.zkClient);
+    it('tests that a childInstance is not created when childInstanceEnabled !== true', function() {
+      solrSmartClient = new SolrSmartClient(logger, getConfig({
+        childInstanceEnabled: false
+      }));
+
+      let childLogger = logger.child();
+      let childInstance = solrSmartClient.childInstance(childLogger);
+      expect(childInstance).toBe(solrSmartClient);
     });
   });
 
   describe('Timeout functionality', function() {
     it('tests that timeout works when attempting to get a connection', function() {
-      var badConfig = {
+      let badConfig = {
         solrClient: {
-          timeoutMillis: 500, // short timeout so we don't wait a long time for the test
-          core: 'vpr',
-          path: '/live_nodes',
+          dataTimeoutMillis: 500, // short timeout so we don't wait a long time for the test
+          core: CORE,
+          path: PATH,
           zooKeeperConnection: 'IP            ' // this should point to a non-existent ZooKeeper server
         }
       };
 
-      solrClient = createClient(logger, badConfig.solrClient);
+      solrSmartClient = createClient(logger, badConfig.solrClient);
 
       runs(function() {
-        solrClient.search('PID:1', function(error) {
+        solrSmartClient.search('PID:1', error => {
           expect(error).not.toBeNull();
           expect(error).not.toBeUndefined();
+          finished = true;
         });
-        finished = true;
       });
 
       waitsFor(function() {
         return finished;
-      }, 5000);
+      }, 1000);
     });
   });
 
-  describe('add()', function() {
-    it('tests that add executes', function() {
-      var solrRecord = {
-        pid: '1001',
-        uid: '1001'
-      };
+  describe('solr functions', function() {
+    describe('add()', function() {
+      it('tests that add() executes', function() {
+        let solrRecord = {
+          pid: '1001',
+          uid: '1001'
+        };
 
-      solrClient = createClient(logger, config.solrClient);
+        solrSmartClient = createClient(logger, getConfig());
 
-      expect(_.isObject(solrRecord)).toBe(true);
-      if (_.isObject(solrRecord)) {
+        expect(_.isObject(solrRecord)).toBe(true);
+        if (_.isObject(solrRecord)) {
+          runs(function() {
+            solrSmartClient.add(solrRecord, (error, data) => {
+              expect(error).toBeNull();
+              expect(data).not.toBeUndefined();
+              expect(data).not.toBeNull();
+              if (data) {
+                expect(data.responseHeader).not.toBeUndefined();
+                expect(data.responseHeader.status).toBe(0);
+              }
+              finished = true;
+            });
+          });
+
+          waitsFor(function() {
+            return finished;
+          }, 1000);
+        }
+      });
+    });
+
+    describe('search()', function() {
+      it('tests that search() executes', function() {
+        solrSmartClient = createClient(logger, getConfig());
+
         runs(function() {
-          solrClient.add(solrRecord, function(error, data) {
+          solrSmartClient.search('PID:1', (error, data) => {
             expect(error).toBeNull();
             expect(data).not.toBeUndefined();
-            expect(data).not.toBeNull();
             if (data) {
               expect(data.responseHeader).not.toBeUndefined();
               expect(data.responseHeader.status).toBe(0);
@@ -127,105 +153,97 @@ describe('solr-smart-client', function() {
 
         waitsFor(function() {
           return finished;
-        });
-      }
-    });
-  });
-
-  describe('search()', function() {
-    it('tests that search executes', function() {
-      solrClient = createClient(logger, config.solrClient);
-
-      runs(function() {
-        solrClient.search('PID:1', function(error, data) {
-          expect(error).toBeNull();
-          expect(data).not.toBeUndefined();
-          if (data) {
-            expect(data.responseHeader).not.toBeUndefined();
-            expect(data.responseHeader.status).toBe(0);
-          }
-          finished = true;
-        });
-      });
-
-      waitsFor(function() {
-        return finished;
+        }, 1000);
       });
     });
-  });
 
-  describe('get()', function() {
-    // disabled because no search handler is available for testing
-    xit('tests that get executes', function() {
-      runs(function() {
-        solrClient.get('', 'PID:1', function(error, data) {
-          expect(error).toBeNull();
-          expect(data).not.toBeUndefined();
-          if (data) {
-            expect(data.responseHeader).not.toBeUndefined();
-            expect(data.responseHeader.status).toBe(0);
-          }
-          finished = true;
+    describe('get()', function() {
+      it('tests that get() executes', function() {
+        runs(function() {
+          solrSmartClient.get('admin/ping', (error, data) => {
+            expect(error).toBeNull();
+            expect(data).not.toBeUndefined();
+            if (data) {
+              expect(data.responseHeader).not.toBeUndefined();
+              expect(data.responseHeader.status).toBe(0);
+            }
+            finished = true;
+          });
         });
-      });
 
-      waitsFor(function() {
-        return finished;
+        waitsFor(function() {
+          return finished;
+        }, 1000);
       });
     });
-  });
 
-  describe('deleteByQuery()', function() {
-    it('tests delete by query executes', function() {
-      runs(function() {
-        solrClient.deleteByQuery('PID:1', function(error, data) {
-          expect(error).toBeNull();
-          expect(data).not.toBeUndefined();
-          if (data) {
-            expect(data.responseHeader).not.toBeUndefined();
-            expect(data.responseHeader.status).toBe(0);
-          }
-          finished = true;
+    describe('deleteByQuery()', function() {
+      it('tests that deleteByQuery() executes', function() {
+        runs(function() {
+          solrSmartClient.deleteByQuery('PID:1', (error, data) => {
+            expect(error).toBeNull();
+            expect(data).not.toBeUndefined();
+            if (data) {
+              expect(data.responseHeader).not.toBeUndefined();
+              expect(data.responseHeader.status).toBe(0);
+            }
+            finished = true;
+          });
         });
-      });
 
-      waitsFor(function() {
-        return finished;
+        waitsFor(function() {
+          return finished;
+        }, 1000);
       });
     });
-  });
 
-  describe('deleteAll()', function() {
-    it('tests delete all documents executes', function() {
-      runs(function() {
-        solrClient.deleteAll(function(error, data) {
-          expect(error).toBeNull();
-          expect(data).not.toBeUndefined();
-          if (data) {
-            expect(data.responseHeader).not.toBeUndefined();
-            expect(data.responseHeader.status).toBe(0);
-          }
-          finished = true;
+    describe('deleteAll()', function() {
+      it('tests that deleteAll() executes', function() {
+        runs(function() {
+          solrSmartClient.deleteAll((error, data) => {
+            expect(error).toBeNull();
+            expect(data).not.toBeUndefined();
+            if (data) {
+              expect(data.responseHeader).not.toBeUndefined();
+              expect(data.responseHeader.status).toBe(0);
+            }
+            finished = true;
+          });
         });
-      });
 
-      waitsFor(function() {
-        return finished;
+        waitsFor(function() {
+          return finished;
+        }, 1000);
       });
     });
-  });
 
-  describe('commit()', function() {
-    it('tests commit executes', function() {
-      runs(function() {
-        solrClient.commit(function(error) {
-          expect(_.isUndefined(error) || _.isNull(error)).toBe(true);
-          finished = true;
+    describe('ping()', function() {
+      it('tests that ping() executes', function() {
+        runs(function() {
+          solrSmartClient.ping(error => {
+            expect(_.isUndefined(error) || _.isNull(error)).toBe(true);
+            finished = true;
+          });
         });
-      });
 
-      waitsFor(function() {
-        return finished;
+        waitsFor(function() {
+          return finished;
+        }, 1000);
+      });
+    });
+
+    describe('commit()', function() {
+      it('tests that commit() executes', function() {
+        runs(function() {
+          solrSmartClient.commit(error => {
+            expect(_.isUndefined(error) || _.isNull(error)).toBe(true);
+            finished = true;
+          });
+        });
+
+        waitsFor(function() {
+          return finished;
+        }, 1000);
       });
     });
   });

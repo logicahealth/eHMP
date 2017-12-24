@@ -23,17 +23,17 @@ describe('solr-document-xform.js', function() {
             var vprRecord = {
                 'attending': 'PROGRAMMER,TWENTY',
                 'attendingDisplayName': 'Programmer,Twenty',
-                'attendingUid': 'urn:va:user:9E7A:755',
+                'attendingUid': 'urn:va:user:SITE:755',
                 'author': 'PROVIDER,ONE',
                 'authorDisplayName': 'Provider,One',
-                'authorUid': 'urn:va:user:9E7A:983',
+                'authorUid': 'urn:va:user:SITE:983',
                 'clinicians': [
                     {
                         'displayName': 'Provider,One',
                         'name': 'PROVIDER,ONE',
                         'role': 'AU',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:983\'}',
-                        'uid': 'urn:va:user:9E7A:983'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:983\'}',
+                        'uid': 'urn:va:user:SITE:983'
                     },
                     {
                         'displayName': 'Provider,One',
@@ -41,8 +41,8 @@ describe('solr-document-xform.js', function() {
                         'role': 'S',
                         'signature': 'ONE PROVIDER',
                         'signedDateTime': '19940311',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:983\'}',
-                        'uid': 'urn:va:user:9E7A:983'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:983\'}',
+                        'uid': 'urn:va:user:SITE:983'
                     },
                     {
                         'displayName': 'Programmer,Twenty',
@@ -50,43 +50,43 @@ describe('solr-document-xform.js', function() {
                         'role': 'C',
                         'signature': 'TOM O\'CONNELL XXXXXXXXXX XXXXXXXXXX XXXXXXXXXX XXXXX',
                         'signedDateTime': '19940311',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                        'uid': 'urn:va:user:9E7A:755'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                        'uid': 'urn:va:user:SITE:755'
                     },
                     {
                         'displayName': 'Programmer,Twenty',
                         'name': 'PROGRAMMER,TWENTY',
                         'role': 'EC',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                        'uid': 'urn:va:user:9E7A:755'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                        'uid': 'urn:va:user:SITE:755'
                     },
                     {
                         'displayName': 'Bjm',
                         'name': 'BJM',
                         'role': 'E',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:11278\'}',
-                        'uid': 'urn:va:user:9E7A:11278'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:11278\'}',
+                        'uid': 'urn:va:user:SITE:11278'
                     },
                     {
                         'displayName': 'Programmer,Twenty',
                         'name': 'PROGRAMMER,TWENTY',
                         'role': 'ATT',
-                        'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                        'uid': 'urn:va:user:9E7A:755'
+                        'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                        'uid': 'urn:va:user:SITE:755'
                     }
                 ],
                 'cosignedDateTime': '19940311',
                 'cosigner': 'PROGRAMMER,TWENTY',
                 'cosignerDisplayName': 'Programmer,Twenty',
-                'cosignerUid': 'urn:va:user:9E7A:755',
+                'cosignerUid': 'urn:va:user:SITE:755',
                 'documentClass': 'DISCHARGE SUMMARY',
-                'documentDefUid': 'urn:va:doc-def:9E7A:1',
+                'documentDefUid': 'urn:va:doc-def:SITE:1',
                 'documentDefUidVuid': 'urn:va:vuid:4693715',
                 'interdisciplinaryType': 'test',
                 'documentTypeCode': 'DS',
                 'documentTypeName': 'Discharge Summary',
                 'encounterName': 'INACTIVE(2 NHCU) Jul 16, 1993',
-                'encounterUid': 'urn:va:visit:9E7A:3:985',
+                'encounterUid': 'urn:va:visit:SITE:3:985',
                 'entered': '19940308',
                 'facilityCode': '998',
                 'facilityName': 'ABILENE (CAA)',
@@ -99,12 +99,12 @@ describe('solr-document-xform.js', function() {
                     'name': 'DISCHARGE SUMMARY',
                     'vuid': 'urn:va:vuid:4693715'
                 },
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'referenceDateTime': '19930719',
                 'signedDateTime': '19940311',
                 'signer': 'PROVIDER,ONE',
                 'signerDisplayName': 'Provider,One',
-                'signerUid': 'urn:va:user:9E7A:983',
+                'signerUid': 'urn:va:user:SITE:983',
                 'stampTime': '19940311000000',
                 'status': 'RETRACTED',
                 'statusDisplayName': 'Retracted',
@@ -113,17 +113,17 @@ describe('solr-document-xform.js', function() {
                     {
                         'attending': 'PROGRAMMER,TWENTY',
                         'attendingDisplayName': 'Programmer,Twenty',
-                        'attendingUid': 'urn:va:user:9E7A:755',
+                        'attendingUid': 'urn:va:user:SITE:755',
                         'author': 'PROVIDER,ONE',
                         'authorDisplayName': 'Provider,One',
-                        'authorUid': 'urn:va:user:9E7A:983',
+                        'authorUid': 'urn:va:user:SITE:983',
                         'clinicians': [
                             {
                                 'displayName': 'Provider,One',
                                 'name': 'PROVIDER,ONE',
                                 'role': 'AU',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:983\'}',
-                                'uid': 'urn:va:user:9E7A:983'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:983\'}',
+                                'uid': 'urn:va:user:SITE:983'
                             },
                             {
                                 'displayName': 'Provider,One',
@@ -131,8 +131,8 @@ describe('solr-document-xform.js', function() {
                                 'role': 'S',
                                 'signature': 'ONE PROVIDER',
                                 'signedDateTime': '19940311',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:983\'}',
-                                'uid': 'urn:va:user:9E7A:983'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:983\'}',
+                                'uid': 'urn:va:user:SITE:983'
                             },
                             {
                                 'displayName': 'Programmer,Twenty',
@@ -140,45 +140,45 @@ describe('solr-document-xform.js', function() {
                                 'role': 'C',
                                 'signature': 'TOM O\'CONNELL XXXXXXXXXX XXXXXXXXXX XXXXXXXXXX XXXXX',
                                 'signedDateTime': '19940311',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                                'uid': 'urn:va:user:9E7A:755'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                                'uid': 'urn:va:user:SITE:755'
                             },
                             {
                                 'displayName': 'Programmer,Twenty',
                                 'name': 'PROGRAMMER,TWENTY',
                                 'role': 'EC',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                                'uid': 'urn:va:user:9E7A:755'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                                'uid': 'urn:va:user:SITE:755'
                             },
                             {
                                 'displayName': 'Bjm',
                                 'name': 'BJM',
                                 'role': 'E',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:11278\'}',
-                                'uid': 'urn:va:user:9E7A:11278'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:11278\'}',
+                                'uid': 'urn:va:user:SITE:11278'
                             },
                             {
                                 'displayName': 'Programmer,Twenty',
                                 'name': 'PROGRAMMER,TWENTY',
                                 'role': 'ATT',
-                                'summary': 'DocumentClinician{uid=\'urn:va:user:9E7A:755\'}',
-                                'uid': 'urn:va:user:9E7A:755'
+                                'summary': 'DocumentClinician{uid=\'urn:va:user:SITE:755\'}',
+                                'uid': 'urn:va:user:SITE:755'
                             }
                         ],
                         'content':'TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST',
                         'cosigner': 'PROGRAMMER,TWENTY',
                         'cosignerDisplayName': 'Programmer,Twenty',
-                        'cosignerUid': 'urn:va:user:9E7A:755',
+                        'cosignerUid': 'urn:va:user:SITE:755',
                         'dateTime': '19930719',
                         'signer': 'PROVIDER,ONE',
                         'signerDisplayName': 'Provider,One',
-                        'signerUid': 'urn:va:user:9E7A:983',
+                        'signerUid': 'urn:va:user:SITE:983',
                         'status': 'RETRACTED',
-                        'summary': 'DocumentText{uid=\'urn:va:document:9E7A:3:308\'}',
-                        'uid': 'urn:va:document:9E7A:3:308'
+                        'summary': 'DocumentText{uid=\'urn:va:document:SITE:3:308\'}',
+                        'uid': 'urn:va:document:SITE:3:308'
                     }
                 ],
-                'uid': 'urn:va:document:9E7A:3:308',
+                'uid': 'urn:va:document:SITE:3:308',
                 'urgency': 'routine'
             };
             var solrRecord = xformer(vprRecord, log);

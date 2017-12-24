@@ -22,7 +22,7 @@ describe('active-user-retriever', function() {
             });
 
             activeUserRetriever._removeBlackListedUsers(log, environment,
-                [{uid: 'urn:va:user:9E7A:334533', id: 334533, site: '9E7A'}], function(err, results) {
+                [{uid: 'urn:va:user:SITE:334533', id: 334533, site: 'SITE'}], function(err, results) {
                     expect(results.length).toBe(0);
                 });
             });
@@ -33,7 +33,7 @@ describe('active-user-retriever', function() {
             });
 
             activeUserRetriever._removeBlackListedUsers(log, environment,
-                [{uid: 'urn:va:user:9E7A:334533', id: 334533, site: '9E7A'}], function(err, results) {
+                [{uid: 'urn:va:user:SITE:334533', id: 334533, site: 'SITE'}], function(err, results) {
                     expect(results[0].id).toBe(334533);
                 });
             });
@@ -46,7 +46,7 @@ describe('active-user-retriever', function() {
             });
 
             spyOn(pjds, 'getActiveUsers').andCallFake(function(callback) {
-                callback(null, {statusCode: 200, body: '{"items": [{"uid": "urn:va:user:9E7A:334533", "id": "334533", "site": "9E7A"}]}'});
+                callback(null, {statusCode: 200, body: '{"items": [{"uid": "urn:va:user:SITE:334533", "id": "334533", "site": "SITE"}]}'});
             });
 
             activeUserRetriever.getAllActiveUsers(log, config, environment, function(error, result) {

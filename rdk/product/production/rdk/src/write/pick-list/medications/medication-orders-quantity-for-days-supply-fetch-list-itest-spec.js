@@ -11,8 +11,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -25,7 +25,7 @@ describe('medication-orders-quantity-for-days-supply resource integration test',
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', daysSupply: 90, unitsPerDose: '2^', schedule: 'Q6H PRN^', duration: '~^', pid: '9E7A;100615', drug: '213' });
+        }, { site: 'SITE', daysSupply: 90, unitsPerDose: '2^', schedule: 'Q6H PRN^', duration: '~^', pid: 'SITE;100615', drug: '213' });
     });
 
     it('will handle returning an empty field if schedule is not correct', function (done) {
@@ -35,7 +35,7 @@ describe('medication-orders-quantity-for-days-supply resource integration test',
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', daysSupply: 90, unitsPerDose: '2^', schedule: '^', duration: '~^', pid: '9E7A;100615', drug: '213' });
+        }, { site: 'SITE', daysSupply: 90, unitsPerDose: '2^', schedule: '^', duration: '~^', pid: 'SITE;100615', drug: '213' });
     });
 });
 

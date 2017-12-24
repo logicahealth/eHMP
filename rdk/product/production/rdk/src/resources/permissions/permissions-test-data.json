@@ -1,0 +1,29 @@
+{
+    "permissions": [
+        {
+            "uid": "one-solo-per-song",
+            "value": "one-solo-per-song",
+            "label": "One Solo Allowed per Song",
+            "description": "Ability to have a solo for each song played at a gig",
+            "example": "",
+            "note": "",
+            "version": {
+                "introduced": "1.3.1",
+                "deprecated": null
+            },
+            "status": "active"
+        }, {
+            "uid": "fills-as-needed",
+            "value": "fills-as-needed",
+            "label": "Drum Fills to create tension and resolve.",
+            "description": "Ability to push a drum fill when the song needs to cause tension or release",
+            "example": "",
+            "note": "",
+            "version": {
+                "introduced": "1.3.1",
+                "deprecated": null
+            },
+            "status": "active"
+        }
+    ]
+}

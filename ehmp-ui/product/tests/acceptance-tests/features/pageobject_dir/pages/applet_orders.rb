@@ -1,24 +1,27 @@
 require_relative 'parent_applet.rb'
+
+class OrderLabTestTray < SitePrism::Section
+  element :fld_order_modal_title, "[id^=main-workflow-label-view]"
+  element :fld_available_lab_test_input_box, "input[class='select2-search__field']"
+  element :select_collection_sample, ".collectionSample select"
+  element :select_specimen, ".specimen select"
+  element :select_collection_type, ".collectionType select"
+  element :btn_toggle, ".btn.dropdown-toggle.btn-primary .caret"
+end
+
 class PobOrdersApplet < PobParentApplet
   
-  set_url '/#orders-full'
-  set_url_matcher(/\/#orders-full/)
-  
-  # *****************  All_Form_Elements  ******************* #
+  set_url '#/patient/orders-full'
+  set_url_matcher(/#\/patient\/orders-full/)
 
-  # *****************  All_Logo_Elements  ******************* #
+  section :order_lab_tray, OrderLabTestTray, ".sidebar-tray.right"
 
   # *****************  All_Field_Elements  ******************* #
-  element :fld_order_modal_title, "[id='main-workflow-label-Order-a-Lab-Test']"
-  element :fld_available_lab_test_input_box, "input[class='select2-search__field']"
   element :fld_lab_test_select, "li:contains('24 HR URINE CALCIUM')"
-  element :fld_collection_type, "#collectionType"
-  element :fld_collection_date, "#collectionDate"
-  element :fld_in_progress, "div.inProgressContainer"
-  element :fld_override_reason, "#reason-for-override"
+
+  element :fld_override_reason, "[name='reason_for_override']"
   element :fld_signature_code, ".signature_code input:not([disabled])"
   element :fld_discontinue_reason, ".reason select"
-  element :fld_sign_order_screen_loaded, ".order_summary"
       
   elements :fld_order_preview_labels, ".col-xs-12 div"    
   elements :fld_order_modal_labels, ".form-group label"
@@ -40,8 +43,8 @@ class PobOrdersApplet < PobParentApplet
   
   elements :btn_all, ".inline-display.button-control"
   elements :btn_submit_order, "[role='menuitem']"
-  element :btn_orders_all, "#all-range-orders"
-  element :btn_orders_date, "[tooltip-data-key='orders_orderdate'] a"
+  section :date_range_filter, ExpandedDateFilter, "#grid-filter-lab_results_grid"
+  element :btn_orders_date, "[data-header-instanceid='orders-entered'] a"
 
   element :btn_delete, ".workflow-controller .modal-footer [data-original-title='Delete']"
   element :btn_draft, ".workflow-controller .modal-footer button[id='saveButton']"
@@ -52,17 +55,18 @@ class PobOrdersApplet < PobParentApplet
   element :ddl_urgency, "[id^=urgency]"
 
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_orders_grid, "#data-grid-orders tbody tr"
-  element :tbl_order_empty_row, "#data-grid-orders tr.empty"
+  elements :tbl_orders_grid, "[data-appletid=orders] table tbody tr"
+  element :tbl_order_empty_row, "[data-appletid=orders] tr.empty"
     
-  element :tbl_orders_first_row, "#data-grid-orders tbody tr.selectable:nth-child(1)"
-  element :tbl_orders_first_row_status, "#data-grid-orders tbody tr.selectable:nth-child(1) td:nth-child(3)"
-  element :tbl_orders_first_row_order, "#data-grid-orders tbody tr.selectable:nth-child(1) td:nth-child(4)"
-  element :tbl_order_date_header, "[data-appletid=orders] thead th:nth-of-type(1)"
-  element :tbl_orders_data_row_loaded, "#data-grid-orders tbody tr:nth-of-type(1) > td:nth-of-type(1)"
-  elements :tbl_coversheet_date_column, "#data-grid-orders tr.selectable td:nth-child(1)"
-  elements :tbl_coversheet_date_column_screenreader, "#data-grid-orders tr.selectable td:nth-child(1) span"
-  elements :tbl_coversheet_type_column, "#data-grid-orders tr.selectable td:nth-child(5)"
+  element :tbl_orders_first_row, "[data-appletid=orders] tbody tr.selectable:nth-child(1)"
+  element :tbl_orders_first_row_status, "[data-appletid=orders] tbody tr.selectable:nth-child(1) td:nth-child(4)"
+  element :tbl_orders_first_row_order, "[data-appletid=orders] tbody tr.selectable:nth-child(1) td:nth-child(5)"
+  element :tbl_order_date_header, "[data-appletid=orders] thead th:nth-of-type(2)"
+  element :tbl_orders_data_row_loaded, "[data-appletid=orders] tbody tr:nth-of-type(1) > td:nth-of-type(2)"
+  elements :tbl_coversheet_date_column, "[data-appletid=orders] tr.selectable td:nth-child(2)"
+  elements :tbl_coversheet_type_column, "[data-appletid=orders] tr.selectable td:nth-child(6)"
+  elements :expanded_tbl_headers, "[data-appletid=orders] thead th"
+  elements :tbl_rows, "[data-appletid=orders] tbody tr.selectable"
 
   # ****************** Methods *********************** #
   # *********************  Methods  ***************************#
@@ -76,7 +80,7 @@ class PobOrdersApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
   end  
   
   def applet_loaded?
@@ -101,23 +105,14 @@ class PobOrdersApplet < PobParentApplet
     all_type_columns = tbl_coversheet_type_column
     return_rows = []
     all_type_columns.each_with_index do | type_element, index |
-      p "Adding row #{type_element.text.upcase}" # if type_element.text.upcase == type.upcase
+      #p "Adding row #{type_element.text.upcase}" # if type_element.text.upcase == type.upcase
       return_rows.push all_rows[index] if type_element.text.upcase == type.upcase
     end
     return_rows
   end
 
   def date_column_text_only
-    dates_screenreader_text = tbl_coversheet_date_column
-    screenreader_text = tbl_coversheet_date_column_screenreader[0]
-    dates_only = []
-    dates_screenreader_text.each_with_index do | td_element, index |
-      date = td_element.text
-      date = date.sub(screenreader_text.text, '')
-      dates_only.push(date.strip)
-    end
-    p dates_only
-    dates_only
+    dates_only = tbl_coversheet_date_column.map { |element| element.text.strip }
   end
 
   def verify_date_time_sort_selectable(reverse_chronilogical)
@@ -132,7 +127,7 @@ class PobOrdersApplet < PobParentApplet
 
       date_only = date_format.match(columns[i]).to_s
       lower = Date.strptime(date_only, format)
-      p "Comparing #{higher}  with #{lower}"
+      #p "Comparing #{higher}  with #{lower}"
 
       check_alpha = reverse_chronilogical ? ((higher >= lower)) : ((higher <= lower))
       p "#{higher} #{for_error_message} #{lower}" unless check_alpha

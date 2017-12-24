@@ -101,7 +101,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12440"
+                    "value": "urn:va:vital:SITE:253:12440"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -181,7 +181,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12441"
+                    "value": "urn:va:vital:SITE:253:12441"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -261,7 +261,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12442"
+                    "value": "urn:va:vital:SITE:253:12442"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -322,7 +322,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12443"
+                    "value": "urn:va:vital:SITE:253:12443"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -397,7 +397,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12443"
+                    "value": "urn:va:vital:SITE:253:12443"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -491,7 +491,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12444"
+                    "value": "urn:va:vital:SITE:253:12444"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -561,7 +561,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12445"
+                    "value": "urn:va:vital:SITE:253:12445"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -619,7 +619,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:12446"
+                    "value": "urn:va:vital:SITE:253:12446"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -678,7 +678,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13374"
+                    "value": "urn:va:vital:SITE:253:13374"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -758,7 +758,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13375"
+                    "value": "urn:va:vital:SITE:253:13375"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -838,7 +838,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13376"
+                    "value": "urn:va:vital:SITE:253:13376"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -899,7 +899,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13377"
+                    "value": "urn:va:vital:SITE:253:13377"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -974,7 +974,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13377"
+                    "value": "urn:va:vital:SITE:253:13377"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1079,7 +1079,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13378"
+                    "value": "urn:va:vital:SITE:253:13378"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1138,7 +1138,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13379"
+                    "value": "urn:va:vital:SITE:253:13379"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1196,7 +1196,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:13380"
+                    "value": "urn:va:vital:SITE:253:13380"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1255,7 +1255,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14258"
+                    "value": "urn:va:vital:SITE:253:14258"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1335,7 +1335,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14259"
+                    "value": "urn:va:vital:SITE:253:14259"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1415,7 +1415,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14260"
+                    "value": "urn:va:vital:SITE:253:14260"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1476,7 +1476,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14261"
+                    "value": "urn:va:vital:SITE:253:14261"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1551,7 +1551,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14261"
+                    "value": "urn:va:vital:SITE:253:14261"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1644,7 +1644,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14262"
+                    "value": "urn:va:vital:SITE:253:14262"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1703,7 +1703,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14883"
+                    "value": "urn:va:vital:SITE:253:14883"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1783,7 +1783,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14884"
+                    "value": "urn:va:vital:SITE:253:14884"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1863,7 +1863,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14885"
+                    "value": "urn:va:vital:SITE:253:14885"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1924,7 +1924,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14886"
+                    "value": "urn:va:vital:SITE:253:14886"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -1999,7 +1999,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14886"
+                    "value": "urn:va:vital:SITE:253:14886"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2092,7 +2092,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:14887"
+                    "value": "urn:va:vital:SITE:253:14887"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2132,7 +2132,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15607"
+                    "value": "urn:va:vital:SITE:253:15607"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2207,7 +2207,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15607"
+                    "value": "urn:va:vital:SITE:253:15607"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2301,7 +2301,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15608"
+                    "value": "urn:va:vital:SITE:253:15608"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2381,7 +2381,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15609"
+                    "value": "urn:va:vital:SITE:253:15609"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2421,7 +2421,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15970"
+                    "value": "urn:va:vital:SITE:253:15970"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2496,7 +2496,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15970"
+                    "value": "urn:va:vital:SITE:253:15970"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2590,7 +2590,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15971"
+                    "value": "urn:va:vital:SITE:253:15971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2670,7 +2670,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:15972"
+                    "value": "urn:va:vital:SITE:253:15972"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2710,7 +2710,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16333"
+                    "value": "urn:va:vital:SITE:253:16333"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2785,7 +2785,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16333"
+                    "value": "urn:va:vital:SITE:253:16333"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2879,7 +2879,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16334"
+                    "value": "urn:va:vital:SITE:253:16334"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2959,7 +2959,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16335"
+                    "value": "urn:va:vital:SITE:253:16335"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -2999,7 +2999,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16729"
+                    "value": "urn:va:vital:SITE:253:16729"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3074,7 +3074,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16729"
+                    "value": "urn:va:vital:SITE:253:16729"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3168,7 +3168,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16730"
+                    "value": "urn:va:vital:SITE:253:16730"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3248,7 +3248,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16731"
+                    "value": "urn:va:vital:SITE:253:16731"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3328,7 +3328,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16732"
+                    "value": "urn:va:vital:SITE:253:16732"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3387,7 +3387,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16733"
+                    "value": "urn:va:vital:SITE:253:16733"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3446,7 +3446,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16734"
+                    "value": "urn:va:vital:SITE:253:16734"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3525,7 +3525,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:16735"
+                    "value": "urn:va:vital:SITE:253:16735"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3565,7 +3565,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17436"
+                    "value": "urn:va:vital:SITE:253:17436"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3640,7 +3640,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17436"
+                    "value": "urn:va:vital:SITE:253:17436"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3734,7 +3734,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17437"
+                    "value": "urn:va:vital:SITE:253:17437"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3814,7 +3814,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17438"
+                    "value": "urn:va:vital:SITE:253:17438"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3894,7 +3894,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17439"
+                    "value": "urn:va:vital:SITE:253:17439"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -3953,7 +3953,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17440"
+                    "value": "urn:va:vital:SITE:253:17440"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4012,7 +4012,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17441"
+                    "value": "urn:va:vital:SITE:253:17441"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4091,7 +4091,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:17442"
+                    "value": "urn:va:vital:SITE:253:17442"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4131,7 +4131,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18103"
+                    "value": "urn:va:vital:SITE:253:18103"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4206,7 +4206,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18103"
+                    "value": "urn:va:vital:SITE:253:18103"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4300,7 +4300,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18104"
+                    "value": "urn:va:vital:SITE:253:18104"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4380,7 +4380,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18105"
+                    "value": "urn:va:vital:SITE:253:18105"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4460,7 +4460,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18106"
+                    "value": "urn:va:vital:SITE:253:18106"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4539,7 +4539,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18107"
+                    "value": "urn:va:vital:SITE:253:18107"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4579,7 +4579,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18648"
+                    "value": "urn:va:vital:SITE:253:18648"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4654,7 +4654,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18648"
+                    "value": "urn:va:vital:SITE:253:18648"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4748,7 +4748,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18649"
+                    "value": "urn:va:vital:SITE:253:18649"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4828,7 +4828,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18650"
+                    "value": "urn:va:vital:SITE:253:18650"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4908,7 +4908,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18651"
+                    "value": "urn:va:vital:SITE:253:18651"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -4967,7 +4967,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18652"
+                    "value": "urn:va:vital:SITE:253:18652"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5026,7 +5026,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18653"
+                    "value": "urn:va:vital:SITE:253:18653"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5105,7 +5105,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:18654"
+                    "value": "urn:va:vital:SITE:253:18654"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5145,7 +5145,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19355"
+                    "value": "urn:va:vital:SITE:253:19355"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5220,7 +5220,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19355"
+                    "value": "urn:va:vital:SITE:253:19355"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5314,7 +5314,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19356"
+                    "value": "urn:va:vital:SITE:253:19356"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5394,7 +5394,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19357"
+                    "value": "urn:va:vital:SITE:253:19357"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5474,7 +5474,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19358"
+                    "value": "urn:va:vital:SITE:253:19358"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5533,7 +5533,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19359"
+                    "value": "urn:va:vital:SITE:253:19359"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5592,7 +5592,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19360"
+                    "value": "urn:va:vital:SITE:253:19360"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5671,7 +5671,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:19361"
+                    "value": "urn:va:vital:SITE:253:19361"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5711,7 +5711,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20062"
+                    "value": "urn:va:vital:SITE:253:20062"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5786,7 +5786,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20062"
+                    "value": "urn:va:vital:SITE:253:20062"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5880,7 +5880,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20063"
+                    "value": "urn:va:vital:SITE:253:20063"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -5960,7 +5960,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20064"
+                    "value": "urn:va:vital:SITE:253:20064"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6040,7 +6040,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20065"
+                    "value": "urn:va:vital:SITE:253:20065"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6099,7 +6099,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20066"
+                    "value": "urn:va:vital:SITE:253:20066"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6158,7 +6158,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20067"
+                    "value": "urn:va:vital:SITE:253:20067"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6237,7 +6237,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20068"
+                    "value": "urn:va:vital:SITE:253:20068"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6277,7 +6277,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20769"
+                    "value": "urn:va:vital:SITE:253:20769"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6352,7 +6352,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20769"
+                    "value": "urn:va:vital:SITE:253:20769"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6446,7 +6446,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20770"
+                    "value": "urn:va:vital:SITE:253:20770"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6526,7 +6526,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20771"
+                    "value": "urn:va:vital:SITE:253:20771"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6606,7 +6606,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20772"
+                    "value": "urn:va:vital:SITE:253:20772"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6686,7 +6686,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20773"
+                    "value": "urn:va:vital:SITE:253:20773"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6745,7 +6745,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20774"
+                    "value": "urn:va:vital:SITE:253:20774"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6824,7 +6824,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:20775"
+                    "value": "urn:va:vital:SITE:253:20775"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6864,7 +6864,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21476"
+                    "value": "urn:va:vital:SITE:253:21476"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -6939,7 +6939,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21476"
+                    "value": "urn:va:vital:SITE:253:21476"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7033,7 +7033,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21477"
+                    "value": "urn:va:vital:SITE:253:21477"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7113,7 +7113,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21478"
+                    "value": "urn:va:vital:SITE:253:21478"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7193,7 +7193,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21479"
+                    "value": "urn:va:vital:SITE:253:21479"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7273,7 +7273,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21480"
+                    "value": "urn:va:vital:SITE:253:21480"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7332,7 +7332,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21481"
+                    "value": "urn:va:vital:SITE:253:21481"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7411,7 +7411,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:21482"
+                    "value": "urn:va:vital:SITE:253:21482"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7451,7 +7451,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22203"
+                    "value": "urn:va:vital:SITE:253:22203"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7526,7 +7526,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22203"
+                    "value": "urn:va:vital:SITE:253:22203"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7620,7 +7620,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22204"
+                    "value": "urn:va:vital:SITE:253:22204"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7700,7 +7700,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22205"
+                    "value": "urn:va:vital:SITE:253:22205"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7780,7 +7780,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22206"
+                    "value": "urn:va:vital:SITE:253:22206"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7860,7 +7860,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22207"
+                    "value": "urn:va:vital:SITE:253:22207"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7919,7 +7919,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22208"
+                    "value": "urn:va:vital:SITE:253:22208"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -7978,7 +7978,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22209"
+                    "value": "urn:va:vital:SITE:253:22209"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8057,7 +8057,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22210"
+                    "value": "urn:va:vital:SITE:253:22210"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8097,7 +8097,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22971"
+                    "value": "urn:va:vital:SITE:253:22971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8172,7 +8172,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22971"
+                    "value": "urn:va:vital:SITE:253:22971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8266,7 +8266,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22972"
+                    "value": "urn:va:vital:SITE:253:22972"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8346,7 +8346,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22973"
+                    "value": "urn:va:vital:SITE:253:22973"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8426,7 +8426,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22974"
+                    "value": "urn:va:vital:SITE:253:22974"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8485,7 +8485,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22975"
+                    "value": "urn:va:vital:SITE:253:22975"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8564,7 +8564,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:22976"
+                    "value": "urn:va:vital:SITE:253:22976"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8604,7 +8604,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23557"
+                    "value": "urn:va:vital:SITE:253:23557"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8679,7 +8679,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23557"
+                    "value": "urn:va:vital:SITE:253:23557"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8773,7 +8773,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23558"
+                    "value": "urn:va:vital:SITE:253:23558"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8853,7 +8853,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23559"
+                    "value": "urn:va:vital:SITE:253:23559"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8933,7 +8933,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23560"
+                    "value": "urn:va:vital:SITE:253:23560"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -8991,7 +8991,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:23561"
+                    "value": "urn:va:vital:SITE:253:23561"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9050,7 +9050,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4744"
+                    "value": "urn:va:vital:SITE:253:4744"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9130,7 +9130,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4745"
+                    "value": "urn:va:vital:SITE:253:4745"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9210,7 +9210,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4746"
+                    "value": "urn:va:vital:SITE:253:4746"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9249,7 +9249,7 @@
                 "contained": [
                     {
                         "resourceType": "Organization",
-                        "_id": "f0ee843e-8523-479c-ead6-d7bc249e9999",
+                        "_id": "f0ee843e-8523-479c-ead6-d7bc249ePORT",
                         "identifier": [
                             {
                                 "type": "facility-code",
@@ -9271,14 +9271,14 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4747"
+                    "value": "urn:va:vital:SITE:253:4747"
                 },
                 "subject": {
                     "reference": "Patient/253"
                 },
                 "performer": [
                     {
-                        "reference": "f0ee843e-8523-479c-ead6-d7bc249e9999",
+                        "reference": "f0ee843e-8523-479c-ead6-d7bc249ePORT",
                         "display": "TROY"
                     }
                 ],
@@ -9324,7 +9324,7 @@
                 "contained": [
                     {
                         "resourceType": "Organization",
-                        "_id": "f0ee843e-8523-479c-ead6-d7bc249e9999",
+                        "_id": "f0ee843e-8523-479c-ead6-d7bc249ePORT",
                         "identifier": [
                             {
                                 "type": "facility-code",
@@ -9346,14 +9346,14 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4747"
+                    "value": "urn:va:vital:SITE:253:4747"
                 },
                 "subject": {
                     "reference": "Patient/253"
                 },
                 "performer": [
                     {
-                        "reference": "f0ee843e-8523-479c-ead6-d7bc249e9999",
+                        "reference": "f0ee843e-8523-479c-ead6-d7bc249ePORT",
                         "display": "TROY"
                     }
                 ],
@@ -9440,7 +9440,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4748"
+                    "value": "urn:va:vital:SITE:253:4748"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9499,7 +9499,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4749"
+                    "value": "urn:va:vital:SITE:253:4749"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9557,7 +9557,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:4750"
+                    "value": "urn:va:vital:SITE:253:4750"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9597,7 +9597,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:655"
+                    "value": "urn:va:vital:SITE:253:655"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9672,7 +9672,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:655"
+                    "value": "urn:va:vital:SITE:253:655"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9766,7 +9766,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:656"
+                    "value": "urn:va:vital:SITE:253:656"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9846,7 +9846,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:657"
+                    "value": "urn:va:vital:SITE:253:657"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -9926,7 +9926,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:658"
+                    "value": "urn:va:vital:SITE:253:658"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10006,7 +10006,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:659"
+                    "value": "urn:va:vital:SITE:253:659"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10064,7 +10064,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:661"
+                    "value": "urn:va:vital:SITE:253:661"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10104,7 +10104,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:676"
+                    "value": "urn:va:vital:SITE:253:676"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10179,7 +10179,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:676"
+                    "value": "urn:va:vital:SITE:253:676"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10273,7 +10273,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:677"
+                    "value": "urn:va:vital:SITE:253:677"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10353,7 +10353,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:678"
+                    "value": "urn:va:vital:SITE:253:678"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10433,7 +10433,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:679"
+                    "value": "urn:va:vital:SITE:253:679"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10512,7 +10512,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:682"
+                    "value": "urn:va:vital:SITE:253:682"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10552,7 +10552,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:696"
+                    "value": "urn:va:vital:SITE:253:696"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10627,7 +10627,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:696"
+                    "value": "urn:va:vital:SITE:253:696"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10721,7 +10721,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:697"
+                    "value": "urn:va:vital:SITE:253:697"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10801,7 +10801,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:698"
+                    "value": "urn:va:vital:SITE:253:698"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10881,7 +10881,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:699"
+                    "value": "urn:va:vital:SITE:253:699"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -10961,7 +10961,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:700"
+                    "value": "urn:va:vital:SITE:253:700"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11019,7 +11019,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:702"
+                    "value": "urn:va:vital:SITE:253:702"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11078,7 +11078,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8956"
+                    "value": "urn:va:vital:SITE:253:8956"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11158,7 +11158,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8957"
+                    "value": "urn:va:vital:SITE:253:8957"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11238,7 +11238,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8958"
+                    "value": "urn:va:vital:SITE:253:8958"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11299,7 +11299,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8959"
+                    "value": "urn:va:vital:SITE:253:8959"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11374,7 +11374,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8959"
+                    "value": "urn:va:vital:SITE:253:8959"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11468,7 +11468,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8960"
+                    "value": "urn:va:vital:SITE:253:8960"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11526,7 +11526,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:9E7A:253:8961"
+                    "value": "urn:va:vital:SITE:253:8961"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11585,7 +11585,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12440"
+                    "value": "urn:va:vital:SITE:253:12440"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11665,7 +11665,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12441"
+                    "value": "urn:va:vital:SITE:253:12441"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11745,7 +11745,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12442"
+                    "value": "urn:va:vital:SITE:253:12442"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11806,7 +11806,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12443"
+                    "value": "urn:va:vital:SITE:253:12443"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11881,7 +11881,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12443"
+                    "value": "urn:va:vital:SITE:253:12443"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -11975,7 +11975,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12444"
+                    "value": "urn:va:vital:SITE:253:12444"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12034,7 +12034,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12445"
+                    "value": "urn:va:vital:SITE:253:12445"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12092,7 +12092,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:12446"
+                    "value": "urn:va:vital:SITE:253:12446"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12151,7 +12151,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13374"
+                    "value": "urn:va:vital:SITE:253:13374"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12231,7 +12231,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13375"
+                    "value": "urn:va:vital:SITE:253:13375"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12311,7 +12311,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13376"
+                    "value": "urn:va:vital:SITE:253:13376"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12372,7 +12372,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13377"
+                    "value": "urn:va:vital:SITE:253:13377"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12447,7 +12447,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13377"
+                    "value": "urn:va:vital:SITE:253:13377"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12541,7 +12541,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13378"
+                    "value": "urn:va:vital:SITE:253:13378"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12600,7 +12600,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13379"
+                    "value": "urn:va:vital:SITE:253:13379"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12658,7 +12658,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:13380"
+                    "value": "urn:va:vital:SITE:253:13380"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12717,7 +12717,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14258"
+                    "value": "urn:va:vital:SITE:253:14258"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12797,7 +12797,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14259"
+                    "value": "urn:va:vital:SITE:253:14259"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12877,7 +12877,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14260"
+                    "value": "urn:va:vital:SITE:253:14260"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -12938,7 +12938,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14261"
+                    "value": "urn:va:vital:SITE:253:14261"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13013,7 +13013,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14261"
+                    "value": "urn:va:vital:SITE:253:14261"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13106,7 +13106,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14262"
+                    "value": "urn:va:vital:SITE:253:14262"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13165,7 +13165,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14883"
+                    "value": "urn:va:vital:SITE:253:14883"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13245,7 +13245,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14884"
+                    "value": "urn:va:vital:SITE:253:14884"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13325,7 +13325,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14885"
+                    "value": "urn:va:vital:SITE:253:14885"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13386,7 +13386,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14886"
+                    "value": "urn:va:vital:SITE:253:14886"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13461,7 +13461,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14886"
+                    "value": "urn:va:vital:SITE:253:14886"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13554,7 +13554,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:14887"
+                    "value": "urn:va:vital:SITE:253:14887"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13594,7 +13594,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15607"
+                    "value": "urn:va:vital:SITE:253:15607"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13669,7 +13669,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15607"
+                    "value": "urn:va:vital:SITE:253:15607"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13763,7 +13763,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15608"
+                    "value": "urn:va:vital:SITE:253:15608"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13843,7 +13843,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15609"
+                    "value": "urn:va:vital:SITE:253:15609"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13883,7 +13883,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15970"
+                    "value": "urn:va:vital:SITE:253:15970"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -13958,7 +13958,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15970"
+                    "value": "urn:va:vital:SITE:253:15970"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14052,7 +14052,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15971"
+                    "value": "urn:va:vital:SITE:253:15971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14132,7 +14132,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:15972"
+                    "value": "urn:va:vital:SITE:253:15972"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14172,7 +14172,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16333"
+                    "value": "urn:va:vital:SITE:253:16333"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14247,7 +14247,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16333"
+                    "value": "urn:va:vital:SITE:253:16333"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14341,7 +14341,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16334"
+                    "value": "urn:va:vital:SITE:253:16334"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14421,7 +14421,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16335"
+                    "value": "urn:va:vital:SITE:253:16335"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14461,7 +14461,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16729"
+                    "value": "urn:va:vital:SITE:253:16729"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14536,7 +14536,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16729"
+                    "value": "urn:va:vital:SITE:253:16729"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14630,7 +14630,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16730"
+                    "value": "urn:va:vital:SITE:253:16730"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14710,7 +14710,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16731"
+                    "value": "urn:va:vital:SITE:253:16731"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14790,7 +14790,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16732"
+                    "value": "urn:va:vital:SITE:253:16732"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14849,7 +14849,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16733"
+                    "value": "urn:va:vital:SITE:253:16733"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14908,7 +14908,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16734"
+                    "value": "urn:va:vital:SITE:253:16734"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -14987,7 +14987,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:16735"
+                    "value": "urn:va:vital:SITE:253:16735"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15027,7 +15027,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17436"
+                    "value": "urn:va:vital:SITE:253:17436"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15102,7 +15102,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17436"
+                    "value": "urn:va:vital:SITE:253:17436"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15196,7 +15196,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17437"
+                    "value": "urn:va:vital:SITE:253:17437"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15276,7 +15276,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17438"
+                    "value": "urn:va:vital:SITE:253:17438"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15356,7 +15356,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17439"
+                    "value": "urn:va:vital:SITE:253:17439"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15415,7 +15415,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17440"
+                    "value": "urn:va:vital:SITE:253:17440"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15474,7 +15474,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17441"
+                    "value": "urn:va:vital:SITE:253:17441"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15553,7 +15553,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:17442"
+                    "value": "urn:va:vital:SITE:253:17442"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15593,7 +15593,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18103"
+                    "value": "urn:va:vital:SITE:253:18103"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15668,7 +15668,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18103"
+                    "value": "urn:va:vital:SITE:253:18103"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15762,7 +15762,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18104"
+                    "value": "urn:va:vital:SITE:253:18104"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15842,7 +15842,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18105"
+                    "value": "urn:va:vital:SITE:253:18105"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -15922,7 +15922,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18106"
+                    "value": "urn:va:vital:SITE:253:18106"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16001,7 +16001,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18107"
+                    "value": "urn:va:vital:SITE:253:18107"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16041,7 +16041,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18648"
+                    "value": "urn:va:vital:SITE:253:18648"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16116,7 +16116,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18648"
+                    "value": "urn:va:vital:SITE:253:18648"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16210,7 +16210,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18649"
+                    "value": "urn:va:vital:SITE:253:18649"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16290,7 +16290,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18650"
+                    "value": "urn:va:vital:SITE:253:18650"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16370,7 +16370,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18651"
+                    "value": "urn:va:vital:SITE:253:18651"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16429,7 +16429,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18652"
+                    "value": "urn:va:vital:SITE:253:18652"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16488,7 +16488,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18653"
+                    "value": "urn:va:vital:SITE:253:18653"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16567,7 +16567,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:18654"
+                    "value": "urn:va:vital:SITE:253:18654"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16607,7 +16607,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19355"
+                    "value": "urn:va:vital:SITE:253:19355"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16682,7 +16682,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19355"
+                    "value": "urn:va:vital:SITE:253:19355"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16776,7 +16776,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19356"
+                    "value": "urn:va:vital:SITE:253:19356"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16856,7 +16856,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19357"
+                    "value": "urn:va:vital:SITE:253:19357"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16936,7 +16936,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19358"
+                    "value": "urn:va:vital:SITE:253:19358"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -16995,7 +16995,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19359"
+                    "value": "urn:va:vital:SITE:253:19359"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17054,7 +17054,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19360"
+                    "value": "urn:va:vital:SITE:253:19360"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17133,7 +17133,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:19361"
+                    "value": "urn:va:vital:SITE:253:19361"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17173,7 +17173,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20062"
+                    "value": "urn:va:vital:SITE:253:20062"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17248,7 +17248,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20062"
+                    "value": "urn:va:vital:SITE:253:20062"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17342,7 +17342,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20063"
+                    "value": "urn:va:vital:SITE:253:20063"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17422,7 +17422,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20064"
+                    "value": "urn:va:vital:SITE:253:20064"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17502,7 +17502,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20065"
+                    "value": "urn:va:vital:SITE:253:20065"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17561,7 +17561,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20066"
+                    "value": "urn:va:vital:SITE:253:20066"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17620,7 +17620,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20067"
+                    "value": "urn:va:vital:SITE:253:20067"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17699,7 +17699,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20068"
+                    "value": "urn:va:vital:SITE:253:20068"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17739,7 +17739,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20769"
+                    "value": "urn:va:vital:SITE:253:20769"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17814,7 +17814,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20769"
+                    "value": "urn:va:vital:SITE:253:20769"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17908,7 +17908,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20770"
+                    "value": "urn:va:vital:SITE:253:20770"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -17988,7 +17988,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20771"
+                    "value": "urn:va:vital:SITE:253:20771"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18068,7 +18068,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20772"
+                    "value": "urn:va:vital:SITE:253:20772"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18148,7 +18148,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20773"
+                    "value": "urn:va:vital:SITE:253:20773"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18207,7 +18207,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20774"
+                    "value": "urn:va:vital:SITE:253:20774"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18286,7 +18286,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:20775"
+                    "value": "urn:va:vital:SITE:253:20775"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18326,7 +18326,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21476"
+                    "value": "urn:va:vital:SITE:253:21476"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18401,7 +18401,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21476"
+                    "value": "urn:va:vital:SITE:253:21476"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18495,7 +18495,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21477"
+                    "value": "urn:va:vital:SITE:253:21477"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18575,7 +18575,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21478"
+                    "value": "urn:va:vital:SITE:253:21478"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18655,7 +18655,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21479"
+                    "value": "urn:va:vital:SITE:253:21479"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18735,7 +18735,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21480"
+                    "value": "urn:va:vital:SITE:253:21480"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18794,7 +18794,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21481"
+                    "value": "urn:va:vital:SITE:253:21481"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18873,7 +18873,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:21482"
+                    "value": "urn:va:vital:SITE:253:21482"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18913,7 +18913,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22203"
+                    "value": "urn:va:vital:SITE:253:22203"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -18988,7 +18988,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22203"
+                    "value": "urn:va:vital:SITE:253:22203"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19082,7 +19082,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22204"
+                    "value": "urn:va:vital:SITE:253:22204"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19162,7 +19162,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22205"
+                    "value": "urn:va:vital:SITE:253:22205"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19242,7 +19242,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22206"
+                    "value": "urn:va:vital:SITE:253:22206"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19322,7 +19322,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22207"
+                    "value": "urn:va:vital:SITE:253:22207"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19381,7 +19381,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22208"
+                    "value": "urn:va:vital:SITE:253:22208"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19440,7 +19440,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22209"
+                    "value": "urn:va:vital:SITE:253:22209"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19519,7 +19519,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22210"
+                    "value": "urn:va:vital:SITE:253:22210"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19559,7 +19559,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22971"
+                    "value": "urn:va:vital:SITE:253:22971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19634,7 +19634,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22971"
+                    "value": "urn:va:vital:SITE:253:22971"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19728,7 +19728,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22972"
+                    "value": "urn:va:vital:SITE:253:22972"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19808,7 +19808,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22973"
+                    "value": "urn:va:vital:SITE:253:22973"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19888,7 +19888,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22974"
+                    "value": "urn:va:vital:SITE:253:22974"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -19947,7 +19947,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22975"
+                    "value": "urn:va:vital:SITE:253:22975"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20026,7 +20026,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:22976"
+                    "value": "urn:va:vital:SITE:253:22976"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20066,7 +20066,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23557"
+                    "value": "urn:va:vital:SITE:253:23557"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20141,7 +20141,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23557"
+                    "value": "urn:va:vital:SITE:253:23557"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20235,7 +20235,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23558"
+                    "value": "urn:va:vital:SITE:253:23558"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20315,7 +20315,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23559"
+                    "value": "urn:va:vital:SITE:253:23559"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20395,7 +20395,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23560"
+                    "value": "urn:va:vital:SITE:253:23560"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20453,7 +20453,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:23561"
+                    "value": "urn:va:vital:SITE:253:23561"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20512,7 +20512,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4744"
+                    "value": "urn:va:vital:SITE:253:4744"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20592,7 +20592,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4745"
+                    "value": "urn:va:vital:SITE:253:4745"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20672,7 +20672,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4746"
+                    "value": "urn:va:vital:SITE:253:4746"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20733,7 +20733,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4747"
+                    "value": "urn:va:vital:SITE:253:4747"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20808,7 +20808,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4747"
+                    "value": "urn:va:vital:SITE:253:4747"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20902,7 +20902,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4748"
+                    "value": "urn:va:vital:SITE:253:4748"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -20961,7 +20961,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4749"
+                    "value": "urn:va:vital:SITE:253:4749"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21019,7 +21019,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:4750"
+                    "value": "urn:va:vital:SITE:253:4750"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21059,7 +21059,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:655"
+                    "value": "urn:va:vital:SITE:253:655"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21134,7 +21134,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:655"
+                    "value": "urn:va:vital:SITE:253:655"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21228,7 +21228,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:656"
+                    "value": "urn:va:vital:SITE:253:656"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21308,7 +21308,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:657"
+                    "value": "urn:va:vital:SITE:253:657"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21388,7 +21388,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:658"
+                    "value": "urn:va:vital:SITE:253:658"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21468,7 +21468,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:659"
+                    "value": "urn:va:vital:SITE:253:659"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21526,7 +21526,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:661"
+                    "value": "urn:va:vital:SITE:253:661"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21566,7 +21566,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:676"
+                    "value": "urn:va:vital:SITE:253:676"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21641,7 +21641,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:676"
+                    "value": "urn:va:vital:SITE:253:676"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21735,7 +21735,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:677"
+                    "value": "urn:va:vital:SITE:253:677"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21815,7 +21815,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:678"
+                    "value": "urn:va:vital:SITE:253:678"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21895,7 +21895,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:679"
+                    "value": "urn:va:vital:SITE:253:679"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21974,7 +21974,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:682"
+                    "value": "urn:va:vital:SITE:253:682"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -21992,7 +21992,7 @@
                 "contained": [
                     {
                         "resourceType": "Organization",
-                        "_id": "0ecd161b-3c36-40aa-8a3f-6858983affb5",
+                        "_id": "0ecd161b-3c36-40aa-8a3f-685PORTaffb5",
                         "identifier": [
                             {
                                 "type": "facility-code",
@@ -22014,14 +22014,14 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:696"
+                    "value": "urn:va:vital:SITE:253:696"
                 },
                 "subject": {
                     "reference": "Patient/253"
                 },
                 "performer": [
                     {
-                        "reference": "0ecd161b-3c36-40aa-8a3f-6858983affb5",
+                        "reference": "0ecd161b-3c36-40aa-8a3f-685PORTaffb5",
                         "display": "CAMP BEE"
                     }
                 ],
@@ -22067,7 +22067,7 @@
                 "contained": [
                     {
                         "resourceType": "Organization",
-                        "_id": "0ecd161b-3c36-40aa-8a3f-6858983affb5",
+                        "_id": "0ecd161b-3c36-40aa-8a3f-685PORTaffb5",
                         "identifier": [
                             {
                                 "type": "facility-code",
@@ -22089,14 +22089,14 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:696"
+                    "value": "urn:va:vital:SITE:253:696"
                 },
                 "subject": {
                     "reference": "Patient/253"
                 },
                 "performer": [
                     {
-                        "reference": "0ecd161b-3c36-40aa-8a3f-6858983affb5",
+                        "reference": "0ecd161b-3c36-40aa-8a3f-685PORTaffb5",
                         "display": "CAMP BEE"
                     }
                 ],
@@ -22183,7 +22183,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:697"
+                    "value": "urn:va:vital:SITE:253:697"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22263,7 +22263,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:698"
+                    "value": "urn:va:vital:SITE:253:698"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22343,7 +22343,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:699"
+                    "value": "urn:va:vital:SITE:253:699"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22423,7 +22423,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:700"
+                    "value": "urn:va:vital:SITE:253:700"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22481,7 +22481,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:702"
+                    "value": "urn:va:vital:SITE:253:702"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22540,7 +22540,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8956"
+                    "value": "urn:va:vital:SITE:253:8956"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22620,7 +22620,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8957"
+                    "value": "urn:va:vital:SITE:253:8957"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22700,7 +22700,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8958"
+                    "value": "urn:va:vital:SITE:253:8958"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22761,7 +22761,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8959"
+                    "value": "urn:va:vital:SITE:253:8959"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22836,7 +22836,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8959"
+                    "value": "urn:va:vital:SITE:253:8959"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22930,7 +22930,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8960"
+                    "value": "urn:va:vital:SITE:253:8960"
                 },
                 "subject": {
                     "reference": "Patient/253"
@@ -22988,7 +22988,7 @@
                     "use": "official",
                     "type": "uid",
                     "system": "http://vistacore.us/fhir/id/uid",
-                    "value": "urn:va:vital:C877:253:8961"
+                    "value": "urn:va:vital:SITE:253:8961"
                 },
                 "subject": {
                     "reference": "Patient/253"

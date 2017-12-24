@@ -7,13 +7,13 @@ class DefaultLogin
 
   @@default_wait_time = DefaultTiming.default_wait_time
   @@facility_name = "PANORAMA"
-  # @@accesscode = "REDACTED"
-  # @@verifycode = "REDACTED"
-  #@@accesscode = "REDACTED"
-  #@@verifycode = "REDACTED"
+  # @@accesscode = "USER  "
+  # @@verifycode = "PW      "
+  #@@accesscode = "DNS    "
+  #@@verifycode = "DNS    !!"
 
-  @@accesscode = "REDACTED"
-  @@verifycode = "REDACTED"
+  @@accesscode = "DNS    "
+  @@verifycode = "DNS    !!"
   @@logged_in = false
   @@login_step=/^POB user is logged into EHMP\-UI with facility as  "(.*?)" accesscode as  "(.*?)" verifycode as  "(.*?)"/
   @@launch_ehmp = /^user launches eHMP\-UI$/

@@ -2,9 +2,9 @@ module.exports = {
     name: 'Node VIX Mock Services running configuration',
     appName: 'Node VIX Mock Services',
     appPasscode: '',
-    port: 8099,
-    accessCode: 'john',
-    verifyCode: 'secret',
+    port: PORT,
+    accessCode: 'USER',
+    verifyCode: 'PW    ',
     logger: {
         name: 'vix-mock-server',
         streams: [{

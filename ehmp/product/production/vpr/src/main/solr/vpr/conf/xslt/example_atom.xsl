@@ -43,7 +43,7 @@
         <email>solr-user@lucene.apache.org</email>
       </author>
       <link rel="self" type="application/atom+xml" 
-            href="http://localhost:8983/solr/q={$query}&amp;wt=xslt&amp;tr=atom.xsl"/>
+            href="http://localhost:PORT/solr/q={$query}&amp;wt=xslt&amp;tr=atom.xsl"/>
       <updated>
         <xsl:value-of select="response/result/doc[position()=1]/date[@name='timestamp']"/>
       </updated>
@@ -57,7 +57,7 @@
     <xsl:variable name="id" select="str[@name='id']"/>
     <entry>
       <title><xsl:value-of select="str[@name='name']"/></title>
-      <link href="http://localhost:8983/solr/select?q={$id}"/>
+      <link href="http://localhost:PORT/solr/select?q={$id}"/>
       <id>tag:localhost,2007:<xsl:value-of select="$id"/></id>
       <summary><xsl:value-of select="arr[@name='features']"/></summary>
       <updated><xsl:value-of select="date[@name='timestamp']"/></updated>

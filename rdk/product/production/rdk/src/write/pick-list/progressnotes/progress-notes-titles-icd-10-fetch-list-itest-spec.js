@@ -10,11 +10,11 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost',
-    site: '9E7A',
+    site: 'SITE',
     rootPath: '/resource/write-pick-list'
 };
 

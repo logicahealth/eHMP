@@ -51,7 +51,7 @@ Given(/^the client requests documents through rdk as pathology,one "([^"]*)"$/) 
   request.add_parameter('pid', pid)
 
   path = request.path
-  @response_rdk_path = HTTPartyRDK.get_as_user(path, '9E7A;PR12345', 'PR12345!!')
+  @response_rdk_path = HTTPartyRDK.get_as_user(path, 'SITE;PR12345', 'PR12345!!')
 
   expect(@response_rdk_path.code).to eq(200)
 end

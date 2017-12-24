@@ -108,7 +108,7 @@ function createJdsSuccessSetEventStoreStatusResponse() {
         'statusCode': 201,
         'headers': {
             'date': 'Tue, 11 Oct 2016 16:36:18 GMT',
-            'location': 'http://IP             /vpr/9E7A;33333/urn:va:allergy:9E7A:3:PORT',
+            'location': 'http://IP             /vpr/SITE;33333/urn:va:allergy:SITE:3:1001',
             'content-type': 'application/json',
             'access-control-allow-origin': '*',
             'content-length': '0'
@@ -124,9 +124,9 @@ function createJdsSuccessSetEventStoreStatusResponse() {
                 'hash': null,
                 'search': null,
                 'query': null,
-                'pathname': '/status/9E7A;33333/store',
-                'path': '/status/9E7A;33333/store',
-                'href': 'http://IP             /status/9E7A;33333/store'
+                'pathname': '/status/SITE;33333/store',
+                'path': '/status/SITE;33333/store',
+                'href': 'http://IP             /status/SITE;33333/store'
             },
             'method': 'POST',
             'headers': {
@@ -161,7 +161,7 @@ function createAllergyEvent() {
         'localId': '751',
         'mechanism': 'PHARMACOLOGIC',
         'originatorName': 'VEHU,EIGHT',
-        'pid': '9E7A;3',
+        'pid': 'SITE;3',
         'products': [{
             'name': 'PENICILLIN',
             'summary': 'AllergyProduct{uid=\'\'}',
@@ -176,7 +176,7 @@ function createAllergyEvent() {
         'stampTime': '20050317200936',
         'summary': 'PENICILLIN',
         'typeName': 'DRUG',
-        'uid': 'urn:va:allergy:9E7A:3:751',
+        'uid': 'urn:va:allergy:SITE:3:751',
         'verified': '20050317200936',
         'verifierName': '<auto-verified>'
     };
@@ -194,9 +194,9 @@ describe('solr-record-storage-handler.js', function() {
             var record = {
                 'familyName': 'EIGHT',
                 'givenNames': 'PATIENT',
-                'uid': 'urn:va:patient:9E7A:3:3',
+                'uid': 'urn:va:patient:SITE:3:3',
                 'stampTime': '20071217151354',
-                'pid': '9E7A;3'
+                'pid': 'SITE;3'
             };
             var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
             environment.jds._setResponseData([null], [jdsResponse], [undefined]);
@@ -223,9 +223,9 @@ describe('solr-record-storage-handler.js', function() {
             var dataDomain = 'treatment';
             var environment = createEnvironment(config, null);
             var record = {
-                'uid': 'urn:va:treatment:9E7A:3:12275',
+                'uid': 'urn:va:treatment:SITE:3:12275',
                 'stampTime': '20071217151354',
-                'pid': '9E7A;3'
+                'pid': 'SITE;3'
             };
             var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
             environment.jds._setResponseData([null], [jdsResponse], [undefined]);
@@ -555,7 +555,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751'
+                'uid': 'urn:va:allergy:SITE:3:751'
             };
 
             var finished;
@@ -580,7 +580,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': null
             };
 
@@ -606,7 +606,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': ''
             };
 
@@ -632,7 +632,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354'
             };
 
@@ -658,7 +658,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354',
                 'pid': null
             };
@@ -685,7 +685,7 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354',
                 'pid': ''
             };
@@ -712,9 +712,9 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354',
-                'pid': '9E7A;33333'
+                'pid': 'SITE;33333'
             };
             environment.jds._setResponseData(['Failed to store record.'], [undefined], [undefined]);
 
@@ -740,9 +740,9 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354',
-                'pid': '9E7A;33333'
+                'pid': 'SITE;33333'
             };
             var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
             jdsResponse.statusCode = 400;
@@ -770,9 +770,9 @@ describe('solr-record-storage-handler.js', function() {
             var environment = createEnvironment(config, null);
             var record = {
                 'kind': 'Allergy/Adverse Reaction',
-                'uid': 'urn:va:allergy:9E7A:3:751',
+                'uid': 'urn:va:allergy:SITE:3:751',
                 'stampTime': '20071217151354',
-                'pid': '9E7A;33333'
+                'pid': 'SITE;33333'
             };
 
             var jdsResponse = createJdsSuccessSetEventStoreStatusResponse();
@@ -803,7 +803,7 @@ describe('solr-record-storage-handler.js', function() {
 
             var patientIdentifier = {
                 'type': 'pid',
-                'value': '9E7A;3'
+                'value': 'SITE;3'
             };
             var allergyRecord = createAllergyEvent();
             var storageJob = {

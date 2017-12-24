@@ -1,7 +1,9 @@
 define([
+    'app/resources/fetch/patient_selection/confirmation/resources',
     'app/resources/fetch/patient_selection/clinics/collection',
     'app/resources/fetch/patient_selection/wards/collection'
 ], function(
+	Confirmation,
 	Clinics,
 	Wards
 ) {
@@ -9,6 +11,7 @@ define([
 
     return {
         Clinics: Clinics,
-        Wards: Wards
+        Wards: Wards,
+        Confirmation: Confirmation
     };
 });

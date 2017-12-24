@@ -15,19 +15,19 @@ describe('single-instance ', function() {
             req.app = {};
             req.app.config = {};
             req.app.config.vistaSites = {
-                'C877': {
+                'SITE': {
                     'name': 'KODAK',
                     'division': '500'
                 },
-                '9E7A': {
+                'SITE': {
                     'name': 'PANORAMA',
                     'division': '500'
                 }
             };
             req.app.config.jbpm = {};
             req.app.config.activityDatabase = {
-                'user': 'REDACTED',
-                'password': 'REDACTED',
+                'user': 'activitydbuser',
+                'password': 'activitydb$11',
                 'connectString': 'IP             /xe'
             };
 
@@ -41,9 +41,9 @@ describe('single-instance ', function() {
         it('_getUserDemographicsQuery', function() {
 
             var input = {};
-            input.userID = '9E7A;10000000270';
+            input.userID = 'SITE;10000000270';
             var result = singleInstance._getUserDemographicsQuery(req, input.userID);
-            expect(result.url).to.be.equal('/data/urn:va:user:9E7A:10000000270');
+            expect(result.url).to.be.equal('/data/urn:va:user:SITE:10000000270');
         });
 
         it('_getPatientDemographics', function() {
@@ -74,19 +74,19 @@ describe('single-instance ', function() {
             req.app = {};
             req.app.config = {};
             req.app.config.vistaSites = {
-                'C877': {
+                'SITE': {
                     'name': 'KODAK',
                     'division': '500'
                 },
-                '9E7A': {
+                'SITE': {
                     'name': 'PANORAMA',
                     'division': '500'
                 }
             };
             req.app.config.jbpm = {};
             req.app.config.activityDatabase = {
-                'user': 'REDACTED',
-                'password': 'REDACTED',
+                'user': 'activitydbuser',
+                'password': 'activitydb$11',
                 'connectString': 'IP             /xe'
             };
 
@@ -126,7 +126,7 @@ describe('single-instance ', function() {
         it('getClinical object from pJDS with bad object', function(done) {
             var object = {
                 'clinicalObject': {
-                    'authorUid': 'urn:va:user:9E7A:10000000270',
+                    'authorUid': 'urn:va:user:SITE:10000000270',
                     'creationDateTime': '20160505200028+0000',
                     'data': {
                         'activity': {
@@ -139,13 +139,13 @@ describe('single-instance ', function() {
                             'consultName': 'Rheumatology Consult',
                             'deploymentId': 'VistaCore:Order:2.0.0.37',
                             'earliestDate': '05\/05\/2016',
-                            'facility': '9E7A',
-                            'icn': '9E7A;419',
+                            'facility': 'SITE',
+                            'icn': 'SITE;419',
                             'latestDate': '05\/12\/2016',
                             'objectType': 'consultOrder',
-                            'orderingProviderId': '9E7A;10000000270',
+                            'orderingProviderId': 'SITE;10000000270',
                             'overrideReason': 'Test override',
-                            'pid': '9E7A;419',
+                            'pid': 'SITE;419',
                             'preReqOrders': [{
                                 'ien': '239',
                                 'label': 'C Reactive Protein',
@@ -291,13 +291,13 @@ describe('single-instance ', function() {
                     'displayName': 'Rheumatology Consult - Urgent',
                     'domain': 'ehmp-activity',
                     'ehmpState': 'draft',
-                    'patientUid': 'urn:va:patient:9E7A:419:419',
+                    'patientUid': 'urn:va:patient:SITE:419:419',
                     'referenceId': '',
                     'subDomain': 'consult',
-                    'uid': 'urn:va:ehmp-activity:9E7A:419:6027a1f6-7177-4f56-8663-87e66f88fcf3',
+                    'uid': 'urn:va:ehmp-activity:SITE:419:6027a1f6-7177-4f56-8663-87e66f88fcf3',
                     'visit': {
                         'dateTime': '20160505155500',
-                        'location': 'urn:va:location:9E7A:64',
+                        'location': 'urn:va:location:SITE:64',
                         'serviceCategory': 'I'
                     }
                 }

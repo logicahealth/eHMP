@@ -8,6 +8,8 @@ class PobStackedGraphsApplet < PobParentApplet
     add_applet_buttons appletid_css
     add_title appletid_css
     add_generic_error_message appletid_css
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
   end
 
   def applet_loaded?

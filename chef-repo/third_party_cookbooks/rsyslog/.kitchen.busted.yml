@@ -39,7 +39,7 @@ platforms:
 #   driver_plugin: ec2
 #   driver_config:
 #     image_id: ami-3be4bc52
-#     username: REDACTED
+#     username: USER    
 
 - name: ubuntu-1004
   driver_plugin: digitalocean

@@ -1,6 +1,6 @@
 class PobRecordSearch < PobParentApplet
-  set_url '/#record-search'
-  set_url_matcher(/\/#record-search$/)
+  set_url '#/patient/record-search'
+  set_url_matcher(/record-search$/)
 
   element :fld_suggestion_list, ".suggest-list"
   elements :fld_suggestion_list_items, :xpath, "//ul[contains(@class, 'suggest-list')]/li"
@@ -50,6 +50,7 @@ class PobRecordSearch < PobParentApplet
   element :popover_content_line1, ".popover-content p:nth-child(1)" #pop-over displays when View Synonyms Used button is clicked
   element :popover_content_synonyms, ".popover-content p.bold-font" #pop-over contains synonyms of the searched text
   elements :txt_highlighted_text, "html > body mark.cpe-search-term-match"
+  elements :modal_search_term_highlights, "#modal-body mark.cpe-search-term-match"
   elements :count_frame, "iframe"
 
   def displayed_result_dates
@@ -107,6 +108,12 @@ class PobRecordSearch < PobParentApplet
     self.class.elements :fld_subgroup_facilities, "div[id$='#{groupontext}'] .subgroupItem .row > div:nth-of-type(3)"
   end
   
+  def main_group_results(groupontext)
+    self.class.elements :fld_maingroup_titles, "div[id$='#{groupontext}'] .topLevelItem .row strong"
+    self.class.elements :fld_maingroup_dates, "div[id$='#{groupontext}'] .topLevelItem .row > .col-xs-11 div:nth-of-type(2) span"
+    self.class.elements :fld_maingroup_facilities, "div[id$='#{groupontext}'] .topLevelItem .row > .col-xs-11 div:nth-of-type(4)"
+  end
+  
   def expand_main_group(group_name)
     po_id = "[groupid="+"'"+"resultGroup#{group_name}"+"'] button"
     self.class.element :fld_main_group_title, "#{po_id}"
@@ -138,6 +145,14 @@ class PobRecordSearch < PobParentApplet
 
   def community_health_summaries_titles
     ['Summarization of Episode Note', 'Continuity of Care Document']
+  end
+  
+  def consult_titles
+    ['PHYSICAL THERAPY', 'NEUROSURGERY', 'RHEUMATOLOGY']
+  end
+  
+  def ehmp_facilities
+    ['PANORAMA', 'KODAK']
   end
 
   def community_health_facility_correct_format?(text)

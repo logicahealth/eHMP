@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
-var authUtils = require('../../subsystems/authentication/utils');
+var authUtils = rdk.utils.authentication;
 
 module.exports = function(req, res, next) {
     var logger = req.logger;

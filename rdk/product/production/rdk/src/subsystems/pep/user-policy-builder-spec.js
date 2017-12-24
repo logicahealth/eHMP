@@ -125,7 +125,7 @@ describe('When a user is audited in Vista for sensitive patient access', functio
         };
 
         patient = {
-            pid: '9E7A;1B'
+            pid: 'SITE;1B'
         };
 
         mockRpcUtil = sinon.stub(rpcUtil, 'getVistaRpcConfiguration', function(config, user) {
@@ -176,7 +176,7 @@ describe('User is not patient', function() {
     it('when session user ssn is not defined', function() {
         var req = {};
         var patients = [{
-            pid: '9E7A;18',
+            pid: 'SITE;18',
             ssn: '123456789'
         }];
 
@@ -228,7 +228,7 @@ describe('User is not patient', function() {
             }
         };
         var patients = [{
-            pid: '9E7A;18',
+            pid: 'SITE;18',
             ssn: ''
         }];
 
@@ -245,7 +245,7 @@ describe('User is the patient', function() {
             }
         };
         var patients = [{
-            pid: '9E7A;18',
+            pid: 'SITE;18',
             ssn: '123456789'
         }];
 
@@ -394,10 +394,10 @@ describe('When a user policy is updated based on patient information', function(
         builder._updateUserPolicyWithPatientData(req, userPolicy, {
             data: {
                 items: [{
-                    pid: '9E7A;18',
+                    pid: 'SITE;18',
                     sensitive: true
                 }, {
-                    pid: '9E7A;18',
+                    pid: 'SITE;18',
                     sensitive: false
                 }]
             }

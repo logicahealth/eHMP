@@ -10,48 +10,48 @@ Scenario: Client can request operational sync status from multiple sites and dom
   And the operational sync results contain different domains from "Panorama site"
       | field                                                           			| value  |
       | syncOperationalComplete														| true	 |
-      | operationalSyncStatus.domainExpectedTotals.immunization-list:9E7A.count 	| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.immunization-list:SITE.count 	| IS_SET |
     
-      | operationalSyncStatus.domainExpectedTotals.signssymptoms-list:9E7A.count 	| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitaltypes-list:9E7A.count 		| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitalqualifier-list:9E7A.count 	| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitalcategory-list:9E7A.count 	| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.signssymptoms-list:SITE.count 	| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitaltypes-list:SITE.count 		| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitalqualifier-list:SITE.count 	| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitalcategory-list:SITE.count 	| IS_SET |
       
       
-      | operationalSyncStatus.domainExpectedTotals.doc-def:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.labgroup:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.asu-class:9E7A.count 			| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.asu-rule:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.labpanel:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.location:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.orderable:9E7A.count 			| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.pt-select:9E7A.count 			| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.quick:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.route:9E7A.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.schedule:9E7A.count 	| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.user:9E7A.count 		| IS_SET |    
+      | operationalSyncStatus.domainExpectedTotals.doc-def:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.labgroup:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.asu-class:SITE.count 			| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.asu-rule:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.labpanel:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.location:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.orderable:SITE.count 			| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.pt-select:SITE.count 			| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.quick:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.route:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.schedule:SITE.count 	| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.user:SITE.count 		| IS_SET |    
       
   And the operational sync results contain different domains from "Kodak site"
       | field                                                          				    | value  |
-      | operationalSyncStatus.domainExpectedTotals.immunization-list:C877.count 		| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.immunization-list:SITE.count 		| IS_SET |
       
-      | operationalSyncStatus.domainExpectedTotals.signssymptoms-list:C877.count 		| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitaltypes-list:C877.count 			| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitalqualifier-list:C877.count 		| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.vitalcategory-list:C877.count 		| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.signssymptoms-list:SITE.count 		| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitaltypes-list:SITE.count 			| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitalqualifier-list:SITE.count 		| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.vitalcategory-list:SITE.count 		| IS_SET |
       
-      | operationalSyncStatus.domainExpectedTotals.doc-def:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.labgroup:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.asu-class:C877.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.asu-rule:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.labpanel:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.location:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.orderable:C877.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.pt-select:C877.count 				| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.quick:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.route:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.schedule:C877.count 					| IS_SET |
-      | operationalSyncStatus.domainExpectedTotals.user:C877.count 						| IS_SET |  
+      | operationalSyncStatus.domainExpectedTotals.doc-def:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.labgroup:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.asu-class:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.asu-rule:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.labpanel:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.location:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.orderable:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.pt-select:SITE.count 				| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.quick:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.route:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.schedule:SITE.count 					| IS_SET |
+      | operationalSyncStatus.domainExpectedTotals.user:SITE.count 						| IS_SET |  
       
 
   

@@ -3,9 +3,13 @@
 require('../../../../../env-setup');
 var _ = require('underscore');
 
-var handler = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-xform-domain-vpr-handler');
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-lab-xformer');
-var util = require('util');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-lab-xformer', function() {
 
@@ -156,7 +160,7 @@ describe('jmeadows-lab-xformer', function() {
             system: 'DOD_NCID'
         }],
         facilityCode: 'DOD',
-        facilityName: "TMDS",
+        facilityName: 'TMDS',
         localId: '080523 BM 15^AP',
         labType: 'AP',
         categoryCode: 'urn:va:lab-category:AP',
@@ -207,7 +211,7 @@ describe('jmeadows-lab-xformer', function() {
     }];
 
     it('transform sample lab to VPR', function() {
-        var result = xformer(sampleDODLab, mockEdipi);
+        var result = xformer(log, sampleDODLab, mockEdipi);
         expect(result.codes).toEqual(sampleVPRLab.codes);
         expect(result.facilityCode).toEqual(sampleVPRLab.facilityCode);
         expect(result.facilityName).toEqual(sampleVPRLab.facilityName);
@@ -239,44 +243,44 @@ describe('jmeadows-lab-xformer', function() {
 
     describe('referenceRange', function(){
         it('transform reference range', function(){
-            var result = xformer(sampleDODLab2, mockEdipi);
+            var result = xformer(log, sampleDODLab2, mockEdipi);
             expect(result.high).toBeUndefined();
             expect(result.low).toBeUndefined();
         });
 
         it('decimal without preceding integer referenceRange', function(){
-            var result = xformer(sampleDODLab3, mockEdipi);
+            var result = xformer(log, sampleDODLab3, mockEdipi);
             expect(result.high).toBe('1.3');
             expect(result.low).toBe('.2');
         });
 
         it('integer referenceRange', function(){
-            var result = xformer(sampleDODLab4, mockEdipi);
+            var result = xformer(log, sampleDODLab4, mockEdipi);
             expect(result.high).toBe('35');
             expect(result.low).toBe('0');
         });
 
         it('< integer referenceRange', function(){
-            var result = xformer(sampleDODLab5, mockEdipi);
+            var result = xformer(log, sampleDODLab5, mockEdipi);
             expect(result.high).toBeUndefined();
             expect(result.low).toBeUndefined();
         });
 
         it('double precision decimal', function(){
-            var result = xformer(sampleDODLab6, mockEdipi);
+            var result = xformer(log, sampleDODLab6, mockEdipi);
             expect(result.high).toBe('13.00');
             expect(result.low).toBe('5.00');
         });
 
         it('reversed high/low - invalid but should still work', function(){
-            var result = xformer(sampleDODLab7, mockEdipi);
+            var result = xformer(log, sampleDODLab7, mockEdipi);
             expect(result.high).toBe('13');
             expect(result.low).toBe('54');
         });
     });
 
     it('transform sample lab document record to VRP types', function() {
-        var resultDoc = xformer(sampleDODLabDocument, mockEdipi);
+        var resultDoc = xformer(log, sampleDODLabDocument, mockEdipi);
         // console.log(util.inspect(resultDoc, {
         //     depth: 4
         // }));
@@ -335,7 +339,7 @@ describe('jmeadows-lab-xformer', function() {
         var labWithoutOrderDate = _.clone(sampleDODLab);
         delete labWithoutOrderDate.orderDate;
 
-        var result = xformer(labWithoutOrderDate, mockEdipi);
+        var result = xformer(log, labWithoutOrderDate, mockEdipi);
         expect(result).toBeTruthy();
         expect(result.transformError).toBeTruthy();
         expect(_.isEmpty(result.transformError)).toBe(false);

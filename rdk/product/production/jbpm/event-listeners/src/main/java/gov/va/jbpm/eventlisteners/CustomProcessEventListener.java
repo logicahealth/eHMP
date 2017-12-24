@@ -31,6 +31,7 @@ import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import gov.va.jbpm.entities.impl.ProcessInstanceImpl;
 import gov.va.jbpm.entities.impl.ProcessRouteImpl;
 import gov.va.jbpm.entities.impl.TaskInstanceImpl;
+import gov.va.jbpm.entities.util.PersistActivityDataModel;
 import gov.va.jbpm.entities.util.ProcessInstanceImplUtil;
 import gov.va.jbpm.entities.util.ProcessRouteImplUtil;
 import gov.va.jbpm.entities.util.TaskInstanceImplUtil;
@@ -81,7 +82,8 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 					Task myTask = taskService.getTaskByWorkItemId(workItem.getId());
 					taskId = myTask.getId();
 				} catch (Exception exc) {
-					throw new EventListenerException("CustomProcessEventListener.beforeNodeLeft: Not able to get the taskId: " + exc.getMessage(), exc);
+					throw new EventListenerException("CustomProcessEventListener.beforeNodeLeft: Not able to get the taskId: " +
+							exc.getMessage(), exc);
 				}
 
 				EntityManager em = getEntityManager(event);
@@ -98,11 +100,11 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 				em.flush();
 			}
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomProcessEventListener.beforeNodeLeft: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomProcessEventListener.beforeNodeLeft: An unexpected condition has happened: %s", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -121,7 +123,7 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 			EntityManager em = getEntityManager(event);
 
 			ProcessInstanceImpl processInstanceImpl = ProcessInstanceImplUtil.create(event);
-			LOGGER.debug("CustomProcessEventListener.beforeProcessStarted: processInstanceImpl: " + processInstanceImpl);
+			LOGGER.debug(String.format("CustomProcessEventListener.beforeProcessStarted: processInstanceImpl: %s", processInstanceImpl));
 			em.persist(processInstanceImpl);
 
 			List<ProcessRouteImpl> routes = processInstanceImpl.getRoutes();
@@ -134,11 +136,11 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 
 			em.flush();
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomProcessEventListener.beforeProcessStarted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomProcessEventListener.beforeProcessStarted: An unexpected condition has happened: %s", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -155,11 +157,11 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 		try {
 			updateProcessInstanceStatus(event);
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(),e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomProcessEventListener.afterProcessStarted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomProcessEventListener.afterProcessStarted: An unexpected condition has happened: %s", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -176,11 +178,11 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 		try {
 			updateProcessInstanceStatus(event);
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomProcessEventListener.afterProcessCompleted: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomProcessEventListener.afterProcessCompleted: An unexpected condition has happened: ", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -308,6 +310,12 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 				}
 				break;
 				
+				case ProcessInstanceImplUtil.ACTIVITYJSON: {
+					String activityJSON = getStringFromNewValue(newValue);
+					PersistActivityDataModel.create(event, activityJSON);
+				}
+				break;
+				
 				default:
 				return;
 			}
@@ -315,11 +323,11 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 			em.merge(processInstanceImpl);
 			em.flush();
 		} catch (EventListenerException e) {
-			//Error was already logged
+			LOGGER.error(e.getMessage(),e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		} catch (Exception e) {
-			LOGGER.error("CustomProcessEventListener.afterVariableChanged: An unexpected condition has happened: " + e.getMessage(), e);
+			LOGGER.error(String.format("CustomProcessEventListener.afterVariableChanged: An unexpected condition has happened: ", e.getMessage()), e);
 			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
 			throw new RuntimeException (e.getMessage(), e);
 		}
@@ -357,7 +365,7 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 		try {
 			retvalue = Long.parseLong(getStringFromNewValue(str));
 		} catch (NumberFormatException e) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "newValue was not a long as expected: " + newValue);
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "newValue was not a long as expected: " + newValue, e);
 		}
 		
 		return retvalue;
@@ -372,7 +380,7 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 
 			retvalue = dueDate.toDate();
 		} catch (Exception e) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "newValue was not a Date as expected: " + newValue);
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "newValue was not a Date as expected: " + newValue, e);
 		}
 		
 		return retvalue;
@@ -395,8 +403,9 @@ public class CustomProcessEventListener extends DefaultProcessEventListener {
 		EntityManager em = getEntityManager(event);
 
 		ProcessInstanceImpl processInstanceImpl = em.find(ProcessInstanceImpl.class, processInstanceId);
-		if (processInstanceImpl == null)
+		if (processInstanceImpl == null) {
 			return;
+		}
 
 		int state = event.getProcessInstance().getState();
 		processInstanceImpl.setStatusId(state);

@@ -19,8 +19,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Deny');
@@ -38,8 +38,8 @@ describe('Test all policy rules', function() {
             dgSensitiveAccess: false,
             isPatientCentric: true,
             resourceConfigItemRel: 'vha.write',
-            site: 'C877',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Deny');
@@ -57,8 +57,8 @@ describe('Test all policy rules', function() {
             dgSensitiveAccess: false,
             isPatientCentric: true,
             resourceConfigItemRel: 'vha.write',
-            site: 'C877',
-            patientPid: '9E7A;3',
+            site: 'SITE',
+            patientPid: 'SITE;3',
             consumerType: 'system'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
@@ -77,8 +77,8 @@ describe('Test all policy rules', function() {
             dgSensitiveAccess: false,
             isPatientCentric: true,
             resourceConfigItemRel: 'vha.write',
-            site: 'C877',
-            patientPid: '9E7A;3',
+            site: 'SITE',
+            patientPid: 'SITE;3',
             consumerType: 'user'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
@@ -96,8 +96,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: 'C877',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Permit');
@@ -114,8 +114,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Permit');
@@ -132,8 +132,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.write',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Permit');
@@ -150,8 +150,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('BreakGlass');
@@ -169,8 +169,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('BreakGlass');
@@ -188,8 +188,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Permit');
@@ -206,8 +206,8 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
-            patientPid: '9E7A;3'
+            site: 'SITE',
+            patientPid: 'SITE;3'
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('Permit');

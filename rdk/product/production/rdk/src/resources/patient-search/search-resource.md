@@ -108,7 +108,7 @@ Parameters may be provided as query parameters or in the request body. The `name
     + Body
 
             {
-                "pid": "9E7A;12345",
+                "pid": "SITE;12345",
                 "demographics": {
                     "familyName": "ssss",
                     "fullName": "ssss",

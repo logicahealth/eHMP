@@ -21,7 +21,8 @@ var logger = require(global.VX_DUMMIES + '/dummy-logger');
 //------------------------------------------
 // End of logging stuff to comment out....
 //------------------------------------------
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 config.mvi.host = vx_sync_ip;
@@ -39,11 +40,11 @@ var jdsCli = new JdsClient(logger, logger, config);
 //     'givenNames': 'PATIENT',
 //     'localId': 1,
 //     'icn': '888V12887',
-//     'pid': '9E7A;3333',
+//     'pid': 'SITE;3333',
 //     'sensitive': true,
 //     'ssn': 666223456,
 //     'stampTime': '1234',
-//     'uid': 'urn:va:pt-select:9E7A:3333:3333'
+//     'uid': 'urn:va:pt-select:SITE:3333:3333'
 // }, {
 //     'birthDate': 19350407,
 //     'familyName': 'ZZZRETFIVEFIFTYONE',
@@ -91,6 +92,37 @@ var jdsCli = new JdsClient(logger, logger, config);
 //     });
 // };
 
+var nf_patient_demographics = {
+    givenNames: 'PATIENT',
+    familyName: 'DOD_NO_VA',
+    genderCode: 'M',
+    ssn: '432233234',
+    birthDate: '19670909',
+    address:[
+        {
+            city: 'Norfolk',
+            line1: 'Lost Street',
+            state: 'VA',
+            use: 'H',
+            zip: '20152'
+
+        }
+    ],
+    telecom:[
+        {
+            use: 'H',
+            value: '301-222-3333'
+        }
+    ],
+    fullName: 'EDIPIONLY,PATIENT',
+    displayName : 'EDIPIONLY,PATIENT',
+    age: 48,
+    genderName: 'Male',
+    sensitive: false,
+    ageYears: 'Unk',
+    dob: '19670909'
+};
+
 describe('mvi-client.js', function() {
 
     it('Vista Cache MVI lookup', function() {
@@ -98,7 +130,7 @@ describe('mvi-client.js', function() {
         var finished = false;
         runs(function() {
             mvi.lookup({
-                value: '9E7A;3',
+                value: 'SITE;3',
                 type: 'pid'
             }, function(err, result) {
                 expect(err).toBeFalsy();
@@ -125,11 +157,11 @@ describe('mvi-client.js', function() {
                 });
                 expect(result.ids).toContain({
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: 'SITE;3'
                 });
                 expect(result.ids).toContain({
                     type: 'pid',
-                    value: 'C877;3'
+                    value: 'SITE;3'
                 });
                 // This only exists for HDR PUB/SUB configuration
                 // expect(result.ids).toContain({
@@ -174,7 +206,7 @@ describe('mvi-client.js', function() {
         var finished = false;
         runs(function() {
             mvi.lookup({
-                value: '9E7A;0',
+                value: 'SITE;0',
                 type: 'pid'
             }, function(err, result) {
                 expect(err).toBeFalsy();
@@ -199,6 +231,31 @@ describe('mvi-client.js', function() {
             }, function(err, result) {
                 expect(err).toBeTruthy();
                 expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI call', 60000);
+    });
+
+
+    it('Vista Cache MVI lookup - patient not found', function() {
+        var mvi = new MVIClient(logger, logger, config, jdsCli);
+        var finished = false;
+        runs(function() {
+            mvi.lookupWithDemographics({
+                value: 'DOD;43215679',
+                type: 'pid'
+            }, nf_patient_demographics, function(err, result) {
+                expect(err).toBeFalsy();
+                expect(result).toBeTruthy();
+                expect(val(result, 'ids')).toBeDefined();
+                expect(val(result, 'ids', 'length')).toBe(1);
+                expect(result.ids).toContain({
+                    type: 'pid',
+                    value: 'DOD;43215679'
+                });
                 finished = true;
             });
         });

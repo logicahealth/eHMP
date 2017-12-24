@@ -3,8 +3,8 @@ Feature: F144 - eHMP viewer GUI - Timeline
 
 @F144_newsfeed_applet @US1946
 Scenario: News feed applet displays all of the Visits for a given patient in a grid form
-  Given a patient with pid "9E7A;100022" has been synced through the RDK API
-  When the client requests the timeline for the patient "9E7A;100022" with parameters
+  Given a patient with pid "SITE;100022" has been synced through the RDK API
+  When the client requests the timeline for the patient "SITE;100022" with parameters
    | label  | value |
    | filter | or(between(dateTime,"19350407","20150810235959"),or(between(administeredDateTime,"19350407","20150810235959"),between(observed,"19350407","20150810235959"))) |
   Then a successful response is returned
@@ -13,8 +13,8 @@ Scenario: News feed applet displays all of the Visits for a given patient in a g
 # This test replaces the DoD appointment test in ehmp-ui
 @F144_Newsfeed @F144_timelineA @US2845
 Scenario: Verify Timeline will display DoD appointments
-Given a patient with pid "9E7A;227" has been synced through the RDK API
-When the client requests the TIMELINE for the patient "9E7A;227" with starting at "19350407"
+Given a patient with pid "SITE;227" has been synced through the RDK API
+When the client requests the TIMELINE for the patient "SITE;227" with starting at "19350407"
 Then a successful response is returned
 And the VPR results contain
       | field           | value           |
@@ -34,8 +34,8 @@ And the VPR results contain
 # This test replaces the Newsfeed Display test in ehmp-ui
 @F144_Newsfeed @US1946
 Scenario: Verify Timeline will display all Consult and Admission and Laboratory for a given patient
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests the TIMELINE for the patient "9E7A;100022" with starting at "19350407"
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests the TIMELINE for the patient "SITE;100022" with starting at "19350407"
 Then a successful response is returned
 And the VPR results contain
       | field           | value                     |
@@ -50,7 +50,7 @@ And the VPR results contain
       | facilityName    | New Jersey HCS            |
       | facilityCode	| 561						|
       | name            | LAPARASCOPY				|
-      | dateTime        | 199811190800           	|
+      | dateTime        | 1998111PORT0           	|
       | kind            | Procedure                 |
 And the VPR results contain
       | field           | value                     |
@@ -63,8 +63,8 @@ And the VPR results contain
 # This test replaces the Newsfeed Display test in ehmp-ui
 @F144_Newsfeed @US2457 @US2845
 Scenario: Verify Timeline will display all Consult and Admission and Laboratory for a given patient
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests the TIMELINE for the patient "9E7A;100022" with starting at "20020101"
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests the TIMELINE for the patient "SITE;100022" with starting at "20020101"
 Then a successful response is returned
 And the VPR results contain
       | field           | value                    		|
@@ -99,8 +99,8 @@ And the VPR results contain
 
 @F144_Newsfeed_Custom_Date_Range @US2594
 Scenario: Verify Newsfeed will display all data between specific date range for a given patient
-Given a patient with pid "9E7A;100022" has been synced through the RDK API
-When the client requests the TIMELINE for the patient "9E7A;100022" with GDF set to custom date range between "20150101" and "20151230235959"
+Given a patient with pid "SITE;100022" has been synced through the RDK API
+When the client requests the TIMELINE for the patient "SITE;100022" with GDF set to custom date range between "20150101" and "20151230235959"
 Then a successful response is returned
 And the VPR results contain
       | field           | value                     	|

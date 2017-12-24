@@ -110,5 +110,5 @@ Scenario Outline: An authorized user can DoD access Laboratory Chem and see stan
 
 #TestNote: 
 #	* We could not test Lab MI in VPR format because it's not available through VPR.       
-#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS  E/JLV+Terminology+Handling
+#  ** Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
       

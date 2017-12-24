@@ -1,7 +1,7 @@
 
 class PobLoginPage < SitePrism::Page
   # set_url "/#logon-screen"
-  set_url "/"
+  set_url ""
   # *****************  All_Form_Elements  ******************* #
   element :frm_ehmp, "form"
 

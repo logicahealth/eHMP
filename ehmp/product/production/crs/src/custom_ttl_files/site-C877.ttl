@@ -3,7 +3,7 @@
 @prefix oi:     <urn:va:oi:>
 @prefix ien:    <urn:va:ien:>
 
-# site C877 - Kodak
+# site SITE - Kodak
 
 # VA enterprise rheumatoid factor orderable concept mapped to local order code
 snomed:415301001 oi:isPreferredOrderable oi:252 .

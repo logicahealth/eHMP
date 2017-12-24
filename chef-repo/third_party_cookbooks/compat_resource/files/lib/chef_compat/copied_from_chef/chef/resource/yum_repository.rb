@@ -41,7 +41,7 @@ class Chef < (defined?(::Chef) ? ::Chef : Object)
       provides :yum_repository
 
       # http://linux.die.net/man/5/yum.conf
-      property :baseurl, String, regex: /.*/
+      property :baseurl, [String, Array], regex: /.*/
       property :cost, String, regex: /^\d+$/
       property :clean_headers, [TrueClass, FalseClass], default: false # deprecated
       property :clean_metadata, [TrueClass, FalseClass], default: true
@@ -51,7 +51,7 @@ class Chef < (defined?(::Chef) ? ::Chef : Object)
       property :exclude, String, regex: /.*/
       property :failovermethod, String, equal_to: %w{priority roundrobin}
       property :fastestmirror_enabled, [TrueClass, FalseClass]
-      property :gpgcheck, [TrueClass, FalseClass]
+      property :gpgcheck, [TrueClass, FalseClass], default: true
       property :gpgkey, [String, Array], regex: /.*/
       property :http_caching, String, equal_to: %w{packages all none}
       property :include_config, String, regex: /.*/
@@ -73,8 +73,7 @@ class Chef < (defined?(::Chef) ? ::Chef : Object)
       property :password, String, regex: /.*/
       property :repo_gpgcheck, [TrueClass, FalseClass]
       property :report_instanceid, [TrueClass, FalseClass]
-      property :repositoryid, String, regex: /.*/, name_attribute: true
-      property :sensitive, [TrueClass, FalseClass], default: false
+      property :repositoryid, String, regex: /.*/, name_property: true
       property :skip_if_unavailable, [TrueClass, FalseClass]
       property :source, String, regex: /.*/
       property :sslcacert, String, regex: /.*/
@@ -85,7 +84,7 @@ class Chef < (defined?(::Chef) ? ::Chef : Object)
       property :options, Hash
 
       default_action :create
-      allowed_actions :create, :remove, :make_cache, :add, :delete
+      allowed_actions :create, :remove, :makecache, :add, :delete
 
       # provide compatibility with the yum cookbook < 3.0 properties
       alias_method :url, :baseurl

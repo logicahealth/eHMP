@@ -14,12 +14,14 @@ define([
                 medications: medications
             };
 
+            var facilityModel = ADK.Enrichment.getFacility(latestMed.get('facilityCode')) || new Backbone.Model();
+
             try {
                 var date = ADK.utils.getTimeSince(moment(latestMed.getEarlierStopAsMoment()).format("YYYYMMDDHHmmssSSS"), true);
                 var userSiteCode = ADK.UserService.getUserSession().get('site');
                 result.uidUnderscored = latestMed.getUid();
                 result.name = latestMed.get('name');
-                result.facilityMoniker = latestMed.get('facilityMoniker');
+                result.facilityMoniker = facilityModel.get('facilityMoniker');
                 result.stopped = latestMed.get('stopped');
                 result.computedSig = latestMed.getSig();
                 result.fillableLabel = latestMed.getNextMedication(date).label;

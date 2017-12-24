@@ -26,12 +26,14 @@ define([
             var model = _.get(channelObj, 'model');
             var results = model.get('results')[0];
             var resultUID = _.get(results, 'resultUid');
+            var patient = _.get(channelObj, 'patient') || ADK.PatientRecordService.getCurrentPatient();
+            var triggerElement = _.get(channelObj, '$el');
             if (resultUID) {
-                return this.showExternalModalView(resultUID, model, _.get(channelObj, 'collection'), _.get(channelObj, 'patient'));
+                return this.showExternalModalView(resultUID, model, _.get(channelObj, 'collection'), patient, triggerElement);
             }
-            return this.showErrorModal(model, _.get(channelObj, 'collection'));
+            return this.showErrorModal(model, _.get(channelObj, 'collection'), triggerElement);
         },
-        showExternalModalView: function showExternalModalView(resultUID, model, collection, patient) {
+        showExternalModalView: function showExternalModalView(resultUID, model, collection, patient, triggerElement) {
             var domainName = resultUID.split(":")[2];
             var domainChannel = _.isEqual(domainName, 'document') ? 'documents' : 'medication_review';
             var channel = ADK.Messaging.getChannel(domainChannel);
@@ -47,11 +49,13 @@ define([
                 size: 'large',
                 footerView: modalFooterView,
                 showLoading: true,
+                triggerElement: triggerElement,
                 headerView: ModalHeaderView.extend({
                     model: model,
                     theView: view,
                     dataCollection: collection,
-                    navHeader: true
+                    navHeader: true,
+                    triggerElement: triggerElement
                 })
             };
             var modal = new ADK.UI.Modal({
@@ -60,7 +64,7 @@ define([
             });
             modal.show();
         },
-        showErrorModal: function showErrorModal(model, collection) {
+        showErrorModal: function showErrorModal(model, collection, triggerElement) {
             var error = "Lab has no link to a result document";
             var header = ModalHeaderView.extend({
                 model: model,
@@ -74,6 +78,7 @@ define([
             var modalOptions = {
                 title: "An Error Occurred",
                 size: 'large',
+                triggerElement: triggerElement,
                 footerView: modalFooterView,
                 headerView: header
             };

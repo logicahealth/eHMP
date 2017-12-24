@@ -280,6 +280,7 @@ this.ui.allCheckboxes.trigger('control:hidden', false);
 |                                  | **units**       | string <br />-- OR --<br /> array of objects | ■ If a string, or an array with 1 element is provided, the value will be used as text to display the units associated with the input field's value <br /> **Example:** `units: "minutes"`<br /><br />■ If an array of objects with 2 elements is provided it will be used to create radio buttons for choosing a unit, and if the array has 3 or more elements a select dropdown will be used <br /> **Example:** `units: [{label: "F",value: "f",title: "F Units"}, {label: "C",value: "c",title: "C Units"}]`<br />**Note:** for an array each should have the required properties of a radio button option [(click here for option attributes)][radioOptions]|
 |                                  | **charCount**       | boolean | Turns on a character counter, which displays the difference between the _maxlength_ option specified and the length of the current input value.<br />**Note:** Requires `maxlength` to be specified<br />**Example:** `charCount: true` |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **changeEvent** | string     | DOM event for input to listen to in order to update model in addition to 'change' event (fires on blur). A common event is 'input' (which fires on keypress/paste/etc.) <br /> **Example:** `changeEvent: "input"`|
 
 #### Listening For User Interaction ####
 
@@ -642,6 +643,7 @@ this.ui.allRadios.trigger('control:hidden', false);
 |                                  | **options**      | object | Sets options for [Select2 lib](https://select2.github.io). **Example:** `options: {minimumInputLength: 0}` By default the **minimumInputLength** is set to 3 so that it takes at least 3 characters typed by user to kick off filtering/fetching feature. See below for more about **sorter** option property |
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 |                                  | **emptyDefault**| boolean    | Toggles presence of empty option (allows user to select nothing). When `false`, first option in picklist is selected to start. Best not used with `required: true`, as the user might mistakenly have the wrong option selected by default.<br />**Default:**  `true`<br />**Example:** `emptyDefault: false`|
+|                                  | **helpMessage** | string     | Message to be shown below select <br /> **Example:** `helpMessage: "This is a help message"`|
 
 #### Listening For User Interaction ####
 
@@ -690,6 +692,7 @@ e.g. function (searchText, fetchSuccess, fetchFail)
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
 | **control:size**     | integer   | adds/updates the size (number of options shown) of the select <br/>**Example:** `$().trigger('control:size', 5)`|
 | **control:picklist:set** | Array or Backbone.Collection | Resets to the given list. Make sure to enclose the list in the square brackets <br/>**Example:** `$().trigger('control:picklist:set', [ [{label: 'Option 1', value: 'opt1'}, {label: 'Option 2', value: 'opt2'}] ])` |
+| **control:helpMessage**          | string    | adds/updates the help message of the select control <br/>**Example:** `$().trigger('control:helpMessage', 'New help message')`|
 :::
 
 ::: showcode Backbone Model Used In Examples:
@@ -908,6 +911,7 @@ This code snippet should be places in the applet's styles.scss and selectValue s
 |                                  | **srOnlyLabel** | boolean    | Makes label tag for field hidden visually and only available for screen reader |
 |                                  | **placeholder** | string     | Textarea's placeholder <br />**Example:** `placeholder: "Enter text..."`|
 |                                  | **extraClasses**| array of strings | Classes to be added to textarea <br />**Example:** `extraClasses: ["class1", "class2"]`|
+|                                  | **readonly**    | boolean    | Makes textarea readonly (value will still be submitted) <br />**Example:** `readonly: true`|
 |                                  | **disabled**    | boolean    | Makes textarea disabled (value will not be submitted) <br />**Example:** `disabled: true`|
 |                                  | **required**    | boolean    | Makes textarea required <br /> **Example:** `required: true`|
 |                                  | **rows**        | integer    | Sets number of rows in textarea <br /> **Example:** `rows: 4`|
@@ -928,6 +932,7 @@ This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFI
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 | **control:required**      | boolean   | toggles the required state of the control <br/>**Example:** `$().trigger('control:required', true)`|
 | **control:disabled**      | boolean   | toggles the disabled state of the control <br/>**Example:** `$().trigger('control:disabled', true)`|
+| **control:readonly**      | boolean   | toggles the readonly state of the control <br/>**Example:** `$().trigger('control:readonly', true)`|
 | **control:title**         | string    | adds/updates the title of the control with the provided string <br/>**Example:** `$().trigger('control:title', 'New Title of the Control')`|
 | **control:placeholder**   | string    | adds/updates the placeholder of the control with the provided string <br/>**Example:** `$().trigger('control:placeholder', 'New Placeholder')`|
 | **control:helpMessage**   | string    | adds/updates the help message of the control with the provided string <br/>**Example:** `$().trigger('control:helpMessage', 'This is a new help message.')`|
@@ -2063,6 +2068,141 @@ this.ui.allControls.trigger('control:hidden', false);
 ```
 :::
 
+### Range Slider ###
+
+> control: **'rangeSlider'**
+
+![rangeSlider](assets/rangeSlider.png "Range Slider Basic Example")
+
+| Required                         | Attribute       | Type       | Description / Example                                                           |
+|:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
+|<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "rangeValue"`|
+|                                  | **extraClasses**| array of strings | Classes to be added to input <br />**Example:** `extraClasses: ["special-class"]`|
+|                                  | **sliderTitle**    | string    | Title shown above the slider <br />**Example:** `sliderTitle: "Example slider title."`|
+|                                  | **min**    | number  | Minimum value in range <br />**Defaults to 0**<br />**Example:** `min: 3`|
+|                                  | **max**| number | Maximum value in range <br />**Defaults to 10**<br />**Example:** `max: 9`|
+|                                  | **step**    | number | Value of increment <br />**Defaults to 1**<br />**Example:** `step: 3`|
+|                                  | **decimals**| number | Number of decimal places to both labels and input <br />**Defaults to 0**<br />**Example:** `decimals: 1`|
+|                                  | **density**| number | Scale of the tick marks. Lower values decrease the scale (will show more ticks), higher values will increase the scale (show less ticks)  <br />**Defaults to 10**<br />**Example:** `density: 20`|
+|                                  | **maxlength**    | number    | Limits html input to value of this length. If not specified, this value is calculated from the max value and decimals <br />**This is calculated by default**<br />**Example:** `dismissible: true`|
+|                                  | **prefix**    | string    | String to prepend to each label <br />**Example:** `prefix: "$"`|
+|                                  | **postfix**| string | String to append to label <br />**Example:** `postfix: "lbs"`|
+|                                  | **filter**| function | Formatter function that determines which labels are shown and which are primary/secondary, and will only show valid steps. See the [noUiSlider filter documentation](http://refreshless.com/nouislider/pips/#section-steps) for more info.<br />**Defaults to show all labels as primary**<br />**Example:** `filter: function() { return value % 10 ? 2 : 1;}`|
+|                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+
+::: definition
+#### Events that can be triggered to change the rangeSlider control's attributes dynamically ####
+| Event                     | Parameter Type | Description / Example                                                      |
+|:--------------------------|:---------:|:--------------------------------------------------------------------------------|
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false })` |
+| **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+:::
+
+::: showcode Backbone Model Used In Examples:
+```JavaScript
+var Model = Backbone.Model.extend({
+    defaults: {
+        rangeValue: 3
+    }
+})
+```
+:::
+::: showcode Example Form Instance:
+```JavaScript
+var ExampleFormView = ADK.UI.Form.extend({
+    model: new Model(),
+    fields: [
+    // basic
+    {
+        control: "rangeSlider",
+        name: "rangeValue"
+    },
+    // extra classes
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        extraClasses: ["specialClass"]
+    },
+    // sliderTitle
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        sliderTitle: 'Level of Pain'
+    }],
+    // min, max, and step
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        min: 0,
+        max: 10,
+        step: 2
+        // this will output a range slider that starts at 0,
+        // ends at 10, and increments by 2
+    }],
+    // decimals
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        decimals: 1
+    }],
+    // density
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        density: 10
+        // This will optimize the tick marks for 10
+        // separate values
+    }],
+    // maxlength
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        maxlength: 5
+        // limit the input field to a value of length 5
+    }],
+    // prefix
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        prefix: "$"
+        // labels will display with "$0", "$1", etc..
+    }],
+    // postfix
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        postfix: "lbs"
+        // labels will display with "0lbs", "1lbs", etc..
+    }],
+    // filter
+    {
+        control: "rangeSlider",
+        name: "rangeValue",
+        filter: function() {
+            return value % 10 ? 2 : 1;
+        }
+        // labels will display as primary if multiple of 10,
+        // secondary otherwise (only shows valid increments)
+    }],
+});
+```
+:::
+::: showcode Example of dynamically changing the selectableTable control's config attributes:
+``` JavaScript
+ui: {
+    'rangeSlider' : '.range-slider-container div.control.rangeSlider-control',
+    'allControls': 'div.control'
+}
+```
+``` JavaScript
+this.ui.rangeSlider.trigger('control:hidden', true);
+
+// you can trigger event on multiple at once!!
+// just make sure your UI selector targets all that apply
+this.ui.allControls.trigger('control:hidden', false);
+```
+:::
+
 ### Select List ###
 > control: **'selectList'**
 
@@ -2264,41 +2404,46 @@ this.ui.allControls.trigger('control:hidden', false);
 ```
 :::
 
-### Range Slider ###
+### Search Bar ###
+> control: **'searchbar'**
 
-> control: **'rangeSlider'**
-
-![rangeSlider](assets/rangeSlider.png "Range Slider Basic Example")
+![searchbar](assets/searchbar.png "Search bar Basic Example")
 
 | Required                         | Attribute       | Type       | Description / Example                                                           |
 |:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
-|<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "rangeValue"`|
-|                                  | **extraClasses**| array of strings | Classes to be added to input <br />**Example:** `extraClasses: ["special-class"]`|
-|                                  | **sliderTitle**    | string    | Title shown above the slider <br />**Example:** `sliderTitle: "Example slider title."`|
-|                                  | **min**    | number  | Minimum value in range <br />**Defaults to 0**<br />**Example:** `min: 3`|
-|                                  | **max**| number | Maximum value in range <br />**Defaults to 10**<br />**Example:** `max: 9`|
-|                                  | **step**    | number | Value of increment <br />**Defaults to 1**<br />**Example:** `step: 3`|
-|                                  | **decimals**| number | Number of decimal places to both labels and input <br />**Defaults to 0**<br />**Example:** `decimals: 1`|
-|                                  | **density**| number | Scale of the tick marks. Lower values decrease the scale (will show more ticks), higher values will increase the scale (show less ticks)  <br />**Defaults to 10**<br />**Example:** `density: 20`|
-|                                  | **maxlength**    | number    | Limits html input to value of this length. If not specified, this value is calculated from the max value and decimals <br />**This is calculated by default**<br />**Example:** `dismissible: true`|
-|                                  | **prefix**    | string    | String to prepend to each label <br />**Example:** `prefix: "$"`|
-|                                  | **postfix**| string | String to append to label <br />**Example:** `postfix: "lbs"`|
-|                                  | **filter**| function | Formatter function that determines which labels are shown and which are primary/secondary, and will only show valid steps. See the [noUiSlider filter documentation](http://refreshless.com/nouislider/pips/#section-steps) for more info.<br />**Defaults to show all labels as primary**<br />**Example:** `filter: function() { return value % 10 ? 2 : 1;}`|
+|<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "searchbarValue"`|
+|                                  | **label**       | string     | Label text for input. <br />**Example:** `label: "Searchbar Label"`|
+|                                  | **srOnlyLabel** | boolean    | Makes label tag for field hidden visually and only available for screen reader |
+|                                  | **title**       | string     | Input's title attribute <br />**Example:** `title: "Example title"`|
+|                                  | **placeholder** | string     | Input's placeholder <br />**Example:** `placeholder: "Search for something"`|
+|                                  | **icon**        | string     | Icon to show in front of the placeholder text inside the input. <br />**Example:** `icon: "fa-search"`|
+|                                  | **minimumInputLength**| integer    | Minimum number of characters that must be entered into the input before search becomes enabled. <br />**Example:** `minimumInputLength: 1`|
+|                                  | **extraClasses**| array of strings | Classes to be added to the control's top level element <br />**Example:** `extraClasses: ["col-xs-12", "special-class-1"]`|
+|                                  | **disabled**    | boolean    | Makes the search bar field disabled (value will not be submitted) <br />**Example:** `disabled: true`|
+|                                  | **required**    | boolean    | Makes the search bar a required field<br /> **Example:** `required: true`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **buttonOptions**| object    | **\*** Configures the search bar's button control. <br /> **Example:** `buttonOptions: {title: 'Search for results', icon: 'fa-search'}` |
+|                                  | **helpMessage** | string     | Message to be shown below search bar <br /> **Example:** `helpMessage: "This is a help message"`|
+|                                  | **instructions**| string     | Instructional text to be placed inside a tooltip icon associated with the input. <br />**Example:** `instructions: "Minimum of 3 characters"`|
+
+#### Listening For User Interaction ####
+
+This control will fire a `change.inputted` and `change.inputted:<NAME FROM CONFIG>` event on the form's model when the user has taken action to change the value of the control. Use this event to differentiate between programmatic model changes and actual user interaction.
 
 ::: definition
-#### Events that can be triggered to change the rangeSlider control's attributes dynamically ####
+#### Events that can be triggered to change control attributes dynamically ####
 | Event                     | Parameter Type | Description / Example                                                      |
 |:--------------------------|:---------:|:--------------------------------------------------------------------------------|
-| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false })` |
+| **control:update:config** | object   | sets multiple control attributes at once. This is helpful in avoiding wasteful, additional renders when multiple fields options need to updated at once.<br/>**Example:** `$().trigger('control:update:config', { hidden: false, disabled: true })` |
 | **control:hidden**        | boolean   | hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
 :::
 
+#### Code Examples ####
 ::: showcode Backbone Model Used In Examples:
 ```JavaScript
 var Model = Backbone.Model.extend({
     defaults: {
-        rangeValue: 3
+        searchbarValue: ''
     }
 })
 ```
@@ -2310,92 +2455,60 @@ var ExampleFormView = ADK.UI.Form.extend({
     fields: [
     // basic
     {
-        control: "rangeSlider",
-        name: "rangeValue"
+        control: "searchbar",
+        name: "searchbarValue",
+        label: "Search Site",
+        title: "Search entire site",
+        placeholder: "Search for something"
     },
     // extra classes
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        extraClasses: ["specialClass"]
+        control: "searchbar",
+        name: "searchbarValue",
+        extraClasses: ["class1", "class2"]
     },
-    // sliderTitle
+    // disabled
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        sliderTitle: 'Level of Pain'
-    }],
-    // min, max, and step
+        control: "searchbar",
+        name: "searchbarValue",
+        disabled: true
+    },
+    // required
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        min: 0,
-        max: 10,
-        step: 2
-        // this will output a range slider that starts at 0,
-        // ends at 10, and increments by 2
-    }],
-    // decimals
+        control: "searchbar",
+        name: "searchbarValue",
+        required: true
+    },
+    // with help message
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        decimals: 1
-    }],
-    // density
+        control: "searchbar",
+        name: "searchbarValue",
+        helpMessage: "This is a help message."
+    },
+    // with instructions
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        density: 10
-        // This will optimize the tick marks for 10
-        // separate values
-    }],
-    // maxlength
+        control: "searchbar",
+        name: "searchbarValue",
+        instructions: "These are instructions."
+    },
+    // minimumInputLength
     {
-        control: "rangeSlider",
-        name: "rangeValue",
-        maxlength: 5
-        // limit the input field to a value of length 5
-    }],
-    // prefix
-    {
-        control: "rangeSlider",
-        name: "rangeValue",
-        prefix: "$"
-        // labels will display with "$0", "$1", etc..
-    }],
-    // postfix
-    {
-        control: "rangeSlider",
-        name: "rangeValue",
-        postfix: "lbs"
-        // labels will display with "0lbs", "1lbs", etc..
-    }],
-    // filter
-    {
-        control: "rangeSlider",
-        name: "rangeValue",
-        filter: function() {
-            return value % 10 ? 2 : 1;
-        }
-        // labels will display as primary if multiple of 10,
-        // secondary otherwise (only shows valid increments)
-    }],
+        control: "searchbar",
+        name: "searchbarValue",
+        minimumInputLength: 3
+    }]
 });
 ```
 :::
-::: showcode Example of dynamically changing the selectableTable control's config attributes:
+::: showcode Example of dynamically changing the controls config attributes:
 ``` JavaScript
 ui: {
-    'rangeSlider' : '.range-slider-container div.control.rangeSlider-control',
-    'allControls': 'div.control'
+    'searchbar' : '.searchbar-control',
 }
 ```
 ``` JavaScript
-this.ui.rangeSlider.trigger('control:hidden', true);
+this.ui.searchbar.trigger('control:hidden', true)
 
-// you can trigger event on multiple at once!!
-// just make sure your UI selector targets all that apply
-this.ui.allControls.trigger('control:hidden', false);
 ```
 :::
 
@@ -2985,6 +3098,7 @@ this.$('.myContainer').trigger('control:items:update', model)
 |                                  | **extraClasses**| array of strings | Classes to be added to fieldset <br />**Example:** `extraClasses: ["class1", "class2"]`|
 |<i class="fa fa-check-circle"></i>| **items**       | array of objects | Controls to be displayed inside of the fieldset. Controls can be nested / arranged in any combination within this array. <br /> **Example:** `items: [{ control: "input", name: "inputValue", label: "input label", placeholder: "Enter text..."}, { control: "textarea", name: "textareaValue",label: "textarea label", placeholder: "Enter text..." }]`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
+|                                  | **srOnlyLegend**| boolean    | Makes legend tag for field hidden visually and only available for screen reader |
 
 >If no legend / title is required, using the container control to wrap other controls would be more appropriate
 
@@ -3466,7 +3580,7 @@ The comment box control provides a method for viewing, editing, creating, and de
 | Required                         | Attribute       | Type       | Description / Example                                                           |
 |:--------------------------------:|:---------------:|:----------:|:--------------------------------------------------------------------------------|
 |<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "commentCollection"`|
-|<i class="fa fa-check-circle note">\*</i>| **collection**        | collection     | Collection to generate list of comments. Each item in the collection must contain: **commentString** (string of actual comment), **author** (object with **name** and **duz**, which is an object containing the vistaid and userid.. _See example below_), and **timeStamp** (string of time comment was authored) <br />**Example:** `collection: new Backbone.Collection([{commentString: "This is probably the primary cause of the patients pain", author: {name: "USER,PANORAMA", duz: {"9E7A": "10000000237"}},timeStamp: "12/14/2014 11:15PM"}])`|
+|<i class="fa fa-check-circle note">\*</i>| **collection**        | collection     | Collection to generate list of comments. Each item in the collection must contain: **commentString** (string of actual comment), **author** (object with **name** and **duz**, which is an object containing the vistaid and userid.. _See example below_), and **timeStamp** (string of time comment was authored) <br />**Example:** `collection: new Backbone.Collection([{commentString: "This is probably the primary cause of the patients pain", author: {name: "USER,PANORAMA", duz: {"SITE": "10000000237"}},timeStamp: "12/14/2014 11:15PM"}])`|
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `comment`, `author`, and `timeStamp`<br /> **Example:** `attributeMapping: {comment: 'commentString',author: 'author', timeStamp: 'timeEntered'}`|
 |                                  | **hidden**      | boolean    | Makes control hidden <br />**Example:** `hidden: true`|
 |                                  | **disabled**    | boolean    | Makes entire control disabled <br />**Example:** `disabled: true`|
@@ -3555,7 +3669,7 @@ var Model = Backbone.Model.extend({
             author: {
                 name: "USER,PANORAMA",
                 duz: {
-                    "9E7A": "10000000237"
+                    "SITE": "10000000237"
                 }
             },
             timeStamp: "12/14/2014 11:15PM"
@@ -3564,7 +3678,7 @@ var Model = Backbone.Model.extend({
             author: {
                 name: "USER,OTHER",
                 duz: {
-                    "9E7A": "10000000238"
+                    "SITE": "10000000238"
                 }
             },
             timeStamp: "12/15/2014 11:17PM"
@@ -3587,7 +3701,7 @@ var ExampleFormView = ADK.UI.Form.extend({
             author: {
                 name: "USER,PANORAMA",
                 duz: {
-                    "9E7A": "10000000237"
+                    "SITE": "10000000237"
                 }
             },
             timeStamp: "12/14/2014 11:15PM"
@@ -3596,7 +3710,7 @@ var ExampleFormView = ADK.UI.Form.extend({
             author: {
                 name: "USER,OTHER",
                 duz: {
-                    "9E7A": "10000000238"
+                    "SITE": "10000000238"
                 }
             },
             timeStamp: "12/15/2014 11:17PM"
@@ -3773,7 +3887,7 @@ this.ui.allControls.trigger('control:hidden', false);
 |<i class="fa fa-check-circle"></i>| **name**        | string     | Model attribute to be updated. <br />**Example:** `name: "nestedCommentCollection"`|
 |<i class="fa fa-check-circle"></i>| **itemColumn**       | object     | Should contain the **columnTitle** (_string_) and **columnClasses** (optional, _array of strings_) attributes<br />**Example:** `itemColumn: {columnTitle:"Item Text", columnClasses:["special-column-class-1"]}`|
 |<i class="fa fa-check-circle"></i>| **commentColumn**    | string     | Should contain the **columnTitle** (_string_) attribute, used for header display text for the second/comment column, and the **columnClasses** (optional, _array of strings_) attribute<br />**Example:** `itemColumn: {columnTitle:"Comment Text", columnClasses:["special-column-class-1"]}`|
-|<i class="fa fa-check-circle note">*</i>| **collection**        | collection     | Collection to generate individual panels that each contain the additional column views, the label text for that panel, and that panel's comments. Each item (which is simply a group of panels) inside of the _collection_ must contain a unique identifier and a **listItems** collection which contains the individual panels. Each item in the _listItems_ collection should contain a unique identifier (_id_), label text (_label_), value (_value_), and comments collection (_commentsCollection_). Each of these can be mapped with the **attributeMapping** attribute.<br /> Each item in the comments collection must contain: **commentString** (string of actual comment), **author** (object with **name** and **duz**, which is an object containing the vistaid and userid.. _See example below_), and **timeStamp** (string of time comment was authored)<br />**Note:** Can be declared in the field definition or in the model value specified in the **name** attribute, but it must be set in one of the two places.<br />**Example:** `collection: new Backbone.Collection([{id: "group1-nestedComment2", label: "group1 NestedComment item 2", selectedValue: true, addToCL: false, comments: new Backbone.Collection([{commentString: "This might be a non-causative symptom", author: {name: "USER,PANORAMA", duz: {"9E7A": "10000000237"}}, timeStamp: "12/12/2014 11:12PM"}]), primary: false}])`|
+|<i class="fa fa-check-circle note">*</i>| **collection**        | collection     | Collection to generate individual panels that each contain the additional column views, the label text for that panel, and that panel's comments. Each item (which is simply a group of panels) inside of the _collection_ must contain a unique identifier and a **listItems** collection which contains the individual panels. Each item in the _listItems_ collection should contain a unique identifier (_id_), label text (_label_), value (_value_), and comments collection (_commentsCollection_). Each of these can be mapped with the **attributeMapping** attribute.<br /> Each item in the comments collection must contain: **commentString** (string of actual comment), **author** (object with **name** and **duz**, which is an object containing the vistaid and userid.. _See example below_), and **timeStamp** (string of time comment was authored)<br />**Note:** Can be declared in the field definition or in the model value specified in the **name** attribute, but it must be set in one of the two places.<br />**Example:** `collection: new Backbone.Collection([{id: "group1-nestedComment2", label: "group1 NestedComment item 2", selectedValue: true, addToCL: false, comments: new Backbone.Collection([{commentString: "This might be a non-causative symptom", author: {name: "USER,PANORAMA", duz: {"SITE": "10000000237"}}, timeStamp: "12/12/2014 11:12PM"}]), primary: false}])`|
 |                                  | **additionalColumns**| array of objects | Each item in the array should have the **columnTitle** (_string_) and **columnClasses** (optional, _array of strings_) attributes. The _columnTitle_ atribute is the string that will be displayed in that columns header, while the _columnClasses_ attribute are the classes that will be placed both on the header and appropriate cell per row. Otherwise, each object in array corresponds to the control to be included. Follow the format for the desired control under its respective place in documentation. Each of these controls will be displayed inline in each panel after the panel's text and the comment toggle button.<br /> **Example:** `additionalColumns: [{columnTitle: "Additional Column 1", name: "additionalColumn1Value", control: 'checkbox'}]`|
 |                                  | **attributeMapping**| object | Ensures for flexible naming of control or model attributes<br />**Options:** `collection`, `commentsCollection`, `value`, `label`, `unique`, `comment`, `author`, and `timeStamp`<br /> **Example:** `attributeMapping: {collection: "listItems", commentsCollection: "comments", comment: "commentString", value: "selectedValue", label: "label", unique: "id", author: "author", timeStamp: "timeStamp"}`|
 |                                  | **extraClasses**| array of strings | Classes to be added to control<br />**Example:** `extraClasses: ["special-class-1", "special-class-2"]`|
@@ -3822,7 +3936,7 @@ var Model = Backbone.Model.extend({
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000237"
+                            "SITE": "10000000237"
                         }
                     },
                     timeStamp: "12/12/2014 11:12PM"
@@ -3839,7 +3953,7 @@ var Model = Backbone.Model.extend({
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000237"
+                            "SITE": "10000000237"
                         }
                     },
                     timeStamp: "12/14/2014 11:15PM"
@@ -3848,7 +3962,7 @@ var Model = Backbone.Model.extend({
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/13/2014 11:17PM"
@@ -3862,7 +3976,7 @@ var Model = Backbone.Model.extend({
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/19/2014 11:11PM"
@@ -3912,7 +4026,7 @@ var ExampleFormView = ADK.UI.Form.extend({
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000237"
+                            "SITE": "10000000237"
                         }
                     },
                     timeStamp: "12/12/2014 11:12PM"
@@ -3929,7 +4043,7 @@ var ExampleFormView = ADK.UI.Form.extend({
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000237"
+                            "SITE": "10000000237"
                         }
                     },
                     timeStamp: "12/14/2014 11:15PM"
@@ -3938,7 +4052,7 @@ var ExampleFormView = ADK.UI.Form.extend({
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/13/2014 11:17PM"
@@ -3952,7 +4066,7 @@ var ExampleFormView = ADK.UI.Form.extend({
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/19/2014 11:11PM"

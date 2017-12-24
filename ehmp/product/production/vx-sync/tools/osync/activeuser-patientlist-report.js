@@ -4,7 +4,7 @@ require('../../env-setup');
 
 var _ = require('underscore');
 var async = require('async');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var OsyncActiveUserListUtil = require(global.VX_UTILS + 'osync/osync-active-user-list-util');
 
@@ -19,6 +19,7 @@ var log = require('bunyan').createLogger({
     level: argv['log-level'] || 'error'
 });
 var config = require(global.VX_ROOT + 'worker-config');
+config.osync.vistaSites = config.vistaSites;
 
 var nullUtils = require(global.VX_UTILS + 'null-utils');
 var patientListVistaRetriever = require(global.OSYNC_UTILS + 'patient-list-vista-retriever');
@@ -29,7 +30,7 @@ if (!noHeader) {
     console.log('Getting PatientList for Active Users...');
 }
 
-var pjds = new PjdsClient(log, log, config);
+var pjds = new PjdsClient(log, log, config.pjds);
 var jds = new JdsClient(log, log, config);
 
 var environment = {

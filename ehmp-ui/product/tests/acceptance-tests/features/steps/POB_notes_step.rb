@@ -124,11 +124,19 @@ end
 
 Then(/^POB user saves the note "(.*?)"$/) do |note_title|
   ehmp = PobNotes.new
-  ehmp.wait_until_btn_close_visible
-  expect(ehmp).to have_btn_close
-  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-  wait.until { ehmp.btn_close.disabled? != true }
-  ehmp.btn_close.click
+  max_attempt = 4
+  begin
+    ehmp.wait_until_btn_close_visible
+    expect(ehmp).to have_btn_close
+    wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+    wait.until { ehmp.btn_close.disabled? != true }
+    ehmp.btn_close.click
+  rescue Exception => e
+    p "Exception received: trying again"
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    retry if max_attempt > 0
+  end
   verify_and_close_growl_alert_pop_up("Note Draft Saved")
   ehmp.wait_for_fld_unsigned_notes_section
   ehmp.wait_until_fld_unsigned_notes_section_visible

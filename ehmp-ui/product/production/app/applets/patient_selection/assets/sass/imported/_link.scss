@@ -1,0 +1,6 @@
+// specificty required because of bootstrap nav overwrites
+.navbar.navbar-default .container-fluid ul.nav.navbar-nav > li.patient-selection-link-style {
+    & > .active {
+    	padding-right: 9px;
+    }
+}

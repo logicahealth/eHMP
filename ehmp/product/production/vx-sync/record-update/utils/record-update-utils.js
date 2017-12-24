@@ -75,8 +75,8 @@ function addDistinct(list, item) {
 //
 // The resulting object will look something like:
 //     {
-//         '9E7A;3': ['allergy', 'lab'],
-//         'C877;1': ['allergy']
+//         'SITE;3': ['allergy', 'lab'],
+//         'SITE;1': ['allergy']
 //     }
 //
 // incomplete: The collection of incomplete domains.
@@ -102,9 +102,9 @@ function addIncompleteDomain(incomplete, pid, domain) {
 //
 // pidsToResyncDomains: An object containing lists of domains keyed by PIDs, e.g.
 //     {
-//         '9E7A;3': ['med', 'allergy', 'consult'],
-//         '9E7A;1': ['med', 'consult'],
-//         'C877;8': ['allergy']
+//         'SITE;3': ['med', 'allergy', 'consult'],
+//         'SITE;1': ['med', 'consult'],
+//         'SITE;8': ['allergy']
 //     }
 //
 // referenceInfo: An object containing info for tracking the flow of a job through
@@ -117,7 +117,7 @@ function addIncompleteDomain(incomplete, pid, domain) {
 // This function returns an object keyed on pid to keep track of domains and number
 // of jobs published. For example, the above value would result in:
 //	   {
-//         '9E7A;3': {
+//         'SITE;3': {
 //             domainsComplete: [],
 //             jobsPublished: 0,
 //             referenceInfo: {
@@ -126,7 +126,7 @@ function addIncompleteDomain(incomplete, pid, domain) {
 //                 requestId: '5e60156e-134d-4220-be48-7a8a706d0528'
 //             }
 //         },
-//         '9E7A;1': {
+//         'SITE;1': {
 //             domainsComplete: [],
 //             jobsPublished: 0,
 //             referenceInfo: {
@@ -135,7 +135,7 @@ function addIncompleteDomain(incomplete, pid, domain) {
 //                 requestId: '7f04a248-db65-492e-bb56-7e30b7ee4d0f'
 //             }
 //         },
-//         'C877;8': {
+//         'SITE;8': {
 //             domainsComplete: [],
 //             jobsPublished: 0,
 //             referenceInfo: {
@@ -167,8 +167,8 @@ function buildPidStats(pidsToResyncDomains, referenceInfo) {
 //
 // pidsToResyncDomains: An object containing lists of domains keyed by PIDs, e.g.
 //     {
-//         '9E7A;3': ['med', 'allergy'],
-//         'C877;8': ['allergy']
+//         'SITE;3': ['med', 'allergy'],
+//         'SITE;8': ['allergy']
 //     }
 //
 //
@@ -176,15 +176,15 @@ function buildPidStats(pidsToResyncDomains, referenceInfo) {
 // For example, the above value would result in:
 //     [
 //         {
-//             pid: '9E7A;3',
+//             pid: 'SITE;3',
 //             domain: 'med'
 //         },
 //         {
-//             pid: '9E7A;3',
+//             pid: 'SITE;3',
 //             domain: 'allergy'
 //         },
 //         {
-//             pid: 'C877;8',
+//             pid: 'SITE;8',
 //             domain: 'allergy'
 //         }
 //     ]

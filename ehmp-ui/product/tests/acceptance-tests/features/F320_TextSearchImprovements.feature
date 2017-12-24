@@ -26,7 +26,7 @@ Scenario: The application needs to be able to highlight the same search terms wh
   And the user views details of the first "Allergy"
   Then the modal is displayed
   And the modal's title is "Allergen - CHOCOLATE"
-  Then the modal contains highlighted "CHOCOLAT"
+  Then the modal contains highlighted "CHOCOLATE"
 
 @F320_4_TextSearchImprovements @US4542 @DE1793 @DE2657
 Scenario: The application needs to be able to highlight the same search terms when the details of the search results are displayed.

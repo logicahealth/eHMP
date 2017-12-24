@@ -10,7 +10,7 @@ module.exports.getResourceConfig = function() {
     return [{
         name: 'permissions-list',
         path: '/list',
-        get: require('./list'),
+        get: require('./get-permissions'),
         interceptors: {
             synchronize: false
         },

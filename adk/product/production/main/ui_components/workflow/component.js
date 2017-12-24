@@ -27,7 +27,7 @@ define([
                 '{{#if showCloseButton}}',
                 '<button type="button" class="close btn btn-icon btn-xs',
                 '{{#if defaultCloseButtonAction}}" data-dismiss="modal"{{else}} custom-on-close-method"{{/if}} ',
-                'title="{{#if closeButtonTitle}}{{closeButtonTitle}}{{else}}Press enter to close.{{/if}}">',
+                'title="{{#if closeButtonTitle}}{{closeButtonTitle}}{{else}}Close{{/if}}">',
                 '<i class="fa fa-times fa-lg"></i>',
                 '</button>',
                 '{{/if}}'
@@ -44,7 +44,7 @@ define([
             '{{#if actionItems}}',
             '<div class="all-padding-no">',
             '<div class="dropdown">',
-            '<button class="btn btn-icon font-size-16 color-pure-white top-padding-no bottom-padding-no right-padding-xs left-padding-sm dropdown-toggle" type="button" id="action-items-dropdown" data-toggle="dropdown" aria-expanded="true" title="Press enter to view setting options">',
+            '<button class="btn btn-icon font-size-16 color-pure-white top-padding-no bottom-padding-no right-padding-xs left-padding-sm dropdown-toggle" type="button" id="action-items-dropdown" data-toggle="dropdown" aria-expanded="true" title="View setting options">',
             '<i class="fa fa-ellipsis-v"></i>',
             '</button>',
             '<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="action-items-dropdown">',
@@ -63,12 +63,8 @@ define([
             'change:title': 'render'
         },
         tagName: 'h4',
-        id: function() {
-            var id = Handlebars.helpers['clean-for-id'].apply(this, [this.model.get('title')]);
-            return 'main-workflow-label-' + Handlebars.helpers['clean-for-id'].apply(this, [this.model.get('title')]);
-        },
         className: function() {
-            return this.getOption('classPrefix') + '-title';
+            return this.getOption('classPrefix') + '-title ' + _.get(this.getOption('headerOptions'), 'titleClass', '');
         },
         template: Handlebars.compile('{{#if icon}}<i class="fa {{icon}}"></i> {{/if}}{{title}}')
     });
@@ -112,23 +108,25 @@ define([
                 }
             });
         },
-        _buildEventString: function (itemKey, key) {
+        _buildEventString: function(itemKey, key) {
             return 'subTray:' + itemKey + ':' + key + ':subTrayView';
         },
         onAddChild: function(childView) {
             // work with the childView instance, here
             var key = childView.model.get('key');
-            if(_.isString(key)) {
+            if (_.isString(key)) {
                 var eventString = this._buildEventString(this.options.itemKey, key);
-                Messaging.reply(eventString, function () { return childView;}, {ready: true});
+                Messaging.reply(eventString, function() {
+                    return childView; }, { ready: true });
             }
         },
         onBeforeRemoveChild: function(childView) {
             // work with the childView instance, here
             var key = childView.model.get('key');
-            if(_.isString(key)) {
+            if (_.isString(key)) {
                 var eventString = this._buildEventString(this.options.itemKey, key);
-                Messaging.stopReplying(eventString, function(){ return childView;});
+                Messaging.stopReplying(eventString, function() {
+                    return childView; });
             }
         }
     });
@@ -243,28 +241,36 @@ define([
             var workflowpopOutToggle = this.model.get('popOutToggle');
             var workflowCloseButtonOptions = this.model.get('closeButtonOptions') || {};
             var workflowactionItems = this.model.get('actionItems');
+            var workflowHeaderOptions = this.workflowOptions.headerOptions;
             if (workflowTitle || workflowactionItems || this.workflowOptions.header) {
-                if (this.workflowOptions.header) {
-                    this.HeaderView = this.workflowOptions.header.extend({
-                        className: this.model.get('classPrefix') + '-header'
+                this.headerModel = new HeaderModel({
+                    'title': workflowTitle,
+                    'icon': this.workflowOptions.icon,
+                    'actionItems': workflowactionItems,
+                    'popOutToggle': workflowpopOutToggle,
+                    'closeButtonTitle': workflowCloseButtonOptions.title,
+                    'defaultCloseButtonAction': !_.isFunction(workflowCloseButtonOptions.onClick),
+                    'showCloseButton': _.get(workflowHeaderOptions, 'showCloseButton', true),
+                    'helpMapping': this.currentStepModel().get('helpMapping'),
+                    'helpUrl': this.currentStepModel().get('helpUrl')
+                });
+                workflowCloseButtonOptions = _.defaults(workflowCloseButtonOptions, {
+                    title: "",
+                    onClick: function() {}
+                });
+                if (this.workflowOptions.header && Backbone.View.prototype.isPrototypeOf(_.get(this, 'workflowOptions.header.prototype'))) {
+                    var HeaderView = this.workflowOptions.header;
+                    this.HeaderView = HeaderView.extend({
+                        classPrefix: this.model.get('classPrefix'),
+                        className: function() {
+                            var protoClassName = _.result(HeaderView, 'prototype.className', '');
+                            return this.getOption('classPrefix') + '-header ' + protoClassName;
+                        },
+                        id: 'main-workflow-label-' + this.cid
                     });
                 } else {
-                    this.headerModel = new HeaderModel({
-                        'title': workflowTitle,
-                        'icon': this.workflowOptions.icon,
-                        'actionItems': workflowactionItems,
-                        'popOutToggle': workflowpopOutToggle,
-                        'closeButtonTitle': workflowCloseButtonOptions.title,
-                        'defaultCloseButtonAction': !_.isFunction(workflowCloseButtonOptions.onClick),
-                        'showCloseButton': true,
-                        'helpMapping': this.currentStepModel().get('helpMapping'),
-                        'helpUrl': this.currentStepModel().get('helpUrl')
-                    });
-                    workflowCloseButtonOptions = _.defaults(workflowCloseButtonOptions, {
-                        title: "",
-                        onClick: function() {}
-                    });
                     this.HeaderView = Backbone.Marionette.LayoutView.extend({
+                        headerId: 'main-workflow-label-' + this.cid,
                         getHelpButtonOptions: function() {
                             return {
                                 colorClass: this.getOption('model').get('shownInTray') ? 'bgc-primary-dark' : null
@@ -331,11 +337,16 @@ define([
                             '<div class="worflow-header-close-button-container"></div>',
                             '</div>'
                         ].join("\n")),
-                        className: this.model.get('classPrefix') + '-header left-padding-sm right-padding-sm',
+                        className: this.model.get('classPrefix') + '-header left-padding-sm right-padding-sm ' + _.get(workflowHeaderOptions, 'modalHeaderClass'),
                         onBeforeShow: function() {
-                            this.showChildView('TitleRegion', new HeaderTitle({
+                            var TitleView = HeaderTitle.extend({
+                                id: this.headerId
+                            });
+
+                            this.showChildView('TitleRegion', new TitleView({
                                 model: this.model,
-                                classPrefix: this.getOption('classPrefix')
+                                classPrefix: this.getOption('classPrefix'),
+                                headerOptions: workflowHeaderOptions
                             }));
                             this.showChildView('CloseButtonRegion', new HeaderCloseButton({
                                 model: this.model
@@ -372,7 +383,7 @@ define([
             this.workflowProgressIndicatorView = new this.WorkflowProgressIndicatorView();
             this.showChildView('ProgressIndicatorRegion', this.workflowProgressIndicatorView);
         },
-        currentStepModel: function(){
+        currentStepModel: function() {
             return this.model.get('steps').at(this.model.get('currentIndex'));
         },
         updateSubTrayView: function(stepModel) {
@@ -418,12 +429,12 @@ define([
                 });
             }
         },
-        toggleSubTray: function(subTrayKey, booleanValue){
-            if (this.SubTrayRegion.hasView() && _.isString(subTrayKey) && _.isBoolean(booleanValue)){
+        toggleSubTray: function(subTrayKey, booleanValue) {
+            if (this.SubTrayRegion.hasView() && _.isString(subTrayKey) && _.isBoolean(booleanValue)) {
                 var stepModel = this.currentStepModel() || null;
-                if (!_.isUndefined(stepModel)){
-                    var subTrayView = Messaging.request('subTray:'+ stepModel.get('subTrayGroup') + ':' + subTrayKey + ":subTrayView");
-                    if (!_.isUndefined(subTrayView)){
+                if (!_.isUndefined(stepModel)) {
+                    var subTrayView = Messaging.request('subTray:' + stepModel.get('subTrayGroup') + ':' + subTrayKey + ":subTrayView");
+                    if (!_.isUndefined(subTrayView)) {
                         var action = booleanValue ? 'show' : 'hide';
                         subTrayView.$el.trigger('subTray.' + action);
                         return true;
@@ -436,19 +447,22 @@ define([
             if (!_.isUndefined(showOptions) && _.isString(showOptions.inTray)) {
                 this.showInTray(showOptions.inTray);
             } else {
-                var $triggerElem = $(':focus');
+                var $triggerElem = _.get(showOptions, 'triggerElement') || _.get(this, 'workflowOptions.triggerElement', $(':focus'));
 
                 var WorkflowRegion = Messaging.request('get:adkApp:region', 'workflowRegion');
                 if (!_.isUndefined(WorkflowRegion)) {
                     var workflowContainerView = new ContainerView({
                         workflowOptions: this.workflowOptions,
-                        controllerView: this
+                        controllerView: this,
+                        attributes: _.extend({ 'aria-labelledby': 'main-workflow-label-' + this.cid }, _.result(ContainerView, 'prototype.attributes', {}))
                     });
                     WorkflowRegion.show(workflowContainerView);
 
                     WorkflowRegion.currentView.$el.one('hidden.bs.modal', function(e) {
                         WorkflowRegion.empty();
-                        $triggerElem.focus();
+                        if ($triggerElem) {
+                            $triggerElem.focus();
+                        }
                     });
                     WorkflowRegion.currentView.$el.modal('show');
                 }
@@ -466,7 +480,7 @@ define([
                     var trayKeyString = trayKey.replace(/s$/, '');
                     if (!_.isUndefined(TrayRegion)) {
                         this.TrayView.listenTo(ResizeUtils.dimensions.contentRegion, 'change', _.bind(function(model) {
-                            if(!_.isUndefined(this.SubTrayRegion)){
+                            if (!_.isUndefined(this.SubTrayRegion)) {
                                 var $trayRegion = TrayView.TrayRegion.$el;
                                 var contentRegionHeight = model.get('height');
                                 this.adjustFormDimensions($trayRegion, contentRegionHeight);
@@ -477,13 +491,13 @@ define([
                         if (TrayRegion.currentView instanceof WorkflowView) {
                             var SimpleAlertItemView = Backbone.Marionette.ItemView.extend({
                                 template: Handlebars.compile([
-                                    '<h5>'+ trayKeyString + ' already in progress.</h5>',
+                                    '<h5>' + trayKeyString + ' already in progress.</h5>',
                                     '<p>Complete the current workflow before starting a new ' + trayKeyString + '.</p>'
                                 ].join('\n'))
                             });
                             var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                                 template: Handlebars.compile([
-                                    '{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'
+                                    '{{ui-button "OK" classes="btn-primary alert-continue btn-sm"}}'
                                 ].join('\n')),
                                 events: {
                                     'click button': function() {
@@ -516,10 +530,14 @@ define([
             this.$el.trigger('tray.reset');
         },
         changeHeaderHelpMapping: function(newMappingString) {
+            if (this.headerModel) {
                 this.headerModel.set('helpMapping', newMappingString);
+            }
         },
         changeHeaderHelpUrl: function(newUrlString) {
+            if (this.headerModel) {
                 this.headerModel.set('helpUrl', newUrlString);
+            }
         },
         changeHeaderTitle: function(newTitleString) {
             if (_.isString(newTitleString)) {
@@ -529,6 +547,11 @@ define([
         changeHeaderIcon: function(newIconString) {
             if (_.isString(newIconString)) {
                 this.headerModel.set('icon', newIconString);
+            }
+        },
+        changeHeaderShowClose: function(shouldShow) {
+            if (_.isBoolean(shouldShow)) {
+                this.headerModel.set('showCloseButton', shouldShow);
             }
         },
         changeHeaderActionItems: function(newActionItemsArray) {

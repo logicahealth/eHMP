@@ -25,6 +25,7 @@ define([
         freezeApplets: true, //if true, applets won't be draggable and resizable by gridster
         applets: [{
             "id": "newsfeed",
+            'instanceId': 'applet-1',
             "title": "Timeline",
             "region": "8afd050c9965",
             "dataRow": "1",

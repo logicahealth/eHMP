@@ -1,64 +1,26 @@
-class WorkspaceManager < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new('Alert title'), VerifyText.new, AccessHtmlElement.new(:css, '#alert-region .modal-title'))
-    add_action(CucumberLabel.new('Alert Confirm Delete'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-danger'))
-    add_action(CucumberLabel.new('Alert Confirm Cancel'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-default'))
-    # add_action(CucumberLabel.new('Close Workspace Manager'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading .done-editing'))
-
-    workspaces = AccessHtmlElement.new(:css, 'div.workspace-table div.table-row')
-    add_verify(CucumberLabel.new('workspace count'), VerifyXpathCount.new(workspaces), workspaces)
-    user_defined_workspaces = AccessHtmlElement.new(:css, 'div.user-defined')
-    add_verify(CucumberLabel.new('ud workspace count'), VerifyXpathCount.new(user_defined_workspaces), user_defined_workspaces)
-    add_verify(CucumberLabel.new('Workspace Manager applet'), VerifyText.new, AccessHtmlElement.new(:css, 'div.workspaceManager-applet'))
-  end
-end
-
-def perform_udw_delete
-  elements = WorkspaceManager.instance
-  return false unless elements.perform_action('Delete workspace')
-  elements.perform_action('Alert Confirm Delete')
-  elements.wait_until_action_element_invisible('Alert Confirm Delete')
-  true
-end
-
-def delete_workspace(element_id)
-  elements = WorkspaceManager.instance
-  p "delete workspace #{element_id}"
-  elements.add_action(CucumberLabel.new('Delete workspace'), ClickAction.new, AccessHtmlElement.new(:css, "##{element_id} button.delete-worksheet"))
-  return perform_udw_delete
-end
-
-def delete_first_udw
-  elements = WorkspaceManager.instance
-  p "delete workspace without id"
-  elements.add_action(CucumberLabel.new('Delete workspace'), ClickAction.new, AccessHtmlElement.new(:css, "div.user-defined button.delete-worksheet"))
-  return perform_udw_delete
-end
-
 Then(/^the user deletes all user defined workspaces$/) do
-  elements = WorkspaceManager.instance
+  manager = PobWorkspaceManager.new
   wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-  expect(elements.wait_until_xpath_count_greater_than('workspace count', 0)).to eq(true)
-  delete_buttons = TestSupport.driver.find_elements(:css, 'div.user-defined')
-  if delete_buttons.length > 0
-    for i in 0..delete_buttons.length - 1
-      first_udw = TestSupport.driver.find_element(:css, 'div.user-defined')
-      id = first_udw.attribute('id')
-      if id.length == 0
-        p "this udw did not have an id"
-        num_udw_delete_buttons = TestSupport.driver.find_elements(:css, 'div.user-defined').length
-        delete_first_udw
-        wait.until { TestSupport.driver.find_elements(:css, 'div.user-defined').length < num_udw_delete_buttons }
-      else
-        # p "delete udw #{id}"
-        expect(TestSupport.driver.find_elements(:id, id).length).to eq(1)
-        delete_workspace(id)
-        expect(TestSupport.driver.find_elements(:id, id).length).to eq(0), "User Defined workspace was not deleted"
-      end
+  wait.until { manager.fld_all_screens.length > 0 }
 
+  attempt_count = 0
+  begin
+    num_udws = manager.fld_userdefined_screens.length
+    for i in 0..num_udws-1
+      before_delete_num = manager.fld_userdefined_screens.length
+      expect(WorkspaceActions.delete_first_udw).to eq(true)
+      wait.until { manager.fld_userdefined_screens.length < before_delete_num }
     end
+  rescue Exception => e
+    p 'issue...lets see what we can about it'
+    if (attempt_count < 3) && manager.has_error_message?
+      attempt_count += 1
+      p "error deleting, try again"
+      manager.acknowledge_error_message
+      sleep 2
+      retry
+    end
+    raise 'unable to delete'
   end
 end
 
@@ -67,17 +29,23 @@ Then(/^the "([^"]*)" preview option is disabled$/) do |workspace_id|
   @ehmp.add_user_defined_workspace_elements(workspace_id)
   expect(@ehmp.has_btn_udw_preview?).to eq(true)
 
-  expect(@ehmp.btn_udw_preview['class']).to_not include('previewWorkspace')
   expect(@ehmp.btn_udw_preview['disabled']).to eq('true')
 end
 
 Then(/^the "([^"]*)" preview option is enabled$/) do |workspace_id|
   @ehmp = PobWorkspaceManager.new unless @ehmp.is_a? PobWorkspaceManager
   @ehmp.add_user_defined_workspace_elements(workspace_id)
+  @ehmp.wait_for_btn_udw_preview
   expect(@ehmp.has_btn_udw_preview?).to eq(true)
 
-  expect(@ehmp.btn_udw_preview['class']).to include('previewWorkspace')
-  expect(@ehmp.btn_udw_preview['disabled']).to be_nil
+  wait_time = Time.now + 10 # sec
+  begin
+    expect(@ehmp.btn_udw_preview['class']).to include('previewWorkspace')
+    expect(@ehmp.btn_udw_preview['disabled']).to be_nil
+  rescue => e
+    retry if Time.now < wait_time
+    raise e
+  end
 end
 
 When(/^user closes the Workspace Manager$/) do

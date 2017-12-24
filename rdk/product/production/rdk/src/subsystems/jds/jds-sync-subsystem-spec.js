@@ -14,16 +14,16 @@ var full_incomplete = {
     latestJobTimestamp: 1467819371546,
     latestSourceStampTime: 20160706113600,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             syncCompleted: false,
             solrSyncCompleted: false
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             syncCompleted: false,
             solrSyncCompleted: false
@@ -39,16 +39,16 @@ var full_complete = {
     latestJobTimestamp: 1467819371546,
     latestSourceStampTime: 20160706113600,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             syncCompleted: true,
             solrSyncCompleted: true
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             syncCompleted: true,
             solrSyncCompleted: true
@@ -62,16 +62,16 @@ var site_incomplete = {
     icn: '10108V420871',
     latestEnterpriseSyncRequestTimestamp: 1467819360679,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             syncCompleted: true,
             solrSyncCompleted: true
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             syncCompleted: false,
             solrSyncCompleted: false
@@ -83,16 +83,16 @@ var site_complete = {
     icn: '10108V420871',
     latestEnterpriseSyncRequestTimestamp: 1467819360679,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             syncCompleted: true,
             solrSyncCompleted: true
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             syncCompleted: true,
             solrSyncCompleted: true
@@ -104,17 +104,17 @@ var site_error = {
     icn: '10108V420871',
     latestEnterpriseSyncRequestTimestamp: 1467819360679,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             hasError: true,
             syncCompleted: false,
             solrSyncCompleted: false
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             syncCompleted: true,
             solrSyncCompleted: true
@@ -129,16 +129,16 @@ var full_error = {
     latestSourceStampTime: 20160706113600,
     hasError: true,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1467819360679,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706094004,
             syncCompleted: true,
             solrSyncCompleted: true
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1467819360679,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             sourceStampTime: 20160706093941,
             hasError: true,
             syncCompleted: false,
@@ -155,17 +155,17 @@ var full_solr_error = {
     latestJobTimestamp: 1481293555965,
     latestSourceStampTime: 20161208162300,
     sites: {
-        '9E7A': {
+        'SITE': {
             latestJobTimestamp: 1481293555965,
-            pid: '9E7A;3',
+            pid: 'SITE;3',
             solrSyncCompleted: false,
             hasSolrError: true,
             sourceStampTime: 20161208162300,
             syncCompleted: false
         },
-        C877: {
+        SITE: {
             latestJobTimestamp: 1481293555965,
-            pid: 'C877;3',
+            pid: 'SITE;3',
             solrSyncCompleted: true,
             sourceStampTime: 20161208162254,
             syncCompleted: true
@@ -174,6 +174,20 @@ var full_solr_error = {
     solrSyncCompleted: false,
     hasSolrError: true,
     syncCompleted: false
+};
+
+var not_found_error = {
+    error: {
+        code: 404,
+        errors: [
+            {
+                message: 'JPID Not Found',
+                reason: 224
+            }
+        ],
+        message: 'Bad Request',
+        request: 'GET /sync/combinedstat/test;patientId '
+    }
 };
 
 describe('jdsSync\'s', function() {
@@ -246,9 +260,9 @@ describe('jdsSync\'s', function() {
         });
 
         it('should be false when prioritySite is passed and no hasError attribute exists', function() {
-            expect(jdsSync.isSimpleSyncStatusWithError(full_complete, 'C877')).to.equal(false);
-            expect(jdsSync.isSimpleSyncStatusWithError(site_incomplete, 'C877')).to.equal(false);
-            expect(jdsSync.isSimpleSyncStatusWithError(site_error, 'C877')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(full_complete, 'SITE')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_incomplete, 'SITE')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error, 'SITE')).to.equal(false);
         });
 
         it('should be false when no hasError attribute exists', function() {
@@ -257,7 +271,7 @@ describe('jdsSync\'s', function() {
         });
 
         it('should be true when prioritySite is passed and no hasError attribute exists for that site', function() {
-            expect(jdsSync.isSimpleSyncStatusWithError(site_error, '9E7A')).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error, 'SITE')).to.equal(true);
         });
 
         it('should be true when no prioritySite is passed and every site has a hasError attribute', function() {
@@ -290,15 +304,15 @@ describe('jdsSync\'s', function() {
         });
 
         it('should be false when prioritySite syncCompleted attribute is false', function() {
-            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, 'C877')).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, 'SITE')).to.equal(false);
         });
 
         it('should be true when prioritySite syncCompleted attribute is true', function() {
-            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, '9E7A')).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete, 'SITE')).to.equal(true);
         });
 
         it('should be true when prioritySite is true with error in other site', function() {
-            expect(jdsSync.isSimpleSyncStatusComplete(site_error, 'C877')).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusComplete(site_error, 'SITE')).to.equal(true);
         });
 
         it('should be false when prioritySite does not exist and every site-level syncCompleted attribute is false', function() {
@@ -390,10 +404,10 @@ describe('jdsSync\'s', function() {
 
             expect(status.allSites).to.be.true();
             expect(status.isSolrSyncCompleted).to.be.true();
-            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.true();
-            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.true();
-            expect(status.VISTA['C877'].isSyncCompleted).to.be.true();
-            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.true();
             expect(status.hasSolrError).to.be.undefined();
         });
 
@@ -404,10 +418,10 @@ describe('jdsSync\'s', function() {
 
             expect(status.allSites).to.be.false();
             expect(status.isSolrSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.false();
-            expect(status.VISTA['C877'].isSyncCompleted).to.be.false();
-            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.false();
             expect(status.hasSolrError).to.be.undefined();
         });
 
@@ -418,11 +432,11 @@ describe('jdsSync\'s', function() {
 
             expect(status.allSites).to.be.false();
             expect(status.isSolrSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.false();
-            expect(status.VISTA['9E7A'].hasSolrError).to.be.true();
-            expect(status.VISTA['C877'].isSyncCompleted).to.be.true();
-            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['SITE'].hasSolrError).to.be.true();
+            expect(status.VISTA['SITE'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['SITE'].isSolrSyncCompleted).to.be.true();
             expect(status.hasSolrError).to.be.true();
         });
     });
@@ -430,7 +444,7 @@ describe('jdsSync\'s', function() {
     describe('syncStatusResultProcessor', function() {
         it('should respond with a 500 if the response is falsey', function() {
             var error = 599;
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var response = 'response';
             var data = 'data';
             var expectedResponse = {
@@ -449,7 +463,7 @@ describe('jdsSync\'s', function() {
         });
         it('should create an unsynced message if the response is 404', function() {
             var error = null;
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var response = {
                 statusCode: 404
             };
@@ -459,7 +473,7 @@ describe('jdsSync\'s', function() {
                 data: {
                     error: {
                         code: 404,
-                        message: 'pid 9E7A;3 is unsynced'
+                        message: 'pid SITE;3 is unsynced'
                     }
                 }
             };
@@ -470,7 +484,7 @@ describe('jdsSync\'s', function() {
         });
         it('should create an successful message if the response is 200', function() {
             var error = null;
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var response = {
                 statusCode: 200
             };
@@ -486,7 +500,7 @@ describe('jdsSync\'s', function() {
         });
         it('should create an successful message if the response is 202', function() {
             var error = null;
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var response = {
                 statusCode: 202
             };
@@ -502,7 +516,7 @@ describe('jdsSync\'s', function() {
         });
         it('should create a generic error message if the response is not handled', function() {
             var error = new Error('could not get URL');
-            var pid = '9E7A;3';
+            var pid = 'SITE;3';
             var response = {
                 statusCode: 509
             };
@@ -520,6 +534,23 @@ describe('jdsSync\'s', function() {
                 expect(err).to.equal(error);
                 expect(response).to.eql(expectedResponse);
             }, req, error, response, data);
+        });
+    });
+
+    describe('waitForPatientLoad', function() {
+        it('should add the pid and detailed params to the path', function(done) {
+            expectHttpFetch('jdsServer', '/sync/combinedstat/test;patientId', 200, full_complete);
+            req.app.subsystems.jdsSync.waitForPatientLoad(pid, 'SITE', req, expectSuccess(done));
+        });
+
+        it('should return 404 when a patient isn\'t found', function(done) {
+            expectHttpFetch('jdsServer', '/sync/combinedstat/test;patientId', 404, not_found_error);
+            req.app.subsystems.jdsSync.waitForPatientLoad(pid, 'SITE', req, expectError(done, 404, 'This patient\'s record is not yet accessible. Please try again in a few minutes. If it is still not accessible, please contact your HIMS representative and have the patient loaded into your local VistA.'));
+        });
+
+        it('should return a standard error result for other errors', function(done) {
+            expectHttpFetch('jdsServer', '/sync/combinedstat/test;patientId', 500);
+            req.app.subsystems.jdsSync.waitForPatientLoad(pid, 'SITE', req, expectError(done, 500));
         });
     });
 
@@ -541,7 +572,7 @@ describe('jdsSync\'s', function() {
 
         request.session = {
             user: {
-                site: '9E7A'
+                site: 'SITE'
             }
         };
 
@@ -558,8 +589,8 @@ describe('jdsSync\'s', function() {
                 hmpServer: {
                     host: 'hmphost',
                     port: 3,
-                    accessCode: 'REDACTED',
-                    verifyCode: 'REDACTED'
+                    accessCode: 'SITE;500',
+                    verifyCode: 'USER  ;PW      '
                 },
                 jdsSync: {
                     settings: {
@@ -568,8 +599,8 @@ describe('jdsSync\'s', function() {
                     }
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 }
             },
             subsystems: {}

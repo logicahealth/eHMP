@@ -43,13 +43,13 @@ var pcmmData = [{ TEAM_ID: 'The A team', TEAM_NAME: 'Baracus', STATIONNUMBER: '1
 describe('teams for user fetch list', function(){
 
     beforeEach(function(){
-        sinon.stub(pcmm, 'doQueryWithParams', function(dummyConfig, query, queryParams, callback, params){
+        sinon.stub(pcmm, 'doExecuteProcWithParams', function(dummyConfig, query, queryParams, callback, params){
             return callback(null, pcmmData);
         });
     });
 
     afterEach(function(){
-        pcmm.doQueryWithParams.restore();
+        pcmm.doExecuteProcWithParams.restore();
     });
 
     it('returns expected JSON', function() {

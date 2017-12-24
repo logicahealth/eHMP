@@ -66,9 +66,9 @@ define([
             var resultUID = _.get(results, '[0].resultUid');
             var channel = ADK.Messaging.getChannel('narrative_lab_results');
             if (resultUID) {
-                return channel.trigger('showExternalModalView', resultUID, model, this.dataCollection, ADK.PatientRecordService.getCurrentPatient());
+                return channel.trigger('showExternalModalView', resultUID, model, this.dataCollection, ADK.PatientRecordService.getCurrentPatient(), this.triggerElement);
             }
-            channel.trigger('showErrorView', model, this.dataCollection);
+            channel.trigger('showErrorView', model, this.dataCollection, this.triggerElement);
         }
     });
 

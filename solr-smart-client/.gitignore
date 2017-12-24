@@ -53,3 +53,4 @@ infrastructure/vagrant/virtualbox/rdk/chef_config
 infrastructure/vagrant/aws/rdk/chef_config
 product/production/rdk/config
 product/production/rdk/logs
+xtmp/

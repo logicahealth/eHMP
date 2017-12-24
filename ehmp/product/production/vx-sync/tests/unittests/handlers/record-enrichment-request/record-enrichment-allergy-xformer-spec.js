@@ -43,7 +43,7 @@ var originalVaAllergyRecord = {
     'stampTime': 20050317200936,
     'summary': 'PENICILLIN',
     'typeName': 'DRUG',
-    'uid': 'urn:va:allergy:9E7A:3:751',
+    'uid': 'urn:va:allergy:SITE:3:751',
     'verified': 20050317200936,
     'verifierName': '<auto-verified>',
     'comments': [{

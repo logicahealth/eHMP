@@ -62,7 +62,7 @@ define([
         },
         getFacilities: function(onSuccess) {
             var fetchOptions = {
-                resourceTitle: 'authentication-list',
+                resourceTitle: 'facility-list',
                 fetchType: 'GET',
                 cache: true,
                 onSuccess: function(collection) {
@@ -215,6 +215,10 @@ define([
             // Build routing string
             var routing = '[FC:' + locationName + '(' + locationCode + ')/TF:' + teamFocus.name + '(' + teamFocus.code + ')]';
             return routing;
+        },
+        getWorkspaceId: function(navigation) {
+            var url = _.get(navigation, 'url', '');
+            return url.substr(url.lastIndexOf('/') + 1);
         }
     };
 

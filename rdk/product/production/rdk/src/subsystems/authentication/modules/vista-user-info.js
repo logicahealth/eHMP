@@ -21,6 +21,7 @@ var NAME_INDEX = 1;
  * @return {Object|undefined}
  */
 var vistaUserInfo = function(req, res, userInfoCB, params) {
+    var errorObj;
     var logger = req.logger;
     var rpcClient = params.rpcClient;
     //call to get corsTabs and rptTabs
@@ -35,20 +36,22 @@ var vistaUserInfo = function(req, res, userInfoCB, params) {
         });
         return userInfoCB(err, data);
     };
-    var errorObj;
+
     return rpcClient.execute(USERINFO_RPC, function(error, result) {
         if (error) {
             //Error Handling for Authentication
             errorObj = new RdkError({
-                'error': error,
-                'code': 'rdk.401.1008'
+                error: error,
+                code: 'rdk.401.1008',
+                logger: logger
             });
             return callback(errorObj, null);
         }
 
         if (!_.isString(result)) {
             errorObj = new RdkError({
-                'code': 'vista.401.1009'
+                code: 'vista.401.1009',
+                logger: logger
             });
             return callback(errorObj, null);
         }
@@ -65,7 +68,8 @@ var vistaUserInfo = function(req, res, userInfoCB, params) {
 
         if (obj.corsTabs === 'false' && obj.rptTabs === 'false') {
             errorObj = new RdkError({
-                'code': 'vista.401.1010'
+                code: 'vista.401.1010',
+                logger: logger
             });
             return callback(errorObj, null);
         }

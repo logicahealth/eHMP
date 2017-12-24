@@ -208,12 +208,12 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
                 });
-                it("clicking 'Add' button adds item to selected the selected side", function() {
+                it("clicking 'Add' button adds item to the selected side", function() {
                     //Make sure there are the correct number of items unslected
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
 
-                    $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
+                    $testPage.find("button[aria-label='Add Item 03']").focus().click();
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button.checked-false')).toHaveLength(1);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                 });
@@ -221,7 +221,7 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(2);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
 
-                    $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 01']").focus().click();
 
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
@@ -229,7 +229,7 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                 });
                 it("removing all items from selected side leaves 'No Items selected.' text", function() {
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
-                    $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 03']").focus().click();
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                 });
@@ -237,17 +237,17 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
-                    $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 01']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 02']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 03']").focus().click();
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
 
                     //Remove all Items from the selected side
-                    $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
-                    $testPage.find("button[title='Press enter to remove Item 02.']").focus().click();
-                    $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 01']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 02']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 03']").focus().click();
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
@@ -326,11 +326,11 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
                 });
-                it("clicking 'Add' button adds item to selected the selected side", function() {
+                it("clicking 'Add' button adds item to the selected side", function() {
                     //Make sure there are the correct number of items unslected
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
 
-                    $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 03']").focus().click();
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
@@ -339,7 +339,7 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(2);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
 
-                    $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 01']").focus().click();
 
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
@@ -347,7 +347,7 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                 });
                 it("removing all items from selected side leaves 'No Items selected.' text", function() {
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
-                    $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 03']").focus().click();
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                 });
@@ -355,17 +355,17 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
-                    $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 01']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 02']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 03']").focus().click();
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
 
                     //Remove all Items from the selected side
-                    $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
-                    $testPage.find("button[title='Press enter to remove Item 02.']").focus().click();
-                    $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 01']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 02']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 03']").focus().click();
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
@@ -411,9 +411,9 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
-                    $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
-                    $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 01']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 02']").focus().click();
+                    $testPage.find("button[aria-label='Add Item 03']").focus().click();
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
@@ -520,7 +520,7 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect(formModel_1.get('msbs-count')).toBe(3);
                 });
                 it("expect the the count to be updated", function() {
-                    $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
+                    $testPage.find("button[aria-label='Remove Item 01']").focus().click();
                     expect(formModel_1.get('msbs-count')).toBe(2);
                 });
             });

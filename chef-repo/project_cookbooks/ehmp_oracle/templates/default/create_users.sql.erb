@@ -1,0 +1,133 @@
+SET SERVEROUTPUT ON
+--------------------------------------------------------
+--  Create application roles
+--------------------------------------------------------
+DECLARE
+  role_exists EXCEPTION;
+  PRAGMA exception_init( role_exists, -01921 );
+
+  PROCEDURE execute_ddl(ddl VARCHAR)
+  IS
+  BEGIN
+    EXECUTE IMMEDIATE ddl;
+    EXCEPTION
+      WHEN role_exists THEN
+        NULL;
+  END;
+
+BEGIN
+
+  execute_ddl('CREATE ROLE ehmp_rw_role');
+  execute immediate 'GRANT EXECUTE ON DBMS_LOB to ehmp_rw_role';
+  execute immediate 'GRANT EXECUTE ON DBMS_SQL to ehmp_rw_role';
+
+END;
+/
+
+--------------------------------------------------------
+--  Create users
+--------------------------------------------------------
+DECLARE
+  PROCEDURE create_user(
+    user_name varchar2,
+    user_password varchar2,
+    user_tablespace varchar2 default null)
+  IS
+    user_count number;
+    v_sql varchar2(32767);
+  BEGIN
+
+    SELECT COUNT(1) INTO user_count FROM dba_users WHERE username = UPPER(user_name);
+
+    IF user_count = 0 THEN
+      v_sql := 'CREATE USER '||user_name||' IDENTIFIED BY "'||user_password||'"';
+      IF user_tablespace IS NOT NULL THEN
+        v_sql := v_sql || ' DEFAULT TABLESPACE '||user_tablespace||' TEMPORARY TABLESPACE TEMP QUOTA UNLIMITED ON ' || user_tablespace;
+      END IF;
+    ELSE
+      v_sql := 'ALTER USER '||user_name||' IDENTIFIED BY "'||user_password||'"';
+      IF user_tablespace  IS NOT NULL THEN
+        v_sql := v_sql || ' DEFAULT TABLESPACE '||user_tablespace||' TEMPORARY TABLESPACE TEMP QUOTA UNLIMITED ON ' || user_tablespace;
+      END IF;
+    END IF;
+
+    execute immediate v_sql;
+
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('EXCEPTION CREATING USER '||user_name||' '||SQLCODE||' '||SQLERRM);
+        RAISE;
+  END;
+
+  PROCEDURE create_dba_user(
+    user_name varchar2,
+    user_password varchar2,
+    user_tablespace varchar2 default null)
+  IS
+  BEGIN
+    create_user(user_name, user_password, user_tablespace);
+    execute immediate 'GRANT DBA TO '||user_name;
+  END;
+
+  PROCEDURE create_schema_owner_user(
+    user_name varchar2,
+    user_password varchar2,
+    user_tablespace varchar2 default null)
+  IS
+  BEGIN
+    create_user(user_name, user_password, user_tablespace);
+    execute immediate 'GRANT CONNECT, RESOURCE, CREATE TABLE, CREATE PROCEDURE, CREATE TYPE, CREATE TRIGGER, UNLIMITED TABLESPACE, CREATE MATERIALIZED VIEW TO '||user_name;
+  END;
+
+  PROCEDURE create_application_user(
+    user_name varchar2,
+    user_password varchar2,
+    user_tablespace varchar2 default null)
+  IS
+  BEGIN
+    create_user(user_name, user_password);
+    execute immediate 'GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE, ehmp_rw_role TO '||user_name;
+  END;
+
+  PROCEDURE drop_user(
+    user_name varchar2)
+  IS
+    user_count number;
+    v_sid number;
+    v_serial number;
+    session_cursor sys_refcursor;
+  BEGIN
+    SELECT COUNT(1) INTO user_count FROM dba_users WHERE username = UPPER(user_name);
+    IF user_count > 0 THEN
+      OPEN session_cursor
+      FOR
+      SELECT s.sid, s.serial#
+      FROM v$session s, v$process p
+      WHERE s.username = upper(user_name) AND p.addr (+)= s.paddr;
+      LOOP
+        FETCH session_cursor INTO v_sid, v_serial;
+        EXIT WHEN session_cursor%notfound;
+        BEGIN
+          execute immediate 'ALTER SYSTEM KILL SESSION '''||v_sid||','||v_serial||''' IMMEDIATE';
+          EXCEPTION
+            WHEN OTHERS THEN
+              NULL;
+        END;
+      END LOOP;
+      CLOSE session_cursor;
+
+      execute immediate 'DROP USER '||user_name||' CASCADE';
+    END IF;
+  END;
+
+BEGIN
+
+<% @users.each do |name, properties| %>
+<% if properties['deprecate'] == true %>
+DROP_USER('<%= properties['username'] %>');
+<% else %>
+CREATE_<%= properties['user_type'] %>_USER('<%= properties['username'] %>', '<%= properties['password'] %>', '<%= properties['tablespace'] %>');
+<% end %>
+<% end %>
+END;
+/

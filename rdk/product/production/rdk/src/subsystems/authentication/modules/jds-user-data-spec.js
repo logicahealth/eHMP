@@ -43,7 +43,7 @@ describe('JDS User Data module', function() {
             }
         };
         var params = {
-            site: '9E7A',
+            site: 'SITE',
             data: data
         };
         jdsUserData(req, res, cb, params);
@@ -69,11 +69,11 @@ describe('JDS User Data module', function() {
     it('makes the callback with error information if an error is returned from JDS', function() {
         var data = {
             duz: {
-                '9E7A': '14563'
+                'SITE': '14563'
             }
         };
         var params = {
-            site: '9E7A',
+            site: 'SITE',
             data: data
         };
         getStub.callsArgWith(1, new Error('This is just an error'), null, null);
@@ -85,17 +85,17 @@ describe('JDS User Data module', function() {
     it('makes the callback with user information if a user is returned from JDS', function() {
         var data = {
             duz: {
-                '9E7A': '14563'
+                'SITE': '14563'
             }
         };
         var params = {
-            site: '9E7A',
+            site: 'SITE',
             data: data
         };
         var body = {
             ssn: '563967858',
             title: 'Faker',
-            uid: 'urn:va:user:9E7A:14563',
+            uid: 'urn:va:user:SITE:14563',
             firstname: 'Arcane',
             lastname: 'Trickster'
         };

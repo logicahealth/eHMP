@@ -25,7 +25,10 @@ gulp.task('vendorjs', function() {
         'bower_components/prism/prism.js',
         'bower_components/prism/components/prism-handlebars.js',
         'bower_components/q/q.js',
-        'bower_components/clipboard/dist/clipboard.min.js'
+        'bower_components/clipboard/dist/clipboard.min.js',
+        'bower_components/backbone-tree-model/src/backbone.treemodel.js',
+        'bower_components/backbone-tree-view/lib/backbone-tree-view.js',
+        'node_modules/lodash.set/index.js'
     ])
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest('dist/js'))
@@ -39,7 +42,8 @@ gulp.task('vendorcss', ['vendorfonts'], function() {
         'bower_components/bootstrap/dist/css/bootstrap.css',
         'bower_components/font-awesome/css/font-awesome.css',
         'bower_components/spinkit/css/spinkit.css',
-        'bower_components/prism/themes/prism.css'
+        'bower_components/prism/themes/prism.css',
+        'bower_components/backbone-tree-view/css/bootstrap-theme.css'
     ])
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest('dist/css'))

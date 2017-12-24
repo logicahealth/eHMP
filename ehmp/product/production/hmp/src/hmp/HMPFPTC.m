@@ -1,5 +1,5 @@
-HMPFPTC ;SLC/MKB,AGP,ASMR/RRB - Patient look-up Utilities at Facility;Nov 04, 2015 18:37:39
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 11
+HMPFPTC ;SLC/MKB,AGP,ASMR/RRB,hrubovcak - Patient look-up Utilities at Facility;Jun 26, 2017 13:00:16
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
@@ -72,11 +72,15 @@ PRF(DFN,CHKS) ; get Patient Record Flags
  Q
  ;
 LOG(HMPZ,DFN) ; Make entry in security log for sensitive patient access
+ ; DE7912 - check for valid DFN and patient exists, 23 June 2017
+ Q:'($G(DFN)>0)  ; DFN invalid, do nothing
+ ; patient missing, log it and exit
+ I '$L($$GET1^DIQ(2,DFN_",",.01,"I")) D LOGDPT^HMPLOG(DFN) Q
+ ;
  N ERR,RESULTS,HMPY,X
  D NOTICE^DGSEC4(.HMPY,DFN) ;IA #3027
  S X=$S(HMPY:"ok",1:"fail")
  S RESULTS("result")=X
- ;S HMP=$$ENCODE^HMPJSON("RESULTS","ERR")
  D ENCODE^HMPJSON("RESULTS","HMPZ","ERR")
  Q
  ;

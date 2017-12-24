@@ -31,8 +31,10 @@ import static org.junit.Assert.assertEquals;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.core.Response;
@@ -92,7 +94,7 @@ public class BounceBackTestIT {
 		target.setType(InvocationType.Direct);
 		LinkedList<String> intents = new LinkedList<String>();
 		target.setIntentsSet(intents);
-		Properties parameters = new Properties();
+		Map<String, Object> parameters = new HashMap<>();
 
 		ResultBundle out;
 

@@ -1,0 +1,10 @@
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = <%= node['fqdn'] %>)(PORT = PORT))
+    )
+  )
+
+SECURE_REGISTER_LISTENER = (IPC)
+ADR_BASE_LISTENER = <%= node['oracle']['ora_base'] %>
+SID_LIST_LISTENER=(SID_LIST=(SID_DESC=(GLOBAL_DBNAME=<%= node['oracle_wrapper']['dbs'][0] %>)(ORACLE_HOME=<%= node['oracle']['rdbms']['ora_home_12c']%>)(SID_NAME=<%= node['oracle_wrapper']['dbs'][0] %>)))

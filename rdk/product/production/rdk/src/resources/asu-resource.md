@@ -105,24 +105,24 @@
                     "items": [{
                         "author": "VEHU,ONE",
                         "authorDisplayName": "Vehu,One",
-                        "authorUid": "urn:va:user:C877:20001",
+                        "authorUid": "urn:va:user:SITE:20001",
                         "clinicians": [{
                             "displayName": "Vehu,One",
                             "name": "VEHU,ONE",
                             "role": "AU",
-                            "summary": "DocumentClinician{uid='urn:va:user:C877:20001'}",
-                            "uid": "urn:va:user:C877:20001"
+                            "summary": "DocumentClinician{uid='urn:va:user:SITE:20001'}",
+                            "uid": "urn:va:user:SITE:20001"
                         }],
-                        "documentDefUid": "urn:va:doc-def:C877:8",
+                        "documentDefUid": "urn:va:doc-def:SITE:8",
                         "status": "COMPLETED",
-                        "uid": "urn:va:document:C877:3:11605"
+                        "uid": "urn:va:document:SITE:3:11605"
                     }]
                 },
                 "actionNames": ["VIEW", "EDIT RECORD", "AMENDMENT"],
                 "userdetails": {
-                    "site": "C877",
+                    "site": "SITE",
                     "duz": {
-                        "C877": "10000000270"
+                        "SITE": "10000000270"
                     }
                 }
             }
@@ -213,12 +213,12 @@
                             "duz": {
                                 "type": "object",
                                 "properties": {
-                                    "C877": {
+                                    "SITE": {
                                         "type": "string"
                                     }
                                 },
                                 "required": [
-                                    "C877"
+                                    "SITE"
                                 ]
                             }
                         },

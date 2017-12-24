@@ -300,7 +300,7 @@ define([
 
             this.collection = new ADK.UIResources.Fetch.Vitals.Collection.PageableCollection({isClientInfinite: true});
             this.comparator = 'observed';
-            this.collection.on('sync', function() {
+            this.collection.on('fetch:success', function() {
                 if (this.collection.length > 0) {
                     this.model.set(this.collection.first().toJSON());
                 } else {
@@ -332,7 +332,6 @@ define([
                     requestParams: this.options.requestParams
                 });
             }, this);
-
             this.collection.fetchCollection(criteria, false);
         },
         createTooltipModel: function(collectionItems) {

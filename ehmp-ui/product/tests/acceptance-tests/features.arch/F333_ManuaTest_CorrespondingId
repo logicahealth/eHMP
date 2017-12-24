@@ -20,6 +20,6 @@ And Note that DoDOnly,Patient and ICNOnly,Patient will not load to coversheet un
 Then Click confirm selection and look for something like below in the logs. 
 Then The DFN and ICN in the log should match the values in the spreadsheet.
 Sample Log
-[2015-03-03T19:27:39.573Z] DEBUG: res-server/5056 on localhost.localdomain: DFN retrieved: 9E7A;3 (logId=4cb312a8-6511-42d6-ab3b-762a421ff000)
-[2015-03-03T19:27:39.573Z] DEBUG: res-server/5056 on localhost.localdomain: DFN retrieved: C877;3 (logId=4cb312a8-6511-42d6-ab3b-762a421ff000)
+[2015-03-03T19:27:39.573Z] DEBUG: res-server/5056 on localhost.localdomain: DFN retrieved: SITE;3 (logId=4cb312a8-6511-42d6-ab3b-762a421ff000)
+[2015-03-03T19:27:39.573Z] DEBUG: res-server/5056 on localhost.localdomain: DFN retrieved: SITE;3 (logId=4cb312a8-6511-42d6-ab3b-762a421ff000)
 [2015-03-03T19:27:39.575Z] DEBUG: res-server/5056 on localhost.localdomain: ICN retrieved: 10108V420871 (logId=4cb312a8-6511-42d6-ab3b-762a421ff000)

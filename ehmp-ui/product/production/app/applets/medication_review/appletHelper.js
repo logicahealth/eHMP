@@ -115,7 +115,7 @@ define([
             if (medDomainData.vaStatus) {
                 switch (medDomainData.vaStatus.toUpperCase()) {
                     case 'PENDING':
-                        return ''; //is this what we should put here? FYI, 9E7A;164 has Pending meds.
+                        return ''; //is this what we should put here? FYI, SITE;164 has Pending meds.
                     case 'ACTIVE':
                         return 'Expires';
                     case 'SUSPEND':
@@ -395,13 +395,13 @@ define([
             if (fillableTimeMinutes < 60) {
                 fillableTimeString = fillableTimeMinutes + '\'';
             } else if (fillableTimeMinutes >= 60 && fillableTimeMinutes < 2880) {
-                fillableTimeString = parseInt(fillableTimeDuration.asHours()) + 'h';
+                fillableTimeString = parseInt(Math.round(fillableTimeDuration.asHours())) + 'h';
             } else if (fillableTimeMinutes >= 2880 && fillableTimeMinutes <= 86400) {
-                fillableTimeString = parseInt(fillableTimeDuration.asDays()) + 'd';
+                fillableTimeString = parseInt(Math.round(fillableTimeDuration.asDays())) + 'd';
             } else if (fillableTimeMinutes > 86400 && fillableTimeMinutes <= 1051200) {
-                fillableTimeString = parseInt(fillableTimeDuration.asMonths()) + 'm';
+                fillableTimeString = parseInt(Math.round(fillableTimeDuration.asMonths())) + 'm';
             } else if (fillableTimeMinutes > 1051200) {
-                fillableTimeString = parseInt(fillableTimeDuration.asYears()) + 'y';
+                fillableTimeString = parseInt(Math.round(fillableTimeDuration.asYears())) + 'y';
             }
 
             //result: {date, description, label, hasLabel}

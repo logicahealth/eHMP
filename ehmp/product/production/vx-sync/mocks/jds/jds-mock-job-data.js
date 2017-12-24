@@ -19,11 +19,11 @@ var syncJobStarted = function(jpid, rootJobId) {
             jobId: rootJobId + 1,
             rootJobId: rootJobId,
             jpid: jpid,
-            type: 'vista-9E7A-subscribe-request',
+            type: 'vista-SITE-subscribe-request',
             timestamp: Date.now() - (5*360000).toString(),
             patientIdentifier: {
                 type: 'pid',
-                value: cooldownJpidRegEx.test(jpid)?'9E7A;42':'9E7A;43'
+                value: cooldownJpidRegEx.test(jpid)?'SITE;42':'SITE;43'
             },
             status: 'completed'
         },
@@ -60,18 +60,18 @@ var syncCompleteWithError = function(jpid, rootJobId) {
             jobId: (parseInt(rootJobId) + 1).toString(),
             rootJobId: rootJobId,
             jpid: jpid,
-            type: 'vista-9E7A-subscribe-request',
+            type: 'vista-SITE-subscribe-request',
             timestamp: '1417798653399',
-            pid: '9E7A;0',
+            pid: 'SITE;0',
             status: 'completed'
         },
         {
             jobId: (parseInt(rootJobId) + 2).toString(),
             rootJobId: rootJobId,
             jpid: jpid,
-            type: 'vista-C877-subscribe-request',
+            type: 'vista-SITE-subscribe-request',
             timestamp: '1417798653402',
-            pid: 'C877;0',
+            pid: 'SITE;0',
             status: 'error',
             error: 'Server could not be reached'
         },

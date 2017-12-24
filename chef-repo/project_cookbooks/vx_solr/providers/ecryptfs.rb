@@ -18,14 +18,14 @@ action :add do
   names = new_resource.name
   passph = get_password(names)
   arrayList = new_resource.list
-  
+
   arrayList.each do |mount_dir|
 
     directory "#{mount_dir}" do
       recursive true
-      owner "root"
-      group "root"
-      mode "0755"  
+      owner node['solr']['user']
+      group node['solr']['group']
+      mode "0755"
       action :create
     end
 

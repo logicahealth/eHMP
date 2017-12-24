@@ -1,0 +1,19 @@
+<table class="table">
+    <caption>
+        <h5>{{legend}}</h5></caption>
+    <thead>
+        <tr>
+            {{#each headers}} <th scope="col">{{this}}</th> {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{formattedName}}</td>
+            <td>{{formattedPermissionSetsString}}</td>
+            <td>{{additionalPermissionsLabelsFormatted}}</td>
+            <td>{{duz}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

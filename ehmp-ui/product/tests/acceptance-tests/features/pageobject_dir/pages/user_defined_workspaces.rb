@@ -1,5 +1,6 @@
 class UserDefinedWorkspace < SitePrism::Page
   element :fld_options_panel, ".optionsPanelStyle"
+  section :menu, MenuSection, ".workspace-selector"
   def applet_built_from(id, data_appletid)
     div_id = "#applet-#{id}"
     self.class.element(:temp_applet_div, div_id)

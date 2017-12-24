@@ -63,8 +63,8 @@ cds_deps = parse_dependency_versions "cds_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 r_list << "role[opencds]"
 r_list << "role[cdsdb]"
 r_list << "role[cdsinvocation]"
@@ -84,7 +84,7 @@ machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} en
   only_if { node[:machine][:production_settings][machine_ident.to_sym].nil? }
 end
 
-if node[:machine][:driver] == "ssh"
+if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
   dev_cdsdb = false
 else
   dev_cdsdb = true
@@ -104,6 +104,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -138,6 +139,11 @@ machine machine_name do
     },
     beats: {
       logging: node[:machine][:logging]
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
   )
   files lazy { node[:cds_provision][:cds][:copy_files] }

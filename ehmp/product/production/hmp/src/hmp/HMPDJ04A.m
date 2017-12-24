@@ -1,5 +1,5 @@
-HMPDJ04A ;ASMR/MKB - Admissions,PTF;Nov 12, 2015 16:42:22
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 11
+HMPDJ04A ;ASMR/MKB,CPC,MBS - Admissions,PTF;July 20, 2017 10:53:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -20,10 +20,19 @@ HMPDJ04A ;ASMR/MKB - Admissions,PTF;Nov 12, 2015 16:42:22
  ; XUAF4                         2171
  ;
  ; All tags expect DFN, ID, [HMPSTART, HMPSTOP, HMPMAX, HMPTEXT]
+ ;
+ ; US18852       -  CPC  - Add discharge section
  Q
  ;
-ADM(ID,DATE) ; -- admission [from VSIT1]
- N ADM,VADMVT,VAIP,VAERR,MVT,SPEC,HLOC,FAC,ICD,I
+DISCHARG(ID,DATE) ; --discharge notification ;US18852
+ N DISCHARG,VST,X0,X15,X,FAC,LOC,CATG,AMIS,INPT,DA,PS
+ D ADM(ID,"",1)
+ S DISCHARG("localId")=ID,DISCHARG("uid")=$$SETUID^HMPUTILS("discharge",DFN,ID)
+ S X=$$GET1^DIQ(2,DFN_",",.351,"I") S:X DISCHARG("deceased")="true"  ;(#.351) Date of death
+ D ADD^HMPDJ("DISCHARG","discharge")
+ Q
+ADM(ID,DATE,NOPOST) ; -- admission [from VSIT1]
+ N ADM,VADMVT,VAIP,VAERR,MVT,SPEC,HLOC,FAC,ICD,I,PRDX,SCNDX,CREDSTOP
  S ID=$G(ID),DATE=+$G(DATE) Q:ID=""  ;Q:DATE<1
  I ID S VAIP("D")=DATE,VST=+ID
  I ID?1"H"1.N S VAIP("E")=+$E(ID,2,99),VST=0
@@ -49,6 +58,8 @@ ADM(ID,DATE) ; -- admission [from VSIT1]
  . S X=$$AMIS^HMPDVSIT($$GET1^DIQ(44,HLOC_",",8,"I"))  ;(#8) STOP CODE NUMBER
  . ;DE2818, end
  . S:$L($G(X)) ADM("stopCodeUid")="urn:va:stop-code:"_$P(X,U),ADM("stopCodeName")=$P(X,U,2)
+ . S CREDSTOP=$$GET1^DIQ(44,HLOC_",",2503,"I")
+ . S:CREDSTOP CREDSTOP=$$AMIS^HMPDVSIT(CREDSTOP),ADM("creditStopCodeUid")="urn:va:stop-code:"_$P(CREDSTOP,U),ADM("creditStopCodeName")=$P(CREDSTOP,U,2)
  . S ADM("summary")="${"_ADM("service")_"}:"_ADM("locationName")
  D FACILITY^HMPUTILS(FAC,"ADM")
  S ADM("categoryCode")="urn:va:encounter-category:AD",ADM("categoryName")="Admission"
@@ -56,7 +67,13 @@ ADM(ID,DATE) ; -- admission [from VSIT1]
  I $G(VAIP(17)) S ADM("stay","dischargeDateTime")=$$JSONDT^HMPUTILS(+$G(VAIP(17,1)))
  I $G(VAIP(18)) S I=I+1 D PROV("ADM",I,+VAIP(18),"A")         ;attending
  I $G(VAIP(MVT,5)) S I=I+1 D PROV("ADM",I,+VAIP(MVT,5),"P",1) ;primary
- S ICD=$$POV^HMPDJ04(VST) S:'ICD ICD=$$PTF^HMPDVSIT(DFN,VAIP(12)) ;PTF>ICD
+ S ICD=$$POV^HMPDJ04(VST)
+ S PRDX=$$PTF^HMPDVSIT(DFN,VAIP(12),.SCNDX) ;PTF>ICD
+ I $P(PRDX,U)'="" S ADM("primaryDiagnosisCode")=$P(PRDX,U),ADM("primaryDiagnosis")=$P(PRDX,U,2)
+ I $O(SCNDX(0)) D
+ . N SDI
+ . S SDI=0 F  S SDI=$O(SCNDX(SDI)) Q:'SDI  S ADM("secondaryDiagnoses",SDI,"description")=$P(SCNDX(SDI),U,2),ADM("secondaryDiagnoses",SDI,"code")=$P(SCNDX(SDI),U)
+ S:'ICD ICD=PRDX
  I $L(ICD)<2 S ADM("reasonName")=$G(VAIP(MVT,7))
  E  S ADM("reasonUid")=$$SETNCS^HMPUTILS("icd",ICD),ADM("reasonName")=$P(ICD,U,2)
  S X=$$CPT^HMPDJ04(VST),ADM("typeName")=$S(X:$P($$CPT^ICPTCOD(X),U,3),1:$$CATG^HMPDVSIT("H"))
@@ -66,6 +83,7 @@ ADM(ID,DATE) ; -- admission [from VSIT1]
  S ADM("lastUpdateTime")=$$EN^HMPSTMP("adm") ;RHL 20150102
  S ADM("stampTime")=ADM("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
+ I $G(NOPOST) M DISCHARG=ADM Q  ;US18852
  I $G(HMPMETA) D ADD^HMPMETA("visit",ADM("uid"),ADM("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("ADM","visit")
  Q
@@ -98,6 +116,10 @@ MVT(CA) ; -- add movements to ADM("movement",i,"attribute")
  . S ADM("movements",CNT,"localId")=DA
  . S ADM("movements",CNT,"dateTime")=$$JSONDT^HMPUTILS(DATE)
  . S ADM("movements",CNT,"movementType")=$$EXTERNAL^DILFD(405,.02,,$P(X0,U,2))
+ . S ADM("movements",CNT,"movementSubType")=$$EXTERNAL^DILFD(405,.04,,$P(X0,U,4)) ;US18852
+ . S X=+$P(X0,U,5) I X D  ;US18852
+ ..  S ADM("movements",CNT,"transferFacilityName")=$$EXTERNAL^DILFD(405,.05,,X)
+ ..  s ADM("movements",CNT,"transferFacilityCode")=X
  . S X=+$P(X0,U,19) I X D
  .. S ADM("movements",CNT,"providerUid")=$$SETUID^HMPUTILS("user",,X)
  .. S ADM("movements",CNT,"providerName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818, changed ^VA(200) to FileMan ICR 10060
@@ -191,6 +213,6 @@ PTF1 ; Set PTF data into PTF array
  ;
 VISIT(DFN,DATE) ; -- Return visit# for admission
  N X,Y
- S X=9999999-$P(DATE,".")_"."_$P(DATE,".",2)
+ S X=PORT999-$P(DATE,".")_"."_$P(DATE,".",2)
  S Y=+$O(^AUPNVSIT("AAH",DFN,X,0))  ;DE2818, ICR 2028
  Q Y

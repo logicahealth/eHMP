@@ -15,7 +15,7 @@ Get patients for a particular clinic/ward
             + `clinics`
 
 
-    :[uid]({{{common}}}/parameters/uid.md required:"required" name:"Location" example:"urn:va:location:9E7A:64")
+    :[uid]({{{common}}}/parameters/uid.md required:"required" name:"Location" example:"urn:va:location:SITE:64")
 
     + ref.id (string, optional) - refId of ward|clinic field
 

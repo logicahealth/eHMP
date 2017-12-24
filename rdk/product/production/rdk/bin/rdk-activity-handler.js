@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 'use strict';
 
 var format = require('util').format;
@@ -25,7 +24,7 @@ nconf.argv().env(); //config priority: command line arguments, env variables, co
 var suppliedConfig = nconf.get('config');
 var defaultConfigPath = path.join(__dirname, '..', 'config/activity_handler.json');
 nconf.file(suppliedConfig || defaultConfigPath);
-nconf.required(['log-level', 'beanstalk', 'jdsServer', 'generalPurposeJdsServer', 'jbpm', 'vistaSites', 'activityManagementJobRetryLimit']);
+nconf.required(['log-level', 'beanstalk', 'jdsServer', 'generalPurposeJdsServer', 'jbpm', 'vistaSites', 'activityManagementJobRetryLimit', 'oracledb']);
 
 var config = {};
 var logLevel = nconf.get('log-level');
@@ -40,16 +39,25 @@ var metrics = bunyan.createLogger({
     level: 'warn'
 });
 
-var activityRequestType = 'activity-management-event';
+var ACTIVITY_REQUEST_TYPE = 'activity-management-event';
+var ERROR_REQUEST_TYPE = 'error-request';
 
 // call this utility to fill in the properties on each tube
 config.beanstalk = QueueConfig.createFullBeanstalkConfig(nconf.get('beanstalk'));
 config.jdsServer = nconf.get('jdsServer');
 config.generalPurposeJdsServer = nconf.get('generalPurposeJdsServer');
 config.jbpm = nconf.get('jbpm');
+config.oracledb = nconf.get('oracledb');
 config.vistaSites = nconf.get('vistaSites');
 config.activityManagementJobRetryLimit = nconf.get('activityManagementJobRetryLimit');
 config.defaultWorkerCount = nconf.get('defaultWorkerCount');
+config.beanstalk.handlerJobTypes = nconf.get('beanstalk').handlerJobTypes;
+config.appDynamicsProfile = nconf.get('appDynamicsProfile');
+
+if (config.appDynamicsProfile) {
+    logger.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+    require('appdynamics').profile(config.appDynamicsProfile);
+}
 
 var app = express();
 app.config = config;
@@ -58,6 +66,8 @@ pidValidator.initialize(app);
 
 kill.logKill(app, null);
 logger.warn('Activity handler starting. Log level: %s', logLevel);
+logger.info('UV_THREADPOOL_SIZE = %s', process.env.UV_THREADPOOL_SIZE);
+
 startHost(logger, config);
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,72 +75,80 @@ startHost(logger, config);
 //////////////////////////////////////////////////////////////////////////////
 
 function startHost(logger, config) {
+    logger.debug('rdk-activity-handler.startHost()');
+
     var environment = buildEnvironment(logger, config);
     var handlerRegistry = registerHandlers(logger, config, environment);
 
-    var profileJobTypes = _.keys(config.beanstalk.jobTypes);
+    var handlerJobTypes = config.beanstalk.handlerJobTypes;
 
-    return startWorkers(config, handlerRegistry, environment, profileJobTypes);
+    return startWorkers(config, handlerRegistry, environment, handlerJobTypes);
 }
 
 function buildEnvironment(logger, config) {
+    logger.debug('rdk-activity-handler.buildEnvironment()');
+
     var environment = {
         jobStatusUpdater: {},
         publisherRouter: {},
         errorPublisher: {}
     };
 
+    //publish will try to update the job's status in jds but we don't need to do that here
+    environment.jobStatusUpdater.createJobStatus = function(job, callback) { return callback(null); };
+
     environment.publisherRouter = new PublisherRouter(logger, config, metrics, environment.jobStatusUpdater);
-    environment.errorPublisher = new ErrorPublisher(logger, config, 'error-request');
+    environment.errorPublisher = new ErrorPublisher(logger, config, ERROR_REQUEST_TYPE);
 
     return environment;
 }
 
 function registerHandlers(logger, config, environment) {
     var handlerRegistry = new HandlerRegistry(environment);
-    handlerRegistry.register(config, activityRequestType, handler);
-
+    handlerRegistry.register(config, ACTIVITY_REQUEST_TYPE, handler);
     return handlerRegistry;
 }
 
 function validConnectInfo(connectInfo) {
     var valid = false;
-    if (!_.isUndefined(connectInfo) && !_.isNull(connectInfo) && !_.isUndefined(connectInfo.host) && !_.isNull(connectInfo.host)
-        && !_.isUndefined(connectInfo.port) && !_.isNull(connectInfo.port) && !_.isUndefined(connectInfo.tubename) && !_.isNull(connectInfo.tubename)) {
+    if (!_.isUndefined(connectInfo) && !_.isNull(connectInfo) && !_.isUndefined(connectInfo.host) && !_.isNull(connectInfo.host) &&
+        !_.isUndefined(connectInfo.port) && !_.isNull(connectInfo.port) && !_.isUndefined(connectInfo.tubename) && !_.isNull(connectInfo.tubename)) {
         valid = true;
     }
     return valid;
 }
 
-function startWorkers(config, handlerRegistry, environment, profileJobTypes) {
+function startWorkers(config, handlerRegistry, environment, handlerJobTypes) {
+    logger.debug('rdk-activity-handler.startWorkers(): handlerJobTypes: %s', handlerJobTypes);
 
     var defaultWorkerCount = config.defaultWorkerCount;
-
     if (!defaultWorkerCount) {
         logger.warn('Activity handler contained no valid defaultWorkerCount setting in config, setting it to 1');
         defaultWorkerCount = 1;
     }
+
     var connectionMap = {};
-    _.each(profileJobTypes, function(jobType) {
+    _.each(handlerJobTypes, function(jobType) {
+        logger.debug('rdk-activity-handler.startWorkers(): create workers for job type: "%s"', jobType);
+
         var connectInfo = config.beanstalk.jobTypes[jobType];
         if (validConnectInfo(connectInfo)) {
             var workerCount;
+
             if (connectInfo.workerCount && _.isNumber(connectInfo.workerCount) && (connectInfo.workerCount >= 1)) {
                 workerCount = connectInfo.workerCount;
             } else {
                 workerCount = defaultWorkerCount;
-                logger.debug({
-                    defaultWorkerCount: defaultWorkerCount
-                }, 'activityHandler.startWorkers: Not a valid  workerCount setting in config. Using the default value ');
                 logger.warn({
                     defaultWorkerCount: defaultWorkerCount
-                }, 'activityHandler.startWorkers: Not a valid  workerCount setting in config. Using the default value ');
+                }, 'activityHandler.startWorkers: Not a valid workerCount setting in config. Using the default value');
             }
 
             logger.debug({
                 workerCount: workerCount,
                 jobType: jobType
-            }, 'activityHandler.startWorkers: Creating workers for jobType ');
+            }, 'activityHandler.startWorkers: Creating workers for jobType');
+
             _.times(workerCount, function(i) {
                 var beanstalkString = format('%s:%s/%s/%d', connectInfo.host, connectInfo.port, connectInfo.tubename, i);
                 connectionMap[beanstalkString] = connectInfo;
@@ -149,7 +167,8 @@ function startWorkers(config, handlerRegistry, environment, profileJobTypes) {
     var workers = _.map(connectionMap, function(beanstalkJobTypeConfig, beanstalkString) {
         logger.debug({
             beanstalkString: beanstalkString
-        }, 'activityHandler.startWorkers(): creating worker ');
+        }, 'rdk-activity-handler.startWorkers(): create %s worker(s) for tube: "%s"', beanstalkJobTypeConfig.workerCount, beanstalkJobTypeConfig.tubename);
+
         return new Worker(logger, beanstalkJobTypeConfig, metrics, handlerRegistry, environment.jobStatusUpdater, environment.errorPublisher, true);
     });
 
@@ -157,11 +176,12 @@ function startWorkers(config, handlerRegistry, environment, profileJobTypes) {
         worker.start(function(err) {
             logger.info({
                 beanstalkJobTypeConfig: worker.beanstalkJobTypeConfig
-            }, 'activityHandler.startWorkers(): Started worker with config ');
+            }, 'rdk-activity-handler.startWorkers(): Started worker with config ');
             if (err) {
                 logger.error(err);
             }
         });
     });
+
     return workers;
 }

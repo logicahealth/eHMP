@@ -62,9 +62,9 @@ function VistaResyncUtil(logger, vistaClient, jdsClient, updateConfig, tubename)
 // then that will be returned with no processing. Otherwise, jdsClient.getPatientListBySite()
 // will be called for each site and all of the results will be returned as a single array.
 //
-// siteList: A list of sites, e.g. ['9E7A', 'C877']
+// siteList: A list of sites, e.g. ['SITE', 'SITE']
 //
-// pidList: A list of PIDs, e.g. ['9E7A;3', '9E7A;1', '9E7A;8', 'C877;1']
+// pidList: A list of PIDs, e.g. ['SITE;3', 'SITE;1', 'SITE;8', 'SITE;1']
 //
 // callback: The function to call when this method is complete or when an error occurs.
 //---------------------------------------------------------------------------------
@@ -137,16 +137,16 @@ VistaResyncUtil.prototype.retrievePatientList = function(siteList, pidList, call
 // to the list of domains for that key, e.g.
 //
 //     {
-//         '9E7A;3': ['med', 'allergy', 'consult'],
-//         '9E7A;1': ['med', 'consult'],
-//         'C877;8': ['allergy'],
+//         'SITE;3': ['med', 'allergy', 'consult'],
+//         'SITE;1': ['med', 'consult'],
+//         'SITE;8': ['allergy'],
 //     }
 //
 // updateTime: A timestamp string in YYYYMMDDHHmmss format.
 //
 // filterDomains: An array of domains, e.g. ['med', 'allergy', 'consult']
 //
-// pids: An array of PIDs, e.g. ['9E7A;3', '9E7A;1', '9E7A;8', 'C877;1']
+// pids: An array of PIDs, e.g. ['SITE;3', 'SITE;1', 'SITE;8', 'SITE;1']
 //
 // callback: The function to call when this method is complete or when an error occurs.
 //---------------------------------------------------------------------------------
@@ -231,9 +231,9 @@ VistaResyncUtil.prototype.retrievePatientSyncDomains = function(updateTime, filt
 //
 // pidsToResyncDomains: An object containing lists of domains to resync keyed by PIDs, e.g.
 //     {
-//         '9E7A;3': ['med', 'allergy', 'consult'],
-//         '9E7A;1': ['med', 'consult'],
-//         'C877;8': ['allergy']
+//         'SITE;3': ['med', 'allergy', 'consult'],
+//         'SITE;1': ['med', 'consult'],
+//         'SITE;8': ['allergy']
 //     }
 //
 // updateTime: A timestamp string in YYYYMMDDHHmmss format.

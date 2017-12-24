@@ -1,0 +1,6 @@
+[
+  { "_id" : "323", "name" : "Primary Care", "stopCodes" : [ { "primary" : "323", "secondary" : "" }, { "primary" : "350", "secondary" : "" }, { "primary" : "322", "secondary" : "" } ], "submittedRequestLimit" : 1 },
+  { "_id" : "203", "name" : "Audiology", "stopCodes" : [ { "primary" : "203", "secondary" : "" } ], "submittedRequestLimit" : 2 },
+  { "_id" : "408", "name" : "Optometry", "stopCodes" : [ { "primary" : "408", "secondary" : "" } ], "submittedRequestLimit" : 2 },
+  { "_id" : "502", "name" : "Outpatient Mental Health", "stopCodes" : [ { "primary" : "502", "secondary" : "125" }, { "primary" : "502", "secondary" : "185" }, { "primary" : "502", "secondary" : "186" }, { "primary" : "502", "secondary" : "187" }, { "primary" : "502", "secondary" : "509" }, { "primary" : "502", "secondary" : "510" } ], "submittedRequestLimit" : 2 }
+]

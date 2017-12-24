@@ -4,20 +4,20 @@ Feature: F138 Return of Allergies in FHIR format
 
 #This feature item covers return of free text, observed, and historical allergies in FHIR format.
 #Since adverse reaction was deprecated, and also based on the comments from Heather Chase and Darren Maglidt, 
-#mark the tag OBE and DE6042 on the test scenarios
+#mark the tag OBE and DE6042 on the tests
 
-@US2345_fhir_freetext @fhir @9E7A1 @OBE @DE6042
+@US2345_fhir_freetext @fhir @SITE1 @OBE @DE6042
 Scenario: Client can request free text allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
-      When the client requests allergies for the patient "9E7A;3" in FHIR format
+      When the client requests allergies for the patient "SITE;3" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "allergy"
             | allergies_field_list            | panorama_allergies_values                                |
             | content.resourceType            | AdverseReaction                                          |
             | content.text.status             | generated                                                |
             | content.text.div                | <div>PENICILLIN</div>         |
-            | content.identifier.value        | urn:va:allergy:9E7A:3:751                                  |
-            | content.subject.reference       | urn:va:allergy:9E7A:3:751                                  |
+            | content.identifier.value        | urn:va:allergy:SITE:3:751                                  |
+            | content.subject.reference       | urn:va:allergy:SITE:3:751                                  |
             | content.didNotOccurFlag         | false                                                    |
             | content.extension.url           | http://vistacore.us/fhir/profiles/@main#entered-datetime |
             | content.extension.valueDateTime | IS_FHIR_FORMATTED_DATE                                               |
@@ -25,7 +25,7 @@ Scenario: Client can request free text allergies in FHIR format
             | content.extension.valueString   | allergy                                                  |
             #Patient
             | content.contained.resourceType     | Patient |
-            | content.contained.identifier.label | 9E7A;3  |
+            | content.contained.identifier.label | SITE;3  |
             #Practitioner
             | content.contained.resourceType              | Practitioner |
             | content.contained.location.identifier.label | CAMP MASTER  |
@@ -43,7 +43,7 @@ Scenario: Client can request free text allergies in FHIR format
 @US2345_fhir_observed @fhir @5000000341V359724 @OBE @DE6042
 Scenario: Client can request observed allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
-      When the client requests allergies for the patient "9E7A;100022" in FHIR format
+      When the client requests allergies for the patient "SITE;100022" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "allergy"
       | allergies_field_list                | panorama_allergies_values       |
@@ -56,7 +56,7 @@ Scenario: Client can request observed allergies in FHIR format
 @US2345_fhir_historical @fhir @5000000217V519385 @OBE @DE6042
 Scenario: Client can request historical allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
-      When the client requests allergies for the patient "9E7A;100716" in FHIR format
+      When the client requests allergies for the patient "SITE;100716" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "allergy"
       | allergies_field_list                  | panorama_allergies_values                                |
@@ -69,7 +69,7 @@ Scenario: Client can request historical allergies in FHIR format
       | content.contained.type.text           | CHOCOLATE                                                |
       | content.identifier.use                | official                                                 |
       | content.identifier.system             | urn:oid:2.16.840.1.113883.6.233                          |
-      | content.identifier.value              | urn:va:allergy:9E7A:100716:973                           |
+      | content.identifier.value              | urn:va:allergy:SITE:100716:973                           |
       | content.didNotOccurFlag               | false                                                    |
       | content.exposure.substance.reference  | IS_SET                                                   |
       | content.extension.url                 | http://vistacore.us/fhir/profiles/@main#reaction-nature  |
@@ -82,7 +82,7 @@ Scenario: Client can request historical allergies in FHIR format
 @DE974_fhir_limit @fhir @5000000339V988748 @DE974 @OBE @DE6042
 Scenario: Client can request observed allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
-      When the client requests "10" allergies for the patient "9E7A;100840" in FHIR format
+      When the client requests "10" allergies for the patient "SITE;100840" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "allergy"
       | allergies_field_list                  | panorama_allergies_values                                |

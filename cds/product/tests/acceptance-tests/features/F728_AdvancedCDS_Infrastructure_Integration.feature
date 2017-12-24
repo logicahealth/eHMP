@@ -36,8 +36,8 @@ Scenario: Create CDS Engine Registry Entry, request CDS engine by ID and then de
 @F728 @US12203  @DE3688 @DE3761
  Scenario: Test for alternate patient IDs when retrieving persisted content related to patient ID (Patient List)
       When the entry is deleted
-      Given the patient identifiers list from patient "9E7A;140" by calling RDK
-      When user sends request to create patient list with content "{"name":"Testing","definition":{"name":"def one","description": "user defined description of this definition template","expression": "{and: [ {or: ['A.A','B.B'], {'A.A'} ]}","date": "2015-03-26T00:14:01.880Z","scope": "private","owner": "9E7A;edm1234","_id": "55134f49857b41493e747d99"},"patients":["9E7A;1","9E7A;140","VLER;5000000342V438646"]}"
+      Given the patient identifiers list from patient "SITE;140" by calling RDK
+      When user sends request to create patient list with content "{"name":"Testing","definition":{"name":"def one","description": "user defined description of this definition template","expression": "{and: [ {or: ['A.A','B.B'], {'A.A'} ]}","date": "2015-03-26T00:14:01.880Z","scope": "private","owner": "SITE;PW","_id": "55134f49857b41493e747d99"},"patients":["SITE;1","SITE;140","VLER;5000000342V438646"]}"
       Then a successful response is returned for created 
       When the client send a request for patient list membership status with one identifier 
       Then the message true returned

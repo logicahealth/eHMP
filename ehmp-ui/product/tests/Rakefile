@@ -5,55 +5,57 @@ task :syncCache, [:testType] do |t, args|
   testType = args[:testType]
   if testType == "Acc"
     patient_sync_list = [
-      "9E7A;100022",
-      "9E7A;3"
+      "SITE;100022",
+      "SITE;3"
     ]
   else
     patient_sync_list = [
-      "9E7A;227",
-      "9E7A;237",
-      "9E7A;100599",
-      "9E7A;100840",
-      "9E7A;271",
-      "9E7A;301",
-      "9E7A;8",
-      "9E7A;164",
-      "9E7A;231",
-      "9E7A;100296",
-      "9E7A;100022",
-      "9E7A;711",
-      "9E7A;100023",
+      "SITE;227",
+      "SITE;237",
+      "SITE;100599",
+      "SITE;100840",
+      "SITE;271",
+      "SITE;301",
+      "SITE;8",
+      "SITE;231",
+      "SITE;100296",
+      "SITE;100022",
+      "SITE;711",
+      "SITE;100023",
       "4325679V4325679",
       "DOD;4325678",
-      "9E7A;100726",
-      "9E7A;65",
-      "C877;100319",
-      "9E7A;253",
-      "9E7A;3",
-      "9E7A;631",
-      "9E7A;229",
-      "C877;100599",
-      "9E7A;1",
-      "C877;287",
-      "9E7A;287",
-      "9E7A;239",
-      "9E7A;100716",
-      "9E7A;9",
-      "9E7A;722",
-      "9E7A;100731",
-      "9E7A;100012",
-      "9E7A;149",
-      "9E7A;100826",
-      "9E7A;100470",
-      "9E7A;100472",
-      "9E7A;100861",
-      "9E7A;35",
-      "9E7A;17",
-      "9E7A;140"
+      "SITE;100726",
+      "SITE;65",
+      "SITE;100319",
+      "SITE;253",
+      "SITE;3",
+      "SITE;631",
+      "SITE;229",
+      "SITE;100599",
+      "SITE;1",
+      "SITE;239",
+      "SITE;100716",
+      "SITE;9",
+      "SITE;722",
+      "SITE;100731",
+      "SITE;100012",
+      "SITE;149",
+      "SITE;100826",
+      "SITE;100470",
+      "SITE;100472",
+      "SITE;100861",
+      "SITE;35",
+      "SITE;17",
+      "SITE;140",
+      "SITE;236"
     ]
   end
-  ENV["JDS_IP"] = knife_search_for_ip("jds")
-  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
-  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 1200, ["9E7A", "C877"]
+  begin
+    ENV["JDS_IP"] = knife_search_for_ip("jds")
+  rescue
+    ENV["JDS_IP"] = knife_search_for_ip("jds_app_server")
+  end
+  ENV["VX_SYNC_IP"] = knife_search_for_ip("primary_vxsync_client")
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:PORT", 1200, ["SITE", "SITE"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
 end

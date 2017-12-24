@@ -8,6 +8,7 @@ nodes/
 clients/
 cache/
 .gradle/
+.idea/
 
 environments/rdk-*
 environments/ehmp-ui-*

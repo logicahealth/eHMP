@@ -174,7 +174,7 @@ deploymentId requires format GroupId:ArtifactId:Version
                     },
                     "subject": {
                         "entityType": "Subject",
-                        "id": "9E7A;140",
+                        "id": "SITE;140",
                         "name": "TestSubject"
                     },
                     "user": {

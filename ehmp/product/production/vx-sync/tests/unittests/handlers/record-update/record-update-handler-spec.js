@@ -16,7 +16,7 @@ var PublisherRouterDummy = require(global.VX_DUMMIES + 'publisherRouterDummy');
 
 var patientIdentifier = {
     type: 'pid',
-    value: '9E7A;3'
+    value: 'SITE;3'
 };
 var dataDomain = 'allergy';
 var rootJobId = 1;
@@ -54,8 +54,8 @@ var originalVaAllergyRecord = {
     'stampTime': 20050317200936,
     'summary': 'PENICILLIN',
     'typeName': 'DRUG',
-    'pid': '9E7A;3',
-    'uid': 'urn:va:allergy:9E7A:3:751',
+    'pid': 'SITE;3',
+    'uid': 'urn:va:allergy:SITE:3:751',
     'verified': 20050317200936,
     'verifierName': '<auto-verified>',
     'comments': [{
@@ -71,8 +71,8 @@ var originalVaAllergyRecord = {
 var allergyMetaStamp = {
     'stampTime':20160506133145,
     'sourceMetaStamp':{
-        '9E7A':{
-            'pid':'9E7A;3',
+        'SITE':{
+            'pid':'SITE;3',
             'localId':'3',
             'stampTime':20160506133145,
             'domainMetaStamp':{
@@ -80,7 +80,7 @@ var allergyMetaStamp = {
                     'domain':'allergy',
                     'stampTime':20160506133145,
                     'eventMetaStamp':{
-                        'urn:va:allergy:9E7A:3:751':{
+                        'urn:va:allergy:SITE:3:751':{
                             'stampTime':20050317200936
                         }
                     }

@@ -9,9 +9,14 @@ joda_filename = ::File.basename(node[:vx_solr][:ehmp][:joda])
 joda_filepath = "#{Chef::Config[:file_cache_path]}/#{joda_filename}"
 vpr_path = "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/"
 
-directory node[:vx_solr][:ehmp][:vpr_data_path]
+directory node[:vx_solr][:ehmp][:vpr_data_path] do
+  owner node['solr']['user']
+  group node['solr']['group']
+end
 
 remote_file "#{Chef::Config[:file_cache_path]}/vpr.tar.gz" do
+  owner node['solr']['user']
+  group node['solr']['group']
   use_conditional_get true
   source node[:vx_solr][:ehmp][:vpr]
   mode   "0755"
@@ -21,11 +26,15 @@ remote_file "#{Chef::Config[:file_cache_path]}/vpr.tar.gz" do
 end
 
 directory vpr_path do
+  owner node['solr']['user']
+  group node['solr']['group']
   action :nothing
   recursive true
 end
 
 remote_file lucene_filepath do
+  owner node['solr']['user']
+  group node['solr']['group']
   use_conditional_get true
   source node[:vx_solr][:ehmp][:lucene]
   notifies :restart, "service[solr]"
@@ -33,6 +42,8 @@ remote_file lucene_filepath do
 end
 
 remote_file joda_filepath do
+  owner node['solr']['user']
+  group node['solr']['group']
   use_conditional_get true
   source node[:vx_solr][:ehmp][:joda]
   notifies :restart, "service[solr]"
@@ -44,6 +55,7 @@ vx_solr_wait_for_connection "ensure solr is deployed" do
 end
 
 execute 'Unpack_vpr' do
+  user node['solr']['user']
   cwd node[:vx_solr][:ehmp][:vpr_data_path]
   command "tar xzf #{Chef::Config[:file_cache_path]}/vpr.tar.gz"
   action :run
@@ -52,25 +64,30 @@ end
 
 solrconfig = template "#{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf/solrconfig.xml" do
   source 'solrconfig.xml.erb'
-  owner 'root'
-  group 'root'
+  owner node['solr']['user']
+  group node['solr']['group']
   mode '0644'
   variables(
     :filtercache_size => node[:vx_solr][:ehmp][:solrconfig][:filtercache][:size],
     :filtercache_initialsize => node[:vx_solr][:ehmp][:solrconfig][:filtercache][:initialsize],
-    :filtercache_autowarmcount => node[:vx_solr][:ehmp][:solrconfig][:filtercache][:autowarmcount]
+    :filtercache_autowarmcount => node[:vx_solr][:ehmp][:solrconfig][:filtercache][:autowarmcount],
+    :softCommitMaxTime => node[:vx_solr][:ehmp][:solrconfig][:softCommitMaxTime],
+    :commitMaxTime => node[:vx_solr][:ehmp][:solrconfig][:commitMaxTime],
+    :commitOpenSearcher => node[:vx_solr][:ehmp][:solrconfig][:commitOpenSearcher],
+    :commitMaxDocs => node[:vx_solr][:ehmp][:solrconfig][:commitMaxDocs]
   )
   notifies :restart, "service[solr]"
 end
 
 template "#{node[:vx_solr][:resources_dir]}/log4j.properties" do
   source 'log4j.properties.erb'
-  owner 'root'
-  group 'root'
+  owner node['solr']['user']
+  group node['solr']['group']
   mode '0644'
   variables(
       :max_file_size => node[:vx_solr][:ehmp][:solrconfig][:log4j][:max_file_size],
       :solr_log_dir => node[:vx_solr][:log_dir],
+      :solr_log_level => node[:vx_solr][:log_level],
       :zookeeper_log_level => node[:vx_solr][:ehmp][:solrconfig][:log4j][:zookeeper_log_level]
   )
   notifies :restart, "service[solr]"
@@ -79,8 +96,8 @@ end
 remote_file "#{node[:vx_solr][:ehmp][:solr_lib_path]}/health-time-core.jar" do
   use_conditional_get true
   source node[:vx_solr][:ehmp][:health_time_core]
-  owner "root"
-  group "root"
+  owner node['solr']['user']
+  group node['solr']['group']
   mode "0755"
   notifies :restart, "service[solr]"
   # checksum open("#{node[:vx_solr][:ehmp][:health_time_core]}.sha1", { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).string
@@ -89,19 +106,21 @@ end
 remote_file "#{node[:vx_solr][:ehmp][:solr_lib_path]}/health-time-solr.jar" do
   use_conditional_get true
   source node[:vx_solr][:ehmp][:health_time_solr]
-  owner "root"
-  group "root"
+  owner node['solr']['user']
+  group node['solr']['group']
   mode "0755"
   notifies :restart, "service[solr]"
   # checksum open("#{node[:vx_solr][:ehmp][:health_time_solr]}.sha1", { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).string
 end
 
 execute 'Copy_hon-lucene-synonyms' do
+  user node['solr']['user']
   command "cp #{lucene_filepath} #{node[:vx_solr][:ehmp][:solr_lib_path]}"
   action :run
 end
 
 execute 'Copy_joda_time' do
+  user node['solr']['user']
   command "cp #{joda_filepath} #{node[:vx_solr][:ehmp][:solr_lib_path]}"
   action :run
 end
@@ -118,11 +137,13 @@ end
 
 # upload configs to zookeeper
 execute "#{node[:vx_solr][:server_dir]}/scripts/cloud-scripts/zkcli.sh -zkhost #{node[:vx_solr][:zookeeper][:zookeeper_connection]} -cmd upconfig -n vprConfig -d #{node[:vx_solr][:ehmp][:vpr_data_path]}/vpr/conf" do
+  user node['solr']['user']
   only_if { solrconfig.updated_by_last_action? || node[:vx_solr][:service_script].updated_by_last_action? }
 end
 
 # link config with collection
 execute "#{node[:vx_solr][:server_dir]}/scripts/cloud-scripts/zkcli.sh -zkhost #{node[:vx_solr][:zookeeper][:zookeeper_connection]} -cmd linkconfig -collection vpr -confname vprConfig" do
+  user node['solr']['user']
   only_if { solrconfig.updated_by_last_action? || node[:vx_solr][:service_script].updated_by_last_action? }
 end
 
@@ -149,4 +170,3 @@ template "#{node[:vx_solr][:cron_dir]}/solr_build_suggest" do
   )
   action create_cron_job_action
 end
-

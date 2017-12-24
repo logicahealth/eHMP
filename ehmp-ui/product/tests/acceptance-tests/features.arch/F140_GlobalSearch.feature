@@ -191,7 +191,7 @@ Scenario: user searches and selects sensitive patient
     And the all patient "acknowledgement message" is displayed on acknowledgement confirm section
         | field                | value                      |
         | acknowledgement message  | This record is protected by the Privacy Act of 1974 and the Health Insurance Portability and Accountability Act of 1996. If you elect to proceed, you will be required to prove you have a need to know. Accessing this patient is tracked, and your station Security Officer will contact you for your justification.                               |
-    When the user click on acknowledge restricted record
+    When the user clicks on acknowledge restricted record
     Then the all patient "patient identifying traits" is displayed on confirm section
         | field         | value                      |
         | dob           | 04/07/1935                 |
@@ -259,8 +259,8 @@ Scenario: All Patient search with first name and full last name that is in Kodak
     When user attempts login
         | field      | value    |
         | Facility   | Kodak    |
-        | AccessCode | REDACTED |
-        | VerifyCode | REDACTED |
+        | AccessCode | USER     |
+        | VerifyCode | PW       |
         | SignIn     |          |
     Then the patient search screen is displayed
     And the User selects All Patient

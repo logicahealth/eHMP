@@ -212,5 +212,5 @@ NXTNODD(N) ; iterate array at position N
 DELVAL ; delete value if last position, otherwise recurse to next
  I N<SPEC(LEVEL,"srcArrays") D NXTNODD(N+1) Q  ; recurse to next
  S J=I(N) ; incase were at the last level and J is used instead of I(N)
- K @SPEC(LEVEL,"tgtRef")
+ K:$D(@SPEC(LEVEL,"tgtRef")) @SPEC(LEVEL,"tgtRef")
  Q

@@ -1,4 +1,4 @@
-class PobStackedGraph < SitePrism::Page
+class PobStackedGraph < PobParentApplet
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
@@ -7,17 +7,23 @@ class PobStackedGraph < SitePrism::Page
   element :fld_vital_result, ".tt-dataset-vitals .fa-plus"
   element :fld_labtest_result, ".tt-dataset-labs .fa-plus"
   element :fld_med_result, ".tt-dataset-meds .fa-plus"
-  elements :fld_stacked_graphs, ".collection-container .row.gist-item"
-  elements :fld_row_label, ".collection-container .row.gist-item div[role=gridcell]:nth-of-type(1) [data-cell-tilesort]"
+  elements :fld_stacked_graphs, ".collection-container .gist-item"
+  elements :fld_row_label, ".collection-container .gist-item [data-cell-tilesort]"
   element :no_graph_placeholder, "[data-appletid='stackedGraph'] .no-graph"
+  elements :fld_first_row, "[data-appletid='stackedGraph'] .gist-item [data-cell-tilesort]"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_stacked_filter, ".stacked-graph-filter-button"
-  element :btn_delete_graph, "[button-type='deletestackedgraph-button-toolbar']"
+  element :btn_delete_graph, ".deletestackedgraph-button-toolbar"
 
-  # *****************  All_Drop_down_Elements  ******************* #
-
-  # *****************  All_Table_Elements  ******************* #
+  def initialize
+    super
+    appletid_css = "[data-appletid=stackedGraph]"
+    add_applet_buttons appletid_css
+    add_title appletid_css
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
+  end
 
   def first_column_text_downcase
     fld_row_label.map { |screen| screen.text.downcase }

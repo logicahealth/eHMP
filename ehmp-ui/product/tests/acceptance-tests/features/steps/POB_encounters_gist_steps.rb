@@ -245,6 +245,47 @@ def choose_first_admission_encounter
   @ehmp.btn_first_admission.click
 end
 
+def hover_over_first_visit_encounter
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_visits_encounter_visible
+  expect(@ehmp).to have_btn_visits_encounter
+  @ehmp.btn_visits_encounter.click
+  @ehmp.wait_until_btn_first_visit_visible
+  expect(@ehmp).to have_btn_first_visit
+  @ehmp.btn_first_visit.hover
+end
+
+def hover_over_first_appointment_encounter
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_appointments_encounter_visible
+  expect(@ehmp).to have_btn_appointments_encounter
+  @ehmp.btn_appointments_encounter.click
+  @ehmp.wait_until_btn_first_appointment_visible
+  expect(@ehmp).to have_btn_first_appointment
+  @ehmp.btn_first_appointment.hover
+end
+
+def hover_over_first_procedure_encounter
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_procedures_encounter_visible
+  expect(@ehmp).to have_btn_procedures_encounter
+  @ehmp.btn_procedures_encounter.click
+  @ehmp.wait_until_btn_first_procedure_visible
+  expect(@ehmp).to have_btn_first_procedure
+  @ehmp.btn_first_procedure.hover
+end
+
+def hover_over_first_admission_encounter
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_admissions_encounter_visible
+  expect(@ehmp).to have_btn_admissions_encounter
+  @ehmp.btn_admissions_encounter.click
+  @ehmp.wait_until_btn_first_admission_visible
+  expect(@ehmp).to have_btn_first_admission
+  @ehmp.btn_first_admission.hover
+  @ehmp.wait_until_btn_admissions_encounter_arrow_down_visible
+end
+
 def view_quick_look_table
   @ehmp = PobEncountersApplet.new
   @ehmp.wait_until_btn_quick_view_visible
@@ -260,9 +301,8 @@ def view_detail_modal
 end
 
 Then(/^the quick look table is displayed$/) do
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_quick_view_visible
-  expect(@ehmp.tbl_quick_view.length > 0).to be(true), "Quick look table does not contain any data rows"
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table ehmp
 end
 
 When(/^the user expands type Visits in Encounters trend view applet$/) do
@@ -281,7 +321,6 @@ end
 When(/^the user views the details for the first Visit type encounter$/) do
   @ehmp = PobEncountersApplet.new
   choose_first_visit_encounter
-  view_detail_modal
 end
 
 Then(/^Encounter trend view applet type Visits contain headers$/) do |table|
@@ -294,31 +333,24 @@ end
 
 When(/^the user views the quick look for the first Visit type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  choose_first_visit_encounter
-  view_quick_look_table
+  hover_over_first_visit_encounter
 end
 
 Then(/^the Visit type quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_visit_type_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_visit_type_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user selects the right side of Visit type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_rtclk_btn_visits_encounter_visible
+  @ehmp.wait_until_btn_visits_encounter_visible
   expect(@ehmp).to have_btn_visits_encounter
-  @ehmp.rtclk_btn_visits_encounter.click
+  @ehmp.btn_visits_encounter.hover
 end
 
 Then(/^the Visit quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_rtclk_visit_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_rtclk_visit_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user expands type Procedures in Encounters trend view applet$/) do
@@ -345,36 +377,28 @@ end
 When(/^the user views the details for the first Procedure type encounter$/) do
   @ehmp = PobEncountersApplet.new
   choose_first_procedure_encounter
-  view_detail_modal
 end
 
 When(/^the user views the quick look for the first Procedure type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  choose_first_procedure_encounter
-  view_quick_look_table
+  hover_over_first_procedure_encounter
 end
 
 Then(/^the Procedure type quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_procedure_type_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_procedure_type_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user selects the right side of Procedure type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_rtclk_btn_procedures_encounter_visible
+  @ehmp.wait_until_btn_procedures_encounter_visible
   expect(@ehmp).to have_btn_procedures_encounter
-  @ehmp.rtclk_btn_procedures_encounter.click
+  @ehmp.btn_procedures_encounter.hover
 end
 
 Then(/^the Procedure quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_rtclk_procedure_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_rtclk_procedure_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user expands type Admissions in Encounters trend view applet$/) do
@@ -401,36 +425,28 @@ end
 When(/^the user views the details for the first Admission type encounter$/) do
   @ehmp = PobEncountersApplet.new
   choose_first_admission_encounter
-  view_detail_modal
 end
 
 When(/^the user views the quick look for the first Admission type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  choose_first_admission_encounter
-  view_quick_look_table
+  hover_over_first_admission_encounter
 end
 
 Then(/^the Admission type quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_admission_type_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_admission_type_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user selects the right side of Admission type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_rtclk_btn_admissions_encounter_visible
+  @ehmp.wait_until_btn_admissions_encounter_visible
   expect(@ehmp).to have_btn_admissions_encounter
-  @ehmp.rtclk_btn_admissions_encounter.click
+  @ehmp.btn_admissions_encounter.hover
 end
 
 Then(/^the Admission quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_rtclk_admission_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_rtclk_admission_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user expands type Appointments in Encounters trend view applet$/) do
@@ -457,42 +473,40 @@ end
 When(/^the user views the details for the first Appointment type encounter$/) do
   @ehmp = PobEncountersApplet.new
   choose_first_appointment_encounter
-  view_detail_modal
 end
 
 When(/^the user views the quick look for the first Appointment type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  choose_first_appointment_encounter
-  view_quick_look_table
+  hover_over_first_appointment_encounter
 end
 
 Then(/^the Appointment type quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_appointment_type_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_appointment_type_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
 When(/^the user selects the right side of Appointment type encounter$/) do
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_rtclk_btn_appointments_encounter_visible
+  @ehmp.wait_until_btn_appointments_encounter_visible
   expect(@ehmp).to have_btn_appointments_encounter
-  @ehmp.rtclk_btn_appointments_encounter.click
+  @ehmp.btn_appointments_encounter.hover
 end
 
 Then(/^the Appointment quick look table contain headers$/) do |table|
-  @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_tbl_encounter_rtclk_appointment_quick_look_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_encounter_rtclk_appointment_quick_look_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found on Encounters Applet quick look"
-  end
+  ehmp = PobEncountersApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
 end
 
-Then(/^Encounters trend view applet displays a dynamic arrow in "([^"]*)" position$/) do |arrow_position|
+Then(/^Encounters trend view applet displays a dynamic arrow in right position$/) do 
   @ehmp = PobEncountersApplet.new
-  @ehmp.wait_until_btn_visits_encounter_arrow_visible
-  expect(@ehmp.btn_visits_encounter_arrow['arrowposition'].eql? arrow_position).to eq(true), "Dynamic arrow is not in expected position"
+  @ehmp.wait_until_btn_visits_encounter_arrow_right_visible
+  expect(@ehmp).to have_btn_visits_encounter_arrow_right
+end
+
+Then(/^Encounters trend view applet displays a dynamic arrow in down position$/) do 
+  @ehmp = PobEncountersApplet.new
+  @ehmp.wait_until_btn_visits_encounter_arrow_down_visible
+  expect(@ehmp).to have_btn_visits_encounter_arrow_down
 end
 
 When(/^the user views the details for the "([^"]*)" Admission type encounter$/) do |type|
@@ -500,7 +514,6 @@ When(/^the user views the details for the "([^"]*)" Admission type encounter$/) 
   @ehmp.wait_until_btn_spinal_cord_admission_visible
   expect(@ehmp).to have_btn_spinal_cord_admission
   @ehmp.btn_spinal_cord_admission.click
-  view_detail_modal
 end
 
 

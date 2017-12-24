@@ -14,7 +14,7 @@ Create Favorites
         + Members
             + `lab` - Laboratory orderables
             + `rad` - Radiology orderables
-    + siteId: `9E7A` (string, optional) - siteId for orderable
+    + siteId: `SITE` (string, optional) - siteId for orderable
 
 + Request JSON Message (application/json)
 
@@ -23,8 +23,8 @@ Create Favorites
             {
                 "id": "urn:va:ordersets:2",
                 "type":"orderset",
-                "siteId":"9E7A",
-                "userid": "urn:va:user:9E7A:10000000270"
+                "siteId":"SITE",
+                "userid": "urn:va:user:SITE:10000000270"
             }
 
 	+ Schema
@@ -70,10 +70,10 @@ Get Favorites
                         "properties": {
                         "id": "urn:va:ordersets:2",
                         "type": "orderset",
-                        "userid": "urn:va:user:9E7A:10000000270"
+                        "userid": "urn:va:user:SITE:10000000270"
                         },
                         "type": "orderset",
-                        "uid": "urn:va:ordersets:2orderseturn:va:user:9E7A:10000000270"
+                        "uid": "urn:va:ordersets:2orderseturn:va:user:SITE:10000000270"
                     }
                     ]
                 },
@@ -108,8 +108,8 @@ Delete Favorites
             {
                 "id": "urn:va:ordersets:2",
                 "type":"orderset",
-                "siteId":"9E7A",
-                "userid": "urn:va:user:9E7A:10000000270"
+                "siteId":"SITE",
+                "userid": "urn:va:user:SITE:10000000270"
             }
 
 	+ Schema

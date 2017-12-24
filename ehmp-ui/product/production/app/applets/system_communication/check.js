@@ -37,9 +37,20 @@ define([
         'draggable': 'false',
         'keyboard': false,
         'footerView': FooterView,
-        'callShow': true
+        'callShow': true,
+        'blocking': true
     };
     var Modal = ADK.UI.Modal.extend({
+        initialize: function () {
+            ADK.UI.Modal.prototype.initialize.apply(this, arguments);
+            $(window).on('beforeunload.system.communication.announcements', function () {
+                /**
+                 * de8068 - this causes the system to log the user out 
+                 * just like they had clicked cancel or the close buttons
+                 */
+                ADK.Messaging.trigger('app:logout');
+            });
+        },
         behaviors: _.defaults({
             ViewedAllBehavior: {
                 behaviorClass: ViewedAllBehavior,
@@ -55,6 +66,7 @@ define([
                 e.preventDefault();
                 if (_.isEqual($(e.currentTarget).attr('data-acknowledge'), "true")) {
                     ADK.SessionStorage.set.sessionModel('system_communication', { acknowledgedAnnouncements: true }, 'sessionStorage');
+                    this.getOption('callback')();
                     return;
                 }
                 ADK.Checks.run('navigation', function() {
@@ -66,6 +78,9 @@ define([
         }),
         onRender: function() {
             this.$('.modal-body').addClass('bottom-padding-no');
+        },
+        onBeforeDestroy: function () {
+            $(window).off('beforeunload.system.communication.announcements');
         }
     });
 
@@ -109,7 +124,7 @@ define([
         },
         defaults: {
             label: 'System Announcements Acknowledgement',
-            failureMessage: 'User has not acknowldged the system terms and announcements!',
+            failureMessage: 'User has not acknowledged the system terms and announcements!',
             beforeunload: false,
             group: 'screen-display',
             onInvalid: function(invalidOptions) {
@@ -119,15 +134,19 @@ define([
                 var onPassCallback = invalidOptions.onPass || function() {
                     return true;
                 };
+                var screenDisplayCallback = _.get(options, 'callback', _.noop);
                 if (_.has(this.announcementsCollection, 'xhr') && _.isEqual(_.get(this.announcementsCollection, 'xhr.state', _.noop)(), 'pending')) {
+                    delete options.callback;
                     ADK.Checks.run('navigation', onPassCallback, { exclude: checkConfig.id });
                     ADK.Messaging.trigger('show:app:loading');
-                    this.listenToOnce(this.announcementsCollection, 'sync error', this.fetchComplete);
+                    this.listenToOnce(this.announcementsCollection, 'sync error', function(collection) { this.fetchComplete(collection, screenDisplayCallback); });
                 } else if (!this.announcementsCollection.isEmpty()) {
                     var modalView = new Modal({
                         view: new AnnouncementsViewWrapper({ globalAnnouncementsCollection: this.announcementsCollection }),
-                        options: modalOptions
+                        options: modalOptions,
+                        callback: screenDisplayCallback
                     });
+                    delete options.callback;
                     ADK.Checks.run('navigation', onPassCallback, { exclude: checkConfig.id });
                     modalView.show();
                     modalView.trigger('modal-shown');
@@ -137,16 +156,19 @@ define([
                 }
             }
         },
-        fetchComplete: function(collection) {
+        fetchComplete: function(collection, screenDisplayCallback) {
             this.stopListening(this.announcementsCollection, 'sync error');
             ADK.Messaging.trigger('hide:app:loading');
             if (!collection.isEmpty()) {
                 var modalView = new Modal({
                     view: new AnnouncementsViewWrapper({ globalAnnouncementsCollection: this.announcementsCollection }),
-                    options: modalOptions
+                    options: modalOptions,
+                    callback: screenDisplayCallback
                 });
                 modalView.show();
                 modalView.trigger('modal-shown');
+            } else if (_.isFunction(screenDisplayCallback)) {
+               screenDisplayCallback();
             }
         }
     });

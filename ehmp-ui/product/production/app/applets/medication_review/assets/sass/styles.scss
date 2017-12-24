@@ -47,7 +47,7 @@
         margin-bottom: 0px;
         border-bottom: 0px;
         &:focus, &:hover {
-            background-color: $primary-lightest;
+            background-color: $primary-lighter;
         }
     }
     &.panel-body {
@@ -59,6 +59,11 @@
     div.meds-item {
         background-color: transparent;
         color: $grey-darkest;
+        padding: 0;
+        .content-container {
+            padding: 5px 0;
+            width: 100%;
+        }
     }
     .active-row {
         background-color: $primary-lightest;
@@ -69,7 +74,6 @@
      /* the chart area */
     /* need to not have padding on the chart section of the row */
     .meds-item-innerlist {
-        border-right: solid 2px rgb(239, 239, 239);
         border-left: solid 2px rgb(239, 239, 239);
         padding-top: 5px;
     }

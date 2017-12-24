@@ -111,7 +111,7 @@ class AllApplets < AccessBrowserV2
 
   def rename_applet(appletid_css, new_name)
     add_action(CucumberLabel.new('Trigger Rename'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .panel-title-label"))
-    add_action(CucumberLabel.new('Rename Applet'), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .panel-title input"))
+    add_action(CucumberLabel.new('Rename Applet'), SendKeysAndTabAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .panel-title input"))
   
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
     driver = TestSupport.driver

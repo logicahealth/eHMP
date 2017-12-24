@@ -260,14 +260,14 @@
           ]
         },
         {
-          "state": "Active",
+          "state": "Returned",
           "substate": "Clarification Requested",
           "actions": [
             "END"
           ]
         },
         {
-          "state": "Active",
+          "state": "Returned",
           "substate": "Declined",
           "actions": [
             "END"

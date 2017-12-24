@@ -31,8 +31,8 @@ var config = {
 	// host: '101.2.2.102',
 	host: 'IP        ',
 	port: PORT,
-	accessCode: 'REDACTED',
-	verifyCode: 'REDACTED',
+	accessCode: 'USER  ',
+	verifyCode: 'PW      ',
 	context: 'HMP UI CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',
@@ -63,7 +63,7 @@ var config = {
 // console.log(regex.test(send));
 
 // console.log('********** calling authenticate');
-// config.port = PORT;
+// config.PORT      ;
 // RpcClient.authenticate(logger, config, function(error, result) {
 // 	console.log('********');
 // 	console.log(error);
@@ -76,8 +76,8 @@ var config = {
 // 	// host: '101.2.2.102',
 // 	host: 'IP        ',
 // 	port: PORT,
-// 	accessCode: 'IP    ',
-// 	verifyCode: 'REDACTED',
+// 	accessCode: 'USER  ',
+// 	verifyCode: 'PW      ',
 // 	context: 'VPR SYNCHRONIZATION CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',
@@ -86,7 +86,7 @@ var config = {
 // };
 
 
-// config.port = PORT;
+// config.PORT      ;
 // console.log('********** calling rpc');
 // RpcClient.callRpc(logger, config, 'ORWU USERINFO', function(error, result) {
 // 	if (error) {
@@ -123,7 +123,7 @@ var config = {
 // 	console.log('********');
 // });
 
-// config.port = PORT;
+// config.PORT       ;
 
 // console.log('********** explicit auth');
 // var client = RpcClient.create(logger, config);
@@ -158,9 +158,9 @@ var config = {
 // config = {
 // 	// host: '101.2.2.102',
 // 	host: 'IP        ',
-// 	port: PORT,
-// 	accessCode: 'REDACTED',
-// 	verifyCode: 'REDACTED',
+// 	port: 9PORT,
+// 	accessCode: 'USER  ',
+// 	verifyCode: 'PW      ',
 // 	context: 'VPR UI CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',

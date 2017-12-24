@@ -7,19 +7,17 @@ define([
     var Utils = {
         setRequest: function(model) {
             var clinicalObject = model.get('clinicalObject');
-            var request = clinicalObject.data.requests[clinicalObject.data.requests.length - 1];
-            if (!_.isUndefined(request.earliestDate)) {
+            var request = _.clone(_.last(_.get(clinicalObject, 'data.requests')));
+            if (_.get(request, 'earliestDate')) {
                 request.earliestDate = moment.utc(request.earliestDate, 'YYYYMMDDHHmmss').local();
             }
-            if (!_.isUndefined(request.latestDate)) {
+            if (_.get(request, 'latestDate')) {
                 request.latestDate = moment.utc(request.latestDate, 'YYYYMMDDHHmmss').local();
             }
 
             if (_.has(clinicalObject, 'data') && !_.isEmpty(clinicalObject.data.requests)) {
                 model.set('request', request);
             }
-
-
         },
         getCreatedAtFacilityName: function(facilityId, facilityCollection) {
             var facilityName = '';
@@ -78,35 +76,36 @@ define([
 
             var options = {};
             var activity = null;
-
             if (_.has(model.get('clinicalObject'), 'data.activity')) {
                 activity = model.get('clinicalObject').data.activity;
             }
 
+            var responses = _.get(model.get('clinicalObject') || {}, 'data.responses', null);
             var request = model.get('request');
 
             var params = {
                 pid: model.get('pid'),
                 requestState: requestState,
-                options: this.buildOptions(request, options, activity)
+                options: this.buildOptions(request, responses, options, activity)
             };
             return params;
         },
         buildEditParameters: function(model) {
             var requestState = model.state;
             var request = model.request;
+            var responses = model.responses;
             var activity = model.activity;
             var taskId = model.taskId;
             var taskStatus = model.taskStatus;
             var options = {};
             var params = {
                 requestState: requestState,
-                options: this.buildOptions(request, options, activity, taskId, taskStatus)
+                options: this.buildOptions(request, responses, options, activity, taskId, taskStatus)
             };
 
             return params;
         },
-        buildOptions: function(request, options, activity, taskId, taskStatus) {
+        buildOptions: function(request, responses, options, activity, taskId, taskStatus) {
             if (!_.isNull(taskId) && !_.isUndefined(taskId)) {
                 options.taskId = taskId;
             }
@@ -139,50 +138,75 @@ define([
                     options.requestDetails = request.request;
                 }
 
-                if (!_.isNull(request.assignTo)) {
-                    if (request.assignTo === 'Me') {
-                        options.assignment = 'opt_me';
-                    } else if (request.assignTo === 'Person') {
+                var route = _.get(request, 'route');
+                var assignment = {};
 
-                        if (!_.isNull(request.route.facility)) {
-                            options.pendingFacility = request.route.facility;
-                            options.pendingFacilityName = request.route.facilityName;
-                        }
-                        if (!_.isNull(request.route.person)) {
-                            options.pendingPerson = request.route.person;
-                        }
-                        options.assignment = 'opt_person';
-                    } else {
-                        if (!_.isNull(request.route.team)) {
-                            options.pendingTeam = request.route.team.code;
-                        }
-                        if (!_.isNull(request.route.assignedRoles) && _.isArray(request.route.assignedRoles)) {
-                            var pendingRoles = [];
-                            _.each(request.route.assignedRoles, function(role) {
-                                if (role) {
-                                    pendingRoles.push(role.code);
-                                }
-                            });
-                            options.pendingRoles = pendingRoles;
-                        }
+                if (_.isArray(responses) && responses.length>1 &&
+                    _.isEqual(_.get(responses, [responses.length-1, 'action']), 'clarification') &&
+                    _.isEqual(_.get(responses, [responses.length-2, 'action']), 'reassign')) {
+                    //get the route information of person who sent request for clarification
+                    route = _.get(responses, [responses.length - 2, 'route']);
+                    _.extend(assignment, {
+                        type: this.mapAssignTo(_.get(responses, [responses.length - 2, 'assignTo']))
+                    });
 
-                        if (request.assignTo === 'My Teams') {
-                            options.assignment = 'opt_myteams';
-                        } else if (request.assignTo === 'Patient\'s Teams') {
-                            options.assignment = 'opt_patientteams';
-                        } else if (request.assignTo === 'Any Team') {
-                            if (!_.isNull(request.route.facility)) {
-                                options.pendingFacility = request.route.facility;
-                                options.pendingFacilityName = request.route.facilityName;
-                            }
-                            options.assignment = 'opt_anyteam';
-                        }
-                    }
+                } else if (!_.isNull(request.assignTo)) {
+                    _.extend(assignment, {
+                        type: this.mapAssignTo(request.assignTo)
+                    });
+                }
+                if(!_.isNull(route) && !_.isUndefined(route)) {
+                    _.extend(options, {
+                        assignment: this.buildTeamOptions(route, assignment)
+                    });
                 }
             }
-
             return options;
 
+        },
+        buildTeamOptions: function(route, assignment) {
+            if (route.person) {
+                _.extend(assignment, {
+                    person: route.person
+                });
+            }
+            if (route.team) {
+                _.extend(assignment, {
+                    team: route.team.code
+                });
+            }
+            if (route.assignedRoles && _.isArray(route.assignedRoles)) {
+                var roles = [];
+                _.each(route.assignedRoles, function(role) {
+                    if (role) {
+                        roles.push(role.code);
+                    }
+                });
+                _.extend(assignment, {
+                    roles: roles
+                });
+            }
+
+            if (route.facility) {
+                _.extend(assignment, {
+                    facility: route.facility,
+                    facilityName: route.facilityName
+                });
+            }
+            return assignment;
+        },
+        mapAssignTo: function (assignTo) {
+            if (assignTo === 'My Teams') {
+                return 'opt_myteams';
+            } else if (assignTo === 'Patient\'s Teams') {
+                return 'opt_patientteams';
+            } else if (assignTo === 'Any Team') {
+                return 'opt_anyteam';
+            } else if (assignTo === 'Person') {
+                return 'opt_person';
+            } else {
+                return 'opt_me';
+            }
         },
         buildAcceptActionModel: function(model, acceptActionModel) {
             var deploymentId = model.get('deploymentId');

@@ -15,9 +15,9 @@ Requires the authentication interceptor to run in order to add the user to the s
     + Body
 
             {
-                "accessCode": "REDACTED",
-                "verifyCode": "REDACTED",
-                "site": "9E7A",
+                "accessCode": "USER  ",
+                "verifyCode": "PW      ",
+                "site": "SITE",
                 "division": "500"
             }
 
@@ -54,11 +54,11 @@ Requires the authentication interceptor to run in order to add the user to the s
 
             {
                 "data": {
-                    "uid": "urn:va:user:9E7A:10000000270",
+                    "uid": "urn:va:user:SITE:10000000270",
                     "disabled": false,
                     "divisionSelect": false,
                     "duz": {
-                        "9E7A": "10000000270"
+                        "SITE": "10000000270"
                     },
                     "expires": "2016-09-20T17:42:25.654Z",
                     "facility": "PANORAMA",
@@ -88,7 +88,7 @@ Requires the authentication interceptor to run in order to add the user to the s
                     "requiresReset": false,
                     "section": "Medicine",
                     "sessionLength": 900000,
-                    "site": "9E7A",
+                    "site": "SITE",
                     "division": "500",
                     "title": "Clinician",
                     "provider": true
@@ -129,11 +129,11 @@ Expects a session to already occur or it returns a blank object.
 
             {
                 "data": {
-                    "uid": "urn:va:user:9E7A:10000000270",
+                    "uid": "urn:va:user:SITE:10000000270",
                     "disabled": false,
                     "divisionSelect": false,
                     "duz": {
-                        "9E7A": "10000000270"
+                        "SITE": "10000000270"
                     },
                     "expires": "2016-09-20T17:42:25.654Z",
                     "facility": "PANORAMA",
@@ -160,7 +160,7 @@ Expects a session to already occur or it returns a blank object.
                     "requiresReset": false,
                     "section": "Medicine",
                     "sessionLength": 900000,
-                    "site": "9E7A",
+                    "site": "SITE",
                     "division": "500",
                     "title": "Clinician",
                     "provider": true
@@ -238,13 +238,13 @@ Is a readonly resource that returns an array.
                             "name": "KODAK",
                             "division": "507",
                             "production": false,
-                            "siteCode": "C877"
+                            "siteCode": "SITE"
                         },
                         {
                             "name": "PANORAMA",
                             "division": "500",
                             "production": false,
-                            "siteCode": "9E7A"
+                            "siteCode": "SITE"
                         }
                     ]
                 },

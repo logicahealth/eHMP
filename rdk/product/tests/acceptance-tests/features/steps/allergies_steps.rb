@@ -155,10 +155,10 @@ Then(/^the client receives (\d+) FHIR VistA result\(s\)$/) do |number_of_results
   json_verify.save_all_values_of_path(0, steps_source, json, output_string, source_allvalues)
 
   num_vista_results = 0
-  source_panorama = /urn:va:.*:9E7A/
-  source_kodak = /urn:va:.*:C877/
+  source_panorama = /urn:va:.*:SITE/
+  source_kodak = /urn:va:.*:SITE/
   source_allvalues.each do |value|
-    #if value.start_with? "urn:va:allergy:B362" #PANORAMA
+    #if value.start_with? "urn:va:allergy:SITE" #PANORAMA
     unless source_panorama.match(value).nil?
       num_vista_results += 1
     end
@@ -293,10 +293,10 @@ Then(/^VPR returns (\d+) VistA result\(s\)$/) do |number_of_results|
   json_verify.save_all_values_of_path(0, steps_source, json, output_string, source_allvalues)
 
   num_vista_results = 0
-  source_panorama = /urn:va:.*:9E7A/
-  source_kodak = /urn:va:.*:C877/
+  source_panorama = /urn:va:.*:SITE/
+  source_kodak = /urn:va:.*:SITE/
   source_allvalues.each do |value|
-    #if value.start_with? "urn:va:allergy:B362" #PANORAMA
+    #if value.start_with? "urn:va:allergy:SITE" #PANORAMA
     unless source_panorama.match(value).nil?
       num_vista_results += 1
     end

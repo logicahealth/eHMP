@@ -19,11 +19,18 @@ CORRIDS(IDLIST) ;Corrects the IDS for a patient
  . . . W !?5,"Entry found: "_IEN
  . . . S FOUND=1
  . . . I $P(^DGCN(391.91,IEN,2),U,2)'=HMPIDS(KEY) D
- . . . . w !?5,"Needs updated value (current value: "_$P(^DGCN(391.91,IEN,2),U,2)_")"
+ . . . . W !?5,"Needs updated value (current value: "_$P(^DGCN(391.91,IEN,2),U,2)_")"
  . . . . K HMPFDA,HMPERR S HMPFDA(391.91,IEN_",",11)=HMPIDS(KEY)
  . . . . D FILE^DIE(,"HMPFDA","HMPERR")
  . . . . I $D(HMPERR) D WERR(.HMPERR) Q
  . . . . W !?10,"Value updated successfuly"
+ . I FOUND D
+ . . W !?5,"Making sure entry is active"
+ . . K HMPFDA,HMPERR,HMPIENA
+ . . S FDAFLDS=$NA(HMPFDA(391.91,IEN_","))
+ . . S @FDAFLDS@(12)="A"
+ . . D UPDATE^DIE(,"HMPFDA","HMPIENA","HMPERR")
+ . . I $D(HMPERR) D WERR(.HMPERR) Q
  . I 'FOUND D
  . . W !?5,"Entry not found, adding to TREATING FACILITY file"
  . . K HMPFDA,HMPERR,HMPIENA

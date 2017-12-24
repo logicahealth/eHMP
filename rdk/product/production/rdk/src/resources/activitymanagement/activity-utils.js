@@ -19,9 +19,22 @@ function getJbpmUser(req) {
 }
 
 function getGenericJbpmConfig(req) {
-    var config = jbpm.getJBPMHttpConfig(req.app.config, req.logger);
+    var loginSite = _.get(req, 'session.user.site', '');
+    var loginCredential = _.get(req, 'session.user.duz[' + loginSite + ']', '');
+    return getGenericJbpmConfigByUser(_.get(req, 'app.config'), loginSite, loginCredential,_.get(req, 'logger'));
+}
 
-    config = jbpm.addAuthToConfig(getJbpmUser(req), 'jbpm', config);
+//combination of getGenericJbpmConfig and getJbpmUser that to remove reliance on the request object and user session values
+function getGenericJbpmConfigByUser(appConfig, loginSite, loginCredential, logger) {
+    var config = jbpm.getJBPMHttpConfig(appConfig, logger);
+
+    if (loginSite.length > 0 && loginCredential.length > 0) {
+        loginCredential = loginSite + ';' + loginCredential;
+    } else {
+        loginCredential = '';
+    }
+
+    config = jbpm.addAuthToConfig(loginCredential, 'jbpm', config);
     config.json = true;
     return config;
 }
@@ -329,7 +342,29 @@ function filterIdentifiers(identifiersList) {
     return validIdentifiers;
 }
 
+function parseVersionFromDeploymentId(deploymentId) {
+    if (!_.isString(deploymentId) || _.size(deploymentId) < 1) {
+        return '';
+    }
+    var version = deploymentId.substring(deploymentId.lastIndexOf(':') + 1);
+    if (_.size(version) === _.size(deploymentId)) {
+        return '';
+    }
+    return version;
+}
+
+/**
+ * Retrieves a activity database configuration object from a request object
+ *
+ * @param {any} req The request object
+ * @returns config object or null
+ */
+function getDatabaseConfigFromRequest(req) {
+    return _.get(req, 'app.config.oracledb.activityDatabase', null);
+}
+
 module.exports.getGenericJbpmConfig = getGenericJbpmConfig;
+module.exports.getGenericJbpmConfigByUser = getGenericJbpmConfigByUser;
 module.exports.filterVariablesForRecency = filterVariablesForRecency;
 module.exports.handleTaskStatuses = handleTaskStatuses;
 module.exports.processJsonObject = processJsonObject;
@@ -342,3 +377,5 @@ module.exports.getFormattedRoutesString = getFormattedRoutesString;
 module.exports.parseAssignedTo = parseAssignedTo;
 module.exports.filterIdentifiers = filterIdentifiers;
 module.exports.xmlTemplates = xmlTemplates;
+module.exports.parseVersionFromDeploymentId = parseVersionFromDeploymentId;
+module.exports.getDatabaseConfigFromRequest = getDatabaseConfigFromRequest;

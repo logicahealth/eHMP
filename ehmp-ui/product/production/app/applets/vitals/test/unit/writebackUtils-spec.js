@@ -14,15 +14,15 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
 
         function getUser(){
             var user = new Backbone.Model();
-            user.set('site', '9E7A');
-            user.set('duz', {'9E7A': '1234'});
+            user.set('site', 'SITE');
+            user.set('duz', {'SITE': '1234'});
             return user;
         }
 
         function getCurrentPatient(){
             var patient = new Backbone.Model();
-            patient.set('pid', '9E7A;1234');
-            patient.set('visit', {locationUid: 'urn:va:location:9E7A:195'});
+            patient.set('pid', 'SITE;1234');
+            patient.set('visit', {locationUid: 'urn:va:location:SITE:195'});
             return patient;
         }
 
@@ -46,8 +46,8 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
                 var model = getModel('12/01/2013', '12:12');
                 var vitalsModel = WritebackUtil.buildSaveVitalsModel(model, false, getIENMap(), getUser(), getCurrentPatient(), saveVitalsModel);
                 expect(vitalsModel.get('dateTime')).toEqual('201312011212');
-                expect(vitalsModel.get('pid')).toEqual('9E7A;1234');
-                expect(vitalsModel.get('locationUid')).toEqual('urn:va:location:9E7A:195');
+                expect(vitalsModel.get('pid')).toEqual('SITE;1234');
+                expect(vitalsModel.get('locationUid')).toEqual('urn:va:location:SITE:195');
                 expect(vitalsModel.get('enterdByIEN')).toEqual('1234');
                 expect(vitalsModel.get('vitals').length).toEqual(0);
             });
@@ -232,24 +232,24 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
             var bmi = new Backbone.Model({typeName: 'BMI'});
             var vitals = [bmi];
 
-            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, bmi, '9E7A');
+            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, bmi, 'SITE');
             expect(resultCollection.models.length).toEqual(0);
         });
 
         it('Should not include vitals from a differnt site', function(){
-            var wrongSiteVital = new Backbone.Model({typeName: 'BP', pid: 'C877:1234'});
+            var wrongSiteVital = new Backbone.Model({typeName: 'BP', pid: 'SITE:1234'});
             var vitals = [wrongSiteVital];
 
-            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, wrongSiteVital, '9E7A');
+            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, wrongSiteVital, 'SITE');
             expect(resultCollection.models.length).toEqual(0);
         });
 
         it('Should include vitals from same site and check appropriate vital', function(){
-            var vitalOne = new Backbone.Model({typeName: 'BP', localId: '1234', result: '120/80', units: 'hh[MG]', pid: '9E7A;x'});
-            var vitalTwo = new Backbone.Model({typeName: 'Pulse', localId: '4321', result: '60', units: '\\min', pid: '9E7A;x'});
+            var vitalOne = new Backbone.Model({typeName: 'BP', localId: '1234', result: '120/80', units: 'hh[MG]', pid: 'SITE;x'});
+            var vitalTwo = new Backbone.Model({typeName: 'Pulse', localId: '4321', result: '60', units: '\\min', pid: 'SITE;x'});
             var vitals = [vitalOne, vitalTwo];
 
-            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, vitalTwo, '9E7A');
+            var resultCollection = WritebackUtil.buildEnteredInErrorVitalCollection(vitals, vitalTwo, 'SITE');
             expect(resultCollection.models.length).toEqual(2);
             expect(resultCollection.models[0].get('itemName')).toEqual('1234');
             expect(resultCollection.models[0].get('itemValue')).toEqual(false);

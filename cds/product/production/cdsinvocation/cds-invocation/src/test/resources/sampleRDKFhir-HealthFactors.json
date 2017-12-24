@@ -5,7 +5,7 @@
     "link": [
       {
         "rel": "self",
-        "href": "http://127.0.0.1/fhir/patient/9E7A;253/observation?_tag=social-history"
+        "href": "http://127.0.0.1/fhir/patient/SITE;253/observation?_tag=social-history"
       }
     ],
     "meta": {
@@ -48,7 +48,7 @@
             {
               "use": "official",
               "system": "http://vistacore.us/fhir/id/uid",
-              "value": "urn:va:factor:9E7A:253:25"
+              "value": "urn:va:factor:SITE:253:25"
             }
           ],
           "subject": {
@@ -148,7 +148,7 @@
             {
               "use": "official",
               "system": "http://vistacore.us/fhir/id/uid",
-              "value": "urn:va:factor:C877:253:25"
+              "value": "urn:va:factor:SITE:253:25"
             }
           ],
           "subject": {

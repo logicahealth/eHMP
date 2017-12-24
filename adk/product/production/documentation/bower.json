@@ -25,6 +25,8 @@
     "spinkit": "~1.0.1",
     "q": "git://github.com/kriskowal/q.git#34ffc83cc487ff5b4bea89a8ddcf08639d7fa451",
     "font-awesome": "~4.3.0",
-    "clipboard": "*"
+    "clipboard": "*",
+    "backbone-tree-model": "git://github.com/EnotionZ/backbone-tree-model",
+    "backbone-tree-view": "git://github.com/kirill-zhirnov/backbone-tree-view"
   }
 }

@@ -1,9 +1,8 @@
-HMPEVNT ;SLC/MKB,ASMR/JD,RRB,CPC,MBS -- VistA event listeners;Aug 29, 2016 20:06:27
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;May 15, 2016;Build 7
+HMPEVNT ;SLC/MKB,ASMR/JD,RRB,CPC,MBS,CPC,hrubovcak -- VistA event listeners;Jun 26, 2017 19:11:09
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3,4**;May 15, 2016;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
- ; -------------------          -----
  ; DG FIELD MONITOR              3344
  ; DGPM MOVEMENT EVENTS          1181
  ; GMRA ENTERED IN ERROR         1467
@@ -27,6 +26,7 @@ HMPEVNT ;SLC/MKB,ASMR/JD,RRB,CPC,MBS -- VistA event listeners;Aug 29, 2016 20:06
  ; XLFDT                        10103
  ; XTHC10                        5515
  ; ORDRNUM^PSSUTLA2              6426  ;DE6363 - JD - 8/23/16
+ ; PROD^XUPROD                   4440
  ;
  ; DE2818 - SQA findings.
  ;          1) Correct unkilled variables by modifying line tags to accept variables as
@@ -42,6 +42,7 @@ HMPEVNT ;SLC/MKB,ASMR/JD,RRB,CPC,MBS -- VistA event listeners;Aug 29, 2016 20:06
  ;                       per site.  This will be fixed in future releases to accommodate multiple
  ;                       servers per site.
  ;
+ ;US18852 - 5/31/17 - CPC add new hospital discharge event
  Q
  ;
 DG(DGDA,DGFIELD,DGFILE) ; -- DG FIELD MONITOR protocol listener  /DE2818 
@@ -76,6 +77,7 @@ DGPM(DGPMA,DGPMDA,DGPMP,DGPMT) ; -- DGPM MOVEMENT EVENTS protocol listener  /DE2
  N ADM,ACT S ADM=DGPMDA
  I DGPMT'=1 S ADM=$S(DGPMA:$P(DGPMA,U,14),1:$P(DGPMP,U,14)) Q:ADM<1
  S ACT=$S(DGPMA:"",1:"@")
+ I DGPMT=3 D POST(DFN,"discharge","H"_ADM,ACT,1) ;US18852 create new discharge event with ignore set to override subscription check
  I $D(^HMP(800000,"AITEM",DFN)) D POST(DFN,"visit","H"_ADM,ACT)
  ; update roster(s) if current movement
  N ADMX,MVTX,PREV,NEW,OLD,WARD
@@ -336,6 +338,7 @@ USR ;
  Q
  ; *s68 - END
 PSB(PSBIEN) ; -- HMP PSB EVENTS protocol listener (BCMA) /DE2818
+ Q:'$$PROD^XUPROD  ; DE7678, BCMA event only in production
  N IEN,DFN,ORPK,TYPE,ORIFN
  S IEN=$S($P($G(PSBIEN),",",2)'="":+$P(PSBIEN,",",2),$G(PSBIEN)="+1":+$G(PSBIEN(1)),1:+$G(PSBIEN))
  S DFN=+$G(^PSB(53.79,IEN,0)),ORPK=$P($G(^(.1)),U)
@@ -349,15 +352,15 @@ XU(IEN,ACT) ; -- XU USER ADD/CHANGE/TERMINATE option listener
  D POSTX("user",IEN,$G(ACT))
  Q
  ;
-POST(DFN,TYPE,ID,ACT) ; -- track updated patient data
+POST(DFN,TYPE,ID,ACT,IGNORE) ; -- track updated patient data
  S DFN=+$G(DFN),TYPE=$G(TYPE),ID=$G(ID)
  Q:'(DFN>0)  Q:TYPE=""  Q:ID=""   ;incomplete request - DE4496 19 August 2016
  Q:$G(^XTMP("HMP-off",TYPE))   ;domain turned 'off'
- Q:'$D(^HMP(800000,"AITEM",DFN))  ;patient not subscribed to
+ I '$G(IGNORE) Q:'$D(^HMP(800000,"AITEM",DFN))  ;patient not subscribed to ;us18855 - only check if subscribed if IGNORE not set
  N HMPDT S HMPDT="HMP-"_DT
  ;S ^XTMP(HMPDT,$$NEXT)=DFN_U_TYPE_U_ID_U_$G(ACT)
  N NODES
- D POST^HMPDJFS(DFN,TYPE,ID,$G(ACT),"",.NODES)
+ D POST^HMPDJFS(DFN,TYPE,ID,$G(ACT),"",.NODES,+$G(IGNORE)) ;;us18852 added ignore
  Q
  ;
 POSTX(TYPE,ID,ACT) ; -- track updated reference items

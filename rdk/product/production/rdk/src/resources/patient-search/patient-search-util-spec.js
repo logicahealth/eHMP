@@ -6,6 +6,7 @@ var patientsSearchUtilTestData = require('./patient-search-util-unittest-data');
 var sensitivity = rdk.utils.sensitivity;
 var pidValidator = require('../../utils/pid-validator');
 var hmpPatientSelect = require('./hmp-patient-select');
+var searchJds = require('./search-jds');
 
 var logger = {
     trace: function() {},
@@ -29,7 +30,7 @@ var req = {
         config: {
             rpcConfig: {
                 host: '127.0.0.1',
-                port: '9999'
+                port: 'PORT'
             },
             vistaSites: {
                 badsite: {},
@@ -547,6 +548,13 @@ describe('callPatientSearch', function() {
         sinon.stub(pidValidator, 'isIcn', function(pid) {
             return true;
         });
+        sinon.stub(searchJds, 'getPatients', function(req, params, site, callback) {
+            patients = [{
+                ssn: '12345system',
+                birthDate: 'system birthday'
+            }];
+            callback(null, patients);
+        });
     });
 
     afterEach(function() {
@@ -589,6 +597,21 @@ describe('callPatientSearch', function() {
 
         patientsSearchUtil.callPatientSearch(req, 'testBadPid', undefined, pidOptions, function(err, result) {
             expect(err).to.be('testBadPid site "testSite" doesn\'t match site in pid "1234"');
+            done();
+        });
+    });
+
+    it('for system user makes searchJds.getPatients call', function(done) {
+        req.session.user.consumerType = 'system';
+        patientsSearchUtil.callPatientSearch(req, undefined, undefined, searchOptions, function(err, result) {
+            expect(err).to.be.falsy();
+
+            expect(result).to.be.truthy();
+            expect(result).to.be.an.array();
+            expect(result).to.have.length(1);
+            expect(result[0].ssn).to.equal('12345system');
+            expect(result[0].birthDate).to.equal('system birthday');
+
             done();
         });
     });

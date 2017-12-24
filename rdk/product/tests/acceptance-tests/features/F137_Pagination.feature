@@ -3,79 +3,79 @@ Feature: F137 - SDK Expansion and Enhancement - Pagination
 
 @US1805 @f137_pagination_1 @vxsync @enrich
 Scenario: Client can request a resource with a start and a limit query parameter
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" starting with 0 and limited to 2
+	When the client requests "order" resource for the patient "SITE;3" starting with 0 and limited to 2
 	Then the client receives 2 pagination results
 	And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:44264			    |
+      | uid                 | urn:va:order:SITE:3:44264			    |
     And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:44264			    |
+      | uid                 | urn:va:order:SITE:3:44264			    |
 
 @US1805 @f137_pagination_3  @vxsync @enrich
 Scenario: Client can request a resource with a start and a limit query parameter, starting with a record offset given by the start parameter
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" starting with 2 and limited to 2
+	When the client requests "order" resource for the patient "SITE;3" starting with 2 and limited to 2
 	Then the client receives 2 pagination results
 	And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:38434				|
+      | uid                 | urn:va:order:SITE:3:38434				|
     And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:38434			    |
+      | uid                 | urn:va:order:SITE:3:38434			    |
 
 @US1805 @f137_pagination_2 @vxsync @enrich
 Scenario: Client can request a resource with only a limit query parameter and the result will start at the 1st record
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" limited to 2
+	When the client requests "order" resource for the patient "SITE;3" limited to 2
 	Then the client receives 2 pagination results
 	And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:44264				|
+      | uid                 | urn:va:order:SITE:3:44264				|
     And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:44264			    |
+      | uid                 | urn:va:order:SITE:3:44264			    |
 
 
 @US1805 @f137_pagination_4 @vxsync @enrich
 Scenario: Client can request a resource with only a start query parameter
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" starting with 427
+	When the client requests "order" resource for the patient "SITE;3" starting with 427
 	Then the client receives 24 pagination results
 	And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:12540				|
+      | uid                 | urn:va:order:SITE:3:12540				|
 
 @US1805 @f137_pagination_5 @vxsync @enrich
 Scenario: When a client requests a resource with a start query parameter greater then the client will receive 0 results
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" starting with 447
+	When the client requests "order" resource for the patient "SITE;3" starting with 447
 	Then the client receives 4 pagination results
 
 @US1805 @f137_pagination_6 @vxsync @enrich
 Scenario: When a client requests a resource with a limited query parameter greater then expected results then the client will receive the expected results
-	Given a patient with pid "9E7A;3" has been synced through the RDK API
-	When the client requests "order" resource for the patient "9E7A;3" in RDK format
+	Given a patient with pid "SITE;3" has been synced through the RDK API
+	When the client requests "order" resource for the patient "SITE;3" in RDK format
 	Then the client receives 451 pagination results
-	When the client requests "order" resource for the patient "9E7A;3" starting with 445 and limited to 5
+	When the client requests "order" resource for the patient "SITE;3" starting with 445 and limited to 5
 	Then the client receives 5 pagination results
 	And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:12540 			|
+      | uid                 | urn:va:order:SITE:3:12540 			|
     And the VPR results contain
       | field               | panorama_valu							|
-      | uid                 | urn:va:order:C877:3:12540			    |
+      | uid                 | urn:va:order:SITE:3:12540			    |
 
 @US1805 @f137_pagination_7 
 Scenario: When a client requests patient-search-full-name with a start and a limit query parameter
@@ -93,8 +93,8 @@ Scenario: When a client requests patient-search-last5 with a start and a limit q
 
 @US1805 @f137_pagination_9 @DE54 @vxsync @patient @11016V630869
 Scenario: When a client requests patient-record-labsbyorder with a start and a limit query parameter
-	Given a patient with pid "9E7A;227" has been synced through the RDK API
-    When the client requests lab orders for the patient "9E7A;227" and order "urn:va:order:9E7A:227:16682" in VPR format from RDK API
+	Given a patient with pid "SITE;227" has been synced through the RDK API
+    When the client requests lab orders for the patient "SITE;227" and order "urn:va:order:SITE:227:16682" in VPR format from RDK API
     And the client receives 14 VPR VistA result(s)
-    When the client requests lab orders for the patient "9E7A;227" and order "urn:va:order:9E7A:227:16682" starting with 2 and limited to 2
+    When the client requests lab orders for the patient "SITE;227" and order "urn:va:order:SITE:227:16682" starting with 2 and limited to 2
     And the client receives 4 VPR VistA result(s)

@@ -14,10 +14,10 @@ public class ResourceUtilTest {
 							"\"deploymentId\":\"BOGUS\"," +
 							"\"processDefId\":\"Order.Consult\"," +
 							"\"parameter\":{" +
-							"\"notification\": \"{   \\\"recipients\\\": [{     \\\"recipient\\\": {       \\\"userId\\\": \\\"10000000270\\\"     },     \\\"salience\\\": 2    }, {     \\\"recipient\\\": {       \\\"userId\\\": \\\"10000000272\\\"         },     \\\"salience\\\": 2      }],   \\\"producer\\\": {     \\\"description\\\": \\\"workflow: lab order management\\\"   },   \\\"referenceId\\\": \\\"task123\\\",   \\\"patientId\\\": \\\"9E7A;253\\\",   \\\"message\\\": {     \\\"subject\\\": \\\"Order lab\\\",     \\\"body\\\": \\\"Finish ordering your lab\\\"   },   \\\"resolution\\\": \\\"producer\\\",   \\\"navigation\\\": {     \\\"channel\\\": \\\"labOE\\\",     \\\"event\\\": \\\"entry:show\\\",     \\\"parameter\\\": \\\"123\\\"   } }\"," +
-						    "\"icn\" : \"9E7A;3\"," +
-						    "\"pid\" : \"9E7A;3\"," +
-						    "\"facility\": \"9E7A\"" +
+							"\"notification\": \"{   \\\"recipients\\\": [{     \\\"recipient\\\": {       \\\"userId\\\": \\\"10000000270\\\"     },     \\\"salience\\\": 2    }, {     \\\"recipient\\\": {       \\\"userId\\\": \\\"10000000272\\\"         },     \\\"salience\\\": 2      }],   \\\"producer\\\": {     \\\"description\\\": \\\"workflow: lab order management\\\"   },   \\\"referenceId\\\": \\\"task123\\\",   \\\"patientId\\\": \\\"SITE;253\\\",   \\\"message\\\": {     \\\"subject\\\": \\\"Order lab\\\",     \\\"body\\\": \\\"Finish ordering your lab\\\"   },   \\\"resolution\\\": \\\"producer\\\",   \\\"navigation\\\": {     \\\"channel\\\": \\\"labOE\\\",     \\\"event\\\": \\\"entry:show\\\",     \\\"parameter\\\": \\\"123\\\"   } }\"," +
+						    "\"icn\" : \"SITE;3\"," +
+						    "\"pid\" : \"SITE;3\"," +
+						    "\"facility\": \"SITE\"" +
 						  "}" +
 						"}";
 

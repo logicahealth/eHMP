@@ -1,5 +1,5 @@
 class PobNotes < SitePrism::Page
-  set_url '/#overview'
+  set_url '#/patient/overview'
 
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #

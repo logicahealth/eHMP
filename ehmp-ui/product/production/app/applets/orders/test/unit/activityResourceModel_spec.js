@@ -45,7 +45,7 @@ define([
                             code: 'abc123'
                         }],
                         destinationFacility: {
-                            code: '9E7A'
+                            code: 'SITE'
                         },
                         acceptingProvider: {
                             uid: 'urn:user:12345'
@@ -70,7 +70,7 @@ define([
 
                 var modifiedResponse = ActivityModel.prototype.parse(response);
                 expect(modifiedResponse.condition).toEqual('abc123');
-                expect(modifiedResponse.destinationFacility).toEqual('9E7A');
+                expect(modifiedResponse.destinationFacility).toEqual('SITE');
                 expect(modifiedResponse.state).toEqual('Response');
                 expect(modifiedResponse.subState).toEqual('Please respond');
                 expect(modifiedResponse.orderable.name).toEqual('Some orderable');

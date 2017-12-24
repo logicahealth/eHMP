@@ -1,0 +1,37 @@
+<div class="body auto-overflow-y auto-overflow pixel-height-100">
+    <table class="table ehmp-table-default table-bordered">
+        <caption class="sr-only">This table represents data details for {{label}}</caption>
+        <thead>
+            <tr>
+                <th scope="col">VistA status</th>
+                <th scope="col">eHMP Status</th>
+                <th scope="col">Permission Sets</th>
+                <th scope="col">Additional Individual Permissions</th>
+                <th scope="col">DUZ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>{{#compare vistaStatus null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare vistaStatus "array" operator="typeof"}}
+                <td>{{#each vistaStatus}}{{this}},{{/each}}</td>{{/compare}}{{#compare vistaStatus "string" operator="typeof"}}
+                <td>{{vistaStatus}}</td> {{/compare}}{{#compare vistaStatus "number" operator="typeof"}}
+                <td>{{vistaStatus}}</td> {{/compare}}{{#compare status null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare status "array" operator="typeof"}}
+                <td>{{#each status}}{{this}},{{/each}}</td>{{/compare}}{{#compare status "string" operator="typeof"}}
+                <td>{{status}}</td> {{/compare}}{{#compare status "number" operator="typeof"}}
+                <td>{{status}}</td> {{/compare}}{{#compare formattedPermissionSetsString null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare formattedPermissionSetsString "array" operator="typeof"}}
+                <td>{{#each formattedPermissionSetsString}}{{this}},{{/each}}</td>{{/compare}}{{#compare formattedPermissionSetsString "string" operator="typeof"}}
+                <td>{{formattedPermissionSetsString}}</td> {{/compare}}{{#compare formattedPermissionSetsString "number" operator="typeof"}}
+                <td>{{formattedPermissionSetsString}}</td> {{/compare}}{{#compare additionalPermissionsLabelsFormatted null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare additionalPermissionsLabelsFormatted "array" operator="typeof"}}
+                <td>{{#each additionalPermissionsLabelsFormatted}}{{this}},{{/each}}</td>{{/compare}}{{#compare additionalPermissionsLabelsFormatted "string" operator="typeof"}}
+                <td>{{additionalPermissionsLabelsFormatted}}</td> {{/compare}}{{#compare additionalPermissionsLabelsFormatted "number" operator="typeof"}}
+                <td>{{additionalPermissionsLabelsFormatted}}</td> {{/compare}}{{#compare duz null operator="==="}}
+                <td>none</td> {{/compare}}{{#compare duz "array" operator="typeof"}}
+                <td>{{#each duz}}{{this}},{{/each}}</td>{{/compare}}{{#compare duz "string" operator="typeof"}}
+                <td>{{duz}}</td> {{/compare}}{{#compare duz "number" operator="typeof"}}
+                <td>{{duz}}</td> {{/compare}}</tr>
+        </tbody>
+    </table>
+</div>

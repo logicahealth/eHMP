@@ -94,6 +94,24 @@
       <parameters/>
       <name>EventStateWriteService</name>
     </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.patientdemographics.PatientDemographicsHandler()</identifier>
+      <parameters/>
+      <name>PatientDemographicsService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.patientpcmmteaminfo.PatientPcmmTeamInfoHandler(ksession)</identifier>
+      <parameters/>
+      <name>PatientPcmmTeamInfoService</name>
+    </work-item-handler>
+    <work-item-handler>
+      <resolver>mvel</resolver>
+      <identifier>new gov.va.signalregistrationservice.UnRegistrationHandler(ksession)</identifier>
+      <parameters/>
+      <name>SignalUnRegistrationService</name>
+    </work-item-handler>
   </work-item-handlers>
   <environment-entries/>
   <configurations/>

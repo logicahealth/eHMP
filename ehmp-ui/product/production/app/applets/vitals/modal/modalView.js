@@ -265,9 +265,8 @@ define([
             if (this.first) {
                 unitsEl = this.first.get('units');
             }
-            if (unitsEl) {
-                this.chartOptions.yAxis.title.text = unitsEl;
-            }
+
+            this.chartOptions.yAxis.title.text = unitsEl ? unitsEl : this.model.get('typeName');
 
             if (this.modalDisplayName === 'BP') {
                 this.chartOptions.series[0].name = 'SBP';

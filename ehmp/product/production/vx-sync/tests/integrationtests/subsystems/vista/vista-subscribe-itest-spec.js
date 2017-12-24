@@ -17,29 +17,29 @@ var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
-var vistaIdValue = '9E7A';
+var vistaIdValue = 'SITE';
 var dfnValue = '3';
 
 function setUpEnvironment() {
 	var config = {
 		'vistaSites': {
-			'9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
+			'SITE': _.defaults(wConfig.vistaSites['SITE'], {
 				'name': 'panorama',
-				'host': 'REDACTED    ',
+				'host': 'IP        ',
 				'port': PORT,
-				'accessCode': 'REDACTED',
-				'verifyCode': 'REDACTED',
+				'accessCode': 'USER  ',
+				'verifyCode': 'PW      ',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
 				'sendTimeout': 10000
 			}),
-			'C877': _.defaults(wConfig.vistaSites.C877, {
+			'SITE': _.defaults(wConfig.vistaSites.SITE, {
 				'name': 'kodak',
-				'host': 'REDACTED    ',
+				'host': 'IP        ',
 				'port': PORT,
-				'accessCode': 'REDACTED',
-				'verifyCode': 'REDACTED',
+				'accessCode': 'USER  ',
+				'verifyCode': 'PW      ',
 				'localIP': '127.0.0.1',
 				'localAddress': 'localhost',
 				'connectTimeout': 3000,
@@ -62,11 +62,11 @@ function setUpEnvironment() {
 
 describe('vista-subscribe.js', function() {
     describe('getIds', function() {
-        it('accurately retrieves corresponding ids for 9E7A;3', function() {
+        it('accurately retrieves corresponding ids for SITE;3', function() {
             var environment = setUpEnvironment();
             var completed = false;
             runs(function() {
-                environment.vistaClient.getIds('9E7A', '3', wConfig.vistaSites['9E7A'].stationNumber, function(error, response) {
+                environment.vistaClient.getIds('SITE', '3', wConfig.vistaSites['SITE'].stationNumber, function(error, response) {
                     expect(error).toBeNull();
                     expect(response).toBeTruthy();
                     var ids = response.split('\r\n');
@@ -115,7 +115,7 @@ describe('vista-subscribe.js', function() {
 				expect(val(actualResponse, 'fullName')).toEqual('EIGHT,PATIENT');
 				expect(val(actualResponse, 'icn')).toEqual('10108V420871');
 				expect(val(actualResponse, 'localId')).toEqual(3);
-				expect(val(actualResponse, 'pid')).toEqual('9E7A;3');
+				expect(val(actualResponse, 'pid')).toEqual('SITE;3');
 				// dummyLogger.debug('vista-subscribe-itest-spec.getDemographics: Got response: %j', actualResponse);
 			});
 		});

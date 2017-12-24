@@ -1,11 +1,28 @@
 define([
     'backbone',
     'marionette',
+    'jquery',
     '_assets/js/tooltipMappings'
-], function(Backbone, Marionette, TooltipMappings) {
+], function(Backbone, Marionette, $, TooltipMappings) {
     "use strict";
 
+
     var Tooltip = Backbone.Marionette.Behavior.extend({
+        behaviors: {
+            ZIndex: {
+                eventString: 'show.bs.tooltip',
+                cleanupEventString: 'hide.bs.tooltip',
+                element: function(event) {
+                    var $tip = $(_.get(event, 'target'));
+                    if (!$tip) {
+                        $tip = this.ui.$tooltip;
+                    }
+                    var tooltipData = $tip.data('bs.tooltip');
+                    return tooltipData.$tip;
+                },
+                failSilently: true
+            }
+        },
         ui: {
             '$tooltip': '[tooltip-data-key], [data-toggle=tooltip]'
         },
@@ -39,8 +56,13 @@ define([
         onRender: function() {
             if (!this.ui.$tooltip.length) {
                 //the tooltip might be this.$el and not a child, and if so, this.ui.$tooltip will be empty
-                if (!!this.$el.attr('tooltip-data-key') || this.$el.attr('data-toggle') === 'tooltip')
+                if (!!this.$el.attr('tooltip-data-key') || this.$el.attr('data-toggle') === 'tooltip') {
                     this.ui.$tooltip = this.$el;
+                }
+                var selectorOption = _.get(this, 'options.selector');
+                if (selectorOption) {
+                    this.ui.$tooltip = this.$(selectorOption);
+                }
             }
 
             _.each(this.ui.$tooltip, function(tip) {
@@ -48,11 +70,11 @@ define([
                 if ($tip.data('bs.tooltip')) return;
                 var config = this.buildConfig($tip);
                 $tip.attr('title', config.title);
-                $tip.tooltip(_.defaults({}, this.options, config));
+                $tip.tooltip(_.defaults({ selector: false }, this.options, config));
             }, this);
         },
         onBeforeDestroy: function() {
-            if(_.isObject(this.ui.$tooltip)) this.ui.$tooltip.tooltip('destroy');
+            if (_.isObject(this.ui.$tooltip)) this.ui.$tooltip.tooltip('destroy');
         }
     });
 

@@ -1,6 +1,4 @@
-define([
-    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel'
-], function(MedicationsUngroupedModel) {
+define([], function() {
     'use strict';
     var medications = {
         "IMO": false,
@@ -135,14 +133,14 @@ define([
             "fillsAllowed": 0,
             "fillsRemaining": 0,
             "locationName": "GENERAL MEDICINE",
-            "locationUid": "urn:va:location:9E7A:23",
-            "orderUid": "urn:va:order:9E7A:8:35739",
+            "locationUid": "urn:va:location:SITE:23",
+            "orderUid": "urn:va:order:SITE:8:35739",
             "ordered": "201405281627",
             "pharmacistName": "PROGRAMMER,ONE",
-            "pharmacistUid": "urn:va:user:9E7A:1",
+            "pharmacistUid": "urn:va:user:SITE:1",
             "prescriptionId": 500983,
             "providerName": "PROVIDER,SEVENTYTHREE",
-            "providerUid": "urn:va:user:9E7A:1999",
+            "providerUid": "urn:va:user:SITE:1999",
             "quantityOrdered": "11",
             "summary": "MedicationOrder{uid=''}",
             "vaRouting": "W"
@@ -150,7 +148,7 @@ define([
         "overallStart": "20140528",
         "overallStop": "20140627",
         "patientInstruction": "",
-        "pid": "9E7A;8",
+        "pid": "SITE;8",
         "productFormName": "TAB",
         "products": [{
             "drugClassCode": "urn:vadc:HS051",
@@ -177,15 +175,15 @@ define([
         "summary": "PREDNISONE 20MG TAB (EXPIRED) TAKE THREE TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE TWO AND ONE-HALF TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE TWO TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE AND ONE-HALF TABLETS BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE TABLET BY MOUTH EVERY DAY FOR 1 DAYS THEN TAKE ONE-HALF TABLET BY MOUTH EVERY DAY FOR 2 DAYS",
         "supply": false,
         "type": "Prescription",
-        "uid": "urn:va:med:9E7A:8:35739",
+        "uid": "urn:va:med:SITE:8:35739",
         "units": "MG",
         "vaStatus": "EXPIRED",
         "vaType": "O"
     };
 
     return {
-        create: function() {
-            return new MedicationsUngroupedModel(medications, {
+        create: function(Model) {
+            return new Model(medications, {
                 parse: true
             });
         }

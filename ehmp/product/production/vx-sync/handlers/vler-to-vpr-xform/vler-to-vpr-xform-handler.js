@@ -1,15 +1,39 @@
 'use strict';
 
-var _ = require('underscore');
-var jobUtil = require(global.VX_UTILS + 'job-utils');
-var idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
-var request = require('request');
-var format = require('util').format;
-var inspect = require(global.VX_UTILS + 'inspect');
-var errorUtil = require(global.VX_UTILS + 'error');
-var lzma = require('lzma');
-var VxSyncForeverAgent = require(global.VX_UTILS+'vxsync-forever-agent');
+const _ = require('underscore');
+const get = require('lodash').get;
+const jobUtil = require(global.VX_UTILS + 'job-utils');
+const idUtil = require(global.VX_UTILS + 'patient-identifier-utils');
+const request = require('request');
+const format = require('util').format;
+const inspect = require(global.VX_UTILS + 'inspect');
+const errorUtil = require(global.VX_UTILS + 'error');
+const lzma = require('lzma');
 
+/*
+
+The following properties are used in the config object:
+vler: {
+    domains: [
+        'vlerdocument'
+    ],
+    compression: {
+        minSize: 1887436  // if this is a non-numeric value or if it is missing, compression is turned off
+    },
+    disabled: false,
+    defaults: {
+        host: 'localhost',
+        port: 5400,
+        adminPort: 5401,
+        method: 'GET',
+        timeout: 60000
+    },
+    vlerdocument: {
+        documentListPath: '/vler/documentList',
+        documentPath: '/vler/document'
+    }
+},
+*/
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('vler-to-vpr-xform-handler.handle : received request to VLER xform %j', job);
     if (!job.patientIdentifier || !job.patientIdentifier.type || job.patientIdentifier.type !== 'pid' || !idUtil.isVler(job.patientIdentifier.value) ||
@@ -18,7 +42,7 @@ function handle(log, config, environment, job, handlerCallback) {
         return handlerCallback(errorUtil.createFatal('vler-to-vpr-xform-handler.handle: Missing parameter(s).'));
     }
 
-    var documentConfig = getVlerDocumentConfiguration(log, config, job);
+    let documentConfig = getVlerDocumentConfiguration(log, config, job);
     if (documentConfig === null) {
         log.warn('vler-to-vpr-xform-handler.handle: No configuration for job: %j', job);
         return handlerCallback(errorUtil.createFatal('vler-to-vpr-xform-handler.handle: No configuration'));
@@ -30,7 +54,7 @@ function handle(log, config, environment, job, handlerCallback) {
         log.debug('vler-to-vpr-xform-handler.handle: Received VLER document response.  error: %s; ', error);
         if ((!error) && (response) && (response.statusCode === 200)) {
             log.debug('vler-to-vpr-xform-handler.handle: response body (string form): %s', body);
-            var jsonBody;
+            let jsonBody;
             if (typeof body !== 'object') {
                 log.debug('vler-to-vpr-xform-handler.handle: was a string.  Parsing to object now...');
                 try {
@@ -40,16 +64,18 @@ function handle(log, config, environment, job, handlerCallback) {
                     return handlerCallback(errorUtil.createFatal('Failed to parse VLER response.'));
                 }
 
-                getFullHtml(log, jsonBody.compressRequired, jsonBody.vlerDocHtml, function(err, result) {
+                let compress = compressionRequired(config, jsonBody);
+
+                getFullHtml(log, compress, jsonBody.vlerDocHtml, function(err, result) {
                     if (!result) {
                         log.error(err);
                         return handlerCallback(errorUtil.createFatal('Failed to get full HTML'));
                     }
 
-                    var vprItem = xformItem(log, job.record.document, result, jsonBody.vlerDocType, jsonBody.compressRequired, job.requestStampTime);
+                    let vprItem = xformItem(log, job.record.document, result, jsonBody.vlerDocType, compress, job.requestStampTime);
 
                     log.debug('vler-to-vpr-xform-handler.handle: We are now preparing jobs for publishing.  record: %j', vprItem);
-                    var meta = {
+                    let meta = {
                         jpid: job.jpid,
                         rootJobId: job.rootJobId,
                         param: job.param,
@@ -58,7 +84,7 @@ function handle(log, config, environment, job, handlerCallback) {
                     if (job.referenceInfo) {
                         meta.referenceInfo = job.referenceInfo;
                     }
-                    var jobsToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, 'vlerdocument', vprItem, meta);
+                    let jobsToPublish = jobUtil.createEventPrioritizationRequest(job.patientIdentifier, 'vlerdocument', vprItem, meta);
 
                     log.debug('vler-to-vpr-xform-handler.handle: Jobs prepared.  jobsToPublish: %j', jobsToPublish);
 
@@ -81,12 +107,12 @@ function handle(log, config, environment, job, handlerCallback) {
                 return handlerCallback(errorUtil.createFatal('invalid response body'));
             }
         } else {
-            var statusCode;
+            let statusCode;
             if ((response) && (response.statusCode)) {
                 statusCode = response.statusCode;
             }
 
-            var errorMessage = format('vler-to-vpr-xform-handler.handle: Unable to retrieve VLER document for %s because %s', inspect(job.patientIdentifier), statusCode);
+            let errorMessage = format('vler-to-vpr-xform-handler.handle: Unable to retrieve VLER document for %s because %s', inspect(job.patientIdentifier), statusCode);
             log.error(errorMessage);
             return handlerCallback(errorUtil.createTransient(errorMessage));
         }
@@ -95,8 +121,21 @@ function handle(log, config, environment, job, handlerCallback) {
 
 }
 
+function compressionRequired(config, jsonBody) {
+    let minSize = get(config, 'vler.compression.minSize');
+    minSize = minSize === null ? undefined : minSize;
+    minSize = Number(minSize);
+
+    // a missing or NaN value for minSize will disable compression
+    if (Number.isNaN(minSize)) {
+        return false;
+    }
+
+    return Buffer.byteLength(jsonBody.vlerDocHtml, 'utf8') >= minSize;
+}
+
 function getVlerDocumentConfiguration(log, config, job) {
-    var query = {};
+    let query = {};
     query.icn = idUtil.extractIcnFromPid(job.patientIdentifier.value, config);
     query.documentUniqueId = job.record.document.documentUniqueId;
     query.homeCommunityId = job.record.document.homeCommunityId;
@@ -108,13 +147,16 @@ function getVlerDocumentConfiguration(log, config, job) {
         return null;
     }
 
-    var vlerConfig = {
+    let vlerConfig = {
         'qs': query
     };
     vlerConfig = _.defaults(vlerConfig, config.vler);
-    var url = format('%s://%s:%s%s', 'http', vlerConfig.defaults.host, vlerConfig.defaults.port, vlerConfig.vlerdocument.documentPath);
+    let url = format('%s://%s:%s%s', 'http', vlerConfig.defaults.host, vlerConfig.defaults.port, vlerConfig.vlerdocument.documentPath);
     vlerConfig.url = url;
-    vlerConfig.agentClass = VxSyncForeverAgent;
+    vlerConfig.forever = true;
+    vlerConfig.agentOptions = {
+        maxSockets: config.handlerMaxSockets || 5
+    };
 
     return vlerConfig;
 }
@@ -124,14 +166,14 @@ function xformItem(log, document, fullHtml, vlerDocType, compressed, stampTime) 
         return;
     }
 
-    var vprItem = vlerDocumentToVPR(document, fullHtml, vlerDocType, compressed);
+    let vprItem = vlerDocumentToVPR(document, fullHtml, vlerDocType, compressed);
     vprItem.stampTime = stampTime;
     log.debug('vler-to-vpr-xform-handler.xformItem: vprItemTimeStamp: %j', vprItem.stampTime);
     return vprItem;
 }
 
 function vlerDocumentToVPR(document, fullHtml, vlerDocType, compressed) {
-    var vprVlerDocument = {};
+    let vprVlerDocument = {};
     vprVlerDocument.kind = vlerDocType;
     vprVlerDocument.creationTime = document.creationTime;
     vprVlerDocument.name = document.name;
@@ -157,13 +199,13 @@ function vlerDocumentToVPR(document, fullHtml, vlerDocType, compressed) {
 
 function getFullHtml(log, compressRequired, vlerDocHtml, callback) {
     if (compressRequired) {
-        var startTime = new Date();
+        let startTime = new Date();
         lzma.compress(vlerDocHtml, 1, function(result) {
             if (result === false) {
                 callback('vler-to-vpr-xform-handler: Failed to compress VLER HTML', null);
             }
-            var resultStr = new Buffer(result).toString('base64');
-            log.debug('before compress: ' + vlerDocHtml.length + ' -> after compress: ' + resultStr.length + ', elapsed time: ' + (((new Date()) - startTime)/1000));
+            let resultStr = new Buffer(result).toString('base64');
+            log.debug('before compress: ' + vlerDocHtml.length + ' -> after compress: ' + resultStr.length + ', elapsed time: ' + (((new Date()) - startTime) / 1000));
             callback(null, resultStr);
         });
     } else {
@@ -175,3 +217,4 @@ module.exports = handle;
 module.exports._getVlerDocumentConfiguration = getVlerDocumentConfiguration;
 module.exports._getFullHtml = getFullHtml;
 module.exports._vlerDocumentToVPR = vlerDocumentToVPR;
+module.exports._compressionRequired = compressionRequired;

@@ -52,7 +52,7 @@ describe('Permissions resource calls', function() {
             'json': true,
             'logger': undefined,
             'port': 0,
-            'url': '/permission/'
+            'url': '/permission/?filter=eq(%22status%22%2C%22active%22)'
         };
         sinon.stub(httpUtil, 'get', function(httpOptions) {
             expect(httpOptions.body).to.be.equal(expectedHttpOptions.body);

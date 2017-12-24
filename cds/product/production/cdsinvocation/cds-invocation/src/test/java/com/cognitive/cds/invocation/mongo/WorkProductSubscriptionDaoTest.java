@@ -72,7 +72,7 @@ public class WorkProductSubscriptionDaoTest {
         workProductSubscriptionDao.setMongoDbDao(mongoDbDao);
         
         WorkProductSubscription wpsTest = new WorkProductSubscription();
-        wpsTest.setUser("9E7A:10000000255");
+        wpsTest.setUser("SITE:10000000255");
         wpsTest.setPriority("URG");
         List<String> types = new ArrayList<>();
         types.add("advice");

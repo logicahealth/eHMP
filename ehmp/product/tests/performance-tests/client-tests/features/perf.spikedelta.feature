@@ -10,5 +10,5 @@ Background:
 
 @perf.spikedelta 
 Scenario: User, with 10 allergies record, requests direct REST call to FHIR api end-points
-    When the client requests allergies from VPR for the patient, "B362;100022" 
+    When the client requests allergies from VPR for the patient, "SITE;100022" 
     Then print system time

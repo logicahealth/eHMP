@@ -109,7 +109,7 @@ function buildPjdsDomainRetrievalTasks(log, config, environment, reindexingConte
             .map(function(patientUUID) { return 'filter=eq(patientUid, "' + patientUUID + '")'; })
             .map(function(patientFilter) {
                 return _.map(pjdsDomains, function(pjdsDomain) {
-                    var queryFunction = environment.pjds.getClinicalObject.bind(environment.pjds, patientFilter + ', eq(domain, "' + pjdsDomain +'")');
+                    var queryFunction = environment.pjdsHttp.getClinicalObject.bind(environment.pjdsHttp, patientFilter + ', eq(domain, "' + pjdsDomain +'")');
                     return retrieveDomainData.bind(null, log, config, environment, pjdsDomain, patientId, queryFunction, saveFunction);
                 });
             })

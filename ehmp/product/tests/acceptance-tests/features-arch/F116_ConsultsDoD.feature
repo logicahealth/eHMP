@@ -19,7 +19,7 @@
     And the results contain data group
       | field            | value                                                         |
       | summary          | AUDIOLOGY - HEARING LOSS CONSULT                              |
-      | uid              | urn:va:document:9E7A:3:3112                                   |
+      | uid              | urn:va:document:SITE:3:3112                                   |
       | kind             | Consult Report                                                |
       | facilityCode     | 500                                                           |
       | facilityName     | CAMP MASTER                                                   |

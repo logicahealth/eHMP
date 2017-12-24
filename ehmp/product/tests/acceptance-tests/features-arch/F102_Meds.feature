@@ -4,18 +4,18 @@ Feature: F102 Return and display of inpatient and outpatient medications
 # I have marked the Feature as @future so the background step will also not be run
 
 Background:
-	Given a patient with pid "9E7A;71" has been synced through FHIR
+	Given a patient with pid "SITE;71" has been synced through FHIR
 
 
 @meds_rest
 Scenario: Client can request meds
 	Given a patient with "inpatient and outpatient medications" in multiple VistAs
-	When the client requests Meds for the patient "9E7A;71"
+	When the client requests Meds for the patient "SITE;71"
 	Then eHMP returns "40" result(s)
 	And the results contain data group
 		| field            | value                                             |
       	| summary     | ATENOLOL 100MG TAB (EXPIRED)\n TAKE ONE EVERY DAY |
-      	| uid         | urn:va:med:9E7A:71:12007                          |
+      	| uid         | urn:va:med:SITE:71:12007                          |
       	| vaStatus    | EXPIRED                                           |
       	| overallStop | 20010211                                          |
       	| vaType      | O                                                 |
@@ -24,7 +24,7 @@ Scenario: Client can request meds
     And the results contain data group
 	  	| field       | value                                          |
       	| summary     | ASPIRIN 600MG SUPP,RTL (EXPIRED)\n AS DIRECTED |
-      	| uid         | urn:va:med:9E7A:71:10976                       |
+      	| uid         | urn:va:med:SITE:71:10976                       |
       	| vaStatus    | EXPIRED                                        |
       	| overallStop | 19991127	                                   |
       	| vaType      | O                                              |
@@ -33,7 +33,7 @@ Scenario: Client can request meds
   	And the results contain data group
 		| field                        | value                    |
 	  	| products.ingredientName | PROLEUKIN INJ            |
-	  	| uid                     | urn:va:med:9E7A:71:10987 |
+	  	| uid                     | urn:va:med:SITE:71:10987 |
 	  	| vaStatus                | EXPIRED                  |
 	  	| overallStop             | 199911252359             |
 	  	| vaType	   			  | V						  |

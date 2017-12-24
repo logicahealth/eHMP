@@ -23,15 +23,15 @@
 		</tr>
 		{{#each limitedoldValues}}
 		<tr>
-			<td>{{attributes.result}} {{attributes.units}}</td>
-			<td>{{#if attributes.abnormal}}<span class="label {{attributes.labelClass}}">{{attributes.interpretationCode}}</span>{{/if}}</td>
-			{{#if attributes.referenceRange}}
-			<td>{{attributes.referenceRange}} {{attributes.units}}</td>
+			<td>{{this.result}} {{this.units}}</td>
+			<td>{{#if this.abnormal}}<span class="label {{this.labelClass}}">{{this.interpretationCode}}</span>{{/if}}</td>
+			{{#if this.referenceRange}}
+			<td>{{this.referenceRange}} {{this.units}}</td>
 			{{else}}
 			<td>N/A</td>
 			{{/if}}
-			<td>{{attributes.observedFormatted}}</td>
-			<td>{{attributes.facilityMoniker}}</td>
+			<td>{{this.observedFormatted}}</td>
+			<td>{{this.facilityMoniker}}</td>
 		</tr>
 		{{/each}}
 	</tbody>

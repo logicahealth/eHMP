@@ -4,12 +4,12 @@ var lockPatient = require('./orders-common-patient-lock');
 var rpcClientFactory = require('./../../core/rpc-client-factory');
 
 var writebackContext = {
-    pid: '9E7A;100615',
+    pid: 'SITE;100615',
     vistaConfig: {
         host: 'IP        ',
         port: PORT,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost'
     },
@@ -48,7 +48,7 @@ var writebackContext = {
             'inputValue': '28'
         }],
         'localId': '12519',
-        'uid': 'urn:va:order:9E7A:100615:12519',
+        'uid': 'urn:va:order:SITE:100615:12519',
         'kind': 'Laboratory'
     },
     logger: sinon.stub(require('bunyan').createLogger({
@@ -57,12 +57,12 @@ var writebackContext = {
 };
 
 var writebackContext2 = {
-    pid: '9E7A;100615',
+    pid: 'SITE;100615',
     vistaConfig: {
         host: 'IP        ',
         port: PORT,
-        accessCode: 'REDACTED',
-        verifyCode: 'REDACTED',
+        accessCode: 'USER  ',
+        verifyCode: 'PW      ',
         localIP: 'IP      ',
         localAddress: 'localhost'
     },
@@ -101,7 +101,7 @@ var writebackContext2 = {
             'inputValue': '28'
         }],
         'localId': '12519',
-        'uid': 'urn:va:order:9E7A:100615:12519',
+        'uid': 'urn:va:order:SITE:100615:12519',
         'kind': 'Laboratory'
     },
     logger: sinon.stub(require('bunyan').createLogger({

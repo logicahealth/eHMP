@@ -12,7 +12,7 @@ class HelperMethods
     objects.each do |item|
       if item.text.upcase.include? text.upcase
         item.click
-        break
+        return true
       end
     end
   end
@@ -63,11 +63,11 @@ class HelperMethods
     end
     true
   end
-  
-  def compare_text_in_list(objects, text1, text2)
+
+  def compare_text_in_list(objects, text_array)
     objects.each do |item|
       #p item.text
-      if [text1, text2].any? { |text| item.text.include? text }
+      if text_array.include? item.text
         next
       else
         return false
@@ -75,6 +75,7 @@ class HelperMethods
     end
     return true
   end
+  
 
   # This method will print all the text from lists, can be used only for troubleshooting purposes
   def print_all_value_from_list_elements(objects)

@@ -592,7 +592,7 @@ $(function() {
                     if (folder === 'adk') {
                         return './adk/';
                     } else if (folder === 'ui') {
-                        return '/app/';
+                        return '../app/';
                     } else if (folder === 'rdk') {
                         return fetchRdkPath();
                     } else {
@@ -602,7 +602,12 @@ $(function() {
                 .then(self.getNavConfig)
                 .then(function(data) {
                     if (folder === 'ui') {
-                        return self.addDocumentedAppletsToHeader(data);
+                        return Q.fcall(function() {
+                                return self.addDocumentedAppletsToHeader(data);
+                            })
+                            .then(function() {
+                                return self.addDocumentedSubItems(data);
+                            });
                     } else {
                         return data;
                     }
@@ -630,11 +635,26 @@ $(function() {
         getAppletManifest: function() {
             var deferred = Q.defer();
             $.ajax({
-                    url: '/app/applets/appletsManifest.js',
+                    url: '../app/applets/appletsManifest.js',
                     dataType: 'script',
                 })
                 .done(function(data) {
                     deferred.resolve(data);
+                })
+                .fail(function() {
+                    return deferred.reject();
+                });
+            return deferred.promise;
+        },
+        getUIDocumentationSubItems: function(url) {
+            var urlSuffix = url.split('/ui/')[1];
+            var deferred = Q.defer();
+            $.ajax({
+                    url: '../app/' + urlSuffix + 'documentation.json',
+                    dataType: 'json',
+                })
+                .done(function(data) {
+                    deferred.resolve(data.items || []);
                 })
                 .fail(function() {
                     return deferred.reject();
@@ -680,6 +700,65 @@ $(function() {
                     deferred.resolve(navigationConfig);
                 });
             return deferred.promise;
+        },
+        addDocumentedSubItems: function(navigationConfig) {
+            var deferred = Q.defer();
+            var subItemsPromises = [];
+            var rightNavItems = navigationConfig.right_nav_items || [];
+            var supportsSubItems = _.filter(rightNavItems, { subItemDropdown: true });
+            _.each(supportsSubItems, _.bind(function(configItem) {
+                if (configItem.url && configItem.name) {
+                    var subItemArrayLoaded = this.getUIDocumentationSubItems(configItem.url);
+                    var subItemPromise = $.Deferred();
+                    subItemsPromises.push(subItemPromise);
+                    subItemArrayLoaded.then(function(arrayOfSubItems) {
+                        var documentedSubItems = _.filter(arrayOfSubItems, function(subItem) {
+                            return !!subItem.label && !!subItem.path && subItem.filepath;
+                        });
+                        if (!_.isEmpty(documentedSubItems)) {
+                            documentedSubItems = _.map(_.sortBy(documentedSubItems, 'label'), function(subItem) {
+                                var urlPath = subItem.filepath.replace('app/', './#/ui/').replace('README.md', '');
+                                return {
+                                    name: subItem.label,
+                                    url: urlPath,
+                                    path: subItem.path,
+                                    documentation: true
+                                };
+                            });
+                            var rightNavItems = navigationConfig.right_nav_items || [];
+                            var configItemNavDropdown = _.findWhere(rightNavItems, { url: configItem.url });
+                            if (configItemNavDropdown) {
+                                rightNavItems = _.without(rightNavItems, configItemNavDropdown);
+                                _.extend(configItemNavDropdown, {
+                                    id: 'search-' + configItem.name,
+                                    subItems: documentedSubItems,
+                                    type: 'file-tree-list'
+                                });
+                            } else {
+                                configItemNavDropdown = {
+                                    id: 'search-' + configItem.name,
+                                    name: configItem.name,
+                                    subItems: documentedSubItems,
+                                    type: 'file-tree-list'
+                                };
+                            }
+
+                            _.extend({}, navigationConfig, {
+                                'right_nav_items': rightNavItems.push(configItemNavDropdown)
+                            });
+                        }
+                        subItemPromise.resolve();
+
+                    }, function() {
+                        subItemPromise.resolve();
+                    });
+                }
+            }, this));
+
+            $.when.apply(this, subItemsPromises).then(function() {
+                deferred.resolve(navigationConfig);
+            });
+            return deferred.promise;
         }
     });
 
@@ -687,21 +766,54 @@ $(function() {
         defaults: {
             what: '',
             where: 'all',
-            label: 'Items'
+            label: 'Items',
+            radioFilters: false,
+            treeItems: [],
+            filterField: 'name',
         },
         initialize: function(opts) {
             this.collection = opts.collection;
             this.filtered = new Backbone.Collection(opts.collection.models);
+            var tree = []; //{title: 'Extensions', nodes: [{}]}
+            _.each(this.get('treeItems'), function(item) {
+                //path, name, url
+                var folders = item.path.split('.');
+                var level = tree;
+                _.each(folders, function(string, index) {
+                    var folderItem = _.findWhere(level, { id: string });
+                    if (folderItem) {
+                        //Folder Level Already Created
+                        if (index < folders.length - 1) {
+                            level = folderItem.nodes;
+                        } else {
+                            //Last Folder Level
+                            _.extend(folderItem, { path: item.path, title: item.name, url: item.url });
+                        }
+                    } else {
+                        //Folder Level Not Created
+                        if (index < folders.length - 1) {
+                            var length = level.push({ id: string, nodes: [], title: string });
+                            level = level[length - 1].nodes;
+                        } else {
+                            //Last Folder Level
+                            level.push({ id: string, path: item.path, title: item.name, url: item.url });
+                        }
+                    }
+                });
+
+            });
+            this.set('treeCollection', new BackTree.Collection(tree));
             this.on('change:what change:where', this.filter);
         },
         filter: function() {
             var what = this.get('what').trim(),
                 where = this.get('where'),
-                models;
+                models,
+                filterField = this.get('filterField');
 
             models = this.collection.filter(function(model) {
                 if (where === 'documented' && !model.get('documentation')) return false;
-                return ~model.get('name').toLowerCase().indexOf(what.toLowerCase());
+                return ~model.get(filterField).toLowerCase().indexOf(what.toLowerCase());
             });
 
             this.filtered.reset(models);
@@ -730,6 +842,10 @@ $(function() {
             this.setElement($newel);
             $oldel.replaceWith($newel);
 
+            if (!!this.model.get('hideItemsOnEmptyFilter') && _.isEmpty(this.model.get('what'))) {
+                this.$el.addClass('hidden');
+            }
+
             return this;
         }
     });
@@ -737,10 +853,12 @@ $(function() {
     ReadmeApp.FormView = Backbone.View.extend({
         template: _.template(
             '<div class="form-group"><input type="text" name="what" value="<%= what %>" class="form-control" placeholder="Search <%= label %>"/></div>' +
+            '<% if (radioFilters) { %>' +
             '<div class="form-group pull-right">' +
             '<label class="radio-inline"><input type="radio" name="where" value="all" <% if (_.isEqual(where,"all")) { %> checked <% } %> > All</label>' +
             '<label class="radio-inline"><input type="radio" name="where" value="documented" <% if (_.isEqual(where,"documented")) { %> checked <% } %> > Documented</label>' +
-            '</div>'
+            '</div>' +
+            '<% } %>'
         ),
         events: {
             'input input[name="what"]': function(e) {
@@ -767,14 +885,14 @@ $(function() {
             this.collectionView = new ReadmeApp.SearchItemsCollectionView({
                 template: _.template('<div class="container-fluid"><ul class="list-inline row"><% _(models).each(function(model) { %> <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">' +
                     '<% if(!!model.documentation) { %> <a title="Click to view documentation" href="<%= model.url %>"><strong class="text-primary"><%= model.name %></strong></a> <% } else { %> <span class="text-muted" title="Not Documented"><%= model.name %></span> <% } %>' +
-                    '</li> <% }); %>'+
-                    '<% if (_(models).isEmpty()) { %> <li class="text-muted">No <%= label %> found.</li> <% } %>'+
+                    '</li> <% }); %>' +
+                    '<% if (_(models).isEmpty()) { %> <li class="text-muted">No <%= label %> found.</li> <% } %>' +
                     '</ul></div>'),
                 collection: this.model.filtered,
                 model: this.model
             });
         },
-        clearSearch: function(){
+        clearSearch: function() {
             this.model.set('what', '');
             this.$('input[name="what"]').val('');
         },
@@ -788,8 +906,60 @@ $(function() {
             return this;
         },
         events: {
-            'click :not("strong"):not("a")': function(e){
-                if(e.target.tagName === "STRONG") return;
+            'click :not("strong"):not("a")': function(e) {
+                if (e.target.tagName === "STRONG") return;
+                e.stopPropagation();
+            }
+        }
+    });
+
+    ReadmeApp.FileTreeListView = Backbone.View.extend({
+        template: _.template('<form class="form-inline modal-header" autocomplete="off"></form><div class="modal-body"><div class="list-of-items"></div><div class="tree-of-items"></div></div>'),
+        initialize: function(opts) {
+            this.model = opts.model;
+            this.model.set('where', 'all');
+            this.formView = new ReadmeApp.FormView({ model: this.model });
+            this.collectionView = new ReadmeApp.SearchItemsCollectionView({
+                template: _.template('<div class="container-fluid"><ul class="list-inline row"><% _(models).each(function(model) { %> <li class="col-xs-12 col-lg-6">' +
+                    '<% if(!!model.documentation) { %> <a title="Click to view documentation" href="<%= model.url %>"><strong class="text-primary"><%= model.name %></strong></a> <% if(model.path){ %> <span class="text-muted" title="Path"> (<%= model.path %>)</span> <%} } else { %> <span class="text-muted" title="Not Documented"><%= model.name %></span> <% } %>' +
+                    '</li> <% }); %>' +
+                    '<% if (_(models).isEmpty()) { %> <li class="text-muted">No <%= label %> found.</li> <% } %>' +
+                    '</ul></div>'),
+                collection: this.model.filtered,
+                model: this.model
+            });
+            BackTree.Item.prototype.getBodyPart = function() {
+                return this.model.has('url') ? '<a title="Click to view documentation" href="' + this.model.get('url') + '"><strong class="text-primary">' + this.model.getTitle() + '</strong></a>' : '<span class="text-muted" title="Not Documented">' + this.model.getTitle() + '</span>';
+            };
+            this.backtreeView = new BackTree.Tree({
+                collection: this.model.get('treeCollection')
+            });
+        },
+        clearSearch: function() {
+            this.model.set('what', '');
+            this.$('input[name="what"]').val('');
+        },
+        render: function() {
+            this.$el.html(this.template());
+            this.formView.$el = this.$el.find('form');
+            this.collectionView.$el = this.$el.find('.list-of-items');
+            this.backtreeView.$el = this.$el.find('.tree-of-items');
+            this.formView.render();
+            this.collectionView.render();
+            this.backtreeView.render();
+            this.listenTo(this.model, 'change:what', function() {
+                if (!!this.model.get('hideItemsOnEmptyFilter') && !_.isEmpty(this.model.get('what'))) {
+                    this.backtreeView.$el.addClass('hidden');
+                } else {
+                    this.backtreeView.$el.removeClass('hidden');
+                }
+            });
+            this.delegateEvents(this.events);
+            return this;
+        },
+        events: {
+            'click :not("strong"):not("a")': function(e) {
+                if (e.target.tagName === "STRONG") return;
                 e.stopPropagation();
             }
         }
@@ -835,10 +1005,14 @@ $(function() {
             htmlString += '</ul><ul class="nav navbar-nav navbar-right">';
             _.each(this.model.get('currentConfig').right_nav_items, function(navItem) {
                 if (_.isArray(navItem.subItems) && navItem.subItems.length > 0) {
-                    if (!_.isUndefined(navItem.type) && _.isEqual(navItem.type, 'searchable-list') && !_.isUndefined(navItem.id)) {
+                    if (!_.isUndefined(navItem.type) && (_.isEqual(navItem.type, 'searchable-list') || _.isEqual(navItem.type, 'file-tree-list')) && !_.isUndefined(navItem.id)) {
                         htmlString += '<li class="dropdown dropdown--full-width"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + navItem.name + '<span class="caret"></span></a>';
                         htmlString += '<div class="dropdown-menu">';
-                        this.searchableLists[navItem.id] = new ReadmeApp.SearchableListView({ model: new ReadmeApp.FilterModel({ collection: new Backbone.Collection(navItem.subItems), label: navItem.name }) });
+                        if (_.isEqual(navItem.type, 'file-tree-list')) {
+                            this.searchableLists[navItem.id] = new ReadmeApp.FileTreeListView({ model: new ReadmeApp.FilterModel({ collection: new Backbone.Collection(navItem.subItems), label: navItem.name, treeItems: navItem.subItems, filterField: 'path', hideItemsOnEmptyFilter: true }) });
+                        } else {
+                            this.searchableLists[navItem.id] = new ReadmeApp.SearchableListView({ model: new ReadmeApp.FilterModel({ collection: new Backbone.Collection(navItem.subItems), label: navItem.name, radioFilters: true }) });
+                        }
                         htmlString += '<div class="searchable-list-container-' + navItem.id + '"></div>';
                         if (_.isString(navItem.url)) {
                             htmlString += '<div class="modal-footer"><a class="btn btn-default pull-right" href="' + navItem.url + '"' + (navItem.newTab ? ' target="_blank"' : '') + '>Read about: ' + navItem.name + '</a></div>';
@@ -871,7 +1045,7 @@ $(function() {
         updateHeader: function() {
             this.model.updateNavigationConfig();
             _.each(this.searchableLists, function(view, key) {
-                if(_.isFunction(view.clearSearch)) {
+                if (_.isFunction(view.clearSearch)) {
                     view.clearSearch.call(view);
                 }
             }, this);
@@ -996,8 +1170,8 @@ $(function() {
             find: /^ui\/(.*)/,
             rewriter: function rewriter(page, deferred) {
                 var self = this;
-                var newPath = '/app/' + page.replace(self.find, '$1');
-                if (newPath.endsWith('/')) {
+                var newPath = '../app/' + page.replace(self.find, '$1');
+                if (newPath[newPath.length - 1] === '/') {
                     newPath += 'README';
                 }
                 return deferred.resolve(newPath);

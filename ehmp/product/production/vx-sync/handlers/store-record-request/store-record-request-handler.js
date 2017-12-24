@@ -87,14 +87,17 @@ function storeJds(log, environment, record, callback) {
         log.debug('store-record-request-handler.handle: JDS response code: %s', (response ? response.statusCode : undefined));
         if (error) {
             environment.metrics.warn('Store record in JDS in Error', metricsObj);
-            log.error('store-record-request-handler.handle: Error encountered when storing to JDS. error: %s; response: %j; body: %j', error, response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            log.error('store-record-request-handler.handle: Error encountered when storing to JDS. error: %j; response: %j; record: %j', error, response, record);
             return callback(error);
         } else if (response.statusCode !== 201) {
             environment.metrics.warn('Store record in JDS in Error', metricsObj);
-            log.error('store-record-request-handler.handle: Unexpected statusCode received when storing to JDS. error: (no error received); response: %j; body: %j', response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            log.error('store-record-request-handler.handle: Unexpected statusCode received when storing to JDS. error: (no error received); response: %j; record: %j', response, record);
         } else {
             environment.metrics.warn('Store record in JDS', metricsObj);
-            log.debug('store-record-request-handler.handle: JDS STORED RECORD!  error: (no error received); response: %j; body: %j', response, body);
+            // Only log the response here as it contains the body and any statusCodes, etc.
+            log.debug('store-record-request-handler.handle: JDS STORED RECORD!  error: (no error received); response: %j; record: %j', response, record);
         }
 
         return callback();

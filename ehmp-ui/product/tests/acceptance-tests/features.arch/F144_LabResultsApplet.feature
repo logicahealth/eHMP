@@ -188,3 +188,20 @@ Scenario: View Numeric Lab Results Base Applet Single Page by clicking on Expand
     | 04/11/2013 - 14:05 | Potassium, Serum or Plasma Quantitative - PLASMA   |   H  | 5.4    | mmol/L | 3.5-4.7   | DOD      |
     | 04/11/2013 - 08:49 | Potassium, Serum or Plasma Quantitative - PLASMA   |   H  | 5.3    | mmol/L | 3.5-4.7   | DOD      |
     | 04/11/2013 - 08:23 | Calcium, Serum or Plasma Quantitative - PLASMA     |   H  | 10.5   | mg/dL  | 8.5-10.1  | DOD      |
+
+@f297_numeric_lab_info_button_integration_overview
+Scenario: Verify Numeric Lab Results applet on overview page has info button toolbar
+  And user searches for and selects "Eight,Patient"
+  Then Overview is active
+  And numeric lab results gist is loaded successfully
+  When user opens the first numeric lab results gist item
+  Then numeric lab results info button is displayed
+ 
+@f297_numeric_lab_info_button_integration_expand_view
+Scenario: Verify Numeric Lab Result applet expanded view has info button toolbar
+  And user searches for and selects "Eight,Patient"
+  Then Overview is active
+  And the user has selected All within the global date picker 
+  And user navigates to numeric lab results expanded view 
+  When user opens the first non-panel numeric lab results row
+  Then numeric lab results info button is displayed

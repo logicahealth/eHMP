@@ -1,4 +1,4 @@
-@F281_immunization_gist @DE618  @DE1267  @reg2
+@F281_immunization_gist @immunization_applet @DE618  @DE1267  @reg2
 
 Feature: F281 : Intervention Gist View
 	
@@ -28,15 +28,19 @@ Scenario: User views the immunization gist view
       | PNEUMOCOCCAL, UNSPECIFIED FORMULATION | FORMATED #y  |
       | PNEUMOCOCCAL                          | FORMATED #y  |
 	
-@F281_3_immunizationGistDisplay @US3382
+@F281_3_immunizationGist_details_Display @US3382
 Scenario: User views the immunization gist modal pop-up
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "FORTYSIX,PATIENT"	
     Then Overview is active
   	And user sees Immunizations Gist
-	When user clicks on "PNEUMOCOCCAL" pill
+	When user opens the first immunization gist item
     Then the modal is displayed
-    And the modal's title is "PNEUMOCOCCAL"
+    And immunization detail modal contains fields
+    |field				|
+    |Name				|
+    |Location			|
+    |Date administered	|
 
 
 
@@ -70,19 +74,6 @@ Scenario: Immunization Applet Gist - filter immunization
   And the user filters the Immunization Gist Applet by text "PNE"
   Then the Immunization Gist only diplays pills including text "PNE"
 	
-@F281_6_immunizationGistDisplay @F281-4 @F281-9 @US3382 @DE861 @DE1267 @DE5249 @DE4667
-Scenario: User views the immunization gist pill quick view
-	# Given user is logged into eHMP-UI
-	Given user searches for and selects "FORTYSIX,PATIENT"	
-	And Overview is active
-  And user sees Immunizations Gist
-	When user clicks the first pill
-  And a quick look icon is displayed in the immunization toolbar
-  And user clicks the quick look icon
-	Then the Immunization Gist Hover Table table contains headers
-    | Date | Series | Reaction | Since	|
-	And the Immunization Gist Hover Table table contains rows
-	
 @f281_immunization_gist_applet_refresh 
 Scenario: Immunization Gist applet displays all of the same details after applet is refreshed
 	# Given user is logged into eHMP-UI
@@ -115,7 +106,6 @@ Scenario: User views the immunization gist modal pop-up from expand view
     And the user is viewing the Immunizations expanded view
     When the user views the details for the first immunization
     Then the modal is displayed
-    #And the modal's title displays "Vaccine" and immunization name
     And the modal's title displays the immunization name
 	
   

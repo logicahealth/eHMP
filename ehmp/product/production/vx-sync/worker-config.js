@@ -2,7 +2,6 @@
 var nconf = require('nconf');
 require('./env-setup');
 var _ = require('underscore');
-var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
 var workerConfigUtil = require(global.VX_UTILS + 'worker-config-utils');
 
 nconf
@@ -66,7 +65,7 @@ function reloadConfig() {
             _.each(keys, function(key){
                 config[key] = newconfig[key];
             });
-            config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
+            workerConfigUtil.populateBeanstalkConfigs(config);
             cachedConfig = newConfigString;
             configChange = true;
         }
@@ -98,12 +97,12 @@ function addChangeCallback(requesterName, callback , useDelay) {
 
 // if(process.env.PANORAMA_IP) {
 // 	console.log('Using environment variable for PANORAMA: %s', process.env.PANORAMA_IP);
-// 	config.vistaSites['9E7A'].host = process.env.PANORAMA_IP;
+// 	config.vistaSites['SITE'].host = process.env.PANORAMA_IP;
 // }
 
 // if(process.env.KODAK_IP) {
 // 	console.log('Using environment variable for KODAK: %s', process.env.KODAK_IP);
-// 	config.vistaSites.C877.host = process.env.KODAK_IP;
+// 	config.vistaSites.SITE.host = process.env.KODAK_IP;
 // }
 
 // if(process.env.JDS_IP) {
@@ -122,9 +121,7 @@ function addChangeCallback(requesterName, callback , useDelay) {
 // process.env.VLER_IP
 // process.env.PGD_IP
 
-config.beanstalk = queueConfig.createFullBeanstalkConfig(config.beanstalk);
-config.osync.beanstalk = queueConfig.createFullBeanstalkConfig(config.osync.beanstalk);
-
+workerConfigUtil.populateBeanstalkConfigs(config);
 
 module.exports = config;
 module.exports.addChangeCallback = addChangeCallback;

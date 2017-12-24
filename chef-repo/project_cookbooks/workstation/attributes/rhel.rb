@@ -3,4 +3,4 @@
 # Recipe:: rhel
 #
 
-default[:workstation][:rhel][:oracledb_module][:version] = "1.10.0"
+default[:workstation][:rhel][:oracledb_module][:version] = "1.12.2"

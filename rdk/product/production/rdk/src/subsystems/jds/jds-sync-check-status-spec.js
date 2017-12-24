@@ -15,7 +15,7 @@ describe('JDS Utils Testing', function() {
             expect(jdsUtils.getVistaSites(sampleSyncStatus)).to.eql(expectedGetVistASitesRetObj.sample);
         });
         it('Testing with sample Sync Status + enterpriseSyncJob', function(){
-            _.each(['9E7A','C877','DOD'], function(site){
+            _.each(['SITE','SITE','DOD'], function(site){
                 expect(jdsUtils._isSiteSynced(sampleSyncStatusWithEnterpriseSyncJob, site)).to.be.false();
             });
         });
@@ -28,7 +28,7 @@ describe('JDS Utils Testing', function() {
             expect(jdsUtils._isSiteSynced(emptySyncStatus)).to.equal(expectedIsSiteSyncedRetObj.empty);
         });
         it('Testing with sample Sync Status', function(){
-            _.each(['9E7A','C877','DOD'], function(site){
+            _.each(['SITE','SITE','DOD'], function(site){
                 expect(jdsUtils._isSiteSynced(sampleSyncStatus, site)).to.equal(expectedIsSiteSyncedRetObj[site]);
             });
         });
@@ -46,10 +46,10 @@ describe('JDS Utils Testing', function() {
             });
         });
         it('Testing with sample Sync Status + enterpriseSyncJob', function(){
-            _.each(['9E7A','C877','DOD','HDR'], function(site){
+            _.each(['SITE','SITE','DOD','HDR'], function(site){
                 expect(jdsUtils.isSyncMarkedCompleted(sampleSyncStatusWithEnterpriseSyncJob, site)).to.be.false();
             });
-            expect(jdsUtils.isSyncMarkedCompleted(sampleSyncStatusWithEnterpriseSyncJob, ['9E7A','C877','DOD','HDR'])).to.be.false();
+            expect(jdsUtils.isSyncMarkedCompleted(sampleSyncStatusWithEnterpriseSyncJob, ['SITE','SITE','DOD','HDR'])).to.be.false();
         });
     });
     describe('Tesing isSyncCompleted', function(){
@@ -88,7 +88,7 @@ describe('JDS Utils Testing', function() {
         it('Testing with sample Sync Status: syncCompleted', function(){
             var testSiteStatus = {
                 latestJobTimestamp: 1464293174353,
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 sourceStampTime: 20160526160604,
                 syncCompleted: true,
                 solrSyncCompleted: true
@@ -104,7 +104,7 @@ describe('JDS Utils Testing', function() {
             var testSiteStatus = {
                 hasError: true,
                 latestJobTimestamp: 1464293174353,
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 sourceStampTime: 20160526160604,
                 syncCompleted: false,
                 solrSyncCompleted: false
@@ -119,7 +119,7 @@ describe('JDS Utils Testing', function() {
         it('Testing with simple Sync Status: hasSolrError', function(){
             var testSiteStatus = {
                 latestJobTimestamp: 1464293174353,
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 sourceStampTime: 20160526160604,
                 syncCompleted: false,
                 solrSyncCompleted: false,
@@ -134,7 +134,7 @@ describe('JDS Utils Testing', function() {
         it('Testing with sample Sync Status: not completed', function(){
             var testSiteStatus = {
               latestJobTimestamp: 1464293174353,
-              pid: '9E7A;3',
+              pid: 'SITE;3',
               sourceStampTime: 20160526160604,
               syncCompleted: false
             };
@@ -150,8 +150,8 @@ describe('JDS Utils Testing', function() {
 
 var expectedIsSiteSyncedRetObj = {
     'empty' : false,
-    '9E7A' : false,
-    'C877' : true,
+    'SITE' : false,
+    'SITE' : true,
     'DOD' : false
 };
 
@@ -161,15 +161,15 @@ var syncMarkCompletedInputAndResult = [
         'result' : false
     },
     {
-        'sites' : ['C877'],
+        'sites' : ['SITE'],
         'result' : true
     },
     {
-        'sites' : ['9E7A','C877'],
+        'sites' : ['SITE','SITE'],
         'result' : false
     },
     {
-        'sites' : ['9E7A','C877','DOD'],
+        'sites' : ['SITE','SITE','DOD'],
         'result' : false
     }
 ];
@@ -350,16 +350,16 @@ var sampleSyncStatus = {
             'completedStamp': {
                 'icn': '10108V420871',
                 'sourceMetaStamp': {
-                    '9E7A': {
+                    'SITE': {
                         'domainMetaStamp': {
                             'allergy': {
                                 'domain': 'allergy',
                                 'eventMetaStamp': {
-                                    'urn:va:allergy:9E7A:3:751': {
+                                    'urn:va:allergy:SITE:3:751': {
                                         'stampTime': 20050317200936,
                                         'stored': true
                                     },
-                                    'urn:va:allergy:9E7A:3:874': {
+                                    'urn:va:allergy:SITE:3:874': {
                                         'stampTime': 20071217151354,
                                         'stored': true
                                     }
@@ -369,20 +369,20 @@ var sampleSyncStatus = {
                             }
                         },
                         'localId': 3,
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20150130170817,
                         'syncCompleted': true
                     },
-                    'C877': {
+                    'SITE': {
                         'domainMetaStamp': {
                             'allergy': {
                                 'domain': 'allergy',
                                 'eventMetaStamp': {
-                                    'urn:va:allergy:C877:3:751': {
+                                    'urn:va:allergy:SITE:3:751': {
                                         'stampTime': 20050317200936,
                                         'stored': true
                                     },
-                                    'urn:va:allergy:C877:3:874': {
+                                    'urn:va:allergy:SITE:3:874': {
                                         'stampTime': 20071217151354,
                                         'stored': true
                                     }
@@ -392,7 +392,7 @@ var sampleSyncStatus = {
                             }
                         },
                         'localId': 3,
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20150130170817,
                         'syncCompleted': true
                     }
@@ -454,12 +454,12 @@ var sampleSyncStatus = {
                 'jpid': 'bd9ce7f7-81c8-49b8-b8f3-1ec4ac09e7d2',
                 'patientIdentifier': {
                     'type': 'pid',
-                    'value': '9E7A;3'
+                    'value': 'SITE;3'
                 },
                 'rootJobId': '1',
                 'status': 'completed',
                 'timestamp': '1423257478447',
-                'type': 'vista-9E7A-subscribe-request'
+                'type': 'vista-SITE-subscribe-request'
             },
             {
                 'jobId': '3',
@@ -511,16 +511,16 @@ var sampleSyncStatusWithEnterpriseSyncJob  = {
             'completedStamp': {
                 'icn': '10108V420871',
                 'sourceMetaStamp': {
-                    '9E7A': {
+                    'SITE': {
                         'domainMetaStamp': {
                             'allergy': {
                                 'domain': 'allergy',
                                 'eventMetaStamp': {
-                                    'urn:va:allergy:9E7A:3:751': {
+                                    'urn:va:allergy:SITE:3:751': {
                                         'stampTime': 20050317200936,
                                         'stored': true
                                     },
-                                    'urn:va:allergy:9E7A:3:874': {
+                                    'urn:va:allergy:SITE:3:874': {
                                         'stampTime': 20071217151354,
                                         'stored': true
                                     }
@@ -530,20 +530,20 @@ var sampleSyncStatusWithEnterpriseSyncJob  = {
                             }
                         },
                         'localId': 3,
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20150130170817,
                         'syncCompleted': true
                     },
-                    'C877': {
+                    'SITE': {
                         'domainMetaStamp': {
                             'allergy': {
                                 'domain': 'allergy',
                                 'eventMetaStamp': {
-                                    'urn:va:allergy:C877:3:751': {
+                                    'urn:va:allergy:SITE:3:751': {
                                         'stampTime': 20050317200936,
                                         'stored': true
                                     },
-                                    'urn:va:allergy:C877:3:874': {
+                                    'urn:va:allergy:SITE:3:874': {
                                         'stampTime': 20071217151354,
                                         'stored': true
                                     }
@@ -553,7 +553,7 @@ var sampleSyncStatusWithEnterpriseSyncJob  = {
                             }
                         },
                         'localId': 3,
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20150130170817,
                         'syncCompleted': true
                     }
@@ -627,12 +627,12 @@ var sampleSyncStatusWithEnterpriseSyncJob  = {
                 'jpid': 'bd9ce7f7-81c8-49b8-b8f3-1ec4ac09e7d2',
                 'patientIdentifier': {
                     'type': 'pid',
-                    'value': '9E7A;3'
+                    'value': 'SITE;3'
                 },
                 'rootJobId': '1',
                 'status': 'started',
                 'timestamp': '1423257478447',
-                'type': 'vista-9E7A-subscribe-request'
+                'type': 'vista-SITE-subscribe-request'
             },
             {
                 'jobId': '3',
@@ -681,5 +681,5 @@ var sampleSyncStatusWithEnterpriseSyncJob  = {
 
 var expectedGetVistASitesRetObj = {
     'empty' : [],
-    'sample': ['9E7A','C877','DOD','HDR']
+    'sample': ['SITE','SITE','DOD','HDR']
 };

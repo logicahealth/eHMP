@@ -36,22 +36,22 @@ describe('solr-appointment-xform.js', function() {
                 'localId': 'A;3000406.15;32',
                 'locationDisplayName': 'Primary Care',
                 'locationName': 'PRIMARY CARE',
-                'locationUid': 'urn:va:location:9E7A:32',
+                'locationUid': 'urn:va:location:SITE:32',
                 'patientClassCode': 'urn:va:patient-class:IMP',
                 'locationOos': false,
                 'patientClassName': 'Inpatient',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'providers': [{
                     'primary': false,
                     'providerDisplayName': 'Provider,Ten',
                     'providerName': 'PROVIDER,TEN',
-                    'providerUid': 'urn:va:user:9E7A:10',
+                    'providerUid': 'urn:va:user:SITE:10',
                     'summary': 'EncounterProvider{uid=\'\'}'
                 }, {
                     'primary': true,
                     'providerDisplayName': 'Provider,Fifteen',
                     'providerName': 'PROVIDER,FIFTEEN',
-                    'providerUid': 'urn:va:user:9E7A:998',
+                    'providerUid': 'urn:va:user:SITE:998',
                     'summary': 'EncounterProvider{uid=\'\'}'
                 }],
                 'reason': 'TheReason',
@@ -68,7 +68,7 @@ describe('solr-appointment-xform.js', function() {
                 'typeCode': '9',
                 'typeDisplayName': 'Regular',
                 'typeName': 'REGULAR',
-                'uid': 'urn:va:appointment:9E7A:8:A;3000406.15;32'
+                'uid': 'urn:va:appointment:SITE:8:A;3000406.15;32'
             };
             var solrRecord = xformer(vprRecord, log);
 

@@ -6,7 +6,7 @@ var xformUtils = require(global.VX_UTILS + 'xform-utils');
 var moment = require('moment');
 var nc = require('namecase');
 
-function dodProblemToVPR(dodRecord, edipi) {
+function dodProblemToVPR(logger, dodRecord, edipi) {
 	var vprProblems = {};
 
 	vprProblems.codes = xformUtils.transformCodes(dodRecord.codes);

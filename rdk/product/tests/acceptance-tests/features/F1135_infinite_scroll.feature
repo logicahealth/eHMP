@@ -3,8 +3,8 @@ Feature: F1135 - Improve Document applet data load times with server side Pagina
 
 @US17130 @TC6568
 Scenario: Verify server side infinite scroll
-  Given a patient with pid "9E7A;8" has been synced through the RDK API
-  And the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  Given a patient with pid "SITE;8" has been synced through the RDK API
+  And the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -15,7 +15,7 @@ Scenario: Verify server side infinite scroll
   And the document results itemsPerPage are less then or equal to 40
   And the document results contain a nextStartIndex field
   
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8" starting with the nextStartIndex
+  When the client requests sorted DOCUMENTS for the patient "SITE;8" starting with the nextStartIndex
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |

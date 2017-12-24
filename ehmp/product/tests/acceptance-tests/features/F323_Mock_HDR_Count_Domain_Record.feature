@@ -6,7 +6,7 @@ Feature: F323 syncing data to check the domains
 
 @count_hdr
 Scenario: Client request sync for patient and get all domain records in Mock HDR
-	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "HDR" site(s)
+	When a patient with pid "SITE;227" has been synced through VX-Sync API for "HDR" site(s)
 	Then the sync status results for "HDR" site(s) contain
 	  | Domain       | SyncComplete |
       | Allergy      |     true     |
@@ -28,7 +28,7 @@ Scenario: Client request sync for patient and get all domain records in Mock HDR
 
 @count_vler
 Scenario: Client request sync for patient and get all domain records in VLER
-	When a patient with pid "9E7A;227" has been synced through VX-Sync API for "VLER" site(s)
+	When a patient with pid "SITE;227" has been synced through VX-Sync API for "VLER" site(s)
 	Then the sync status results for "VLER" site(s) contain
 	  | Domain       | SyncComplete |
       | Vlerdocument |     true     |

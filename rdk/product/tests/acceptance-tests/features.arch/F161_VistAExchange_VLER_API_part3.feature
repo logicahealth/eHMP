@@ -6,8 +6,8 @@ Feature: F161 - VistA Exchange - VLER API
 @F161_3_fhir_vler_api @fhir @unstable @10104V248233
 Scenario: For a patient a collection of data is made successfully
 	Given a patient with "data" in multiple VistAs
-	And a patient with pid "9E7A;229" has been synced through the RDK API
-	When the client requests data for the patient "9E7A;229" in VPR format in encounter "urn:va:visit:9E7A:229:1462"
+	And a patient with pid "SITE;229" has been synced through the RDK API
+	When the client requests data for the patient "SITE;229" in VPR format in encounter "urn:va:visit:SITE:229:1462"
 	Then a successful response is returned
 	Then in section "problems" the response contains 17 "problem"s
 	Then in section "encounters" the response contains 0 "encounter"s
@@ -29,10 +29,10 @@ Scenario: For a patient a collection of data is made successfully
 @F161_4_fhir_vler_api @fhir @unstable @5123456789V027402
 Scenario: Client can break the glass when requesting data in FHIR format for a sensitive patient
 	Given a patient with "data" in multiple VistAs
-	And a patient with pid "9E7A;18" has been synced through the RDK API
-	When the client requests data for that sensitive patient "9E7A;18" in encounter "urn:va:visit:9E7A:8:6472"
+	And a patient with pid "SITE;18" has been synced through the RDK API
+	When the client requests data for that sensitive patient "SITE;18" in encounter "urn:va:visit:SITE:8:6472"
 	Then a permanent redirect response is returned
-	When the client breaks glass and repeats a request for data for that patient "9E7A;18" in encounter "urn:va:visit:9E7A:8:6472"
+	When the client breaks glass and repeats a request for data for that patient "SITE;18" in encounter "urn:va:visit:SITE:8:6472"
 	Then a successful response is returned
 	And the results contain
 		| name               | value             |
@@ -41,8 +41,8 @@ Scenario: Client can break the glass when requesting data in FHIR format for a s
 @F161_5_fhir_vler_api @fhir @unstable @10110V004877
 Scenario: For a patient a collection of data is made successfully
 	Given a patient with "data" in multiple VistAs
-	And a patient with pid "9E7A;8" has been synced through the RDK API
-	When the client requests data for the patient "9E7A;8" in VPR format in encounter "urn:va:visit:9E7A:8:1845"
+	And a patient with pid "SITE;8" has been synced through the RDK API
+	When the client requests data for the patient "SITE;8" in VPR format in encounter "urn:va:visit:SITE:8:1845"
 	Then a successful response is returned
 	Then in section "planOfCare" the response contains 14 "encounter"s
 		And the results contain
@@ -56,14 +56,14 @@ Scenario: For a patient a collection of data is made successfully
 		| planOfCare.encounter.dateTime            | 200004061500                                  |
 		| planOfCare.encounter.stopCodeName        | PRIMARY CARE/MEDICINE                         |
 		| planOfCare.encounter.appointmentStatus   | NO ACTION TAKEN                                     |
-		| planOfCare.encounter.locationUid         | urn:va:location:9E7A:32                       |
+		| planOfCare.encounter.locationUid         | urn:va:location:SITE:32                       |
 		| planOfCare.encounter.locationName        | PRIMARY CARE                                  |
 		| planOfCare.encounter.shortLocationName   | PCM                                           |
 		| planOfCare.encounter.locationDisplayName | Primary Care                                  |
 		| planOfCare.encounter.kind                | Visit                                         |
-		| planOfCare.encounter.uid                 | urn:va:appointment:9E7A:8:A;3000406.15;32     |
+		| planOfCare.encounter.uid                 | urn:va:appointment:SITE:8:A;3000406.15;32     |
 		| planOfCare.encounter.summary             | PRIMARY CARE/MEDICINE                         |
-		| planOfCare.encounter.pid                 | 9E7A;8                                        |
+		| planOfCare.encounter.pid                 | SITE;8                                        |
 		| planOfCare.encounter.localId             | A;3000406.15;32                               |
 		| planOfCare.encounter.typeName            | REGULAR                                       |
 		| planOfCare.encounter.typeDisplayName     | Regular                                       |
@@ -88,30 +88,30 @@ Scenario: For a patient a collection of data is made successfully
 		| planOfCare.order.providerDisplayName       | Provider,Twohundredninetyseven                        |
 		| planOfCare.order.service                   | RA                                                    |
 		| planOfCare.order.kind                      | Radiology                                             |
-		| planOfCare.order.uid                       | urn:va:order:9E7A:8:11077                             |
+		| planOfCare.order.uid                       | urn:va:order:SITE:8:11077                             |
 		| planOfCare.order.summary                   | CONTAINS KNEE 2 VIEWS LEFT                            |
-		| planOfCare.order.pid                       | 9E7A;8                                                |
+		| planOfCare.order.pid                       | SITE;8                                                |
 		| planOfCare.order.localId                   | 11077                                                 |
 		| planOfCare.order.locationName              | 5 WEST PSYCH                                          |
 		| planOfCare.order.oiCode                    | urn:va:oi:2748                                        |
 		| planOfCare.order.entered                   | 199912151008                                          |
 		| planOfCare.order.statusCode                | urn:va:order-status:actv                              |
 		| planOfCare.order.statusVuid                | urn:va:vuid:4500659                                   |
-		| planOfCare.order.providerUid               | urn:va:user:9E7A:11712                                |
+		| planOfCare.order.providerUid               | urn:va:user:SITE:11712                                |
 		| planOfCare.order.providerName              | PROVIDER,TWOHUNDREDNINETYSEVEN                        |
-		| planOfCare.order.locationUid               | urn:va:location:9E7A:66                               |
-		| planOfCare.order.results.uid               | urn:va:image:9E7A:8:7008784.8989-1                    |
+		| planOfCare.order.locationUid               | urn:va:location:SITE:66                               |
+		| planOfCare.order.results.uid               | urn:va:image:SITE:8:7008784.8989-1                    |
 		| planOfCare.order.clinicians.name           | PROVIDER,TWOHUNDREDNINETYSEVEN                        |
 		| planOfCare.order.clinicians.role           | S                                                     |
 		| planOfCare.order.clinicians.signedDateTime | 199912151008                                          |
-		| planOfCare.order.clinicians.uid            | urn:va:user:9E7A:11712                                |
+		| planOfCare.order.clinicians.uid            | urn:va:user:SITE:11712                                |
 		Then in section "results" the response contains 2 "document"s
 		And the results contain
 		#Resutls - imaging
 		| name                                 | value                                 |
-		| results.document.authorUid           | urn:va:user:C877:11712                |
+		| results.document.authorUid           | urn:va:user:SITE:11712                |
 		| results.document.authorDisplayName   | Provider,Twohundredninetyseven        |
-		| results.document.signerUid           | urn:va:user:C877:11597                |
+		| results.document.signerUid           | urn:va:user:SITE:11597                |
 		| results.document.signerDisplayName   | Provider,Prf                          |
 		| results.document.signedDateTime      | 199901051157                          |
 		| results.document.kind                | Radiology Report                      |
@@ -125,9 +125,9 @@ Scenario: For a patient a collection of data is made successfully
 		| results.document.localTitle          | VAS-CAROTID DUPLEX SCAN               |
 		| results.document.nationalTitle.name  | RADIOLOGY REPORT                      |
 		| results.document.nationalTitle.vuid  | urn:va:vuid:4695068                   |
-		| results.document.uid                 | urn:va:document:C877:8:7018790.8861-1 |
+		| results.document.uid                 | urn:va:document:SITE:8:7018790.8861-1 |
 		| results.document.summary             | VAS-CAROTID DUPLEX SCAN               |
-		| results.document.pid                 | C877;8                                |
+		| results.document.pid                 | SITE;8                                |
 		| results.document.author              | PROVIDER,TWOHUNDREDNINETYSEVEN        |
 		| results.document.signer              | PROVIDER,PRF                          |
 

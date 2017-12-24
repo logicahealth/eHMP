@@ -13,7 +13,7 @@ var inputValue = {
             'specimen': 'RUL NEEDLE BX',
             'comment': '',
             'groupName': 'CH 1126 10',
-            'groupUid': 'urn:va:accession:B362:737:CH;7008872.87699',
+            'groupUid': 'urn:va:accession:SITE:737:CH;7008872.87699',
             'displayName': '',
             'result': 'Report: 36 YEAR OLD WITH AIDS AND RIGHT UPPER LOBE LUNG MASS.\n8 Smears.\nCLASS O     BLOODY, DEGENERATED MATERIAL UNSATISFACTORY FOR EVALUATION.',
             'kind': 'Pathology',
@@ -22,7 +22,7 @@ var inputValue = {
             'qualifiedName': 'RUL NEEDLE BX',
             'uid': 'urn:va:lab:DOD:0000000010:1000001189',
             'summary': 'RUL NEEDLE BX Report: 36 YEAR OLD WITH AIDS AND RIGHT UPPER LOBE LUNG MASS.\n8 Smears.\nCLASS O     BLOODY, DEGENERATED MATERIAL UNSATISFACTORY FOR EVALUATION.',
-            'pid': '9E7A;100022',
+            'pid': 'SITE;100022',
             'typeCode': 'urn:va:ien:60:548:71',
             'localId': '^AP',
             'lnccodes': [],
@@ -30,14 +30,14 @@ var inputValue = {
             'organizerType': 'accession',
             'statusName': 'completed',
         }, {
-            'uid': 'urn:va:lab:B362:737:CH;7008872.87699;29',
+            'uid': 'urn:va:lab:SITE:737:CH;7008872.87699;29',
             'summary': 'MAGNESIUM (BLOOD) 2.3',
-            'pid': 'B362;737',
+            'pid': 'SITE;737',
             'localId': 'CH;7008872.87699;29',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
             'groupName': 'CH 1126 10',
-            'groupUid': 'urn:va:accession:B362:737:CH;7008872.87699',
+            'groupUid': 'urn:va:accession:SITE:737:CH;7008872.87699',
             'categoryCode': 'urn:va:lab-category:CH',
             'categoryName': 'Laboratory',
             'observed': '199911261230',
@@ -71,7 +71,7 @@ var inputValue = {
             }],
             'qualifiedName': 'MAGNESIUM (BLOOD)',
             'statusCode': 'urn:va:lab-status:completed',
-            'orderUid': 'urn:va:order:B362:737:11000',
+            'orderUid': 'urn:va:order:SITE:737:11000',
             'statusName': 'completed',
             'displayOrder': 1,
             'typeId': 201,
@@ -82,7 +82,7 @@ var inputValue = {
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
             'groupName': 'CH 0323 2445',
-            'groupUid': 'urn:va:accession:9E7A:253:CH;6899693.879999',
+            'groupUid': 'urn:va:accession:SITE:253:CH;6899693.87PORT',
             'categoryCode': 'urn:va:lab-category:CH',
             'categoryName': 'Laboratory',
             'observed': '201003051200',
@@ -101,10 +101,10 @@ var inputValue = {
             'abnormal': false,
             'micro': false,
             'qualifiedName': 'HDL (SERUM)',
-            'uid': 'urn:va:lab:9E7A:253:CH;6899693.879999;80',
+            'uid': 'urn:va:lab:SITE:253:CH;6899693.87PORT;80',
             'summary': 'HDL (SERUM) 58 MG/DL',
-            'pid': '9E7A;253',
-            'localId': 'CH;6899693.879999;80',
+            'pid': 'SITE;253',
+            'localId': 'CH;6899693.87PORT;80',
             'typeName': 'HDL',
             'lnccodes': ['urn:va:ien:60:244:72'],
             'statusCode': 'urn:va:lab-status:completed',
@@ -113,14 +113,14 @@ var inputValue = {
             'typeId': 244,
             'sample': ''
         }, {
-            'uid': 'urn:va:lab:B362:737:MI;7009789.889352',
+            'uid': 'urn:va:lab:SITE:737:MI;7009789.889352',
             'summary': 'CULTURE & SUSCEPTIBILITY (URINE)',
-            'pid': 'B362;737',
+            'pid': 'SITE;737',
             'localId': 'MI;7009789.889352',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
             'groupName': 'MI 99 2',
-            'groupUid': 'urn:va:accession:B362:737:MI;7009789.889352',
+            'groupUid': 'urn:va:accession:SITE:737:MI;7009789.889352',
             'categoryCode': 'urn:va:lab-category:MI',
             'categoryName': 'Microbiology',
             'observed': '199902091106',
@@ -230,7 +230,7 @@ var inputValue = {
             }],
             'results': [{
                 'localTitle': 'LR MICROBIOLOGY REPORT',
-                'resultUid': 'urn:va:document:B362:737:MI;7009789.889352',
+                'resultUid': 'urn:va:document:SITE:737:MI;7009789.889352',
                 'uid': 'MI;7009789.889352'
             }],
             'statusName': 'completed',
@@ -238,10 +238,10 @@ var inputValue = {
             'sample': 'URINE',
             'bactRemarks': 'PROVIDER NOTIFIED '
         }, {
-            'uid': 'urn:va:lab:B362:1:CY;7039672.99999',
+            'uid': 'urn:va:lab:SITE:1:CY;7039672.PORT9',
             'summary': 'PAP SMEAR',
-            'pid': 'B362;1',
-            'localId': 'CY;7039672.99999',
+            'pid': 'SITE;1',
+            'localId': 'CY;7039672.PORT9',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
             'groupName': 'CY 96 4',
@@ -258,14 +258,14 @@ var inputValue = {
             'results': [{
                 'localTitle': 'LR CYTOPATHOLOGY REPORT',
                 'nationalTitle': 'LABORATORY NOTE',
-                'resultUid': 'urn:va:document:B362:1:CY;7039672.99999',
-                'uid': 'urn:va:lab:B362:1:CY;7039672.99999;0'
+                'resultUid': 'urn:va:document:SITE:1:CY;7039672.PORT9',
+                'uid': 'urn:va:lab:SITE:1:CY;7039672.PORT9;0'
             }],
             'statusName': 'completed'
         }, {
-            'uid': 'urn:va:lab:B362:1:SP;7049482',
+            'uid': 'urn:va:lab:SITE:1:SP;7049482',
             'summary': 'WART',
-            'pid': 'B362;1',
+            'pid': 'SITE;1',
             'localId': 'SP;7049482',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
@@ -291,14 +291,14 @@ var inputValue = {
             'results': [{
                 'localTitle': 'LR SURGICAL PATHOLOGY REPORT',
                 'nationalTitle': 'LABORATORY NOTE',
-                'resultUid': 'urn:va:document:B362:1:SP;7049482',
-                'uid': 'urn:va:lab:B362:1:SP;7049482;0'
+                'resultUid': 'urn:va:document:SITE:1:SP;7049482',
+                'uid': 'urn:va:lab:SITE:1:SP;7049482;0'
             }],
             'statusName': 'completed'
         }, {
-            'uid': 'urn:va:lab:B362:1:EM;7049691',
+            'uid': 'urn:va:lab:SITE:1:EM;7049691',
             'summary': 'WART',
-            'pid': 'B362;1',
+            'pid': 'SITE;1',
             'localId': 'EM;7049691',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
@@ -324,8 +324,8 @@ var inputValue = {
             'results': [{
                 'localTitle': 'LR ELECTRON MICROSCOPY REPORT',
                 'nationalTitle': 'LABORATORY NOTE',
-                'resultUid': 'urn:va:document:B362:1:EM;7049691',
-                'uid': 'urn:va:lab:B362:1:EM;7049691;0'
+                'resultUid': 'urn:va:document:SITE:1:EM;7049691',
+                'uid': 'urn:va:lab:SITE:1:EM;7049691;0'
             }],
             'statusName': 'completed'
         }]

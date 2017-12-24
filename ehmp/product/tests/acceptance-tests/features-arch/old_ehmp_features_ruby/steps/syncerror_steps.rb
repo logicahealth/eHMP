@@ -1,6 +1,6 @@
 class SiteInitialize
   def site_initialize
-    define_source_site = { 'PANORAMA' => '9E7A', 'KODAK' => 'C877', 'DOD' => 'DOD', 'DAS' => 'DAS', 'HDR' => 'HDR', 'VLER' => 'VLER' }
+    define_source_site = { 'PANORAMA' => 'SITE', 'KODAK' => 'SITE', 'DOD' => 'DOD', 'DAS' => 'DAS', 'HDR' => 'HDR', 'VLER' => 'VLER' }
     return define_source_site
   end
 end

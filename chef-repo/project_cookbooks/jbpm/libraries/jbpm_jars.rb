@@ -24,12 +24,19 @@ end
 
 def jar_deployed?(artifactId, version, user, password)
   deployed_jars(user, password).each{ |unit|
-    # return true if unit["artifactId"] == artifactId && unit["version"] == version && unit["status"] == "DEPLOYED"
-    if (unit.key?("deployment-unit")) # true if "deployment-unit" is defined - BPM v6.3, false fro BPM v6.1
-      return true if unit["deployment-unit"]["artifactId"] == artifactId && unit["deployment-unit"]["version"] == version && unit["deployment-unit"]["status"] == "DEPLOYED"
+    # "deployment-unit" is defined in jBPM v6.3, but not in jBPM v6.1
+    if (unit.key?("deployment-unit")) 
+      artifact_id = unit["deployment-unit"]["artifactId"]
+      jar_version = unit["deployment-unit"]["version"]
+      status = unit["deployment-unit"]["status"]
     else
-      return true if unit["artifactId"] == artifactId && unit["version"] == version && unit["status"] == "DEPLOYED"
+      artifact_id = unit["artifactId"]
+      jar_version = unit["version"]
+      status = unit["status"]
     end
+
+    return true if artifact_id == artifactId && jar_version == version && status == "DEPLOYED"
+
   }
   false
 end

@@ -8,7 +8,7 @@ Feature: F323  Normalization of Allergens Data
 @terminology_allergies @VPR @observed_historical 
 Scenario: An authorized user can access VA Allergens Data and see standardized UMLS CUI values when defined through VPR API
 	Given a patient with "allergies" in multiple VistAs
-	And a patient with pid "9E7A;100022" has been synced through VX-Sync API for "9E7A" site(s)
+	And a patient with pid "SITE;100022" has been synced through VX-Sync API for "SITE" site(s)
 	When the client requests "allergies" for the patient "5000000341V359724" in VPR format 
     Then the VPR results contain "allergies" terminology from "(VUID to UMLS CUI (VA), CHCS IEN to UMLS CUI (DoD))"    
 	  | field         | value       				   |
@@ -38,7 +38,7 @@ Scenario: An authorized user can access VA Allergens Data and see standardized U
 @terminology_allergies @VPR @observed_historical 
 Scenario: An authorized user can access DoD Allergens Data and see standardized UMLS CUI values when defined through VPR API
 	Given a patient with "allergies" in multiple VistAs
-	And a patient with pid "9E7A;8" has been synced through VX-Sync API for "DoD" site(s)
+	And a patient with pid "SITE;8" has been synced through VX-Sync API for "DoD" site(s)
 	When the client requests "allergies" for the patient "10110V004877" in VPR format 
     Then the VPR results contain "allergies" terminology from "(VUID to UMLS CUI (VA), CHCS IEN to UMLS CUI (DoD))"
       | field         | value                          |
@@ -90,7 +90,7 @@ Scenario: An authorized user can access DoD Allergens Data and see standardized 
 @terminology_allergies1 @VPR @historical 
 Scenario: An authorized user can access VA and DoD Allergens Data and see standardized UMLS CUI values when defined through VPR API
 	Given a patient with "allergies" in multiple VistAs
-	And a patient with pid "9E7A;100716" has been synced through VX-Sync API for "9E7A;DoD" site(s)
+	And a patient with pid "SITE;100716" has been synced through VX-Sync API for "SITE;DoD" site(s)
 	When the client requests "allergies" for the patient "5000000217V519385" in VPR format 
     Then the VPR results contain "allergies" terminology from "(VUID to UMLS CUI (VA), CHCS IEN to UMLS CUI (DoD))"
       | field         | value                          |

@@ -15,7 +15,7 @@ Get the current user session
                     "disabled": true,
                     "divisionSelect": true,
                     "duz": {
-                        "9E7A": "ssss"
+                        "SITE": "ssss"
                     },
                     "facility": "ssss",
                     "firstname": "ssss",

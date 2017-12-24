@@ -1,5 +1,4 @@
 VPRJFPS ;SLC/KCM -- Set/Kill Indexes for Medications
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 VALID(MED) ; Return true if required fields for indexing are present
  I '$L($G(MED("facility"))) Q 0
@@ -44,6 +43,9 @@ CWAD(DOC) ; Return true if CWAD document
  S S=$G(DOC("status"))
  I ((C="C")!(C="D")!(C="W")),((S="COMPLETED")!(S="AMENDED")) Q 1
  Q 0
+CWADNRMVD(DOC) ; Return true if CWAD document and not removed
+ I $G(DOC("removed"))="true" Q 0
+ Q $$CWAD(.DOC)
 PRNTDOCS(DOC) ; Return if the docment does NOT have a child, ensuring this index only contains parent documents
  I $D(DOC("parentUid")) Q 0
  Q 1
@@ -78,6 +80,9 @@ PTSYNCSTATUS(STAT) ; return true if syncstatus object has forOperational=false
  Q 0
 TASKPND(TASK) ;
  I $G(TASK("completed"))="true" Q 0
+ Q 1
+NRMVD(DOC) ; return true if not removed
+ I $G(DOC("removed"))="true" Q 0
  Q 1
 PACT(PROB) ; return true if active problem and not removed
  I $G(PROB("removed"))="true" Q 0

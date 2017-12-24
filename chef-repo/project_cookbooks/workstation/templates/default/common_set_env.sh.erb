@@ -1,0 +1,5 @@
+#!/bin/sh
+
+if uname -a | grep -q "Darwin"; then
+  export JAVA_HOME=<%= @java_home %>
+fi

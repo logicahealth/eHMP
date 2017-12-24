@@ -45,32 +45,69 @@ ehmp_deps = parse_dependency_versions "ehmp_provision"
 machine_ident = ENV['VXSYNC_IDENT'] || "vxsync"
 db_item = ENV['VXSYNC_DB_ITEM'] || ENV['VXSYNC_IDENT']
 
+vxsync_attributes = {
+  source: vxsync_source,
+  clear_logs: node[:machine][:driver] == "aws"
+}
+
+primary_vxsync_client = true
 unless db_item.nil?
   db_attributes = Chef::EncryptedDataBagItem.load("vxsync_env", db_item, node[:common][:data_bag_string])
   node.override[:machine] = Chef::Mixin::DeepMerge.hash_only_merge(node[:machine], db_attributes["machine"]) unless db_attributes["machine"].nil?
   node.override[:ehmp_provision][:vxsync][:vxsync_applications] = db_attributes["vxsync"]["vxsync_applications"] unless (db_attributes["vxsync"].nil? || db_attributes["vxsync"]["vxsync_applications"].nil?)
+
+  # if we are using a db_item, deployed machine is not primary vxsync client unless it has the primary_vxsync_client attribute set
+  if !(node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client") && db_attributes["vxsync"]["primary_vxsync_client"] == true)
+    primary_vxsync_client = false
+  end
+
+  # if the vxsync machine only contains vista and not client, set port to 5002
+  if node[:ehmp_provision][:vxsync][:vxsync_applications] == ["vista"]
+    vxsync_attributes[:beanstalk_processes] = {
+      :jobrepo => {
+        :config => {
+          :port => 5002
+        }
+      }
+    }
+  end
+
+  vxsync_attributes = Chef::Mixin::DeepMerge.hash_only_merge(vxsync_attributes, db_attributes["vxsync"])
+  client_attributes = db_attributes["vxsync_client"]
+  vista_attributes = db_attributes["vxsync_vista"]
 end
 
-include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client').nil? && node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
+if ENV.has_key?('INCLUDE_ASU')
+  include_asu = true
+else
+  include_asu = find_optional_nodes_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client') == [] && primary_vxsync_client
+end
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
-r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:simulated_ssh_driver].nil? && (node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh")
+r_list << (node[:simulated_ssh_driver] ? "recipe[role_cookbook::aws@#{machine_deps["role_cookbook"]}]" : "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]")
 node[:ehmp_provision][:vxsync][:vxsync_applications].each { |app| r_list << "role[vxsync_#{app}]" }
+r_list << "role[primary_vxsync_client]" if primary_vxsync_client
+r_list << "role[vxsync_error_processor]" if primary_vxsync_client
 r_list << "role[asu]" if include_asu
 if ENV.has_key?("RESET_SYNC")
+  node[:ehmp_provision][:vxsync][:vxsync_applications].each { |app| r_list << "recipe[vxsync_#{app}::reset_sync@#{ehmp_deps["vxsync_#{app}"]}]" }
   r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
   r_list << "recipe[asu::default@#{ehmp_deps["asu"]}]" if include_asu
 else
   r_list << "recipe[vxsync::clear_logs@#{ehmp_deps["vxsync"]}]" if node[:machine][:driver] == "aws"
   r_list << "recipe[vxsync@#{ehmp_deps["vxsync"]}]"
+  r_list << "recipe[beanstalk@#{ehmp_deps["beanstalk"]}]"
+  node[:ehmp_provision][:vxsync][:vxsync_applications].each { |app| r_list << "recipe[vxsync_#{app}@#{ehmp_deps["vxsync_#{app}"]}]" }
+  r_list << "recipe[osync@#{ehmp_deps["osync"]}]" if node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
+  r_list << "recipe[soap_handler@#{ehmp_deps["soap_handler"]}]"
   r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
   r_list << "recipe[asu::install@#{ehmp_deps["asu"]}]" if include_asu
   r_list << "recipe[asu::uninstall@#{ehmp_deps["asu"]}]" unless include_asu
 end
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
-r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh" && node[:simulated_ssh_driver].nil?
 
 if ENV.has_key?("NO_RESET")
   reset = false
@@ -85,7 +122,7 @@ if node[:machine][:driver] == "ssh"
   admissions_hash = {}
 else
   appointment_scheduling_hash = {
-    :'9E7A,C877' => {
+    :'SITE,SITE' => {
       :enabled => true,
       :weekday => '*',
       :hour => '3',
@@ -94,12 +131,12 @@ else
     }
   }
   admissions_hash = {
-    :'9E7A,C877' => {
+    :'SITE,SITE' => {
       :enabled => true,
       :minute => "30",
       :hour => "0",
       :weekday => "*",
-      :log_file => "osync-admission-C877-9E7A.log"
+      :log_file => "osync-admission-SITE-SITE.log"
     }
   }
 end
@@ -127,6 +164,7 @@ machine machine_name do
           :keys => [
             node[:machine][:production_settings][machine_ident.to_sym][:ssh_key]
           ],
+          :user_known_hosts_file => '/dev/null'
         },
         :options => {
           :prefix => 'sudo ',
@@ -136,6 +174,7 @@ machine machine_name do
     }
   }
   attributes(
+    machine_ident: machine_ident,
     stack: node[:machine][:stack],
     nexus_url: node[:common][:nexus_url],
     data_bag_string: node[:common][:data_bag_string],
@@ -143,10 +182,9 @@ machine machine_name do
       reset: reset
     },
     db_item: db_item,
-    vxsync: {
-      source: vxsync_source,
-      clear_logs: node[:machine][:driver] == "aws"
-    },
+    vxsync: vxsync_attributes,
+    vxsync_client: client_attributes,
+    vxsync_vista: vista_attributes,
     soap_handler: {
       source: soap_handler_source
     },
@@ -159,8 +197,12 @@ machine machine_name do
     osync: {
       appointment_scheduling: appointment_scheduling_hash,
       admissions: admissions_hash
+    },
+    yum_wrapper: {
+      vistacore: {
+        reponame: node[:machine][:staging]
+      }
     }
-
   )
   files lazy { node[:ehmp_provision][:vxsync][:copy_files] }
   chef_environment node[:machine][:environment]

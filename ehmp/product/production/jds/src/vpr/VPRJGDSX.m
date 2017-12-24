@@ -62,7 +62,7 @@ KTALLY(OBJECT) ; Decrement a tally index
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
  S I="" F  S I=$O(VALUES(I)) Q:I=""  D
  . S TALLY=$I(@GLOBALX@("tally",IDXNAME,VALUES(I,1)),-1)
- . I @GLOBALX@("tally",IDXNAME,VALUES(I,1))=0 K ^VPRJDX("tally",IDXNAME,VALUES(I,1))
+ . I @GLOBALX@("tally",IDXNAME,VALUES(I,1))=0 K:$D(^VPRJDX("tally",IDXNAME,VALUES(I,1))) ^VPRJDX("tally",IDXNAME,VALUES(I,1))
  Q
  ;
  ; ----- Index Logic: attributes -----
@@ -99,8 +99,8 @@ KATTRIB(OBJECT) ; Kill attribute based index
  I $L(IDXMETA("review")) D
  . N REVTM
  . S REVTM=$G(@GLOBALX@("keyReview",KEY,IDXNAME)) Q:'$L(REVTM)
- . K @GLOBALX@("keyReview",KEY,IDXNAME)
- . K @GLOBALX@("review",REVTM,KEY,IDXNAME)
+ . K:$D(@GLOBALX@("keyReview",KEY,IDXNAME)) @GLOBALX@("keyReview",KEY,IDXNAME)
+ . K:$D(@GLOBALX@("review",REVTM,KEY,IDXNAME)) @GLOBALX@("review",REVTM,KEY,IDXNAME)
  ;
  I IDXMETA("levels")=0  D KA0  Q
  ;
@@ -114,25 +114,25 @@ SA0 ; unsorted list set logic
  S @GLOBALX@("attr",IDXNAME,KEY)=""
  Q
 KA0 ; unsorted list kill logic
- K @GLOBALX@("attr",IDXNAME,KEY)
+ K:$D(@GLOBALX@("attr",IDXNAME,KEY)) @GLOBALX@("attr",IDXNAME,KEY)
  Q
 SA1 ; one attribute set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S @GLOBALX@("attr",IDXNAME,VALUES(I,1),KEY,I)=""
  Q
 KA1 ; one attribute kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K @GLOBALX@("attr",IDXNAME,VALUES(I,1),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(@GLOBALX@("attr",IDXNAME,VALUES(I,1),KEY,I)) @GLOBALX@("attr",IDXNAME,VALUES(I,1),KEY,I)
  Q
 SA2 ; two attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)=""
  Q
 KA2 ; two attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(@GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)) @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),KEY,I)
  Q
 SA3 ; three attributes set logic
  S I="" F  S I=$O(VALUES(I)) Q:I=""  S @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)=""
  Q
 KA3 ; three attributes kill logic
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(@GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)) @GLOBALX@("attr",IDXNAME,VALUES(I,1),VALUES(I,2),VALUES(I,3),KEY,I)
  Q
  ;
 REVERSE ; REV index
@@ -151,5 +151,5 @@ KREVERSE(OBJECT) ; Kill a relation link index
  Q:$D(OBJECT)<10
  N VALUES,I
  D IDXVALS^VPRJCV(.OBJECT,.VALUES,.IDXMETA) Q:'$D(VALUES)
- S I="" F  S I=$O(VALUES(I)) Q:I=""  K @GLOBALX@("rev",VALUES(I,1),IDXNAME,KEY,I)
+ S I="" F  S I=$O(VALUES(I)) Q:I=""  K:$D(@GLOBALX@("rev",VALUES(I,1),IDXNAME,KEY,I)) @GLOBALX@("rev",VALUES(I,1),IDXNAME,KEY,I)
  Q

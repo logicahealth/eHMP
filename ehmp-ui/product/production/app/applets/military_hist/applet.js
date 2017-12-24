@@ -103,13 +103,31 @@ define([
             this.bindEntityEvents(this.sites, this.siteCollectionEvents);
 
             this.viewType = options.appletConfig.viewType;
+            var self = this;
             this.appletOptions = {
-                collection: this.collection,
-                onClickRow: this.onClickRow,
-                tblRowSelector: '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr',
-                toolbarOptions: {
-                    buttonTypes: ['detailsviewbutton', 'editviewbutton']
-                }
+                tileOptions: {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: function(params) {
+                                self.getDetailsModal(params.model, params.$el, self);
+                            }
+                        }, {
+                            type: 'editviewbutton',
+                            shouldShow: function() {
+                                return ADK.UserService.hasPermission('edit-military-history');
+                            }
+                        }]
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: function(params) {
+                            self.getDetailsModal(params.model, params.$el, self);
+                        }
+                    }
+                },
+                collection: this.collection
             };
 
             if (this.columnsViewType === 'expanded') {
@@ -125,13 +143,10 @@ define([
                         channelObj.model.set(model.attributes);
                         this.collectionSave(channelObj.collection || this.collection, model);
                     });
-                    this.showEditView(mockmodel);
+                    this.showEditView(mockmodel, channelObj.$el);
                 } else {
                     this.showPatientLocalityError();
                 }
-            });
-            this.listenTo(this.channel, 'detailView', function(channelObj) {
-                this.onClickRow(channelObj.model);
             });
             this.listenTo(this.channel, 'applet:refresh', this.refresh);
             this._super.initialize.apply(this, arguments);
@@ -185,10 +200,7 @@ define([
                 }, this);
             }
         },
-        onClickRow: function(model) {
-            this.getDetailsModal(model);
-        },
-        showEditView: function(model) {
+        showEditView: function(model, triggerElement) {
             var options = {
                 size: "small",
                 title: 'Edit Military History',
@@ -197,12 +209,13 @@ define([
                 steps: [{
                     view: ModalEditView,
                     viewModel: model
-                }]
+                }],
+                triggerElement: triggerElement
             };
             var workflow = new ADK.UI.Workflow(options);
             workflow.show();
         },
-        getDetailsModal: function(model) {
+        getDetailsModal: function(model, triggerElement, callbackView) {
             var detailsView = new ModalDetailsView({
                 model: model
             });
@@ -212,9 +225,10 @@ define([
                     size: "medium",
                     title: model.get('displayName'),
                     keyboard: true,
-                    nextPreviousCollection: this.collection
+                    nextPreviousCollection: this.collection,
+                    triggerElement: triggerElement
                 },
-                callbackView: this
+                callbackView: callbackView || this
 
             });
             modalView.show();
@@ -259,7 +273,7 @@ define([
 
             // Get the pid param in the same way as ADK.PatientRecordService.fetchCollection does
             collection.url = ADK.ResourceService.buildUrl('patient-meta-edit', {
-                pid: patient.get('pid') || patient.get('icn') || patient.get('id') || "",
+                pid: patient.getIdentifier(),
                 _ack: isAcknowledged
             });
             collection.sync('update', collection, {

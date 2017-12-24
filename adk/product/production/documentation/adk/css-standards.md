@@ -10,7 +10,7 @@ Standards for creating and maintaining scalable CSS
 
 <p>Applet specific sass files can be found inside the individual applet sass folder. These get combined, compressed, and compiled into the applets.scss and applets.css files.</p>
 
-```JavaScript
+```
 // Example paths to individual applet sass
 /Projects/vistacore/ehmp-ui/product/production/app/applets/encounters/assets/sass/styles.scss
 /Projects/vistacore/ehmp-ui/product/production/app/applets/addOrder/assets/sass/styles.scss
@@ -58,7 +58,7 @@ For styles such as float/text align right/left, please review <a href="http://ge
 
 **Example of Helper Classes**
 <br />To style the default button, it requires both _btn_ and _btn-default_ (see button documentation below)
-```JavaScript
+```HTML
 // btn-sm is a local helper class 
 // button component based located:
 // /Projects/vistacore/adk/product/production/_assets/sass/partials/ui-components/_buttons.scss
@@ -74,20 +74,21 @@ For styles such as float/text align right/left, please review <a href="http://ge
 ### Global Helper Classes Location  ###
 **Helper classes are located in ADK, and are available to be used in both ADK and eHMP-UI** <br />
 Path:
-```JavaScript
+```
 /Projects/vistacore/adk/product/production/_assets/sass/partials/adk/helper-classes.scss
 ```
 
 <br />
 ### Available Global Classes ###
 **To view the _helper-classes.scss_ sass CSS compiled file, below is the path: (you may need to 'prettify' the compiled code** <br />
-```JavaScript
+```
 /Projects/vistacore/adk/product/production/_assets/css/partials/adk/helper-classes.css
 ```
 
 **Global Helper Classes Available for:**
 * **Padding / Margin** (left-padding-sm, right-margin-lg etc)
 * **Width** (percent-width-60, pixel-width-50)
+* **Height** (pixel-height-60, max-height-lg)
 * **Font Size** (size-font-12, size-font-14)
 * **Font Colors** (color-pure-white, color-primary)
 * **Background Colors** (background-color-pure-white, background-color-primary)
@@ -97,12 +98,12 @@ Path:
 
 <br /><br />
 ### Compiled Global Helper Classes  ### 
-**DO NOT USE THESE EXACT CLASSES // compiled helper-classes.css file as of 10/13/15<br /> <br /> _These class definitions are subject to change. Instead refer to the latest dev, [helper files from above](#Where-are-The-Global-Helper-Classes-Located-)._**
+**DO NOT USE THESE EXACT CLASSES // compiled utility-classes.css file as of 7/18/17<br /> <br /> _These class definitions are subject to change. Instead refer to the latest dev, [helper files from above](#Where-are-The-Global-Helper-Classes-Located-)._**
 
 
 <br />
 ### Width ###
-```JavaScript
+```CSS
 .percent-width-5 {width: 5% !important; max-width: 5% !important; min-width: 5% !important}
 .percent-width-10 {width: 10% !important; max-width: 10% !important; min-width: 10% !important}
 .percent-width-15 {width: 15% !important; max-width: 15% !important; min-width: 15% !important}
@@ -225,8 +226,120 @@ Path:
 .pixel-width-100 {width: 100px !important; max-width: 100px !important; min-width: 100px !important}
 ```
 <br />
+<br />
+### Height ###
+```CSS
+.pixel-height-0 {height: 0px !important; max-height: 0px !important; min-height: 0px !important;}
+.pixel-height-1 {height: 1px !important; max-height: 1px !important; min-height: 1px !important;}
+.pixel-height-2 {height: 2px !important; max-height: 2px !important; min-height: 2px !important;}
+.pixel-height-3 {height: 3px !important; max-height: 3px !important; min-height: 3px !important;}
+.pixel-height-4 {height: 4px !important; max-height: 4px !important; min-height: 4px !important;}
+.pixel-height-5 {height: 5px !important; max-height: 5px !important; min-height: 5px !important;}
+.pixel-height-6 {height: 6px !important; max-height: 6px !important; min-height: 6px !important;}
+.pixel-height-7 {height: 7px !important; max-height: 7px !important; min-height: 7px !important;}
+.pixel-height-8 {height: 8px !important; max-height: 8px !important; min-height: 8px !important;}
+.pixel-height-9 {height: 9px !important; max-height: 9px !important; min-height: 9px !important;}
+.pixel-height-10 {height: 10px !important; max-height: 10px !important; min-height: 10px !important;}
+.pixel-height-11 {height: 11px !important; max-height: 11px !important; min-height: 11px !important;}
+.pixel-height-12 {height: 12px !important; max-height: 12px !important; min-height: 12px !important;}
+.pixel-height-13 {height: 13px !important; max-height: 13px !important; min-height: 13px !important;}
+.pixel-height-14 {height: 14px !important; max-height: 14px !important; min-height: 14px !important;}
+.pixel-height-15 {height: 15px !important; max-height: 15px !important; min-height: 15px !important;}
+.pixel-height-16 {height: 16px !important; max-height: 16px !important; min-height: 16px !important;}
+.pixel-height-17 {height: 17px !important; max-height: 17px !important; min-height: 17px !important;}
+.pixel-height-18 {height: 18px !important; max-height: 18px !important; min-height: 18px !important;}
+.pixel-height-19 {height: 19px !important; max-height: 19px !important; min-height: 19px !important;}
+.pixel-height-20 {height: 20px !important; max-height: 20px !important; min-height: 20px !important;}
+.pixel-height-21 {height: 21px !important; max-height: 21px !important; min-height: 21px !important;}
+.pixel-height-22 {height: 22px !important; max-height: 22px !important; min-height: 22px !important;}
+.pixel-height-23 {height: 23px !important; max-height: 23px !important; min-height: 23px !important;}
+.pixel-height-24 {height: 24px !important; max-height: 24px !important; min-height: 24px !important;}
+.pixel-height-25 {height: 25px !important; max-height: 25px !important; min-height: 25px !important;}
+.pixel-height-26 {height: 26px !important; max-height: 26px !important; min-height: 26px !important;}
+.pixel-height-27 {height: 27px !important; max-height: 27px !important; min-height: 27px !important;}
+.pixel-height-28 {height: 28px !important; max-height: 28px !important; min-height: 28px !important;}
+.pixel-height-29 {height: 29px !important; max-height: 29px !important; min-height: 29px !important;}
+.pixel-height-30 {height: 30px !important; max-height: 30px !important; min-height: 30px !important;}
+.pixel-height-31 {height: 31px !important; max-height: 31px !important; min-height: 31px !important;}
+.pixel-height-32 {height: 32px !important; max-height: 32px !important; min-height: 32px !important;}
+.pixel-height-33 {height: 33px !important; max-height: 33px !important; min-height: 33px !important;}
+.pixel-height-34 {height: 34px !important; max-height: 34px !important; min-height: 34px !important;}
+.pixel-height-35 {height: 35px !important; max-height: 35px !important; min-height: 35px !important;}
+.pixel-height-36 {height: 36px !important; max-height: 36px !important; min-height: 36px !important;}
+.pixel-height-37 {height: 37px !important; max-height: 37px !important; min-height: 37px !important;}
+.pixel-height-38 {height: 38px !important; max-height: 38px !important; min-height: 38px !important;}
+.pixel-height-39 {height: 39px !important; max-height: 39px !important; min-height: 39px !important;}
+.pixel-height-40 {height: 40px !important; max-height: 40px !important; min-height: 40px !important;}
+.pixel-height-41 {height: 41px !important; max-height: 41px !important; min-height: 41px !important;}
+.pixel-height-42 {height: 42px !important; max-height: 42px !important; min-height: 42px !important;}
+.pixel-height-43 {height: 43px !important; max-height: 43px !important; min-height: 43px !important;}
+.pixel-height-44 {height: 44px !important; max-height: 44px !important; min-height: 44px !important;}
+.pixel-height-45 {height: 45px !important; max-height: 45px !important; min-height: 45px !important;}
+.pixel-height-46 {height: 46px !important; max-height: 46px !important; min-height: 46px !important;}
+.pixel-height-47 {height: 47px !important; max-height: 47px !important; min-height: 47px !important;}
+.pixel-height-48 {height: 48px !important; max-height: 48px !important; min-height: 48px !important;}
+.pixel-height-49 {height: 49px !important; max-height: 49px !important; min-height: 49px !important;}
+.pixel-height-50 {height: 50px !important; max-height: 50px !important; min-height: 50px !important;}
+.pixel-height-51 {height: 51px !important; max-height: 51px !important; min-height: 51px !important;}
+.pixel-height-52 {height: 52px !important; max-height: 52px !important; min-height: 52px !important;}
+.pixel-height-53 {height: 53px !important; max-height: 53px !important; min-height: 53px !important;}
+.pixel-height-54 {height: 54px !important; max-height: 54px !important; min-height: 54px !important;}
+.pixel-height-55 {height: 55px !important; max-height: 55px !important; min-height: 55px !important;}
+.pixel-height-56 {height: 56px !important; max-height: 56px !important; min-height: 56px !important;}
+.pixel-height-57 {height: 57px !important; max-height: 57px !important; min-height: 57px !important;}
+.pixel-height-58 {height: 58px !important; max-height: 58px !important; min-height: 58px !important;}
+.pixel-height-59 {height: 59px !important; max-height: 59px !important; min-height: 59px !important;}
+.pixel-height-60 {height: 60px !important; max-height: 60px !important; min-height: 60px !important;}
+.pixel-height-61 {height: 61px !important; max-height: 61px !important; min-height: 61px !important;}
+.pixel-height-62 {height: 62px !important; max-height: 62px !important; min-height: 62px !important;}
+.pixel-height-63 {height: 63px !important; max-height: 63px !important; min-height: 63px !important;}
+.pixel-height-64 {height: 64px !important; max-height: 64px !important; min-height: 64px !important;}
+.pixel-height-65 {height: 65px !important; max-height: 65px !important; min-height: 65px !important;}
+.pixel-height-66 {height: 66px !important; max-height: 66px !important; min-height: 66px !important;}
+.pixel-height-67 {height: 67px !important; max-height: 67px !important; min-height: 67px !important;}
+.pixel-height-68 {height: 68px !important; max-height: 68px !important; min-height: 68px !important;}
+.pixel-height-69 {height: 69px !important; max-height: 69px !important; min-height: 69px !important;}
+.pixel-height-70 {height: 70px !important; max-height: 70px !important; min-height: 70px !important;}
+.pixel-height-71 {height: 71px !important; max-height: 71px !important; min-height: 71px !important;}
+.pixel-height-72 {height: 72px !important; max-height: 72px !important; min-height: 72px !important;}
+.pixel-height-73 {height: 73px !important; max-height: 73px !important; min-height: 73px !important;}
+.pixel-height-74 {height: 74px !important; max-height: 74px !important; min-height: 74px !important;}
+.pixel-height-75 {height: 75px !important; max-height: 75px !important; min-height: 75px !important;}
+.pixel-height-76 {height: 76px !important; max-height: 76px !important; min-height: 76px !important;}
+.pixel-height-77 {height: 77px !important; max-height: 77px !important; min-height: 77px !important;}
+.pixel-height-78 {height: 78px !important; max-height: 78px !important; min-height: 78px !important;}
+.pixel-height-79 {height: 79px !important; max-height: 79px !important; min-height: 79px !important;}
+.pixel-height-80 {height: 80px !important; max-height: 80px !important; min-height: 80px !important;}
+.pixel-height-81 {height: 81px !important; max-height: 81px !important; min-height: 81px !important;}
+.pixel-height-82 {height: 82px !important; max-height: 82px !important; min-height: 82px !important;}
+.pixel-height-83 {height: 83px !important; max-height: 83px !important; min-height: 83px !important;}
+.pixel-height-84 {height: 84px !important; max-height: 84px !important; min-height: 84px !important;}
+.pixel-height-85 {height: 85px !important; max-height: 85px !important; min-height: 85px !important;}
+.pixel-height-86 {height: 86px !important; max-height: 86px !important; min-height: 86px !important;}
+.pixel-height-87 {height: 87px !important; max-height: 87px !important; min-height: 87px !important;}
+.pixel-height-88 {height: 88px !important; max-height: 88px !important; min-height: 88px !important;}
+.pixel-height-89 {height: 89px !important; max-height: 89px !important; min-height: 89px !important;}
+.pixel-height-90 {height: 90px !important; max-height: 90px !important; min-height: 90px !important;}
+.pixel-height-91 {height: 91px !important; max-height: 91px !important; min-height: 91px !important;}
+.pixel-height-92 {height: 92px !important; max-height: 92px !important; min-height: 92px !important;}
+.pixel-height-93 {height: 93px !important; max-height: 93px !important; min-height: 93px !important;}
+.pixel-height-94 {height: 94px !important; max-height: 94px !important; min-height: 94px !important;}
+.pixel-height-95 {height: 95px !important; max-height: 95px !important; min-height: 95px !important;}
+.pixel-height-96 {height: 96px !important; max-height: 96px !important; min-height: 96px !important;}
+.pixel-height-97 {height: 97px !important; max-height: 97px !important; min-height: 97px !important;}
+.pixel-height-98 {height: 98px !important; max-height: 98px !important; min-height: 98px !important;}
+.pixel-height-99 {height: 99px !important; max-height: 99px !important; min-height: 99px !important;}
+.pixel-height-100 {height: 100px !important; max-height: 100px !important; min-height: 100px !important;}
+.auto-height {height: auto !important;}
+.inherit-height {height: inherit !important;}
+.percent-height-100 {height: 100% !important;}
+.max-height-sm {max-height: 100px !important;}
+.max-height-md {max-height: 250px !important;}
+.max-height-lg {max-height: 500px !important;}
+```
+<br />
 ### Margin / Padding ###
-```JavaScript
+```CSS
 .all-margin-no {margin: 0 !important}
 .all-margin-xs {margin: 5px !important}
 .all-margin-sm {margin: 10px !important}
@@ -291,7 +404,7 @@ Path:
 ```
 <br />
 ### Flex ###
-```JavaScript
+```CSS
 .flex-width-1 {flex: 1 !important}
 .flex-width-2 {flex: 2 !important}
 .flex-width-3 {flex: 3 !important}
@@ -305,7 +418,7 @@ Path:
 ```
 <br />
 ### Text / Background Color ###
-```JavaScript
+```CSS
 .color-primary {color: #003E4F !important}
 .color-primary-light {color: #406E7B !important}
 .color-primary-lighter {color: #B8C2CC !important}
@@ -365,13 +478,13 @@ Path:
 ```
 <br />
 ### Border ###
-```JavaScript
+```CSS
 .all-border-no {border: none !important}
 .bottom-border-grey-light {border-bottom: 1px solid #ddd}
 ```
 <br />
 ### Display ###
-```JavaScript
+```CSS
 .inline-block-display {display: inline-block !important}
 .inline-display {display: inline !important}
 .block-display {display: block !important}
@@ -384,7 +497,7 @@ Path:
 ```
 <br />
 ### Font Size ###
-```JavaScript
+```CSS
 .bold-font {font-weight: bold !important}
 .font-size-12 {font-size: 12px !important}
 .font-size-14 {font-size: 14px !important}
@@ -393,7 +506,7 @@ Path:
 ```
 <br />
 ### Misc ###
-```JavaScript
+```CSS
 .high-chart-placeholder {border: 1px solid #DDDDDD;background-image: url(data:image/gif;base64,R0lGODlhIANYArMAAO3t7fPz8/z8/OHh4fn5+ejo6N7e3tTU1OXl5evr69PT09ra2tfX19DQ0MzMzP///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMwMTQgNzkuMTU2Nzk3LCAyMDE0LzA4LzIwLTA5OjUzOjAyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxNCAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozQ0IxNkZDRUYxQTYxMUU0ODVGOEY1OEM2NDJBQzY0NiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozQ0IxNkZDRkYxQTYxMUU0ODVGOEY1OEM2NDJBQzY0NiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkMxQjg0NjA5RjFBMzExRTQ4NUY4RjU4QzY0MkFDNjQ2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkMxQjg0NjBBRjFBMzExRTQ4NUY4RjU4QzY0MkFDNjQ2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva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);background-position: center center; min-height: 20px;display: block}
 .auto-overflow-y {overflow-y: scroll !important;}
 .percent-height-100 {height: 100% !important}
@@ -407,7 +520,7 @@ Path:
 ## Buttons ##
 ### How to Implement ###
 Each button element that needs to follow base styling for buttons, <b>requires at least two classes</b> for styling. 
-```JavaScript
+```HTML
 // button example below with btn and btn-default, required classes 
 // needed to display the button properly with no additional css required
 // btn-default can be changed out for other classes
@@ -441,43 +554,43 @@ This btn-default class sets default styling, different colors can be passed usin
 
 ### Incorrect Use ###
 Missing btn class
-```JavaScript
+```HTML
 <button type="button" class="btn-default" title="title">Button</button>
 ```
 Missing btn-default [or btn-primary etc.] class
-```JavaScript
+```HTML
 <button type="button" class="btn btn-sm" title="title">Button</button>
 ```
 Missing btn class
-```JavaScript
+```HTML
 <button type="button" class="btn-default btn-sm" title="title">Button</button> 
 ```
 Missing btn-default[or btn-primary etc] class
-```JavaScript
+```HTML
 <button type="button" class="btn" title="title">Button</button>
 ```
 ### Correct Use ###
 Basic default btn classes
-```JavaScript
+```HTML
 <button type="button" class="btn btn-default" title="title">Button</button>
 ```
 Small primary btn classes
-```JavaScript
+```HTML
 <button type="button" class="btn btn-primary btn-sm" title="title">Button</button>
 ```
 Large red button
-```JavaScript
+```HTML
 <button type="button" class="btn btn-danger btn-lg" title="title">Button</button> 
 ```
 Custom padding / margins using global helper classes
-```JavaScript
+```HTML
 // adding all margin of 15px, margin: 15px; to a small default button 
 <button type="button" 
 		class="btn btn-default btn-sm all-margin-lg" title="title">Button</button>
 ```
 
 #### Other examples of correct uses of btn and btn #### 
-```JavaScript
+```HTML
 //  Button States
 <button type="button" class="btn btn-default" title="title">Active</button> 
 <button type="button" class="btn btn-default active " title="title">Selected</button> 
@@ -515,7 +628,7 @@ Custom padding / margins using global helper classes
 **Our faux tables now use flex box to control the layout along with [flex-width-?](#Flex) helper classes to adjust column width based on content priority**
 
 ### Basic Example with default width of columns set to flex: 1; ###
-```JavaScript
+```HTML
 <div class="faux-table-container">
     <div class="faux-table">
         <div class="header table-row">
@@ -577,7 +690,7 @@ Custom padding / margins using global helper classes
 ```
 ### First Column Wider Example ###
 **First column cell has a helper class of flex-width-2, padding a style of flex: 2; and styling this cell to be wider that other cells in this row**
-```JavaScript
+```HTML
 <div class="faux-table-container">
     <div class="faux-table">
         <div class="header table-row">
@@ -646,7 +759,7 @@ Custom padding / margins using global helper classes
 <p>These faux-table accordion rows are styled to behave like a faux-table.</p>
 
 ### Example ###
-```JavaScript
+```HTML
 <div class="patient-info-revealed ftar-container">
     <div class="main-header">
         <div class="table-cell"><span>Provider Title</span></div>

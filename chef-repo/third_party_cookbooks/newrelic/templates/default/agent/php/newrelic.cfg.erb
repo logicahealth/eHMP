@@ -105,7 +105,7 @@ loglevel=<%= @resource.daemon_loglevel %>
 #          to use a port in the range 1-1023, the daemon must be started by
 #          the super-user. This is a fundamental OS limitation and not one
 #          imposed by the daemon itself.
-# Default: 33142
+# Default: PORT
 <% if @resource.daemon_port.nil? %>
 #port=PORT
 <% else %>
@@ -140,7 +140,7 @@ ssl=<%= @resource.daemon_ssl %>
 #          the details.
 #          This string is in the form [user[:password]]@hostname[:port] with
 #          the user, password and port fields being optional. Some examples:
-#          myusername:REDACTED
+#          myusername:USER   @IP           
 #          someuser@proxy.mydomain.com:PORT
 #          proxy.mydomain.com
 # Default: none

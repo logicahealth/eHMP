@@ -32,7 +32,7 @@ Given(/^a patient with pid "(.*?)" has been synced through VX\-Sync API for "(.*
   
   
   base_url = DefaultLogin.vx_sync_url
-  if (pid.include? "9E7A") || (pid.include? "C877")
+  if (pid.include? "SITE") || (pid.include? "SITE")
     p sync_path = "#{base_url}/sync/doLoad?pid=#{pid}"
     p status_path = "#{base_url}/sync/status?pid=#{pid}"
   else

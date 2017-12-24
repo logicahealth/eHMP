@@ -114,7 +114,7 @@ public class RulesResultsService implements RulesResultsIface {
      * @api {post} /cds-results-service/rest/invokeRulesForPatient Invoke Rule
      *      for a patient
      * @apiParamExample {json} Request-Example: { "context": { "patientId" :
-     *                  "9E7A:100816", "userId" : "1", "siteId" : "1" },
+     *                  "SITE:100816", "userId" : "1", "siteId" : "1" },
      *                  "reason":"providerInteractiveAdvice" }
      * @apiName invokeRulesForPatient
      * @apiGroup RulesResultsService

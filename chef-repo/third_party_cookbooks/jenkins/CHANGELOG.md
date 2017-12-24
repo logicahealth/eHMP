@@ -2,6 +2,32 @@
 
 This file is used to list changes made in each version of the jenkins cookbook.
 
+## 5.0.1 (2017-05-01)
+
+- Add -remoting option that is required due to [Jenkins issue](https://jenkins.io/blog/2017/04/26/security-advisory/). Attribute `['jenkins']['executor']['protocol']` has been added to allow for using the deprecated remoting option (default) or ssh/http in which attribute `['jenkins']['executor']['cli_user']` needs to be assigned.
+
+## [5.0.0](https://github.com/chef-cookbooks/jenkins/tree/v5.0.0) (2017-03-08)
+[Full Changelog](https://github.com/chef-cookbooks/jenkins/compare/v4.2.1...v5.0.0)
+
+**Improvements**
+- Add support for 2.x ([daften](https://github.com/daften))
+- Change default to stable, adding channel toggle [\#575](https://github.com/chef-cookbooks/jenkins/pull/575) ([cheeseplus](https://github.com/cheeseplus))
+- Use `dpkg_autostart` to prevent service from starting post install
+- Fix update-center.json URL
+- Fix Jenkins home dir creation on Ubuntu for package installs [\#576](https://github.com/chef-cookbooks/jenkins/pull/576) ([cheeseplus](https://github.com/cheeseplus))
+- Lots of testing and CI fixes
+
+## 4.2.1 (2017-01-18)
+
+- Fix the repo URL for RHEL based systems.
+
+## 4.2.0 (2017-01-17)
+
+- updated the jenkins url and keys for redhat in the attributes
+- Remove superfluous call ensure_update_center_present to update center
+- Allow overriding of maxopenfiles with a new attribute
+- Require the latest compat_resource
+
 ## 4.1.2 (2016-11-03)
 
 - Fix undefined java method

@@ -31,12 +31,14 @@ define([
     DocUtils,
     ImageIndicator
 ) {
-    "use strict";
+    'use strict';
+
+    var channel = ADK.Messaging.getChannel('documents');
 
     var FullScreenColumns = [{
         name: 'dateDisplay',
+        flexWidth: 'flex-width-date',
         label: 'Date',
-        hoverTip: 'documents_date',
         groupKey: function(item) {
             // TODO: not doing anything, add backup attribute or remove "if" block
             if (item.referenceDateTime) {
@@ -51,32 +53,30 @@ define([
         }
     }, {
         name: 'localTitle',
+        flexWidth: 'flex-width-2',
         label: 'Description',
-        hoverTip: 'documents_description'
+        bodyTemplate: Handlebars.compile('{{localTitle}} <strong>{{addendumIndicator}}</strong>')
     }, {
         name: 'kind',
         label: 'Type',
-        hoverTip: 'documents_type',
         sortKeys: {
             asc: 'kind asc, dateTime desc',
             desc: 'kind desc, dateTime desc'
         }
     }, {
         name: 'authorDisplayName',
-        label: 'Author/Verifier',
-        hoverTip: 'documents_enteredby'
+        label: 'Author/Verifier'
     }, {
         name: 'facilityName',
         label: 'Facility',
-        hoverTip: 'documents_facility',
         sortKeys: {
             asc: 'facilityName asc, dateTime desc',
             desc: 'facilityName desc, dateTime desc'
         }
     }, {
         name: 'hasImages',
+        flexWidth: 'pixel-width-45',
         label: 'Images',
-        hoverTip: 'documents_images',
         bodyTemplate: '{{#if hasImages}}<span><i class="fa fa-paperclip" data-toggle="tooltip" title="Image(s) are attached" aria-label="Document contains attached images"></i></span>{{/if}}'
     }];
     var SummaryColumns = [FullScreenColumns[0], FullScreenColumns[2], FullScreenColumns[3]];
@@ -92,7 +92,6 @@ define([
         type: 'POST',
         limit: 100
     };
-    Object.freeze(collectionOptions);
 
 
     var GroupCollection = ADK.UIResources.Fetch.Document.DocumentViews.GroupCollection.extend({
@@ -105,6 +104,25 @@ define([
 
 
     var AppletLayoutView = ADK.UI.ServerPagingApplet.extend({
+        tileOptions: {
+            primaryAction: {
+                enabled: true,
+                onClick: function(params, event) {
+                    var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                    channel.trigger('onClickRow', this.model, targetElement);
+                }
+            },
+            quickMenu: {
+                enabled: true,
+                buttons: [{
+                    type: 'detailsviewbutton',
+                    onClick: function(params, event) {
+                        var targetElement = _.get(params, '$el', this.$('.dropdown--quickmenu > button'));
+                        channel.trigger('onClickRow', this.model, targetElement);
+                    }
+                }]
+            }
+        },
         defaultSortColumn: FullScreenColumns[0].name,
         groupable: true,
         helpers: {
@@ -118,9 +136,10 @@ define([
             // }
         },
         initialize: function(options) {
+            this.collectionOptions = _.cloneDeep(collectionOptions);
             this.modalCollection = new ADK.UIResources.Fetch.Document.DocumentViews.Collection();
 
-            if (ADK.UserService.hasPermission('sign-note') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
+            if (ADK.UserService.hasPermission('sign-note') && ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista()) {
                 this.onClickAdd = this._onClickAdd;
             }
 
@@ -135,7 +154,9 @@ define([
                 this.triggerMethod('refresh');
             });
 
-            this.collection = new GroupCollection([], collectionOptions);
+            this.listenTo(channel, 'onClickRow', this.onClickRow);
+
+            this.collection = new GroupCollection([], this.collectionOptions);
         },
         _onClickAdd: function() {
             var notesFormOptions = {
@@ -147,12 +168,12 @@ define([
             NotesFormUtil.launchNoteForm(notesFormOptions);
         },
         getColumns: function() {
-            if (this.columnsViewType === "summary" || _.isEqual(_.get(this.getOption('appletConfig') || {}, 'viewType', ''), 'summary')) {
+            if (this.columnsViewType === "summary") {
                 return SummaryColumns;
             }
             return FullScreenColumns;
         },
-        onClickRow: function(model, gridView) {
+        onClickRow: function(model, target) {
             var docType = model.get('kind');
             var complexDocBool = model.get('complexDoc');
             var resultDocCollection = new ADK.UIResources.Fetch.Document.Collections.ResultsByUidCollection();
@@ -164,11 +185,11 @@ define([
             }
 
             this.modalCollection.reset();
-            this.changeModelAndView(model, docType, resultDocCollection, childDocCollection);
+            this.changeModelAndView(model, docType, resultDocCollection, childDocCollection, target);
         },
         beforeFetch: function() {
             if (!_.has(this.collection, 'fetchOptions')) {
-                this.collection.fetchOptions = collectionOptions;
+                this.collection.fetchOptions = this.collectionOptions;
             }
             this.createFilter();
         },
@@ -191,16 +212,16 @@ define([
                 }
             });
         },
-        changeModelAndView: function(newModel, docType, resultDocCollection, childDocCollection) {
+        changeModelAndView: function(newModel, docType, resultDocCollection, childDocCollection, target) {
             if (newModel.get('documentClass') === "PROGRESS NOTES") {
-                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection);
+                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection, target);
                 DocUtils.getDoc.call(this, newModel.get('uid'), this.modalCollection);
             } else {
                 this.modalCollection.reset(newModel);
-                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection);
+                this.showDetailsView(newModel, docType, resultDocCollection, childDocCollection, target);
             }
         },
-        showDetailsView: function(initialModel, docType) {
+        showDetailsView: function(initialModel, docType, resultDocCollection, childDocCollection, target) {
             initialModel = initialModel || this.collection.first().get('rows').first();
 
             var PagingModel = Backbone.Model.extend({
@@ -271,7 +292,8 @@ define([
                 footerView: ModalFooter.extend({
                     model: initialModel,
                     pagingModel: pagingModel
-                })
+                }),
+                triggerElement: target
             };
 
             var detailsModal = new ADK.UI.Modal({

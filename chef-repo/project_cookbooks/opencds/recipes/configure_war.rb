@@ -15,7 +15,7 @@ template("#{node[:tomcat][:home]}/shared/classes/cds-engine-agent.properties") d
   variables(
     lazy {
       {
-        :cdsinvocation => find_node_by_role("cdsinvocation", node[:stack]),
+        :cdsinvocation_host => "localhost:#{node[:synapse][:services][:cdsinvocation][:haproxy][:port]}",
         :opencds => node
       }
     }

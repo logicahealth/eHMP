@@ -23,7 +23,7 @@ var argv = require('yargs')
 	})
 	.option('p', {
 		alias: 'port',
-		default: 9080,
+		default: PORT,
 		describe: 'Port of the JDS server',
 		type: 'number'
 	})
@@ -68,7 +68,7 @@ var argv = require('yargs')
 
 // var protocol = argv.protocol || 'http';
 // var host = argv.host || 'IP        ';
-// var port = argv.port || 9080;
+// var port = argv.port || PORT;
 // var path = argv.path || '/sync/combinedstat/';
 var protocol = argv.protocol;
 var host = argv.host;
@@ -80,43 +80,43 @@ var color = String(argv.color).toLowerCase() !== 'false' && String(argv.color).t
 
 var url = protocol + '://' + host + ':' + port + path;
 
-var idList = ['9E7A;164',
-	'9E7A;100608',
-	'9E7A;253',
-	'9E7A;227',
-	'9E7A;71',
-	'9E7A;239',
-	'9E7A;100599',
-	'9E7A;100001',
-	'9E7A;231',
-	'9E7A;3',
-	'9E7A;9',
-	'9E7A;18',
-	'9E7A;722',
-	'9E7A;100716',
-	'9E7A;100840',
-	'9E7A;100731',
-	'9E7A;65',
-	'9E7A;8',
-	'9E7A;230',
-	'9E7A;17',
-	'9E7A;100125',
-	'9E7A;229',
-	'9E7A;420',
-	'9E7A;100022',
-	'9E7A;100012',
-	'9E7A;271',
-	'C877;1',
-	'9E7A;428',
-	'9E7A;1',
-	'9E7A;100184',
-	'9E7A;167',
-	'9E7A;100615',
-	'9E7A;301',
-	'9E7A;100033',
-	'9E7A;100817',
-	'9E7A;149',
-	'9E7A;204'
+var idList = ['SITE;164',
+	'SITE;100608',
+	'SITE;253',
+	'SITE;227',
+	'SITE;71',
+	'SITE;239',
+	'SITE;100599',
+	'SITE;100001',
+	'SITE;231',
+	'SITE;3',
+	'SITE;9',
+	'SITE;18',
+	'SITE;722',
+	'SITE;100716',
+	'SITE;100840',
+	'SITE;100731',
+	'SITE;65',
+	'SITE;8',
+	'SITE;230',
+	'SITE;17',
+	'SITE;100125',
+	'SITE;229',
+	'SITE;420',
+	'SITE;100022',
+	'SITE;100012',
+	'SITE;271',
+	'SITE;1',
+	'SITE;428',
+	'SITE;1',
+	'SITE;100184',
+	'SITE;167',
+	'SITE;100615',
+	'SITE;301',
+	'SITE;100033',
+	'SITE;100817',
+	'SITE;149',
+	'SITE;204'
 ];
 
 var addList = buildListFromArg(argv, 'add');

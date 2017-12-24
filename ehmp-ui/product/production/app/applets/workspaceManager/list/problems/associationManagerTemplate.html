@@ -6,7 +6,7 @@
                 <label for="screenProblemSearch" class="hidden">Search for problems</label>
                 <input type="text" class="form-control" id="screenProblemSearch" placeholder="Search Problems" title="Enter text to begin searching. Results will appear below. Then press tab to view results.">
             </form>
-            <button class="clear-search-problem-btn btn btn-md btn-icon" type="button" title="Press enter to clear text">
+            <button class="clear-search-problem-btn btn btn-md btn-icon" type="button" title="Clear text">
                 <i class="fa fa-times-circle font-size-12"></i>
             </button>
             <div class="problem-loading-container">
@@ -18,7 +18,7 @@
     <div class="problem-list-region"></div>
 </div>
 <div class="association-manager-footer row top-margin-sm">
-    <button class="user-defined-template btn btn-default navbar-btn btn-sm pull-right" type="button" id="associationManagerCloseBtn" title="Press enter to close">Close</button>
+    <button class="user-defined-template btn btn-default navbar-btn btn-sm pull-right" type="button" id="associationManagerCloseBtn">Close</button>
 </div>
 {{else}}
 
@@ -29,7 +29,7 @@
                 <label for="screenProblemSearch"></label>
                 <input type="text" class="form-control" id="screenProblemSearch" placeholder="Search Problems" disabled="true" title="Enter text to begin searching. Results will appear below. Then press tab to view results.">
             </form>
-            <button class="clear-search-problem-btn btn btn-md btn-icon" type="button" title="Press enter to clear text">
+            <button class="clear-search-problem-btn btn btn-md btn-icon" type="button" title="Clear text">
                 <i class="fa fa-times-circle font-size-12"></i>
             </button>
         </div>
@@ -38,6 +38,6 @@
     <div class="problem-list-region"></div>
 </div>
 <div class="association-manager-footer row top-margin-sm">
-    <button class="predefined-template btn btn-default navbar-btn btn-sm pull-right" type="button" id="associationManagerCloseBtn" title="Press enter to close">Close</button>
+    <button class="predefined-template btn btn-default navbar-btn btn-sm pull-right" type="button" id="associationManagerCloseBtn">Close</button>
 </div>
 {{/unless}}

@@ -1,5 +1,5 @@
-@F282_problems_gist   @reg1
-Feature: F82 - Problems Gist View
+@F282_problems_gist @problems_applet  @reg1
+Feature: F282 - Problems Gist View
 
 @f282_problems_initial_view @F282-1.1 @F282-2.1 @US3390 @US4317 @US18212
 Scenario: User views the problems gist view
@@ -69,41 +69,14 @@ Scenario: Problems trend view Applet is sorted by the column header Onset date
   Then the Problems trend view applet is sorted in alphabetic order based on Onset date
   And the user sorts the Problems trend view applet by column Onset date
   And the Problems trend view applet is sorted in reverse alphabetic order based on Onset date 
-  
-@f282_problems_quick_view_not_through_toolbar @F282-7.1 @US4155 @4317 @DE1321
-Scenario: Problems Applet Trend view - quick view of problems
-  Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
-  Then Overview is active
-  And Problems trend view has data rows
-  And hovering over the right side of problem trend view and selecting the onset date field
-  Then the problems quick look table is displayed
-  And problems quick look table contains headers
-    |Headers 		|
-    | Date   		|
-    | Description 	| 
-    | Facility 		|
-
-@f282_problems_quick_view_through_toolbar @F282-7.1 @US4317 @US4805
-Scenario: Problems Applet Trend view - quick view of problems
-  Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
-  Then Overview is active
-  And Problems trend view has data rows
-  When user opens the first problems gist item
-  And user selects the quick look view toolbar
-  Then the problems quick look table is displayed
-  And problems quick look table contains headers
-    |Headers 		|
-    | Date   		|
-    | Description 	| 
-    | Facility 		|
 
 @f282_problems__detail_view_through_toolbar @F282-6.1 @US4317 @US4805 @DE1400 @DE6551
 Scenario: Problems Applet Gist - detail view of most recent problem 
   Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
   Then Overview is active
   And Problems trend view has data rows
-  When user opens the first problems gist item
-  And user selects the detail view toolbar
+  And user hovers over the problems applet trend view row
+  And user selects the detail view from Quick Menu Icon of problems applet
   Then the detail modal is displayed
   And the detail modal title is set
   And problems detail view contain fields

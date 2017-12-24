@@ -17,3 +17,19 @@ Scenario: Verify button is clickable and a new window si opened
 	And user searches for and selects "Five,Patient"
 	Then Cover Sheet is active
 	Then the InfoButtton page is opened by clicking on the infobutton icon
+	
+@f297_allergies_info_button_integration_1
+Scenario: Verify allergy applet on overview page has info button toolbar
+  When user searches for and selects "eight,patient"
+  And Overview is active
+  Given allergy gist is loaded successfully
+  And user opens the first allergy pill
+  Then allergies info button is displayed
+  
+@f297_allergies_info_button_integration_2
+Scenario: Verify allergy applet expanded view has info button toolbar
+  When user searches for and selects "eight,patient"
+  And Overview is active
+  Given user navigates to allergies expanded view 
+  And user opens the first allergy row
+  Then allergies info button is displayed

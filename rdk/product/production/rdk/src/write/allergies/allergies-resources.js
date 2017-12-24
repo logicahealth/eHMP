@@ -11,7 +11,8 @@ function getResourceConfig() {
         path: '',
         post: add,
         interceptors: {
-            convertPid: true
+            convertPid: true,
+            synchronize: false
         },
         requiredPermissions: ['add-allergy'],
         isPatientCentric: true
@@ -20,7 +21,8 @@ function getResourceConfig() {
         path: '/:resourceId',
         put: eie,
         interceptors: {
-            convertPid: true
+            convertPid: true,
+            synchronize: false
         },
         requiredPermissions: ['eie-allergy'],
         isPatientCentric: true

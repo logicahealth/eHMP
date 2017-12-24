@@ -37,7 +37,7 @@ define([
             this.appletOptions = appletOptions;
             this.appletOptions.appletConfig = this.options.appletConfig;
 
-            this.appletOptions.AppletView = InterventionsView.getView();
+            this.appletOptions.AppletView = this.AppletView.getView();
             this._base.initialize.apply(this, arguments);
         }
     });

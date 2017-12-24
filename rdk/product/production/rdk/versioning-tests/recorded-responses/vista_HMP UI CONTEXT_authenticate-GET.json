@@ -1,1 +1,1 @@
-{"error":null,"response":{"accessCode":"IP    ","verifyCode":"REDACTED,"duz":"10000000270","greeting":"Good evening USER,PANORAMA"}}
+{"error":null,"response":{"accessCode":"USER  ","verifyCode":"PW      ","duz":"10000000270","greeting":"Good evening USER,PANORAMA"}}

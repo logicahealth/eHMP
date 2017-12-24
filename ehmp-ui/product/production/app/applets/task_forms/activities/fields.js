@@ -88,21 +88,18 @@ define([
                     extraClasses: ['btn-default', 'btn-sm', 'pull-left'],
                     id: 'task-order-entry-delete-button',
                     label: 'Delete',
-                    title: 'Press enter to delete',
                     type: 'button'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-default', 'btn-sm'],
                     id: 'modal-save-close-button',
                     label: 'Draft',
-                    title: 'Press enter to save as draft and close',
                     type: 'button'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm'],
                     id: 'modal-accept-button',
                     label: 'Accept',
-                    title: 'Press enter to accept',
                     type: 'button'
                 }],
             }]
@@ -120,7 +117,6 @@ define([
                 control: 'button',
                 name: 'consultOverview',
                 label: 'Activity Details',
-                title: 'Press enter to view the activity details',
                 type: 'button',
                 id: 'consult-overview-button',
                 extraClasses: ['btn-primary', 'btn-xs']
@@ -155,7 +151,7 @@ define([
                 label: 'Scheduled Date',
                 tite: 'Enter in a date in the following format: MM/DD/YYYY',
                 placeholder: 'MM/DD/YYYY',
-                startDate: new Date(),
+                startDate: '0d',
                 required: 'true',
                 diabled: 'true',
                 hidden: 'true'
@@ -319,14 +315,12 @@ define([
                     extraClasses: ['btn-default', 'btn-sm'],
                     id: 'modal-close-button',
                     label: 'Cancel',
-                    title: 'Press enter to cancel',
                     type: 'button'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm'],
                     id: 'modal-done-button',
                     label: 'Accept',
-                    title: 'Press enter to accept',
                     type: 'button'
                 }]
             }]
@@ -350,7 +344,7 @@ define([
             }, {
                 control: "container",
                 extraClasses: ["order-summary", "col-xs-12"],
-                template: Handlebars.compile('<div class="well bottom-padding-xl top-padding-sm all-padding-sm"><div class="col-xs-10 left-padding-no"><span class="font-size-14"><strong>{{summary}}</strong></span></div><div class="col-xs-2"><div class="sign-activityId"><button type="button" class="btn btn-link all-padding-sm top-padding-no" title="Press enter to view details">View Details</button></div></div></div>')
+                template: Handlebars.compile('<div class="well bottom-padding-xl top-padding-sm all-padding-sm"><div class="col-xs-10 left-padding-no"><span class="font-size-14"><strong>{{summary}}</strong></span></div><div class="col-xs-2"><div class="sign-activityId"><button type="button" class="btn btn-link all-padding-sm top-padding-no">View Details</button></div></div></div>')
             }, {
                 control: "input",
                 name: "signature_code",
@@ -388,7 +382,6 @@ define([
                     id: 'modal-cancel-button',
                     label: 'Cancel',
                     name: 'cancel',
-                    title: 'Press enter to cancel',
                     type: 'button'
                 }, {
                     control: 'button',
@@ -396,7 +389,6 @@ define([
                     id: 'modal-sign-button',
                     label: 'Accept',
                     name: 'sign-accept',
-                    title: 'Press enter to accept',
                     type: 'button'
                 }]
             }]

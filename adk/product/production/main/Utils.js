@@ -10,6 +10,7 @@ define([
     'main/adk_utils/stringUtils',
     'main/adk_utils/crsUtil',
     'main/adk_utils/cssCalcUtils',
+    'main/adk_utils/patientUtils',
     'backbone-sorted-collection',
     'moment',
     'underscore',
@@ -27,6 +28,7 @@ define([
     StringUtils,
     CrsUtil,
     CssCalcUtils,
+    PatientUtils,
     SortedCollection,
     Moment,
     _,
@@ -49,6 +51,7 @@ define([
     Utils.tooltipMappings = TooltipMappings;
     Utils.crsUtil = CrsUtil;
     Utils.cssCalc = CssCalcUtils;
+    Utils.patient = PatientUtils;
 
     Utils.formatDate = function(date, displayFormat, sourceFormat) {
 
@@ -781,6 +784,10 @@ define([
 
     Utils.isNotUndefinedAndNotNull = function(object) {
         return !(_.isUndefined(object) || _.isNull(object));
+    };
+
+    Utils.breakLines = function(text) {
+        return text.replace(/(\r\n|\n|\r)/gm, '<br>');
     };
 
     return Utils;

@@ -1,7 +1,7 @@
 {{#if navHeader}}
     <p class="text-right">
-        <button type="button" class="btn btn-default vitals-prev" title="Press enter to load previous vitals."><i class="fa fa-arrow-up"></i> Previous</button>
-        <button type="button" class="btn btn-default vitals-next" title="Press enter to load next vitals."><i class="fa fa-arrow-down"></i> Next</button>
+        <button type="button" class="btn btn-default vitals-prev" aria-label="Load previous vitals"><i class="fa fa-arrow-up"></i> Previous</button>
+        <button type="button" class="btn btn-default vitals-next" aria-label="Load next vitals"><i class="fa fa-arrow-down"></i> Next</button>
     </p>
 {{/if}}
 <div class="table-responsive">
@@ -32,10 +32,10 @@
                     {{#if formattedHeight}}
                         {{formattedHeight}}
                     {{else}}
-                        {{result}} {{units}}
+                        {{resultUnits}}
                     {{/if}}
                     {{#if metricResult}}
-                        <span>({{metricResult}} {{metricUnits}})</span>
+                        <span>({{metricResultUnits}})</span>
                     {{/if}}
                 </td>
                 <td id="vitalsModalObservedFormatted">

@@ -13,7 +13,7 @@ module.exports.defaultRPCPatient = {
     'birthDate': '19350407',
     'sensitive': true,
     'localId': '35',
-    'pid': '9E7A;35',
+    'pid': 'SITE;35',
     'icn': '',
     'summary': 'Zzzretfivefifty,Patient'
 };

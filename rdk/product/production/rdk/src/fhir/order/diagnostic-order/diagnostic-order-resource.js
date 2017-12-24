@@ -83,7 +83,7 @@ function getResourceConfig() {
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
+ *      http://IP           /resource/fhir/patient/SITE;253/diagnosticorder?_count=1
  *
  * @apiSuccess {json} data JSON object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticorder.html">Diagnostic Order FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -95,7 +95,7 @@ function getResourceConfig() {
  *     "link": [
  *         {
  *             "relation": "self",
- *             "url": "http://localhost:8888/resource/fhir/patient/9E7A;253/diagnosticorder?_count=1"
+ *             "url": "http://localhost:PORT/resource/fhir/patient/SITE;253/diagnosticorder?_count=1"
  *         }
  *     ],
  *     "total": 489,
@@ -105,7 +105,7 @@ function getResourceConfig() {
  *                 "resourceType": "DiagnosticOrder",
  *                 "id": "46f20ac5-9902-4207-e1c4-ab9fb8135796",
  *                 "subject": {
- *                     "reference": "Patient/9E7A;253"
+ *                     "reference": "Patient/SITE;253"
  *                 },
  *                 "item": [
  *                     {
@@ -149,7 +149,7 @@ function getResourceConfig() {
  *                         "identifier": [
  *                             {
  *                                 "system": "http://vistacore.us/fhir/id/uid",
- *                                 "value": "urn:va:user:9E7A:1"
+ *                                 "value": "urn:va:user:SITE:1"
  *                             }
  *                         ]
  *                     },
@@ -171,7 +171,7 @@ function getResourceConfig() {
  *                         "identifier": [
  *                             {
  *                                 "system": "http://vistacore.us/fhir/id/uid",
- *                                 "value": "urn:va:user:9E7A:1"
+ *                                 "value": "urn:va:user:SITE:1"
  *                             }
  *                         ],
  *                         "extension": [
@@ -209,7 +209,7 @@ function getResourceConfig() {
  *                         "identifier": [
  *                             {
  *                                 "system": "http://vistacore.us/fhir/id/uid",
- *                                 "value": "urn:va:location:9E7A:32"
+ *                                 "value": "urn:va:location:SITE:32"
  *                             }
  *                         ]
  *                     }
@@ -220,7 +220,7 @@ function getResourceConfig() {
  *                 "identifier": [
  *                     {
  *                         "system": "urn:oid:2.16.840.1.113883.6.233",
- *                         "value": "urn:va:order:9E7A:253:38017"
+ *                         "value": "urn:va:order:SITE:253:38017"
  *                     }
  *                 ],
  *                 "event": [

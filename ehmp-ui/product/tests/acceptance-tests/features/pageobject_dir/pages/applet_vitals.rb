@@ -10,21 +10,24 @@ class PobVitalsApplet < PobParentApplet
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
+  elements :fld_vitals_gist, "[data-appletid=vitals] span[data-cell-instanceid]"
   element :fld_vitals_gist_item, "[data-cell-instanceid='problem_name_BPS']"
-  elements :fld_vitals_gist, "[data-appletid=vitals] .grid-container .gist-item-list .table-row"
+  element :fld_vitals_type_header, "[data-appletid='vitals'] [data-header-instanceid='name-header']"
 
-  elements :fld_vital_type_column_data, "[data-appletid=vitals] [dialog-toggle] span:not(.sr-only)"
-
+  
+  elements :fld_vital_type_column_data, "[data-appletid=vitals] span[data-cell-instanceid]"
   elements :fld_vital_names, "[data-appletid=vitals] .border-vertical span:not(.sr-only)"
 
   # *****************  All_Button_Elements  ******************* #
-  element :btn_expanded_all_range, "#all-range-vitals"
-  element :btn_expanded_all_range_active, "#all-range-vitals.active-range"
+  section :date_range_filter, ExpandedDateFilter, "#grid-filter-vitals"
 
   # *****************  All_Drop_down_Elements  ******************* #
 
   # *****************  All_Table_Elements  ******************* #
-  elements :tbl_vitals_grid, "table[id='data-grid-vitals'] tr.selectable "
+  elements :tbl_vitals_grid, "[data-appletid=vitals] tbody tr"
+  elements :tbl_vitals_type_cell_data, "[data-appletid=vitals] tbody tr td:nth-child(3)"
+    
+  element :fld_vitals_search_filter, "#input-filter-search-vitals"
 
   # *****************  Quickview  ******************* #
   element :fld_vital_quickview_popover, "div.popover--gist-popover"
@@ -44,7 +47,8 @@ class PobVitalsApplet < PobParentApplet
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
     add_expanded_applet_fields appletid_css
-    add_toolbar_buttons
+    add_toolbar_buttons appletid_css
+    add_quick_view_popover appletid_css
     add_tile_sort_elements
   end
 

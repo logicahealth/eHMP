@@ -204,7 +204,7 @@ define([
                 statusName: "UNRELEASED",
                 detailSummary: newUnsignedOrderDetail,
                 clinicians: [],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 
@@ -213,7 +213,7 @@ define([
                 statusName: "PENDING",
                 detailSummary: signedOrderDetail,
                 clinicians: ["Doctor Foo"],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 
@@ -222,7 +222,7 @@ define([
                 statusName: "DISCONTINUED",
                 detailSummary: discontinuedUnsignedOrderDetail,
                 clinicians: ["Doctor Foo"],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 
@@ -231,7 +231,7 @@ define([
                 statusName: "DISCONTINUED",
                 detailSummary: discontinuedOrderDetail,
                 clinicians: ["Doctor Foo"],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 
@@ -240,7 +240,7 @@ define([
                 statusName: "CANCELLED",
                 detailSummary: canceledOrderDetail,
                 clinicians: ["Doctor Foo"],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 
@@ -249,7 +249,7 @@ define([
                 statusName: "COMPLETE",
                 detailSummary: completedOrderDetail,
                 clinicians: ["Doctor Foo"],
-                uid: 'urn:va:order:9E7A:3:44259'
+                uid: 'urn:va:order:SITE:3:44259'
             });
         };
 

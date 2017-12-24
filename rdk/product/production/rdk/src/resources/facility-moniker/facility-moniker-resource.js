@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 
 function getResourceConfig() {
     return [{
@@ -18,9 +17,7 @@ function getResourceConfig() {
 }
 
 function facilityMonikerResource(req, res) {
-    res.type('json');
-    res.status(200);
-    return fs.createReadStream(__dirname + '/vha-sites.json').pipe(res);
+    return res.status(200).rdkSend(require('./vha-sites.json'));
 }
 
 module.exports.getResourceConfig = getResourceConfig;

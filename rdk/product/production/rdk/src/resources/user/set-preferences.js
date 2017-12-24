@@ -1,7 +1,7 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
-var pjds = rdk.utils.pjdsStore;
+var pjdsUtil = rdk.utils.pjdsUtil;
 var _ = require('lodash');
 
 module.exports = setEhmpUserPreferences;
@@ -23,7 +23,7 @@ function setEhmpUserPreferences(req, res) {
         key: uid
     };
 
-    pjds.get(req, res, pjdsOptions, function(error, response) {
+    pjdsUtil.getUser(req, res, pjdsOptions, function(error, response) {
         if (error) {
             req.session.user.preferences = origPreferences;
             return res.status(rdk.httpstatus.bad_request).rdkSend(error.message);
@@ -34,9 +34,8 @@ function setEhmpUserPreferences(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend('Not found a matching data from ehmpusers');
         }
 
-        pjdsOptions.data = response.data;
-        pjdsOptions.data.preferences = preferences;
-        pjds.put(req, res, pjdsOptions, function(error, response) {
+        pjdsOptions.data = { preferences: preferences };
+        pjdsUtil.patchUser(req, res, pjdsOptions, function(error, response) {
             if (error) {
                 req.session.user.preferences = origPreferences;
                 res.status(rdk.httpstatus.bad_request).rdkSend(error.message);

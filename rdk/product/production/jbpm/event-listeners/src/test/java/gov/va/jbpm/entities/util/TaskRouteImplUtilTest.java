@@ -45,9 +45,9 @@ public class TaskRouteImplUtilTest {
 	
 	@Test
 	public void testRouteCreate_MultipleRoutes() throws EventListenerException {
-		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Kodak(C877)/TT:Primary Care Team A 3rd Floor(501)],[TF: Primary Care(104)/TR:Nurse Practitioner (93)]");
+		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Kodak(SITE)/TT:Primary Care Team A 3rd Floor(501)],[TF: Primary Care(104)/TR:Nurse Practitioner (93)]");
 		assertEquals(2, taskRoutes.size());
-		assertEquals("C877", taskRoutes.get(0).getFacility());
+		assertEquals("SITE", taskRoutes.get(0).getFacility());
 		assertEquals(501, taskRoutes.get(0).getTeamType());
 		assertEquals(104, taskRoutes.get(1).getTeamFocus());
 		assertEquals(93, taskRoutes.get(1).getTeamRole());
@@ -56,18 +56,18 @@ public class TaskRouteImplUtilTest {
 
 	@Test
 	public void testRouteCreate_RouteAndUserId() throws EventListenerException {
-		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Panorama(9E7A)/TT:Primary Care Team A 3rd Floor(501)],bpmsAdmin");
+		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Panorama(SITE)/TT:Primary Care Team A 3rd Floor(501)],bpmsAdmin");
 		assertEquals(2, taskRoutes.size());
-		assertEquals("9E7A", taskRoutes.get(0).getFacility());
+		assertEquals("SITE", taskRoutes.get(0).getFacility());
 		assertEquals(501, taskRoutes.get(0).getTeamType());
 		assertEquals("bpmsAdmin", taskRoutes.get(1).getUserId());
 	}
 	
 	@Test
 	public void testRouteCreate_RouteWithPAAndUserId() throws EventListenerException {
-		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Panorama(9E7A)/TT:Primary Care Team A 3rd Floor(501)/PA:Patient Assignment(1)],bpmsAdmin");
+		List<TaskRouteImpl> taskRoutes = TaskRouteImplUtil.create(1, "[FC:Panorama(SITE)/TT:Primary Care Team A 3rd Floor(501)/PA:Patient Assignment(1)],bpmsAdmin");
 		assertEquals(2, taskRoutes.size());
-		assertEquals("9E7A", taskRoutes.get(0).getFacility());
+		assertEquals("SITE", taskRoutes.get(0).getFacility());
 		assertEquals(501, taskRoutes.get(0).getTeamType());
 		assertEquals(true, taskRoutes.get(0).getPatientAssignment());
 		assertEquals("bpmsAdmin", taskRoutes.get(1).getUserId());

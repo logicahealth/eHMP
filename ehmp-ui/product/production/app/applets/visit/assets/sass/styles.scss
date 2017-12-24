@@ -1,24 +1,23 @@
 // visit encounter in the workspace navigation
 // will fix the specifity in this selector once button sass updates have been merged into the feature branch
-.btn.btn-xs.encounter-info-button {
-    background: $primary-lighter;
+.btn.encounter-info-button {
     box-shadow: none;
-    border-radius: 3px;
     float: right;
     text-align: left;
-    font-size: 11px;
+    font-size: 12px;
+    font-weight: 400;
     line-height: 14px;
-    padding: 2px 25px 2px 10px;
     word-break: break-all;
     min-width: 300px;
     max-width: 400px;
-    color: inherit;
+    border-radius: 0;
+    color: initial;
     &:hover {
-        background: darken($primary-light, 10%);
-        color: $primary-dark;
-    }
-    h5 {
-        color: inherit;
+        &,
+        .fa {
+            background: $primary-lightest;
+            color: $primary-dark;
+        }
     }
     .encounter-location-provider {
         overflow: hidden;

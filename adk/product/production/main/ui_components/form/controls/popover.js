@@ -35,19 +35,17 @@ define([
                 items: [{
                     control: 'button',
                     name: 'confirm-dismiss-button',
-                    title: _.get(this.options, 'dismissButtonTitle', 'Press enter to go back'),
                     label: _.get(this.options, 'dismissButtonLabel', 'No'),
                     type: 'button',
                     extraClasses: ['btn-default', 'btn-sm', 'close']
                 }, {
                     control: "button",
                     name: 'confirm-cancel-button',
-                    title: _.get(this.options, 'confirmButtonTitle', 'Press enter to cancel'),
                     label: _.get(this.options, 'confirmButtonLabel', 'Yes'),
                     type: "button",
                     extraClasses: ['btn-default', 'btn-sm']
                 }]
-            }]);
+            }], { formView: _.get(this, 'field.formView') });
         },
         triggerEvent: function() {
             if (_.isString(this.eventString)) {
@@ -151,6 +149,9 @@ define([
         className: function() {
             return 'hidden';
         },
+        attributes: {
+            'aria-hidden': 'true'
+        },
         behaviors: _.defaults({
             NestableContainer: {
                 behaviorClass: ControlService.Behaviors.NestableContainer
@@ -187,7 +188,7 @@ define([
 
             this.items = this.items || this.field.get("items") || this.defaults.items;
             if (!(this.items instanceof Backbone.Collection))
-                this.items = new ControlService.Fields(this.items);
+                this.items = new ControlService.Fields(this.items, { formView: _.get(this, 'field.formView') });
             this.collection = this.items;
 
             this.collection.bind('remove', this.render);
@@ -201,6 +202,7 @@ define([
                 content: self.$('>'),
                 placement: customOptions.placement,
                 trigger: customOptions.trigger,
+                template: '<div accesskey="p" class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div><div class="sr-only">End of tooltip. Escape to exit.</div></div>',
                 delay: customOptions.delay
             };
             if (!_.isUndefined(customOptions.container) && !_.isUndefined(customOptions.viewport)) {
@@ -208,17 +210,31 @@ define([
                 popoverOptions.viewport = customOptions.viewport;
                 popoverOptions.content = self.$('>').clone(true, true);
             }
+
+            var onPopoverKeydown = function onPopoverKeydown(event) {
+                if (event.which === 27) {
+                    event.stopPropagation();
+                    self.popover.popover('hide');
+                    self.popover.focus();
+                }
+            };
+
             self.popover = self.parentButtonView.$el.find('button').first()
                 .popover(popoverOptions);
-            self.popover.on("show.bs.popover", function(vent) {
+            self.popover.on("show.bs.popover", function(event) {
                 self.parentButtonView.$el.find('button').addClass('popover-shown');
             });
-            self.popover.on("hide.bs.popover", function(vent) {
+            self.popover.on("shown.bs.popover", function(event) {
+                self.popover.data('bs.popover').$tip.on('keydown', onPopoverKeydown);
+            });
+            self.popover.on("hide.bs.popover", function(event) {
                 self.parentButtonView.$el.find('button').removeClass('popover-shown');
                 var popover = self.parentButtonView.$el.find('.popover');
                 popover.hide();
                 self.$el.append(popover.find('.popover-content >'));
+                self.popover.data('bs.popover').$tip.off('keydown', onPopoverKeydown);
             });
+         
             self.parentButtonView.$el.find('button').first().attr('data-original-title', this.field.get('header'));
         }
     });

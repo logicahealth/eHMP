@@ -3,15 +3,18 @@ define([
     'marionette',
     'jquery',
     'handlebars',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/task_forms/activities/order.lab/views/formFields',
-    'app/applets/task_forms/activities/order.lab/eventHandler'
-], function(Backbone, Marionette, $, Handlebars, AssignmentTypeUtils, FormFields, EventHandler) {
+    'app/applets/task_forms/activities/order.lab/eventHandler',
+    'app/extensions/extensions'
+], function(Backbone, Marionette, $, Handlebars, FormFields, EventHandler, Extensions) {
     'use strict';
 
     var FormModel = new Backbone.Model();
 
     var formView = ADK.UI.Form.extend({
+        controlClass: {
+            'assignTo': Extensions.UI.Form.Controls.AssignTo
+        },
         onInitialize: function() {
             EventHandler.claimTask(this.model);
         },
@@ -20,27 +23,13 @@ define([
         basicRequiredFields: ['title', 'assignment'],
         actionRequiredFields: {
             'Remind Me Later': ['notificationDate', 'comment'],
-            'Reassign Reminder': {
-                'opt_person': ['facility', 'person', 'comment'],
-                'opt_myteams': ['team', 'roles', 'comment'],
-                'opt_patientteams': ['team', 'roles', 'comment'],
-                'opt_anyteam': ['facility', 'team', 'roles', 'comment']
-            },
+            'Reassign Reminder': ['comment'],
             'Cancel Reminder': ['comment']
         },
         ui: {
             'notificationDatepicker': '.notification-datepicker',
             'assignment': '.assignment',
-            'assignToContainer': '.assign-to-container',
             'actionOptions': '.action',
-            'facilityContainer': '.facility-row',
-            'personContainer': '.person-row',
-            'teamContainer': '.team-row',
-            'rolesContainer': '.roles-row',
-            'facilityField': '.facility',
-            'personField': '.person',
-            'teamField': '.team',
-            'rolesField': '.roles',
             'patientContactInstruction': '.patient-contact-instruction',
             'labContactInstruction': '.lab-contact-instruction',
             'acceptButton': '.acceptButton',
@@ -56,10 +45,6 @@ define([
         modelEvents: {
             'change:action': 'handleActionChange',
             'change:assignment': 'changeAssignment',
-            'change:facility': 'handleFacilityChange',
-            'change:team': 'handleTeamChange',
-            'change:roles': 'handleAcceptButton',
-            'change:person': 'handleAcceptButton',
             'change:comment': 'handleAcceptButton'
         },
         handleAcceptButton: function(model) {
@@ -67,17 +52,13 @@ define([
             var fields = this.actionRequiredFields[model.get('action')];
             var disableAccept = true;
             _.each(fields, function(field) {
-                if (_.isObject(field)) {
-                    fields = fields[model.get('assignment')] || '';
-                }
-                if (_.isArray(fields)) {
-                    if (fields.length === _.size(_.omit(_.pick(model.attributes, fields), _.isEmpty))) {
-                        disableAccept = false;
-                    } else {
-                        disableAccept = true;
-                    }
+                if (fields.length === _.size(_.omit(model.pick(fields), _.isEmpty))) {
+                    disableAccept = false;
+                } else {
+                    disableAccept = true;
                 }
             });
+            disableAccept = disableAccept || !this.model.isValid();
             this.ui.acceptButton.trigger('control:disabled', disableAccept);
         },
         unsetFields: function(model, fields) {
@@ -92,42 +73,28 @@ define([
         },
         changeAssignment: function() {
             this.handleAcceptButton(this.model);
-            AssignmentTypeUtils.changeAssignment(this);
-        },
-        handleFacilityChange: function() {
-            this.unsetFields(this.model, ['team', 'roles']);
-            this.handleAcceptButton(this.model);
-            AssignmentTypeUtils.handleFacilityChange(this);
-        },
-        handleTeamChange: function() {
-            this.unsetFields(this.model, ['roles']);
-            this.handleAcceptButton(this.model);
-            AssignmentTypeUtils.handleTeamChange(this);
-        },
-        adjustButtonProperties: function() {
-            //Empty function called from AssignmentTypeUtils. Need to coordinate with team Mars
         },
         handleActionChange: function() {
+            var action = this.model.get('action');
+            this.showAssignment(_.isEqual(action, 'Reassign Reminder'));
             this.handleAcceptButton(this.model);
-            switch (this.model.get('action')) {
+            switch (action) {
                 case 'Reassign Reminder':
                     this.ui.notificationDatepicker.trigger('control:hidden', true);
                     this.ui.notificationDatepicker.trigger('control:required', false);
-                    this.ui.assignToContainer.trigger('control:hidden', false);
-                    this.ui.assignToContainer.trigger('control:required', true);
                     break;
                 case 'Cancel Reminder':
                     this.ui.notificationDatepicker.trigger('control:hidden', true);
                     this.ui.notificationDatepicker.trigger('control:required', false);
-                    this.ui.assignToContainer.trigger('control:hidden', true);
-                    this.ui.assignToContainer.trigger('control:required', false);
                     break;
                 default:
                     this.ui.notificationDatepicker.trigger('control:hidden', false);
                     this.ui.notificationDatepicker.trigger('control:required', true);
-                    this.ui.assignToContainer.trigger('control:hidden', true);
-                    this.ui.assignToContainer.trigger('control:required', false);
             }
+        },
+        showAssignment: function(shouldShow) {
+            this.ui.assignment.trigger('control:required', shouldShow);
+            this.ui.assignment.trigger('control:hidden', !shouldShow);
         },
         fireCloseEvent: function(event) {
             this.unsetErrorModel();
@@ -152,13 +119,7 @@ define([
             });
         },
         onError: function(model, resp) {
-            var errorMessage = _.get(resp, 'responseJSON.message', '');
-            if (_.isEmpty(errorMessage)) {
-                this.model.set({
-                    'lab-error-message': 'error retrieving order tasks'
-                });
-            }
-            this.showErrorMessage(errorMessage);
+            this.showErrorMessage(errorMessage, _.get(resp, 'responseJSON.message', 'error retrieving order tasks'));
             this.hideInProgress();
         },
         showErrorMessage: function(errorMessage) {
@@ -177,8 +138,6 @@ define([
                 this.ui.patientContactInstruction.trigger('control:hidden', true);
                 this.ui.labContactInstruction.trigger('control:hidden', false);
             }
-            this.$el.find('#assignment').attr('title', "Assign to Person, My Teams, Patient's Teams, or Any Team");
-            this.$el.find('#assignment label:first').remove();
         }
     });
 

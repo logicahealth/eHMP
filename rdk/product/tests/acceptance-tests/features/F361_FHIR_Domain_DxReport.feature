@@ -3,7 +3,7 @@ Feature: F361 FHIR Domain - DiagnosticReport
 @F361_diagnosticreport @US5961 @DE3161
      Scenario: Client can request DiagnosticReport in FHIR format
      Given a patient with "diagnosticreport" in multiple VistAs
-     When the diagnosticreport is requested for the patient "9E7A;229"
+     When the diagnosticreport is requested for the patient "SITE;229"
      Then a successful response is returned
      And the FHIR results contain "diagnosticreport"
      	 | field 											           | value 								|
@@ -13,7 +13,7 @@ Feature: F361 FHIR Domain - DiagnosticReport
        | resource.name.coding.display    | HDL|
        | resource.status                 | final |
        | resource.issued                 | IS_FHIR_FORMATTED_DATE |
-       | resource.subject.reference      | Patient/9E7A;229|
+       | resource.subject.reference      | Patient/SITE;229|
        | resource.performer.display      | ALBANY VA MEDICAL CENTER|
        | resource.contained.resourceType | Observation |
        | resource.contained.issued       | IS_FHIR_FORMATTED_DATE |

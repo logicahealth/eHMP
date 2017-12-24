@@ -7,10 +7,10 @@ Feature: F93 Return of Demographics in FHIR format
 @US949_SEN @fhir @debug @DE141
 Scenario: Client can break the glass when requesting demographics in FHIR format for a sensitive patient
     Given a patient with "demographics" in multiple VistAs
-    Given a patient with pid "9E7A;167" has been synced through Admin API
-    When the client requests demographics for that sensitive patient "9E7A;167"
+    Given a patient with pid "SITE;167" has been synced through Admin API
+    When the client requests demographics for that sensitive patient "SITE;167"
     Then a temporary redirect response is returned
-    When the client breaks glass and repeats a request for demographics for that patient "9E7A;167"
+    When the client breaks glass and repeats a request for demographics for that patient "SITE;167"
     Then a successful response is returned
     And the results contain
       | demographics_supplemental_list                   | demographics_values                          |

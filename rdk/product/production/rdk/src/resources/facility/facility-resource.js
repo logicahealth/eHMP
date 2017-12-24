@@ -14,7 +14,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['future-release-not-available-for-use'],
+        requiredPermissions: [],
         isPatientCentric: false,
         bypassCsrf: true
     }];

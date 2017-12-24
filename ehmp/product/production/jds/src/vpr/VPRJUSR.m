@@ -12,7 +12,7 @@ SET(ARGS,BODY)  ; Store or update a user data object based on the passed in id
   L +^VPRJUSR(SID):$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q ""
   TSTART
   I $O(^VPRJUSR(SID,""))']"" S INCR=$I(^VPRJUSR(0))
-  K ^VPRJUSR(SID)
+  K:$D(^VPRJUSR(SID)) ^VPRJUSR(SID)
   M ^VPRJUSR(SID)=DEMOG
   TCOMMIT
   L -^VPRJUSR(SID)
@@ -24,7 +24,7 @@ CLR(RESULT,ARGS)  ; Clear ALL user data object!!!
   L +^VPRJUSR:$G(^VPRCONFIG("timeout","gds"),5) E  D SETERROR^VPRJRER(502) Q
   S VPRJA=0
   TSTART
-  F  S VPRJA=$O(^VPRJUSR(VPRJA)) Q:VPRJA']""  K ^VPRJUSR(VPRJA)
+  F  S VPRJA=$O(^VPRJUSR(VPRJA)) Q:VPRJA']""  K:$D(^VPRJUSR(VPRJA)) ^VPRJUSR(VPRJA)
   S ^VPRJUSR(0)=0
   TCOMMIT
   L -^VPRJUSR
@@ -36,7 +36,7 @@ DEL(RESULT,ARGS)  ; Delete a given user data object
   I $D(^VPRJUSR(ARGS("_id"))) D
   .L +^VPRJUSR(ARGS("_id")):$G(^VPRCONFIG("timeout","gds"),5)
   .TSTART
-  .K ^VPRJUSR(ARGS("_id"))
+  .K:$D(^VPRJUSR(ARGS("_id"))) ^VPRJUSR(ARGS("_id"))
   .TCOMMIT
   .L -^VPRJUSR(ARGS("_id"))
   S RESULT="{}"
@@ -56,7 +56,9 @@ GET(RESULT,ARGS) ; Returns user data object
   N DEMOG,ERR,BODY,SID
   I $$UNKARGS^VPRJCU(.ARGS,"_id") Q
   S SID=ARGS("_id")
+  L +^VPRJUSR(ARGS("_id")):$G(^VPRCONFIG("timeout","gds"),5)
   M DEMOG=^VPRJUSR(SID)
+  L -^VPRJUSR(ARGS("_id"))
   D ENCODE^VPRJSON("DEMOG","BODY","ERR") ; From an array to JSON
   I $D(ERR) D SETERROR^VPRJRER(202) Q
   M RESULT=BODY

@@ -10,6 +10,17 @@ def remove_single_udaf_tag(term)
   true
 end
 
+When(/^the user opens applet "([^"]*)" Filter section$/) do |applet_num|
+  ehmp = PobUDAF.new
+  ehmp.to_filter_applet_grid(applet_num)
+
+  unless ehmp.wait_for_fld_filter
+    p "filter was not displayed, open filter section"
+    ehmp.btn_open_filter_section.click 
+  end
+  expect(ehmp.wait_for_fld_filter).to eq(true)
+end
+
 When(/^the user removes all udaf tags$/) do
   @ehmp = PobUDAF.new unless @ehmp.is_a? PobUDAF
   @ehmp.to_filter_applet_grid('1')
@@ -82,52 +93,52 @@ end
 
 When(/^the user renames the filter to "(.*?)"$/) do |filter_title|
   @ehmp = PobUDAF.new unless @ehmp.is_a? PobUDAF
+  @ehmp.fld_edit_filter_title.native.send_keys [:end]
+  @ehmp.fld_edit_filter_title.native.send_keys [:shift, :home], :backspace
   @ehmp.fld_edit_filter_title.set filter_title
   @ehmp.fld_edit_filter_title.native.send_keys(:enter)
 end
 
-def input_and_enter_into_control(container, modal_or_applet, control_name, input_text)
-  attempts ||= 0
-
-  control_key = "Control - #{modal_or_applet} - #{control_name}"
-  #p "control_key is #{control_key}"
-  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-  wait.until { container.get_element(control_key) }
-
-  input_element = container.get_element(control_key)
-
-  # need to clear what is currently in the input
-  # clear() seems to not work correctly with placeholders
-  for i in 0...input_element.attribute("value").size
-    input_element.send_keys(:backspace)
-  end
-
-  # if you just want to clear the input (empty input text)
-  unless input_text.strip.empty?
-    input_element.send_keys(input_text)
-    input_element.submit
-
-    # because of race conditions, sometimes the value doesn't get input correctly
-    if input_element.attribute("value") != input_text
-      fail
-    end
-  end # unless
-rescue => e
-  attempts += 1
-
-  if attempts < 3
-    p "Attemping retry of input."
-    sleep 2
-    retry
-  else
-    p "!! Error attempting input on - #{control_name} !!"
-    raise e
-  end # if/else
-  #else # succesful begin
-  #  p "Input - #{control_name}"
+Given(/^the user creates and views a udw with a summary numeric lab results applet$/) do
+  name = "udaffilter#{Time.now.strftime('%Y%m%d%H%M%S%L')}a"
+  p name
+  steps %{
+    Given the user creates a user defined workspace named "#{name}"
+    When the user customizes the "#{name}" workspace
+    And the user adds an summary "lab_results_grid" applet to the user defined workspace
+    And the user selects done to complete customizing the user defined workspace
+    Then the "#{name.upcase}" screen is active
+    And the active screen displays 1 applets
+    Then the applet "1" grid loads without issue
+  }
 end
 
-When(/^the user enters text "(.*?)" in the "(.*?)" control (?:on|in) the "(.*?)"$/) do |input_text, control_name, parent_name|
-  container_key = get_container_key(control_name, parent_name)
-  input_and_enter_into_control(container_key.container, container_key.modal_or_applet, container_key.control_name, input_text)
+Given(/^the user creates a unique user defined workspace$/) do
+  @unique_udw_name = "unique#{Time.now.strftime('%Y%m%d%H%M%S%L')}a"
+  p @unique_udw_name
+  steps %{
+    Given the user creates a user defined workspace named "#{@unique_udw_name}"
+  }
 end
+
+When(/^the user customizes the unique workspace$/) do
+  expect(@unique_udw_name).to_not be_nil
+  steps %{
+    When the user customizes the "#{@unique_udw_name}" workspace
+  }
+end
+
+Then(/^the unique screen is active$/) do
+  expect(@unique_udw_name).to_not be_nil
+  steps %{
+    Then the "#{@unique_udw_name.upcase}" screen is active
+  }
+end
+
+When(/^the user navigates to the unique workspace$/) do
+  expect(@unique_udw_name).to_not be_nil
+  steps %{
+    And the user navigates to "#/patient/#{@unique_udw_name}" 
+  }
+end
+

@@ -18,19 +18,19 @@ import java.util.ArrayList;
  {
  "stampTime": "20150522232603",
  "actionName": "VIEW",
- "actionUid": "urn:va:doc-action:9E7A:7",
+ "actionUid": "urn:va:doc-action:SITE:7",
  "description": "A clinical document with a status of Uncosigned may be viewed by individuals enrolled under the User Class, Clinical Service Chief.",
  "docDefName": "CLINICAL DOCUMENTS",
- "docDefUid": "urn:va:doc-def:9E7A:38",
+ "docDefUid": "urn:va:doc-def:SITE:38",
  "isAnd": false,
  "localId": 100,
  "statusName": "UNCOSIGNED",
- "statusUid": "urn:va:doc-status:9E7A:6",
- "uid": "urn:va:asu-rule:9E7A:100",
+ "statusUid": "urn:va:doc-status:SITE:6",
+ "uid": "urn:va:asu-rule:SITE:100",
  "userClassName": "CLINICAL SERVICE CHIEF",
- "userClassUid": "urn:va:asu-class:9E7A:554"
+ "userClassUid": "urn:va:asu-class:SITE:554"
  "userRoleName": "EXPECTED COSIGNER",
- "userRoleUid": "urn:va:asu-role:9E7A:4"
+ "userRoleUid": "urn:va:asu-role:SITE:4"
  }
 
  **/

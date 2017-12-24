@@ -5,7 +5,7 @@ require 'vistarpc4r'
 load_start_time = Time.now
 puts "Starting Data Upload"
 
-@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "REDACTED", "REDACTED", false)
+@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "USER  ", "USER  !!", false)
 @broker.connect
 @broker.setContext('OR CPRS GUI CHART')
 

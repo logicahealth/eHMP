@@ -3,9 +3,4 @@
 # Recipe:: default
 #
 
-gem_package 'greenletters'
-
-include_recipe 'jds::cache'
-include_recipe 'jds::config'
-include_recipe 'jds::routines'
-include_recipe 'jds::networking'
+# This recipe isn't used.  Call your machine specific recipe within this cookbook.

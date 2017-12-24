@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# usage: sudo ./record-update/utils/run-record-re-enrichment-util.sh --pid "9E7A;3" --domain allergy --updateTime 20071217151354 --solr-only
+# usage: sudo ./record-update/utils/run-record-re-enrichment-util.sh --pid "SITE;3" --domain allergy --updateTime 20071217151354 --solr-only
 
 # Each of the following values can all be overridden by
 # setting an environment variable of the same name:

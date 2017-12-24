@@ -1,5 +1,5 @@
-HMPDJ04 ;SLC/MKB,ASMR/RRB,ASF,PB - Appointments,Visits;May 24, 2016 15:21:17
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 7
+HMPDJ04 ;SLC/MKB,ASMR/RRB,ASF,PB,MBS - Appointments,Visits;July 20, 2017 10:53:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -21,7 +21,7 @@ HMPDJ04 ;SLC/MKB,ASMR/RRB,ASF,PB - Appointments,Visits;May 24, 2016 15:21:17
  Q
  ;
 SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
- N NODE,HLOC,APPT,X,STS,CLS,FAC,SV,PRV
+ N NODE,HLOC,APPT,X,STS,CLS,FAC,SV,PRV,CREDSTOP
  S NODE=$G(^TMP($J,"SDAMA301",DFN,HMPDT))
  N $ES,$ET,ERRPAT,ERRMSG
  S $ET="D ERRHDLR^HMPDERRH",ERRPAT=DFN
@@ -44,6 +44,8 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  . S X=$$GET1^DIQ(44,(+HLOC)_",",1) S:X]"" APPT("shortLocationName")=X  ;DE2818, (#1) ABBREVIATION
  . S X=$$AMIS^HMPDVSIT(+$P(NODE,U,13))
  . S:$L(X) APPT("stopCodeUid")="urn:va:stop-code:"_$P(X,U),APPT("stopCodeName")=$P(X,U,2)
+ . S CREDSTOP=$$GET1^DIQ(44,HLOC_",",2503,"I")
+ . S:CREDSTOP CREDSTOP=$$AMIS^HMPDVSIT(CREDSTOP),APPT("creditStopCodeUid")="urn:va:stop-code:"_$P(CREDSTOP,U),APPT("creditStopCodeName")=$P(CREDSTOP,U,2)
  . S SV=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
  . I SV S APPT("service")=$$SERV^HMPDSDAM(SV)
  . ;find default provider
@@ -66,6 +68,7 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  Q
  ;
 DGS ; scheduled admissions [from APPOINTM^HMPDJ0]
+ N HMPA,HMPX
  ;DE2818, ^DGS(41.1) references ICR 3796
  S HMPA=0 F  S HMPA=$O(^DGS(41.1,"B",DFN,HMPA)) Q:HMPA<1  D  Q:HMPI'<HMPMAX
  . S HMPX=$G(^DGS(41.1,HMPA,0))
@@ -76,7 +79,7 @@ DGS ; scheduled admissions [from APPOINTM^HMPDJ0]
  Q
  ;
 DGS1(IFN) ; -- scheduled admission
- N ADM,X0,DATE,HLOC,FAC,SV,X
+ N ADM,X0,DATE,HLOC,FAC,SV,X,CREDSTOP
  S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted (DE2818, ICR 3796)
  ;
  S DATE=+$P(X0,U,2),HLOC=+$$GET1^DIQ(42,+$P(X0,U,8)_",",.01)  ;DE2818, ICR 10039
@@ -90,6 +93,8 @@ DGS1(IFN) ; -- scheduled admission
  . S ADM("locationUid")=$$SETUID^HMPUTILS("location",,+HLOC)
  . S X=$$GET1^DIQ(44,+HLOC_",",8,"I"),X=$$AMIS^HMPDVSIT(X)
  . S:$L(X) ADM("stopCodeUid")="urn:va:stop-code:"_$P(X,U),ADM("stopCodeName")=$P(X,U,2)
+ . S CREDSTOP=$$GET1^DIQ(44,HLOC_",",2503,"I")
+ . S:CREDSTOP CREDSTOP=$$AMIS^HMPDVSIT(CREDSTOP),ADM("creditStopCodeUid")="urn:va:stop-code:"_$P(CREDSTOP,U),ADM("creditStopCodeName")=$P(CREDSTOP,U,2)
  . S SV=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
  . I SV S ADM("service")=$$SERV^HMPDSDAM(SV)
  S X=+$P(X0,U,5) I X D
@@ -106,7 +111,7 @@ DGS1(IFN) ; -- scheduled admission
  Q
  ;
 VSIT1(ID) ; -- visit
- N VST,X0,X15,X,FAC,LOC,CATG,AMIS,INPT,DA,PS
+ N VST,X0,X15,X,FAC,LOC,CATG,AMIS,INPT,DA,PS,CREDSTOP
  I $G(ID)?1"H"1.N D ADM^HMPDJ04A(ID) Q
  ;DE2818, ICR 6275
  I $D(^EDP(230,"V",ID)),$L($T(EDP1^HMPDJ04E)) D EDP1^HMPDJ04E(ID) Q
@@ -145,6 +150,8 @@ VSIT1(ID) ; -- visit
  . S VST("locationName")=$$GET1^DIQ(44,LOC_",",.01)  ;DE2818, (#.01) NAME
  . S VST("locationOos")=$S($$GET1^DIQ(44,LOC_",",50.01,"I"):"true",1:"false")  ;DE2818, (#50.01) OCCASION OF SERVICE CLINIC?
  . S X=$$SERV^HMPDVSIT($$GET1^DIQ(44,LOC_",",9.5,"I")) S:$L(X) VST("service")=X  ;DE2818, (#9.5) TREATING SPECIALTY
+ . S CREDSTOP=$$GET1^DIQ(44,LOC_",",2503,"I")
+ . S:CREDSTOP CREDSTOP=$$AMIS^HMPDVSIT(CREDSTOP),VST("creditStopCodeUid")="urn:va:stop-code:"_$P(CREDSTOP,U),VST("creditStopCodeName")=$P(CREDSTOP,U,2)
  S:$D(AMIS) VST("stopCodeUid")="urn:va:stop-code:"_$P(AMIS,U),VST("stopCodeName")=$P(AMIS,U,2)
  S X=$$POV(ID) S:$L(X) VST("reasonUid")=$$SETNCS^HMPUTILS("icd",$P(X,U)),VST("reasonName")=$P(X,U,2)
  ; provider(s), DE2818 - ^AUPNVPRV references - ICR 2316

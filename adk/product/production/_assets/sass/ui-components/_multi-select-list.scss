@@ -15,14 +15,13 @@
             width: 100%;
             &:hover,
             &:focus {
-                background-color: $primary-lightest;
                 color: $primary-dark;
                 text-decoration: none;
                 
             }
         }
         &:hover {
-            background-color: $primary-lightest;
+            background-color: $primary-lighter;
         }
     }
 }

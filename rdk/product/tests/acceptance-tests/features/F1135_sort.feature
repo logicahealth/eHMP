@@ -4,7 +4,7 @@ Feature: Improve Document applet data load times with server side Pagination
 
 @US17106 @US17106_date @US17106_date_asc
 Scenario:  Client recives documents sorted in ascending order by dateTime field
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -18,7 +18,7 @@ Scenario:  Client recives documents sorted in ascending order by dateTime field
 
 @US17106 @US17106_date @US17106_date_desc
 Scenario: Client recives documents sorted in descending order by dateTime field
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -33,7 +33,7 @@ Scenario: Client recives documents sorted in descending order by dateTime field
 
 @US17106 @US17106_type @US17106_type_asc
 Scenario: Client recives documents sorted in ascending order by Type field, then descending order by dateTime (descending datetime order is the way 2.0 documents functions)
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -48,7 +48,7 @@ Scenario: Client recives documents sorted in ascending order by Type field, then
 
 @US17106 @US17106_type @US17106_type_asc
 Scenario: Verify secondary dateTime sort can be ascending
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -64,7 +64,7 @@ Scenario: Verify secondary dateTime sort can be ascending
 
 @US17106 @US17106_type @US17106_type_desc
 Scenario: Client recives documents sorted in descending order by Type field, then descending order by dateTime (descending datetime order is the way 2.0 documents functions)
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -78,7 +78,7 @@ Scenario: Client recives documents sorted in descending order by Type field, the
 
 @US17106 @US17106_facility_asc
 Scenario: Client recives documents sorted in ascending order by facilityName field, then descending order by dateTime (descending datetime order is the way 2.0 documents functions)
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -94,7 +94,7 @@ Scenario: Client recives documents sorted in ascending order by facilityName fie
 
 @US17106 @US17106_facility_desc
 Scenario: Client recives documents sorted in descending order by facilityName field, then descending order by dateTime (descending datetime order is the way 2.0 documents functions)
-  When the client requests sorted DOCUMENTS for the patient "9E7A;8"
+  When the client requests sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 45        |
@@ -109,7 +109,7 @@ Scenario: Client recives documents sorted in descending order by facilityName fi
 
 @US17106 @US17106_facility_desc_error
 Scenario: Client receives error when missing sort order
-  When the client attempts to request sorted DOCUMENTS for the patient "9E7A;8"
+  When the client attempts to request sorted DOCUMENTS for the patient "SITE;8"
   | parameter | value      |
   | template  | notext     |
   | limit     | 40         |
@@ -120,8 +120,8 @@ Scenario: Client receives error when missing sort order
 
 @sort_with_infinite_scroll
 Scenario: Client receives documents filtered with scrolling
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
-  When the client requests sorted DOCUMENTS for the patient "9E7A;3"
+  Given a patient with pid "SITE;301" has been synced through the RDK API
+  When the client requests sorted DOCUMENTS for the patient "SITE;301"
   | parameter | value      |
   | template  | notext     |
   | limit     | 2000       |
@@ -129,7 +129,7 @@ Scenario: Client receives documents filtered with scrolling
   | range     | 19350407..20170615235959         |
   | order     | facilityName ASC, dateTime DESC  |
   And the client notes the returned documents non-scrolled results
-  When the client requests sorted DOCUMENTS by scrolling for the patient "9E7A;3"
+  When the client requests sorted DOCUMENTS by scrolling for the patient "SITE;301"
   | parameter | value      |
   | template  | notext     |
 

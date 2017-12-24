@@ -24,7 +24,7 @@ var syncStatus1 = {
                         'domain': 'allergy',
                         'eventCount': 1,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:546': {
+                            'urn:va:allergy:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -37,7 +37,7 @@ var syncStatus1 = {
                         'domain': 'appointment',
                         'eventCount': 1,
                         'eventMetaStamp': {
-                            'urn:va:appointment:9E7A:3:546': {
+                            'urn:va:appointment:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -50,7 +50,7 @@ var syncStatus1 = {
                         'domain': 'consult',
                         'eventCount': 1,
                         'eventMetaStamp': {
-                            'urn:va:consult:9E7A:3:546': {
+                            'urn:va:consult:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -66,13 +66,13 @@ var syncStatus1 = {
                 'syncCompleteAsOf': 20160411095621,
                 'syncCompleted': true
             },
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'eventCount': 4,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:546': {
+                            'urn:va:allergy:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -83,7 +83,7 @@ var syncStatus1 = {
                     }
                 },
                 'localId': '3',
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'stampTime': 20160408113843,
                 'syncCompleteAsOf': 20160411095621,
                 'syncCompleted': true
@@ -136,21 +136,21 @@ var syncStatus2 = {
                 'syncCompleteAsOf': 20160412140317,
                 'syncCompleted': true
             },
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'eventCount': 3,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:546': {
+                            'urn:va:allergy:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:547': {
+                            'urn:va:allergy:SITE:3:547': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:548': {
+                            'urn:va:allergy:SITE:3:548': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -163,11 +163,11 @@ var syncStatus2 = {
                         'domain': 'appointment',
                         'eventCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:appointment:9E7A:3:546': {
+                            'urn:va:appointment:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:appointment:9E7A:3:547': {
+                            'urn:va:appointment:SITE:3:547': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -178,7 +178,7 @@ var syncStatus2 = {
                     }
                 },
                 'localId': 8,
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'stampTime': 16051105010000,
                 'syncCompleteAsOf': 20160412140317,
                 'syncCompleted': true
@@ -192,21 +192,21 @@ var simpleSyncStatus1 = {
         'icn': '10108V420871',
         'lastAccessTime': 20160412104227,
         'sourceMetaStamp': {
-            '9E7A': {
+            'SITE': {
                 'domainMetaStamp': {
                     'allergy': {
                         'domain': 'allergy',
                         'eventCount': 3,
                         'eventMetaStamp': {
-                            'urn:va:allergy:9E7A:3:546': {
+                            'urn:va:allergy:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:547': {
+                            'urn:va:allergy:SITE:3:547': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:allergy:9E7A:3:548': {
+                            'urn:va:allergy:SITE:3:548': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -219,11 +219,11 @@ var simpleSyncStatus1 = {
                         'domain': 'appointment',
                         'eventCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:appointment:9E7A:3:546': {
+                            'urn:va:appointment:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:appointment:9E7A:3:548': {
+                            'urn:va:appointment:SITE:3:548': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -236,11 +236,11 @@ var simpleSyncStatus1 = {
                         'domain': 'consult',
                         'eventCount': 2,
                         'eventMetaStamp': {
-                            'urn:va:consult:9E7A:3:546': {
+                            'urn:va:consult:SITE:3:546': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             },
-                            'urn:va:consult:9E7A:3:547': {
+                            'urn:va:consult:SITE:3:547': {
                                 'stampTime': 20090317200936,
                                 'stored': true
                             }
@@ -251,7 +251,7 @@ var simpleSyncStatus1 = {
                     }
                 },
                 'localId': 3,
-                'pid': '9E7A;3',
+                'pid': 'SITE;3',
                 'stampTime': 20160412101240,
                 'syncCompleteAsOf': 20160412143126,
                 'syncCompleted': true
@@ -274,8 +274,8 @@ var patientList = {
         'patientIdentifiers': [
             '2939;467',
             '5000000341V359724',
-            '9E7A;100022',
-            'C877;100022',
+            'SITE;100022',
+            'SITE;100022',
             'DOD;0000000010',
             'FFC7;476',
             'VHICID;7551',
@@ -287,8 +287,8 @@ var patientList = {
         'patientIdentifiers': [
             '10110V004877',
             '2939;21',
-            '9E7A;8',
-            'C877;8',
+            'SITE;8',
+            'SITE;8',
             'DOD;0000000008',
             'FFC7;30',
             'VHICID;31733',
@@ -310,9 +310,9 @@ var allergyDomainData1 = {
             'uid': 'urn:va:allergy:2939:19:106'
         }, {
             'data': 'someData',
-            'pid': '9E7A;3',
+            'pid': 'SITE;3',
             'stampTime': 20160303154108,
-            'uid': 'urn:va:allergy:9E7A:3:751'
+            'uid': 'urn:va:allergy:SITE:3:751'
         }]
     }
 };
@@ -325,8 +325,8 @@ var allergyDomainData2 = {
         'currentItemCount': 1,
         'items': [{
             'data': 'someData',
-            'pid': '9E7A;8',
-            'uid': 'urn:va:allergy:9E7A:8:751',
+            'pid': 'SITE;8',
+            'uid': 'urn:va:allergy:SITE:8:751',
             'stampTime': 20061217151354,
         }]
     }
@@ -340,8 +340,8 @@ var consultDomainData1 = {
         'currentItemCount': 2,
         'items': [{
             'data': 'someData',
-            'pid': '9E7A;8',
-            'uid': 'urn:va:consult:9E7A:8:751',
+            'pid': 'SITE;8',
+            'uid': 'urn:va:consult:SITE:8:751',
             'stampTime': 20061217151354
         }]
     }
@@ -438,14 +438,14 @@ describe('record-re-enrichment-util.js', function() {
             var done = false;
 
             runs(function() {
-                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3', '9E7A;8'], function(error, result) {
+                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3', 'SITE;8'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toBeTruthy();
                     expect(result).toEqual({
                         '2939;3': ['allergy', 'appointment', 'consult'],
-                        '9E7A;3': ['allergy'],
-                        '9E7A;8': ['allergy', 'appointment']
+                        'SITE;3': ['allergy'],
+                        'SITE;8': ['allergy', 'appointment']
                     });
                 });
             });
@@ -466,12 +466,12 @@ describe('record-re-enrichment-util.js', function() {
             var done = false;
 
             runs(function() {
-                reEnrichUtil.retrievePatientSyncDomains(null, ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                reEnrichUtil.retrievePatientSyncDomains(null, ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toBeTruthy();
                     expect(result).toEqual({
-                        '9E7A;3': ['allergy', 'appointment', 'consult']
+                        'SITE;3': ['allergy', 'appointment', 'consult']
                     });
                 });
             });
@@ -494,7 +494,7 @@ describe('record-re-enrichment-util.js', function() {
             var done = false;
 
             runs(function() {
-                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -517,7 +517,7 @@ describe('record-re-enrichment-util.js', function() {
             var done = false;
 
             runs(function() {
-                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                reEnrichUtil.retrievePatientSyncDomains('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['SITE;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -535,7 +535,7 @@ describe('record-re-enrichment-util.js', function() {
             sessionId: 'TEST',
             utilityType: 'Record Re-enrichment Util Unit Test'
         };
-        it('Normal path: updateTime provided', function() {
+        it('Normal path: updateTime provided', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, null, null], [{
                 statusCode: 200
@@ -554,8 +554,8 @@ describe('record-re-enrichment-util.js', function() {
             });
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
             reEnrichUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, referenceInfo, function(error) {
                 expect(error).toBeFalsy();
@@ -587,14 +587,14 @@ describe('record-re-enrichment-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
                         'data': 'someData',
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20160303154108,
-                        'uid': 'urn:va:allergy:9E7A:3:751'
+                        'uid': 'urn:va:allergy:SITE:3:751'
                     },
                     'jobId': jasmine.any(String),
                     'referenceInfo': {
@@ -603,10 +603,13 @@ describe('record-re-enrichment-util.js', function() {
                         utilityType: referenceInfo.utilityType
                     }
                 }));
+
+                done();
             });
+
         });
 
-        it('Normal path: updateTime omitted', function() {
+        it('Normal path: updateTime omitted', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, null, null], [{
                 statusCode: 200
@@ -619,8 +622,8 @@ describe('record-re-enrichment-util.js', function() {
             var reEnrichUtil = new ReEnrichUtil(log, jdsClient, updateConfig);
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var jobsSentToBeanstalkByPid = [];
@@ -659,14 +662,14 @@ describe('record-re-enrichment-util.js', function() {
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
                         'type': 'pid',
-                        'value': '9E7A;3'
+                        'value': 'SITE;3'
                     },
                     'dataDomain': 'allergy',
                     'record': {
                         'data': 'someData',
-                        'pid': '9E7A;3',
+                        'pid': 'SITE;3',
                         'stampTime': 20160303154108,
-                        'uid': 'urn:va:allergy:9E7A:3:751'
+                        'uid': 'urn:va:allergy:SITE:3:751'
                     },
                     'jobId': jasmine.any(String),
                     'referenceInfo': {
@@ -675,10 +678,11 @@ describe('record-re-enrichment-util.js', function() {
                         utilityType: referenceInfo.utilityType
                     }
                 }));
+                done();
             });
         });
 
-        it('Error path: error returned by writeJobsToBeanstalk', function() {
+        it('Error path: error returned by writeJobsToBeanstalk', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, null, null], [{
                 statusCode: 200
@@ -691,8 +695,8 @@ describe('record-re-enrichment-util.js', function() {
             var reEnrichUtil = new ReEnrichUtil(log, jdsClient, updateConfig);
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             var jobsSentToBeanstalkByPid = [];
@@ -705,10 +709,11 @@ describe('record-re-enrichment-util.js', function() {
                 expect(error).toBeFalsy();
                 var jobsSentToBeanstalk = _.flatten(jobsSentToBeanstalkByPid);
                 expect(jobsSentToBeanstalk.length).toEqual(3);
+                done();
             });
         });
 
-        it('Error path: error from JDS', function() {
+        it('Error path: error from JDS', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, {
                 error: 'ERROR!'
@@ -721,8 +726,8 @@ describe('record-re-enrichment-util.js', function() {
             var reEnrichUtil = new ReEnrichUtil(log, jdsClient, updateConfig);
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             spyOn(reEnrichUtil, 'writeJobsToBeanstalk').andCallFake(function(childLog, jobs, callback) {
@@ -731,10 +736,11 @@ describe('record-re-enrichment-util.js', function() {
 
             reEnrichUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, referenceInfo, function(error) {
                 expect(error).toBeFalsy();
+                done();
             });
         });
 
-        it('Error path: No response from JDS', function() {
+        it('Error path: No response from JDS', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, null, null], [{
                 statusCode: 200
@@ -745,8 +751,8 @@ describe('record-re-enrichment-util.js', function() {
             var reEnrichUtil = new ReEnrichUtil(log, jdsClient, updateConfig);
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             spyOn(reEnrichUtil, 'writeJobsToBeanstalk').andCallFake(function(childLog, jobs, callback) {
@@ -755,10 +761,11 @@ describe('record-re-enrichment-util.js', function() {
 
             reEnrichUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, referenceInfo, function(error) {
                 expect(error).toBeFalsy();
+                done();
             });
         });
 
-        it('Error path: Unexpected statusCode from JDS', function() {
+        it('Error path: Unexpected statusCode from JDS', function(done) {
             var jdsClient = new JdsClientDummy(log, {});
             jdsClient._setResponseData([null, null, null], [{
                 statusCode: 200
@@ -771,8 +778,8 @@ describe('record-re-enrichment-util.js', function() {
             var reEnrichUtil = new ReEnrichUtil(log, jdsClient, updateConfig);
 
             var pidsToResyncDomains = {
-                '9E7A;3': ['allergy'],
-                '9E7A;8': ['allergy', 'consult']
+                'SITE;3': ['allergy'],
+                'SITE;8': ['allergy', 'consult']
             };
 
             spyOn(reEnrichUtil, 'writeJobsToBeanstalk').andCallFake(function(childLog, jobs, callback) {
@@ -781,6 +788,7 @@ describe('record-re-enrichment-util.js', function() {
 
             reEnrichUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, referenceInfo, function(error) {
                 expect(error).toBeFalsy();
+                done();
             });
         });
     });

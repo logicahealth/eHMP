@@ -9,22 +9,22 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
 
         function getUser(){
             var user = new Backbone.Model();
-            user.set('site', '9E7A');
-            user.set('duz', {'9E7A': '1234'});
+            user.set('site', 'SITE');
+            user.set('duz', {'SITE': '1234'});
             return user;
         }
 
         function getPatient(){
             
             var currentPatient = new Backbone.Model();
-            currentPatient.set('pid', '9E7A;3');
+            currentPatient.set('pid', 'SITE;3');
             currentPatient.set('localId', '64');
             currentPatient.set('fullName', 'TEST,PATIENT');
 
             return currentPatient;
         }
 
-		var user = {'duz': {'9E7A': '1234'}};
+		var user = {'duz': {'SITE': '1234'}};
 		var author = {'name': 'AUTHOR TEST', 'duz': user};
 
         var testAnnotations = [{
@@ -211,8 +211,8 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     problemIEN: '33',
                     'onset-date': '02/2012',
                     noTreatmentFactors: 'true',
-                    'originalComments': new Backbone.Collection([{noteCounter: 1, commentString: 'comment 1', author: {duz: {'9E7A': '1234'}}}]),
-                    'annotations': new Backbone.Collection([{noteCounter: 1, commentString: 'comment', author: {duz: {'9E7A': '1234'}}}, {commentString: 'comment 2', author: {duz: {'9E7A': '1234'}}}])
+                    'originalComments': new Backbone.Collection([{noteCounter: 1, commentString: 'comment 1', author: {duz: {'SITE': '1234'}}}]),
+                    'annotations': new Backbone.Collection([{noteCounter: 1, commentString: 'comment', author: {duz: {'SITE': '1234'}}}, {commentString: 'comment 2', author: {duz: {'SITE': '1234'}}}])
                 });
                 WritebackUtil.buildEditProblemsModel(formModel, getUser(), editProblemModel);
                 expect(editProblemModel.get('problemIEN')).toEqual('33');
@@ -232,14 +232,14 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 123',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
                     commentString: 'testing 345',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -255,7 +255,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -264,7 +264,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -274,7 +274,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -291,7 +291,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -300,7 +300,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -310,7 +310,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'new comment',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
@@ -318,7 +318,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'new comment 2',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -335,7 +335,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -344,7 +344,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
@@ -352,7 +352,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'delete me',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
@@ -360,7 +360,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'rename me',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -370,7 +370,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -379,7 +379,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
@@ -387,21 +387,21 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'some new name',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
                     commentString: 'new additional comment',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
                     commentString: 'another new comment',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -422,7 +422,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -431,7 +431,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '4321'
+                            'SITE': '4321'
                         }
                     }
                 },{
@@ -439,7 +439,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'test comment from another user',
                     author: {
                         duz: {
-                            'C877': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -449,7 +449,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing changes',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },
@@ -458,7 +458,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'testing 2',
                     author: {
                         duz: {
-                            '9E7A': '4321'
+                            'SITE': '4321'
                         }
                     }
                 },{
@@ -466,21 +466,21 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                     commentString: 'test comment from another user',
                     author: {
                         duz: {
-                            'C877': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
                     commentString: 'new additional comment',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 },{
                     commentString: 'another new comment',
                     author: {
                         duz: {
-                            '9E7A': '1234'
+                            'SITE': '1234'
                         }
                     }
                 }]);
@@ -499,7 +499,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
             });
 
             it('Should fail when duz is undefined', function(){
-                expect(WritebackUtil.isCommentByLoggedInUser(new Backbone.Model({site: '9E7A'}), new Backbone.Model())).toEqual(false);
+                expect(WritebackUtil.isCommentByLoggedInUser(new Backbone.Model({site: 'SITE'}), new Backbone.Model())).toEqual(false);
             });
 
             it('Should fail when no author on the comment', function(){
@@ -507,15 +507,15 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
             });
 
             it('Should fail when no duz on the comment for the logged in user site', function(){
-                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'C877': '1234'}}}))).toEqual(false);
+                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'SITE': '1234'}}}))).toEqual(false);
             });
 
             it('Should fail when no user IDs do not match', function(){
-                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'9E7A': '4321'}}}))).toEqual(false);
+                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'SITE': '4321'}}}))).toEqual(false);
             });
 
             it('Should pass when sites and user IDs match', function(){
-                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'9E7A': '1234'}}}))).toEqual(true);
+                expect(WritebackUtil.isCommentByLoggedInUser(getUser(), new Backbone.Model({author: {duz: {'SITE': '1234'}}}))).toEqual(true);
             });
         });
 });

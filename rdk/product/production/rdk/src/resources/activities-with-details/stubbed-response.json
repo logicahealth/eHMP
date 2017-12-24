@@ -1,0 +1,351 @@
+{ "items": [{
+    "ACTIVITYHEALTHDESCRIPTION": null,
+    "ASSIGNEDTOFACILITYID": null,
+    "ASSIGNEDTOID": "[TM:(1131)/TR:(24)]",
+    "CREATEDATID": null,
+    "CREATEDBYID": "SITE;10000000270",
+    "CREATEDBYNAME": "USER,PANORAMA",
+    "CREATEDON": "2016-06-20T11:23:19.000Z",
+    "DEPLOYMENTID": "VistaCore:Order:2.0.rc201.157",
+    "DOMAIN": "Discharge Follow-Up",
+    "INSTANCENAME": "Inpatient Discharge",
+    "INTENDEDFOR": "",
+    "ISACTIVITYHEALTHY": 1,
+    "ISSENSITIVEPATIENT": false,
+    "MODE": "Opened",
+    "NAME": "DischargeFollowup",
+    "PATIENTNAME": "EIGHT,PATIENT",
+    "PATIENTSSNLASTFOUR": "0008",
+    "PID": "SITE;3",
+    "PROCESSID": "62",
+    "STATUS": "InProgress",
+    "TASKSTATE": "Active: Pending Follow-up",
+    "ROUTINGCODE": "[TF:Primary Care(1131)/FC: PANORAMA (SITE)]",
+    "PCPID": "SITE;10000000288",
+    "PCPNAME": "PROVIDER, TWO",
+    "PCTEAM": "1131",
+    "PROCESSID": "123",
+    "URGENCY": 9,
+    "ACTIVITYJSON": {
+        "activity": {
+            "activityDescription": "Discharge Follow-up is used to document the patient contact after discharge from the hospital.",
+            "deploymentId": "VistaCore:Order",
+            "processDefinitionId": "Order.DischargeFollowup",
+            "type": "Order",
+            "domain": "Discharge Follow-Up",
+            "processInstanceId": "123",
+            "instanceName": "Inpatient Discharge",
+            "patientUid": "urn:va:patient:[site]:[DFN]:[DFN]",
+            "clinicalObjectUid": "",
+            "sourceFacilityId": "",
+            "destinationFacilityId": "",
+            "state": "Active: Pending Follow-up",
+            "initiator": "urn:va:user:[site]:[DUZ]",
+            "timeStamp": "20160420000000",
+            "urgency": "9",
+            "assignedTo": "",
+            "activityHealthy": "1",
+            "activityHealthDescription": ""
+        },
+        "discharge": {
+            "dateTime": "20170320000000",
+            "admitDateTime": "20170319000000",
+            "fromFacilityId": "637",
+            "disposition": "[discharged disposition]",
+            "primaryCarePhysicianIdAtActivityClosure": "[userId]",
+            "primaryCarePhysicianNameAtActivityClosure": "[user name]",
+            "primaryCareTeamAtActivityClosure": "[primary care team]",
+            "diagnosis": {
+                "id": "1",
+                "code": "[code]",
+                "description": "[diagnosis description]",
+                "timeout": "[configurable timeout value]"
+            }
+        },
+        "contact": {
+            "dueDateTime": "20170322000000",
+            "attempts": "1"
+        },
+        "follow-up": {
+            "actionId": "[actionId]",
+            "actionText": "Contact Attempt",
+            "executionUserId": "[userId]",
+            "executionUserName": "[user name]",
+            "executionDateTime": "[timestamp]",
+            "data": {
+                "comment": "Attempted to call but no answer from the patient",
+                "attempt": "1"
+            }
+        }
+    }
+},
+{
+    "ACTIVITYHEALTHDESCRIPTION": "Patient has not been contacted",
+    "ASSIGNEDTOFACILITYID": null,
+    "ASSIGNEDTOID": "[TM:(1131)/TR:(24)]",
+    "CREATEDATID": null,
+    "CREATEDBYID": "SITE;10000000270",
+    "CREATEDBYNAME": "USER,PANORAMA",
+    "CREATEDON": "2016-06-22T11:23:19.000Z",
+    "DEPLOYMENTID": "VistaCore:Order:2.0.rc201.157",
+    "DOMAIN": "Discharge Follow-Up",
+    "INSTANCENAME": "Inpatient Discharge",
+    "INTENDEDFOR": "",
+    "ISACTIVITYHEALTHY": 0,
+    "ISSENSITIVEPATIENT": false,
+    "MODE": "Opened",
+    "NAME": "DischargeFollowup",
+    "PATIENTNAME": "BCMA,EIGHT",
+    "PATIENTSSNLASTFOUR": "1111",
+    "PID": "SITE;100022",
+    "PROCESSID": "62",
+    "STATUS": "InProgress",
+    "TASKSTATE": "Active: Pending Follow-up",
+    "ROUTINGCODE": "[TF:Primary Care(1131)/FC: PANORAMA (SITE)]",
+    "PCPID": "SITE;10000000288",
+    "PCPNAME": "KHAN,VIHAAN",
+    "PCTEAM": "1131",
+    "PROCESSID": "124",
+    "URGENCY": 9,
+    "ACTIVITYJSON": {
+        "activity": {
+            "activityDescription": "Discharge Follow-up is used to document the patient contact after discharge from the hospital.",
+            "deploymentId": "VistaCore:Order",
+            "processDefinitionId": "Order.DischargeFollowup",
+            "type": "Order",
+            "domain": "Discharge Follow-Up",
+            "processInstanceId": "124",
+            "instanceName": "Inpatient Discharge",
+            "patientUid": "urn:va:patient:[site]:[DFN]:[DFN]",
+            "clinicalObjectUid": "",
+            "sourceFacilityId": "",
+            "destinationFacilityId": "",
+            "state": "Active: Pending Follow-up",
+            "initiator": "urn:va:user:[site]:[DUZ]",
+            "timeStamp": "20160420000000",
+            "urgency": "9",
+            "assignedTo": "",
+            "activityHealthy": "0",
+            "activityHealthDescription": "Patient has not been contacted"
+        },
+        "discharge": {
+            "dateTime": "20160319000000",
+            "admitDateTime": "20160319000000",
+            "fromFacilityId": "500",
+            "disposition": "Test disposition",
+            "primaryCarePhysicianIdAtActivityClosure": "[userId]",
+            "primaryCarePhysicianNameAtActivityClosure": "[user name]",
+            "primaryCareTeamAtActivityClosure": "Panorama Care Team 1",
+            "diagnosis": {
+                "id": "1",
+                "code": "[code]",
+                "description": "[diagnosis description]",
+                "timeout": "[configurable timeout value]"
+            }
+        },
+        "contact": {
+            "dueDateTime": "20170322000000",
+            "attempts": "3"
+        },
+        "follow-up": {
+            "actionId": "[actionId}",
+            "actionText": "Contact Attempt",
+            "executionUserId": "[userId]",
+            "executionUserName": "[user name]",
+            "executionDateTime": "[timestamp]",
+            "data": {
+                "comment": "Attempted to call but no answer from the patient",
+                "attempt": "1"
+            }
+        },
+        "signal": {
+            "name": "COMPLETE",
+            "actionId": "[actionId}",
+            "actionText": "Complete",
+            "history": [
+                {
+                    "taskName": "Attempt",
+                    "signalAction": "Complete",
+                    "signalStatusTimestamp": "2017-06-16T17:37:01.000Z",
+                    "signalHistory": "Attempted to call but no answer from the patient",
+                    "signalOwnerName": "KHAN,VIHAAN"
+                }, {
+                    "taskName": "Attempt",
+                    "signalAction": "Complete",
+                    "signalStatusTimestamp": "2017-06-16T17:37:01.000Z",
+                    "signalHistory": "Attempted to call second time but no answer from the patient",
+                    "signalOwnerName": "KHAN,VIHAAN"
+                }
+            ],
+            "executionUserId": "[userId]",
+            "executionUserName": "[user name]",
+            "executionDateTime": "[timestamp]",
+            "data":{
+                "comment": "Comment from UI Screen"
+            }
+        }
+    }
+},
+{
+    "ACTIVITYHEALTHDESCRIPTION": "No response from patient",
+    "ASSIGNEDTOFACILITYID": null,
+    "ASSIGNEDTOID": "[TM:(1131)/TR:(24)]",
+    "CREATEDATID": null,
+    "CREATEDBYID": "SITE;10000000270",
+    "CREATEDBYNAME": "USER,PANORAMA",
+    "CREATEDON": "2016-06-22T11:23:19.000Z",
+    "DEPLOYMENTID": "VistaCore:Order:2.0.rc201.157",
+    "DOMAIN": "Discharge Follow-Up",
+    "INSTANCENAME": "Inpatient Discharge",
+    "INTENDEDFOR": "",
+    "ISACTIVITYHEALTHY": 0,
+    "ISSENSITIVEPATIENT": false,
+    "MODE": "Opened",
+    "NAME": "DischargeFollowup",
+    "PATIENTNAME": "ZZZRETFIVEFIFTYONE,PATIENT",
+    "PATIENTSSNLASTFOUR": "9999",
+    "PID": "SITE;1",
+    "PROCESSID": "62",
+    "STATUS": "InProgress",
+    "TASKSTATE": "Active: Pending Follow-up",
+    "ROUTINGCODE": "[TF:Primary Care(1131)/FC: PANORAMA (SITE)]",
+    "PCPID": "SITE;10000000288",
+    "PCPNAME": "USER,PANORAMA",
+    "PCTEAM": "1131",
+    "PROCESSID": "222",
+    "URGENCY": 9,
+    "ACTIVITYJSON": {
+        "activity": {
+            "activityDescription": "Discharge Follow-up is used to document the patient contact after discharge from the hospital.",
+            "deploymentId": "VistaCore:Order",
+            "processDefinitionId": "Order.DischargeFollowup",
+            "type": "Order",
+            "domain": "Discharge Follow-Up",
+            "processInstanceId": "222",
+            "instanceName": "Inpatient Discharge",
+            "patientUid": "urn:va:patient:[site]:[DFN]:[DFN]",
+            "clinicalObjectUid": "",
+            "sourceFacilityId": "",
+            "destinationFacilityId": "",
+            "state": "Active: Pending Follow-up",
+            "initiator": "urn:va:user:[site]:[DUZ]",
+            "timeStamp": "20160420000000",
+            "urgency": "9",
+            "assignedTo": "",
+            "activityHealthy": "0",
+            "activityHealthDescription": "No response from patient"
+        },
+        "discharge": {
+            "dateTime": "20170131000000",
+            "admitDateTime": "20170319000000",
+            "fromFacilityId": "500",
+            "disposition": "A different disposition",
+            "primaryCarePhysicianIdAtActivityClosure": "[userId]",
+            "primaryCarePhysicianNameAtActivityClosure": "[user name]",
+            "primaryCareTeamAtActivityClosure": "Urgent care team",
+            "diagnosis": {
+                "id": "1",
+                "code": "[code]",
+                "description": "[diagnosis description]",
+                "timeout": "[configurable timeout value]"
+            }
+        },
+        "contact": {
+            "dueDateTime": "20170322000000",
+            "attempts": "2"
+        },
+        "follow-up": {
+            "actionId": "[actionId}",
+            "actionText": "Contact Attempt",
+            "executionUserId": "[userId]",
+            "executionUserName": "[user name]",
+            "executionDateTime": "[timestamp]",
+            "data": {
+                "comment": "Attempted to call but no answer from the patient",
+                "attempt": "1"
+            }
+        }
+    }
+},
+{
+    "ACTIVITYHEALTHDESCRIPTION": null,
+    "ASSIGNEDTOFACILITYID": null,
+    "ASSIGNEDTOID": "[TM:(1131)/TR:(24)]",
+    "CREATEDATID": null,
+    "CREATEDBYID": "SITE;10000000270",
+    "CREATEDBYNAME": "USER,PANORAMA",
+    "CREATEDON": "2016-06-20T11:23:19.000Z",
+    "DEPLOYMENTID": "VistaCore:Order:2.0.rc201.157",
+    "DOMAIN": "Discharge Follow-Up",
+    "INSTANCENAME": "Inpatient Discharge",
+    "INTENDEDFOR": "",
+    "ISACTIVITYHEALTHY": 1,
+    "ISSENSITIVEPATIENT": false,
+    "MODE": "Opened",
+    "NAME": "DischargeFollowup",
+    "PATIENTNAME": "TEN,PATIENT",
+    "PATIENTSSNLASTFOUR": "2222",
+    "PID": "SITE;8",
+    "PROCESSID": "62",
+    "STATUS": "InProgress",
+    "TASKSTATE": "Active: Pending Follow-up",
+    "ROUTINGCODE": "[TF:Primary Care(1131)/FC: PANORAMA (SITE)]",
+    "PCPID": "SITE;10000000288",
+    "PCPNAME": "PROVIDER, THREE",
+    "PCTEAM": "1131",
+    "PROCESSID": "333",
+    "URGENCY": 9,
+    "ACTIVITYJSON": {
+        "activity": {
+            "activityDescription": "Discharge Follow-up is used to document the patient contact after discharge from the hospital.",
+            "deploymentId": "VistaCore:Order",
+            "processDefinitionId": "Order.DischargeFollowup",
+            "type": "Order",
+            "domain": "Discharge Follow-Up",
+            "processInstanceId": "333",
+            "instanceName": "Inpatient Discharge",
+            "patientUid": "urn:va:patient:[site]:[DFN]:[DFN]",
+            "clinicalObjectUid": "",
+            "sourceFacilityId": "",
+            "destinationFacilityId": "",
+            "state": "Active: Pending Follow-up",
+            "initiator": "urn:va:user:[site]:[DUZ]",
+            "timeStamp": "20160420000000",
+            "urgency": "9",
+            "assignedTo": "",
+            "activityHealthy": "1",
+            "activityHealthDescription": ""
+        },
+        "discharge": {
+            "dateTime": "20170519000000",
+            "admitDateTime": "20170319000000",
+            "fromFacilityId": "501",
+            "disposition": "Successfully discharged",
+            "primaryCarePhysicianIdAtActivityClosure": "[userId]",
+            "primaryCarePhysicianNameAtActivityClosure": "[user name]",
+            "primaryCareTeamAtActivityClosure": "Test team name",
+            "diagnosis": {
+                "id": "1",
+                "code": "[code]",
+                "description": "[diagnosis description]",
+                "timeout": "[configurable timeout value]"
+            }
+        },
+        "contact": {
+            "dueDateTime": "20170322000000",
+            "attempts": "0"
+        },
+        "follow-up": {
+            "actionId": "[actionId}",
+            "actionText": "Contact Attempt",
+            "executionUserId": "[userId]",
+            "executionUserName": "[user name]",
+            "executionDateTime": "[timestamp]",
+            "data": {
+                "comment": "Attempted to call but no answer from the patient",
+                "attempt": "1"
+            }
+        }
+    }
+}
+]}

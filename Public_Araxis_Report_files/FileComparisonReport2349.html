@@ -1,0 +1,906 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>2349. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>2349. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:56 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>2349.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\rdk\rdk\product\tests\acceptance-tests\features</td> 
+     <td>F1135_filter.feature</td> 
+     <td>Wed Sep 6 17:14:30 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\rdk\rdk\product\tests\acceptance-tests\features</td> 
+     <td>F1135_filter.feature</td> 
+     <td>Tue Oct 10 18:46:33 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2349.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">16</td> 
+     <td style="text-align: right;">176</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">15</td> 
+     <td style="text-align: right;">78</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2349.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>2349.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>2349.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@F1135&nbsp;@US</span> <span class="U2">17105</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Feature:&nbsp;I</span> <span class="U2">mprove&nbsp;Doc</span> <span class="U2">ument&nbsp;appl</span> <span class="U2">et&nbsp;data&nbsp;lo</span> <span class="U2">ad&nbsp;times&nbsp;w</span> <span class="U2">ith&nbsp;server</span> <span class="U2">&nbsp;side&nbsp;Pagi</span> <span class="U2">nation&nbsp;-&nbsp;I</span> <span class="U2">mplement&nbsp;s</span> <span class="U2">erver&nbsp;side</span> <span class="U2">&nbsp;filtering</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">#&nbsp;marked&nbsp;f</span> <span class="U2">uture&nbsp;beca</span> <span class="U2">use&nbsp;I&nbsp;coul</span> <span class="U2">d&nbsp;not&nbsp;find</span> <span class="U2">&nbsp;a&nbsp;patient</span> <span class="U2">&nbsp;in&nbsp;the&nbsp;pr</span> <span class="U2">esync&nbsp;list</span> <span class="U2">&nbsp;who&nbsp;had&nbsp;t</span> <span class="U2">his&nbsp;field&nbsp;</span> <span class="U2">populated</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_am</span> <span class="U2">ended&nbsp;@fut</span> <span class="U2">ure</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">erd&nbsp;by&nbsp;ame</span> <span class="U2">nded</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">8</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">9</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"amend</span> <span class="U2">ed"&nbsp;for&nbsp;pi</span> <span class="U2">d&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">10</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"a</span> <span class="U2">mended"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"ame</span> <span class="U2">nded"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_re</span> <span class="U2">ferenceDat</span> <span class="U2">eTime</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">erd&nbsp;by&nbsp;ref</span> <span class="U2">erenceDate</span> <span class="U2">Time</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">15</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">16</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"refer</span> <span class="U2">enceDateTi</span> <span class="U2">me"&nbsp;for&nbsp;pi</span> <span class="U2">d&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">17</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"r</span> <span class="U2">eferenceDa</span> <span class="U2">teTime"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"ref</span> <span class="U2">erenceDate</span> <span class="U2">Time"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_da</span> <span class="U2">teTime</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">erd&nbsp;by&nbsp;dat</span> <span class="U2">eTime</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">22</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">23</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"dateT</span> <span class="U2">ime"&nbsp;for&nbsp;p</span> <span class="U2">id&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">24</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"d</span> <span class="U2">ateTime"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"dat</span> <span class="U2">eTime"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_lo</span> <span class="U2">calTitle</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario&nbsp;O</span> <span class="U2">utline:&nbsp;Cl</span> <span class="U2">ient&nbsp;recei</span> <span class="U2">ves&nbsp;docume</span> <span class="U2">nts&nbsp;filter</span> <span class="U2">d&nbsp;by&nbsp;filte</span> <span class="U2">rField&nbsp;loc</span> <span class="U2">alTitle</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">29</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">30</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"&lt;jds_</span> <span class="U2">field&gt;"&nbsp;fo</span> <span class="U2">r&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">31</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"&lt;</span> <span class="U2">jds_field&gt;</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"&lt;jd</span> <span class="U2">s_field&gt;"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Examples:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;jds_fi</span> <span class="U2">eld&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;localT</span> <span class="U2">itle&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;typeNa</span> <span class="U2">me&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;summar</span> <span class="U2">y&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;name&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_ki</span> <span class="U2">nd</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;ki</span> <span class="U2">nd</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">43</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">44</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"kind"</span> <span class="U2">&nbsp;for&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">45</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"k</span> <span class="U2">ind"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"kin</span> <span class="U2">d"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_au</span> <span class="U2">thorDispla</span> <span class="U2">yName</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario&nbsp;O</span> <span class="U2">utline:&nbsp;Cl</span> <span class="U2">ient&nbsp;recei</span> <span class="U2">ves&nbsp;docume</span> <span class="U2">nts&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;filt</span> <span class="U2">erField&nbsp;au</span> <span class="U2">thorDispla</span> <span class="U2">yName</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">50</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">51</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"&lt;save</span> <span class="U2">d_field_va</span> <span class="U2">lue&gt;"&nbsp;for&nbsp;</span> <span class="U2">pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">52</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"&lt;</span> <span class="U2">jds_field&gt;</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"&lt;sa</span> <span class="U2">ved_field_</span> <span class="U2">value&gt;"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Examples</span> <span class="U2">:</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;saved_</span> <span class="U2">field_valu</span> <span class="U2">e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;j</span> <span class="U2">ds_field&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;author</span> <span class="U2">DisplayNam</span> <span class="U2">e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;a</span> <span class="U2">uthorDispl</span> <span class="U2">ayName&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;author</span> <span class="U2">DisplayNam</span> <span class="U2">e&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;a</span> <span class="U2">uthorDispl</span> <span class="U2">ayName&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;provid</span> <span class="U2">erDisplayN</span> <span class="U2">ame&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;p</span> <span class="U2">roviderDis</span> <span class="U2">playName&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;clinic</span> <span class="U2">ians.displ</span> <span class="U2">ayName&nbsp;|&nbsp;c</span> <span class="U2">linicians[</span> <span class="U2">].displayN</span> <span class="U2">ame&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;activi</span> <span class="U2">ty.respons</span> <span class="U2">ible&nbsp;&nbsp;&nbsp;|&nbsp;a</span> <span class="U2">ctivity[].</span> <span class="U2">responsibl</span> <span class="U2">e&nbsp;&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_ca</span> <span class="U2">se</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Filter&nbsp;is&nbsp;</span> <span class="U2">case-insen</span> <span class="U2">sitive</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">64</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">65</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"autho</span> <span class="U2">rDisplayNa</span> <span class="U2">me"&nbsp;for&nbsp;pi</span> <span class="U2">d&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">66</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;up</span> <span class="U2">case&nbsp;"auth</span> <span class="U2">orDisplayN</span> <span class="U2">ame"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"aut</span> <span class="U2">horDisplay</span> <span class="U2">Name"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">69</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;do</span> <span class="U2">wncase&nbsp;"au</span> <span class="U2">thorDispla</span> <span class="U2">yName"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"aut</span> <span class="U2">horDisplay</span> <span class="U2">Name"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_fa</span> <span class="U2">cility</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;fa</span> <span class="U2">cility</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">75</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">76</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"facil</span> <span class="U2">ityName"&nbsp;f</span> <span class="U2">or&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">77</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"f</span> <span class="U2">acilityNam</span> <span class="U2">e"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"fac</span> <span class="U2">ilityName"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_or</span> <span class="U2">derName</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;or</span> <span class="U2">derName</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">83</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;722"&nbsp;has&nbsp;</span> <span class="U2">been&nbsp;synce</span> <span class="U2">d&nbsp;through&nbsp;</span> <span class="U2">the&nbsp;RDK&nbsp;AP</span> <span class="U2">I</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">84</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"order</span> <span class="U2">Name"&nbsp;for&nbsp;</span> <span class="U2">pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;722"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">85</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;722"&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;a&nbsp;</span> <span class="U2">"orderName</span> <span class="U2">"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"ord</span> <span class="U2">erName"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_re</span> <span class="U2">ason</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;re</span> <span class="U2">ason</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">90</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">91</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"reaso</span> <span class="U2">n"&nbsp;for&nbsp;pid</span> <span class="U2">&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">92</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;8"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;a&nbsp;"r</span> <span class="U2">eason"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"rea</span> <span class="U2">son"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_im</span> <span class="U2">ageLocatio</span> <span class="U2">n&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;im</span> <span class="U2">ageLocatio</span> <span class="U2">n</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">97</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;253"&nbsp;has&nbsp;</span> <span class="U2">been&nbsp;synce</span> <span class="U2">d&nbsp;through&nbsp;</span> <span class="U2">the&nbsp;RDK&nbsp;AP</span> <span class="U2">I</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">98</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">oted&nbsp;the&nbsp;f</span> <span class="U2">irst&nbsp;docum</span> <span class="U2">ent&nbsp;"image</span> <span class="U2">Location"&nbsp;</span> <span class="U2">for&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;253"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">99</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;253"&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;a&nbsp;</span> <span class="U2">"imageLoca</span> <span class="U2">tion"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;doc</span> <span class="U2">ument&nbsp;resu</span> <span class="U2">lts&nbsp;are&nbsp;fi</span> <span class="U2">ltered&nbsp;on&nbsp;</span> <span class="U2">field&nbsp;"ima</span> <span class="U2">geLocation</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_2_</span> <span class="U2">terms</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">er&nbsp;by&nbsp;2&nbsp;di</span> <span class="U2">fferent&nbsp;te</span> <span class="U2">rms</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">104</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;3"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced&nbsp;</span> <span class="U2">through&nbsp;th</span> <span class="U2">e&nbsp;RDK&nbsp;API</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">105</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;sorted</span> <span class="U2">&nbsp;DOCUMENTS</span> <span class="U2">&nbsp;for&nbsp;the&nbsp;p</span> <span class="U2">atient&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;3"&nbsp;filter</span> <span class="U2">ed&nbsp;by&nbsp;term</span> <span class="U2">s</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;term&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Provid</span> <span class="U2">er&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Eight&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;the</span> <span class="U2">&nbsp;document&nbsp;</span> <span class="U2">results&nbsp;ar</span> <span class="U2">e&nbsp;filtered</span> <span class="U2">&nbsp;on&nbsp;terms</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;term&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Provid</span> <span class="U2">er&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Eight&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@filter_wi</span> <span class="U2">th_infinit</span> <span class="U2">e_scroll</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Client&nbsp;rec</span> <span class="U2">eives&nbsp;docu</span> <span class="U2">ments&nbsp;filt</span> <span class="U2">ered&nbsp;with&nbsp;</span> <span class="U2">scrolling</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">118</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Given&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;with</span> <span class="U2">&nbsp;pid&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;301"&nbsp;has&nbsp;</span> <span class="U2">been&nbsp;synce</span> <span class="U2">d&nbsp;through&nbsp;</span> <span class="U2">the&nbsp;RDK&nbsp;AP</span> <span class="U2">I</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">119</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cl</span> <span class="U2">ient&nbsp;reque</span> <span class="U2">sts&nbsp;unlimi</span> <span class="U2">ted&nbsp;docume</span> <span class="U2">nts&nbsp;for&nbsp;th</span> <span class="U2">e&nbsp;patient&nbsp;</span> <span class="U2">"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;301"&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;te</span> <span class="U2">rms</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;term&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Provid</span> <span class="U2">er&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;And&nbsp;the&nbsp;</span> <span class="U2">client&nbsp;not</span> <span class="U2">es&nbsp;the&nbsp;ret</span> <span class="U2">urned&nbsp;docu</span> <span class="U2">ments&nbsp;non-</span> <span class="U2">scrolled&nbsp;r</span> <span class="U2">esults</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">123</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">When&nbsp;the&nbsp;c</span> <span class="U2">lient&nbsp;requ</span> <span class="U2">ests&nbsp;docum</span> <span class="U2">ents&nbsp;by&nbsp;sc</span> <span class="U2">rolling&nbsp;fo</span> <span class="U2">r&nbsp;the&nbsp;pati</span> <span class="U2">ent&nbsp;"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">;301"&nbsp;filt</span> <span class="U2">ered&nbsp;by&nbsp;te</span> <span class="U2">rms</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;term&nbsp;&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;|&nbsp;Provid</span> <span class="U2">er&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;the</span> <span class="U2">&nbsp;document&nbsp;</span> <span class="U2">results&nbsp;ar</span> <span class="U2">e&nbsp;the&nbsp;same</span> <span class="U2">&nbsp;as&nbsp;non-sc</span> <span class="U2">rolled&nbsp;res</span> <span class="U2">ults</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

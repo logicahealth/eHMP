@@ -8,9 +8,9 @@ default[:ehmp_provision][:zookeeper][:copy_files] = {}
 #######################################################################################################################
 # zookeeper specific aws configuration options
 default[:ehmp_provision][:zookeeper][:aws][:instance_type] ="m3.medium"
-default[:ehmp_provision][:zookeeper][:aws][:subnet] = "subnet-213b2256"
-default[:ehmp_provision][:zookeeper][:aws][:ssh_username] = "REDACTED"
-default[:ehmp_provision][:zookeeper][:aws][:ssh_keyname] = "REDACTED"
+default[:ehmp_provision][:zookeeper][:aws][:subnet] = "DNS"
+default[:ehmp_provision][:zookeeper][:aws][:ssh_username] = "USER    "
+default[:ehmp_provision][:zookeeper][:aws][:ssh_keyname] = "SSH KEYNAME"
 default[:ehmp_provision][:zookeeper][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:ehmp_provision][:vxsync][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

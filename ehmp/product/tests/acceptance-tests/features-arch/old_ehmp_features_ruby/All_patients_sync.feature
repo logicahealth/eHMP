@@ -6,7 +6,7 @@ Feature: sync all patients that have been used for test
 Scenario: Check sync request is stable
 	Given the patient(s) with pid
       | pid                |
-	  | 1006184063V088473  |
+	  | DNS       V088473  |
 	  | 10101V964144	   |
       | 10104V248233       |
       | 10105V001065       |
@@ -24,35 +24,35 @@ Scenario: Check sync request is stable
       | 5000000116V912836  |
       | 5000000217V519385  |
       | 5123456789V027402  |
-      | 9E7A;1             |
-      | 9E7A;100022        |
-      | 9E7A;100033        |
-      | 9E7A;100084        |
-      | 9E7A;100184        |
-      | 9E7A;11            |
-      | 9E7A;129           |
-      | 9E7A;13            |
-      | 9E7A;164           |
-      | 9E7A;167           |
-      | 9E7A;17            |
-      | 9E7A;21            |
-      | 9E7A;35            |
-      | 9E7A;4             |
-      | 9E7A;50            |
-      | 9E7A;6             |
-      | 9E7A;71            |
-      | 9E7A;737           |
-      | C877;1             |
-      | C877;100022        |
+      | SITE;1             |
+      | SITE;100022        |
+      | SITE;100033        |
+      | SITE;100084        |
+      | SITE;100184        |
+      | SITE;11            |
+      | SITE;129           |
+      | SITE;13            |
+      | SITE;164           |
+      | SITE;167           |
+      | SITE;17            |
+      | SITE;21            |
+      | SITE;35            |
+      | SITE;4             |
+      | SITE;50            |
+      | SITE;6             |
+      | SITE;71            |
+      | SITE;737           |
+      | SITE;1             |
+      | SITE;100022        |
       | 100031V310296      |
-      | C877;100184        |
-      | C877;129           |
-      | C877;164           |
-      | C877;167           |
-      | C877;17            |
-      | C877;21            |
-      | C877;6             |
-      | C877;737           |
+      | SITE;100184        |
+      | SITE;129           |
+      | SITE;164           |
+      | SITE;167           |
+      | SITE;17            |
+      | SITE;21            |
+      | SITE;6             |
+      | SITE;737           |
 
       
 	Given select patient(s) from above pid that have not been synced

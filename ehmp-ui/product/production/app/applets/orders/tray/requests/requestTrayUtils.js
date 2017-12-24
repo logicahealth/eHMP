@@ -13,9 +13,9 @@ define([
 
         formModel.set('requestState', requestState);
         if (!(_.isEmpty(requestState))) {
-            if (requestState == 'Active:PendingResponse') {
+            if (requestState === 'Active:PendingResponse') {
                 formTitle = formTitle + ' - edit';
-            } else if (requestState == 'Active: Clarification Requested' || requestState == 'Active: Declined') {
+            } else if (requestState === 'Returned: Clarification Requested' || requestState === 'Returned: Declined') {
                 formTitle = formTitle + ' - review';
             }
         } else if (_.get(options, 'draft-uid') && !(_.isEmpty(_.get(options, 'draft-uid')))) {
@@ -29,11 +29,6 @@ define([
             keyboard: false,
             steps: []
         };
-
-        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectEncounter.extend({
-            inTray: true,
-            skipVisitCheck: true
-        }));
 
         workflowOptions.steps.push({
             view: RequestFormView,

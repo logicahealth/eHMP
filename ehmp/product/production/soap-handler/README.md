@@ -66,5 +66,5 @@ admin port: `-Ddw.http.adminPort=PORT`
 ### Config File
 ```
 http:
-	port: 9090
-	adminPort:9091
+	port: PORT
+	adminPort:PORT

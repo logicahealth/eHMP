@@ -54,7 +54,7 @@ ErrorPublisher.prototype.connect = function(callback) {
         use: self.client.use.bind(self.client, tubename)
     }, function(error) {
         if (error) {
-            self.logger.debug('error-publisher.connect(): failed to connect client %j', error);
+            self.logger.error('error-publisher.connect(): failed to connect client %j', error);
             self.close();
             if (callback) {
                 callback(error);
@@ -63,7 +63,7 @@ ErrorPublisher.prototype.connect = function(callback) {
         }
 
         self.client.on('error', function(err) {
-            self.logger.warn('error-publisher.connect(): beanstalk client error %s:%s %j', err, host, port);
+            self.logger.error('error-publisher.connect(): beanstalk client error %s:%s %j', err, host, port);
             self.close();
         });
 

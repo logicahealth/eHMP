@@ -2,13 +2,11 @@ define([
     'backbone',
     'marionette',
     'app/applets/patient_selection/views/baseSearchView',
-    'app/applets/patient_selection/views/table/view',
     'app/applets/patient_selection/views/mySite/filter'
 ], function(
     Backbone,
     Marionette,
     BaseSearchView,
-    SearchResultsCollectionView,
     MySiteFilter
 ) {
     'use strict';
@@ -16,25 +14,35 @@ define([
     var SearchView = BaseSearchView.extend({
         _emptyMessage: 'No results found. Verify search criteria.',
         FilterView: Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('<p>Enter either first letter of last name <strong>and</strong> last four of social security number, or generic name in the search field above.</p>')
+            initialize: function(){
+                this.inputReference = _.get(ADK.Messaging.request('tray:patientSelection:mySite:trayView'), 'ui.ButtonContainer');
+            },
+            template: Handlebars.compile('<p>Enter either first letter of last name <strong>and</strong> last four of social security number, or generic name in the {{#if hasInputReference}}<a href="#">{{/if}}search field{{#if hasInputReference}}</a>{{/if}}.</p>'),
+            templateHelpers: function(){
+                return {
+                    hasInputReference: !_.isUndefined(this.inputReference) && this.inputReference.length > 0
+                };
+            },
+            events: {
+                'click a': function(e){
+                    e.preventDefault();
+                    this.inputReference.find('input').focus();
+                }
+            }
         }),
         patientRecordResultsCollectionEvents: {
             'error': 'onError'
         },
-        resultsView: SearchResultsCollectionView.extend({
-            attributes: {
-                "aria-controls": "patientSelectionMySiteSearchText"
-            }
-        }),
         initialize: function() {
             this.bindEntityEvents(this.collection, this.patientRecordResultsCollectionEvents);
-            this.listenTo(ADK.Messaging.getChannel('patient-selection-mySite'), 'execute-search', this.executeSearch);
+            this.listenTo(ADK.Messaging.getChannel(this.getOption('eventChannelName')), 'execute-search', this.executeSearch);
             this.setEmpty();
         },
         onBeforeShow: function() {
             this.searchResultsRegion.$el.addClass('hidden');
         },
         executeSearch: function(fullNameFilter) {
+
             if (!_.isEmpty(fullNameFilter) && _.isString(fullNameFilter)) {
                 if (this.collection.xhr) this.collection.xhr.abort();
                 if (fullNameFilter.length < 3) {
@@ -43,7 +51,7 @@ define([
                     return;
                 }
                 this.searchResultsRegion.$el.removeClass('hidden');
-                this.$el.trigger('patientSearchTray.show');
+                this.$el.trigger(this.getOption('_eventPrefix') + '.show');
 
                 // Transfer Focus to the tray even when it is open
                 ADK.Messaging.request('tray:patientSelection:mySite:trayView').setFocusToFirstMenuItem();
@@ -93,17 +101,6 @@ define([
         },
         onBeforeDestroy: function() {
             this.unbindEntityEvents(this.collection, this.patientRecordResultsCollectionEvents);
-        }
-    });
-
-    ADK.Messaging.trigger('register:component', {
-        type: "contextNavigationItem",
-        group: ["staff", "staff-left"],
-        key: "mySitePatientSelectionInput",
-        view: MySiteFilter,
-        orderIndex: 1,
-        shouldShow: function() {
-            return (ADK.UserService.hasPermissions('read-patient-record'));
         }
     });
 

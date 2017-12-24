@@ -18,13 +18,9 @@ define([
     var DETAIL_CHILD_DOC_SORT_FIELD = 'localTitle';
 
     var appletHelper = {
-        isComplexDoc: function(docType) {
-            docType = docType || '';
-            if (docType.toLowerCase() == "surgery" || docType.toLowerCase() == "consult" || docType.toLowerCase() == "procedure" || docType.toLowerCase() == "imaging" || docType.toLowerCase() == "radiology report") { //docType.toLowerCase() == "radiology" ||
-                return true;
-            } else {
-                return false;
-            }
+        isComplexDoc: function (docType) {
+            docType = (docType || '').toLowerCase();
+            return docType === 'surgery' || docType === 'consult' || docType === 'procedure' || docType === 'imaging' || docType === 'radiology report' || docType === 'laboratory report';
         },
         hasChildDocs: function(data) {
             return (data.get('isInterdisciplinary') === true || data.get('isInterdisciplinary') === 'true') && data.get('interdisciplinaryType').toLowerCase() === 'parent';

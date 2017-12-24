@@ -10,8 +10,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -23,6 +23,6 @@ describe('medication-defaults resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', pharmacyType: 'O', pid: '9E7A;100615', locationUid: 'urn:va:location:9E7A:64' });
+        }, { site: 'SITE', pharmacyType: 'O', pid: 'SITE;100615', locationUid: 'urn:va:location:SITE:64' });
     });
 });

@@ -16,7 +16,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:cds-dashboard.properties</value>
-				<value>file:${catalina.home}/shared/classes/cds-dashboard.properties</value>
+				<value>cds-dashboard.properties</value>
 			</list>
 		</property>
     </bean>

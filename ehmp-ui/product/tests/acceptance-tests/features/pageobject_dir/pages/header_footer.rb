@@ -1,60 +1,51 @@
 class PobHeaderFooter < SitePrism::Page
-  # *****************  All_Form_Elements  ******************* #
-
-  # *****************  All_Logo_Elements  ******************* #
-
-  # *****************  All_Field_Elements  ******************* #
+  # ****************** header ********************** #
+  element :link_nav_home, '[id=header-region] #current-staff-nav-header-tab-home-button'
   element :fld_staff_view, "#current-staff-nav-header-tab"
   element :fld_user_icons, ".application-user-icons"
-  
-  element :fld_ehmp_version, "#bottom-region p"
+
   element :fld_recent_patient_header, ".dropdown-header p"
 
-  elements :fld_footer_links, ".fa.fa-check-circle.success"
-  elements :fld_recent_patient_list, ".dropdown-body li"
-  element :fld_most_recent_patient, ".dropdown-body > li:nth-child(2) > a"
-  element :fld_current_patient, "#current-patient-nav-header-tab strong"
-
-  # *****************  All_Button_Elements  ******************* #
-  # element :btn_patient_search, "#patientSearchButton"
   element :btn_notification, "#myNotificationsButton"
+
+  element :btn_patients, "a[id='patientSearchButton']"
+  element :fld_patients, "p[id='patientSearchButton']"
+
+  element :btn_logout, ".fa-sign-out"
+  element :btn_patients_active, "li.patient-selection-link-style >p[id='patientSearchButton'].active"
+  # ****************** footer ********************** #
+  element :fld_ehmp_version, "#bottom-region p"
   element :btn_refresh_patient_data, "#refresh-patient-data"
+  elements :fld_footer_links, ".fa.fa-check-circle.success"
   element :btn_view_details, "#open-sync-modal"
-
-  elements :btn_tray_sidebars, "[aria-label='Tray Sidebar'] button[id^='tray']"
-  element :btn_recent_patient, ".fa-chevron-down"
-  elements :fld_rp_list_results, ".dropdown-body li:not(.hidden)"
+  element :btn_refresh_patient_data, "#refresh-patient-data"
   element :btn_incident_report, ".application-footer-items-right div > button"
+  element :btn_icon_ccow_status, '.application-footer-items #ccowStatusBtn .icon-ccow-disconnected'
+  element :btn_ccow_status, '.application-footer-items #ccowStatusBtn'
+  element :btn_ccow_status_sr, '.application-footer-items #ccowStatusBtn .sr-only'
+  elements :fld_sync_status, '#patientSyncStatusRegion li.patient-status-icon span[aria-hidden]'
 
-  # *****************  All_Drop_down_Elements  ******************* #
-
-  # *****************  All_link_Elements  ******************* #
-  element :lnk_ehmp_header_help, "#top-region .help-button-container .help-icon-link"
-
-  def check_pat_name_format
-    fld_rp_list_results.map { | li_element | li_element.text.upcase }
-  end
+  # ***************** tray ************************* #
+  elements :btn_tray_sidebars, "[aria-label='Tray Sidebar'] button[id^='tray']"
 
   def wait_until_header_footer_elements_loaded
     wait = Selenium::WebDriver::Wait.new(:timeout => 60)
     max_attempt = 3
     begin
-      wait_for_fld_staff_view 
-      wait_for_fld_user_icons 
-      wait_for_fld_ehmp_version 
-      wait_for_fld_current_patient
-      wait_for_btn_notification 
-      wait_for_btn_refresh_patient_data 
+      wait_for_fld_staff_view
+      wait_for_fld_user_icons
+      wait_for_fld_ehmp_version
+      wait_for_btn_notification
+      wait_for_btn_refresh_patient_data
       wait_for_btn_view_details
-      wait_for_btn_tray_sidebars 
-      wait_for_btn_recent_patient
+      wait_for_btn_tray_sidebars
       wait.until { fld_footer_links.length >= 2 }
     rescue => e
 
       max_attempt -= 1
       retry if max_attempt > 0
       # *****************  reenable raise when DE5488 is fixed  ******************* #
-      #raise e if max_attempt <= 0 
+      #raise e if max_attempt <= 0
       p "#{e}"
       p 'footer did not show expected successfully data sync.  attempt to continue because of DE5488' if max_attempt <= 0
       # *****************  reenable raise when DE5488 is fixed  ******************* #

@@ -1,0 +1,426 @@
+{
+    "config": {
+        "inMemory": {
+            "percentTotalHeapBeforeMemoryNotification": 75,
+            "pickListConfig": [{
+                "name": "allergies-symptoms",
+                "modulePath": "allergies/allergies-symptoms-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "largePickListRetry": 65,
+                "filterForEntireRecursiveCollection": {
+                    "fieldToCheckAgainst": "synonym",
+                    "paramNameForStringToSearchFor": "searchString"
+                },
+                "requiredPermissions": ["add-allergy"]
+            }, {
+                "name": "allergies-symptoms-all-with-top-ten",
+                "modulePath": "allergies/allergies-symptoms-all-with-top-ten-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "largePickListRetry": 65,
+                "filterForEntireRecursiveCollection": {
+                    "fieldToCheckAgainst": "synonym",
+                    "paramNameForStringToSearchFor": "searchString"
+                },
+                "requiredPermissions": ["add-allergy"]
+            }, {
+                "name": "clinics-newloc-fetch-list",
+                "modulePath": "locations/clinics/clinics-newloc-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "clinics-fetch-list",
+                "modulePath": "locations/clinics/clinics-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "lab-all-samples",
+                "modulePath": "labs/lab-all-samples-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-collect-times",
+                "modulePath": "labs/lab-collect-times-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "optionalParams": ["division"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-order-orderable-items",
+                "modulePath": "labs/lab-order-orderable-items-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredParams": ["labType"],
+                "requiredPermissions": ["add-lab-order"],
+                "largePickListRetry": 65,
+                "initialLoadDefaultParams": [{
+                    "labType": "S.LAB"
+                }, {
+                    "labType": "S.IVA RX"
+                }, {
+                    "labType": "S.IVB RX"
+                }],
+                "filterForEntireRecursiveCollection": {
+                    "fieldToCheckAgainst": "synonym",
+                    "paramNameForStringToSearchFor": "searchString"
+                }
+            }, {
+                "name": "lab-order-specimens",
+                "modulePath": "labs/lab-order-specimens-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "largePickListRetry": 65,
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "new-persons",
+                "modulePath": "person/new-persons-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "largePickListRetry": 65,
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "progress-notes-titles",
+                "modulePath": "progressnotes/progress-notes-titles-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "asuDataNeedsRefreshAfterMinutes": 3000,
+                "asuLargePickListRetry": 65,
+                "requiredPermissions": ["sign-note"]
+            }, {
+                "name": "vitals",
+                "modulePath": "vitals/vitals-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredPermissions": ["add-vital"]
+            }, {
+                "name": "wards-fetch-list",
+                "modulePath": "locations/wards/wards-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "people-for-facility",
+                "modulePath": "team-management/people-for-facility-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "requiredParams": ["facilityID"],
+                "optionalParams": ["searchString"],
+                "requiredPermissions": ["add-task"]
+            }, {
+                "name": "teams-for-facility",
+                "modulePath": "team-management/teams-for-facility-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "largePickListRetry": 65,
+                "needsFacilityGranularity": true,
+                "requiredParams": ["facilityID"],
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "roles-for-team",
+                "modulePath": "team-management/roles-for-team-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "dataNeedsRefreshAfterMinutes": 3000,
+                "needsPcmm": true,
+                "requiredParams": ["teamID"],
+                "requiredPermissions": ["read-patient-record"]
+            }]
+        },
+        "direct": {
+            "pickListConfig": [{
+                "name": "allergies-match",
+                "modulePath": "allergies/allergies-match-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["searchString"],
+                "requiredPermissions": ["add-allergy"]
+            }, {
+                "name": "allergies-symptoms-top-ten",
+                "modulePath": "allergies/allergies-symptoms-top-ten-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredPermissions": ["add-allergy"]
+            }, {
+                "name": "immunization-admin-route",
+                "modulePath": "immunizations/immunization-admin-route-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-admin-site",
+                "modulePath": "immunizations/immunization-admin-site-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-data",
+                "modulePath": "immunizations/immunization-data-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["pxvfilter", "subfiles"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-info-source",
+                "modulePath": "immunizations/immunization-info-source-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-lot",
+                "modulePath": "immunizations/immunization-lot-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-manufacturer",
+                "modulePath": "immunizations/immunization-manufacturer-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-vaccine-info-statement",
+                "modulePath": "immunizations/immunization-vaccine-info-statement-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "optionalParams": ["filter", "date"],
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "immunization-types",
+                "modulePath": "immunizations/immunization-types-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredPermissions": ["add-immunization"]
+            }, {
+                "name": "lab-order-dialog-def",
+                "modulePath": "labs/lab-order-dialog-def-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["location"],
+                "optionalParams": ["division"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-order-max-days-continuous",
+                "modulePath": "labs/lab-order-max-days-continuous-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["location", "schedule"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-sample-specimen-urgency",
+                "modulePath": "labs/lab-sample-specimen-urgency-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["labTestIEN"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-time-valid-immediate-collect-time",
+                "modulePath": "labs/lab-time-valid-immediate-collect-time-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["time"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "lab-times-available",
+                "modulePath": "labs/lab-times-available-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["date", "locationUid"],
+                "requiredPermissions": ["add-lab-order"]
+            }, {
+                "name": "medication-defaults",
+                "modulePath": "medications/medication-defaults-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["pharmacyType"],
+                "optionalParams": ["pid", "locationIen"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-index",
+                "modulePath": "medications/medication-index-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["ien", "searchString"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-list",
+                "modulePath": "medications/medication-list-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["searchString"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-orders",
+                "modulePath": "medications/medication-orders-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["ien", "first", "last"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-orders-calc-max-refills",
+                "modulePath": "medications/medication-orders-calc-max-refills-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["pid", "drug", "days", "ordItem", "discharge"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-order-defaults",
+                "modulePath": "medications/medication-order-defaults-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["pharmacyType"],
+                "optionalParams": ["ien", "pid", "needPatientInstructions", "pkiEnabled"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-orders-default-days",
+                "modulePath": "medications/medication-orders-default-days-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["unitStr", "schedStr", "pid", "drug", "oi"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-orders-dispense-drug-message",
+                "modulePath": "medications/medication-orders-dispense-drug-message-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["ien"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-orders-quantity-for-days-supply",
+                "modulePath": "medications/medication-orders-quantity-for-days-supply-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "pid", "drug"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "medication-schedules",
+                "modulePath": "medications/medication-schedules-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "new-persons-direct",
+                "modulePath": "person/new-persons-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "optionalParams": ["date", "newPersonsType"],
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "pki-enabled",
+                "modulePath": "site/pki-enabled-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART"
+            }, {
+                "name": "printer-devices",
+                "modulePath": "printers/printer-devices-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART"
+            }, {
+                "name": "problems-lexicon-lookup",
+                "modulePath": "problems/problems-lexicon-lookup-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["searchString"],
+                "optionalParams": ["date", "synonym", "limit", "noMinimumLength"],
+                "requiredPermissions": ["add-condition-problem"]
+            }, {
+                "name": "problems-lexicon-extended-lookup",
+                "modulePath": "problems/problems-lexicon-extended-lookup-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["searchString"],
+                "optionalParams": ["date", "synonym", "limit", "noMinimumLength"],
+                "requiredPermissions": ["add-condition-problem"]
+            }, {
+                "name": "progress-notes-titles-flags",
+                "modulePath": "progressnotes/progress-notes-titles-fetch-flags",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["ien"],
+                "requiredPermissions": ["sign-note"]
+            }, {
+                "name": "radiology-dialog-default",
+                "modulePath": "radiology/radiology-dialog-default-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["pid", "imagingType"],
+                "optionalParams": ["anEventDiv"],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "progress-notes-titles-icd-10",
+                "modulePath": "progressnotes/progress-notes-titles-icd-10-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredParams": ["searchString"],
+                "requiredPermissions": ["add-encounter", "edit-encounter"]
+            }, {
+                "name": "radiology-imaging-types",
+                "modulePath": "radiology/radiology-imaging-types-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "radiology-orderables",
+                "modulePath": "radiology/radiology-orderables-fetch-list",
+                "vistaContext": "HMP UI CONTEXT",
+                "requiredParams": ["imgType"],
+                "initialLoadDefaultParams": [{
+                    "imgType": "9"
+                }],
+                "requiredPermissions": ["future-release-not-available-for-use"]
+            }, {
+                "name": "services-fetch-list",
+                "modulePath": "services/services-fetch-list",
+                "vistaContext": "OR CPRS GUI CHART",
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "quick-orders",
+                "modulePath": "orderables/quick-order-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "isUserSpecific": true,
+                "optionalParams": ["searchString", "scope"]
+            }, {
+                "name": "order-sets",
+                "modulePath": "orderables/order-set-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "isUserSpecific": true,
+                "optionalParams": ["searchString", "scope"]
+            }, {
+                "name": "favorite-orderables",
+                "modulePath": "orderables/favorite-orderable-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "isUserSpecific": true
+            }, {
+                "name": "enterprise-orderables",
+                "modulePath": "orderables/enterprise-orderable-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "optionalParams": ["searchString"]
+            }, {
+                "name": "facilities",
+                "modulePath": "team-management/facilities-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "needsFullConfig": true,
+                "needsPcmm": true,
+                "optionalParams": ["teamFocus", "division"]
+            }, {
+                "name": "teams-for-user",
+                "modulePath": "team-management/teams-for-user-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "needsPcmm": true,
+                "needsFullConfig": true,
+                "requiredParams": ["staffIEN"],
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "teams-for-patient",
+                "modulePath": "team-management/teams-for-patient-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "needsPcmm": true,
+                "needsFullConfig": true,
+                "requiredParams": ["pid"],
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "teams-for-user-patient-related",
+                "modulePath": "team-management/teams-for-user-patient-related-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "needsPcmm": true,
+                "needsFullConfig": true,
+                "requiredParams": ["staffIEN", "pid"],
+                "requiredPermissions": ["read-patient-record"]
+            }, {
+                "name": "teams-for-facility-patient-related",
+                "modulePath": "team-management/teams-for-facility-patient-related-fetch-list",
+                "vistaContext": "NOT APPLICABLE",
+                "needsPcmm": true,
+                "needsFullConfig": true,
+                "requiredParams": ["facilityID", "pid"],
+                "requiredPermissions": ["read-patient-record"]
+            }]
+        },
+        "groups": {
+            "name": "Configuration data for pick-list groups",
+            "pickListConfig": [{
+                "name": "orderables",
+                "modulePath": "orderables/orderables-fetch-group",
+                "requiredPermissions": ["read-orderable"]
+            }]
+        },
+        "vistaSites": {
+            "F4K3": {},
+            "N0P3": {}
+        }
+    }
+}
+

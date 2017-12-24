@@ -1,5 +1,5 @@
 HMPUTIL1 ;SLC/AGP,ASMR/RRB,CPC - HMP utilities routine ;May 15, 2016 14:15
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,6**;May 15, 2016;Build 1
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,4**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q
@@ -112,7 +112,7 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  .N HMPX,HMPDATA,X
  .S LSTLN=LSTLN+1
  . ;US18245
- . S X="{""collection"":"""_HMPDOM_$S(DFN'="OPD":""""_$$PIDS^HMPDJFS(DFN),1:"")_",""seq"":1,""total"":1"
+ . S X="{""collection"":"""_HMPDOM_$S(DFN'="OPD":""""_$$PIDS^HMPDJFS(DFN),1:"""")_",""seq"":1,""total"":1" ;US18852 JSON bug
  . S X=X_",""unsolicitedUpdate"":"_$S($G(FILTER("freshnessDateTime")):"true",1:"false")_","
  . S X=X_"""object"":"
  .; If it is patient data add the wrapper with pid

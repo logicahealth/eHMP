@@ -55,7 +55,7 @@ var _ = require('lodash');
  * @param params object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-    var filter = _.get(params, 'filter');
+    var filter = _.get(params, 'filter', '');
     if (!validate.isStringNullish(filter)) {
         var filterFields = filter.split(':');
         if (filterFields.length !== 2) {
@@ -84,5 +84,5 @@ module.exports.fetch = function(logger, configuration, callback, params) {
         date = dateConverter.getFilemanDateWithArgAsStr(date);
     }
 
-    return rpcUtil.standardRPCCall(logger, configuration, 'PXVIMM IMM LOT', filter, date, parse, callback);
+    return rpcUtil.standardRPCCall(logger, configuration, 'PXVIMM IMM LOT', filter, '1', parse, callback);
 };

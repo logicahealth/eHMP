@@ -22,9 +22,7 @@ aside.tray-container {
                 transform: rotate(90deg);
                 -webkit-transform-origin: 15px 15px 0px;
                 transform-origin: 15px 15px 0px;
-                background-color: $primary;
                 border-radius: 0px;
-                color: $pure-white;
                 padding: 2px 5px;
                 text-transform: none;
                 min-width: 31px; // default fallback
@@ -36,13 +34,8 @@ aside.tray-container {
                 &:hover,
                 &:active,
                 &:focus {
-                    background-color: $primary-dark;
-                    color: $pure-white;
                     border-bottom: none;
                     padding: 1px 4px;
-                    i {
-                        color: $pure-white;
-                    }
                 }
                 i.fa-stack-1x {
                     color: $primary-dark;

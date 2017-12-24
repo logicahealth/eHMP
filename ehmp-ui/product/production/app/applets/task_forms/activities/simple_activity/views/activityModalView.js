@@ -82,9 +82,10 @@ define([
             },
             initialize: function(options) {
                 this.fields = AppletHelper.fields(options.activityTypes);
+                var patient = ADK.PatientRecordService.getCurrentPatient();
                 this.model.set({
-                    'patientname': ADK.PatientRecordService.getCurrentPatient().get('displayName'),
-                    'patientid': ADK.PatientRecordService.getCurrentPatient().get('pid'),
+                    'patientname': patient.get('displayName'),
+                    'patientid': patient.getIdentifier(),
                     'startdate': moment().format('MM/DD/YYYY'),
                     'starttime': '',
                     'duedate': moment().format('MM/DD/YYYY'),

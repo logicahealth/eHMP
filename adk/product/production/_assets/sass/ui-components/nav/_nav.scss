@@ -1,7 +1,6 @@
 // base navbar
 .navbar {
     &.navbar-default {
-        background-color: $secondary-light;
         border: 0px;
         border-radius: 0px;
         border-bottom: 1px solid $grey;
@@ -20,59 +19,13 @@
             ul.nav {
                 &.navbar-nav {
                     margin: 3px 2px;
-                    li {
+                    li:not(.prevent-default-styling) {
                         font-size: 14px;
                         height: 20px;
-                        #eHMPCurrentUser {
-                            font-size: 96%;
-                            margin-top: -2px;
-                            &:focus {
-                                background-color: transparent;
-                            }
-                        }
                         ul {
                             &.dropdown-menu {
                                 margin-top: 2px;
-                                li a {
-                                    width: 100%;
-                                    &:hover,
-                                    &:focus {
-                                        background-color: $grey-lightest;
-                                    }
-                                }
                             }
-                        }
-                        // Patient Search Icon
-                        .fa-user + .fa-search {
-                            bottom: 4px;
-                            font-size: 7px;
-                            position: relative;
-                            right: 1px;
-                        }
-                        // Patient Context Icon
-                        .fa-question-circle {
-                            &.fa-lg {
-                                font-size: 16px;
-                                vertical-align: 0;
-                            }
-                        }
-                        .context-navigation-link {
-                            .fa-stack {
-                                height: 12px;
-                                line-height: 12px;
-                                margin-top: -6px;
-                                width: 15px;
-                            }
-                            .fa-circle {
-                                font-size: 16px;
-                            }
-                            .fa-user {
-                                margin-top: 2px;
-                            }
-                        }
-                        // Dropdown menu divider
-                        &.divider {
-                            height: 1px;
                         }
                         button,
                         a,
@@ -81,7 +34,6 @@
                             margin-top: -3px;
                             padding: 3px 10px;
                             &:hover {
-                                background-color: transparent;
                                 color: $primary-dark;
                                 outline: none;
                             }
@@ -111,6 +63,37 @@
                             &:hover {
                                 color: $grey-darkest;
                             }
+                        }
+                    }
+                    li {
+                        ul {
+                            &.dropdown-menu {
+                                li a {
+                                    width: 100%;
+                                    &:hover,
+                                    &:focus {
+                                        background-color: $grey-lightest;
+                                    }
+                                }
+                            }
+                        }
+                        .context-navigation-link {
+                            .fa-stack {
+                                height: 12px;
+                                line-height: 12px;
+                                margin-top: -6px;
+                                width: 15px;
+                            }
+                            .fa-circle {
+                                font-size: 16px;
+                            }
+                            .fa-user {
+                                margin-top: 2px;
+                            }
+                        }
+                        // Dropdown menu divider
+                        &.divider {
+                            height: 1px;
                         }
                         //Shortcuts and Notifications
                         &.alert-dropdown {

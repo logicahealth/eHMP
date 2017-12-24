@@ -14,7 +14,7 @@ var logger = require(global.VX_DUMMIES + 'dummy-logger');
 //     child: logUtil._createLogger
 // });
 
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
@@ -131,7 +131,7 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
 			}
 		};
 
-		var pjds = new PjdsClient(logger, logger, config);
+		var pjds = new PjdsClient(logger, logger, config.pjds);
 		var jds = new JdsClient(logger, logger, config);
 
 		var environment = {

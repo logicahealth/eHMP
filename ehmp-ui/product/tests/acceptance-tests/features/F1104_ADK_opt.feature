@@ -39,5 +39,5 @@ Scenario: visual Indicator for locked workspaces
     When the user clicks the Workspace Manager
     And the Workspace Manager is displayed
     And the predefined screens have a visual indicator indicating they are locked
-    | screen  |
-    | Summary |
+    | screen  | value   |
+    | Summary | summary |

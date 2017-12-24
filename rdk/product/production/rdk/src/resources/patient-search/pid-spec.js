@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var httpMocks = require('node-mocks-http');
 var pid = require('./pid');
-var TEST_SITE = '9E7A';
+var TEST_SITE = 'SITE';
 var INVALID_PID = 'N0T!T';
 var ICN = '5000000116V912836';
 

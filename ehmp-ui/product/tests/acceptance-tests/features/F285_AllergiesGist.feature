@@ -1,13 +1,10 @@
-@F285_allergies_gist   @reg2
+@F285_allergies_gist @allergies_applet  @reg2
 Feature: F285 : Overview Screen
 
-# POC Team Jupiter
-
 Background:
- # Given user is logged into eHMP-UI
-  And user searches for and selects "FORTYSIX,PATIENT"
-  Then Overview is active
-  And user sees Allergies Gist
+  Given user searches for and selects "FORTYSIX,PATIENT"
+  When Overview is active
+  Then user sees Allergies Gist
 
 @F285_1_AllergiesGistDisplay @US4005
 Scenario: View Allergies Gist View on the overview screen
@@ -15,57 +12,40 @@ Scenario: View Allergies Gist View on the overview screen
   Then the Allergies Gist Applet contains buttons Refresh, Help and Expand
   And the Allergies Gist Applet does not contain button Filter Toggle
 
-@F285_3_AllergiesGistDisplay
-Scenario: Allergy Gist has popover menu
-  When the Allergies Gist applet is finished loading
-  And the Allergies Gist contains at least 1 pill
-  When user clicks an allergy pill
-  Then a popover displays with icons
-  | icons |
-  | info  |
-  | detail|
-
-  
-@F285_2_AllergiesGistExpandView @US4005
-Scenario: View Allergies Applet Single Page by clicking on Expand View
-
-   And User clicks the Expand View in the Allergies Applet
-   Then the Allergies Applet title is "ALLERGIES"
-
 @F285_2b_AllergiesGistExpandView @US4005
 Scenario: Verify expanded applet returns to overview
   And User clicks the Expand View in the Allergies Applet
   And the Allergies Applet expand view contains data rows
   And the user minimizes the expanded Allergies Applet
-  #Then Overview is active by default
   Then Overview is active
   And user sees Allergies Gist
 
   
 @f282_allergies_gist_refresh 
 Scenario: Allergies Gist displays all of the same details after applet is refreshed
-  And the Allergies Gist Applet contains data rows
+  Given the Allergies Gist contains at least 1 pill
+  And the user notes the number of allergy pills
+
   When user refreshes Allergies Gist Applet
   Then the message on the Allergies Gist Applet does not say "An error has occurred"
-  
-@f282_allergies_gist_exapnd_view_refresh 
-Scenario: Allergies Gist expand view displays all of the same details after applet is refreshed
-  And User clicks the Expand View in the Allergies Applet
-  Then the expanded Allergies Applet is displayed
-  And the Allergies Applet expand view contains data rows
-  When user refreshes Allergies Applet
-  Then the message on the Allergies Applet does not say "An error has occurred"
-  
+  And the Allergies Gist displays the expected number of allergy pills
+
 @F282_AllergiesGist_detail_view 
 Scenario: Verfy details for a particular allergy for patient using Gist view applet
-	When the user views the first Allergies Gist detail view
-    Then the modal is displayed
-    And the modal's title is "Allergen - CHOCOLATE"
+  Given the Allergies Gist applet is finished loading
+  And the Allergies Gist contains at least 1 pill
+  When user views the first allergy details
+  Then the modal is displayed
+  And the Allergy modal's title starts with "ALLERGEN"
+  And the Allergy Detail modal displays
+      | symptoms            |
+      | drug classes        |
+      | nature of reaction  |
+      | entered by          |
+      | originated          |
+      | verified            |
+      | observed/historical |
+      | observed date       |
+
     
-@F282_AllergiesGist_detail_from_expand_view 
-Scenario: Verfy details for a pariticular allergy for patient using expand view applet
-    And User clicks the Expand View in the Allergies Applet
-    Then the expanded Allergies Applet is displayed
-	When the user views the first Allergies detail view
-    Then the modal is displayed
-    And the modal's title is "Allergen - CHOCOLATE"
+

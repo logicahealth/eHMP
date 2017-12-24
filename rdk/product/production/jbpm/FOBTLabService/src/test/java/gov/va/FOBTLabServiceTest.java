@@ -34,14 +34,14 @@ public class FOBTLabServiceTest {
 //	public void testGetRdkResponse() {
 //		String res = FOBTServiceHandler
 //				.getRdkResponse(
-//						"http://SERVER:PORT/resource/fhir/patient/9E7A;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
+//						"http://IP             /resource/fhir/patient/SITE;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
 //						false);
 //		assertNotNull(res);
 //
 //		// should have a token now - try to reuse it
 //		String res2 = FOBTServiceHandler
 //				.getRdkResponse(
-//						"http://SERVER:PORT/resource/fhir/patient/9E7A;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
+//						"http://IP             /resource/fhir/patient/SITE;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
 //						false);
 //		assertNotNull(res2);
 //	}
@@ -50,7 +50,7 @@ public class FOBTLabServiceTest {
 //	public void testGetRdkResponseInvalidToken() {
 //		String res = FOBTServiceHandler
 //				.getRdkResponse(
-//						"http://SERVER:PORT/resource/fhir/patient/9E7A;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
+//						"http://IP             /resource/fhir/patient/SITE;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
 //						false);
 //		assertNotNull(res);
 //
@@ -60,7 +60,7 @@ public class FOBTLabServiceTest {
 //
 //		String res2 = FOBTServiceHandler
 //				.getRdkResponse(
-//						"http://SERVER:PORT/resource/fhir/patient/9E7A;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
+//						"http://IP             /resource/fhir/patient/SITE;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
 //						false);
 //		assertNotNull(res2);
 //	}
@@ -70,7 +70,7 @@ public class FOBTLabServiceTest {
 //		FOBTServiceHandler.setSessionId(null);
 //		String res = FOBTServiceHandler
 //				.getRdkResponse(
-//						"http://SERVER:PORT/resource/fhir/patient/9E7A;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
+//						"http://IP             /resource/fhir/patient/SITE;129/diagnosticreport?domain=lab&name=OCCULT BLOOD&_sort:desc=date&_count=1",
 //						false);
 //		assertNotNull(res);
 //	}

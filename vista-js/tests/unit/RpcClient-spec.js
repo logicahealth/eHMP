@@ -18,8 +18,8 @@ var logger = {
 var config = {
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     context: 'HMP UI CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',
@@ -253,6 +253,20 @@ describe('RpcClient.js', function() {
             testConfig.division = '613';
             testCommandMultiRpc(RpcClient.prototype.divisionCommand, [null, null], ['3\r\n507^CAMP BEE^507^1\r\n613^MARTINSBURG VAMC^613\r\n17102^WASHINGTON^688\r\n', '1'], null, '613', testConfig);
         });
+
+        it('verify returns the parent division when the user account defaults to a non-facility division and a parent division is passed', function() {
+            var testConfig = _.clone(config);
+            testConfig.division = '500';
+            var userInfo = '10000000270\r\nUSER,PANORAMA\r\nPanorama User\r\n3000^REGION 3^\r\n\r\nMEDICINE\r\n\r\n4000\r\n\r\n';
+            testCommandMultiRpc(RpcClient.prototype.divisionCommand, [null, null], ['0\r\n', userInfo], null, '500', testConfig);
+        });
+
+        it('verify returns the error when user account defaults to a non-facility division and a child division is passed', function() {
+            var testConfig = _.clone(config);
+            testConfig.division = '500AA';
+            var userInfo = '10000000270\r\nUSER,PANORAMA\r\nPanorama User\r\n3000^REGION 3^\r\n\r\nMEDICINE\r\n\r\n4000\r\n\r\n';
+            testCommandMultiRpc(RpcClient.prototype.divisionCommand, [null, null], ['0\r\n', userInfo], 'Selected division not found for this user', userInfo, testConfig);
+        });
     });
 
     describe('buildContextCallback()', function() {
@@ -464,8 +478,8 @@ describe('RpcClient.js', function() {
     describe('RpcClient.connect()', function() {
         it('verify connection', function() {
             var user = {
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 duz: '10000000226',
                 greeting: 'OK'
             };
@@ -561,7 +575,7 @@ describe('RpcClient.js', function() {
                 logger: logger,
                 config: {
                     host: '0.0.0.0',
-                    port: 9999
+                    port: PORT
                 },
                 sender: null,
                 _createSender: function() {
@@ -653,7 +667,7 @@ describe('RpcClient.js', function() {
                 logger: logger,
                 config: {
                     host: '0.0.0.0',
-                    port: 9999
+                    port: PORT
                 },
                 sender: null,
                 _createSender: function() {
@@ -716,8 +730,8 @@ describe('RpcClient.js', function() {
     describe('authenticate()', function() {
         it('verify authenticate() calls connect() and close()', function() {
             var user = {
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 duz: '10000000226',
                 greeting: 'OK'
             };
@@ -767,8 +781,8 @@ describe('RpcClient.js', function() {
     describe('callRpc()', function() {
         it('verify callRpc() calls connect(), execute(), and close()', function() {
             var user = {
-                accessCode: 'REDACTED',
-                verifyCode: 'REDACTED',
+                accessCode: 'USER  ',
+                verifyCode: 'PW      ',
                 duz: '10000000226',
                 greeting: 'OK'
             };

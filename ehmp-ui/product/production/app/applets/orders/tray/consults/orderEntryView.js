@@ -27,7 +27,7 @@ define([
 
         AlertFooterItemView = Backbone.Marionette.ItemView.extend({
             template: Handlebars.compile([
-                '{{ui-button "OK" classes="btn-primary btn-sm alert-continue" title="Press enter to close"}}'
+                '{{ui-button "OK" classes="btn-primary btn-sm alert-continue"}}'
             ].join('\n')),
             events: {
                 'click button': function() {
@@ -804,7 +804,7 @@ define([
 
             AlertFooterItemView = Backbone.Marionette.ItemView.extend({
                 template: Handlebars.compile([
-                    '{{ui-button "Ok" classes="btn-primary alert-continue" title="Press enter to close"}}'
+                    '{{ui-button "Ok" classes="btn-primary alert-continue"}}'
                 ].join('\n')),
                 events: {
                     'click button': function() {

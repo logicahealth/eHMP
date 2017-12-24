@@ -24,6 +24,7 @@ import us.vistacore.vxsync.ConnectionException;
 import us.vistacore.vxsync.ServerException;
 import us.vistacore.vxsync.id.Icn;
 import us.vistacore.vxsync.utility.DataConverter;
+import us.vistacore.vxsync.utility.Utils;
 
 import com.codahale.metrics.annotation.Timed;
 
@@ -99,19 +100,21 @@ public class HdrSoapHandler {
                 conn = HdrConnection.createConnection(url);
                 if (conn.getResponseCode() != HttpsURLConnection.HTTP_OK) {
                     LOG.warn("getHdrData: unexpected response code from HDR connection: " + conn.getResponseCode() +
-                            " " + conn.getResponseMessage());
+                            " " + Utils.avoidLogForging(conn.getResponseMessage()));
                     return null;
                 }
 
                 inputstream = conn.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputstream));
-                
+
                 int charAsInt;
                 while ((charAsInt = reader.read()) != -1){
                 	hdrOutput.append((char) charAsInt);
                 }
 
                 hdrOutput.append(",");
+
+                reader.close();
             }
 
             hdrOutput.deleteCharAt(hdrOutput.length() - 1);
@@ -132,7 +135,7 @@ public class HdrSoapHandler {
 
             return hdrJSONString;
         } catch(javax.xml.ws.WebServiceException e) {
-			LOG.error("Error getting HDR Data for all hdr domains - icn " + icn + " " + e);
+			LOG.error("Error getting HDR Data for all hdr domains - icn " + Utils.avoidLogForging(icn) + " " + e);
 		    Throwable cause = e;
 		    while ((cause = cause.getCause()) != null) {
 		        if (cause instanceof SocketTimeoutException) {
@@ -141,7 +144,7 @@ public class HdrSoapHandler {
 		    }
 			throw new ServerException("Error reported from JMeadows");
 		} catch (Exception e) {
-			LOG.error("Error getting HDR Data for all hdr domains - icn " + icn + " " + e);
+			LOG.error("Error getting HDR Data for all hdr domains - icn " + Utils.avoidLogForging(icn) + " " + e);
 			throw new ServerException("Error reported from JMeadows");
 		} finally {
         	if (reader != null) {
@@ -196,7 +199,7 @@ public class HdrSoapHandler {
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK)
             {
                 LOG.warn("getHdrData: unexpected response code from HDR connection: " + conn.getResponseCode() +
-                            " " + conn.getResponseMessage());
+                            " " + Utils.avoidLogForging(conn.getResponseMessage()));
                 return null;
             }
 
@@ -204,7 +207,7 @@ public class HdrSoapHandler {
             while ((charAsInt = reader.read()) != -1){
             	hdrOutput.append((char) charAsInt);
             }
-            
+
             inputstream.close();
             conn.disconnect();
             String hdrJSONString = hdrOutput.toString();
@@ -215,7 +218,7 @@ public class HdrSoapHandler {
 
             return hdrJSONString ;
         } catch (javax.xml.ws.WebServiceException e) {
-			LOG.error("Error getting HDR Data for domain " + domain + " icn " + icn + " " + e);
+			LOG.error("Error getting HDR Data for domain " + Utils.avoidLogForging(domain) + " icn " + Utils.avoidLogForging(icn) + " " + e);
 		    Throwable cause = e;
 
 		    while ((cause = cause.getCause()) != null) {
@@ -226,7 +229,7 @@ public class HdrSoapHandler {
 			throw new ServerException("Error reported from JMeadows");
 		}
 		catch (Exception e) {
-			LOG.error("Error getting HDR Data for domain "+domain+" icn "+icn+" "+e);
+			LOG.error("Error getting HDR Data for domain "+Utils.avoidLogForging(domain)+" icn "+Utils.avoidLogForging(icn)+" "+e);
 			throw new ServerException("Error reported from JMeadows");
 		}
     }

@@ -16,7 +16,8 @@ module.exports.getResourceConfig = function() {
         path: '',
         post: add,
         interceptors: {
-            convertPid: true
+            convertPid: true,
+            synchronize: false
         },
         requiredPermissions: ['add-condition-problem'],
         isPatientCentric: true
@@ -25,7 +26,8 @@ module.exports.getResourceConfig = function() {
         path: '/:resourceId',
         put: update,
         interceptors: {
-            convertPid: true
+            convertPid: true,
+            synchronize: false
         },
         requiredPermissions: ['edit-condition-problem'],
         isPatientCentric: true

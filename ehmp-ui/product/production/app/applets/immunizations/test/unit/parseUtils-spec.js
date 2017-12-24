@@ -126,8 +126,8 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 var providerList = new Backbone.Collection();
                 providerList.add(new Backbone.Model({name: 'USER,PANORAMA', code: '100000027'}));
                 providerList.add(new Backbone.Model({name: 'ANOTHER,PROVIDER', code: '123456789'}));
-                var duz = {'9E7A': '100000027'};
-                var user = new Backbone.Model({duz: duz, site: '9E7A'});
+                var duz = {'SITE': '100000027'};
+                var user = new Backbone.Model({duz: duz, site: 'SITE'});
                 var foundUser = ParseUtil.findUser(providerList, user);
                 expect(foundUser.get('name')).toEqual('USER,PANORAMA');
                 expect(foundUser.get('code')).toEqual('100000027');

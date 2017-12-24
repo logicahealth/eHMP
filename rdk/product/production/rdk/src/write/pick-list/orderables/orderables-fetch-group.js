@@ -67,17 +67,19 @@ module.exports.fetchGroup = function(req, callback) {
             setHeader: function(k, v) {
                 //no-op
             },
-            status: function(statusCode) {
-                var action = (statusCode >= 300) ? pushResultsAndCallBack.bind(null, next, type) : pushResultsAndCallBack.bind(null, next, type, null);
-                return {
-                    rdkSend: action
-                };
-            }
+            status: function (statusCode) {
+                if (statusCode >= 300) {
+                    this.rdkSend = pushResultsAndCallBack.bind(null, next, type);
+                }
+                return this;
+            },
+            rdkSend: pushResultsAndCallBack.bind(null, next, type, null)
         };
     }
 
     function getDataFromLabOrderables(next) {
         req.query.labType = 'S.LAB';
+        req.pickListParseStreams = true;
         fetchIndividualPickList('lab-order-orderable-items', req, makeDummyResponse(subtypes.labOrderables, next));
     }
 

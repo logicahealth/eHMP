@@ -1,0 +1,20 @@
+input {
+   file {
+      type => "audit"
+      path => "<%= @path %>"
+      start_position => beginning
+   }
+}
+filter {
+    json{
+        source => "message"
+    }
+}
+output {
+   elasticsearch {
+      host => "<%= @host %>"
+      port => "<%= @port %>"
+      protocol => http
+      index => "audit"
+   }
+}

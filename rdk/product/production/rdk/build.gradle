@@ -2,11 +2,11 @@ ext.set('groupId', 'us.vistacore.rdk')
 ext.set('artifactId', 'rdk')
 ext.set('commitCountDir', projectDir)
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 def repoCommitCountClosure = {
-  def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-  def proc2 = 'wc -l'.execute()
-  proc1 | proc2
-  return proc2.text.trim()
+  def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+  return proc.text.trim()
 }
 
 def repoCommitCount = "${->repoCommitCountClosure()}"
@@ -22,29 +22,30 @@ uploadArchives {
   }
 }
 
-task installNpm(type: Exec) {
-  group "RDK Tasks"
-  description "installs package(s)"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+if(Os.isFamily(Os.FAMILY_MAC)) {
+  task installNpm(type: Exec) {
+    group "RDK Tasks"
+    description "installs package(s)"
+    commandLine "npm", "install", "--registry", npmRegistry
+  }
+} else {
+  task installNpm(type: Exec) {
+    group "RDK Tasks"
+    description "installs package(s)"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry ${->npmRegistry}"
+  }
 }
 
 task installNpmOracleDB(type: Exec) {
   group "RDK Tasks"
   description "installs the Oracle DB node package"
-  commandLine "npm", "install", "oracledb@1.9.3", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install oracledb@1.12.2 --unsafe-perm --registry ${->npmRegistry}"
 }
 
 task installFakeOracleDB(type: Exec) {
   group "RDK Tasks"
   description "installs an empty Oracle DB node package for local testing iff none exists"
   commandLine "sh", "-c", "[ -d \"${projectDir}/node_modules/oracledb\" ] || mkdir -p \"${projectDir}/node_modules/oracledb\" && touch \"${projectDir}/node_modules/oracledb/index.js\""
-}
-
-task ccowInstallNpm(type: Exec) {
-  workingDir './ccow'
-  group "RDK Tasks"
-  description "installs package(s) for ccow"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
 }
 
 task cleanNPM(type: Delete) {
@@ -91,7 +92,7 @@ task rdkAllTests(dependsOn: [test, rdkIntTests]) {
   description "runs unit and integration tests"
 }
 
-task zipRDK(type: Zip, dependsOn: [build, ccowInstallNpm]) {
+task zipRDK(type: Zip, dependsOn: [build]) {
   extension = 'zip'
   baseName = 'rdk'
   version = version

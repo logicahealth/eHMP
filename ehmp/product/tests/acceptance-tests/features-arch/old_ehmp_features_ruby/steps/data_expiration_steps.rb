@@ -84,8 +84,8 @@ When(/^manual expiration is called for patient with icn "(.*?)" and site "(.*?)"
   # https://IP           /sync/expire?icn=10108V420871&vistaId=DOD&time=20140916170917.999
   base_url = DefaultLogin.hmp_url
   p path = "#{base_url}/sync/expire?icn=#{icn}&vistaId=#{site_name}"
-  user = "9E7A;500"
-  pass = "IP    ;REDACTED"
+  user = "SITE;500"
+  pass = "USER  ;PW      "
   begin
     @response = HTTPartyWithBasicAuth.post_with_authorization_for_user(path, user, pass)
   rescue Timeout::Error
@@ -98,8 +98,8 @@ When(/^the client requests manual expiration time "(.*?)" for patient with icn "
   # https://IP           /sync/expire?icn=10108V420871&vistaId=DOD&time=20140916170917.999
   base_url = DefaultLogin.hmp_url
   p path = "#{base_url}/sync/expire?icn=#{icn}&vistaId=#{site_name}&time=#{time}"
-  user = "9E7A;500"
-  pass = "IP    ;REDACTED"
+  user = "SITE;500"
+  pass = "USER  ;PW      "
   begin
     @response = HTTPartyWithBasicAuth.post_with_authorization_for_user(path, user, pass)
   rescue Timeout::Error
@@ -112,8 +112,8 @@ When(/^manual expiration is called for patient with dfn "(.*?)" and site "(.*?)"
   # https://IP           /sync/expire?dfn=10108V420871&vistaId=DOD&time=20140916170917.999
   base_url = DefaultLogin.hmp_url
   p path = "#{base_url}/sync/expire?dfn=#{dfn}&vistaId=#{site_name}"
-  user = "9E7A;500"
-  pass = "IP    ;REDACTED"
+  user = "SITE;500"
+  pass = "USER  ;PW      "
   begin
     @response = HTTPartyWithBasicAuth.post_with_authorization_for_user(path, user, pass)
   rescue Timeout::Error
@@ -126,8 +126,8 @@ When(/^the client requests manual expiration time "(.*?)" for patient with dfn "
   # https://IP           /sync/expire?dfn=10108V420871&vistaId=DOD&time=20140916170917.999
   base_url = DefaultLogin.hmp_url
   p path = "#{base_url}/sync/expire?dfn=#{dfn}&vistaId=#{site_name}&time=#{time}"
-  user = "9E7A;500"
-  pass = "IP    ;REDACTED"
+  user = "SITE;500"
+  pass = "USER  ;PW      "
   begin
     @response = HTTPartyWithBasicAuth.post_with_authorization_for_user(path, user, pass)
   rescue Timeout::Error

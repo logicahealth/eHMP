@@ -18,7 +18,7 @@ var req = {
         config: {
             rpcConfig: {
                 context: 'HMP UI CONTEXT',
-                siteHash: '9E7A'
+                siteHash: 'SITE'
             },
             vistaSites: {},
             CRSServer: {
@@ -29,7 +29,7 @@ var req = {
     },
     session: {
         user: {
-            site: '9E7A'
+            site: 'SITE'
         }
     }
 };

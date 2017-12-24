@@ -8,7 +8,7 @@ function check(logger, config, callback) {
     var url = 'http://' + config.vler.defaults.host + ':' + config.vler.defaults.adminPort + '/ping';
 	request(url, function(error, response, body) {
 		if (error) {
-			logger.info('vler-checker.check() Error attempting to connect to "%s": %s', url, error);
+			logger.error('vler-checker.check() Error attempting to connect to "%s": %s', url, error);
 			return callback(null, false);
 		}
 

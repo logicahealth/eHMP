@@ -14,15 +14,13 @@ action :create do
       Chef::Log.info("Making a flag for #{new_resource.patient}")
       console = Greenletters::Process.new("sh", :transcript => new_resource.log, :timeout => node[:vista][:shell_timeout_seconds])
 
-      console.on(:output, /Enter RETURN to continue/i) do |process, match_data|
+      console.on(:output, /Type <Enter> to continue or '\^' to exit/i) do |process, match_data|
         console.write("\n")
       end
 
       console.on(:output, /Are you sure you wish to continue/i) do |process, match_data|
         console.write("YES\n")
       end
-
-
 
       # start the shell, set up cache environment and start cache shell
       console.start!
@@ -39,14 +37,9 @@ action :create do
         # Set user and setup programmer environment
         console.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
           process.write("S DUZ=#{new_resource.duz}\r")
-          if new_resource.programmer_mode
-            process.write("D ^XUP\r")
-            process.write("^\r")
-          end
+          process.write("D ^XUP\r")
         end
       end
-
-      console.write("d ^XUP\n")
 
       console.wait_for(:output, /OPTION NAME:/i)
       console.write("DGPF RECORD FLAG ASSIGNMENT\n")

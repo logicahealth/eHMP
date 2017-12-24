@@ -22,8 +22,8 @@ And the VPR results contain:
       | fullName                        | EIGHT,INPATIENT                                                                                  |
       | last4                           | 0808                                                                                             |
       | last5                           | E0808                                                                                            |
-      | pid                             | 9E7A;100716                                                                                       |
-      #| summary                         | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, 9E7A;100716]} |
+      | pid                             | SITE;100716                                                                                       |
+      #| summary                         | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, SITE;100716]} |
       | uid                             | IS_SET                                                                                           |                          
       #| domainUpdated                   | IS_SET                                                                                           |
       # according to wiki, this value should be at location 27.02, but this patient did not have a 27.02 location, so not sure where these values are coming from
@@ -34,7 +34,7 @@ Given a patient with "this last name exists" in multiple VistAs
 When the user searches for a patient "ZZZRETIREDONEFIVE,PATIENT" in VPR format
 And the VPR results contain:
       | field         | panorama_value            |
-      | pid           | 9E7A;167                  |
+      | pid           | SITE;167                  |
       | fullName      | ZZZRETIREDONEFIVE,PATIENT |
       | sensitive     | true                      |
 
@@ -49,7 +49,7 @@ And the VPR results contain:
       | familyName    | EIGHT                  |
       | genderName    | Male                   |
       | givenNames    | INPATIENT              |
-      | pid           | 9E7A;100716            |
+      | pid           | SITE;100716            |
       | ssn           | 666000808              |
       | uid           | IS_SET                 |
 

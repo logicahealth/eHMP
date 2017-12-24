@@ -29,7 +29,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: property('jacksonVersion')
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: property('jacksonVersion')
     compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: property('jacksonVersion')
-    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.4'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version:property('commons-lang3')
     compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: property('cxfVersion')
     compile group: 'junit', name: 'junit', version: property('junitVersion')
 }

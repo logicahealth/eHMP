@@ -5,7 +5,7 @@ Feature: Incident Reports
   Scenario: Submit single incident report
     Given an incident report
       | field                | value                                                               |
-      | pid                  | 9E7A;3                                                              |
+      | pid                  | SITE;3                                                              |
       | comment              | Hello world                                                         |
       | simpleSyncStatus     | {}                                                                  |
       | tracker.screenName   | provider-centric-view                                               |
@@ -17,8 +17,8 @@ Feature: Incident Reports
       | tracker.appVersion   | 5.0 (Windows NT 6.1; WOW64; Trident/7.0; SLCC2; rv:11.0) like Gecko |
       | tracker.platform     | Win32                                                               |
       | tracker.facility     | PANORAMA                                                            |
-      | tracker.duz          | {"9E7A": "3"}                                                       |
-      | tracker.site         | 9E7A                                                                |
+      | tracker.duz          | {"SITE": "3"}                                                       |
+      | tracker.site         | SITE                                                                |
       | tracker.title        | Clinician                                                           |
       | tracker.history      | ["/staff/provider-centric-view"]                                    |
       | tracker.historyTimes | [1484762636811]                                                     |
@@ -45,7 +45,7 @@ Feature: Incident Reports
   Scenario: Submit multiple incident reports
     Given an incident report
       | field            | value                                          |
-      | pid              | 9E7A;3                                         |
+      | pid              | SITE;3                                         |
       | comment          | This happened when I tried clicking the button |
       | simpleSyncStatus | {}                                             |
     And the incident report has an incident

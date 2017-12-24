@@ -1,5 +1,5 @@
 pushd /opt/vxsync
-VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --port 9999 &
+VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --port PORT &
 VXSYNC_LOG_SUFFIX=writebackEndpoint node endpoints/writeback/writeback-endpoint.js --port 9090 &
 VXSYNC_LOG_SUFFIX=subscriberHost-primary node subscriberHost.js --profile primary &
 VXSYNC_LOG_SUFFIX=subscriberHost-jmeadows node subscriberHost.js --profile jmeadows &

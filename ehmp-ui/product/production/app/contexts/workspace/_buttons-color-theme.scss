@@ -1,0 +1,69 @@
+@mixin buttonsColorTheme($button-primary, $button-primary-dark, $button-primary-light, $button-primary-light-alt) {
+    .btn-default {
+        background-color: $button-primary-light;
+        color: $button-primary;
+        &:hover,
+        &:focus,
+        &:active,
+        &.active,
+        &:active:focus {
+            background-color: $button-primary-light-alt;
+            color: $button-primary-dark;
+        }
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:focus,
+        &[disabled]:active {
+            background-color: lighten($button-primary-light-alt, 10%);
+            color: $button-primary-dark;
+        }
+    }
+    .btn-icon {
+        color: $button-primary;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            color: $button-primary-dark;
+        }
+    }
+    .btn-primary {
+        background-color: $button-primary;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            background-color: $button-primary-dark;
+        }
+    }
+    .btn-group {
+        > .btn {
+            &.active-range {
+                background-color: $button-primary-dark;
+            }
+        }
+        &.btn-group--date-range {
+            .btn {
+                &.active {
+                    background: $button-primary-dark;
+                    color: $pure-white;
+                }
+            }
+        }
+    }
+    .modal-content .modal-footer {
+        .btn.btn-primary,
+        .btn.btn-default {
+            background-color: $pure-white;
+            color: $button-primary;
+            &:hover,
+            &:focus,
+            &:active,
+            &.active,
+            &:active:focus {
+                background-color: $pure-white;
+                color: $button-primary-dark;
+            }
+        }
+    }
+}

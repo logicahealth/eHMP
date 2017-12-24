@@ -75,7 +75,7 @@ define([
                         extraClasses: ["btn-default btn-sm"],
                         label: "Check All",
                         name: "checkAll",
-                        title: "Press enter to select all vitals",
+                        title: "Select all vitals",
                         type: "button"
                     }]
                 }, {
@@ -178,15 +178,13 @@ define([
                             extraClasses: ['btn-default', 'btn-sm', 'pull-left'],
                             type: 'button',
                             label: 'Cancel',
-                            title: 'Press enter to leave the form without making any changes'
                             }, {
                             control: 'button',
                             disabled: true,
                             extraClasses: ['btn-primary', 'btn-sm'],
                             label: 'Enter in Error',
                             name: 'submit-entered-in-error',
-                            id: 'submit-entered-in-error',
-                            title: 'Press enter to submit entered in error form'
+                            id: 'submit-entered-in-error'
                             }]
                         }]
                     }]
@@ -198,7 +196,7 @@ define([
                 });
 
                 var CancelFooterView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
+                    template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm"}}{{ui-button "Yes" classes="btn-primary btn-sm"}}'),
                     events: {
                         'click .btn-primary': function() {
                             ADK.UI.Alert.hide();
@@ -221,7 +219,7 @@ define([
                 });
 
                 var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
+                    template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm"}}'),
                     events: {
                         'click .btn-primary': function() {
                             ADK.UI.Alert.hide();
@@ -279,11 +277,10 @@ define([
                     if (!this.hasBeenClicked) {
                         this.hasBeenClicked = !this.hasBeenClicked;
                         btnText = 'Deselect All';
-                        btnTitle = 'Press enter to deselect all vitals.';
                     } else {
                         this.hasBeenClicked = !this.hasBeenClicked;
                         btnText = 'Check All';
-                        btnTitle = 'Press enter to select all vitals.';
+                        btnTitle = 'Select all vitals.';
                     }
 
                     this.ui.vitalsChecklist.trigger('control:item:value', {

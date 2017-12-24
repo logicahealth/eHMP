@@ -21,26 +21,26 @@ describe('Vitals Resource Test', function() {
                 config: {
                     rpcConfig: {
                         context: 'HMP UI CONTEXT',
-                        siteHash: '9E7A'
+                        siteHash: 'SITE'
                     },
                     vistaSites: {
-                        '9E7A': {
+                        'SITE': {
                             name: 'PANORAMA',
                             division: '500',
                             host: 'IP        ',
-                            port: 9210,
+                            port: PORT,
                             production: false,
-                            accessCode: 'REDACTED',
-                            verifyCode: 'REDACTED'
+                            accessCode: 'USER  ',
+                            verifyCode: 'PW      '
                         },
-                        'C877': {
+                        'SITE': {
                             name: 'KODAK',
                             division: '500',
                             host: 'IP        ',
-                            port: 9210,
+                            port: PORT,
                             production: false,
-                            accessCode: 'REDACTED',
-                            verifyCode: 'REDACTED'
+                            accessCode: 'USER  ',
+                            verifyCode: 'PW      '
                         }
                     }
                 }
@@ -48,7 +48,7 @@ describe('Vitals Resource Test', function() {
             query: {},
             session: {
                 user: {
-                    site: '9E7A'
+                    site: 'SITE'
                 }
             }
         };
@@ -66,7 +66,7 @@ describe('Vitals Resource Test', function() {
         req.interceptorResults = {
             patientIdentifiers: {
                 dfn: 3,
-                site: '9E7A'
+                site: 'SITE'
             }
         };
         req.param = function(param) {
@@ -84,7 +84,7 @@ describe('Vitals Resource Test', function() {
         req.interceptorResults = {
             patientIdentifiers: {
                 dfn: 3,
-                site: '9E7A'
+                site: 'SITE'
             }
         };
         req.param = function(param) {

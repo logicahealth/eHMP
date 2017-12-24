@@ -10,7 +10,7 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @@users = {}
     
-  @@users["9E7A;edm1234"] = "edm1234!!"
+  @@users["SITE;USER"] = "PW"
   def self.password_for(username)
     return @@users[username]
   end
@@ -18,7 +18,7 @@ end
 
 class HTTPartyWithSysAdminAuth
   include HTTParty
-  @@auth = { :accessCode => "edm1234", :verifyCode => "edm1234!!", :site => "9E7A", :division => "500" }
+  @@auth = { :accessCode => "USER", :verifyCode => "PW", :site => "SITE", :division => "500" }
 #remove this site before doing things
   @@site = nil
   @@time_start = Time.new

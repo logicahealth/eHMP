@@ -18,7 +18,7 @@ var log = require(global.VX_DUMMIES + 'dummy-logger');
 var originalVaVitalRecord = {
     'displayName': 'T',
     'enteredByName': 'LABTECH,SPECIAL',
-    'enteredByUid': 'urn:va:user:9E7A:11745',
+    'enteredByUid': 'urn:va:user:SITE:11745',
     'facilityCode': 998,
     'facilityName': 'ABILENE (CAA)',
     'high': 102,
@@ -26,12 +26,12 @@ var originalVaVitalRecord = {
     'lastUpdateTime': 20040330215452,
     'localId': 12447,
     'locationName': 'NUR NEW LOCATION',
-    'locationUid': 'urn:va:location:9E7A:278',
+    'locationUid': 'urn:va:location:SITE:278',
     'low': 95,
     'metricResult': '37.0',
     'metricUnits': 'C',
     'observed': 200403302131,
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'qualifiers': [{
         'name': 'AXILLARY',
         'vuid': 4688640
@@ -42,7 +42,7 @@ var originalVaVitalRecord = {
     'summary': 'TEMPERATURE 98.6 F',
     'typeCode': 'urn:va:vuid:4500638',
     'typeName': 'TEMPERATURE',
-    'uid': 'urn:va:vital:9E7A:3:12447',
+    'uid': 'urn:va:vital:SITE:3:12447',
     'units': 'F',
     'interpretationCode': 'SomeInterp',
     'organizer': {

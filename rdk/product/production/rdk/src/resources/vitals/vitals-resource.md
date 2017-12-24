@@ -98,7 +98,7 @@ Validate the difference between previous and current vital measurements
     + Body
 
             {
-                "pid": "9E7A;3",
+                "pid": "SITE;3",
                 "bloodpressure": {
                     "value": "ssss"
                 },

@@ -11,7 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.PROCESSED_EVENT_STATE")
+@Table(name = "PROCESSED_EVENT_STATE", schema="ACTIVITYDB")
 public class ProcessedEventState {
 
 	@Id

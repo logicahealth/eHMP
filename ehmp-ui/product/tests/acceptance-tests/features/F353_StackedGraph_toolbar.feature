@@ -1,4 +1,4 @@
-@F353  
+@F353 @stack_graph_quickmenu 
 Feature: F353 - stacked graphs
 
 Background:
@@ -6,11 +6,8 @@ Background:
   Then Overview is active
   And the user clicks the Workspace Manager
   Then the user deletes all user defined workspaces
-  Given the user creates a user defined workspace named "stackgraphtoolbar"
-  When the user customizes the "stackgraphtoolbar" workspace
-  And the user adds an expanded "stackedGraph" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  Then the "STACKGRAPHTOOLBAR" screen is active
+  And the user creates and views a udw with a stackgraph applet
+
   And the "Stacked Graphs" ("stackedGraph") expanded applet is displayed
   And the Stacked Graphs applet is empty
   When the user adds BMI Vitals to the graph
@@ -18,26 +15,22 @@ Background:
 
 @US6312
 Scenario: User should be able to get information by clicking quick view button on stacked graph
-  When the user clicks the row for BMI
-  Then a popover toolbar displays buttons
-   | button |
-   | Quick View Button |
-  When the user clicks the BMI Quick View Button
+  When the user hovers over the row for BMI
   Then a quickview displays a vitals table with expected headers
 
 @US4668 @DE6010
 Scenario: Verify detail modal view
-  When the user clicks the row for BMI
-  Then a popover toolbar displays buttons
-   | button |
-   | Detail View Button |
-  When the user clicks the BMI Detail View button
+  When the user hovers over the row for BMI
+  Then user can view the Quick Menu Icon in Stacked Graph applet
+  When user selects the detail view from Quick Menu Icon of Stack Graph applet
   Then the modal is displayed
   Then the BMI Vital detail modal is displayed
 
 @US6237
 Scenario: Verify user can remove graph
-  When the user clicks the row for BMI
-  Then a popover toolbar displays with a delete button
+  When the user hovers over the row for BMI
+  Then user can view the Quick Menu Icon in Stacked Graph applet
+  When Quick Menu Icon is selected in Stack Graph applet
+  Then a menu option displays with a delete button
   When the user chooses to remove the graph
   Then the Stacked Graphs applet does not display a row for BMI

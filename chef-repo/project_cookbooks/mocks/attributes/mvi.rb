@@ -17,3 +17,4 @@ default[:mvi][:agent_options][:cert] = nil
 default[:mvi][:agent_options][:request_cert] = nil
 default[:mvi][:agent_options][:ca] = nil
 default[:mvi][:agent_options][:passphrase] = nil
+default[:mvi][:agent_options][:max_sockets] = 5

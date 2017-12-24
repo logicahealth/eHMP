@@ -1,0 +1,76 @@
+apply plugin: 'maven'
+
+ext.set('repo', 'filerepo')
+ext.set('groupId', 'us.vistacore.infrastructure')
+ext.set('artifactId', 'rdk-infrastructure')
+ext.set('repoVersion', getRepoVersion())
+ext.set('commitCountDir', projectDir)
+
+def repoCommitCountClosure = {
+  def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+  return proc.text.trim()
+}
+
+repoCommitCount = "${->repoCommitCountClosure()}"
+version = "${->repoVersion + '.' + repoCommitCount}"
+
+ext.set('infrastructureVersion', version)
+
+repositories {
+  maven {url "https://store.vistacore.us/nexus/content/groups/public"}
+}
+
+uploadArchives {
+  repositories.mavenDeployer {
+    pom.groupId = "${->groupId}"
+    pom.version = "${->infrastructureVersion}"
+    repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}") {
+      authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
+    }
+  }
+}
+
+def getRepoVersion() {
+    def v
+    v = new File(projectDir, "properties/applicationVersionPrefix").getText()
+    if (v.endsWith('.'))
+        v = v.substring(0, v.length()-1)
+    return v
+}
+
+task packageRDKInfrastructure(type: Zip) {
+  extension = 'zip'
+  baseName = 'rdk-infrastructure'
+  destinationDir buildDir
+  version = infrastructureVersion
+
+  println "RDK_INFRASTRUCTURE_VERSION='${version}'"
+
+  project.buildDir.mkdirs()
+        delete{
+            delete "${project.buildDir}/version.properties"
+        }
+        new File("${project.buildDir}/version.properties") << """RDK_INFRASTRUCTURE_VERSION=${version}
+"""
+
+  from('chef/cookbooks/') {
+    excludes = ["rdk_dev"]
+    into 'infrastructure/chef/cookbooks/'
+  }
+  from('chef/data_bags/') {
+    excludes = ["endpoints", "patients", "sensu", "users"]
+    into 'infrastructure/chef/data_bags/'
+  }
+  from('vagrant') {
+    excludes = ["virtualbox", "Servers.rb"]
+    into 'infrastructure/vagrant'
+  }
+  from('../.chef') {
+    excludes = ["*.lock", "*.pem", "*.rb"]
+    into '.chef'
+  }
+}
+
+artifacts {
+  archives packageRDKInfrastructure
+}

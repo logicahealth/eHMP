@@ -6,7 +6,7 @@ var logger = sinon.stub(require('bunyan').createLogger({
 }));
 var RpcClient = require('vista-js').RpcClient;
 var vistaConnect = require('./vista-connection');
-var SITE = '9E7A';
+var SITE = 'SITE';
 var DIVISION = '411';
 var ACCESS_CODE = 'JENGA';
 var VERIFY_CODE = 'JENGA';
@@ -27,7 +27,7 @@ describe('Vista Connection Module', function() {
         req.logger = logger;
         _.set(req, ['app', 'config', 'vistaSites', SITE], {
             host: '12345',
-            port: 8888,
+            port: PORT,
             //name: 'PIONEER',
             infoButtonOid: 'blahblahblah',
             //division: 411

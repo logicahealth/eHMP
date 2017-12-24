@@ -4,22 +4,22 @@ Feature: F102 Return and display of documents
 # I have marked the Feature as @future so the background step will also not be run
 
 Background:
-	Given a patient with pid "9E7A;71" has been synced through FHIR
+	Given a patient with pid "SITE;71" has been synced through FHIR
 	
 @docs_rest @future
 Scenario: Client can request document
 	Given a patient with "documents" in multiple VistAs
-	When the client requests documents for the patient "9E7A;71"
+	When the client requests documents for the patient "SITE;71"
 	Then eHMP returns "3" result(s)
 	And the results contain data group
 		| field         | value                              |
-		| uid      | urn:va:document:9E7A:71:CY;7059298 |
+		| uid      | urn:va:document:SITE:71:CY;7059298 |
       	| summary  | LR CYTOPATHOLOGY REPORT            |
       	| dateTime | 19940701                           |
       	
     And the results contain data group
 		| field         | value                       |
-		| uid      | urn:va:document:9E7A:71:494 |
+		| uid      | urn:va:document:SITE:71:494 |
       	| summary  | MONDAY USER                 |
       	| dateTime | 19971215153425              |
       	

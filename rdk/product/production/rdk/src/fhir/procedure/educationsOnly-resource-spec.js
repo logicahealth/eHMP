@@ -4,10 +4,10 @@ var inputValue = require('./educationsOnly-resource-spec-data').jdsInput;
 
 describe('Procedure FHIR Resource - testing FHIR conversion of educations type data', function() {
     var req = {
-        'pid': '9E7A;253',
+        'pid': 'SITE;253',
         originalUrl: '/fhir/patient/11016V630869/educations?_tag=educations',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -41,7 +41,7 @@ describe('Procedure FHIR Resource - testing FHIR conversion of educations type d
 
         it('Verifies that Fhir structure contains all required attributes', function() {
             expect(aFhir.resourceType).to.equal('Procedure');
-            expect(aFhir.patient.reference).to.equal('Patient/9E7A;237');
+            expect(aFhir.patient.reference).to.equal('Patient/SITE;237');
             expect(aFhir.status).to.equal(educations.jdsToFHIRStatusMap.get('COMPLETE'));
             expect(aFhir.type.coding[0].display).to.equal(aVprItem.name);
             expect(aFhir.identifier[0].value).to.not.be.undefined();

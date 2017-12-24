@@ -1,4 +1,4 @@
-@f893_immunization_enhanced_detail_view  @DE4560 @reg3 @future 
+@f893_immunization_enhanced_detail_view  @immunization_applet @DE4560 @reg3 @future 
 
 Feature: F893 : Enhanced Immunization Detail View with VIMM Fields
 

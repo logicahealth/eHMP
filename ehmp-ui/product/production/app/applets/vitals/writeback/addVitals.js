@@ -50,7 +50,6 @@ define([
                 items: [{
                     control: "button",
                     type: "button",
-                    title: "Press enter to pass",
                     name: "facility-name-pass-po",
                     label: "Pass",
                     extraClasses: ["btn-primary", "btn-xs", "top-margin-xl", "font-size-12"]
@@ -63,8 +62,7 @@ define([
                     type: 'button',
                     label: 'Expand All',
                     name: 'expandCollapseAll',
-                    extraClasses: ["btn-default", "btn-xs", "top-margin-xl", "left-margin-xs", "background-color-pure-white", "font-size-12"],
-                    title: "Press enter to expand all vitals"
+                    extraClasses: ["btn-default", "btn-xs", "top-margin-xl", "left-margin-xs", "background-color-pure-white", "font-size-12"]
                 }]
             }, {
                 control: 'spacer'
@@ -79,7 +77,6 @@ define([
             name: "bp-location-po",
             disabled: true,
             label: "Location",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -87,13 +84,11 @@ define([
             name: "bp-method-po",
             disabled: true,
             label: "Method",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
             control: "select",
             label: "Cuff Size",
-            title: "Use up and down arrows to view options and then press enter to select",
             name: "bp-cuff-size-po",
             disabled: true,
             extraClasses: ["col-xs-12"],
@@ -101,7 +96,6 @@ define([
         }, {
             control: "select",
             label: "Position",
-            title: "Use up and down arrows to view options and then press enter to select",
             name: "bp-position-po",
             disabled: true,
             extraClasses: ["col-xs-12"],
@@ -225,7 +219,6 @@ define([
             name: "pulse-method-po",
             disabled: true,
             label: "Method",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -233,7 +226,6 @@ define([
             name: "pulse-position-po",
             disabled: true,
             label: "Position",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -241,7 +233,6 @@ define([
             name: "pulse-site-po",
             disabled: true,
             label: "Site",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -249,7 +240,6 @@ define([
             name: "pulse-location-po",
             disabled: true,
             label: "Location",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }]
@@ -302,7 +292,6 @@ define([
             name: "respiration-method-po",
             disabled: true,
             label: "Method",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -310,7 +299,6 @@ define([
             name: "respiration-position-po",
             disabled: true,
             label: "Position",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }]
@@ -329,7 +317,6 @@ define([
         items: [{
             control: "select",
             label: "Location",
-            title: "Use up and down arrows to view options and then press enter to select",
             name: "temperature-location-po",
             disabled: true,
             pickList: []
@@ -391,7 +378,6 @@ define([
             label: "Method",
             name: "po-method-po",
             disabled: true,
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }]
@@ -453,7 +439,6 @@ define([
             label: "Quality",
             name: "height-quality-po",
             disabled: true,
-            title: "Use up and down arrows to view options and then press enter to select",
             pickList: []
         }]
     };
@@ -513,7 +498,6 @@ define([
             name: "weight-method-po",
             disabled: true,
             label: "Method",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -521,7 +505,6 @@ define([
             name: "weight-quality-po",
             disabled: true,
             label: "Quality",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }]
@@ -637,7 +620,6 @@ define([
             name: "cg-site-po",
             disabled: true,
             label: "Site",
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }, {
@@ -645,7 +627,6 @@ define([
             label: "Location",
             name: "cg-location-po",
             disabled: true,
-            title: "Use up and down arrows to view options and then press enter to select",
             extraClasses: ["col-xs-12"],
             pickList: []
         }]
@@ -704,7 +685,6 @@ define([
                     label: "Accept",
                     type: "button",
                     name: "form-add-btn",
-                    title: "Press enter to accept"
                 }]
             }]
         }]
@@ -748,7 +728,7 @@ define([
     });
 
     var WarningFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Submit" classes="btn-primary btn-sm" title="Press enter to submit."}}'),
+        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm"}}{{ui-button "Submit" classes="btn-primary btn-sm"}}'),
         events: {
             'click .btn-primary': function() {
                 var self = this;
@@ -815,7 +795,7 @@ define([
             'suppO2InputValue': '.suppO2InputValue input',
             'heightInputValue': '.heightInputValue input[type="text"]',
             'weightInputValue': '.weightInputValue input[type="text"]',
-            'circumValue': 'circumValue input[type="text"]',
+            'circumValue': '.circumValue input[type="text"]',
             'pain-value-po': '.pain-value-po input'
         },
         fields: F423Fields,
@@ -838,7 +818,13 @@ define([
             "circumValue", "cg-radio-po", "cg-site-po", "cg-location-po"
         ],
         onRender: function() {
-            this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+            this.stopListening(this.model, 'change.inputted');
+            this.listenTo(this.model, 'change.inputted', function(model, changedValue) {
+                if (!_.has(changedValue, '_dateTakenInput')) {
+                    this.registerChecks();
+                    this.stopListening(this.model, 'change.inputted');
+                }
+            });
             writebackUtils.retrievePickLists(this, function() {}, function() {
                 var errorAlertView = new ADK.UI.Alert({
                     title: 'Error',
@@ -957,9 +943,9 @@ define([
                 toggleBooleanPassBtn = !toggleBooleanPassBtn;
 
                 if (this.ui.PassButton.hasClass('active')) {
-                    this.ui.PassButton.trigger('control:label', 'Enable').trigger('control:title', 'Press enter to enable all vitals');
+                    this.ui.PassButton.trigger('control:label', 'Enable');
                 } else {
-                    this.ui.PassButton.trigger('control:label', 'Pass').trigger('control:title', 'Press enter to pass all vitals');
+                    this.ui.PassButton.trigger('control:label', 'Pass');
                 }
                 this.ui.PassButton.find('button').focus();
 
@@ -982,9 +968,9 @@ define([
                 this.ui.AllCollapsibleContainers.trigger("control:collapsed", toggleBooleanExpandCollapse);
 
                 if (toggleBooleanExpandCollapse) {
-                    this.ui.ExpandCollapseAllControl.trigger("control:label", 'Expand All').trigger("control:title", 'Press enter to expand all vitals');
+                    this.ui.ExpandCollapseAllControl.trigger("control:label", 'Expand All');
                 } else {
-                    this.ui.ExpandCollapseAllControl.trigger("control:label", 'Collapse All').trigger("control:title", 'Press enter to collapse all vitals');
+                    this.ui.ExpandCollapseAllControl.trigger("control:label", 'Collapse All');
                 }
                 this.ui.ExpandCollapseAllControl.find('button').focus();
                 toggleBooleanExpandCollapse = !toggleBooleanExpandCollapse;

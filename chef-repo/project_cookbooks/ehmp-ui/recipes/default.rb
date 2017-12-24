@@ -28,12 +28,11 @@ directory dest_dir do
   action :create
 end
 
-execute "extract from ZIP" do
-  cwd dest_dir
-  command "unzip #{Chef::Config['file_cache_path']}/ehmp-ui.zip"
-  action :run
+common_extract "#{Chef::Config['file_cache_path']}/ehmp-ui.zip" do
+  directory dest_dir
+  action :extract_if_missing
   notifies :run, "execute[Move app.json to app directory]", :immediately
-  only_if { (Dir.entries(dest_dir) - %w{ . .. }).empty? }
+  not_if ("mountpoint -q #{dest_dir}")
 end
 
 execute "Move app.json to app directory" do

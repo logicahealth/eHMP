@@ -5,7 +5,7 @@ var multidivisionalSubsystem = require('./vista-multidivision-subsystem');
 var app = {
     'config': {
         'vistaSites': {
-            'C877': {
+            'SITE': {
                 'division': [{
                     'id': '507',
                     'name': 'KODAK'
@@ -20,14 +20,14 @@ var app = {
                 'host': 'IP        ',
                 'localIP': 'IP      ',
                 'localAddress': 'localhost',
-                'port': 9210,
+                'port': PORT,
                 'production': false,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'PW',
+                'verifyCode': 'PW',
                 'infoButtonOid': '1.3.6.1.4.1.3768',
                 'abbreviation': 'KDK'
             },
-            '9E7A': {
+            'SITE': {
                 'division': [{
                     'id': '500',
                     'name': 'PANORAMA'
@@ -36,10 +36,10 @@ var app = {
                 'host': 'IP        ',
                 'localIP': 'IP      ',
                 'localAddress': 'localhost',
-                'port': 9210,
+                'port': PORT,
                 'production': false,
-                'accessCode': 'REDACTED',
-                'verifyCode': 'REDACTED',
+                'accessCode': 'USER  ',
+                'verifyCode': 'PW      ',
                 'infoButtonOid': '1.3.6.1.4.1.3768',
                 'abbreviation': 'PAN'
             }

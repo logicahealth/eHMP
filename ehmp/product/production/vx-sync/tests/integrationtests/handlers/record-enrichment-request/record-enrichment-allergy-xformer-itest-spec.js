@@ -9,7 +9,8 @@ require('../../../../env-setup');
 
 var _ = require('underscore');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
 
@@ -53,7 +54,7 @@ var originalVaAllergyRecord = {
     'stampTime': 20050317200936,
     'summary': 'PENICILLIN',
     'typeName': 'DRUG',
-    'uid': 'urn:va:allergy:9E7A:3:751',
+    'uid': 'urn:va:allergy:SITE:3:751',
     'verified': 20050317200936,
     'verifierName': '<auto-verified>'
 };

@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import us.vistacore.vxsync.id.MviId;
 import us.vistacore.vxsync.mvi.MviDemographics;
 import us.vistacore.vxsync.config.MviConfiguration;
+import us.vistacore.vxsync.utility.Utils;
 
 public class MessageBuilder {
 
@@ -52,7 +53,7 @@ public class MessageBuilder {
 
 	public PRPAIN201309UV02 getCorrespondingIds(MviId pid) {
 		LOG.debug("Start building 1309 request - get corresponding ids");
-		LOG.info("Building 1309 SOAP message for " + pid.toString());
+		LOG.info("Building 1309 SOAP message for " + Utils.avoidLogForging(pid.toString()));
 		UUID messageId = UUID.randomUUID();
 		LOG.debug("Assigning message id " + messageId.toString());
 
@@ -103,7 +104,7 @@ public class MessageBuilder {
 
 	public PRPAIN201305UV02 getAttendedSearch(MviDemographics demographics) {
 		LOG.debug("Start building 1305 request - attended search");
-		LOG.info("Building 1305 SOAP message for " + demographics.toString());
+		LOG.info("Building 1305 SOAP message for " + Utils.avoidLogForging(demographics.toString()));
 		UUID messageId = UUID.randomUUID();
 		LOG.debug("Assigning message id " + messageId.toString());
 
@@ -153,7 +154,7 @@ public class MessageBuilder {
 		PRPAMT201306UV02QueryByParameter queryByParams = jax_queryByParams.getValue();
 		queryByParams.setQueryId(createId(ROOT_CODE_5, messageId.toString()));
 		queryByParams.setStatusCode(createCode("new"));
-		queryByParams.setModifyCode(createCode("1"));
+		queryByParams.setModifyCode(createCode("MVI.COMP1"));
 		queryByParams.setInitialQuantity(createInt("10"));
 		queryByParams.setResponsePriorityCode(createCode("I"));
 

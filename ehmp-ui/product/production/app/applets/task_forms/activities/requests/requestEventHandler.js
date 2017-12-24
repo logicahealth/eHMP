@@ -8,20 +8,13 @@ define([
 ], function(Async, moment, EventHandler, TaskFetchHelper, RequestUtils, Utils) {
     'use strict';
 
-    var parseAssignment = function(assignment) {
-        if (assignment === 'opt_me') {
-            return 'Me';
-        } else if (assignment === 'opt_person') {
-            return 'Person';
-        } else if (assignment === 'opt_myteams') {
-            return 'My Teams';
-        } else if (assignment === 'opt_anyteam') {
-            return 'Any Team';
-        } else if (assignment === 'opt_patientteams') {
-            return 'Patient\'s Teams';
-        } else {
-            return null;
-        }
+    var sanitizedRouteString = function(value) {
+        return _.trim(value.replace(/\(|\)|\:|\[|\]|\,/g, '-'));
+    };
+
+    var getFormattedAssignmentValue = function(formModel, attribute) {
+        var path = '_labelsForSelectedValues.' + attribute;
+        return _.get(formModel.get('assignment'), path, '');
     };
 
     var parseUrgencyId = function(urgency) {
@@ -44,40 +37,26 @@ define([
     };
 
     var routingCode = function(formModel, formAction) {
-        var assignTo = parseAssignment(formModel.get('assignment'));
+        var assignTo = getFormattedAssignmentValue(formModel, 'type');
         var userSession = ADK.UserService.getUserSession().attributes;
-        if (assignTo === 'Me') {
+        if (_.isEqual(assignTo, 'Me')) {
             return userSession.site + ';' + userSession.duz[userSession.site];
-        } else if (assignTo === 'Person') {
-            return formModel.get('person');
+        } else if (_.isEqual(assignTo, 'Person')) {
+            return _.get(formModel.get('assignment'), 'person');
         } else {
-            var roles = formModel.get('roles');
-            var team = formModel.get('team');
+            var team = _.get(formModel.get('assignment'), 'team');
+            var friendlyTeamName = sanitizedRouteString(getFormattedAssignmentValue(formModel, 'team'));
 
-            var friendlyTeamName;
-            var friendlyRoleName;
-            _.each(formModel.get('storedTeamsList'), function(singleTeam){
-                if(singleTeam.teamID == team) {
-                    friendlyTeamName = sanitizedRouteString(singleTeam.teamName);
+            var roles = _.get(formModel.get('assignment'), 'roles');
+            var formattedRoleNames = getFormattedAssignmentValue(formModel, 'roles') || [];
+
+            var codes = _.transform(roles, function(result, role, index) {
+                if (!_.isEmpty(role)) {
+                    result.push('[TM:' + friendlyTeamName + '(' + team + ')/TR:' + formattedRoleNames[index] + '(' + role + ')]');
                 }
-            });
-
-            var codes = [];
-            _.each(roles, function(role) {
-                _.each(formModel.get('storedRolesList'), function(singleRole){
-                    if(singleRole.roleID == role) {
-                        friendlyRoleName = sanitizedRouteString(singleRole.name);
-                    }
-                });
-                codes.push('[TM:' + friendlyTeamName + '(' + team + ')/TR:' + friendlyRoleName + '(' + role + ')]');
-
-            });
+            }, []);
             return codes.join();
         }
-    };
-
-    var sanitizedRouteString = function(value) {
-        return _.trim(value.replace(/\(|\)|\:|\[|\]|\,/g, '-'));
     };
 
     // Builds and return the parameter object from the UI form
@@ -134,80 +113,76 @@ define([
     };
 
     var setRouteToRequest = function(formModel, request) {
-        if (formModel.get('assignment') !== 'opt_me') {
-            request.route = {};
-            if (formModel.get('assignment') === 'opt_person') {
-                request.route.facility = formModel.get('facility');
-                request.route.facilityName = formModel.get('facilityName');
-                request.route.person = formModel.get('person');
-                if (!_.isEmpty(request.route.person) && formModel.has('storedPersonsList')) {
-                    request.route.personName = lookupPersonName(formModel.get('storedPersonsList'), request.route.person);
-                }
-            } else {
-                request.route.routingCode = routingCode(formModel);
-                var team = formModel.get('team');
-                if (!_.isEmpty(team) && formModel.has('storedTeamsList')) {
-                    request.route.team = {
-                        code: team,
-                        name: lookupTeamName(formModel.get('storedTeamsList'), team)
-                    };
-                }
+        var assignmentType = _.get(formModel.get('assignment'), 'type');
+        if (_.isEqual(assignmentType, 'opt_me')) {
+            return request;
+        } else if (_.isEqual(assignmentType, 'opt_person')) {
+            _.set(request, 'route', _.extend({}, {
+                facilityName: getFormattedAssignmentValue(formModel, 'facility'),
+                personName: getFormattedAssignmentValue(formModel, 'person')
+            }, _.pick(formModel.get('assignment'), ['facility', 'person'])));
+        } else {
+            if (_.isEqual(assignmentType, 'opt_anyteam')) {
+                _.set(request, 'route', _.extend({}, {
+                    facilityName: getFormattedAssignmentValue(formModel, 'facility')
+                }, _.pick(formModel.get('assignment'), ['facility'])));
+            }
 
-                var roles = formModel.get('roles');
-                if (_.isArray(roles) && formModel.has('storedRolesList')) {
-                    var processedRoles = [];
-                    _.each(roles, function(role) {
-                        if (!_.isEmpty(role)) {
-                            processedRoles.push({
-                                code: role,
-                                name: lookupRoleName(formModel.get('storedRolesList'), role)
-                            });
-                        }
-                    });
-                    request.route.assignedRoles = processedRoles;
-                }
+            _.set(request, 'route.routingCode', routingCode(formModel));
+            var team = _.get(formModel.get('assignment'), 'team');
+            if (!_.isEmpty(team)) {
+                _.set(request, 'route.team', {
+                    code: team,
+                    name: getFormattedAssignmentValue(formModel, 'team')
+                });
+            }
 
-                if (formModel.get('assignment') === 'opt_anyteam') {
-                    request.route.facility = formModel.get('facility');
-                    request.route.facilityName = formModel.get('facilityName');
-                }
+            var roles = _.get(formModel.get('assignment'), 'roles');
+            if (_.isArray(roles)) {
+                var formattedNames = getFormattedAssignmentValue(formModel, 'roles') || [];
+                _.set(request, 'route.assignedRoles', _.transform(roles, function(result, role, index) {
+                    if (!_.isEmpty(role)) {
+                        result.push({
+                            code: role,
+                            name: formattedNames[index]
+                        });
+                    }
+                }), []);
             }
         }
         return request;
     };
 
     var buildActivity = function(formModel, formAction, userSession) {
-        var activity = {
+        return {
             objectType: 'activity',
             deploymentId: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
             processDefinitionId: formModel.get('activity') ? formModel.get('activity').processDefinitionId : 'Order.Request',
             processInstanceId: formModel.get('activity') ? formModel.get('activity').processInstanceId : '', // Populated when the activity instance is created
             state: formAction,
             initiator: userSession.duz[userSession.site],
-            assignTo: parseAssignment(formModel.get('assignment')),
+            assignTo: getFormattedAssignmentValue(formModel, 'type'),
             timeStamp: '',
             urgency: parseUrgencyId(formModel.get('urgency')),
             assignedTo: routingCode(formModel, formAction),
             instanceName: RequestUtils.removeWhiteSpace(formModel.get('title')),
             domain: 'Request',
             sourceFacilityId: ADK.UserService.getUserSession().get('division'),
-            destinationFacilityId: formModel.get('facility') ? formModel.get('facility') : ADK.UserService.getUserSession().get('division'),
+            destinationFacilityId: _.get(formModel.get('assignment'), 'facility', ADK.UserService.getUserSession().get('division')),
             type: 'Order'
         };
-
-        return activity;
     };
 
     var buildRequest = function(formModel, userSession, visitInfo) {
         var request = {
             objectType: 'request',
             taskinstanceId: '',
-            urgency: formModel.get('urgency'), // from form
-            earliestDate: moment(formModel.get('earliest')).startOf('day').utc().format('YYYYMMDDHHmmss'), // from form
-            latestDate: moment(formModel.get('latest')).endOf('day').utc().format('YYYYMMDDHHmmss'), // from form
-            title: RequestUtils.removeWhiteSpace(formModel.get('title')), // from form
-            assignTo: parseAssignment(formModel.get('assignment')), // from form
-            request: RequestUtils.removeWhiteSpace(formModel.get('requestDetails') || ' '), // from form
+            urgency: formModel.get('urgency'),
+            earliestDate: moment(formModel.get('earliest')).startOf('day').utc().format('YYYYMMDDHHmmss'),
+            latestDate: moment(formModel.get('latest')).endOf('day').utc().format('YYYYMMDDHHmmss'),
+            title: RequestUtils.removeWhiteSpace(formModel.get('title')),
+            assignTo: getFormattedAssignmentValue(formModel, 'type'),
+            request: RequestUtils.removeWhiteSpace(formModel.get('requestDetails') || ' '),
             submittedByUid: 'urn:va:user:' + userSession.site + ':' + userSession.duz[userSession.site],
             submittedByName: userSession.lastname + ',' + userSession.firstname,
             submittedTimeStamp: moment().utc(),
@@ -219,58 +194,8 @@ define([
             }
         };
         request = setRouteToRequest(formModel, request);
-
         return request;
     };
-
-
-    function lookupTeamName(teamList, teamID) {
-        if (!teamList) {
-            return null;
-        }
-
-        var foundTeam = _.find(teamList, function(team) {
-            if (!team) {
-                return false;
-            }
-
-            return ((teamID === team.teamID) || (parseInt(teamID, 10) === team.teamID));
-        });
-
-        return foundTeam ? foundTeam.teamName : null;
-    }
-
-    function lookupPersonName(personList, personID) {
-        if (!personList) {
-            return null;
-        }
-
-        var foundPerson = _.find(personList, function(person) {
-            if (!person) {
-                return false;
-            }
-
-            return (personID === person.personID);
-        });
-
-        return foundPerson ? foundPerson.name : null;
-    }
-
-    function lookupRoleName(roleList, roleID) {
-        if (!roleList) {
-            return null;
-        }
-
-        var foundRole = _.find(roleList, function(role) {
-            if (!role) {
-                return false;
-            }
-
-            return ((roleID === role.roleID) || (parseInt(roleID, 10) === role.roleID));
-        });
-
-        return foundRole ? foundRole.name : null;
-    }
 
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e, taskListView) {
@@ -281,7 +206,6 @@ define([
     // handles all the click events on the form, what is clicked is passed
     // through in formAction
     var startRequestPost = function(collection, formModel, formAction, userSession, patientContext, visitInfo, form) {
-
         var newestActivity = Utils.findLatest(collection, 'Order.Request');
 
         // Add to form model to be stored into pJDS
@@ -289,7 +213,6 @@ define([
             deploymentId: newestActivity.get('deploymentId'),
             processDefId: newestActivity.get('id'),
             objectType: 'requestActivity',
-            // orderingProviderId: userSession.site + ';' + userSession.duz[userSession.site],
             icn: patientContext.get('pid'),
             pid: patientContext.get('pid')
         });
@@ -511,7 +434,6 @@ define([
                     startRequestPost(collection, formModel, formAction, userSession, patientContext, visitInfo, form);
                 }
             };
-            //formModel.trigger('draft:saveConsult');
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
         sendUpdate: function(e, formModel, formAction) {
@@ -532,7 +454,6 @@ define([
                     sendRequestUpdate(collection, formModel, formAction, userSession, patientContext, visitInfo);
                 }
             };
-            //formModel.trigger('draft:saveConsult');
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
         sendSignal: function(e, formModel, formAction, form) {

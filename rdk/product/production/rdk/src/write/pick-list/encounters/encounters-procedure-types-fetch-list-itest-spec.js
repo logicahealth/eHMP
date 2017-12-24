@@ -10,8 +10,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -23,7 +23,7 @@ describe('encounters-procedure-types resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {locationUid: 'urn:va:location:9E7A:195', visitDate: '20131001'});
+        }, {locationUid: 'urn:va:location:SITE:195', visitDate: '20131001'});
     });
     it('will return an error if locationIEN is missing', function (done) {
         this.timeout(8000);
@@ -39,6 +39,6 @@ describe('encounters-procedure-types resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {locationUid: 'urn:va:location:9E7A:195'});
+        }, {locationUid: 'urn:va:location:SITE:195'});
     });
 });

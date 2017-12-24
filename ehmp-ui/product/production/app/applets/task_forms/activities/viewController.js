@@ -20,7 +20,7 @@ define([
             closeOnESC: closeOnESC
         });
     }
-
+    var channel = ADK.Messaging.getChannel('task_forms');
     var viewController = {
         initialize: function(appletId) {
             //Activity management form router
@@ -37,16 +37,31 @@ define([
                 }
             });
 
-            var channel = ADK.Messaging.getChannel('task_forms');
             channel.reply('activity_detail', function(params) {
-                ActivityOverview.startActivityDetails(params.processId, params.readOnly);
+                ActivityOverview.startActivityDetails(params);
+            });
+            channel.reply('serialize_data', function(data, fields) {
+                if (data.showHighlights === true) {
+                    var highlightText = function(text) {
+                        return ADK.utils.stringUtils.addSearchResultElementHighlighting(text, data.highlightKeywords);
+                    };
+                    _.each(fields, function(field) {
+                        var value = _.get(data, field);
+                        if (!_.isUndefined(value)) {
+                            _.set(data, field, highlightText(value));
+                        }
+                    });
+                }
+                return data;
             });
 
             channel.reply('edit:request', function(params) {
                 var contextType = ADK.WorkspaceContextRepository.currentContextId;
                 if (contextType === 'staff') {
                     ADK.PatientRecordService.setCurrentPatient(params.pid, {
-                        navigation: true,
+                        confirmationOptions: {
+                            reconfirm: false
+                        },
                         callback: function() {
                             RequestTrayUtils.launchRequestForm(params.options, params.requestState);
                         }
@@ -77,22 +92,15 @@ define([
                 var ownerId = taskObj.get('actualOwnerId');
                 var processInstanceId = taskObj.get('processInstanceId');
                 taskObj.set('lockedDate', moment(taskObj.get('statusTimeStamp')).format('MM/DD/YYYY HH:mm'));
-                var taskName = taskObj.get('name');
                 var modal;
-                var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
-                var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
-                var isReviewRequest = (taskName === 'Review');
-                var isResponseRequest = (taskName === 'Response');
-                var hasEditPermissions = !isReviewRequest || hasEditRequestPermission;
-                var hasRespondPermissions = !isResponseRequest || hasRespondRequestPermission;
-                if (!hasEditPermissions || !hasRespondPermissions) {
+                if (!taskObj.get('hasPermissions')) {
                     //Task can not be completed
                     modal = taskModal(false, processInstanceId);
-                    modal.show();
+                    modal.show(params.triggerElement ? { triggerElement: params.triggerElement } : {});
                 } else if (status === 'Completed') {
                     //The cask can be completed
                     modal = taskModal(true, processInstanceId);
-                    modal.show();
+                    modal.show(params.triggerElement ? { triggerElement: params.triggerElement } : {});
                 } else if (status === 'Ready' || (status === 'Reserved' && (ownerId === userId)) || (status === 'InProgress' && (ownerId === userId))) {
                     //If the task isn't 'locked' proceed to form
                     launchForm(params, taskObj);
@@ -107,6 +115,27 @@ define([
                     //Else we need to show the locked modal and ask if the user wants to unlock the task.
                     lockModal(params, taskObj);
                 }
+            },
+            onError: function(response, error) {
+                var errorItemView = ADK.Views.Error.create({
+                    model: new Backbone.Model(error)
+                });
+
+                var alertView = new ADK.UI.Alert({
+                    title: 'Error',
+                    icon: 'icon-circle-exclamation',
+                    footerView: Backbone.Marionette.ItemView.extend({
+                        template: Handlebars.compile('{{ui-button "OK" classes="btn btn-primary ok-button" data-dismiss="modal"}}'),
+                        events: {
+                            'click button': function() {
+                                ADK.UI.Alert.hide();
+                            }
+                        }
+                    })
+                });
+
+                alertView.messageView = errorItemView;
+                alertView.show();
             }
         };
         ADK.ResourceService.fetchCollection(fetchOptions);
@@ -117,9 +146,9 @@ define([
             template: function() {
                 var template = '';
                 if (canBeCompleted) {
-                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>';
+                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close"><i class="fa fa-times fa-lg"></i></button></div></div></div>';
                 } else {
-                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>';
+                    template = '<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close"><i class="fa fa-times fa-lg"></i></button></div></div></div>';
                 }
                 return Handlebars.compile(template);
             }
@@ -165,7 +194,7 @@ define([
     //If task is 'locked' this is the code that's run before the form is launched.
     var lockModal = function(params, taskObj) {
         var headerView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-lock font-size-18 right-padding-xs" aria-hidden="true"></i>Task is Currently Locked</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
+            template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-lock font-size-18 right-padding-xs" aria-hidden="true"></i>Task is Currently Locked</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close"><i class="fa fa-times fa-lg"></i></button></div></div></div>')
         });
         var view = new PopupView({
             model: taskObj
@@ -187,7 +216,9 @@ define([
                 },
                 activDetail: function(event) {
                     ADK.UI.Modal.hide();
-                    ActivityOverview.startActivityDetails(params.activityId);
+                    ActivityOverview.startActivityDetails({
+                        processId: params.activityId
+                    });
                 },
                 onSuccess: function(obj) {
                     ADK.UI.Modal.hide();
@@ -236,7 +267,7 @@ define([
             view: view,
             options: modalOptions
         });
-        modal.show();
+        modal.show(params.triggerElement ? { triggerElement: params.triggerElement } : {});
     };
 
     var launchForm = function(params, taskObj) {
@@ -248,7 +279,10 @@ define([
 
         var formModel = buildFormModel(taskObj.get('variables'));
         $.extend(formModel, _.pick(params, ['activityId', 'taskDefinitionId', 'taskId', 'taskName']));
-        $.extend(formModel, _.pick(taskObj.attributes, ['deploymentId', 'processId', 'processInstanceId', 'status']));
+        var nextUrl = _.get(taskObj, 'attributes.navigation.nextURL');
+        // NEEDS FUTURE UPDATE: This needs to be updated when PreDefinedScreen become context specific
+        nextUrl = _.isString(nextUrl) ? nextUrl.substr(nextUrl.lastIndexOf('/') + 1) : null;
+        $.extend(formModel, _.pick(taskObj.attributes, ['deploymentId', 'processId', 'processInstanceId', 'status', 'navigation']), { nextURL: nextUrl });
         params.formModel = new Backbone.Model(formModel);
         ADK.Messaging.getChannel('task_forms').trigger(params.taskDefinitionId, params);
     };
@@ -266,7 +300,9 @@ define([
             'clinicalObjectUid',
             'notificationDate',
             'status',
-            'consultClinicalObjectJSON'
+            'consultClinicalObjectJSON',
+            'instanceName',
+            'dischargeClinicalObject'
         ];
         var parts = _.pick(arrToObj(processVariables), PICK);
 
@@ -282,7 +318,9 @@ define([
             notificationDate: parts.notificationDate,
             requestActivity: parts.requestActivity,
             status: parts.status,
-            cdsIntentResults: _.get(parts, 'consultClinicalObjectJSON.data.consultOrders[0].cdsIntentResult.data.results', null)
+            cdsIntentResults: _.get(parts, 'consultClinicalObjectJSON.data.consultOrders[0].cdsIntentResult.data.results', null),
+            instanceName: parts.instanceName,
+            dischargeContactBy: _.get(parts, 'dischargeClinicalObject.data.contact.dueDateTime', '')
         });
 
         // Parse state into state and substate

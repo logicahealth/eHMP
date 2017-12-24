@@ -21,7 +21,7 @@
           {{#compare mySite.status 'error'}}
               <i class="fa fa-exclamation-circle"></i>
           {{/compare}}
-          <button class="btn btn-link" type="button" title="Press enter to access my site sources" accesskey="m">My Site
+          <button class="btn btn-link" type="button">My Site
             <span class="sr-only">New data since {{#if mySite.newDataSince}} {{mySite.newDataSince}} {{else}} Current {{/if}}</span>
           </button>
           <p class="source-sync-details">
@@ -60,9 +60,11 @@
           {{#compare allVa.status 'error'}}
               <i class="fa fa-exclamation-circle"></i>
           {{/compare}}
-          <button class="btn btn-link" title="Press enter to access all V A sources" type="button">All VA
-            <span class="sr-only">{{#if allVa.mostRecentTime}} Last refresh {{allVa.mostRecentTime}} {{#if allVa.leastRecentTime}} - {{allVa.leastRecentTime}}{{/if}} ago{{/if}}</span>
-            <span class="sr-only">New data since {{#if allVa.newDataSince}} {{allVa.newDataSince}} {{else}} Current {{/if}}</span>
+          <button class="btn btn-link" type="button">
+            <span aria-hidden="true">All VA</span>
+            <div class="sr-only">All V A</div>
+            <div class="sr-only">{{#if allVa.mostRecentTime}} Last refresh {{allVa.mostRecentTime}} {{#if allVa.leastRecentTime}} - {{allVa.leastRecentTime}}{{/if}} ago{{/if}}</div>
+            <div class="sr-only">New data since {{#if allVa.newDataSince}} {{allVa.newDataSince}} {{else}} Current {{/if}}</div>
           </button>
           <p class="source-sync-details">
             {{#compare allVa.status 'completed'}}
@@ -95,8 +97,10 @@
           {{#compare dod.status 'error'}}
               <i class="fa fa-exclamation-circle"></i>
           {{/compare}}
-          <button class="btn btn-link" title="Press enter to access D O D sources" type="button">DoD
-            <span class="sr-only">Last refresh {{#if dod.mostRecentTime}}{{dod.mostRecentTime}} ago{{/if}}<span>
+          <button class="btn btn-link" type="button">
+            <span aria-hidden="true">DoD</span>
+            <div class="sr-only">D O D</div>
+            <div class="sr-only">Last refresh {{#if dod.mostRecentTime}}{{dod.mostRecentTime}} ago{{/if}}<div>
           </button>
           <p class="source-sync-details">
             {{#compare dod.status 'completed'}}
@@ -129,7 +133,7 @@
           {{#compare communities.status 'error'}}
               <i class="fa fa-exclamation-circle"></i>
           {{/compare}}
-          <button class="btn btn-link" title="Press enter to access communities sources" type="button">Communities
+          <button class="btn btn-link" type="button">Communities
             <span class="sr-only">Last refresh {{#if communities.mostRecentTime}}{{communities.mostRecentTime}} ago{{/if}}</span>
           </button>
           <p class="source-sync-details">
@@ -154,7 +158,6 @@
     </ul>
   </div>
   <div id="sync-site-detail" class="sync-site-detail col-xs-9" tabindex="0">
-    <span class="sr-only">Press alt + m to return to source menu</span>
     <div id="forceSiteSyncStatus" class="row">
       {{#if msgSuccessfulSync}}
         <p id="forceSiteSyncStatus-success" class="bg-danger"><strong>{{currentDateTime}} - Refresh was successful</strong><button id="msg-successful-sync" type="button" class="btn close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
@@ -165,7 +168,7 @@
     </div>
     <div id="sync-site-detail-header" class="sync-site-detail-header row">
       <h4 class="col-xs-4">{{selectedSource.sourceDisplayName}}</h4>
-<!--       <button type="button" class="force-source-sync btn btn-primary" id="force-source-sync" title="Press enter to refresh data"
+<!--       <button type="button" class="force-source-sync btn btn-primary" id="force-source-sync"
       {{#compare forceSyncStatus 'inProgress'}}
          disabled="disabled"><span><i class="fa fa-spinner fa-spin"></i> Refreshing</span>
       {{/compare}}
@@ -175,79 +178,62 @@
       </button> -->
     </div>
     <table>
-      <caption class="sr-only">This table represents data for {{selectedSource.sourceDisplayName}} data categorized by {{#compare selectedSource.sourceName 'allVa'}} site, {{/compare}} domain, {{#compare selectedSource.sourceType 'primary' operator='!='}}and{{/compare}} last refresh{{#compare selectedSource.sourceType 'primary'}}, and new data since.{{/compare}}</caption>
+      <caption class="sr-only">{{selectedSource.sourceDisplayName}} data sites</caption>
       <thead>
         <tr>
           {{#compare selectedSource.sourceName 'allVa'}}
-          <th scope="col" class="sortable renderable site" data-header-instanceid="sync-detail-header-site" >
+          <th scope="col" class="sortable renderable site" data-header-instanceid="sync-detail-header-site" aria-sort="{{#compare sortColumn 'siteDisplayName'}}{{#compare sortOrder 'asc'}}ascending{{/compare}}{{#compare sortOrder 'desc'}}descending{{/compare}}{{/compare}}">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Site
             {{#compare sortColumn 'siteDisplayName'}}
-              <i class="fa 
               {{#compare sortOrder 'asc'}}
-                fa-caret-up"></i>
-                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+                <i class="fa fa-caret-up"></i>
               {{/compare}}
               {{#compare sortOrder 'desc'}}
-                fa-caret-down"></i>
-                <span class="sr-only">Press enter to sort. Sorted descending</span>
+                <i class="fa fa-caret-down"></i>
               {{/compare}}
-            {{else}}
-             <span class="sr-only">Press enter to sort.</span>
             {{/compare}}
-            </span>
+              <div class="sr-only">Sortable column</div>
            </a>
           </th>
           {{/compare}}
-          <th scope="col" class="sortable renderable domain" data-header-instanceid="sync-detail-header-domain">
+          <th scope="col" class="sortable renderable domain" data-header-instanceid="sync-detail-header-domain" aria-sort="{{#compare sortColumn 'domainDisplayName'}}{{#compare sortOrder 'asc'}}ascending{{/compare}}{{#compare sortOrder 'desc'}}descending{{/compare}}{{/compare}}">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Domain
             {{#compare sortColumn 'domainDisplayName'}}
-              <i class="fa 
               {{#compare sortOrder 'asc'}}
-                fa-caret-up"></i>
-                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+                <i class="fa fa-caret-up"></i>
               {{/compare}}
               {{#compare sortOrder 'desc'}}
-                fa-caret-down"></i>
-                <span class="sr-only">Press enter to sort. Sorted descending</span>
+                <i class="fa fa-caret-down"></i>
               {{/compare}}
-            {{else}}
-             <span class="sr-only">Press enter to sort.</span>
             {{/compare}}
+              <div class="sr-only">Sortable column</div>
             </a>
           </th>
-          <th scope="col" class="sortable renderable last-synced" data-header-instanceid="sync-detail-header-last-synced">
+          <th scope="col" class="sortable renderable last-synced" data-header-instanceid="sync-detail-header-last-synced" aria-sort="{{#compare sortColumn 'stampTime'}}{{#compare sortOrder 'asc'}}ascending{{/compare}}{{#compare sortOrder 'desc'}}descending{{/compare}}{{/compare}}">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Last Refresh
             {{#compare sortColumn 'stampTime'}}
-              <i class="fa 
               {{#compare sortOrder 'asc'}}
-                fa-caret-up"></i>
-                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+                <i class="fa fa-caret-up"></i>
               {{/compare}}
               {{#compare sortOrder 'desc'}}
-                fa-caret-down"></i>
-                <span class="sr-only">Press enter to sort. Sorted descending</span>
+                <i class="fa fa-caret-down"></i>
               {{/compare}}
-            {{else}}
-             <span class="sr-only">Press enter to sort.</span>
             {{/compare}}
+              <div class="sr-only">Sortable column</div>
             </a>
           </th>
           {{#compare selectedSource.sourceType 'primary'}}
-          <th scope="col" class="sortable renderable new-data-since" data-header-instanceid="sync-detail-header-new-data-since">
+          <th scope="col" class="sortable renderable new-data-since" data-header-instanceid="sync-detail-header-new-data-since" aria-sort="{{#compare sortColumn 'newDataSince'}}{{#compare sortOrder 'asc'}}ascending{{/compare}}{{#compare sortOrder 'desc'}}descending{{/compare}}{{/compare}}">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">New Data Since
             {{#compare sortColumn 'newDataSince'}}
-              <i class="fa 
               {{#compare sortOrder 'asc'}}
-                fa-caret-up"></i>
-                <span class="sr-only">Press enter to sort. Sorted ascending</span>
+                <i class="fa fa-caret-up"></i>
               {{/compare}}
               {{#compare sortOrder 'desc'}}
-                fa-caret-down"></i>
-                <span class="sr-only">Press enter to sort. Sorted descending</span>
+                <i class="fa fa-caret-down"></i>
               {{/compare}}
-            {{else}}
-             <span class="sr-only">Press enter to sort.</span>
             {{/compare}}
+              <div class="sr-only">Sortable column</div>
             </a>
           </th>
           {{/compare}}

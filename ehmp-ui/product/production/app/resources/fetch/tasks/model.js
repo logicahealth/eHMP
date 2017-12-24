@@ -1,13 +1,14 @@
 define([
     'backbone',
     'moment',
+    'underscore',
     'app/resources/fetch/tasks/util'
-], function (Backbone, moment, Util) {
+], function(Backbone, moment, _, Util) {
     'use strict';
 
     return Backbone.Model.extend({
         childParse: false,
-        parse: function (response) {
+        parse: function(response) {
             var momentDue = moment(response.DUE);
             response.TASKNAMEFORMATTED = _.trim((response.TASKNAME + ' - ' + response.INSTANCENAME), ' -');
             response.DUEDATEFORMATTED = momentDue.isValid() ? momentDue.format('MM/DD/YYYY') : 'N/A';
@@ -31,7 +32,8 @@ define([
             if (!_.isNull(response.PATIENTNAME) && !_.isUndefined(response.PATIENTNAME) && response.PATIENTNAME !== '') {
                 response.PATIENTNAMESSN = response.PATIENTNAME + ' (' + response.LAST4 + ')';
             }
-            response.hasPermissions = Util.hasPermissions(response);
+
+            response.actionable = Util.isActionable(response.ACTIVE, response.dueTextValue, response.hasPermissions, response.BEFOREEARLIESTDATE);
 
             var momentCreated = moment(response.TASKCREATEDON);
             if (momentCreated.isValid()) {

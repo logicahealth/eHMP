@@ -5,11 +5,11 @@
  #This feature item returns Inpatient Medications in FHIR format. Also includes cases where no Inpatient Medications exist.
  # in-patient medication maps to medication administration in FHIR URL
 
- @F138_1_inpatient_medication_fhir @fhir @9E7A100033
+ @F138_1_inpatient_medication_fhir @fhir @SITE100033
  Scenario: Client can request in-patient medication results in FHIR format
  	Given a patient with "in-patient medication results" in multiple VistAs
- #	And a patient with pid "9E7A;100033" has been synced through the RDK API
- 	When the client requests in-patient medication results for the patient "9E7A;100033" in FHIR format
+ #	And a patient with pid "SITE;100033" has been synced through the RDK API
+ 	When the client requests in-patient medication results for the patient "SITE;100033" in FHIR format
  	Then a successful response is returned
  	And the FHIR results contain "in-patient medication administration results"
  	| field | panorama_value |
@@ -35,10 +35,10 @@
   | resource.contained.contained.contained.type.coding.display  | INSULIN NOVOLIN N(NPH) INJ |
   | resource.contained.contained.contained.description          | INSULIN NPH HUMAN 100 U/ML INJ NOVOLIN N |
   | resource.contained.identifier.system              | urn:oid:2.16.840.1.113883.6.233 |
-  | resource.contained.identifier.value               | urn:va:med:9E7A:100033:17694 |
+  | resource.contained.identifier.value               | urn:va:med:SITE:100033:17694 |
   | resource.contained.note             | INSULIN NOVOLIN N(NPH) INJ (EXPIRED)\n Give: 8 UNITS SC QD |
   | resource.contained.dateWritten      | IS_FHIR_FORMATTED_DATE |
-  | resource.contained.prescriber.reference | Provider/urn:va:user:9E7A:10958 |
+  | resource.contained.prescriber.reference | Provider/urn:va:user:SITE:10958 |
   | resource.contained.dosageInstruction.text | Give: 8 UNITS SC QD |
   | resource.contained.dosageInstruction.scheduledTiming.repeat.frequency | 1 |
   | resource.contained.dosageInstruction.scheduledTiming.repeat.periodUnits | s |
@@ -50,7 +50,7 @@
   | resource.contained.dispense.expectedSupplyDuration.units  | days |
   | resource.contained.resourceType         | Practitioner |
   | resource.identifier.system              | urn:oid:2.16.840.1.113883.6.233 |
-  | resource.identifier.value               | urn:va:med:9E7A:100033:17694 |
+  | resource.identifier.value               | urn:va:med:SITE:100033:17694 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#IMO |
   | resource.extension.valueBoolean       | false |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#kind |
@@ -80,15 +80,15 @@
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/locationName |
   | resource.extension.valueString        | BCMA |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/locationUid |
-  | resource.extension.valueString        | urn:va:location:9E7A:11 |
+  | resource.extension.valueString        | urn:va:location:SITE:11 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/orderUid |
-  | resource.extension.valueString        | urn:va:order:9E7A:100033:17694 |
+  | resource.extension.valueString        | urn:va:order:SITE:100033:17694 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/pharmacistName |
   | resource.extension.valueString        | LABTECH,FIFTYSEVEN |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/pharmacistUid |
-  | resource.extension.valueString        | urn:va:user:9E7A:10000000047 |
+  | resource.extension.valueString        | urn:va:user:SITE:10000000047 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/predecessor |
-  | resource.extension.valueString        | urn:va:med:9E7A:100033:17693 |
+  | resource.extension.valueString        | urn:va:med:SITE:100033:17693 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/providerName |
   | resource.extension.valueString        | WARDCLERK,FIFTYTHREE |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/summary |
@@ -113,7 +113,7 @@
   | resource.extension.valueString        | urn:va:vuid:4001483 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#products[0]/suppliedName |
   | resource.extension.valueString        | INSULIN NPH HUMAN 100 U/ML INJ NOVOLIN N |
-  | resource.patient.reference            | Patient/9E7A;100033 |
+  | resource.patient.reference            | Patient/SITE;100033 |
   | resource.wasNotGiven                  | false |
   | resource.reasonGiven.text             | None |
   | resource.reasonGiven.coding.system    | http://hl7.org/fhir/reason-medication-given |
@@ -128,7 +128,7 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
  Scenario: Client can request in-patient medication results in FHIR format
  	Given a patient with "in-patient medication results" in multiple VistAs
  	#And a patient with pid "10146V393772" has been synced through the RDK API
- 	When the client requests in-patient medication results for the patient "9E7A;301" in FHIR format
+ 	When the client requests in-patient medication results for the patient "SITE;301" in FHIR format
  	Then a successful response is returned
  	And the FHIR results contain "in-patient medication administration results"
  	| field | kodak_value |
@@ -154,9 +154,9 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
   | resource.contained.contained.contained.type.coding.display  | POTASSIUM CHLORIDE INJ,SOLN |
   | resource.contained.contained.contained.description          | POTASSIUM CHLORIDE 2MEQ/ML INJ 20 MEQ |
   | resource.contained.identifier.system              | urn:oid:2.16.840.1.113883.6.233 |
-  | resource.contained.identifier.value               | urn:va:med:9E7A:301:10779:1 |
+  | resource.contained.identifier.value               | urn:va:med:SITE:301:10779:1 |
   | resource.contained.dateWritten      | IS_FHIR_FORMATTED_DATE |
-  | resource.contained.prescriber.reference | Provider/urn:va:user:9E7A:10958 |
+  | resource.contained.prescriber.reference | Provider/urn:va:user:SITE:10958 |
   | resource.contained.dosageInstruction.scheduledTiming.repeat.periodUnits | s |
   | resource.contained.dosageInstruction.route.text                         | IV |
   | resource.contained.dispense.validityPeriod.start      | IS_FHIR_FORMATTED_DATE |
@@ -164,7 +164,7 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
   | resource.contained.dispense.expectedSupplyDuration.units  | days |
   | resource.contained.resourceType         | Practitioner |
   | resource.identifier.system              | urn:oid:2.16.840.1.113883.6.233 |
-  | resource.identifier.value               | urn:va:med:9E7A:301:10779:1 |
+  | resource.identifier.value               | urn:va:med:SITE:301:10779:1 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#IMO |
   | resource.extension.valueBoolean       | false |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#kind |
@@ -186,17 +186,17 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/locationName |
   | resource.extension.valueString        | GEN MED |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/locationUid |
-  | resource.extension.valueString        | urn:va:location:9E7A:9 |
+  | resource.extension.valueString        | urn:va:location:SITE:9 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/orderUid |
-  | resource.extension.valueString        | urn:va:order:9E7A:301:10779 |
+  | resource.extension.valueString        | urn:va:order:SITE:301:10779 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/pharmacistName |
   | resource.extension.valueString        | RADTECH,FORTYONE |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/pharmacistUid |
-  | resource.extension.valueString        | urn:va:user:9E7A:11817 |
+  | resource.extension.valueString        | urn:va:user:SITE:11817 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/providerName |
   | resource.extension.valueString        | WARDCLERK,FIFTYTHREE |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/successor |
-  | resource.extension.valueString        | urn:va:med:9E7A:301:10833 |
+  | resource.extension.valueString        | urn:va:med:SITE:301:10833 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#orders[0]/summary |
   | resource.extension.valueString        | MedicationOrder{uid=''} |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#products[0]/drugClassCode |
@@ -219,7 +219,7 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
   | resource.extension.valueString        | urn:va:vuid:4000853 |
   | resource.extension.url                | http://vistacore.us/fhir/extensions/med#products[0]/suppliedName |
   | resource.extension.valueString        | POTASSIUM CHLORIDE 2MEQ/ML INJ 20 MEQ |
-  | resource.patient.reference            | Patient/9E7A;301 |
+  | resource.patient.reference            | Patient/SITE;301 |
   | resource.wasNotGiven                  | false |
   | resource.reasonGiven.text             | None |
   | resource.reasonGiven.coding.system    | http://hl7.org/fhir/reason-medication-given |
@@ -236,11 +236,11 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
  Scenario: Client can request in-patient medication results in FHIR format
  	Given a patient with "in-patient medication results" in multiple VistAs
  #	And a patient with pid "5000000341V359724" has been synced through the RDK API
- 	When the client requests in-patient medication results for the patient "9E7A;100022" in FHIR format
+ 	When the client requests in-patient medication results for the patient "SITE;100022" in FHIR format
  	Then a successful response is returned
  	And the FHIR results contain "in-patient medication administration results"
  	| field                                       | value                                                |
- 	| resource.identifier.value                    | CONTAINS urn:va:med:9E7A:100022                      |
+ 	| resource.identifier.value                    | CONTAINS urn:va:med:SITE:100022                      |
  	| resource.contained.contained.product.form.text         | TAB                                                  |
  	| resource.contained.dosageInstruction.text    | Give: 325MG PO Q4H                                   |
  	| resource.contained.status               | stopped                                           |
@@ -258,21 +258,21 @@ And FHIR date and time conver to Zulu format for Inpatient Medication
  @F138_5_inpatient_medication_fhir  @fhir @5123456789V027402
  Scenario: Client can break the glass when requesting in-patient medication results in FHIR format for a sensitive patient
        Given a patient with "in-patient medication results" in multiple VistAs
-       When the client requests in-patient medication results for that sensitive patient "9E7A;18"
+       When the client requests in-patient medication results for that sensitive patient "SITE;18"
        Then a permanent redirect response is returned
-       When the client breaks glass and repeats a request for in-patient medication results for that patient "9E7A;18"
+       When the client breaks glass and repeats a request for in-patient medication results for that patient "SITE;18"
        Then a successful response is returned
 
  # negative test case for medication.
- @F138_6_in_medication_neg_fhir @9E7A100184
+ @F138_6_in_medication_neg_fhir @SITE100184
  Scenario: Negative scenario.  Client can request Inpatient Medications in FHIR format
  	Given a patient with "No medication results" in multiple VistAs
- 	When the client requests in-patient medication results for the patient "9E7A;100184" in FHIR format
+ 	When the client requests in-patient medication results for the patient "SITE;100184" in FHIR format
  	Then a successful response is returned
 
  @F138_7_inpatient_medication_fhir @fhir @5000000341V359724 @DE974
  Scenario: Client can request in-patient medication results in FHIR format
  	Given a patient with "in-patient medication results" in multiple VistAs
  #	And a patient with pid "5000000341V359724" has been synced through the RDK API
- 	When the client requests "10" in-patient medication results for the patient "9E7A;100022" in FHIR format
+ 	When the client requests "10" in-patient medication results for the patient "SITE;100022" in FHIR format
  	Then a successful response is returned

@@ -8,7 +8,7 @@
  Scenario: Client can request lab anatomic pathology results in FHIR format
  	Given a patient with "lab anatomic pathology results" in multiple VistAs
 # And a patient with pid "11016V630869" has been synced through the RDK API
- 	When the client requests "anatomic pathology" results for that patient "9E7A;227"
+ 	When the client requests "anatomic pathology" results for that patient "SITE;227"
  	Then a successful response is returned
  	And the results contain lab "anatomic pathology" results
        | field                                          | value                        |
@@ -16,7 +16,7 @@
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE          |
        | resource.name.text                    | LR ANATOMIC PATHOLOGY REPORT |
        | resource.status                                 | final                        |
-       | resource.subject.reference                      | Patient/9E7A;227         |
+       | resource.subject.reference                      | Patient/SITE;227         |
        | resource.performer.reference                    | IS_SET                       |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE         |
        | resource.serviceCategory.text                   | Other                        |
@@ -44,7 +44,7 @@
  Scenario: Client can request lab anatomic pathology results in FHIR format
  	Given a patient with "lab anatomic pathology results" in multiple VistAs
   #And a patient with pid "10110V004877" has been synced through the RDK API
- 	When the client requests "anatomic pathology" results for that patient "9E7A;8"
+ 	When the client requests "anatomic pathology" results for that patient "SITE;8"
  	Then a successful response is returned
  	And the results contain lab "anatomic pathology" results
        | field                                           | value                        |
@@ -53,7 +53,7 @@
        | resource.name.text                              | LR ANATOMIC PATHOLOGY REPORT |
 #Test DoD data no longer includes terminology codes
        | resource.status                                 | final                        |
-       | resource.subject.reference                      | Patient/9E7A;8         |
+       | resource.subject.reference                      | Patient/SITE;8         |
        #Organization
        | resource.contained.resourceType                 | Organization      |
        | resource.contained.identifier.type.text         | facility-code     |
@@ -61,7 +61,7 @@
         #Specimen
        | resource.contained.resourceType                 | Specimen                          |
        | resource.contained.type.text                    | CONTAINS BONE MARROW                       |
-       | resource.contained.subject.reference            | Patient/9E7A;8              |
+       | resource.contained.subject.reference            | Patient/SITE;8              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE              |
        #Observation
        | resource.contained.resourceType                 | Observation                       |
@@ -87,14 +87,14 @@
        | resource.name.text                              | LR ANATOMIC PATHOLOGY REPORT |
 #Test DoD data no longer includes terminology codes
        | resource.status                                 | final                        |
-       | resource.subject.reference                      | Patient/9E7A;8         |
+       | resource.subject.reference                      | Patient/SITE;8         |
        #Organization
        | resource.contained.resourceType                 | Organization      |
        | resource.contained.identifier.type.text         | facility-code     |
        | resource.contained.identifier.value             | DOD               |
         #Specimen
        | resource.contained.resourceType                 | Specimen                          |
-       | resource.contained.subject.reference            | Patient/9E7A;8              |
+       | resource.contained.subject.reference            | Patient/SITE;8              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE              |
        #Observation
        | resource.contained.resourceType                 | Observation                       |
@@ -115,13 +115,13 @@
  Scenario: Client can request lab anatomic pathology results in FHIR format
  	Given a patient with "lab anatomic pathology results" in multiple VistAs
     #   And a patient with pid "10117V810068" has been synced through the RDK API
- 	When the client requests "anatomic pathology" results for that patient "9E7A;428"
+ 	When the client requests "anatomic pathology" results for that patient "SITE;428"
  	Then a successful response is returned
        And the results contain lab "anatomic pathology" results
        | field                                          | value                        |
        | resource.name.text                              | LR CYTOPATHOLOGY REPORT      |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                  |
-       | resource.subject.reference                      | Patient/9E7A;428         |
+       | resource.subject.reference                      | Patient/SITE;428         |
        | resource.performer.display                      | CAMP MASTER                  |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                  |
        | resource.serviceCategory.text                   | Cytopathology                |
@@ -133,9 +133,9 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | CY 99 1                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueReference.reference      | Composition/urn:va:document:9E7A:428:CY;7009895 |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:SITE:428:CY;7009895 |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                 |
-       | resource.identifier.value                       | urn:va:lab:9E7A:428:CY;7009895                  |
+       | resource.identifier.value                       | urn:va:lab:SITE:428:CY;7009895                  |
        | resource.specimen.display                       | NEC                                             |
        #Organization
        | resource.contained.resourceType                 | Organization      |
@@ -147,7 +147,7 @@
        #Specimen
        | resource.contained.resourceType                 | Specimen                          |
        | resource.contained.type.text                    | NEC                               |
-       | resource.contained.subject.reference            | Patient/9E7A;428              |
+       | resource.contained.subject.reference            | Patient/SITE;428              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                       |
        | resource.text.status                            | generated                         |
        | resource.text.div                               | <div>(NEC)</div>        |
@@ -155,7 +155,7 @@
        | field                                          | value                        |
        | resource.name.text                              | LR CYTOPATHOLOGY REPORT      |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                 |
-       | resource.subject.reference                      | Patient/9E7A;428         |
+       | resource.subject.reference                      | Patient/SITE;428         |
        | resource.performer.display                      | CAMP BEE                     |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                 |
        | resource.serviceCategory.text                   | Cytopathology                |
@@ -167,9 +167,9 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | CY 99 1                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueReference.reference      | Composition/urn:va:document:C877:428:CY;7009895 |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:SITE:428:CY;7009895 |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                 |
-       | resource.identifier.value                       | urn:va:lab:C877:428:CY;7009895                  |
+       | resource.identifier.value                       | urn:va:lab:SITE:428:CY;7009895                  |
        | resource.specimen.display                       | NEC                                             |
        #Organization
        | resource.contained.resourceType                 | Organization      |
@@ -181,7 +181,7 @@
        #Specimen
        | resource.contained.resourceType                 | Specimen                          |
        | resource.contained.type.text                    | NEC                               |
-       | resource.contained.subject.reference            | Patient/9E7A;428              |
+       | resource.contained.subject.reference            | Patient/SITE;428              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                        |
        | resource.text.status                            | generated                         |
        | resource.text.div                               | <div>(NEC)</div>        |
@@ -190,13 +190,13 @@
  Scenario: Client can request lab anatomic pathology results in FHIR format
  	Given a patient with "lab anatomic pathology results" in multiple VistAs
   #And a patient with pid "10146V393772" has been synced through the RDK API
- 	When the client requests "anatomic pathology" results for that patient "9E7A;301"
+ 	When the client requests "anatomic pathology" results for that patient "SITE;301"
  	Then a successful response is returned
        And the results contain lab "anatomic pathology" results
        | field                                          | value                        |
        | resource.name.text                              | LR SURGICAL PATHOLOGY REPORT |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE          |
-       | resource.subject.reference                      | Patient/9E7A;301         |
+       | resource.subject.reference                      | Patient/SITE;301         |
        | resource.performer.display                      | CAMP BEE                     |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE         |
        | resource.serviceCategory.text                   | Surgical Pathology           |
@@ -208,9 +208,9 @@
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#groupName   |
        | resource.extension.valueString                  | SP 98 8                                             |
        | resource.extension.url                          | http://vistacore.us/fhir/extensions/lab#report      |
-       | resource.extension.valueReference.reference      | Composition/urn:va:document:C877:301:SP;7019484.83  |
+       | resource.extension.valueReference.reference      | Composition/urn:va:document:SITE:301:SP;7019484.83  |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                     |
-       | resource.identifier.value                       | urn:va:lab:C877:301:SP;7019484.83                   |
+       | resource.identifier.value                       | urn:va:lab:SITE:301:SP;7019484.83                   |
        | resource.specimen.display                       | PROSTATE CHIPS                                      |
        #Organization
        | resource.contained.resourceType                 | Organization      |
@@ -222,7 +222,7 @@
        #Specimen
        | resource.contained.resourceType                 | Specimen                          |
        | resource.contained.type.text                    | PROSTATE CHIPS                    |
-       | resource.contained.subject.reference            | Patient/9E7A;301              |
+       | resource.contained.subject.reference            | Patient/SITE;301              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE              |
        | resource.text.status                            | generated                         |
        | resource.text.div                               | <div>(PROSTATE CHIPS)</div>  |
@@ -242,7 +242,7 @@
  @F138_6_Labs_pathology_neg_fhir @fhir @10104V248233
  Scenario: Negative scenario.  Client can request lab anatomic pathology results in FHIR format
     Given a patient with "No lab results" in multiple VistAs
-    When the client requests "anatomic pathology" results for that patient "9E7A;229"
+    When the client requests "anatomic pathology" results for that patient "SITE;229"
     Then a successful response is returned
     Then corresponding matching FHIR records totaling "0" are displayed
 
@@ -250,5 +250,5 @@
  Scenario: Client can request lab anatomic pathology results in FHIR format
        Given a patient with "lab anatomic pathology results" in multiple VistAs
        #And a patient with pid "10110V004877" has been synced through the RDK API
-       When the client requests "10" "anatomic pathology" results for that patient "9E7A;8" in FHIR format
+       When the client requests "10" "anatomic pathology" results for that patient "SITE;8" in FHIR format
        Then a successful response is returned

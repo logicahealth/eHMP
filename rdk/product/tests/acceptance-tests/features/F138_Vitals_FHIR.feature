@@ -2,15 +2,15 @@
  Feature: F138 - Return of Vitals in FHIR format
  #This feature item returns Vitals in FHIR format. Also includes cases where no Vitals exist.
 
- @F138_1_vitals_fhir @fhir @9E7A100022
+ @F138_1_vitals_fhir @fhir @SITE100022
  Scenario: Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;100022" in FHIR format
+ 	When the client requests vitals for the patient "SITE;100022" in FHIR format
  	Then a successful response is returned
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value					            |
  	| resource.contained.resourceType	        | Organization					            	|
- 	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				        | CONTAINS urn:va:vital:SITE:100022		|
  	| resource.contained.identifier.value	    | 998									                |
  	| resource.contained.name				          | ABILENE (CAA)							          |
  # Not available for this patient.
@@ -34,7 +34,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value						          |
-  | resource.identifier.value               | CONTAINS urn:va:vital:9E7A:100022   |
+  | resource.identifier.value               | CONTAINS urn:va:vital:SITE:100022   |
  	| resource.text.div						            | CONTAINS TEMPERATURE 98.6 F			    |
  	| resource.code.coding.display			      | TEMPERATURE							            |
  	| resource.valueQuantity.value			      | 98.6									              |
@@ -46,7 +46,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value						          |
-  | resource.identifier.value               | CONTAINS urn:va:vital:9E7A:100022   |
+  | resource.identifier.value               | CONTAINS urn:va:vital:SITE:100022   |
  	| resource.text.div						            | CONTAINS RESPIRATION 22 /min		   	|
  	| resource.code.coding.display			      | RESPIRATION							            |
  	| resource.valueQuantity.value			      | 22								                 	|
@@ -58,7 +58,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value					          	|
-  | resource.identifier.value               | CONTAINS urn:va:vital:9E7A:100022   |
+  | resource.identifier.value               | CONTAINS urn:va:vital:SITE:100022   |
  	| resource.text.div						            | CONTAINS PULSE 70 /min			      	|
  	| resource.code.coding.display			      | PULSE									              |
  	| resource.valueQuantity.value			      | 70									                |
@@ -70,7 +70,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value						          |
- 	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				        | CONTAINS urn:va:vital:SITE:100022		|
  	| resource.text.div						            | CONTAINS HEIGHT 60 in					      |
  	| resource.code.coding.display			      | HEIGHT								              |
  	| resource.valueQuantity.value		      	| 60									                |
@@ -82,7 +82,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value						          |
- 	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				        | CONTAINS urn:va:vital:SITE:100022		|
  	| resource.text.div						            | CONTAINS WEIGHT 200 lb			       	|
  	| resource.code.coding.display			      | WEIGHT								              |
  	| resource.valueQuantity.value			      | 200									                |
@@ -91,7 +91,7 @@
   And the FHIR results contain "vital results"
  	| field									              | panorama_value						|
  	| resource.contained.resourceType	    | Organization							|
- 	| resource.identifier.value				    | CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				    | CONTAINS urn:va:vital:SITE:100022		|
  	| resource.contained.identifier.value	| 998									      |
  	| resource.contained.name				      | ABILENE (CAA)						  |
  	| resource.text.status					            | generated								|
@@ -102,7 +102,7 @@
 
   And the FHIR results contain "vital results"
  	| field									          | panorama_value						|
- 	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
  	| resource.text.div						    | CONTAINS PULSE OXIMETRY 98 %			  |
  	| resource.code.coding.display			    | PULSE OXIMETRY			|
  	| resource.valueQuantity.value			    | 98									|
@@ -114,7 +114,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                | panorama_value						          |
- 	| resource.identifier.value				      | CONTAINS urn:va:vital:9E7A:100022		|
+ 	| resource.identifier.value				      | CONTAINS urn:va:vital:SITE:100022		|
  	| resource.text.div						          | CONTAINS PAIN 3					          	|
  	| resource.code.coding.display			    | PAIN									  |
  	| resource.valueQuantity.value			    | 3										    |
@@ -123,10 +123,10 @@
  	| resource.referenceRange.high.value		| IS_NOT_SET							|
  And FHIR date and time conver to Zulu format for Vitals
 
- @F138_vitals_fhir_girth @fhir @9E7A428
+ @F138_vitals_fhir_girth @fhir @SITE428
  Scenario: Client can request vitals in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;428" in FHIR format
+ 	When the client requests vitals for the patient "SITE;428" in FHIR format
  	Then a successful response is returned
  	And the FHIR results contain "vitals"
    | name                                           | value                                |
@@ -154,19 +154,19 @@
    | resource.valueQuantity.units                   | in                                   |
    | resource.issued                                | IS_FHIR_FORMATTED_DATE               |
 
- # following 2 scenarios are checking for another patient for return of vital results.
+ # following 2 tests are checking for another patient for return of vital results.
  # only few fields are checked to validate data integrity.
  # qualifiers field mapping is checked here which was not available for the above patient
- @F138_3_vitals_fhir @fhir @9E7A100184
+ @F138_3_vitals_fhir @fhir @SITE100184
  Scenario: Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;100184" in FHIR format
+ 	When the client requests vitals for the patient "SITE;100184" in FHIR format
  	Then a successful response is returned
  	Then the client receives 13 FHIR "VistA" result(s)
  	And the client receives 13 FHIR "panorama" result(s)
   And the FHIR results contain "vital results"
  	| field									          | panorama_value						             |
- 	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184			 |
+ 	| resource.identifier.value				| CONTAINS urn:va:vital:SITE:100184			 |
  	| resource.code.coding.system			| http://loinc.org									     |
  	| resource.code.coding.code				| 8310-5											           |
  	| resource.code.coding.display		| Body temperature									     |
@@ -178,7 +178,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									          | panorama_value						           |
- 	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184		 |
+ 	| resource.identifier.value				| CONTAINS urn:va:vital:SITE:100184		 |
  	| resource.code.coding.system			| http://loinc.org									   |
  	| resource.code.coding.code				| 8867-4											         |
  	| resource.code.coding.display  	| Heart rate										       |
@@ -188,16 +188,16 @@
  	| resource.referenceRange.low.value		  | 60										     	 	 |
  	| resource.referenceRange.high.value		| 120												     |
 
- @F138_4_vitals_fhir @fhir @9E7A100184
+ @F138_4_vitals_fhir @fhir @SITE100184
  Scenario: Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;100184" in FHIR format
+ 	When the client requests vitals for the patient "SITE;100184" in FHIR format
  	Then a successful response is returned
  	Then the client receives 13 FHIR "VistA" result(s)
  	And the client receives 13 FHIR "panorama" result(s)
  	And the FHIR results contain "vital results"
  	| field									          | panorama_value						          |
- 	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184		|
+ 	| resource.identifier.value				| CONTAINS urn:va:vital:SITE:100184		|
  	| resource.code.coding.system			| http://loinc.org									  |
  	| resource.code.coding.code				| 8310-5											        |
  	| resource.code.coding.display  	| Body temperature									  |
@@ -209,7 +209,7 @@
 
  	And the FHIR results contain "vital results"
  	| field									                  | panorama_value						                |
- 	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100184					|
+ 	| resource.identifier.value				        | CONTAINS urn:va:vital:SITE:100184					|
  	| resource.code.coding.system			        | http://loinc.org						        			|
  	| resource.code.coding.code				        | 8867-4							              				|
  	| resource.code.coding.display			      | Heart rate						            				|
@@ -219,15 +219,15 @@
   | resource.referenceRange.low.value		    | 60									                			|
   | resource.referenceRange.high.value		  | 120											                	|
 
- @F138_5_vitals_neg_fhir @fhir @9E7A100184
+ @F138_5_vitals_neg_fhir @fhir @SITE100184
  Scenario: Negative scenario.  Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals for the patient "9E7A;100184" in FHIR format
+ 	When the client requests vitals for the patient "SITE;100184" in FHIR format
  	Then a successful response is returned
  	Then corresponding matching FHIR records totaling "13" are displayed
 
- @F138_6_vitals_fhir @fhir @DE974 @9E7A100022
+ @F138_6_vitals_fhir @fhir @DE974 @SITE100022
  Scenario: Client can request vital results in FHIR format
  	Given a patient with "vitals" in multiple VistAs
- 	When the client requests vitals with _count of "10" for the patient "9E7A;100022" in FHIR format
+ 	When the client requests vitals with _count of "10" for the patient "SITE;100022" in FHIR format
   Then the FHIR results contain "10" vitals

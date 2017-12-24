@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults   @DE4084 @reg2
+@F144 @F144_numericlabresults   @DE4084 @reg4 @Lab_Results
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:

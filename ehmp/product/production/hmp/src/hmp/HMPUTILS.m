@@ -1,5 +1,5 @@
-HMPUTILS ;SLC/AGP,ASMR/ASF,JC-HMP utilities ;Jan 20, 2017 17:18:18
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 01, 2011;Build 7
+HMPUTILS ;SLC/AGP,ASMR/ASF,JC,CPC-HMP utilities ;Jan 20, 2017 17:18:18
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;Sep 01, 2011;Build 7
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q  ; no entry from top
@@ -20,9 +20,80 @@ CHKSP(HMPFHMP) ; ^XTMP check before patient subscription starts to cache   *BEGI
  ; HMPFHMP - server name
  N HMPOK S HMPOK=0
  F  D  Q:HMPOK
- . I $$GETMAX>$$GETSIZE("estimate",HMPFHMP) S HMPOK=1 D STATUS^HMPMETA(HMPOK,HMPFHMP) Q  ; set DISK USAGE STATUS to 'WITHIN LIMIT' and continue, US8228
- . D STATUS^HMPMETA(HMPOK,HMPFHMP) H $$GETSECS^HMPDJFSP  ; DISK USAGE STATUS is 'EXCEEDED LIMIT' and wait, US8228
+ . I $$GETMAX>$$GETSIZE("estimate",HMPFHMP) S HMPOK=1 D STATUS(HMPOK,HMPFHMP) Q  ; set DISK USAGE STATUS to 'WITHIN LIMIT' and continue, US8228
+ . D STATUS(HMPOK,HMPFHMP) H $$GETSECS^HMPDJFSP  ; DISK USAGE STATUS is 'EXCEEDED LIMIT' and wait, US8228
  Q  ;  *END*S68-PJH
+ ;
+STATUS(STOP,HMPFHMP) ; Set HMP GLOBAL USAGE MONITOR status
+ Q:$G(STOP)=""  Q:$G(HMPFHMP)=""
+ N HMPFLG,HMPSTMP,HMPSRV
+ S HMPSRV=$O(^HMP(800000,"B",HMPFHMP,"")) Q:'HMPSRV
+ S HMPFLG=$P($G(^HMP(800000,HMPSRV,0)),U,5),HMPSTMP=$P($G(^HMP(800000,HMPSRV,0)),U,6)
+ ;If stopped and already flagged as stopped do nothing
+ I STOP,HMPFLG Q
+ ;If stopped but not flagged as stopped set flag and timestamp
+ I STOP,'HMPFLG D SET(STOP,HMPSRV) Q
+ ;If running and flagged as stopped flag as running
+ I 'STOP,HMPFLG D SET(STOP,HMPSRV) Q
+ ;No action needed if running and not flagged as stop
+ Q
+ ;
+SET(STOP,HMPSRV) ; Flag set/reset, Stamptime set
+ Q:'$G(HMPSRV)
+ L +^HMP(800000,HMPSRV,0):5 E  D  Q
+ . N J,TXT
+ . S TXT(1)="Failed to lock file 800000 for server "_HMPSRV_" in SET HMPUTILS",TXT(2)=" "
+ . S J=$$NWNTRY^HMPLOG($$NOW^XLFDT,"",.TXT)
+ S $P(^HMP(800000,HMPSRV,0),U,5,6)=STOP_U_$$NOW^XLFDT
+ L -^HMP(800000,HMPSRV,0)
+ Q
+ ;
+CHECK(HMPFHMP) ; Check storage status and send MailMan message if appropriate
+ ; Input HMPFHMP - server name
+ Q:$G(HMPFHMP)=""
+ N HMPDIFF,HMPFLG,HMPSRV,HMPSTTM
+ S HMPSRV=$O(^HMP(800000,"B",HMPFHMP,"")) Q:'HMPSRV
+ ; ^DD(800000,.05,0)="DISK USAGE STATUS^S^0:WITHIN LIMIT;1:EXCEEDED LIMIT;^0;5^Q"
+ S HMPFLG=$P($G(^HMP(800000,HMPSRV,0)),U,5)
+ ;No action required if status is not set
+ I HMPFLG="" Q
+ ; (#.06) DISK USAGE STATUS TIME [6D]
+ S HMPSTTM=$P($G(^HMP(800000,HMPSRV,0)),U,6) Q:HMPSTTM=""
+ ;quit if status time < five minutes ago
+ I $$FMDIFF^XLFDT($$NOW^XLFDT,HMPSTTM,2)<300 Q
+ ;Otherwise send message
+ D MSG(HMPFLG)
+ ; Clear DISK USAGE STATUS and DISK USAGE STATUS TIME
+ L +^HMP(800000,HMPSRV,0):5 E  D  Q  ; quit if no lock
+ . N J,TXT
+ . S TXT(1)="Failed to lock file 800000 for server "_HMPSRV_" in CHECK HMPUTILS",TXT(2)=" "
+ . S J=$$NWNTRY^HMPLOG($$NOW^XLFDT,"",.TXT)
+ S $P(^HMP(800000,HMPSRV,0),U,5)=""
+ S $P(^HMP(800000,HMPSRV,0),U,6)=""
+ L -^HMP(800000,HMPSRV,0)
+ Q
+ ;
+ ; DE6644: 2 MailMan message subroutines combined, 13 January 2017
+MSG(HMPFLG) ; send email about space limit for ^XTMP("HMP*")
+ Q:'$D(HMPFLG)  ; must have flag, if HMPFLG then limit exceeded
+ ; 1 megabyte = 2**20 bytes = 1048576 bytes
+ N HMPMSG,HMPRCPNT,HMPSUBJ,HMPTXT,MAX
+ S MAX=$$GETMAX^HMPUTILS  ; system parameter: HMP EXTRACT DISK SIZE LIMIT
+ S HMPSUBJ="HMP namepsace XTMP Global Size Monitor "_$S(HMPFLG:"PAUSE",1:"RESTART")_" alert"
+ D MSGLN(.HMPTXT,"*ALERT*: eHMP storage in the ^XTMP global has")
+ D MSGLN(.HMPTXT,$S(HMPFLG:"exceeded ",1:"been below ")_$FN(MAX,",")_" bytes ("_$J(MAX/1048576,2,2)_" MB) for more than 5 minutes.")
+ D MSGLN(.HMPTXT,"eHMP subscribing was "_$S(HMPFLG:"PAUSED.",1:"RESTARTED.")),MSGLN(.HMPTXT," ")
+ D MSGLN(.HMPTXT,"HMP* namespace data stored in ^XTMP is "_$J($P($$GETSIZE^HMPUTILS,"^")/1048576,2,2)_" MB.")
+ D MSGLN(.HMPTXT," "),MSGLN(.HMPTXT,"eHMP ^XTMP space check made "_$$HTE^XLFDT($H)),MSGLN(.HMPTXT," ")
+ I $G(ZTSK) D MSGLN(.HMPTXT,"TaskMan task number: "_ZTSK)  ; add task number if available
+ D MSGLN(.HMPTXT," ")
+ S HMPRCPNT("G.HMP IRM GROUP")="",HMPRCPNT(DUZ)=""
+ D SENDMSG^XMXAPI(DUZ,HMPSUBJ,"HMPTXT",.HMPRCPNT,,.HMPMSG)  ; HMPMSG returned as message number
+ Q
+ ;
+MSGLN(TXTARY,LN) ; add LN to TXTARY (passed by ref.) for MailMan message
+ Q:'$L($G(LN))  ; must have some text
+ S TXTARY(0)=$G(TXTARY(0))+1,TXTARY(TXTARY(0))=LN Q
  ;
 SETERROR(RESULT,ERROR,EXTERROR,DATA) ; -- error text for JSON
  N CNT,TEMP,HMPTEMP,XCNT

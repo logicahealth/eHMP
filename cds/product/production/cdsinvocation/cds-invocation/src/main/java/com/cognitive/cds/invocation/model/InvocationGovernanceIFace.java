@@ -25,7 +25,7 @@
 package com.cognitive.cds.invocation.model;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 public interface InvocationGovernanceIFace {
 
@@ -51,6 +51,6 @@ public interface InvocationGovernanceIFace {
 	 * @return A List of the InvocationMappings to do
 	 */
 	List<InvocationMapping> apply(List<InvocationMapping> mappings, InvocationTarget invocationTarget,
-			Context context, Properties parameters, String intent, IntentMapping mapping);
+			Context context, Map<String, Object> parameters, String intent, IntentMapping mapping);
 
 }

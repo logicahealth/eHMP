@@ -8,6 +8,6 @@ Scenario: Displaying Vitals Qualifiers on Expanded View
   And Overview is active
   When the user expands the vitals applet
   When the expanded vitals applet is displayed
-  When the user clicks the all-range-vitals
+  When the user clicks the All vitals range
   Then some vitals display qualifiers
 

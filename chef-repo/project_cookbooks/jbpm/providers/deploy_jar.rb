@@ -3,7 +3,7 @@ use_inline_resources
 action :execute do
 
   auth_string = "#{new_resource.user}:#{new_resource.password}"
-  
+
   if !jar_deployed?(new_resource.artifact_id, new_resource.version, new_resource.user, new_resource.password)
 
     common_directory "#{node[:jbpm][:m2_home]}/repository/#{new_resource.group_id}/#{new_resource.artifact_id}/#{new_resource.version}" do
@@ -54,24 +54,35 @@ action :execute do
   end
 
   deployed_jars(new_resource.user, new_resource.password).each do |jar|
-    
-    if jar["artifactId"] == new_resource.artifact_id && jar["version"] != new_resource.version
+    # "deployment-unit" is defined in jBPM v6.3, but not in jBPM v6.1
+    if (jar.key?("deployment-unit"))
+      group_id = jar["deployment-unit"]["groupId"]
+      artifact_id = jar["deployment-unit"]["artifactId"]
+      version = jar["deployment-unit"]["version"]
+    else
+      group_id = jar["groupId"]
+      artifact_id = jar["artifactId"]
+      version = jar["version"]
+    end
 
-      ruby_block "deactivate_#{jar['artifactId']}-#{jar['version']}" do
+    if artifact_id == new_resource.artifact_id && version != new_resource.version
+
+      ruby_block "deactivate_#{artifact_id}-#{version}" do
         block do
-          deactivate_jar(jar["groupId"], jar["artifactId"], jar["version"], new_resource.user, new_resource.password, 1, new_resource.max_deactivation_attempts)
+          deactivate_jar(group_id, artifact_id, version, new_resource.user, new_resource.password, 1, new_resource.max_deactivation_attempts)
         end
+        only_if { new_resource.remove_legacy_jars }
       end
 
-      http_request "request_undeploy_#{jar['artifactId']}-#{jar['version']}" do
-        url "http://#{node[:ipaddress]}:8080/business-central/rest/deployment/#{jar['groupId']}:#{jar['artifactId']}:#{jar['version']}/undeploy"
+      http_request "request_undeploy_#{artifact_id}-#{version}" do
+        url "http://#{node[:ipaddress]}:8080/business-central/rest/deployment/#{group_id}:#{artifact_id}:#{version}/undeploy"
         message {}
         headers({'AUTHORIZATION' => "Basic #{
           Base64.encode64(auth_string)}",
           'Content-Type' => 'application/xml'
         })
         action :post
-        only_if { new_resource.undeploy_legacy_jars }
+        only_if { new_resource.remove_legacy_jars }
       end
 
       new_resource.updated_by_last_action(true)

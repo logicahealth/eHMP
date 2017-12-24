@@ -1,4 +1,4 @@
-@F144_Lab_Results_Date_Filter @Lab_Results   @DE6991 @DE6976 @reg1
+@F144_Lab_Results_Date_Filter @Lab_Results   @DE6991 @DE6976 @reg3
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 # Team: Andromeda

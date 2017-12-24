@@ -1,7 +1,5 @@
 package vistacore.order.exception;
 
-import org.jboss.logging.Logger;
-
 /**
  * This exception can be used to provide a status code to the UI
  */
@@ -12,7 +10,6 @@ public class OrderException extends Exception {
 	public static final Integer INTERNAL_SERVER_ERROR = 500;
 	
 	private Integer httpStatus = INTERNAL_SERVER_ERROR;
-	private static final Logger LOGGER = Logger.getLogger(OrderException.class);
 //-----------------------------------------------------------------------------
 //-------------------------Constructors----------------------------------------
 //-----------------------------------------------------------------------------
@@ -27,7 +24,6 @@ public class OrderException extends Exception {
 	public OrderException(Integer httpStatus, String message) {
 		super(message);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 	/**
@@ -37,7 +33,6 @@ public class OrderException extends Exception {
 	 */
 	public OrderException(String message) {
 		super(message);
-		LOGGER.error(message);
 	}
 
 	/**
@@ -51,7 +46,6 @@ public class OrderException extends Exception {
 	public OrderException(Integer httpStatus, String message, Throwable cause) {
 		super(message, cause);
 		this.httpStatus = httpStatus;
-		LOGGER.error(message);
 	}
 	
 	/**
@@ -62,7 +56,6 @@ public class OrderException extends Exception {
 	 */
 	public OrderException(String message, Throwable cause) {
 		super(message, cause);
-		LOGGER.error(message);
 	}
 	
 //-----------------------------------------------------------------------------

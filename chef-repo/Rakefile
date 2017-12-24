@@ -175,9 +175,9 @@ task :ssh, [:machine, :driver, :stack] do |t, args|
   key = knife_search_for_key_name(machine, stack, driver)
   case driver
   when "aws"
-    user = "REDACTED"
+    user = "USER    "
   when "local"
-    user = "REDACTED"
+    user = "vagrant"
   end
   exec('ssh', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}")
 end

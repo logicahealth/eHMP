@@ -51,9 +51,9 @@
 
 		<property name="defaultAuth">
 			<bean class="com.cognitive.cds.invocation.fhir.model.Authentication">
-				<constructor-arg name="accessCode" value="REDACTED" />
-				<constructor-arg name="verifyCode" value="REDACTED" />
-				<constructor-arg name="site" value="9E7A" />
+				<constructor-arg name="accessCode" value="USER  " />
+				<constructor-arg name="verifyCode" value="PW      " />
+				<constructor-arg name="site" value="SITE" />
 				<constructor-arg name="division" value="500" />
 			</bean>
 		</property>

@@ -705,6 +705,10 @@ function _morphToSecondaryDemographics (primaryDemographics) {
         delete ptDemographics.cwadf;
     }
 
+    if (ptDemographics.patientRecordFlag) {
+    	delete ptDemographics.patientRecordFlag;
+    }
+
     return ptDemographics;
 }
 

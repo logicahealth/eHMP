@@ -16,7 +16,7 @@ var foreverAgent = new ForeverAgent();
 function initSolr(solrConfig, req) {
     if (solrClient === null) {
         req.logger.info('SolrSmartClient.InitClient called');
-        solrClient = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, req.logger, foreverAgent);
+        solrClient = solrSmartClient.createClient(req.logger, solrConfig, foreverAgent);
     }
 
     return solrClient;
@@ -100,19 +100,20 @@ function emulatedHmpGetRelativeDate(teeMinus) {
 
 
 /**
- * Named to be the same as solr's ClientUtils java method, escapeQueryChars
+ * Named to be the same as solr's ClientUtils java method, escapeQueryChars.
+ * This method differs from the standard Lucenes implementation :
+ *   see http://lucene.apache.org/core/5_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
+ * by allowing * and ? if preserveWildcards is set. Otherwise, the * and ? are stripped from the returned string.
+ *
  * @param unescaped
  */
-function escapeQueryChars(unescaped, preserveWhitespace) {
+function escapeQueryChars(unescaped, preserveWildcards) {
     if (!unescaped) {
         return '';
     }
-    // match the comment below and (if requested) any whitespace
-    // \+-!():^[]"{}~*?|&;
-    // see http://lucene.apache.org/core/5_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
-    if (preserveWhitespace) {
-        return unescaped.replace(/([\\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;\/])/g, '\\$1');
-    } else {
-        return unescaped.replace(/([\\\+\-\!\(\)\:\^\[\]\"\{\}\~\*\?\|\&\;\/\s])/g, '\\$1');
+    unescaped = unescaped.replace(/([\\\+\-\!\(\)\:\^\[\]\"\{\}\~\|\&\;\/\s])/g, '\\$1');
+    if (!preserveWildcards) {
+        unescaped = unescaped.replace(/([\*\?])/g, '');
     }
+    return unescaped;
 }

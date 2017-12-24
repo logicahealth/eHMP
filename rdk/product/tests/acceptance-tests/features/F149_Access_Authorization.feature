@@ -3,21 +3,21 @@ Feature: F149 - Access Control / Authorization
 
 @US2117_1
 Scenario: Authorized Client gets a sensitive patient warning (break glass scenario) when requesting demographics for a sensitive patient
-    Given a sensitive patient "9E7A;167"
-    And an "authorized" client "REDACTED"
-    When the client "REDACTED" requests data for that sensitive patient "9E7A;167"
+    Given a sensitive patient "SITE;167"
+    And an "authorized" client "PW         "
+    When the client "PW         " requests data for that sensitive patient "SITE;167"
     Then a permanent redirect response is returned
 
-@US2117_2 @vxsync @patient @9E7A167
+@US2117_2 @vxsync @patient @SITE167
 Scenario: Authorized Client receives data when requesting demographics with sensitivity acknowledgement for a sensitive patient
-     Given a sensitive patient "9E7A;167"
-     And an "authorized" client "REDACTED"
-     When the client "REDACTED" requests data for that sensitive patient "9E7A;167" with sensitivity acknowledgement
+     Given a sensitive patient "SITE;167"
+     And an "authorized" client "PW         "
+     When the client "PW         " requests data for that sensitive patient "SITE;167" with sensitivity acknowledgement
      Then a successful response is returned
 
-@US2117_3 @vxsync @patient @9E7A100022
+@US2117_3 @vxsync @patient @SITE100022
 Scenario: Authorized Client receives data when requesting demographics for a non-sensitive patient
-    Given a non-sensitive patient "9E7A;100022"
-    And an "authorized" client "REDACTED"
-    When the client "REDACTED" requests data for that non-sensitive patient "9E7A;100022"
+    Given a non-sensitive patient "SITE;100022"
+    And an "authorized" client "PW         "
+    When the client "PW         " requests data for that non-sensitive patient "SITE;100022"
     Then a successful response is returned

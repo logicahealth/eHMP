@@ -1,6 +1,6 @@
 {
-    "accessCode": "REDACTED",
-    "verifyCode": "REDACTED",
+    "accessCode": "USER  ",
+    "verifyCode": "PW      ",
     "corsTabs": "true",
     "dgRecordAccess": "false",
     "dgSecurityOfficer": "false",
@@ -8,13 +8,13 @@
     "disabled": false,
     "divisionSelect": false,
     "duz": {
-        "9E7A": "10000000270"
+        "SITE": "10000000270"
     },
     "facility": "PANORAMA",
     "firstname": "PANORAMA",
     "infoButtonOid": "1.3.6.1.4.1.3768",
     "lastname": "USER",
-    "password": "REDACTED",
+    "password": "PW      ",
     "pcmm": [{
         "roles": [
             "NURSE (RN)",
@@ -133,12 +133,12 @@
     ],
     "rptTabs": "false",
     "section": "Medicine",
-    "site": "9E7A",
+    "site": "SITE",
     "ssn": 666441233,
     "title": "Clinician",
-    "uid": "urn:va:user:9E7A:10000000270",
-    "username": "REDACTED",
-    "verifyCode": "REDACTED",
+    "uid": "urn:va:user:SITE:10000000270",
+    "username": "PW         ",
+    "verifyCode": "PW      ",
     "vistaKeys": [
         "PROVIDER",
         "GMRA-SUPERVISOR",

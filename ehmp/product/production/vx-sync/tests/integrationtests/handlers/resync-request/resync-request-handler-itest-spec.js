@@ -16,7 +16,9 @@ var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var hostPort = testConfig.vxsyncPort;
 var port = PORT;
 var tubename = 'vx-resync-test';
 
@@ -86,7 +88,7 @@ describe('resync-request-handler', function() {
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
-                    port: 8080,
+                    port: hostPort,
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
@@ -94,8 +96,8 @@ describe('resync-request-handler', function() {
                     method: 'POST'
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
@@ -115,7 +117,7 @@ describe('resync-request-handler', function() {
             environment.jobStatusUpdater = new JobStatusUpdater(dummyLogger, config, environment.jds);
             environment.publisherRouter = new PublisherRouter(dummyLogger, config, dummyLogger, environment.jobStatusUpdater);
 
-            clearTestPatient(config.syncRequestApi, '9E7A;1');
+            clearTestPatient(config.syncRequestApi, 'SITE;1');
         });
 
         afterEach(function() {
@@ -127,7 +129,7 @@ describe('resync-request-handler', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;1'
+                    value: 'SITE;1'
                 },
                 rootJobId: '1',
                 jobId: '1'
@@ -161,7 +163,7 @@ describe('resync-request-handler', function() {
                 type: 'resync-request',
                 patientIdentifier: {
                     type: 'pid',
-                    value: '9E7A;1'
+                    value: 'SITE;1'
                 },
                 rootJobId: '2',
                 jobId: '2'

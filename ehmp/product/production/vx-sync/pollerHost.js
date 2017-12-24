@@ -26,6 +26,7 @@ var processName = process.env.VXSYNC_LOG_SUFFIX;
 var processStartTime = moment().format('YYYYMMDDHHmmss');
 
 var options = pollerUtils.parsePollerOptions(logger);
+logger.debug('pollerHost: Running with options: %j', options);
 
 if (_.isEmpty(options.sites)) {
     logger.error('No Vista site given for pollerHost');
@@ -39,7 +40,7 @@ var pollers = _.map(options.sites, function(site) {
         console.log('Unknown Vista site %s', site);
         process.exit(1);
     }
-    return new Poller(logUtil.getAsChild(site, logger), site, config, environment, options.autostart);
+    return new Poller(logUtil.getAsChild(site, logger), site, config, environment, options.autostart, options.multipleMode);
 });
 
 process.on('SIGURG', function() {
@@ -48,8 +49,8 @@ process.on('SIGURG', function() {
     pausePollers(pollers);
     listenForShutdownReady(pollers);
 
-    //TODO: move time to wait into configuration
-    setTimeout(timeoutOnWaitingForShutdownReady, 30000, pollers).unref();
+    let shutdownTimeout = (config && config.shutdownTimeout && config.shutdownTimeout.pollerHost) ? config.shutdownTimeout.pollerHost : 30000;
+    setTimeout(timeoutOnWaitingForShutdownReady, shutdownTimeout, pollers).unref();
 });
 
 _.each(pollers, function(poller) {

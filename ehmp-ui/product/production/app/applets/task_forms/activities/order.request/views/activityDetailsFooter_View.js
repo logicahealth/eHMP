@@ -36,7 +36,9 @@ define([
                         instanceName: activityModel.get('instanceName'),
                         processInstanceId: processId,
                         deploymentId: activityModel.get('deploymentId'),
-                        signalName: 'END'
+                        signalName: 'END',
+                        showHighlights: activityModel.get('showHighlights'),
+                        highlights: activityModel.get('detailsHighlights')
                     });
 
                     var workflow = new ADK.UI.Workflow({

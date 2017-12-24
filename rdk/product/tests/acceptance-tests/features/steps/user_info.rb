@@ -3,23 +3,25 @@ When(/^the client requests to view list Active users with name search criteria "
   query.add_parameter('user.filter', '{"firstName":"'+firstName +'","lastName":"'+ lastName+ '"}')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
+  @response = HTTPartyRDK.get_as_user(path, "SITE;USER  ", "PW      ")
 end
 When(/^the client requests to view list Active and Inactive users with name search criteria "(.*?)","(.*?)"$/) do |lastName, firstName|
   query = RDKQuery.new('user-service-userlist')
   query.add_parameter('user.filter', '{"firstName":"'+firstName +'","lastName":"'+ lastName+ '"}')
-  query.add_parameter('show.inactive', 'true')
+  query.add_parameter('show.vista.inactive', 'true')
+  query.add_parameter('show.ehmp.inactive', 'true')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
+  @response = HTTPartyRDK.get_as_user(path, "SITE;USER  ", "PW      ")
 end
-When(/^the client requests to view list Active users with name and role search criteria "(.*?)","(.*?)","(.*?)"$/) do |lastName, firstName, role|
+When(/^the client requests to view list Active users with name and permissionSet search criteria "(.*?)","(.*?)","(.*?)"$/) do |lastName, firstName, permissionSet|
   query = RDKQuery.new('user-service-userlist')
-  query.add_parameter('user.filter', '{"firstName":"'+firstName +'","lastName":"'+ lastName+ '","role":"'+ role+ '"}')
-  query.add_parameter('show.inactive', 'true')
+  query.add_parameter('user.filter', '{"firstName":"'+firstName +'","lastName":"'+ lastName+ '","permissionSet":"'+ permissionSet+ '"}')
+  query.add_parameter('show.vista.inactive', 'true')
+  query.add_parameter('show.ehmp.inactive', 'true')
   path = query.path
   p path
-  @response = HTTPartyRDK.get_as_user(path, "9E7A;REDACTED", "REDACTED")
+  @response = HTTPartyRDK.get_as_user(path, "SITE;USER  ", "PW      ")
 end
 Then(/^the results contains all required fields$/) do
   json = JSON.parse(@response.body)
@@ -32,6 +34,6 @@ Then(/^the results contains all required fields$/) do
     expect(item["fname"]).to_not be_nil
     expect(item["lname"]).to_not be_nil
     expect(item["site"]).to_not be_nil
-    expect(item["roles"]).to_not be_nil
+    expect(item["permissionSet"]).to_not be_nil
   end
 end

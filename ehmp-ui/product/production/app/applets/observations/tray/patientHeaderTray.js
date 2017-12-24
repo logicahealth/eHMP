@@ -34,7 +34,7 @@ define([
         orderIndex: 20,
         view: trayView,
         shouldShow: function() {
-            return ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('add-immunization|add-allergy|add-vital|add-condition-problem');
+            return ADK.PatientRecordService.getCurrentPatient().isInPrimaryVista() && ADK.UserService.hasPermissions('add-immunization|add-allergy|add-vital|add-condition-problem');
         }
     });
 

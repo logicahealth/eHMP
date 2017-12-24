@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # Library:: executor
 #
 # Author:: Seth Vargo <sethvargo@gmail.com>
 #
-# Copyright 2013-2014, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ module Jenkins
       @options = {
         cli:     '/usr/share/jenkins/cli/java/cli.jar',
         java:    'java',
-        timeout: 60
+        timeout: 60,
       }.merge(options)
     end
 
@@ -73,6 +73,8 @@ module Jenkins
       command << options[:jvm_options].to_s if options[:jvm_options]
       command << %(-jar "#{options[:cli]}")
       command << %(-s #{URI.escape(options[:endpoint])}) if options[:endpoint]
+      command << %(-"#{options[:protocol]}")             if options[:protocol]
+      command << %(-user "#{options[:cli_user]}")        if options[:cli_user]
       command << %(-i "#{options[:key]}")                if options[:key]
       command << %(-p #{uri_escape(options[:proxy])})    if options[:proxy]
       command.push(pieces)

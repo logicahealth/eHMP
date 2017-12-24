@@ -3,30 +3,13 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var ObjectId = require('mongoskin').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
+var testId = require('../../utils/mongo-utils').validateMongoDBId;
 
 // Database
 var dbName = 'schedule';
 var exeCollection = 'cdsjobs';
-var agenda;
-var cdsInvocationUrl;
-var agendaJobProcessorName;
-var thisApp;
 
-var testId;
-
-//Called from cds-agenda.init()
-function init(app) {
-    thisApp = app;
-    var isCDSInvocationServerAvailable = _.result(thisApp, 'subsystems.cds.isCDSInvocationConfigured');
-    if (!isCDSInvocationServerAvailable) {
-        return;
-    }
-    agenda = thisApp.subsystems.cds.getAgenda();
-    agendaJobProcessorName = thisApp.subsystems.cds.getAgendaJobProcessorName();
-    testId = thisApp.subsystems.cds.testMongoDBId;
-    cdsInvocationUrl = thisApp.subsystems.cds.getInvocationUrl();
-}
 
 // /////////
 // Job
@@ -78,8 +61,8 @@ function init(app) {
  *    "data": null }
  *
  */
-var getJob = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function getJob(req, res) {
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
     var status = rdk.httpstatus.ok;
@@ -89,6 +72,7 @@ var getJob = function(req, res) {
         match.jobname = req.query.jobname;
     }
 
+    var agenda = req.app.subsystems.cds.getAgenda();
     agenda.jobs(match, function(err, jobs) {
         // Work with jobs
         /*
@@ -102,8 +86,8 @@ var getJob = function(req, res) {
         }
         res.status(status).rdkSend(message);
     });
-};
-module.exports.getJob = getJob;
+}
+
 
 /**
  * Create a scheduled job
@@ -130,11 +114,14 @@ module.exports.getJob = getJob;
  *                  "error": "Missing required CDS job name" }
  *
  */
-var postJob = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function postJob(req, res) {
+    req.logger.debug('cds-schedule.postJob');
+
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
-    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+
+    req.app.subsystems.cds.getCDSDB(req.logger, dbName, null, function(error, dbConnection) {
         if (error) {
             return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
@@ -160,7 +147,7 @@ var postJob = function(req, res) {
             return res.status(rdk.httpstatus.not_found).rdkSend('Missing required CDS job name');
         }
 
-        url = req.query.url || cdsInvocationUrl;
+        url = req.query.url || req.app.subsystems.cds.getInvocationUrl();
 
         if (req.query.when) {
             when = req.query.when;
@@ -176,13 +163,15 @@ var postJob = function(req, res) {
                 return res.status(rdk.httpstatus.not_found).rdkSend('CDS Job \'' + cdsname + '\' does not exist');
             }
 
+            var agenda = req.app.subsystems.cds.getAgenda();
+
             agenda.jobs(match, function(err, result) {
                 if (err) {
                     return res.status(rdk.httpstatus.bad_request).rdkSend(err);
                 } else if (!_.isEmpty(result)) {
                     return res.status(rdk.httpstatus.conflict).rdkSend('Job \'' + jobname + '\' exists');
                 }
-                aj = agenda.create(agendaJobProcessorName, {
+                aj = agenda.create(req.app.subsystems.cds.getAgendaJobProcessorName(), {
                     cdsname: cdsname,
                     url: url
                 });
@@ -202,8 +191,8 @@ var postJob = function(req, res) {
             });
         });
     });
-};
-module.exports.postJob = postJob;
+}
+
 
 /**
  * Modify a scheduled job
@@ -234,8 +223,8 @@ module.exports.postJob = postJob;
  *
  *
  */
-var putJob = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function putJob(req, res) {
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
     var disable = req.query.hasOwnProperty('disable');
@@ -259,6 +248,7 @@ var putJob = function(req, res) {
         interval = req.query.interval;
     }
 
+    var agenda = req.app.subsystems.cds.getAgenda();
     agenda.jobs({
         jobname: jobname
     }, function(err, result) {
@@ -288,8 +278,8 @@ var putJob = function(req, res) {
             return res.status(rdk.httpstatus.ok).rdkSend('Job - ' + jobname + ' updated');
         });
     });
-};
-module.exports.putJob = putJob;
+}
+
 
 /**
  * Delete a scheduled job
@@ -314,8 +304,8 @@ module.exports.putJob = putJob;
  *                  "error": "Job not found" }
  *
  */
-var deleteJob = function(req, res) {
-    if (_.isUndefined(thisApp)) {
+function deleteJob(req, res) {
+    if (_.isUndefined(req.app.subsystems.cds)) {
         return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
     var match = {};
@@ -335,6 +325,7 @@ var deleteJob = function(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing or invalid required parameter.');
     }
 
+    var agenda = req.app.subsystems.cds.getAgenda();
     agenda.cancel(match, function(err, numRemoved) {
         if (!_.isEmpty(err)) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
@@ -344,6 +335,10 @@ var deleteJob = function(req, res) {
         }
         return res.status(rdk.httpstatus.ok).rdkSend(numRemoved);
     });
-};
+}
+
+
+module.exports.getJob = getJob;
+module.exports.postJob = postJob;
+module.exports.putJob = putJob;
 module.exports.deleteJob = deleteJob;
-module.exports.init = init;

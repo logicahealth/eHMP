@@ -1,9 +1,8 @@
-@F295_encounters_trend_view_admission  @reg1
+@F295_encounters_trend_view_admission @applet_encounters  @reg1
 Feature: F295 - Encounters Applet - Admission  
 
 Background:
-  
-  Given user searches for and selects "zzzretiredonenineteen,Patient "
+  Given user searches for and selects "Onehundredsixteen,Patient "
   Then Overview is active
   And the user has selected All within the global date picker
   And POB Encounters trend view has data rows

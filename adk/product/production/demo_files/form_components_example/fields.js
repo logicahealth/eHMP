@@ -224,7 +224,6 @@ define([
                 control: "select",
                 name: "bp-location-po",
                 label: "Location",
-                title: "Use up and down arrows to view options and then press enter to select",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
                 pickList: [{
@@ -241,7 +240,6 @@ define([
                 control: "select",
                 name: "bp-method-po",
                 label: "Method",
-                title: "Use up and down arrows to view options and then press enter to select",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
                 pickList: [{
@@ -257,7 +255,6 @@ define([
             }, {
                 control: "select",
                 label: "Cuff Size",
-                title: "Use up and down arrows to view options and then press enter to select",
                 name: "bp-cuff-size-po",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
@@ -274,7 +271,6 @@ define([
             }, {
                 control: "select",
                 label: "Position",
-                title: "Use up and down arrows to view options and then press enter to select",
                 name: "bp-position-po",
                 extraClasses: ["col-xs-6"],
                 disabled: true,
@@ -310,7 +306,6 @@ define([
                     items: [{
                         control: "select",
                         name: "select1",
-                        title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
                         label: "select",
                         pickList: optionsCollection,
                         groupEnabled: false
@@ -789,7 +784,6 @@ define([
         select: [{
             control: 'select',
             name: "selectError",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (with error message and filter)",
             pickList: timeZonesCollection1,
             showFilter: true,
@@ -797,13 +791,11 @@ define([
         }, {
             control: "select",
             name: "selectError",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (with error message)",
             pickList: optionsCollection,
         }, {
             control: "select",
             name: "select1",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select",
             pickList: optionsCollection,
             groupEnabled: false,
@@ -811,28 +803,24 @@ define([
         }, {
             control: "select",
             name: "select2",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (with extra classes)",
             pickList: optionsArray,
             extraClasses: ["class1", "class2"]
         }, {
             control: "select",
             name: "select3",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (disabled)",
             pickList: optionsArray,
             disabled: true
         }, {
             control: "select",
             name: "select4",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (required)",
             pickList: optionsArray,
             required: true
         }, {
             control: "select",
             name: "select5",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (list)",
             pickList: [{
                 label: "Option 1",
@@ -854,13 +842,11 @@ define([
         }, {
             control: "select",
             name: "select6",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (empty option)",
             pickList: []
         }, {
             control: "select",
             name: "select11",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select with sr-only",
             pickList: optionsCollection,
             srOnlyLabel: true
@@ -912,7 +898,6 @@ define([
         }, {
             control: "select",
             name: "select12",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (multiple)",
             pickList: optionsCollection,
             groupEnabled: false,
@@ -920,7 +905,6 @@ define([
         }, {
             control: "select",
             name: "select13",
-            title: "To view the option(s), use the up and down arrow keys, and then press enter to select an option.",
             label: "select (filter & array & fetch & multiple)",
             pickList: [],
             showFilter: true,
@@ -1744,7 +1728,7 @@ define([
                             author: {
                                 name: "USER,PANORAMA",
                                 duz: {
-                                    "9E7A": "10000000255"
+                                    "SITE": "10000000255"
                                 }
                             },
                             timeStamp: "12/12/2014 11:12PM"
@@ -1764,7 +1748,7 @@ define([
                             author: {
                                 name: "USER,PANORAMA",
                                 duz: {
-                                    "9E7A": "10000000255"
+                                    "SITE": "10000000255"
                                 }
                             },
                             timeStamp: "12/14/2014 11:15PM"
@@ -1773,7 +1757,7 @@ define([
                             author: {
                                 name: "USER,OTHER",
                                 duz: {
-                                    "9E7A": "10000000238"
+                                    "SITE": "10000000238"
                                 }
                             },
                             timeStamp: "12/13/2014 11:17PM"
@@ -1789,7 +1773,7 @@ define([
                             author: {
                                 name: "USER,OTHER",
                                 duz: {
-                                    "9E7A": "10000000238"
+                                    "SITE": "10000000238"
                                 }
                             },
                             timeStamp: "12/19/2014 11:11PM"
@@ -1821,7 +1805,7 @@ define([
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000255"
+                            "SITE": "10000000255"
                         }
                     },
                     timeStamp: "12/14/2014 11:15PM"
@@ -1830,7 +1814,7 @@ define([
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/13/2014 11:17PM"
@@ -1860,7 +1844,7 @@ define([
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000255"
+                            "SITE": "10000000255"
                         }
                     },
                     timeStamp: "12/14/2014 11:15PM"
@@ -1869,7 +1853,7 @@ define([
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/13/2014 11:17PM"
@@ -1897,7 +1881,7 @@ define([
                     author: {
                         name: "USER,PANORAMA",
                         duz: {
-                            "9E7A": "10000000255"
+                            "SITE": "10000000255"
                         }
                     },
                     timeStamp: "12/14/2014 11:15PM"
@@ -1906,7 +1890,7 @@ define([
                     author: {
                         name: "USER,OTHER",
                         duz: {
-                            "9E7A": "10000000238"
+                            "SITE": "10000000238"
                         }
                     },
                     timeStamp: "12/13/2014 11:17PM"

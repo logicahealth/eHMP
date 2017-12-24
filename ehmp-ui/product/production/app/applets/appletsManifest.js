@@ -1,5 +1,5 @@
 (function(root, factory) {
-    "use strict";
+    'use strict';
     if (typeof define === 'function' && define.amd) {
         // AMD format (for use in app/r.js)
         define(['main/ADK'], function(ADK) {
@@ -33,7 +33,7 @@
         showInUDWSelection: false,
         requiredByLayout: true,
         documentation: true
-    },{
+    }, {
         id: 'ui_components_demo',
         title: 'UI Components Demo',
         context: ['demo'],
@@ -41,8 +41,8 @@
         permissions: [],
         concatenate: false
     }, {
-        id: "patient_information",
-        title: "Patient Information",
+        id: 'patient_information',
+        title: 'Patient Information',
         permissions: [],
         requiredByLayout: ['patient'],
         showInUDWSelection: false
@@ -223,7 +223,8 @@
         title: 'Workspace Manager',
         context: ['patient'],
         permissions: [],
-        requiredByLayout: ['patient']
+        requiredByLayout: ['patient', 'staff'],
+        documentation: true
     }, {
         id: 'logon',
         title: 'Logon',
@@ -235,7 +236,8 @@
         title: 'Patient Selection',
         context: ['patient', 'staff'],
         permissions: ['read-patient-record'],
-        requiredByLayout: true
+        requiredByLayout: true,
+        documentation: true
     }, {
         id: 'discharge_summary',
         title: 'Discharge Summary',
@@ -257,8 +259,8 @@
         context: ['patient'],
         permissions: []
     }, {
-        id: "workspace_context_navigation",
-        title: "Workspace Context Navigation",
+        id: 'workspace_context_navigation',
+        title: 'Workspace Context Navigation',
         permissions: [],
         requiredByLayout: true,
         showInUDWSelection: false
@@ -269,15 +271,15 @@
         permissions: [],
         requiredByLayout: ['patient']
     }, {
-        id: "patient_sync_status",
-        title: "Patient Sync Status",
+        id: 'patient_sync_status',
+        title: 'Patient Sync Status',
         context: ['patient'],
         permissions: [],
         requiredByLayout: ['patient'],
         documentation: true
     }, {
-        id: "ssoLogon",
-        title: "Auto Signing In",
+        id: 'ssoLogon',
+        title: 'Auto Signing In',
         context: ['logon'],
         permissions: []
     }, {
@@ -294,8 +296,8 @@
         showInUDWSelection: true,
         permissions: ['read-user-permission-set', 'read-admin-screen']
     }, {
-        id: "task_forms",
-        title: "Task Forms",
+        id: 'task_forms',
+        title: 'Task Forms',
         context: ['patient'],
         permissions: []
     }, {
@@ -317,36 +319,65 @@
         context: ['patient'],
         showInUDWSelection: false,
         permissions: [],
-        requiredByLayout: ['patient']
+        requiredByLayout: ['patient'],
+        documentation: true
     }, {
-        id: "activities",
-        title: "Activities",
+        id: 'activities',
+        title: 'Activities',
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'activities-patient-full',
         permissions: ['read-task'],
         dependencies: ['task_forms']
     }, {
-        id: "tab_manager",
-        title: "Tab Manager",
+        id: 'tab_manager',
+        title: 'Tab Manager',
         context: ['patient', 'staff'],
         showInUDWSelection: false,
         permissions: []
     }, {
-        id: "consults",
-        title: "Consults",
+        id: 'consults',
+        title: 'Consults',
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'consults-patient-full',
         permissions: ['read-task'],
         dependencies: ['task_forms']
     }, {
-        id: "requests",
-        title: "Requests",
+        id: 'requests',
+        title: 'Requests',
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'requests-patient-full',
         permissions: ['read-task'],
+        dependencies: ['task_forms']
+    }, {
+        id: 'video_visits',
+        title: 'Video Visits - Next 90 Days',
+        context: ['patient'],
+        showInUDWSelection: true,
+        permissions: [],
+        documentation: true
+    }, {
+        id: 'permission_sets',
+        title: 'Permission Sets',
+        maximizeScreen: 'permission-sets-full',
+        context: ['admin'],
+        permissions: ['read-permission-sets'],
+        documentation: true
+    }, {
+        id: 'individual_permissions',
+        title: 'Individual Permissions',
+        context: ['admin'],
+        maximizeScreen: 'individual-permissions-full',
+        permissions: ['read-permission-sets'],
+        documentation: true
+    }, {
+        id: 'discharge_followup',
+        title: 'Inpatient Discharge Follow-Up',
+        context: ['staff'],
+        showInUDWSelection: true,
+        permissions: ['read-discharge-followup'],
         dependencies: ['task_forms']
     }];
 

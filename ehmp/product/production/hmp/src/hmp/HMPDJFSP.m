@@ -5,7 +5,7 @@ HMPDJFSP ;SLC/KCM.ASMR/RRB,CPC-PUT/POST for extract & freshness ;Jan 20, 2017 17
  Q  ; no entry at top
  ;
  ; 2017-01-12 AFS/CPC US18005 -  Add passthrough fields
- ;
+ ; 2017-04-27 CPC DE7967 - Reject duplicate sync request if still processing
  ;
  ; --- create a new patient subscription
  ;
@@ -75,21 +75,21 @@ PUTSUB(ARGS) ; return location after creating a new subscription
  ;cpc US11019 following chunk of code moved out of QUINIT as was being called multiple times
  ;US11019 get array of job ids by domain
  ; only done once when beginning the batch, no matter how many tasked jobs
- L +^XTMP(HMPBATCH):5 E  D SETERR^HMPDJFS("Cannot lock batch:"_HMPBATCH) QUIT
- I '$D(^XTMP(HMPBATCH)) D
- . D NEWXTMP^HMPDJFS(HMPBATCH,2,"HMP Patient Extract")
- . ;US11019 - store domain specific job ids
- . N EMPB S EMPB="jobDomainId-" ;US11019
- . F  S EMPB=$O(ARGS(EMPB)) Q:EMPB=""  Q:EMPB'["jobDomainId-"  S:'HMPSVERS HMPSVERS=1 S ^XTMP(HMPBATCH,"JOBID",$P(EMPB,"jobDomainId-",2))=ARGS(EMPB) ; US11019 3rd version
- . ;US18005 - store non-specific pass through variables
- . S EMPB="refInfo-"
- . F  S EMPB=$O(ARGS(EMPB)) Q:EMPB=""  Q:EMPB'["refInfo-"  S ^XTMP(HMPBATCH,"refInfo",$P(EMPB,"refInfo-",2))=ARGS(EMPB)
- . S ^XTMP(HMPBATCH,"HMPSVERS")=HMPSVERS ;US11019 store sync version
- . I $G(ARGS("jobId"))]"" S ^XTMP(HMPBATCH,"JOBID")=ARGS("jobId") ;US3907 /US11019 /US18005
- . I $G(ARGS("rootJobId"))]"" S ^XTMP(HMPBATCH,"ROOTJOBID")=ARGS("rootJobId"),^XTMP(HMPBATCH,"refInfo","rootJobId")=ARGS("rootJobId")  ;US3907/US18005
- . S ^XTMP(HMPBATCH,0,"time")=$H
- . ; US6734 - setting of syncStart for OPD only
- . I HMPFDFN="OPD" D SETMARK("Start",HMPFDFN,HMPBATCH),INIT^HMPMETA(HMPBATCH,HMPFDFN,.ARGS) ; US6734
+ L +^XTMP(HMPBATCH):5 E  D SETERR^HMPDJFS("Cannot lock batch:"_HMPBATCH) QUIT "" ;DE7967
+ I $D(^XTMP(HMPBATCH)) D SETERR^HMPDJFS("Duplicate sync request for - "_HMPBATCH) L -^XTMP(HMPBATCH) QUIT "" ;DE7967
+ D NEWXTMP^HMPDJFS(HMPBATCH,2,"HMP Patient Extract")
+ ;US11019 - store domain specific job ids
+ N EMPB S EMPB="jobDomainId-" ;US11019
+ F  S EMPB=$O(ARGS(EMPB)) Q:EMPB=""  Q:EMPB'["jobDomainId-"  S:'HMPSVERS HMPSVERS=1 S ^XTMP(HMPBATCH,"JOBID",$P(EMPB,"jobDomainId-",2))=ARGS(EMPB) ; US11019 3rd version
+ ;US18005 - store non-specific pass through variables
+ S EMPB="refInfo-"
+ F  S EMPB=$O(ARGS(EMPB)) Q:EMPB=""  Q:EMPB'["refInfo-"  S ^XTMP(HMPBATCH,"refInfo",$P(EMPB,"refInfo-",2))=ARGS(EMPB)
+ S ^XTMP(HMPBATCH,"HMPSVERS")=HMPSVERS ;US11019 store sync version
+ I $G(ARGS("jobId"))]"" S ^XTMP(HMPBATCH,"JOBID")=ARGS("jobId") ;US3907 /US11019 /US18005
+ I $G(ARGS("rootJobId"))]"" S ^XTMP(HMPBATCH,"ROOTJOBID")=ARGS("rootJobId"),^XTMP(HMPBATCH,"refInfo","rootJobId")=ARGS("rootJobId")  ;US3907/US18005
+ S ^XTMP(HMPBATCH,0,"time")=$H
+ ; US6734 - setting of syncStart for OPD only
+ I HMPFDFN="OPD" D SETMARK("Start",HMPFDFN,HMPBATCH),INIT^HMPMETA(HMPBATCH,HMPFDFN,.ARGS) ; US6734
  L -^XTMP(HMPBATCH)
  ;cpc US11019 end moved code
  ;US13442
@@ -118,6 +118,7 @@ QREJOIN  ; task And come back in from queue
  . I +HMPFDFN,$G(^XTMP("HMPFS~"_HMPSRV("ien"),"waiting")) S ^XTMP("HMPFS~"_HMPSRV("ien"),"waiting",HMPFDFN)="" QUIT
  . D UPDSTS(HMPFDFN,$P(HMPBATCH,"~",2),1) ;moved from background job to once in foreground 12/17/2015
  . I 'HMPSVERS N HMPFDOM M HMPFDOM=DOMAINS D QUINIT^HMPDJFSQ(HMPBATCH,HMPFDFN,.HMPFDOM) Q  ;US11019 Enable previous behavior
+ . S I="" F  S I=$O(DOMAINS(I)) Q:'I  S ^XTMP(HMPBATCH,0,"status",DOMAINS(I))=0 ;ensure all domains always initialised DE7604
  . S I="" F  S I=$O(DOMAINS(I)) Q:'I  D
  ..  N HMPFDOM
  ..  S HMPFDOM(1)=DOMAINS(I)
@@ -135,27 +136,12 @@ QREJOIN  ; task And come back in from queue
  ;===JD END===
  Q "/hmp/subscription/"_HMPSRV_"/patient/"_$$PID^HMPDJFS(HMPFDFN)
  ;
- ;
-QUINIT(HMPBATCH,HMPFDFN,HMPFDOM) ; Queue the initial extracts for a patient
- ; called by:
- ;   VERMATCH^HMPDJFSG
- ;   CVTSEL^HMPP3I
- ; calls:
- ;   QUINIT^HMPDJFSQ
- ;
- do QUINIT^HMPDJFSQ(HMPBATCH,HMPFDFN,.HMPFDOM)
- ;
- quit  ; end of QUINIT
- ;
- ;
 SETDOM(ATTRIB,DOMAIN,VALUE,HMPMETA) ; Set value for a domain ; cpc TA41760
  ; called by:
  ;   QUINIT^HMPDJFSQ
- ;   QUINIT^HMPMETA
  ;   DQINIT^HMPDJFSQ
  ;   DOMPT
  ;   MOD4STRM
- ; calls: none
  ; input:
  ;   ATTRIB: "status" or "count" attribute
  ;   VALUE:
@@ -167,12 +153,10 @@ SETDOM(ATTRIB,DOMAIN,VALUE,HMPMETA) ; Set value for a domain ; cpc TA41760
  S ^XTMP(HMPBATCH,0,ATTRIB,DOMAIN)=VALUE
  Q
  ;
- ;
 SETMARK(TYPE,HMPFDFN,HMPBATCH) ; Post markers for begin and end of initial synch
  ; called by:
  ;   PUTSUB
  ;   PUTSUB-QREJOIN
- ;   QUINIT^HMPMETA
  ;   DQINIT^HMPDJFSQ
  ; calls:
  ;   POST^HMPDJFS
@@ -186,17 +170,6 @@ SETMARK(TYPE,HMPFDFN,HMPBATCH) ; Post markers for begin and end of initial synch
  Q:TYPE="Start"!(TYPE="Meta")  ; US11019
  D SETTIDY("<done>",.NODES)
  Q
- ;
- ;
-DQINIT ; task Dequeue initial extracts
- ; called by: none
- ; calls:
- ;   DQINIT^HMPDJFSQ
- ;
- do DQINIT^HMPDJFSQ
- ;
- quit  ; end of DQINIT
- ;
  ;
 DOMPT(HMPFADOM) ; Load a patient domain
  ; called by:
@@ -221,45 +194,29 @@ DOMPT(HMPFADOM) ; Load a patient domain
  I ($G(@RSLT@("total"),0)>0)!($P(HMPCHNK,"#",2)=0) D CHNKFIN  ; *S68-JCH*
  Q
  ;
- ;
-DOMOPD(HMPFADOM) ; Load an operational domain in smaller batches
- ; called by: none
- ; calls:
- ;   DOMOPD^HMPDJFSQ
- ;
- D DOMOPD^HMPDJFSQ(HMPFADOM) Q
- ;
- ;
 CHNKCNT(DOMAIN) ; -- get patient object chunk count trigger                        *BEGIN*S68-JCH*
- ; called by:
- ;   DOMPT
- ; calls:
- ;   $$GET^XPAR
- ; input:
- ;   DOMAIN := current domain name being processed
+ ; called by: DOMPT
+ ; calls: $$GET^XPAR
+ ; input: DOMAIN := current domain name being processed
  ;
  Q $S(+$$GET^XPAR("PKG","HMP DOMAIN SIZES",$P($G(DOMAIN),"#"),"Q")>3000:500,1:1000)  ; *END*S68-JCH*
- ;
  ;
 CHNKINIT(HMP,HMPI) ; -- init chunk section callback  *BEGIN*S68-JCH*
  ; called by:
  ;   GET^HMPDJ
  ;   DQINIT^HMPDJFSQ
  ;   CHNKCHK
- ; calls: none
  ; input by ref:
  ;   HMP := $NA of location for chunk of objects
  ;   HMPI := number of objects in @HMP
  ;
  ; -- quit if not in chunking mode
  Q:'$D(HMPCHNK)
- ;
  S $P(HMPCHNK,"#",2)=$S(HMPCHNK["#":$P(HMPCHNK,"#",2)+1,1:0)
  S HMP=$NA(^XTMP(HMPBATCH,HMPFZTSK,HMPCHNK))
  K @HMP
  S HMPI=0
  Q  ; *END*S68-JCH*
- ;
  ;
 CHNKCHK(HMP,HMPI) ; -- check if chunk should be queued callback *BEGIN*S68-JCH*
  ; called by:
@@ -289,7 +246,6 @@ CHNKCHK(HMP,HMPI) ; -- check if chunk should be queued callback *BEGIN*S68-JCH*
  D CHNKINIT(.HMP,.HMPI)
  Q  ; *END*S68-JCH*
  ;
- ;
 CHNKFIN ; -- finish chunk section callback *BEGIN*S68-JCH*
  ; called by:
  ;   DOMPT
@@ -300,12 +256,10 @@ CHNKFIN ; -- finish chunk section callback *BEGIN*S68-JCH*
  ;
  ; -- quit if not in chunking mode
  Q:'$D(HMPCHNK)
- ;
  D MOD4STRM(HMPCHNK)
  ; -- domain#number, <no estimated do> , chunk trigger count for domain
  D POSTSEC(HMPCHNK,,HMPCHNK("trigger count"))
  Q  ; *END*S68-JCH*
- ;
  ;
 MOD4STRM(DOMAIN) ; modify extract to be ready for stream
  ; called by:
@@ -329,7 +283,6 @@ MOD4STRM(DOMAIN) ; modify extract to be ready for stream
  D SETDOM("count",DOMONLY,$G(^XTMP(HMPBATCH,0,"count",DOMONLY),0)+COUNT)
  Q
  ;
- ;
 POSTSEC(DOMAIN,ETOTAL,SECSIZE) ; post domain section to stream and set tidy nodes
  ; called by:
  ;   DOMOPD^HMPDJFSQ
@@ -349,12 +302,10 @@ POSTSEC(DOMAIN,ETOTAL,SECSIZE) ; post domain section to stream and set tidy node
  I $G(HMPQREF)'="" S @HMPQREF=$P($H,",",2) ;update heartbeat US13442
  Q
  ;
- ;
 SETTIDY(DOMAIN,NODES) ; Set tidy nodes for clean-up of the extracts in ^XTMP
  ; called by:
  ;   SETMARK
  ;   POSTSEC
- ; calls: none
  ; expects:
  ;   HMPBATCH,HMPFZTSK
  ;
@@ -367,48 +318,9 @@ SETTIDY(DOMAIN,NODES) ; Set tidy nodes for clean-up of the extracts in ^XTMP
  . S ^XTMP(STREAM,"tidy",SEQ,"task")=HMPFZTSK
  Q
  ;
- ;
-MVFRUPD(HMPBATCH,HMPFDFN) ; Move freshness updates over active stream
- ; called by: none
- ; calls:
- ;   MVFRUPD^HMPDJFSQ
- ;
- do MVFRUPD^HMPDJFSQ(HMPBATCH,HMPFDFN)
- ;
- quit  ; end of MVFRUPD
- ;
- ;
-BLDSERR(DFN,DOMAIN,ERRJSON) ; Create syncError object in ERRJSON
- ; called by: none
- ; calls:
- ;   DECODE^HMPJSON
- ;   ENCODE^HMPJSON
- ; expects:
- ;   HMPBATCH, HMPFSYS, HMPFZTSK
- ;
- N COUNT,ERRVAL,ERROBJ,ERR,ERRMSG,SYNCERR
- M ERRVAL=^XTMP(HMPBATCH,HMPFZTSK,DOMAIN,"error")
- I $G(ERRVAL)="" Q
- S ERRVAL="{"_ERRVAL_"}"
- D DECODE^HMPJSON("ERRVAL","ERROBJ","ERR")
- I $D(ERR) S $EC=",UJSON decode error,"
- K ^XTMP(HMPBATCH,HMPFZTSK,DOMAIN,"error")
- S ERRMSG=ERROBJ("error","message")
- Q:'$L(ERRMSG)
- S SYNCERR("uid")="urn:va:syncError:"_HMPFSYS_":"_DFN_":"_DOMAIN
- S SYNCERR("collection")=DOMAIN
- S SYNCERR("error")=ERRMSG
- D ENCODE^HMPJSON("SYNCERR","ERRJSON","ERR") I $D(ERR) S $EC=",UJSON encode error," Q
- S COUNT=$O(^TMP("HMPERR",$J,""),-1)+1
- M ^TMP("HMPERR",$J,COUNT)=ERRJSON
- Q
- ;
- ;
 POSTERR(COUNT,DFN) ; put error into ^XTMP(batch)
- ; called by:
- ;   DQINIT^HMPDJFSQ
- ; calls:
- ;   POST^HMPDJFS
+ ; called by: DQINIT^HMPDJFSQ
+ ; calls: POST^HMPDJFS
  ;
  N CNT,NODE,HMPSRV
  S HMPSRV=$P(HMPBATCH,"~",2)
@@ -419,21 +331,8 @@ POSTERR(COUNT,DFN) ; put error into ^XTMP(batch)
  D POST^HMPDJFS(DFN,"syncError","error:"_HMPFZTSK_":"_COUNT_":"_COUNT,"",HMPSRV)
  Q
  ;
- ;
-INITDONE(HMPBATCH) ; Return 1 if all domains are done
- ; called by:
- ;   DQINIT^HMPDJFSQ
- ; calls: none
- ;
- N X,DONE
- S X="",DONE=1
- F  S X=$O(^XTMP(HMPBATCH,0,"status",X)) Q:'$L(X)  I '^(X) S DONE=0
- Q DONE
- ;
- ;
 SETPAT(DFN,SRV,NEWSUB) ; Add patient to 800000 if not there
  ; called by:
- ;   EN^HMPMETA
  ;   PUTSUB
  ; calls:
  ;   SETERR^HMPDJFS
@@ -458,10 +357,8 @@ SETPAT(DFN,SRV,NEWSUB) ; Add patient to 800000 if not there
  L -^HMP(800000,IEN,1,DFN)
  Q
  ;
- ;
 UPDOPD(SRV,STS) ; Update status of operational synch
  ; called by:
- ;   UNSUB^HMPMETA
  ;   UPDSTS
  ;   SETPAT
  ; calls:
@@ -475,7 +372,6 @@ UPDOPD(SRV,STS) ; Update status of operational synch
  I $D(ERR) D SETERR^HMPDJFS("Error changing operational status")
  D CLEAN^DILF
  Q
- ;
  ;
 ADDPAT(DFN,SRV) ; Add a patient as subscribed for server
  ; called by:
@@ -496,7 +392,6 @@ ADDPAT(DFN,SRV) ; Add a patient as subscribed for server
  I $D(ERR) D SETERR^HMPDJFS("Error adding patient subscription")
  D CLEAN^DILF
  Q
- ;
  ;
 UPDSTS(DFN,SRVNM,STS) ; Update the sync status
  ; called by:

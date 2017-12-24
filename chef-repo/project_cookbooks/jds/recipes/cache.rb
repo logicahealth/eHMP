@@ -19,7 +19,7 @@ end
 execute "Change instance name of old cache" do
   command "ccontrol rename #{current_instance_name} cache#{current_cache_version}"
   action :nothing
-  not_if { current_instance_name == "cache#{current_cache_version}" || current_instance_name.empty?}
+  not_if { current_instance_name == "cache#{current_cache_version}" || current_instance_name.empty? }
 end
 
 # Create init script for cache instance
@@ -106,9 +106,9 @@ end
 
 execute "install cache tar" do
   cwd node[:jds][:installer_dir]
-  command "./cinstall_silent"
+  command "./cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}/cinstall_silent"
   environment cache_parameter
-  notifies :run, "execute[Change instance name of old cache]", :before 
+  notifies :run, "execute[Change instance name of old cache]", :before
   notifies :stop, "service[#{current_service_name}]", :before if !current_service_name.nil? && !current_service_name.empty?
   notifies :disable, "service[#{current_service_name}]", :before if !current_service_name.nil? && !current_service_name.empty?
   notifies :enable, "service[#{node[:jds][:service_name]}]", :before
@@ -117,9 +117,17 @@ execute "install cache tar" do
   not_if {`ccontrol qlist | grep #{node[:jds][:instance_name].upcase}^#{node[:jds][:cache_dir]}^#{node[:jds][:cache_install_version]}^`.include?(node[:jds][:instance_name].upcase)}
 end
 
+include_recipe "jds::zstop_ro"
+
 execute "update cpf config" do
   cwd node[:jds][:cache_dir]
   command "sed -i 's/WebServer=1/WebServer=0/' cache.cpf"
   notifies :restart, "service[#{node[:jds][:service_name]}]", :immediately
   only_if "grep \"WebServer=1\" #{node[:jds][:cache_dir]}/cache.cpf"
+end
+
+ruby_block 'set ecp default port based off super server port' do
+  block do
+    node.override[:jds][:ecp][:default_port] = `ccontrol list JDS |grep -Po '(?<=SuperServer port = )[0-9]+'`.chomp!
+  end
 end

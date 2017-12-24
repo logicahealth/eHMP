@@ -61,20 +61,16 @@ function removeAlreadySyncedVistaDirectSites(log, config, sites, patientIdentifi
                 return false;
             }
 
-            // We have to catch a special case where there may be a lastestJobTimestamp value - but that value represents the time stamp on the
-            // enterprise-sync-request job.   That job is the only up-stream job from a Vista Subscribe Request for a specific site.  So if the
-            // timestamps of the site and the enterprise request are the same - then we should assume that there are no other jobs related
-            // to this site in play - so we should keep the entry in the list to be synchronized.
-            //----------------------------------------------------------------------------------------------------------------------------------
-            if (siteStatus.latestJobTimestamp === simpleSyncStatus.latestEnterpriseSyncRequestTimestamp) {
+            // We have to catch a special case where we have requested a sync on a patient that has already been synchronized.  In this case
+            // there is an open job - which is the enterprise-sync-request job, but that should ony be considered a case to sync this patient
+            // if they have not already been synchronized on this site yet.   The best way to tell that will be to check the sourceStampTime.
+            // If this value is '', null, undefined, etc  (!sourceStampTime) then it means that JDS has never stored a meta-stamp for this
+            // patient yet.  Which would be the situation where this is the first request to sync this patient - therefore we should keep it
+            // in the list (Return false) If this value has a time, then it means that a meta-stamp has been stored for this patient for this
+            // site and therefore, this is a duplicate request - so we should skip it (Return true).
+            //--------------------------------------------------------------------------------------------------------------------------------
+            if (!siteStatus.sourceStampTime) {
                 return false;
-            }
-
-            // If the opposite case occurs - meaning that the values are not the same and that the one in there happened later than the
-            // enterprise-sync-request - then it means that there is a job in play for this site - and we should remove it from the list.
-            //-----------------------------------------------------------------------------------------------------------------------------
-            if (siteStatus.latestJobTimestamp > simpleSyncStatus.latestEnterpriseSyncRequestTimestamp) {
-                return true;
             }
 
             // If it is not any of the cases above - then it is a running sync and it should not be requested again.
@@ -202,39 +198,10 @@ function removeUnwantedSecondarySiteEntry(log, config, site, patientIdentifiers,
         if (siteSyncStatus.hasError) {
             keepInList = true;
 
-        // If  syncCompleted is false - We need to check some additional conditions to see
-        // what we should be doing on this.
-        //--------------------------------------------------------------------------------------
-        } else if (!siteSyncStatus.syncCompleted) {
-
-            // No jobs have been started related to this site - so that means we need to keep it in the list.
-            //-----------------------------------------------------------------------------------------------
-            if ((_.isString(siteSyncStatus.latestJobTimestamp)) && (_.isEmpty(siteSyncStatus.latestJobTimestamp))) {
-                keepInList = true;
-
-            // We have to catch a special case where there may be a lastestJobTimestamp value - but that value represents the time stamp on the
-            // enterprise-sync-request job.   That job is the only up-stream job from a Secondary Site Request for a specific site.  So if the
-            // timestamps of the site and the enterprise request are the same - then we should assume that there are no other jobs related
-            // to this site in play - so we should keep the entry in the list to be synchronized.
-            //----------------------------------------------------------------------------------------------------------------------------------
-            } else if (siteSyncStatus.latestJobTimestamp === simpleSyncStatus.latestEnterpriseSyncRequestTimestamp) {
-                keepInList = true;
-
-            // If the opposite case occurs - meaning that the values are not the same and that the one in there happened later than the
-            // enterprise-sync-request - then it means that there is a job in play for this site - and we should remove it from the list.
-            //-----------------------------------------------------------------------------------------------------------------------------
-            } else if (siteSyncStatus.latestJobTimestamp > simpleSyncStatus.latestEnterpriseSyncRequestTimestamp) {
-                keepInList = false;
-
-            // This is a situation that should never happen... The enterprise sunc request timesstamp is the earliest in time.  But if we got here
-            // then it implies that the dod stamptime was earlier than the enterprise sync request time stamp.  So we will remove it from the list.
-            //--------------------------------------------------------------------------------------------------------------------------------------
-            } else {
-                log.warn('expiration-rule.removeUnwantedSecondarySiteEntry: An invalid condition occurred where the enterprise-sync-request job time > the latest secondary site job time.' +
-                         '  This should not occur.   Going to leave secondary site sync in the list for safety. Site: %s, patientIdentifiers: %s; simpleSyncStatus: %s',
-                        site, inspect(patientIdentifiers), inspect(simpleSyncStatus));
-                keepInList = false;
-            }
+        // If  sourceStampTime is empty that means we have not synced this site - we need to sync
+        //---------------------------------------------------------------------------------------
+        } else if (_.isString(siteSyncStatus.sourceStampTime) && _.isEmpty(siteSyncStatus.sourceStampTime)) {
+            keepInList = true;
 
         // This means that there is no error, and sync was complete previuosly - so now lets
         // see if the data is stale.

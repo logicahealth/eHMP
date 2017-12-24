@@ -1,0 +1,909 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>148. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>148. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:27:52 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>148.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\cds\cds\product\tests\acceptance-tests\features</td> 
+     <td>F518_CDSIntegration.feature</td> 
+     <td>Thu Mar 16 15:17:48 2017 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\cds\cds\product\tests\acceptance-tests\features</td> 
+     <td>F518_CDSIntegration.feature</td> 
+     <td>Tue Oct 10 16:58:50 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>148.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">5</td> 
+     <td style="text-align: right;">272</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">4</td> 
+     <td style="text-align: right;">8</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>148.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>148.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>148.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@cds</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Feature:&nbsp;F</span> <span class="U2">518&nbsp;-&nbsp;Inte</span> <span class="U2">grate&nbsp;Clin</span> <span class="U2">ical&nbsp;Decis</span> <span class="U2">ion&nbsp;Suppor</span> <span class="U2">t&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8390_ht</span> <span class="U2">nrule&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Create&nbsp;pat</span> <span class="U2">ient&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;DELETE&nbsp;re</span> <span class="U2">quest&nbsp;to&nbsp;d</span> <span class="U2">elete&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;list</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;cdsj</span> <span class="U2">ob</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">create&nbsp;pat</span> <span class="U2">ient&nbsp;list&nbsp;</span> <span class="U2">with&nbsp;conte</span> <span class="U2">nt&nbsp;"{"name</span> <span class="U2">":"TestPat</span> <span class="U2">ientList",</span> <span class="U2">"definitio</span> <span class="U2">n":{"name"</span> <span class="U2">:"TestPati</span> <span class="U2">entList","</span> <span class="U2">descriptio</span> <span class="U2">n":"user&nbsp;d</span> <span class="U2">efined&nbsp;des</span> <span class="U2">cription&nbsp;o</span> <span class="U2">f&nbsp;this&nbsp;def</span> <span class="U2">inition&nbsp;te</span> <span class="U2">mplate","e</span> <span class="U2">xpression"</span> <span class="U2">:"{and:&nbsp;[&nbsp;</span> <span class="U2">{or:&nbsp;['A.A</span> <span class="U2">','B.B'],&nbsp;</span> <span class="U2">{'A.A'}&nbsp;]}</span> <span class="U2">","date":"</span> <span class="U2">2015-02-27</span> <span class="U2">T20:33:41.</span> <span class="U2">308Z","sco</span> <span class="U2">pe":"priva</span> <span class="U2">te","owner</span> <span class="U2">":"unknown</span> <span class="U2">"}}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed&nbsp;for&nbsp;cre</span> <span class="U2">ated</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;id&nbsp;is</span> <span class="U2">&nbsp;returned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;adds&nbsp;a&nbsp;</span> <span class="U2">patient&nbsp;in</span> <span class="U2">&nbsp;the&nbsp;patie</span> <span class="U2">nt&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">13</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cd</span> <span class="U2">sjob&nbsp;is&nbsp;sc</span> <span class="U2">heduled&nbsp;fo</span> <span class="U2">r&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;with&nbsp;</span> <span class="U2">content&nbsp;"{</span> <span class="U2">"descripti</span> <span class="U2">on":"A&nbsp;Tes</span> <span class="U2">t&nbsp;job&nbsp;from</span> <span class="U2">&nbsp;the&nbsp;unit&nbsp;</span> <span class="U2">tests","di</span> <span class="U2">sabled":fa</span> <span class="U2">lse,"execu</span> <span class="U2">tion":{"ba</span> <span class="U2">seContext"</span> <span class="U2">:{"locatio</span> <span class="U2">n":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Loca</span> <span class="U2">tion","id"</span> <span class="U2">:null,"nam</span> <span class="U2">e":null,"t</span> <span class="U2">ype":null}</span> <span class="U2">,"specialt</span> <span class="U2">y":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Spec</span> <span class="U2">ialty","id</span> <span class="U2">":null,"na</span> <span class="U2">me":null,"</span> <span class="U2">type":null</span> <span class="U2">},"subject</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":null</span> <span class="U2">,"entityTy</span> <span class="U2">pe":"Subje</span> <span class="U2">ct","id":n</span> <span class="U2">ull,"name"</span> <span class="U2">:null,"typ</span> <span class="U2">e":null},"</span> <span class="U2">user":{"co</span> <span class="U2">deSystem":</span> <span class="U2">"VA:DUZ","</span> <span class="U2">entityType</span> <span class="U2">":"User","</span> <span class="U2">id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}},"jo</span> <span class="U2">bId":null,</span> <span class="U2">"subjectId</span> <span class="U2">s":null,"s</span> <span class="U2">ubjectList</span> <span class="U2">References</span> <span class="U2">":[{"id":"</span> <span class="U2">TestPatien</span> <span class="U2">tList","ty</span> <span class="U2">pe":"Patie</span> <span class="U2">nt"}],"tar</span> <span class="U2">get":{"int</span> <span class="U2">entsSet":[</span> <span class="U2">"HTN"],"mo</span> <span class="U2">de":"Norma</span> <span class="U2">l","percei</span> <span class="U2">vedExecuti</span> <span class="U2">onTime":nu</span> <span class="U2">ll,"supple</span> <span class="U2">mentalMapp</span> <span class="U2">ings":null</span> <span class="U2">,"type":"B</span> <span class="U2">ackground"</span> <span class="U2">}},"lastRu</span> <span class="U2">n":1429161</span> <span class="U2">765119,"na</span> <span class="U2">me":"TestC</span> <span class="U2">DSJob","ow</span> <span class="U2">ner":{"cod</span> <span class="U2">eSystem":"</span> <span class="U2">VA:DUZ","e</span> <span class="U2">ntityType"</span> <span class="U2">:"User","i</span> <span class="U2">d":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}}"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;a</span> <span class="U2">&nbsp;Hypertens</span> <span class="U2">ion&nbsp;rule&nbsp;i</span> <span class="U2">s&nbsp;ran&nbsp;for&nbsp;</span> <span class="U2">patient&nbsp;li</span> <span class="U2">st</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;workprodu</span> <span class="U2">ct&nbsp;is&nbsp;crea</span> <span class="U2">ted&nbsp;for&nbsp;Hy</span> <span class="U2">pertension</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;database&nbsp;</span> <span class="U2">delete&nbsp;res</span> <span class="U2">ponse&nbsp;is&nbsp;r</span> <span class="U2">eturned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8390_pa</span> <span class="U2">tientlist_</span> <span class="U2">CRUD&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">22</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;pati</span> <span class="U2">ent&nbsp;list&nbsp;(</span> <span class="U2">note:&nbsp;base</span> <span class="U2">d&nbsp;on&nbsp;the&nbsp;d</span> <span class="U2">ocument,&nbsp;n</span> <span class="U2">o&nbsp;PUT&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;upd</span> <span class="U2">ate&nbsp;patien</span> <span class="U2">t&nbsp;list)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;DELETE&nbsp;re</span> <span class="U2">quest&nbsp;to&nbsp;d</span> <span class="U2">elete&nbsp;a&nbsp;pa</span> <span class="U2">tient&nbsp;list</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">create&nbsp;pat</span> <span class="U2">ient&nbsp;list&nbsp;</span> <span class="U2">with&nbsp;conte</span> <span class="U2">nt&nbsp;"{"name</span> <span class="U2">":"TestPat</span> <span class="U2">ientList",</span> <span class="U2">"definitio</span> <span class="U2">n":{"name"</span> <span class="U2">:"Testlist</span> <span class="U2">1","descri</span> <span class="U2">ption":"us</span> <span class="U2">er&nbsp;defined</span> <span class="U2">&nbsp;descripti</span> <span class="U2">on&nbsp;of&nbsp;this</span> <span class="U2">&nbsp;definitio</span> <span class="U2">n&nbsp;template</span> <span class="U2">","express</span> <span class="U2">ion":"{and</span> <span class="U2">:&nbsp;[&nbsp;{or:&nbsp;[</span> <span class="U2">'A.A','B.B</span> <span class="U2">'],&nbsp;{'A.A'</span> <span class="U2">}&nbsp;]}","dat</span> <span class="U2">e":"2015-0</span> <span class="U2">2-27T20:33</span> <span class="U2">:41.308Z",</span> <span class="U2">"scope":"p</span> <span class="U2">rivate","o</span> <span class="U2">wner":"unk</span> <span class="U2">nown"}}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed&nbsp;for&nbsp;cre</span> <span class="U2">ated</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;id&nbsp;is</span> <span class="U2">&nbsp;returned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;G</span> <span class="U2">ET&nbsp;request</span> <span class="U2">&nbsp;for&nbsp;a&nbsp;cre</span> <span class="U2">ated&nbsp;patie</span> <span class="U2">nt&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;PUT&nbsp;reque</span> <span class="U2">st&nbsp;to&nbsp;upda</span> <span class="U2">te&nbsp;patient</span> <span class="U2">&nbsp;list&nbsp;with</span> <span class="U2">&nbsp;content&nbsp;"</span> <span class="U2">{"name":"T</span> <span class="U2">estPatient</span> <span class="U2">List","def</span> <span class="U2">inition":{</span> <span class="U2">"name":"Te</span> <span class="U2">stlistupda</span> <span class="U2">ted","desc</span> <span class="U2">ription":"</span> <span class="U2">This&nbsp;is&nbsp;up</span> <span class="U2">dated&nbsp;list</span> <span class="U2">","express</span> <span class="U2">ion":"{and</span> <span class="U2">:&nbsp;[&nbsp;{or:&nbsp;[</span> <span class="U2">'A.A','B.B</span> <span class="U2">'],&nbsp;{'A.A'</span> <span class="U2">}&nbsp;]}","dat</span> <span class="U2">e":"2015-0</span> <span class="U2">2-27T20:33</span> <span class="U2">:41.308Z",</span> <span class="U2">"scope":"p</span> <span class="U2">rivate","o</span> <span class="U2">wner":"unk</span> <span class="U2">nown"}}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">a&nbsp;successf</span> <span class="U2">ul&nbsp;respons</span> <span class="U2">e&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;database&nbsp;</span> <span class="U2">delete&nbsp;res</span> <span class="U2">ponse&nbsp;is&nbsp;r</span> <span class="U2">eturned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8390_wo</span> <span class="U2">rkproducts</span> <span class="U2">_CRUD&nbsp;@US8</span> <span class="U2">161&nbsp;@futur</span> <span class="U2">e</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;work</span> <span class="U2">&nbsp;products&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;request&nbsp;t</span> <span class="U2">o&nbsp;create&nbsp;a</span> <span class="U2">&nbsp;work&nbsp;prod</span> <span class="U2">uct&nbsp;with&nbsp;c</span> <span class="U2">ontent&nbsp;"{"</span> <span class="U2">categories</span> <span class="U2">":[4191920</span> <span class="U2">03],"conte</span> <span class="U2">xt":{"loca</span> <span class="U2">tion":{"co</span> <span class="U2">deSystem":</span> <span class="U2">"VA:Locati</span> <span class="U2">on","entit</span> <span class="U2">yType":"Lo</span> <span class="U2">cation","i</span> <span class="U2">d":"2883",</span> <span class="U2">"name":"Cl</span> <span class="U2">inicOne","</span> <span class="U2">type":"Cli</span> <span class="U2">nicName"},</span> <span class="U2">"specialty</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":"VA:</span> <span class="U2">Specialty"</span> <span class="U2">,"entityTy</span> <span class="U2">pe":"Speci</span> <span class="U2">alty","id"</span> <span class="U2">:"FM","nam</span> <span class="U2">e":"Family</span> <span class="U2">&nbsp;Medicine"</span> <span class="U2">,"type":"S</span> <span class="U2">peciality"</span> <span class="U2">},"subject</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":"VA:</span> <span class="U2">UniversalI</span> <span class="U2">d","entity</span> <span class="U2">Type":"Sub</span> <span class="U2">ject","id"</span> <span class="U2">:"50000003</span> <span class="U2">17V387446"</span> <span class="U2">,"name":nu</span> <span class="U2">ll,"type":</span> <span class="U2">"Patient"}</span> <span class="U2">,"user":{"</span> <span class="U2">codeSystem</span> <span class="U2">":"VA:Prov</span> <span class="U2">ider","ent</span> <span class="U2">ityType":"</span> <span class="U2">User","id"</span> <span class="U2">:"unitTest</span> <span class="U2">UserId","n</span> <span class="U2">ame":"TEST</span> <span class="U2">,USER","ty</span> <span class="U2">pe":"Provi</span> <span class="U2">der"}},"du</span> <span class="U2">plicateChe</span> <span class="U2">ckKey":{"c</span> <span class="U2">heckSum":"</span> <span class="U2">","subject</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":"VA:</span> <span class="U2">UniversalI</span> <span class="U2">d","entity</span> <span class="U2">Type":"Sub</span> <span class="U2">ject","id"</span> <span class="U2">:"50000003</span> <span class="U2">17V387446"</span> <span class="U2">,"name":nu</span> <span class="U2">ll,"type":</span> <span class="U2">"Patient"}</span> <span class="U2">,"type":"a</span> <span class="U2">dvice"},"e</span> <span class="U2">xpirationD</span> <span class="U2">ate":14439</span> <span class="U2">89700000,"</span> <span class="U2">generation</span> <span class="U2">Date":1443</span> <span class="U2">903300000,</span> <span class="U2">"id":"2929</span> <span class="U2">289789573"</span> <span class="U2">,"invocati</span> <span class="U2">onInfo":{"</span> <span class="U2">callId":"U</span> <span class="U2">UID&nbsp;of&nbsp;Cal</span> <span class="U2">lId","gene</span> <span class="U2">ratedBy":"</span> <span class="U2">UnitTestRu</span> <span class="U2">lesEngine"</span> <span class="U2">,"targetIn</span> <span class="U2">fo":{"inte</span> <span class="U2">ntsSet":["</span> <span class="U2">Invocation</span> <span class="U2">IntentA"],</span> <span class="U2">"mode":"No</span> <span class="U2">rmal","per</span> <span class="U2">ceivedExec</span> <span class="U2">utionTime"</span> <span class="U2">:null,"sup</span> <span class="U2">plementalM</span> <span class="U2">appings":n</span> <span class="U2">ull,"type"</span> <span class="U2">:"Backgrou</span> <span class="U2">nd"}},"pay</span> <span class="U2">load":[{"d</span> <span class="U2">ata":{"det</span> <span class="U2">ails":{"de</span> <span class="U2">tail":"Thi</span> <span class="U2">s&nbsp;is&nbsp;the&nbsp;B</span> <span class="U2">ody","prov</span> <span class="U2">enance":"T</span> <span class="U2">est&nbsp;Data"}</span> <span class="U2">,"doneDate</span> <span class="U2">":null,"du</span> <span class="U2">eDate":144</span> <span class="U2">3989700000</span> <span class="U2">,"generate</span> <span class="U2">dBy":"Gene</span> <span class="U2">ratedBYUni</span> <span class="U2">tTest","id</span> <span class="U2">":null,"pi</span> <span class="U2">d":"500000</span> <span class="U2">0317V38744</span> <span class="U2">6","priori</span> <span class="U2">ty":50,"pr</span> <span class="U2">ovider":"P</span> <span class="U2">roviderId"</span> <span class="U2">,"title":"</span> <span class="U2">A&nbsp;Test&nbsp;Res</span> <span class="U2">ult","type</span> <span class="U2">":"advice"</span> <span class="U2">},"type":"</span> <span class="U2">advice"}],</span> <span class="U2">"priority"</span> <span class="U2">:0,"type":</span> <span class="U2">"advice"}"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;Then&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;w</span> <span class="U2">ork&nbsp;produc</span> <span class="U2">t&nbsp;id&nbsp;is&nbsp;re</span> <span class="U2">turned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;use</span> <span class="U2">r&nbsp;sends&nbsp;GE</span> <span class="U2">T&nbsp;request&nbsp;</span> <span class="U2">for&nbsp;a&nbsp;crea</span> <span class="U2">ted&nbsp;work&nbsp;p</span> <span class="U2">roduct</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;s</span> <span class="U2">uccessful&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;returned</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;use</span> <span class="U2">r&nbsp;sends&nbsp;PU</span> <span class="U2">T&nbsp;request&nbsp;</span> <span class="U2">to&nbsp;update&nbsp;</span> <span class="U2">a&nbsp;work&nbsp;pro</span> <span class="U2">duct&nbsp;with&nbsp;</span> <span class="U2">content&nbsp;"{</span> <span class="U2">"categorie</span> <span class="U2">s":[419192</span> <span class="U2">003],"cont</span> <span class="U2">ext":{"loc</span> <span class="U2">ation":{"c</span> <span class="U2">odeSystem"</span> <span class="U2">:"VA:Locat</span> <span class="U2">ion","enti</span> <span class="U2">tyType":"L</span> <span class="U2">ocation","</span> <span class="U2">id":"2883"</span> <span class="U2">,"name":"C</span> <span class="U2">linicOne",</span> <span class="U2">"type":"Cl</span> <span class="U2">inicName"}</span> <span class="U2">,"specialt</span> <span class="U2">y":{"codeS</span> <span class="U2">ystem":"VA</span> <span class="U2">:Specialty</span> <span class="U2">","entityT</span> <span class="U2">ype":"Spec</span> <span class="U2">ialty","id</span> <span class="U2">":"FM","na</span> <span class="U2">me":"Famil</span> <span class="U2">y&nbsp;Medicine</span> <span class="U2">","type":"</span> <span class="U2">Speciality</span> <span class="U2">"},"subjec</span> <span class="U2">t":{"codeS</span> <span class="U2">ystem":"VA</span> <span class="U2">:Universal</span> <span class="U2">Id","entit</span> <span class="U2">yType":"Su</span> <span class="U2">bject","id</span> <span class="U2">":"5000000</span> <span class="U2">317V387446</span> <span class="U2">","name":n</span> <span class="U2">ull,"type"</span> <span class="U2">:"Patient"</span> <span class="U2">},"user":{</span> <span class="U2">"codeSyste</span> <span class="U2">m":"VA:Pro</span> <span class="U2">vider","en</span> <span class="U2">tityType":</span> <span class="U2">"User","id</span> <span class="U2">":"unitTes</span> <span class="U2">tUserId","</span> <span class="U2">name":"TES</span> <span class="U2">T,USER","t</span> <span class="U2">ype":"Prov</span> <span class="U2">ider"}},"d</span> <span class="U2">uplicateCh</span> <span class="U2">eckKey":{"</span> <span class="U2">checkSum":</span> <span class="U2">"","subjec</span> <span class="U2">t":{"codeS</span> <span class="U2">ystem":"VA</span> <span class="U2">:Universal</span> <span class="U2">Id","entit</span> <span class="U2">yType":"Su</span> <span class="U2">bject","id</span> <span class="U2">":"5000000</span> <span class="U2">317V387446</span> <span class="U2">","name":n</span> <span class="U2">ull,"type"</span> <span class="U2">:"Patient"</span> <span class="U2">},"type":"</span> <span class="U2">advice"},"</span> <span class="U2">expiration</span> <span class="U2">Date":1443</span> <span class="U2">989700000,</span> <span class="U2">"generatio</span> <span class="U2">nDate":144</span> <span class="U2">3903300000</span> <span class="U2">,"id":"292</span> <span class="U2">9289789573</span> <span class="U2">","invocat</span> <span class="U2">ionInfo":{</span> <span class="U2">"callId":"</span> <span class="U2">UUID&nbsp;of&nbsp;Ca</span> <span class="U2">llId","gen</span> <span class="U2">eratedBy":</span> <span class="U2">"UnitTestR</span> <span class="U2">ulesEngine</span> <span class="U2">","targetI</span> <span class="U2">nfo":{"int</span> <span class="U2">entsSet":[</span> <span class="U2">"Invocatio</span> <span class="U2">nIntentA"]</span> <span class="U2">,"mode":"N</span> <span class="U2">ormal","pe</span> <span class="U2">rceivedExe</span> <span class="U2">cutionTime</span> <span class="U2">":null,"su</span> <span class="U2">pplemental</span> <span class="U2">Mappings":</span> <span class="U2">null,"type</span> <span class="U2">":"Backgro</span> <span class="U2">und"}},"pa</span> <span class="U2">yload":[{"</span> <span class="U2">data":{"de</span> <span class="U2">tails":{"d</span> <span class="U2">etail":"Th</span> <span class="U2">is&nbsp;is&nbsp;the&nbsp;</span> <span class="U2">Body","pro</span> <span class="U2">venance":"</span> <span class="U2">Test&nbsp;Data"</span> <span class="U2">},"doneDat</span> <span class="U2">e":null,"d</span> <span class="U2">ueDate":14</span> <span class="U2">4398970000</span> <span class="U2">0,"generat</span> <span class="U2">edBy":"Gen</span> <span class="U2">eratedBYUn</span> <span class="U2">itTest","i</span> <span class="U2">d":null,"p</span> <span class="U2">id":"50000</span> <span class="U2">00317V3874</span> <span class="U2">46","prior</span> <span class="U2">ity":50,"p</span> <span class="U2">rovider":"</span> <span class="U2">ProviderId</span> <span class="U2">","title":</span> <span class="U2">"A&nbsp;Test&nbsp;Re</span> <span class="U2">sult&nbsp;updat</span> <span class="U2">ed","type"</span> <span class="U2">:"advice"}</span> <span class="U2">,"type":"a</span> <span class="U2">dvice"}],"</span> <span class="U2">priority":</span> <span class="U2">0,"type":"</span> <span class="U2">advice"}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;s</span> <span class="U2">uccessful&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;returned</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;Then&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;work</span> <span class="U2">&nbsp;product</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;s</span> <span class="U2">uccessful&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;returned</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8161_su</span> <span class="U2">bscription</span> <span class="U2">s&nbsp;@future</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Get,&nbsp;updat</span> <span class="U2">e&nbsp;and&nbsp;dele</span> <span class="U2">te&nbsp;subscri</span> <span class="U2">ption</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">subscripti</span> <span class="U2">ons&nbsp;are&nbsp;av</span> <span class="U2">ailable&nbsp;fo</span> <span class="U2">&nbsp;the&nbsp;user</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;G</span> <span class="U2">ET&nbsp;request</span> <span class="U2">&nbsp;for&nbsp;subsc</span> <span class="U2">riptions</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;P</span> <span class="U2">UT&nbsp;request</span> <span class="U2">&nbsp;to&nbsp;update</span> <span class="U2">&nbsp;subscript</span> <span class="U2">ions&nbsp;with&nbsp;</span> <span class="U2">content&nbsp;"{</span> <span class="U2">"specialty</span> <span class="U2">":[4084390</span> <span class="U2">02,4084780</span> <span class="U2">03,3945820</span> <span class="U2">07],"prior</span> <span class="U2">ity":"URG"</span> <span class="U2">,"type":["</span> <span class="U2">P"]}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;u</span> <span class="U2">ser&nbsp;sends&nbsp;</span> <span class="U2">DELETE&nbsp;req</span> <span class="U2">uest&nbsp;to&nbsp;de</span> <span class="U2">lete&nbsp;the&nbsp;s</span> <span class="U2">ubscriptio</span> <span class="U2">n</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8360_cd</span> <span class="U2">sjob_CRUD</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;cds&nbsp;</span> <span class="U2">job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;DELETE&nbsp;re</span> <span class="U2">quest&nbsp;to&nbsp;d</span> <span class="U2">elete&nbsp;a&nbsp;cd</span> <span class="U2">sjob</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">create&nbsp;pat</span> <span class="U2">ient&nbsp;list&nbsp;</span> <span class="U2">with&nbsp;conte</span> <span class="U2">nt&nbsp;"{"name</span> <span class="U2">":"TestPat</span> <span class="U2">ientList",</span> <span class="U2">"definitio</span> <span class="U2">n":{"name"</span> <span class="U2">:"CDSJobLi</span> <span class="U2">st","descr</span> <span class="U2">iption":"u</span> <span class="U2">ser&nbsp;define</span> <span class="U2">d&nbsp;descript</span> <span class="U2">ion&nbsp;of&nbsp;thi</span> <span class="U2">s&nbsp;definiti</span> <span class="U2">on&nbsp;templat</span> <span class="U2">e","expres</span> <span class="U2">sion":"{an</span> <span class="U2">d:&nbsp;[&nbsp;{or:&nbsp;</span> <span class="U2">['A.A','B.</span> <span class="U2">B'],&nbsp;{'A.A</span> <span class="U2">'}&nbsp;]}","da</span> <span class="U2">te":"2015-</span> <span class="U2">02-27T20:3</span> <span class="U2">3:41.308Z"</span> <span class="U2">,"scope":"</span> <span class="U2">private","</span> <span class="U2">owner":"un</span> <span class="U2">known"}}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed&nbsp;for&nbsp;cre</span> <span class="U2">ated</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;id&nbsp;is</span> <span class="U2">&nbsp;returned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;adds&nbsp;a&nbsp;</span> <span class="U2">patient&nbsp;in</span> <span class="U2">&nbsp;the&nbsp;patie</span> <span class="U2">nt&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">65</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cd</span> <span class="U2">sjob&nbsp;is&nbsp;sc</span> <span class="U2">heduled&nbsp;fo</span> <span class="U2">r&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;with&nbsp;</span> <span class="U2">content&nbsp;"{</span> <span class="U2">"descripti</span> <span class="U2">on":"A&nbsp;Tes</span> <span class="U2">t&nbsp;job&nbsp;from</span> <span class="U2">&nbsp;the&nbsp;unit&nbsp;</span> <span class="U2">tests","di</span> <span class="U2">sabled":fa</span> <span class="U2">lse,"execu</span> <span class="U2">tion":{"ba</span> <span class="U2">seContext"</span> <span class="U2">:{"locatio</span> <span class="U2">n":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Loca</span> <span class="U2">tion","id"</span> <span class="U2">:null,"nam</span> <span class="U2">e":null,"t</span> <span class="U2">ype":null}</span> <span class="U2">,"specialt</span> <span class="U2">y":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Spec</span> <span class="U2">ialty","id</span> <span class="U2">":null,"na</span> <span class="U2">me":null,"</span> <span class="U2">type":null</span> <span class="U2">},"subject</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":null</span> <span class="U2">,"entityTy</span> <span class="U2">pe":"Subje</span> <span class="U2">ct","id":n</span> <span class="U2">ull,"name"</span> <span class="U2">:null,"typ</span> <span class="U2">e":null},"</span> <span class="U2">user":{"co</span> <span class="U2">deSystem":</span> <span class="U2">"VA:DUZ","</span> <span class="U2">entityType</span> <span class="U2">":"User","</span> <span class="U2">id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}},"jo</span> <span class="U2">bId":null,</span> <span class="U2">"subjectId</span> <span class="U2">s":null,"s</span> <span class="U2">ubjectList</span> <span class="U2">References</span> <span class="U2">":[{"id":"</span> <span class="U2">CDSJobList</span> <span class="U2">","type":"</span> <span class="U2">Patient"}]</span> <span class="U2">,"target":</span> <span class="U2">{"intentsS</span> <span class="U2">et":["HTN"</span> <span class="U2">],"mode":"</span> <span class="U2">Normal","p</span> <span class="U2">erceivedEx</span> <span class="U2">ecutionTim</span> <span class="U2">e":null,"s</span> <span class="U2">upplementa</span> <span class="U2">lMappings"</span> <span class="U2">:null,"typ</span> <span class="U2">e":"Backgr</span> <span class="U2">ound"}},"l</span> <span class="U2">astRun":14</span> <span class="U2">2916176511</span> <span class="U2">9,"name":"</span> <span class="U2">TestCDSJob</span> <span class="U2">","owner":</span> <span class="U2">{"codeSyst</span> <span class="U2">em":"VA:DU</span> <span class="U2">Z","entity</span> <span class="U2">Type":"Use</span> <span class="U2">r","id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}}"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">cdsjob&nbsp;id&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;GET&nbsp;reque</span> <span class="U2">st&nbsp;for&nbsp;a&nbsp;c</span> <span class="U2">reated&nbsp;cds</span> <span class="U2">job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">a&nbsp;successf</span> <span class="U2">ul&nbsp;respons</span> <span class="U2">e&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">70</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">And&nbsp;user&nbsp;s</span> <span class="U2">ends&nbsp;PUT&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">update&nbsp;a&nbsp;c</span> <span class="U2">dsjob&nbsp;with</span> <span class="U2">&nbsp;content&nbsp;"</span> <span class="U2">{"descript</span> <span class="U2">ion":"A&nbsp;Te</span> <span class="U2">st&nbsp;job&nbsp;fro</span> <span class="U2">m&nbsp;the&nbsp;unit</span> <span class="U2">&nbsp;tests&nbsp;is&nbsp;</span> <span class="U2">updated","</span> <span class="U2">disabled":</span> <span class="U2">false,"exe</span> <span class="U2">cution":{"</span> <span class="U2">baseContex</span> <span class="U2">t":{"locat</span> <span class="U2">ion":{"cod</span> <span class="U2">eSystem":n</span> <span class="U2">ull,"entit</span> <span class="U2">yType":"Lo</span> <span class="U2">cation","i</span> <span class="U2">d":null,"n</span> <span class="U2">ame":null,</span> <span class="U2">"type":nul</span> <span class="U2">l},"specia</span> <span class="U2">lty":{"cod</span> <span class="U2">eSystem":n</span> <span class="U2">ull,"entit</span> <span class="U2">yType":"Sp</span> <span class="U2">ecialty","</span> <span class="U2">id":null,"</span> <span class="U2">name":null</span> <span class="U2">,"type":nu</span> <span class="U2">ll},"subje</span> <span class="U2">ct":{"code</span> <span class="U2">System":nu</span> <span class="U2">ll,"entity</span> <span class="U2">Type":"Sub</span> <span class="U2">ject","id"</span> <span class="U2">:null,"nam</span> <span class="U2">e":null,"t</span> <span class="U2">ype":null}</span> <span class="U2">,"user":{"</span> <span class="U2">codeSystem</span> <span class="U2">":"VA:DUZ"</span> <span class="U2">,"entityTy</span> <span class="U2">pe":"User"</span> <span class="U2">,"id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}},"jo</span> <span class="U2">bId":null,</span> <span class="U2">"subjectId</span> <span class="U2">s":null,"s</span> <span class="U2">ubjectList</span> <span class="U2">References</span> <span class="U2">":[{"id":"</span> <span class="U2">CDSJobList</span> <span class="U2">","type":"</span> <span class="U2">Patient"}]</span> <span class="U2">,"target":</span> <span class="U2">{"intentsS</span> <span class="U2">et":["HTN"</span> <span class="U2">],"mode":"</span> <span class="U2">Normal","p</span> <span class="U2">erceivedEx</span> <span class="U2">ecutionTim</span> <span class="U2">e":null,"s</span> <span class="U2">upplementa</span> <span class="U2">lMappings"</span> <span class="U2">:null,"typ</span> <span class="U2">e":"Backgr</span> <span class="U2">ound"}},"l</span> <span class="U2">astRun":14</span> <span class="U2">2916176511</span> <span class="U2">9,"name":"</span> <span class="U2">TestCDSJob</span> <span class="U2">","owner":</span> <span class="U2">{"codeSyst</span> <span class="U2">em":"VA:DU</span> <span class="U2">Z","entity</span> <span class="U2">Type":"Use</span> <span class="U2">r","id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}}"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;cdsj</span> <span class="U2">ob</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">a&nbsp;successf</span> <span class="U2">ul&nbsp;respons</span> <span class="U2">e&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;database&nbsp;</span> <span class="U2">delete&nbsp;res</span> <span class="U2">ponse&nbsp;is&nbsp;r</span> <span class="U2">eturned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">77</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8360_sc</span> <span class="U2">hedulejob_</span> <span class="U2">CRUD&nbsp;&nbsp;@fut</span> <span class="U2">ure&nbsp;@US168</span> <span class="U2">19</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">78</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;sche</span> <span class="U2">dule&nbsp;job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;DELETE&nbsp;re</span> <span class="U2">quest&nbsp;to&nbsp;d</span> <span class="U2">elete&nbsp;a&nbsp;sc</span> <span class="U2">heduled&nbsp;jo</span> <span class="U2">b</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">80</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;cdsj</span> <span class="U2">ob</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">create&nbsp;pat</span> <span class="U2">ient&nbsp;list&nbsp;</span> <span class="U2">with&nbsp;conte</span> <span class="U2">nt&nbsp;"{"name</span> <span class="U2">":"TestPat</span> <span class="U2">ientList",</span> <span class="U2">"definitio</span> <span class="U2">n":{"name"</span> <span class="U2">:"Schedule</span> <span class="U2">Test","des</span> <span class="U2">cription":</span> <span class="U2">"user&nbsp;defi</span> <span class="U2">ned&nbsp;descri</span> <span class="U2">ption&nbsp;of&nbsp;t</span> <span class="U2">his&nbsp;defini</span> <span class="U2">tion&nbsp;templ</span> <span class="U2">ate","expr</span> <span class="U2">ession":"{</span> <span class="U2">and:&nbsp;[&nbsp;{or</span> <span class="U2">:&nbsp;['A.A','</span> <span class="U2">B.B'],&nbsp;{'A</span> <span class="U2">.A'}&nbsp;]}","</span> <span class="U2">date":"201</span> <span class="U2">5-02-27T20</span> <span class="U2">:33:41.308</span> <span class="U2">Z","scope"</span> <span class="U2">:"private"</span> <span class="U2">,"owner":"</span> <span class="U2">unknown"}}</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed&nbsp;for&nbsp;cre</span> <span class="U2">ated</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;id&nbsp;is</span> <span class="U2">&nbsp;returned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;adds&nbsp;a&nbsp;</span> <span class="U2">patient&nbsp;in</span> <span class="U2">&nbsp;the&nbsp;patie</span> <span class="U2">nt&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">87</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;</span> <span class="U2">And&nbsp;the&nbsp;cd</span> <span class="U2">sjob&nbsp;is&nbsp;sc</span> <span class="U2">heduled&nbsp;fo</span> <span class="U2">r&nbsp;patient&nbsp;</span> <span class="U2">list&nbsp;with&nbsp;</span> <span class="U2">content&nbsp;"{</span> <span class="U2">"descripti</span> <span class="U2">on":"A&nbsp;Tes</span> <span class="U2">t&nbsp;job&nbsp;from</span> <span class="U2">&nbsp;the&nbsp;unit&nbsp;</span> <span class="U2">tests","di</span> <span class="U2">sabled":fa</span> <span class="U2">lse,"execu</span> <span class="U2">tion":{"ba</span> <span class="U2">seContext"</span> <span class="U2">:{"locatio</span> <span class="U2">n":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Loca</span> <span class="U2">tion","id"</span> <span class="U2">:null,"nam</span> <span class="U2">e":null,"t</span> <span class="U2">ype":null}</span> <span class="U2">,"specialt</span> <span class="U2">y":{"codeS</span> <span class="U2">ystem":nul</span> <span class="U2">l,"entityT</span> <span class="U2">ype":"Spec</span> <span class="U2">ialty","id</span> <span class="U2">":null,"na</span> <span class="U2">me":null,"</span> <span class="U2">type":null</span> <span class="U2">},"subject</span> <span class="U2">":{"codeSy</span> <span class="U2">stem":null</span> <span class="U2">,"entityTy</span> <span class="U2">pe":"Subje</span> <span class="U2">ct","id":n</span> <span class="U2">ull,"name"</span> <span class="U2">:null,"typ</span> <span class="U2">e":null},"</span> <span class="U2">user":{"co</span> <span class="U2">deSystem":</span> <span class="U2">"VA:DUZ","</span> <span class="U2">entityType</span> <span class="U2">":"User","</span> <span class="U2">id":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}},"jo</span> <span class="U2">bId":null,</span> <span class="U2">"subjectId</span> <span class="U2">s":null,"s</span> <span class="U2">ubjectList</span> <span class="U2">References</span> <span class="U2">":[{"id":"</span> <span class="U2">TestPatien</span> <span class="U2">tList","ty</span> <span class="U2">pe":"Patie</span> <span class="U2">nt"}],"tar</span> <span class="U2">get":{"int</span> <span class="U2">entsSet":[</span> <span class="U2">"HTN"],"mo</span> <span class="U2">de":"Norma</span> <span class="U2">l","percei</span> <span class="U2">vedExecuti</span> <span class="U2">onTime":nu</span> <span class="U2">ll,"supple</span> <span class="U2">mentalMapp</span> <span class="U2">ings":null</span> <span class="U2">,"type":"B</span> <span class="U2">ackground"</span> <span class="U2">}},"lastRu</span> <span class="U2">n":1429161</span> <span class="U2">765119,"na</span> <span class="U2">me":"TestC</span> <span class="U2">DSJob","ow</span> <span class="U2">ner":{"cod</span> <span class="U2">eSystem":"</span> <span class="U2">VA:DUZ","e</span> <span class="U2">ntityType"</span> <span class="U2">:"User","i</span> <span class="U2">d":"</span> <span class="C2">SIT</span> <span class="U2">E</span> <span class="R2"> 
+       <div class="IP"> 
+       </div> </span> <span class="U2">:100000002</span> <span class="U2">55","name"</span> <span class="U2">:"USER&nbsp;PAN</span> <span class="U2">ORAMA","ty</span> <span class="U2">pe":"provi</span> <span class="U2">der"}}"</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;P</span> <span class="U2">OST&nbsp;reques</span> <span class="U2">t&nbsp;to&nbsp;sched</span> <span class="U2">ule&nbsp;a&nbsp;job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;G</span> <span class="U2">ET&nbsp;request</span> <span class="U2">&nbsp;for&nbsp;a&nbsp;sch</span> <span class="U2">eduled&nbsp;job</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;PUT&nbsp;reque</span> <span class="U2">st&nbsp;to&nbsp;upda</span> <span class="U2">te&nbsp;a&nbsp;sched</span> <span class="U2">uled&nbsp;job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">a&nbsp;successf</span> <span class="U2">ul&nbsp;respons</span> <span class="U2">e&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;sche</span> <span class="U2">duled&nbsp;job</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;And&nbsp;</span> <span class="U2">a&nbsp;successf</span> <span class="U2">ul&nbsp;respons</span> <span class="U2">e&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;cdsj</span> <span class="U2">ob</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;a&nbsp;pati</span> <span class="U2">ent&nbsp;list</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;database&nbsp;</span> <span class="U2">delete&nbsp;res</span> <span class="U2">ponse&nbsp;is&nbsp;r</span> <span class="U2">eturned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;G</span> <span class="U2">ET&nbsp;request</span> <span class="U2">&nbsp;to&nbsp;get&nbsp;pa</span> <span class="U2">tient&nbsp;list</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8155_De</span> <span class="U2">finition_C</span> <span class="U2">RUD&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;defi</span> <span class="U2">nitions</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;DELETE&nbsp;re</span> <span class="U2">quest&nbsp;to&nbsp;d</span> <span class="U2">elete&nbsp;the&nbsp;</span> <span class="U2">defintion</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;D</span> <span class="U2">ELETE&nbsp;requ</span> <span class="U2">est&nbsp;to&nbsp;del</span> <span class="U2">ete&nbsp;the&nbsp;co</span> <span class="U2">py&nbsp;of&nbsp;defi</span> <span class="U2">nition</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;</span> <span class="U2">user&nbsp;sends</span> <span class="U2">&nbsp;request&nbsp;t</span> <span class="U2">o&nbsp;create&nbsp;d</span> <span class="U2">efinition&nbsp;</span> <span class="U2">with&nbsp;conte</span> <span class="U2">nt&nbsp;"{"name</span> <span class="U2">":"mytest1</span> <span class="U2">0","descri</span> <span class="U2">ption":"us</span> <span class="U2">er&nbsp;defined</span> <span class="U2">&nbsp;descripti</span> <span class="U2">on&nbsp;of&nbsp;this</span> <span class="U2">&nbsp;definitio</span> <span class="U2">n&nbsp;template</span> <span class="U2">","express</span> <span class="U2">ion":"{and</span> <span class="U2">:&nbsp;[&nbsp;{or:&nbsp;[</span> <span class="U2">'A.A','B.B</span> <span class="U2">'],&nbsp;{'A.A'</span> <span class="U2">}&nbsp;]}"}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;definiti</span> <span class="U2">on&nbsp;id&nbsp;is&nbsp;r</span> <span class="U2">eturned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;G</span> <span class="U2">ET&nbsp;request</span> <span class="U2">&nbsp;for&nbsp;a&nbsp;def</span> <span class="U2">inition&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">111</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;P</span> <span class="U2">OST&nbsp;reques</span> <span class="U2">t&nbsp;to&nbsp;copy&nbsp;</span> <span class="U2">the&nbsp;create</span> <span class="U2">d&nbsp;definiti</span> <span class="U2">on</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">112</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;a&nbsp;</span> <span class="U2">successful</span> <span class="U2">&nbsp;response&nbsp;</span> <span class="U2">is&nbsp;returne</span> <span class="U2">d&nbsp;for&nbsp;crea</span> <span class="U2">ted</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;th</span> <span class="U2">e&nbsp;copy&nbsp;of&nbsp;</span> <span class="U2">definition</span> <span class="U2">&nbsp;id&nbsp;is&nbsp;ret</span> <span class="U2">urned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">114</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;u</span> <span class="U2">ser&nbsp;sends&nbsp;</span> <span class="U2">DELETE&nbsp;req</span> <span class="U2">uest&nbsp;to&nbsp;de</span> <span class="U2">lete&nbsp;the&nbsp;d</span> <span class="U2">efintion</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;u</span> <span class="U2">ser&nbsp;sends&nbsp;</span> <span class="U2">DELETE&nbsp;req</span> <span class="U2">uest&nbsp;to&nbsp;de</span> <span class="U2">lete&nbsp;the&nbsp;c</span> <span class="U2">opy&nbsp;of&nbsp;def</span> <span class="U2">inition</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8154_cr</span> <span class="U2">iteria_CRU</span> <span class="U2">D&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Perform&nbsp;CR</span> <span class="U2">UD&nbsp;on&nbsp;crit</span> <span class="U2">eria</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Given&nbsp;us</span> <span class="U2">er&nbsp;sends&nbsp;r</span> <span class="U2">equest&nbsp;to&nbsp;</span> <span class="U2">create&nbsp;cri</span> <span class="U2">teria&nbsp;with</span> <span class="U2">&nbsp;content&nbsp;"</span> <span class="U2">{"name":"T</span> <span class="U2">estCriteri</span> <span class="U2">a","access</span> <span class="U2">or":"vital</span> <span class="U2">:items[]:q</span> <span class="U2">ualifiedNa</span> <span class="U2">me","datat</span> <span class="U2">ype":"inte</span> <span class="U2">ger"}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;And&nbsp;a&nbsp;su</span> <span class="U2">ccessful&nbsp;r</span> <span class="U2">esponse&nbsp;is</span> <span class="U2">&nbsp;returned&nbsp;</span> <span class="U2">for&nbsp;create</span> <span class="U2">d</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;And&nbsp;the&nbsp;</span> <span class="U2">criteria&nbsp;i</span> <span class="U2">d&nbsp;is&nbsp;retur</span> <span class="U2">ned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;And&nbsp;user</span> <span class="U2">&nbsp;sends&nbsp;GET</span> <span class="U2">&nbsp;request&nbsp;f</span> <span class="U2">or&nbsp;a&nbsp;crite</span> <span class="U2">ria&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;And&nbsp;a&nbsp;su</span> <span class="U2">ccessful&nbsp;r</span> <span class="U2">esponse&nbsp;is</span> <span class="U2">&nbsp;returned</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;When&nbsp;use</span> <span class="U2">r&nbsp;sends&nbsp;DE</span> <span class="U2">LETE&nbsp;reque</span> <span class="U2">st&nbsp;to&nbsp;dele</span> <span class="U2">te&nbsp;a&nbsp;crite</span> <span class="U2">ria</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;a&nbsp;s</span> <span class="U2">uccessful&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;returned</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@US8970&nbsp;</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Metrics&nbsp;se</span> <span class="U2">rvice&nbsp;and&nbsp;</span> <span class="U2">Dash&nbsp;board</span> <span class="U2">&nbsp;Hardening</span> <span class="U2">&nbsp;-&nbsp;Change&nbsp;</span> <span class="U2">payload&nbsp;re</span> <span class="U2">sponse&nbsp;fie</span> <span class="U2">ld&nbsp;name&nbsp;to</span> <span class="U2">&nbsp;data</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;When&nbsp;cli</span> <span class="U2">ent&nbsp;sends&nbsp;</span> <span class="U2">GET&nbsp;reques</span> <span class="U2">t&nbsp;for&nbsp;a&nbsp;st</span> <span class="U2">atic&nbsp;list&nbsp;</span> <span class="U2">of&nbsp;the&nbsp;met</span> <span class="U2">rics&nbsp;servi</span> <span class="U2">ce</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Then&nbsp;a&nbsp;s</span> <span class="U2">uccessful&nbsp;</span> <span class="U2">response&nbsp;i</span> <span class="U2">s&nbsp;returned</span> <span class="U2">&nbsp;with&nbsp;fiel</span> <span class="U2">d&nbsp;data&nbsp;ins</span> <span class="U2">tead&nbsp;of&nbsp;pa</span> <span class="U2">yload</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">@DE6499</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Scenario:&nbsp;</span> <span class="U2">Get&nbsp;inbox&nbsp;</span> <span class="U2">for&nbsp;user</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;When&nbsp;u</span> <span class="U2">ser&nbsp;sends&nbsp;</span> <span class="U2">GET&nbsp;reques</span> <span class="U2">t&nbsp;for&nbsp;inbo</span> <span class="U2">x</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;Then&nbsp;a</span> <span class="U2">&nbsp;successfu</span> <span class="U2">l&nbsp;response</span> <span class="U2">&nbsp;is&nbsp;return</span> <span class="U2">ed</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

@@ -5,7 +5,7 @@ Feature: Enter and Store A Problem List
 @F414_3 @UAT_script @DE5179 @DE7348 @reg2
 Scenario: eHMP user can add a Problem for an inpatient initiated from applet
   Given user searches for and selects "TWENTY,INPATIENT"
-  And Overview is active
+  Then Summary View is active
   And the user navigates to expanded problems applet
   And the user takes note of number of existing problems
   

@@ -47,6 +47,7 @@ define([
                 options: {
                     size: "large",
                     showLoading: true,
+                    triggerElement: _.get(paramObj, '$el'),
                     title: function() {
                         return _.result(response, 'title') || _.result(viewDetail, 'title');
                     }

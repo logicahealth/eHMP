@@ -17,6 +17,11 @@ var moment = require('moment');
 logUtil.initialize(config);
 
 var logger = logUtil.get('subscriberHost', 'host');
+if (config.appDynamicsProfile) {
+    logger.debug('appDynamicsProfile object detected on configuration - requiring appdynamics');
+    var appDynamicsProfile = JSON.parse(JSON.stringify(config.appDynamicsProfile));
+    require('appdynamics').profile(appDynamicsProfile); // tier and node names are read from environment variables
+}
 var healthcheckUtils = require(global.VX_UTILS + 'healthcheck-utils');
 
 
@@ -66,8 +71,8 @@ process.on('SIGURG', function() {
     pauseWorkers(workers);
     listenForShutdownReady(workers);
 
-    //TODO: move time to wait into configuration
-    setTimeout(timeoutOnWaitingForShutdownReady, 30000, workers).unref();
+    let shutdownTimeout = (config && config.shutdownTimeout && config.shutdownTimeout.subscriberHost) ? config.shutdownTimeout.subscriberHost : 30000;
+    setTimeout(timeoutOnWaitingForShutdownReady, shutdownTimeout, workers).unref();
 });
 
 process.on('uncaughtException', function (err) {
@@ -140,6 +145,9 @@ function registerHandlers(logger, config, environment) {
 
     handlerRegistry.register(config, jobUtil.hdrSyncRequestType(), require(global.VX_HANDLERS + 'hdr-sync-request/hdr-sync-request-handler'));
     handlerRegistry.register(config, jobUtil.vlerSyncRequestType(), require(global.VX_HANDLERS + 'vler-sync-request/vler-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.vlerDasSyncRequestType(), require(global.VX_HANDLERS + 'vler-das-sync-request/vler-das-sync-request-handler'));
+    handlerRegistry.register(config, jobUtil.vlerDasDocRetrieveType(), require(global.VX_HANDLERS + 'vler-das-doc-retrieve/vler-das-doc-retrieve-handler'));
+    handlerRegistry.register(config, jobUtil.vlerDasXformVprType(), require(global.VX_HANDLERS + 'vler-das-xform-vpr/vler-das-xform-vpr-handler'));
     handlerRegistry.register(config, jobUtil.pgdSyncRequestType(), require(global.VX_HANDLERS + 'pgd-sync-request/pgd-sync-request-handler'));
     handlerRegistry.register(config, jobUtil.jmeadowsSyncRequestType(), require(global.VX_HANDLERS + 'jmeadows-sync-request/jmeadows-sync-request-handler'));
 
@@ -177,6 +185,7 @@ function registerHandlers(logger, config, environment) {
     handlerRegistry.register(config, jobUtil.recordUpdateType(), require(global.VX_HANDLERS + 'record-update/record-update-handler'));
 
     handlerRegistry.register(config, jobUtil.patientRecordRetirementType(), require(global.VX_HANDLERS + 'patient-record-retirement/patient-record-retirement-handler'));
+    handlerRegistry.register(config, jobUtil.syncNotificationType(), require(global.VX_HANDLERS + 'sync-notification/sync-notification-handler'));
 
     return handlerRegistry;
 }

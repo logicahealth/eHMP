@@ -1,4 +1,4 @@
-#http://IP             /patientrecord/labpanels?pid=9E7A%3B1&_ack=true&accessCode=REDACTED&verifyCode=REDACTED&site=9E7A
+#http://IP             /patientrecord/labpanels?pid=SITE%3B1&_ack=true&accessCode=USER  &verifyCode=PW      &site=SITE
 class LabsByPanel < BuildQuery
   def initialize(parameter_hash_table)
     super()

@@ -33,7 +33,7 @@ define([
                 author: {
                     name: "USER,PANORAMA",
                     duz: {
-                        "9E7A": "10000000255"
+                        "SITE": "10000000255"
                     }
                 },
                 timeStamp: "12/12/2014 11:12PM"
@@ -53,7 +53,7 @@ define([
                 author: {
                     name: "USER,PANORAMA",
                     duz: {
-                        "9E7A": "10000000255"
+                        "SITE": "10000000255"
                     }
                 },
                 timeStamp: "12/14/2014 11:15PM"
@@ -62,7 +62,7 @@ define([
                 author: {
                     name: "USER,OTHER",
                     duz: {
-                        "9E7A": "10000000238"
+                        "SITE": "10000000238"
                     }
                 },
                 timeStamp: "12/13/2014 11:17PM"
@@ -78,7 +78,7 @@ define([
                 author: {
                     name: "USER,OTHER",
                     duz: {
-                        "9E7A": "10000000238"
+                        "SITE": "10000000238"
                     }
                 },
                 timeStamp: "12/19/2014 11:11PM"

@@ -2,6 +2,8 @@ ext.set('repo', uploadRepo)
 ext.set('groupId', 'us.vistacore.ehmp')
 ext.set('artifactId', 'vxsync')
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 // add dummy test task so java plugin doesn't have to be applied
 task test {}
 
@@ -13,17 +15,33 @@ task cleanNPM(type: Delete) {
 
 clean.dependsOn cleanNPM
 
-task installNpm(type: Exec, dependsOn: cleanNPM) {
-  group "VX-Sync Tasks"
-  description "installs package(s)"
-  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
-}
+if(Os.isFamily(Os.FAMILY_MAC))
+{
+  task installNpm(type: Exec, dependsOn: cleanNPM) {
+    group "VX-Sync Tasks"
+    description "installs package(s)"
+    commandLine "npm", "install", "--registry", npmRegistry
+  }
 
-task buildJava(type: Exec, dependsOn: installNpm) {
-  group "VX-Sync Tasks"
-  description "installs package(s)"
-  workingDir "${projectDir}/node_modules/xslt4node/node_modules/java"
-  commandLine "npm", "run", "install"
+  task buildJava(type: Exec, dependsOn: installNpm) {
+    group "VX-Sync Tasks"
+    description "installs package(s)"
+    workingDir "${projectDir}/node_modules/java"
+    commandLine "npm", "run", "install"
+  }
+} else {
+  task installNpm(type: Exec, dependsOn: cleanNPM) {
+    group "VX-Sync Tasks"
+    description "installs package(s)"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry ${->npmRegistry}"
+  }
+
+  task buildJava(type: Exec, dependsOn: installNpm) {
+    group "VX-Sync Tasks"
+    description "installs package(s)"
+    workingDir "${projectDir}/node_modules/java"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm run install --unsafe-perm --registry ${->npmRegistry}"
+  }
 }
 
 task unitTest(type: Exec, dependsOn: installNpm) {

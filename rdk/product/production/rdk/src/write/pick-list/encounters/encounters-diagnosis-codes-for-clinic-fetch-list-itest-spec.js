@@ -9,9 +9,9 @@ var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
-    port: 9210,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    port: PORT,
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -23,7 +23,7 @@ describe('diagnostic-codes-clinic resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {locationUid: 'urn:va:location:9E7A:195'});
+        }, {locationUid: 'urn:va:location:SITE:195'});
     });
         it('will return an error if locationUid is missing', function (done) {
         this.timeout(8000);

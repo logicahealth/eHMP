@@ -25,13 +25,16 @@ define([
                 if (screen === 'provider-centric-view') {
                     ADK.Navigation.navigate('overview');
                 }
-                var requests = params.formModel.attributes.requestActivity.data.requests;
+                var formModel = _.get(params, 'formModel', new Backbone.Model());
+                var requestActivity = formModel.get('requestActivity') || {};
+                var requests = _.get(requestActivity, 'data.requests');
                 var modelObj = {
-                    request: requests[requests.length - 1],
-                    state: params.formModel.attributes.state + ": " + params.formModel.attributes.subState,
-                    activity: params.formModel.attributes.requestActivity.data.activity,
-                    taskStatus: params.formModel.attributes.status,
-                    taskId: params.formModel.attributes.taskId
+                    request: _.last(requests),
+                    responses:  _.get(requestActivity, 'data.responses'),
+                    state: formModel.get('state') + ': ' + formModel.get('subState'),
+                    activity: _.get(requestActivity, 'data.activity'),
+                    taskStatus: formModel.get('status'),
+                    taskId: formModel.get('taskId')
                 };
 
                 params = Utils.buildEditParameters(modelObj);

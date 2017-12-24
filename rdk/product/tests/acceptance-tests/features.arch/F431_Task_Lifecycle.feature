@@ -10,7 +10,7 @@ Scenario: Create a fitlab process, then claim and complete that process
   Then a successful response is returned
   And save the deployment ID for "FITLabProject"
   # Create a process
-  When the client creates a process with content latest deployment ID and content ""processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"123123123","facility":"9E7A"}}"
+  When the client creates a process with content latest deployment ID and content ""processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"123123123","facility":"SITE"}}"
   Then a successful response is returned
   # Get list of tasks for a patient
   When the client requests to see the list of tasks for a patient "{"context": "patient","patientICN":"123123123","status":"Ready"}"
@@ -25,8 +25,8 @@ Scenario: Create a fitlab process, then claim and complete that process
       | data.items.PRIORITY                 | 0                                                      |
       | data.items.ACTUALOWNERID            |                                                        |
       | data.items.ACTUALOWNERNAME          |                                                        |
-      | data.items.CREATEDBYID              | REDACTED                                               |
-      | data.items.CREATEDBYNAME            | REDACTED                                               |
+      | data.items.CREATEDBYID              | PW                                                     |
+      | data.items.CREATEDBYNAME            | PW                                                     |
       | data.items.TASKCREATEDON            | IS_SET                                                 |
       | data.items.EXPIRATIONTIME           |                                                        |
       | data.items.PROCESSINSTANCEID        | IS_SET                                                 |

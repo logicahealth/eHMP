@@ -182,13 +182,14 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                                     if (req && req.logger) {
                                         req.logger.error(err.message);
                                     }
-                                    self._doCloseRecordset(req, result.outBinds.recordset, function(cberr) {
+                                    self._doCloseRecordset(req, result.outBinds.recordset, function (cberr) {
                                         return parallelCb(err, null); //return the original error
                                     });
+                                } else {
+                                    self._doCloseRecordset(req, result.outBinds.recordset, function (err) {
+                                        return parallelCb(null, rows); //only return the cb after recordset is done
+                                    });
                                 }
-                                self._doCloseRecordset(req, result.outBinds.recordset, function(err) {
-                                    return parallelCb(null, rows); //only return the cb after recordset is done
-                                });
                             });
 
                         },
@@ -199,13 +200,14 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                                     if (req && req.logger) {
                                         req.logger.error(err.message);
                                     }
-                                    self._doCloseRecordset(req, result.outBinds.recordset2, function() {
+                                    self._doCloseRecordset(req, result.outBinds.recordset2, function () {
                                         return parallelCb(err, null); //only return the cb after recordset is done
                                     });
+                                } else {
+                                    self._doCloseRecordset(req, result.outBinds.recordset2, function () {
+                                        return parallelCb(null, rows); //only return the cb after recordset is done
+                                    });
                                 }
-                                self._doCloseRecordset(req, result.outBinds.recordset2, function() {
-                                    return parallelCb(null, rows); //only return the cb after recordset is done
-                                });
                             });
                         }
                     ],
@@ -274,6 +276,9 @@ module.exports.getPool = function(req, dbConfig, cb) {
     if (isClosing) {
         return cb(new Error('Connection pool closing for shutdown - no new connections allowed'));
     }
+    if(!_.has(dbConfig, 'user') || !_.has(dbConfig, 'password') || !_.has(dbConfig, 'connectString')) {
+        return cb(new Error('Missing connection string or user credentials to oracle data store'), null);
+    }
     var self = this;
     var connectionHash = new Buffer(dbConfig.user + dbConfig.password + dbConfig.connectString).toString('base64');
     if (!_.isEmpty(self._cachedPool) && _.has(self._cachedPool, connectionHash)) {
@@ -286,6 +291,8 @@ module.exports.getPool = function(req, dbConfig, cb) {
             connectString: dbConfig.connectString,
             poolMin: dbConfig.poolMin || 0,
             poolMax: dbConfig.poolMax || 4,
+            poolPingInterval: 10,
+            poolTimeout: 60,
             _enableStats: true
         },
         function(err, pool) {

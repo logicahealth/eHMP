@@ -1,0 +1,82 @@
+
+buildscript {
+  repositories {
+    maven { url "https://store.vistacore.us/nexus/content/groups/public" }
+  }
+  dependencies {
+    classpath 'jenkins:jenkins-cli:1.642.1'
+  }
+}
+
+jenkinsBaseUrl = 'https://ci.vistacore.us'
+
+def runCliCommand(List<String> args, InputStream input = System.in, OutputStream output = System.out, OutputStream err = System.err)
+{
+  def hudson.cli.CLI cli = new hudson.cli.CLI(jenkinsBaseUrl.toURI().toURL())
+  args.add('--username')
+  args.add(System.getenv()['USERNAME'])
+  args.add('--password')
+  args.add(System.getenv()['PASSWORD'])
+  cli.execute(args, input, output, err)
+  cli.close()
+}
+
+def createJob(Job job){
+  println "creating job ${job.name} in jenkins ${jenkinsBaseUrl}"
+  FileInputStream configFileInputStream = new FileInputStream(job.configFile)
+  runCliCommand(['create-job', job.name], configFileInputStream)
+}
+
+def updateJob(Job job){
+  println "updating job ${job.name} in jenkins ${jenkinsBaseUrl}"
+  FileInputStream configFileInputStream = new FileInputStream(job.configFile)
+  runCliCommand(['update-job', job.name], configFileInputStream)
+}
+
+def getJob(Job job){
+  println "getting job ${job.name} in jenkins ${jenkinsBaseUrl}"
+  FileOutputStream configFileOutputStream = new FileOutputStream(job.configFile)
+  runCliCommand(['get-job', job.name], System.in, configFileOutputStream, System.err)
+}
+
+def boolean doesJobExist(String jobName)  {
+  def slurper = new XmlSlurper()
+  def addr       = "$jenkinsBaseUrl/api/xml"
+  def authString = "${System.getenv()['USERNAME']}:${System.getenv()['PASSWORD']}".getBytes().encodeBase64().toString()
+  def conn = addr.toURL().openConnection()
+  conn.setRequestProperty( "Authorization", "Basic ${authString}" )
+
+  def jenkinsMain = slurper.parseText( conn.content.text )
+
+  boolean found = false
+  jenkinsMain.job.each{
+    if (it.name.text() == jobName) {
+      found = true
+    }
+  }
+
+  return found
+}
+
+projectDir.listFiles().each{ file ->
+  if( file.name =~ /.tpl$/ ){
+    def basename = file.name.replace(".tpl", "")
+    def job = new Job(name: "rdk-${basename}-template", configFile: file)
+
+    task "push-${file.name}" << {
+      if (!doesJobExist(job.name)) {
+        createJob(job)
+      }else {
+        updateJob(job)
+      }
+    }
+
+    task "pull-${file.name}" << {
+      getJob(job)
+    }
+  }
+}
+class Job {
+	String name
+	File configFile
+}

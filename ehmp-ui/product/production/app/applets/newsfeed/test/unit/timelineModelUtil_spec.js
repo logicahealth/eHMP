@@ -10,21 +10,21 @@ define([
 		it('should return appointment when the kind is visit and the uid is an appointment uid', function() {
 			var response = {
 				kind: 'Visit',
-				uid: 'urn:va:appointment:9E7A:1:101010101'
+				uid: 'urn:va:appointment:SITE:1:101010101'
 			};
 			expect(TimelineUtil.getDisplayType(response)).toEqual('Appointment');
 		});
 		it('should return visit when the kind is visit and the uid is a visit uid', function() {
 			var response = {
 				kind: 'Visit',
-				uid: 'urn:va:visit:9E7A:1:101010101'
+				uid: 'urn:va:visit:SITE:1:101010101'
 			};
 			expect(TimelineUtil.getDisplayType(response)).toEqual('Visit');
 		});
 		it('should return the kind when the kind is not visit', function() {
 			var response = {
 				kind: 'Laboratory',
-				uid: 'urn:va:lab:9E7A:1:101010101'
+				uid: 'urn:va:lab:SITE:1:101010101'
 			};
 			expect(TimelineUtil.getDisplayType(response)).toEqual('Laboratory');
 		});

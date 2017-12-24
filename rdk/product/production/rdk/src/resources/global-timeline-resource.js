@@ -76,7 +76,7 @@ function getData(req, callback) {
 
     async.parallel({
             encounters: function(callback) {
-                makeJdsCall(req.app.config, '/vpr/' + pid + '/index/encounter', req.logger, callback);
+                makeJdsCall(req.app.config, '/vpr/' + pid + '/index/encounter?filter=ne(removed,true)', req.logger, callback);
             }
         },
         function(err, results) {
@@ -219,7 +219,7 @@ function sortInpatientOutpatient(results, logger) {
 
                     break;
                 default:
-                    logger.error({encounter: encounter}, 'Unparseable encounter encountered');
+                    logger.error({encounter: encounter}, 'Encounter with unexpected kind attribute');
                     //  noop - exclude from results if no kind
             }
         });

@@ -578,8 +578,8 @@ describe('solr-xform-utils.js', function () {
         it('Verify valid value', function () {
             var solrRecord = {};
             var vprRecord = {
-                'uid': 'urn:va:allergy:9E7A:3:1',
-                'pid': '9E7A;3',
+                'uid': 'urn:va:allergy:SITE:3:1',
+                'pid': 'SITE;3',
                 'facilityCode': '500',
                 'facilityName': 'SomeFacility',
                 'kind': 'SomeKind',
@@ -1013,15 +1013,15 @@ describe('solr-xform-utils.js', function () {
         it('Verify valid value', function () {
             var solrRecord = {};
             var vprRecord = {
-                'patientUid': 'urn:va:patient:9E7A:239:239'
+                'patientUid': 'urn:va:patient:SITE:239:239'
             };
             solrXformUtil.setStringPidFromSimpleUid(solrRecord, 'pid', vprRecord, 'patientUid');
-            expect(solrRecord.pid).toEqual('9E7A;239');
+            expect(solrRecord.pid).toEqual('SITE;239');
         });
         it('Verify solrRecord null', function () {
             var solrRecord = null;
             var vprRecord = {
-                'patientUid': 'urn:va:patient:9E7A:239:239'
+                'patientUid': 'urn:va:patient:SITE:239:239'
             };
             solrXformUtil.setStringPidFromSimpleUid(solrRecord, 'pid', vprRecord, 'patientUid');
             expect(solrRecord).toBeNull();
@@ -1043,7 +1043,7 @@ describe('solr-xform-utils.js', function () {
         it('Verify vprRecord.field is not a valid UID', function () {
             var solrRecord = null;
             var vprRecord = {
-                'patientUid': 'urn:va:patient:9E7A'
+                'patientUid': 'urn:va:patient:SITE'
             };
             solrXformUtil.setStringPidFromSimpleUid(solrRecord, 'pid', vprRecord, 'patientUid');
             expect(solrRecord).toBeNull();

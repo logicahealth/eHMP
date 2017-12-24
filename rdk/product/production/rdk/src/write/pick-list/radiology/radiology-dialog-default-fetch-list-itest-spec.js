@@ -11,8 +11,8 @@ var configuration = {
     context: 'OR CPRS GUI CHART',
     host: 'IP        ',
     port: PORT,
-    accessCode: 'REDACTED',
-    verifyCode: 'REDACTED',
+    accessCode: 'USER  ',
+    verifyCode: 'PW      ',
     localIP: 'IP      ',
     localAddress: 'localhost'
 };
@@ -25,6 +25,6 @@ describe('radiology-dialog-default resource integration test', function() {
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, { site: '9E7A', pid: '9E7A;100022' , imagingType: 35 });
+        }, { site: 'SITE', pid: 'SITE;100022' , imagingType: 35 });
     });
 });

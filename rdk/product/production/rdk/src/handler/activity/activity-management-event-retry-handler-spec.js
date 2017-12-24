@@ -1,9 +1,12 @@
 'use strict';
 var _ = require('lodash');
 var bunyan = require('bunyan');
+var activityRetry = require('./activity-management-event-retry-handler');
+
 var log = sinon.stub(bunyan.createLogger({
-    name: 'test-logger'
+    name: 'activity-management-event-retry-handler-spec'
 }));
+
 var job = {
     record: {
         test: 'key',
@@ -16,17 +19,12 @@ var config = {
     'log-level': 'warn'
 };
 
-var activityRetry = require('./activity-management-event-retry-handler');
-
 describe('activity-management-event-retry-handler-spec.js', function() {
-    beforeEach(function() {});
-    afterEach(function() {});
-
     describe('check', function() {
         it('Should add activityRetry key to job object', function() {
             activityRetry.check(log, config, job, function(error, response) {
                 expect(error).to.be(null);
-                expect(response.record.activityRetry).to.be(0);
+                expect(response.record.activityRetry).to.be(-1);
             });
         });
 
@@ -45,53 +43,46 @@ describe('activity-management-event-retry-handler-spec.js', function() {
                 expect(error).to.be('Fatal - Retry Check Error Job Retry count is greater than or equal to config limit.');
             });
         });
-
-        it('Should add one to the activityRetry key', function() {
-            var ltLimitJob = _.cloneDeep(job);
-            ltLimitJob.record.activityRetry = 3;
-            activityRetry.check(log, config, ltLimitJob, function(error, response) {
-                expect(response.record.activityRetry).to.be(4);
-            });
-        });
     });
 
     describe('validateResponse', function() {
-        it('Should return a fatal error that the error is not an object', function() {
-            activityRetry.validateResponse(log, 'not an object', function(errorCode) {
-                expect(errorCode).to.be('Fatal - Error from Activity Event Processor was not an object.');
-            });
+        beforeEach(function() {
+            log = sinon.stub(bunyan.createLogger({
+                name: 'activity-management-event-retry-handler-spec'
+            }));
+        });
+        afterEach(function() {
+            log.debug.restore();
         });
 
-        it('Should return a fatal error that the error does not have a message key', function() {
-            activityRetry.validateResponse(log, {
-                data: 'no message key'
-            }, function(errorCode) {
-                expect(errorCode).to.be('Fatal - Error from Activity Event Processor does not have a message to validate.');
+        it('Should return a fatal error that the error is not a string', function() {
+            var errorCode = activityRetry.validateResponse(log, {
+                string: 'no its an object'
             });
+            expect(errorCode).to.be(0);
+            expect(log.debug.callCount).to.equal(1);
+            expect(log.debug.calledWith('Fatal Retry Validation Error - Error response was not a string.')).to.be.true();
         });
 
         it('Should return a fatal error that there is no error code', function() {
-            activityRetry.validateResponse(log, {
-                message: 'no error code'
-            }, function(errorCode) {
-                expect(errorCode).to.be('0');
-            });
+            var errorCode = activityRetry.validateResponse(log, 'no error code');
+            expect(errorCode).to.be(0);
+            expect(log.debug.callCount).to.equal(1);
+            expect(log.debug.calledWith('Fatal Retry Validation Error - Error response does not have an error code.')).to.be.true();
         });
 
         it('Should return a transient error because the first digit is 1 and the 4th is -', function() {
-            activityRetry.validateResponse(log, {
-                message: '101 - transient error'
-            }, function(errorCode) {
-                expect(errorCode).to.be('1');
-            });
+            var errorCode = activityRetry.validateResponse(log, '101 - transient error');
+            expect(errorCode).to.be(1);
+            expect(log.debug.callCount).to.equal(1);
+            expect(log.debug.calledWith('Transient Retry Validation Error - Error response returned an error with a transient code.')).to.be.true();
         });
 
         it('Should return a fatal error because the first digit is 2 and the 4th is -', function() {
-            activityRetry.validateResponse(log, {
-                message: '201 - fatal error'
-            }, function(errorCode) {
-                expect(errorCode).to.be('2');
-            });
+            var errorCode = activityRetry.validateResponse(log, '201 - fatal error');
+            expect(errorCode).to.be(2);
+            expect(log.debug.callCount).to.equal(1);
+            expect(log.debug.calledWith('Fatal Retry Validation Error - Error response returned an error with a fatal code.')).to.be.true();
         });
     });
 });

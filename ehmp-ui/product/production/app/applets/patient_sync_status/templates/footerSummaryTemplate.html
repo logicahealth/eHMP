@@ -40,15 +40,13 @@
         {{/if}}
     {{/each}}
     <li class="footer-divider-right">
-        <button type="button" class="btn btn-xs btn-default" id="refresh-patient-data" title="Press enter to refresh all of the data sites.">
+        <button type="button" class="btn btn-xs btn-default" id="refresh-patient-data" aria-label="Refresh all data sites">
             <i class="fa fa-refresh"></i> Refresh All Data
         </button>
     </li>
     <li class="footer-divider-left">
-        <button type="button" class="btn btn-xs btn-default" id="open-sync-modal" title="Press enter to view details of eHMP data sources.">
-            <i class="fa fa-server">
-                <span class="sr-only">eHMP Data Sources</span>
-            </i> View Details
+        <button type="button" class="btn btn-xs btn-default" id="open-sync-modal" aria-label="View details of eHMP data sources">
+            <i class="fa fa-server"></i> View Details
         </button>
     </li>
 {{/if}}

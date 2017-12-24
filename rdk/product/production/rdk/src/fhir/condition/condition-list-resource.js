@@ -63,7 +63,7 @@ function createConditionConformanceData() {
 //http://IP             /vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
 //get all problems in the system
 
-//http://IP             /vpr/9E7A;20/find/problem
+//http://IP             /vpr/SITE;20/find/problem
 //get all problems for a specific pid
 
 function getResourceConfig() {
@@ -220,7 +220,7 @@ function buildSearchQuery(params) {
  *  "link": [
  *      {
  *          "relation": "self",
- *          "url": "http://localhost:8888/resource/fhir/patient/10110V004877/condition?_count=1"
+ *          "url": "http://localhost:PORT/resource/fhir/patient/10110V004877/condition?_count=1"
  *      }
  *  ],
  *  "total": 32,
@@ -237,7 +237,7 @@ function buildSearchQuery(params) {
  *              "summary": "Diabetes Mellitus Type II or unspecified (ICD-9-CM 250.00)"
  *          },
  *          "patient": {
- *              "reference": "9E7A;8"
+ *              "reference": "SITE;8"
  *          },
  *          "code": {
  *              "coding": [{
@@ -256,11 +256,11 @@ function buildSearchQuery(params) {
  *              "resourceType": "Encounter",
  *              "text": {
  *                  "status": "generated",
- *                  "div": "<div>Encounter with patient 9E7A;8</div>"
+ *                  "div": "<div>Encounter with patient SITE;8</div>"
  *              },
  *              "location": [{
  *                  "resourceType": "Location",
- *                  "_id": "urn:va:location:9E7A:32"
+ *                  "_id": "urn:va:location:SITE:32"
  *              }]
  *          },
  *          {
@@ -268,7 +268,7 @@ function buildSearchQuery(params) {
  *              "_id": "71a470ef-0f93-4377-80ac-54c4f3ec914c",
  *              "name": "VEHU,TEN",
  *              "identifier": {
- *                  "value": "urn:va:user:9E7A:20012",
+ *                  "value": "urn:va:user:SITE:20012",
  *                  "system": "urn:oid:2.16.840.1.113883.6.233"
  *              }
  *          }],

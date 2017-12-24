@@ -17,7 +17,7 @@ public class SimpleServer {
 	private static String trustPass = "changeit";
 	private static String keystore = "~/Projects/vistacore/ehmp/product/production/soap-handler/src/test/resources/serverKeystore.jks";
 	private static String truststore = "~/Projects/vistacore/ehmp/product/production/soap-handler/src/test/resources/serverTruststore.jks";
-	private static int portNum = 9999;
+	private static int portNum = PORT;
 	
 	public static void main(String[] args) {
 		ServerSocket ss;
@@ -109,7 +109,7 @@ public class SimpleServer {
 	                "<subject1 typeCode=\"SBJ\">"+
 	                    "<patient classCode=\"PAT\">"+
 	                        "<id root=\"2.16.840.1.113883.4.1\" extension=\"666000615^PI^200SSA^USSSA^A\"/>"+
-	                        "<id root=\"2.16.840.1.113883.4.349\" extension=\"100622^PI^C877^USVHA\"/>"+
+	                        "<id root=\"2.16.840.1.113883.4.349\" extension=\"100622^PI^SITE^USVHA\"/>"+
 	                        "<id root=\"2.16.840.1.113883.4.349\" extension=\"000100031^PI^200ESR^USVHA^H\"/>"+
 	                        "<id root=\"2.16.840.1.113883.4.349\" extension=\"000100031^PI^200ESR^USVHA^PCE\"/>"+
 	                        "<id root=\"2.16.840.1.113883.4.349\" extension=\"5000000123V015819^NI^200M^USVHA^P\"/>"+

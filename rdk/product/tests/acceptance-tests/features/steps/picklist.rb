@@ -21,7 +21,7 @@ When(/^the client requests picklist with the parameters and site "([^"]*)"$/) do
   end
   querypicklist.add_parameter('site', site)
   path = querypicklist.path
-  @response = HTTPartyRDK.get_as_user(path, "#{site};REDACTED", "REDACTED")
+  @response = HTTPartyRDK.get_as_user(path, "#{site};USER  ", "PW      ")
   @json_object = JSON.parse(@response.body)
 end
 

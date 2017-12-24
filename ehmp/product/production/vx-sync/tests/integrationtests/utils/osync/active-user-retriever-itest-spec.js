@@ -7,7 +7,7 @@ var moment = require('moment');
 
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var wConfig = require(global.VX_ROOT + 'worker-config');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 
 var retriever = require(global.OSYNC_UTILS + 'active-user-retriever');
 
@@ -18,7 +18,7 @@ describe('active-user-retriever.js', function() {
         port: PORT
     })};
 
-    var pjds = new PjdsClient(logger, logger, config);
+    var pjds = new PjdsClient(logger, logger, config.pjds);
 
     var environment = {
         pjds: pjds
@@ -31,7 +31,7 @@ describe('active-user-retriever.js', function() {
         var setUpDone = false;
 
         runs(function () {
-            var user = {uid: 'urn:va:user:9E7A:34534543', site: '9E7A', id: '34534543', lastSuccessfulLogin: moment().format()};
+            var user = {uid: 'urn:va:user:SITE:34534543', site: 'SITE', id: '34534543', lastSuccessfulLogin: moment().format()};
 
             pjds.addActiveUser(user, function (error, response) {
                 if (error) {
@@ -50,7 +50,7 @@ describe('active-user-retriever.js', function() {
         var tearDown = false;
 
         runs(function () {
-            pjds.removeActiveUser('urn:va:user:9E7A:34534543', function (error, response) {
+            pjds.removeActiveUser('urn:va:user:SITE:34534543', function (error, response) {
                 expect(error).toBeFalsy();
                 expect(response.statusCode).toBe(200);
                 tearDown = true;
@@ -74,7 +74,7 @@ describe('active-user-retriever.js', function() {
 
         runs(function () {
             expect(users.length).toBeTruthy();
-            expect(users).toContain(jasmine.objectContaining({uid: 'urn:va:user:9E7A:34534543'}));
+            expect(users).toContain(jasmine.objectContaining({uid: 'urn:va:user:SITE:34534543'}));
         });
     });
 
@@ -82,7 +82,7 @@ describe('active-user-retriever.js', function() {
         var initBlacklist = false;
 
         runs(function () {
-            pjds.addToOsyncBlist('34534543', '9E7A', 'user', function (error, response) {
+            pjds.addToOsyncBlist('34534543', 'SITE', 'user', function (error, response) {
                 if (error) {
                     expect(error).toBeFalsy();
                 }
@@ -106,12 +106,12 @@ describe('active-user-retriever.js', function() {
         waitsFor(function () {return testDone;}, 'test done', 20000);
 
         runs(function () {
-            expect(users || []).not.toContain(jasmine.objectContaining({uid: 'urn:va:user:9E7A:34534543'}));
+            expect(users || []).not.toContain(jasmine.objectContaining({uid: 'urn:va:user:SITE:34534543'}));
         });
         var clearBlacklist = false;
 
         runs(function () {
-            pjds.removeFromOsyncBlist('34534543', '9E7A', 'user', function (error, response) {
+            pjds.removeFromOsyncBlist('34534543', 'SITE', 'user', function (error, response) {
                 if (error) {
                     expect(error).toBeFalsy();
                 }

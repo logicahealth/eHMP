@@ -1,0 +1,20 @@
+<div class="body auto-overflow-y auto-overflow pixel-height-100">
+    <table class="table ehmp-table-default table-bordered">
+        <caption class="sr-only">This table represents data details for {{label}}</caption>
+        <thead>
+            <tr>
+                <th scope="col">Permissions</th>
+            </tr>
+        </thead>
+        <tbody>{{#compare permissionsLabels null operator="==="}}
+            <tr>
+                <td>none</td>
+            </tr> {{/compare}}{{#compare permissionsLabels "array" operator="typeof"}}{{#each permissionsLabels}}
+            <tr>
+                <td>{{this}}</td>
+            </tr>{{/each}}{{/compare}}{{#compare permissionsLabels "string" operator="typeof"}}
+            <tr>
+                <td>{{permissionsLabels}}</td>
+            </tr> {{/compare}}</tbody>
+    </table>
+</div>

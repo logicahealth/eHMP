@@ -1,7 +1,6 @@
 define([
-    'moment',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeFields'
-], function(moment, AssignmentTypeFields) {
+    'moment'
+], function(moment) {
     'use strict';
 
     var errorMessageContainer = {
@@ -53,7 +52,6 @@ define([
             name: 'urgency',
             required: true,
             label: 'Urgency',
-            title: 'Use up and down arrows to view options and then press enter to select',
             pickList: [{
                 label: 'Routine',
                 value: 'routine',
@@ -94,16 +92,13 @@ define([
             required: true,
             label: 'Title',
             placeholder: 'Name your request',
-            title: 'Enter a title for the request',
             maxlength: 140
         }]
-    }];
-
-    _.each(AssignmentTypeFields.getFields(), function(field) {
-        bodyContents.push(field);
-    });
-
-    bodyContents.push({
+    }, {
+        control: 'assignTo',
+        name: 'assignment',
+        extraClasses: ['bottom-padding-sm']
+    }, {
         control: 'container',
         extraClasses: ['row', 'bottom-padding-sm'],
         items: [{
@@ -112,11 +107,10 @@ define([
             name: 'requestDetails',
             label: 'Request',
             placeholder: 'Enter your request',
-            title: 'Enter details for the request',
             maxlength: 200,
             rows: 4
         }]
-    });
+    }];
 
     var requestFields = [{
         control: 'container',
@@ -132,8 +126,7 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm'],
                     id: 'activityDetails',
                     label: 'Activity details',
-                    type: 'button',
-                    title: 'Press enter for activity details'
+                    type: 'button'
                 }
             }
         }, {
@@ -183,15 +176,13 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm', 'left-margin-sm'],
                     id: 'requestDraftButton',
                     label: 'Draft',
-                    type: 'button',
-                    title: 'Press enter to save as draft and close'
+                    type: 'button'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
                     id: 'requestAcceptButton',
                     label: 'Accept',
-                    type: 'button',
-                    title: 'Press enter to accept'
+                    type: 'button'
                 }]
             }]
         }]

@@ -1,0 +1,28 @@
+#
+# Cookbook Name:: pick_list
+# Attributes: picklist
+#
+default['pick_list']['percentTotalHeapBeforeMemoryNotification'] = "75"
+default['pick_list']['allergies_symptoms']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['allergies_symptoms']['largePickListRetry'] = "65"
+default['pick_list']['allergies_symptoms_all_with_top_ten']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['allergies_symptoms_all_with_top_ten']['largePickListRetry'] = "65"
+default['pick_list']['clinics_newloc_fetch_list']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['clinics_fetch_list']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['lab_all_samples']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['lab_collect_times']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['lab_order_orderable_items']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['lab_order_orderable_items']['largePickListRetry'] = "65"
+default['pick_list']['lab_order_specimens']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['lab_order_specimens']['largePickListRetry'] = "65"
+default['pick_list']['new_persons']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['new_persons']['largePickListRetry'] = "65"
+default['pick_list']['progress_notes_titles']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['progress_notes_titles']['asuDataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['progress_notes_titles']['asuLargePickListRetry'] = "65"
+default['pick_list']['vitals']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['wards_fetch_list']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['people_for_facility']['dataNeedsRefreshAfterMinutes'] = "3000"
+default['pick_list']['teams_for_facility']['dataNeedsRefreshAfterMinutes'] = "10"
+default['pick_list']['teams_for_facility']['largePickListRetry'] = "65"
+default['pick_list']['roles_for_team']['dataNeedsRefreshAfterMinutes'] = "10"

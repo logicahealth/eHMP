@@ -25,9 +25,9 @@ Then(/^the Type of care info moved to bottom of patient info$/) do
   expect(type_of_case_options).to include last_data
 end
 
-Then(/^the Global Header displays the user name "([^"]*)"$/) do |name|
+Then(/^the Patient View Current Patient displays the user name "([^"]*)"$/) do |name|
   ehmp = PobCoverSheet.new
-  expect(ehmp.global_header.wait_for_fld_patient_name).to eq(true)
+  expect(ehmp.patient_view.wait_for_fld_patient_name).to eq(true)
   # remove spaces so they don't have to be exact and take case out of the equation
-  expect(ehmp.global_header.fld_patient_name.text.gsub(' ', '').upcase).to eq(name.gsub(' ', '').upcase)
+  expect(ehmp.patient_view.fld_patient_name.text.gsub(' ', '').upcase).to eq(name.gsub(' ', '').upcase)
 end

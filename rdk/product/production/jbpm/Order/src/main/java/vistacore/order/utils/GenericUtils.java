@@ -15,7 +15,7 @@ public class GenericUtils {
 			else
 				return null;
 		} catch (Exception e) {
-			LOGGER.info("getJsonElementValueAsString was unable to retrieve '" + memberName + "':" + e.getMessage(), e);
+			LOGGER.error(String.format("getJsonElementValueAsString was unable to retrieve '%s': %s", memberName, e.getMessage()), e);
 		}
 
 		return null;

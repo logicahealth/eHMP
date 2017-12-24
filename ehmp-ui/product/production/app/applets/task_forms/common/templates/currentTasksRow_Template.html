@@ -1,12 +1,11 @@
-<div class="table-cell flex-width-1 left-border-grey">
-    <span>{{#unless ../readOnly}}{{#ifExp dueTextValue "!==" 1}} {{#ifExp ACTIVE "&&" hasPermissions}}<i class="icon-action-arrow color-primary-dark"><span class="sr-only">This activity has an action</span></i> {{/ifExp}} {{/ifExp}}{{/unless}}</span>
-</div>
-<div class="table-cell flex-width-6">
+<td class="table-cell left-border-grey clickable-cell notification-container"></td>
+<td class="table-cell flex-width-2 clickable-cell">
     <span>{{priorityFormatted}}</span>
-</div>
-<div class="table-cell flex-width-3">
+</td>
+<td class="table-cell clickable-cell">
     <span>{{dueText}}</span>
-</div>
-<div class="table-cell flex-width-6 right-border-grey">
-    <span>{{TASKNAME}}</span>
-</div>
+</td>
+<td class="table-cell flex-width-2 clickable-cell">
+    <span>{{highlightText TASKNAME}}</span>
+</td>
+<td class="table-cell pixel-width-50 right-border-grey action-container"></td>

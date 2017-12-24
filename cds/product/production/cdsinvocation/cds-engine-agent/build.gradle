@@ -27,7 +27,7 @@ sourceCompatibility = property('javaVersion')
 targetCompatibility = property('targetJavaVersion')
 
 gretty {
-	httpPort = 8080
+	httpPort = PORT
 	managedClassReload = true
 }
 

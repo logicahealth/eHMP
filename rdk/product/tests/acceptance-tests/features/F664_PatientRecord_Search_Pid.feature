@@ -4,14 +4,14 @@ Feature: F664 RDK Enhancements - PSI 9
 
 @F664_PatientRecord_Search_Pid_Scenario_1
 Scenario: Search Pid
-  Given a patient with pid "9E7A;3" has been synced through the RDK API
+  Given a patient with pid "SITE;3" has been synced through the RDK API
   When the client searches for pid where pid is "10108V420871"
   Then a successful response is returned
   And the response contains at least 1 items
 
 @F664_PatientRecord_Search_Pid_Scenario_2 @debug @de1862 @de3740 @de3863
 Scenario: Search Pid using site
-  When the client searches for pid where pid is "9E7A;3"
+  When the client searches for pid where pid is "SITE;3"
   Then a successful response is returned
   And the response contains 1 item
   And the client receives at least 1 VPR VistA result(s)
@@ -30,7 +30,7 @@ Scenario: Search Pid using site
 
 @F664_PatientRecord_Search_Pid_Scenario_3
 Scenario: Search Pid with pid of same person but in different site
-  When the client searches for pid where pid is "9E7A;3"
+  When the client searches for pid where pid is "SITE;3"
   Then a successful response is returned
   And the response contains 1 item
   And the client receives at least 1 VPR VistA result(s)

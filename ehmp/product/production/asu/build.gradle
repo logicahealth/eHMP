@@ -53,27 +53,30 @@ dependencyManagement {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-tomcat")
-    compile("org.springframework.boot:spring-boot-starter-security")
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile 'org.springframework.data:spring-data-commons'
     compile 'org.springframework:spring-tx'
     compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.2.0'
     compile (group: 'com.codahale.metrics', name: 'metrics-json', version: '3.0.1')
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '4.0.0'
     compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '4.0.0'
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '4.0.0'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: '2.2.3'
+    
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-smile', version: "${versions.jacksonVersion}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${versions.jacksonVersion}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${versions.jacksonVersion}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${versions.jacksonVersion}"
     compile "commons-collections:commons-collections:3.2.1"
-    compile 'joda-time:joda-time:2.2'
+    compile "joda-time:joda-time:${versions.jodaTimeVersion}"
     compile("org.apache.poi:poi:3.10-FINAL")
     compile("org.apache.poi:poi-ooxml:3.10-FINAL")
 
     compile("com.google.guava:guava:14.0.1")
-    compile("commons-lang:commons-lang:2.6")
 }
 
 eclipse {
@@ -88,10 +91,8 @@ task wrapper(type: Wrapper) {
 }
 
 def repoCommitCountClosure = {
-  def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-  def proc2 = 'wc -l'.execute()
-  proc1 | proc2
-  return proc2.text.trim()
+  def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+  return proc.text.trim()
 }
 
 def repoCommitCount = "${->repoCommitCountClosure()}"

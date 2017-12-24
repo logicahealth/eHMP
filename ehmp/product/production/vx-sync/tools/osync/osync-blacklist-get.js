@@ -2,7 +2,7 @@
 
 require('../../env-setup');
 
-var PjdsClient = require(global.VX_SUBSYSTEMS+'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 
 var log = require('bunyan').createLogger({
 	'name': 'add-osync-blacklist',
@@ -17,7 +17,7 @@ var argv = require('yargs')
 
 var list = argv.list;
 
-var pjdsClient = new PjdsClient(log, metrics, config);
+var pjdsClient = new PjdsClient(log, metrics, config.pjds);
 
 pjdsClient.getOsyncBlist(list, function(error, response, result) {
 	console.log(result);

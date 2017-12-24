@@ -250,9 +250,9 @@ describe('pjds-client.js', function() {
             var finished;
 
             runs(function () {
-                pjdsClient.getClinicalObject('range=urn:va:activity:9E7A:239:29fe0301-14ac-4d8d-95a9-9f538866beba', 'clinicobj_uid', function () {
+                pjdsClient.getClinicalObject('range=urn:va:activity:SITE:239:29fe0301-14ac-4d8d-95a9-9f538866beba', 'clinicobj_uid', function () {
                     expect(pjdsClient.execute.callCount).toEqual(1);
-                    expect(pjdsClient.execute).toHaveBeenCalledWith('/clinicobj/index/clinicobj_uid?range=urn:va:activity:9E7A:239:29fe0301-14ac-4d8d-95a9-9f538866beba',
+                    expect(pjdsClient.execute).toHaveBeenCalledWith('/clinicobj/index/clinicobj_uid?range=urn:va:activity:SITE:239:29fe0301-14ac-4d8d-95a9-9f538866beba',
                         null, 'GET', jasmine.any(Object), jasmine.any(Function));
 
                     finished = true;

@@ -11,17 +11,17 @@ describe('The patient-record-document-view-signatures', function() {
     beforeEach(function() {
         req = {
             query: {
-                visitLocation: 'urn:va:location:9E7A:64',
+                visitLocation: 'urn:va:location:SITE:64',
                 visitDateTime: '20160101080000',
                 visitServiceCategory: 'A',
-                pid: '9E7A;3'
+                pid: 'SITE;3'
             },
             session: {
                 user: {
-                    site: '9E7A',
+                    site: 'SITE',
                     duz: {
-                        '9E7A': '10000000270',
-                        'C77A': 'duz2'
+                        'SITE': '10000000270',
+                        'SITE': 'duz2'
                     },
                 }
             },
@@ -61,7 +61,7 @@ describe('The patient-record-document-view-signatures', function() {
                         'ssn': 666000012,
                         'stampTime': 20160329075007,
                         'title': 'Physician',
-                        'uid': 'urn:va:user:9E7A:991'
+                        'uid': 'urn:va:user:SITE:991'
                     }
                 ]
             }
@@ -86,7 +86,7 @@ describe('The patient-record-document-view-signatures', function() {
                         'ssn': 666000634,
                         'stampTime': 20160329075007,
                         'title': 'MEDICAL STUDENT',
-                        'uid': 'urn:va:user:9E7A:11736'
+                        'uid': 'urn:va:user:SITE:11736'
                     }
                 ]
             }
@@ -97,14 +97,14 @@ describe('The patient-record-document-view-signatures', function() {
                 items: [{
                     'author': 'PROVIDER,EIGHT',
                     'authorDisplayName': 'Provider,Eight',
-                    'authorUid': 'urn:va:user:9E7A:991',
+                    'authorUid': 'urn:va:user:SITE:991',
                     'clinicians': [
                         {
                             'displayName': 'Provider,Eight',
                             'name': 'PROVIDER,EIGHT',
                             'role': 'AU',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Provider,Eight',
@@ -112,30 +112,30 @@ describe('The patient-record-document-view-signatures', function() {
                             'role': 'S',
                             'signature': 'EIGHT PROVIDER MD',
                             'signedDateTime': '20160329110512',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Provider,Eight',
                             'name': 'PROVIDER,EIGHT',
                             'role': 'ES',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'P8',
                             'name': 'P8',
                             'role': 'E',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         }
                     ],
                     'documentClass': 'PROGRESS NOTES',
-                    'documentDefUid': 'urn:va:doc-def:9E7A:20',
+                    'documentDefUid': 'urn:va:doc-def:SITE:20',
                     'documentTypeCode': 'C',
                     'documentTypeName': 'Crisis Note',
                     'encounterName': '7A GEN MED Aug 14, 2014',
-                    'encounterUid': 'urn:va:visit:9E7A:3:11420',
+                    'encounterUid': 'urn:va:visit:SITE:3:11420',
                     'entered': '201603291105',
                     'facilityCode': '998',
                     'facilityName': 'ABILENE (CAA)',
@@ -144,12 +144,12 @@ describe('The patient-record-document-view-signatures', function() {
                     'lastUpdateTime': '20160329110512',
                     'localId': '11737',
                     'localTitle': 'CRISIS NOTE',
-                    'pid': '9E7A;3',
+                    'pid': 'SITE;3',
                     'referenceDateTime': '201603291104',
                     'signedDateTime': '20160329110512',
                     'signer': 'PROVIDER,EIGHT',
                     'signerDisplayName': 'Provider,Eight',
-                    'signerUid': 'urn:va:user:9E7A:991',
+                    'signerUid': 'urn:va:user:SITE:991',
                     'stampTime': '20160329110512',
                     'status': 'COMPLETED',
                     'statusDisplayName': 'Completed',
@@ -158,14 +158,14 @@ describe('The patient-record-document-view-signatures', function() {
                         {
                             'author': 'PROVIDER,EIGHT',
                             'authorDisplayName': 'Provider,Eight',
-                            'authorUid': 'urn:va:user:9E7A:991',
+                            'authorUid': 'urn:va:user:SITE:991',
                             'clinicians': [
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'AU',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
@@ -173,47 +173,47 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'S',
                                     'signature': 'EIGHT PROVIDER MD',
                                     'signedDateTime': '20160329110512',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'ES',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'P8',
                                     'name': 'P8',
                                     'role': 'E',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 }
                             ],
                             'content': 'afadsfaffd adfasdf adf asdf\r\n',
                             'dateTime': '201603291104',
                             'signer': 'PROVIDER,EIGHT',
                             'signerDisplayName': 'Provider,Eight',
-                            'signerUid': 'urn:va:user:9E7A:991',
+                            'signerUid': 'urn:va:user:SITE:991',
                             'status': 'COMPLETED',
-                            'summary': 'DocumentText{uid="urn:va:document:9E7A:3:11737"}',
-                            'uid': 'urn:va:document:9E7A:3:11737'
+                            'summary': 'DocumentText{uid="urn:va:document:SITE:3:11737"}',
+                            'uid': 'urn:va:document:SITE:3:11737'
                         }
                     ],
-                    'uid': 'urn:va:document:9E7A:3:11737'
+                    'uid': 'urn:va:document:SITE:3:11737'
                 },
                 {
                     'author': 'PROVIDER,EIGHT',
                     'authorDisplayName': 'Provider,Eight',
-                    'authorUid': 'urn:va:user:9E7A:991',
+                    'authorUid': 'urn:va:user:SITE:991',
                     'clinicians': [
                         {
                             'displayName': 'Provider,Eight',
                             'name': 'PROVIDER,EIGHT',
                             'role': 'AU',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Provider,Eight',
@@ -221,30 +221,30 @@ describe('The patient-record-document-view-signatures', function() {
                             'role': 'S',
                             'signature': 'EIGHT PROVIDER MD',
                             'signedDateTime': '20160329110819',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Provider,Eight',
                             'name': 'PROVIDER,EIGHT',
                             'role': 'ES',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'P8',
                             'name': 'P8',
                             'role': 'E',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         }
                     ],
                     'documentClass': 'PROGRESS NOTES',
-                    'documentDefUid': 'urn:va:doc-def:9E7A:20',
+                    'documentDefUid': 'urn:va:doc-def:SITE:20',
                     'documentTypeCode': 'C',
                     'documentTypeName': 'Crisis Note',
                     'encounterName': '7A GEN MED Aug 14, 2014',
-                    'encounterUid': 'urn:va:visit:9E7A:3:11420',
+                    'encounterUid': 'urn:va:visit:SITE:3:11420',
                     'entered': '20160329110810',
                     'facilityCode': '998',
                     'facilityName': 'ABILENE (CAA)',
@@ -253,12 +253,12 @@ describe('The patient-record-document-view-signatures', function() {
                     'lastUpdateTime': '20160329110819',
                     'localId': '11738',
                     'localTitle': 'CRISIS NOTE',
-                    'pid': '9E7A;3',
+                    'pid': 'SITE;3',
                     'referenceDateTime': '201603291108',
                     'signedDateTime': '20160329110819',
                     'signer': 'PROVIDER,EIGHT',
                     'signerDisplayName': 'Provider,Eight',
-                    'signerUid': 'urn:va:user:9E7A:991',
+                    'signerUid': 'urn:va:user:SITE:991',
                     'stampTime': '20160329110819',
                     'status': 'COMPLETED',
                     'statusDisplayName': 'Completed',
@@ -267,14 +267,14 @@ describe('The patient-record-document-view-signatures', function() {
                         {
                             'author': 'PROVIDER,EIGHT',
                             'authorDisplayName': 'Provider,Eight',
-                            'authorUid': 'urn:va:user:9E7A:991',
+                            'authorUid': 'urn:va:user:SITE:991',
                             'clinicians': [
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'AU',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
@@ -282,47 +282,47 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'S',
                                     'signature': 'EIGHT PROVIDER MD',
                                     'signedDateTime': '20160329110819',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'ES',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'P8',
                                     'name': 'P8',
                                     'role': 'E',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 }
                             ],
                             'content': 'abcded\r\n',
                             'dateTime': '201603291108',
                             'signer': 'PROVIDER,EIGHT',
                             'signerDisplayName': 'Provider,Eight',
-                            'signerUid': 'urn:va:user:9E7A:991',
+                            'signerUid': 'urn:va:user:SITE:991',
                             'status': 'COMPLETED',
-                            'summary': 'DocumentText{uid="urn:va:document:9E7A:3:11738"}',
-                            'uid': 'urn:va:document:9E7A:3:11738'
+                            'summary': 'DocumentText{uid="urn:va:document:SITE:3:11738"}',
+                            'uid': 'urn:va:document:SITE:3:11738'
                         }
                     ],
-                    'uid': 'urn:va:document:9E7A:3:11738'
+                    'uid': 'urn:va:document:SITE:3:11738'
                 },
                 {
                     'author': 'RADTECH,TWENTY',
                     'authorDisplayName': 'Radtech,Twenty',
-                    'authorUid': 'urn:va:user:9E7A:11736',
+                    'authorUid': 'urn:va:user:SITE:11736',
                     'clinicians': [
                         {
                             'displayName': 'Radtech,Twenty',
                             'name': 'RADTECH,TWENTY',
                             'role': 'AU',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                            'uid': 'urn:va:user:9E7A:11736'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                            'uid': 'urn:va:user:SITE:11736'
                         },
                         {
                             'displayName': 'Radtech,Twenty',
@@ -330,8 +330,8 @@ describe('The patient-record-document-view-signatures', function() {
                             'role': 'S',
                             'signature': 'TWENTY RADTECH MEDICAL STUDENT',
                             'signedDateTime': '20160330083817',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                            'uid': 'urn:va:user:9E7A:11736'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                            'uid': 'urn:va:user:SITE:11736'
                         },
                         {
                             'displayName': 'Provider,Eight',
@@ -339,41 +339,41 @@ describe('The patient-record-document-view-signatures', function() {
                             'role': 'C',
                             'signature': 'EIGHT PROVIDER MD',
                             'signedDateTime': '20160330135254',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Radtech,Twenty',
                             'name': 'RADTECH,TWENTY',
                             'role': 'ES',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                            'uid': 'urn:va:user:9E7A:11736'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                            'uid': 'urn:va:user:SITE:11736'
                         },
                         {
                             'displayName': 'Provider,Eight',
                             'name': 'PROVIDER,EIGHT',
                             'role': 'EC',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                            'uid': 'urn:va:user:9E7A:991'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                            'uid': 'urn:va:user:SITE:991'
                         },
                         {
                             'displayName': 'Ss',
                             'name': 'SS',
                             'role': 'E',
-                            'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                            'uid': 'urn:va:user:9E7A:11736'
+                            'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                            'uid': 'urn:va:user:SITE:11736'
                         }
                     ],
                     'cosignedDateTime': '20160330135254',
                     'cosigner': 'PROVIDER,EIGHT',
                     'cosignerDisplayName': 'Provider,Eight',
-                    'cosignerUid': 'urn:va:user:9E7A:991',
+                    'cosignerUid': 'urn:va:user:SITE:991',
                     'documentClass': 'PROGRESS NOTES',
-                    'documentDefUid': 'urn:va:doc-def:9E7A:40',
+                    'documentDefUid': 'urn:va:doc-def:SITE:40',
                     'documentTypeCode': 'PN',
                     'documentTypeName': 'Progress Note',
                     'encounterName': '7A GEN MED Aug 14, 2014',
-                    'encounterUid': 'urn:va:visit:9E7A:3:11420',
+                    'encounterUid': 'urn:va:visit:SITE:3:11420',
                     'entered': '20160330083802',
                     'facilityCode': '998',
                     'facilityName': 'ABILENE (CAA)',
@@ -382,12 +382,12 @@ describe('The patient-record-document-view-signatures', function() {
                     'lastUpdateTime': '20160330150254',
                     'localId': '11741',
                     'localTitle': 'ASI-ADDICTION SEVERITY INDEX',
-                    'pid': '9E7A;3',
+                    'pid': 'SITE;3',
                     'referenceDateTime': '201603300837',
                     'signedDateTime': '20160330083817',
                     'signer': 'RADTECH,TWENTY',
                     'signerDisplayName': 'Radtech,Twenty',
-                    'signerUid': 'urn:va:user:9E7A:11736',
+                    'signerUid': 'urn:va:user:SITE:11736',
                     'stampTime': '20160330150254',
                     'status': 'COMPLETED',
                     'statusDisplayName': 'Completed',
@@ -396,14 +396,14 @@ describe('The patient-record-document-view-signatures', function() {
                         {
                             'author': 'RADTECH,TWENTY',
                             'authorDisplayName': 'Radtech,Twenty',
-                            'authorUid': 'urn:va:user:9E7A:11736',
+                            'authorUid': 'urn:va:user:SITE:11736',
                             'clinicians': [
                                 {
                                     'displayName': 'Radtech,Twenty',
                                     'name': 'RADTECH,TWENTY',
                                     'role': 'AU',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Radtech,Twenty',
@@ -411,8 +411,8 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'S',
                                     'signature': 'TWENTY RADTECH MEDICAL STUDENT',
                                     'signedDateTime': '20160330083817',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
@@ -420,61 +420,61 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'C',
                                     'signature': 'EIGHT PROVIDER MD',
                                     'signedDateTime': '20160330135254',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Radtech,Twenty',
                                     'name': 'RADTECH,TWENTY',
                                     'role': 'ES',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'EC',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Ss',
                                     'name': 'SS',
                                     'role': 'E',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 }
                             ],
                             'content': 'test cosign note\r\n',
                             'cosigner': 'PROVIDER,EIGHT',
                             'cosignerDisplayName': 'Provider,Eight',
-                            'cosignerUid': 'urn:va:user:9E7A:991',
+                            'cosignerUid': 'urn:va:user:SITE:991',
                             'dateTime': '201603300837',
                             'signer': 'RADTECH,TWENTY',
                             'signerDisplayName': 'Radtech,Twenty',
-                            'signerUid': 'urn:va:user:9E7A:11736',
+                            'signerUid': 'urn:va:user:SITE:11736',
                             'status': 'COMPLETED',
-                            'summary': 'DocumentText{uid="urn:va:document:9E7A:3:11741"}',
-                            'uid': 'urn:va:document:9E7A:3:11741'
+                            'summary': 'DocumentText{uid="urn:va:document:SITE:3:11741"}',
+                            'uid': 'urn:va:document:SITE:3:11741'
                         },
                         {
                             'author': 'RADTECH,TWENTY',
                             'authorDisplayName': 'Radtech,Twenty',
-                            'authorUid': 'urn:va:user:9E7A:11736',
+                            'authorUid': 'urn:va:user:SITE:11736',
                             'clinicians': [
                                 {
                                     'displayName': 'Ss',
                                     'name': 'SS',
                                     'role': 'E',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Radtech,Twenty',
                                     'name': 'RADTECH,TWENTY',
                                     'role': 'AU',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Radtech,Twenty',
@@ -482,8 +482,8 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'S',
                                     'signature': 'RADTECH,TWENTY',
                                     'signedDateTime': '20160330150127',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
@@ -491,38 +491,38 @@ describe('The patient-record-document-view-signatures', function() {
                                     'role': 'C',
                                     'signature': 'PROVIDER,EIGHT',
                                     'signedDateTime': '20160330150254',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 },
                                 {
                                     'displayName': 'Radtech,Twenty',
                                     'name': 'RADTECH,TWENTY',
                                     'role': 'ES',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:11736"}',
-                                    'uid': 'urn:va:user:9E7A:11736'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:11736"}',
+                                    'uid': 'urn:va:user:SITE:11736'
                                 },
                                 {
                                     'displayName': 'Provider,Eight',
                                     'name': 'PROVIDER,EIGHT',
                                     'role': 'EC',
-                                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:991"}',
-                                    'uid': 'urn:va:user:9E7A:991'
+                                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:991"}',
+                                    'uid': 'urn:va:user:SITE:991'
                                 }
                             ],
                             'content': 'gavin lam addendum\r\n',
                             'cosigner': 'PROVIDER,EIGHT',
                             'cosignerDisplayName': 'Provider,Eight',
-                            'cosignerUid': 'urn:va:user:9E7A:991',
+                            'cosignerUid': 'urn:va:user:SITE:991',
                             'dateTime': '201603301501',
                             'signer': 'RADTECH,TWENTY',
                             'signerDisplayName': 'Radtech,Twenty',
-                            'signerUid': 'urn:va:user:9E7A:11736',
+                            'signerUid': 'urn:va:user:SITE:11736',
                             'status': 'COMPLETED',
-                            'summary': 'DocumentText{uid="urn:va:document:9E7A:3:11743"}',
-                            'uid': 'urn:va:document:9E7A:3:11743'
+                            'summary': 'DocumentText{uid="urn:va:document:SITE:3:11743"}',
+                            'uid': 'urn:va:document:SITE:3:11743'
                         }
                     ],
-                    'uid': 'urn:va:document:9E7A:3:11741'
+                    'uid': 'urn:va:document:SITE:3:11741'
                 }]
             }
         };
@@ -536,7 +536,7 @@ describe('The patient-record-document-view-signatures', function() {
                     statusCode: 200
                 };
 
-                if (options.url === '/data/urn:va:user:9E7A:991') {
+                if (options.url === '/data/urn:va:user:SITE:991') {
                     return callback(err, usersResponse, sampleSigner);
                 } else {
                     return callback(err, usersResponse, sampleCosigner);

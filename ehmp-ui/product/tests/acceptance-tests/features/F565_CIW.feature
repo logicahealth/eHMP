@@ -3,7 +3,8 @@ Feature: F565 - Include Concept Invoked Workspaces Menu to Additional Views
 
 Background:
 	# Given user is logged into eHMP-UI
-	And user searches for and selects "Nineteen,Patient"
+	#And user searches for and selects "Nineteen,Patient"
+	And user searches for and selects "Eight,Patient"
     Then Overview is active
     And the user clicks the Workspace Manager
     Then the user deletes all user defined workspaces
@@ -15,8 +16,8 @@ Background:
  Scenario: User can navigate to user defined workspace from Problems applet after associating a problem
  	When Overview is active
  	And the user has selected All within the global date picker
-  	When user clicks on the left hand side of the item "Essential Hypertension" 
-  	Then user selects the "Essential Hypertension" CIW icon in Problems Gist
+  	When user hovers over the left hand side of the item "Essential Hypertension" 
+  	Then user selects the associated workspace CIW in Problems Gist
   	Then the user navigated to the user defined workspace "/patient/ciw"
 
 @US6095 @DE4265 
@@ -27,7 +28,9 @@ Scenario: Verify CIW Menu displayed on summary view
   And the user adds an summary "problems" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
   Then the "UDAFFILTER" screen is active
-  When user clicks on summary row for "Hypertension" in the Problems Applet
+  And the "Problems" ("problems") summary applet is displayed
+  And the Problems applet displays
+  When user hovers on summary row for "Hypertension" in the Problems Applet
   Then a popover toolbar displays the CIW button
 
 @US6095 @DE4265 
@@ -38,6 +41,7 @@ Scenario: Verify CIW Menu displayed on expanded view
   And the user adds an expanded "problems" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
   Then the "UDAFFILTER" screen is active
+  And the "Problems" ("problems") expanded applet is displayed
   When the user clicks on the expanded row for "Hypertension" in the Problems Applet
   Then a popover toolbar displays the CIW button
 
@@ -63,12 +67,12 @@ Scenario: Verify CIW Menu displayed on maximized view
     And the user associates user defined workspace "SECONDCIW" with "Essential hypertension"
     And user closes the user defined work space manager
  	And the user has selected All within the global date picker
-  	When user clicks on the left hand side of the item "Essential Hypertension" 
-  	Then user selects the "Essential Hypertension" CIW dowpdown icon in Problems Gist
+  	When user hovers over the left hand side of the item "Essential Hypertension" 
+  	Then user selects the associated workspace icon in Problems Gist
   	Then the following workspace options are displayed
-  	 | workspace name |
-  	 | CIW  |
-  	 | SECONDCIW |
-  	When the user selects workspace option "SECONDCIW"
+  	 | workspace name 	|
+  	 | CIW LINK  		|
+  	 | SECONDCIW LINK	|
+  	When the user selects workspace option SECONDCIW
   	Then the user navigated to the user defined workspace "/patient/secondciw"
 

@@ -88,7 +88,7 @@ define([
                     tagName: 'span',
                     template: Handlebars.compile(model.get('cwadIdentifier')+' <span class="fa-stack"><i class="fa fa-chevron-circle-right font-size-16"></i></span>')
                 }),
-                buttonClass: 'btn-xs',
+                buttonClass: 'btn-default btn-xs',
                 viewport: '.main-tray-viewport',
                 preventFocusoutClose: true,
                 containerHeightDifference: 20,

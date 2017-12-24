@@ -83,7 +83,6 @@ define([
                         extraClasses: ["btn-default", "btn-sm"],
                         label: "Cancel",
                         name: "esig-cancel",
-                        title: "Press enter to cancel.",
                         id: 'esig-cancel-btn',
                         type: "button"
                     }, {
@@ -92,7 +91,6 @@ define([
                         label: "Sign",
                         name: 'esig-sign',
                         id: 'esig-sign-btn',
-                        title: "Press enter to sign note"
                     }]
                 }]
             }]

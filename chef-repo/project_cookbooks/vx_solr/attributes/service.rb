@@ -8,6 +8,7 @@ default[:vx_solr][:service][:jvm_params] = "-Djute.maxbuffer=15000000"
 default[:vx_solr][:service][:memory] = nil
 default[:vx_solr][:service][:solr_host] = nil
 default[:vx_solr][:service][:zk_client_timeout] = 40000
+default[:vx_solr][:service][:heap] = nil
 default[:vx_solr][:service][:solr_instances] = 1
 default[:vx_solr][:service][:'chef-rewind_version'] = "0.0.9"
 

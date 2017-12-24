@@ -9,11 +9,11 @@ And number of audit logs is known
 @US452
 Scenario: Request to MVI with valid DFN/Site Code combination is audited
     Given user logs in with valid credentials
-    And a DFN "100022" and site code "200" combination
-    And number of mvi audit logs is known for dfn "100022" and sitecode "200"
+    And a DFN "100022" and site code "SITE" combination
+    And number of mvi audit logs is known for dfn "100022" and sitecode "SITE"
     When a request is made to MVI with that combination
     Then the response is successful
-    And the audit log saves the mvi request data for "100022" and "200"
+    And the audit log saves the mvi request data for "100022" and "SITE"
         
     
 @US452
@@ -47,8 +47,8 @@ Scenario: Request to MVI with invalid ICN is audited
 
 @US449
 Scenario: Require user authentication to allow access to the VistA Exchange patient record retrieval API
-#DNS   @kodak REDACTED
-	Given user logs in with username "DNS   ", password "REDACTED", and sitecode "200"
+#USER  @kodak USER  !!
+	Given user logs in with username "USER  ", password "USER  !!", and sitecode "SITE"
 	When an auth client requests the patient resource directory for patient with id "E1"
 	Then the endpoint responds back with a json object
     And a successful authenticated response is returned within "30" seconds
@@ -65,9 +65,9 @@ Scenario Outline: User attempts to access the API with invalid credentials
 
     Examples:
     |username|password  |sitecode   |
-    |baduid  |REDACTED  |200|
-    |DNS     |badpw     |200|
-    |DNS     |REDACTED  |badsite    |
+    |USER    |PW        |SITE|
+    |USER    |PW        |SITE|
+    |USER    |PW        |badsite    |
 
 @US449
 Scenario: User attempts to access the API without login information
@@ -94,21 +94,21 @@ Scenario Outline: User can access data from multiple VistA hosts after single si
 
 Examples:
     |username		|password	|sitecode	    |
-    |DNS   			|REDACTED	|200	|
-    |DNS   			|REDACTED	|542GA |
+    |USER  			|USER  !!	|SITE	|
+    |USER  			|USER  !!	|SITE |
 
 
 @US449
 Scenario: Require user authentication to command all endpoints
 	Given a patient with id "E1" has not been synced
-	Given user logs in with username "DNS   ", password "badpassword", and sitecode "doesnotexist"
+	Given user logs in with username "USER  ", password "PW", and sitecode "doesnotexist"
     When an auth client commands clear cache for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
 
 @US449
 Scenario Outline: Require user authentication to allow access to all endpoints
-	Given user logs in with username "DNS   ", password "badpassword", and sitecode "doesnotexist"
+	Given user logs in with username "USER  ", password "PW", and sitecode "doesnotexist"
     When an authenticated client requests "<endpoint>" for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
@@ -125,14 +125,14 @@ Examples:
 @US449 @US449_allergysummary
 Scenario:Require user authentication to allow access for allergy summary
     Given a patient with id "E1" has not been synced
-    Given user logs in with username "DNS   ", password "badpassword", and sitecode "doesnotexist"
+    Given user logs in with username "USER  ", password "PW", and sitecode "doesnotexist"
     When a client requests an allergy summary for patient with id "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
 
 @US449 @US449_FHIR
 Scenario Outline: Require user authentication to allow access to all fhir endpoints
-    Given user logs in with username "DNS   ", password "badpassword", and sitecode "doesnotexist"
+    Given user logs in with username "USER  ", password "PW", and sitecode "doesnotexist"
     When I search for JSON "<endpoint>" Resources with a "identifier" of "E1"
     Then the endpoint responds back with an error message
     And an unauthorized response is returned within "10" seconds
@@ -146,7 +146,7 @@ Examples:
     
 @US451 @US451_on
 Scenario: Data retrieval option is turned on
-    Given user logs in with username "IP    ", password "REDACTED", and sitecode "200"
+    Given user logs in with username "USER  ", password "PW      ", and sitecode "SITE"
     #Given a patient has not been synced
     And a patient with id "E1" has not been synced
     And data retrieval option is turned on
@@ -156,14 +156,14 @@ Scenario: Data retrieval option is turned on
     Then the audit log saves sync request data for patient "E1" with data
     #vista instance, data type retrieved, patient id, date, time delta (how long did fetch take), number of data items (record size), and data
         | field             | value     |
-        | vistAInstance     | 200       |
+        | vistAInstance     | SITE       |
         | dataType          | vital     |
         | patientIdentifier | E1        |
         | dataItems         | 7         |         
         
 @US451 @US451_off
 Scenario: Data retrieval option is turned off
-    Given user logs in with username "IP    ", password "REDACTED", and sitecode "200"
+    Given user logs in with username "USER  ", password "PW      ", and sitecode "SITE"
     #Given a patient has not been synced
     And a patient with id "E1" has not been synced
     And data retrieval option is turned off
@@ -173,7 +173,7 @@ Scenario: Data retrieval option is turned off
     Then the audit log saves sync request data for patient "E1" without data
     #vista instance, data type retrieved, patient id, date, time delta (how long did fetch take), number of data items (record size), and data
         | field             | value     |
-        | vistAInstance     | 200       |
+        | vistAInstance     | SITE       |
         | dataType          | vital     |
         | patientIdentifier | E1        |
         | dataItems         | 7         |         
@@ -182,19 +182,19 @@ Scenario: Data retrieval option is turned off
 @US450 @USHERE
 Scenario: User's attempt to authenticate with valid credentials is audited
 	Given the soap cache is cleared
-	Given user logs in with username "IP    ", password "REDACTED", and sitecode "200"
+	Given user logs in with username "USER  ", password "PW      ", and sitecode "SITE"
 	And a patient with id "E1" has been synced
-	And number of user audit logs is known for "IP    "
+	And number of user audit logs is known for "USER  "
     When an authenticated client requests "vital" for patient with id "E1"
     Then a successful authenticated response is returned within "30" seconds
     And the endpoint responds back with a json object
-    And the authentication request is audited as "true" for "IP    "
+    And the authentication request is audited as "true" for "USER  "
 
 
 @US450
 Scenario: User's attempt to authenticate with invalid credentials is audited
 	Given the soap cache is cleared
-	Given user logs in with username "badname", password "badpassword", and sitecode "badsitecode"
+	Given user logs in with username "badname", password "PW", and sitecode "SITE"
     And a patient with id "E1" has been synced
     And number of user audit logs is known for "badname"
     When an authenticated client requests "vital" for patient with id "E1"
@@ -205,12 +205,12 @@ Scenario: User's attempt to authenticate with invalid credentials is audited
 
 @US450
 Scenario Outline: User's request for patient information is audited
-	Given user logs in with username "DNS   ", password "REDACTED", and sitecode "542GA"
+	Given user logs in with username "USER  ", password "USER  !!", and sitecode "SITE"
 	And a patient with id "E1" has been synced
     When an authenticated client requests "<dataRequest>" for patient with id "E1"
     Then a successful authenticated response is returned within "30" seconds
     And the endpoint responds back with a json object
-    And the audit log saves datatype "<dataRequest>" for patient "E1" for "DNS   "
+    And the audit log saves datatype "<dataRequest>" for patient "E1" for "USER  "
 
     Examples:
     |dataRequest	|

@@ -55,6 +55,9 @@ function sendHeartbeat(logger, config, environment, processName, profile, proces
 
     if (!processName) {
         logger.error('healthcheck-utils(name: %s, id: %s).sendHeartbeat(): processName is null or undefined. Cannot send heartbeat.', processName, processId);
+        if(callback) {
+            return setTimeout(callback, 0, null);
+        }
         return;
     }
 

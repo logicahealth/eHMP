@@ -46,7 +46,7 @@ Scenario: Client can request DoD vitals in VPR format
     #And the jds results contain results
       | field             | panorama_value                 |
       | summary           | BLOOD PRESSURE 110/71 mm[Hg]   |
-      # | uid               | urn:va:vital:9E7A:100615:24047 |
+      # | uid               | urn:va:vital:SITE:100615:24047 |
       | pid               | CONTAINS ;100615               |
       | facilityCode      | 500                            |
       | facilityName      | CAMP MASTER                    |
@@ -57,7 +57,7 @@ Scenario: Client can request DoD vitals in VPR format
    And the VPR results contain
       | field             | panorama_value                 |
       | summary           | TEMPERATURE 100.1 F            |
-      # | uid               | urn:va:vital:9E7A:100615:24048 |
+      # | uid               | urn:va:vital:SITE:100615:24048 |
       | pid               | CONTAINS ;100615               |
       | facilityCode      | 500                            |
       | facilityName      | CAMP MASTER                    |

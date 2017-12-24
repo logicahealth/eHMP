@@ -31,21 +31,24 @@ Feature: Basic Military History
 
   @US10809 @US10810 @TC2280_2 @TC2281_2 @DE6392 
   Scenario: Verify the Military History first row Edit View - Branch(s) of Service
-    When the user clicks on data row number "1"
+    And user hovers over the military history applet trend view row "1"
+    And user can view the Quick Menu Icon in military history applet
+    When Quick Menu Icon is selected in military history applet
+
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 1st testing text row" and clicks row "1" save
     And the description for row "1" is updated to "This is 1st testing text row"
 
-    When the user clicks on data row number "1"
+    When the user views the Quick Menu in military history applet for row "1"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 2nd testing text row" and clicks row "1" save
     And the description for row "1" is updated to "This is 2nd testing text row"
 
-    When the user clicks on data row number "1"
+    When the user views the Quick Menu in military history applet for row "1"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the user edits text and clicks row "1" cancel
@@ -54,12 +57,12 @@ Feature: Basic Military History
     When POB the user clicks the Military History Expand Button
     And POB "military_hist" Military History applet loaded successfully
     Then the Military History applet contains headers
-      | Headers |
-      | Name |
-      | Description |
+      | Headers       |
+      | Name          |
+      | Description   |
       | Last Modified |
-      | Location |
-      | Modified By |
+      | Location      |
+      | Modified By   |
     And the Last Modified column displays last updated date
     And the Location column displays the name of the site "PANORAMA"
     And the Modified By column displays the name of the user "UATTWO EHMP" who edited the description
@@ -74,21 +77,24 @@ Feature: Basic Military History
 
   @US10809 @US10810 @TC2280_3 @TC2281_3 @DE6392 
   Scenario: Verify the Military History second row Edit View - Service Date(s)
-    When the user clicks on data row number "2"
+    And user hovers over the military history applet trend view row "2"
+    And user can view the Quick Menu Icon in military history applet
+    When Quick Menu Icon is selected in military history applet
+
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 1st testing text row" and clicks row "2" save
     And the description for row "2" is updated to "This is 1st testing text row"
 
-    When the user clicks on data row number "2"
+    When the user views the Quick Menu in military history applet for row "2"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 2nd testing text row" and clicks row "2" save
     And the description for row "2" is updated to "This is 2nd testing text row"
 
-    When the user clicks on data row number "2"
+    When the user views the Quick Menu in military history applet for row "2"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the user edits text and clicks row "2" cancel
@@ -96,21 +102,24 @@ Feature: Basic Military History
 
   @US10809 @US10810 @TC2280_4 @TC2281_4 @DE6392
   Scenario: Verify the Military History third row Edit View - Areas of Service
-    When the user clicks on data row number "3"
+    And user hovers over the military history applet trend view row "3"
+    And user can view the Quick Menu Icon in military history applet
+    When Quick Menu Icon is selected in military history applet
+
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 1st testing text row" and clicks row "3" save
     And the description for row "3" is updated to "This is 1st testing text row"
 
-    When the user clicks on data row number "3"
+    When the user views the Quick Menu in military history applet for row "3"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 2nd testing text row" and clicks row "3" save
     And the description for row "3" is updated to "This is 2nd testing text row"
 
-    When the user clicks on data row number "3"
+    When the user views the Quick Menu in military history applet for row "3"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the user edits text and clicks row "3" cancel
@@ -118,21 +127,24 @@ Feature: Basic Military History
 
   @US10809 @US10810 @TC2280_5 @TC2281_5 @DE6392
   Scenario: Verify the Military History fourth row Edit View - Occupational specialties
-    When the user clicks on data row number "4"
+    Given user hovers over the military history applet trend view row "4"
+    Then user can view the Quick Menu Icon in military history applet
+    When Quick Menu Icon is selected in military history applet
+
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 1st testing text row" and clicks row "4" save
     And the description for row "4" is updated to "This is 1st testing text row"
 
-    When the user clicks on data row number "4"
+    When the user views the Quick Menu in military history applet for row "4"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the Edit form has a Text box, Cancel and Save buttons
     Then the user enters text "This is 2nd testing text row" and clicks row "4" save
     And the description for row "4" is updated to "This is 2nd testing text row"
 
-    When the user clicks on data row number "4"
+    When the user views the Quick Menu in military history applet for row "4"
     And the buttons Details form and Edit form are displayed on
     And the user clicks on Edit form button
     And the user edits text and clicks row "4" cancel

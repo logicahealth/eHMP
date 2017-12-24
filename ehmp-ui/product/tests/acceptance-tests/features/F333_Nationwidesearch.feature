@@ -7,7 +7,6 @@ Background:
   And the user enters last name "Dodonly" in nationwide tray
   And the user enters first name "Patient" in nationwide tray
   And the user enters ssn "432-11-1234" in nationwide tray
-  Then take screenshot for comparison purposes with name "nationwide"
   And the user selects Nationwide search button
   Then the Nationwide Tray contains search results
   And the Nationwide search results contain "DODONLY, PATIENT"

@@ -362,7 +362,7 @@ Object.defineProperty(procedure, 'EDUCATION_TYPECODE_SYSTEM', {
 });
 Object.defineProperty(procedure, 'NONEDUCATION_TYPECODE_SYSTEM', {
     get: function() {
-        return 'gov.va.fileman697-2:9E7A';
+        return 'gov.va.fileman697-2:SITE';
     }
 });
 Object.defineProperty(procedure, 'PROCEDURE_OUTCOME_SYSTEM', {

@@ -74,8 +74,8 @@ Then(/^Cover Sheet is active$/) do
 
   # increased the timeout as coversheet applets are taking longer to load
   max_attempt = 2
+  time_to_load = 90
   begin
-    time_to_load = 90
     expect(browser_access.wait_until_xpath_count("Number of Applets", 9, time_to_load)).to be_true
   rescue => e
     TestSupport.driver.navigate.refresh
@@ -83,11 +83,12 @@ Then(/^Cover Sheet is active$/) do
     retry if max_attempt > 0
     raise e if max_attempt <= 0
   end
+
   wait = Selenium::WebDriver::Wait.new(:timeout => time_to_load) 
   begin
     wait.until { CoverSheetApplets.instance.applets_loaded? }
   rescue
-    expect(CoverSheetApplets.instance.applets_loaded? true).to eq(true)
+    expect(CoverSheetApplets.instance.applets_loaded? true).to eq(true), "Applets did not load after #{time_to_load} sec"
   end
   @ehmp = PobHeaderFooter.new
   @ehmp.wait_until_header_footer_elements_loaded
@@ -134,7 +135,7 @@ class CoverSheetApplets < AccessBrowserV2
     add_verify(CucumberLabel.new("Number of Applets"), VerifyXpathCount.new(@@applet_count), @@applet_count)
 
     # count the number of rows in the allergy_grid table
-    @@vitals_applet_data_grid_rows = AccessHtmlElement.new(:xpath, ".//*[@id='grid-panel-vitals']/div[3]/div/div[1]/div/table/tbody/tr")
+    @@vitals_applet_data_grid_rows = AccessHtmlElement.new(:css, "[data-appletid=vitals] tbody tr")
     add_verify(CucumberLabel.new("Number of Vitals Applet Rows"), VerifyXpathCount.new(@@vitals_applet_data_grid_rows), @@vitals_applet_data_grid_rows)
   end
   
@@ -147,24 +148,24 @@ class CoverSheetApplets < AccessBrowserV2
     # | Active & Recent MEDICATIONS   |
     # | COMMUNITY HEALTH SUMMARIES|
     helper = HelperMethods.new
-    allergy_gist_applet = AllergiesGist.instance
+    allergy_gist_applet = PobAllergiesApplet.new
     order_applet = OrdersContainer.instance
     conditions = ActiveProblems.instance
     numeric_lab = NumericLabResults.instance
     vitals = VitalsCoversheet.instance
     immunizations = ImmunizationsCoverSheet.instance
-    appointments = AppointmentsCoverSheet.instance
-    active_meds = ActiveMedications.instance
+    appointments = PobAppointmentsApplet.new
+    active_meds = PobActiveRecentMedApplet.new
     health_summaries = PobCommunityHealthApplet.new
     return false unless print_applet_loading_outcome("Conditions/Problems", conditions.applet_grid_loaded, print_checks)
     return false unless print_applet_loading_outcome("Vitals", vitals.applet_loaded, print_checks)
-    return false unless print_applet_loading_outcome("Allergy Gist", allergy_gist_applet.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Allergy Gist", allergy_gist_applet.applet_gist_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Appointments", appointments.applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Numeric Lab Results", numeric_lab.applet_loaded?, print_checks)
     health_summary_loaded = helper.applet_grid_loaded(health_summaries.has_fld_empty_row?, health_summaries.tbl_data_rows)
     return false unless print_applet_loading_outcome("Community Health Summaries", health_summary_loaded, print_checks)
     return false unless print_applet_loading_outcome("Immunizations", immunizations.applet_loaded?, print_checks)
-    return false unless print_applet_loading_outcome("Active Meds", active_meds.applet_loaded?, print_checks)
+    return false unless print_applet_loading_outcome("Active Meds", active_meds.summary_applet_loaded?, print_checks)
     return false unless print_applet_loading_outcome("Order", order_applet.applet_loaded, print_checks)
     return true
   end

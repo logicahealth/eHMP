@@ -12,7 +12,7 @@ var query = 'SELECT DISTINCT PCMM.TEAM.TEAM_ID, PCMM.TEAM.TEAM_NAME, SDSADM.STD_
     + 'INNER JOIN SDSADM.STD_INSTITUTION ON SDSADM.STD_INSTITUTION.ID = PCMM.TEAM.VA_INSTITUTION_ID '
     + 'INNER JOIN PCMM.TEAM_PATIENT_ASSIGN ON PCMM.TEAM_PATIENT_ASSIGN.TEAM_ID = PCMM.TEAM.TEAM_ID '
     + 'INNER JOIN PCMM.PCMM_PATIENT ON PCMM.PCMM_PATIENT.PCMM_PATIENT_ID = PCMM.TEAM_PATIENT_ASSIGN.PCMM_PATIENT_ID '
-    + 'WHERE PCMM.STAFF.STAFF_IEN=:0 AND PCMM.PCMM_PATIENT.ICN=:1';
+    + 'WHERE PCMM.STAFF.STAFF_IEN=:0 AND PCMM.PCMM_PATIENT.BASE_ICN=:1';
 
 module.exports.fetch = function(logger, configuration, callback, params) {
     var pcmmDbConfig = _.get(params, 'pcmmDbConfig');
@@ -22,8 +22,11 @@ module.exports.fetch = function(logger, configuration, callback, params) {
     var ien = _.get(params, 'staffIEN');
     bindVars.push(ien);
 
-    var patientID = _.get(params, 'pid');
-    bindVars.push(patientID);
+    var baseIcn = _.get(params, 'pid');
+    if (!_.isUndefined(baseIcn)) {
+        baseIcn = baseIcn.split('V')[0];
+    }
+    bindVars.push(baseIcn);
 
     logger.trace('teams-for-user-patient-related picklist: query = ' + query);
     pcmm.doQueryWithParams(pcmmDbConfig, query, bindVars, function(err, rows) {

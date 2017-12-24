@@ -6,7 +6,7 @@ Feature: JLV GUI Refactoring to use VistA Exchange
 Scenario: Verify current patient identifying traits
     Given user searches for and selects "Eight,Patient"
 	Then Cover Sheet is active
-	And the Global Header displays the user name "Eight,Patient (E0008)"
+	And the Patient View Current Patient displays the user name "Eight,Patient (E0008)"
 	And the applets are displayed on the coversheet
 		| applet 					|
 		| ALLERGIES     		 	| 

@@ -1,14 +1,14 @@
 <fieldset class="all-margin-sm btn-date-range">
     <legend class="sr-only">Date Range Filter</legend>
     <div class="btn-group btn-group-xs">
-        <button id="all-range-{{appletId}}" name="allRange" type="button" class="btn btn-sm btn-default" title="Press enter to select all years">All</button>
-        <button id="2yr-range-{{appletId}}" name="2yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 2 years">2yr</button>
-        <button id="1yr-range-{{appletId}}" name="1yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last year">1yr</button>
-        <button id="3mo-range-{{appletId}}" name="3moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 3 months">3m</button>
-        <button id="1mo-range-{{appletId}}" name="1moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last month">1m</button>
-        <button id="7d-range-{{appletId}}" name="7dRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 7 days">7d</button>
-        <button id="72hr-range-{{appletId}}" name="72hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 72 hours">72hr</button>
-        <button id="24hr-range-{{appletId}}" name="24hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 24 hours">24hr</button>
+        <button id="all-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="All years">All</button>
+        <button id="2yr-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last 2 years">2yr</button>
+        <button id="1yr-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last year">1yr</button>
+        <button id="3mo-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last 3 months">3m</button>
+        <button id="1mo-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last month">1m</button>
+        <button id="7d-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last 7 days">7d</button>
+        <button id="72hr-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last 72 hours">72hr</button>
+        <button id="24hr-range-{{appletId}}" type="button" class="btn btn-sm btn-default" aria-label="Last 24 hours">24hr</button>
     </div>
     <div class="form-group">
         <label for="filter-from-date-{{appletId}}" class="font-size-12">From</label>
@@ -16,7 +16,7 @@
             <span class="input-group-addon" aria-hidden="true" for="filter-from-date-{{appletId}}">
                 <i class="fa fa-calendar"></i>
             </span>
-            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-from-date-{{appletId}}" name="filter-from-date-{{appletId}}" title="Enter date in MM/DD/YYYY format" />
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-from-date-{{appletId}}" name="filter-from-date-{{appletId}}" aria-describedby="customDateRange{{appletId}}" />
         </div>
     </div>
     <div class="form-group">
@@ -25,8 +25,9 @@
             <span class="input-group-addon" aria-hidden="true" for="filter-to-date-{{appletId}}">
                 <i class="fa fa-calendar"></i>
             </span>
-            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-to-date-{{appletId}}" name="filter-to-date-{{appletId}}" title="Enter date in MM/DD/YYYY format" />
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filter-to-date-{{appletId}}" name="filter-to-date-{{appletId}}" aria-describedby="customDateRange{{appletId}}" />
         </div>
     </div>
-    <button id="custom-range-apply-{{appletId}}" name="custom-range-apply-{{appletId}}" type="submit" class="btn btn-sm btn-primary left-margin-sm" title="Press enter to apply custom date range" disabled>Apply</button>
+    <div id="customDateRange{{appletId}}" class="sr-only" aria-hidden="true">Use format: MM/DD/YYYY</div>
+    <button id="custom-range-apply-{{appletId}}" name="custom-range-apply-{{appletId}}" type="submit" class="btn btn-sm btn-primary left-margin-sm" disabled>Apply</button>
 </fieldset>

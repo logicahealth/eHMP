@@ -18,5 +18,5 @@ exec bluepill load /etc/bluepill/<%= @name %>.pill
 pre-stop script
   set -x
   PATH=/opt/chef/bin:/opt/chef/embedded/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  exec bluepill stop <%= @name %>
+  exec bluepill <%= @name %> stop
 end script

@@ -1,0 +1,61 @@
+module.exports = {
+    'env': {
+        'es6': true,
+        'node': true,
+        'jasmine': true
+    },
+    'extends': 'eslint:recommended',
+    'parserOptions': {
+        'ecmaVersion': 6
+        // 'sourceType': 'module'
+    },
+    'rules': {
+        'array-callback-return': ['error'],
+        'block-scoped-var': ['error'],
+        'callback-return': ['error'],
+        'camelcase': ['error'],
+        'curly': ['error'],
+        'eol-last': ['error'],
+        'eqeqeq': ['error', 'always', {'null': 'ignore'}],
+        'func-call-spacing': ['error', 'never'],
+        'guard-for-in': ['error'],
+        'handle-callback-err': ['error'],
+        'indent': ['error', 4],
+        'linebreak-style': ['error', 'unix'],
+        'no-caller': ['error'],
+        'no-else-return': ['error'],
+        'no-eval': ['error'],
+        'no-extend-native': ['error'],
+        'no-floating-decimal': ['error'],
+        'no-implicit-coercion': ['error'],
+        'no-implied-eval': ['error'],
+        'no-labels': ['error'],
+        'no-lone-blocks': ['error'],
+        'no-loop-func': ['error'],
+        'no-mixed-requires': ['error'],
+        'no-multi-assign': ['error'],
+        'no-new': ['error'],
+        'no-new-func': ['error'],
+        'no-new-wrappers': ['error'],
+        'no-return-assign': ['error'],
+        'no-self-compare': ['error'],
+        'no-sequences': ['error'],
+        'no-sync': ['error'],
+        'no-throw-literal': ['error'],
+        'no-trailing-spaces': ['error'],
+        'no-undefined': ['error'],
+        'no-unused-vars': ['error', {'args': 'none'}],
+        'no-useless-call': ['error'],
+        'no-useless-concat': ['error'],
+        'no-useless-escape': ['error'],
+        'one-var': ['error', 'never'],
+        'quotes': ['error', 'single'],
+        'require-jsdoc': ['warn'],
+        'semi': ['error', 'always'],
+        'strict': ['error', 'global'],
+        'unicode-bom': ['error', 'never'],
+        'valid-jsdoc': ['error', {'prefer': {'returns': 'return'}, 'requireReturn': false, 'requireParamDescription': false, 'requireReturnDescription': false}]
+        // 'no-magic-numbers': ['warn'],
+
+    }
+};

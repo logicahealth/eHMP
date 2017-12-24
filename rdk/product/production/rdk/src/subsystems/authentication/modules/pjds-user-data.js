@@ -4,7 +4,7 @@ var moment = require('moment');
 var rdk = require('../../../core/rdk');
 var RdkTimer = rdk.utils.RdkTimer;
 var RdkError = rdk.utils.RdkError;
-var pjds = require('../../../subsystems/pjds/pjds-store');
+var pjdsUtil = rdk.utils.pjdsUtil;
 
 /**
  * Call (p)jds for permissions related to the user to help determine some eHMP policies
@@ -15,6 +15,7 @@ var pjds = require('../../../subsystems/pjds/pjds-store');
  * @return {Object|undefined}
  */
 var getEhmpUserData = function(req, res, pjdsCallback, params) {
+    var errorObj;
     var logger = req.logger;
     var data = _.get(params, 'data', {});
     var uid = data.uid;
@@ -31,33 +32,40 @@ var getEhmpUserData = function(req, res, pjdsCallback, params) {
         return pjdsCallback(err, data);
     };
     if (!uid) {
-        var errorObj = new RdkError({
-            'code': 'pjds.412.1001'
+        errorObj = new RdkError({
+            code: 'pjds.412.1001',
+            logger: logger
         });
         return callback(errorObj, null);
     }
     //Gets User Permission Sets for User
     var pjdsOptions = {
-        store: 'ehmpusers',
-        key: uid
+        user: {
+            store: 'ehmpusers',
+            uid: uid
+        }
     };
-    pjds.get(req, res, pjdsOptions, function(error, response) {
+
+    //permission and permission set filters default to `eq(status,active)`
+    pjdsUtil.getUserWithFilteredPermissions(req, res, pjdsOptions, function(error, response) {
         if (error) {
-            var errorObj = new RdkError({
-                'error': error,
-                'code': 'pjds.500.1001'
+            errorObj = new RdkError({
+                error: error,
+                code: 'pjds.500.1001',
+                logger: logger
             });
             return callback(errorObj, null);
         }
         logger.trace(response, 'pJDS ehmp users result');
 
-        data.preferences = _.get(response, 'data.preferences', {
+        data.preferences = _.get(response, 'preferences', {
             defaultScreen: {}
         });
-        data.permissionSets = _.get(response, 'data.permissionSet.val', []);
-        data.eHMPUIContext = _.get(response, 'data.eHMPUIContext', {});
-        data.permissions = _.get(response, 'data.permissionSet.additionalPermissions', []);
-        data.unsuccessfulLoginAttemptCount = _.get(response, 'data.unsuccessfulLoginAttemptCount', 0);
+        data.permissionSets = _.get(response, 'permissionSet.val', []);
+        data.eHMPUIContext = _.get(response, 'eHMPUIContext', {});
+        data.permissions = _.get(response, 'permissions') || _.get(response, 'permissionSet.additionalPermissions', []);
+        data.nationalAccess = _.get(response, 'nationalAccess', false);
+        data.unsuccessfulLoginAttemptCount = _.get(response, 'unsuccessfulLoginAttemptCount', 0);
         return callback(null, data);
     });
 };
@@ -72,6 +80,8 @@ var getEhmpUserData = function(req, res, pjdsCallback, params) {
  * @return {Object|undefined}
  */
 var getTrustedSystemData = function(req, res, authenticationCB, params) {
+    var errorObj;
+    var logger = req.logger;
     var name = _.get(params, 'name');
     var timer = new RdkTimer({
         'name': 'systemAuthTimer.authenticationStep',
@@ -79,103 +89,61 @@ var getTrustedSystemData = function(req, res, authenticationCB, params) {
     });
 
     var callback = function(err, data) {
-        timer.log(req.logger, {
+        timer.log(logger, {
             'stop': true
         });
         return authenticationCB(err, data);
     };
-    var errorObj;
+
     if (!name) {
-        var errObj = new RdkError({
-            code: 'pjds.412.1001'
+        errorObj = new RdkError({
+            code: 'pjds.412.1001',
+            logger: logger
         });
-        return callback(errObj, null);
+        return callback(errorObj, null);
     }
-    var data = {
-        name: name,
-        consumerType: 'system',
-        permissionSets: [],
-        permissions: []
-    };
     //Gets User Permission Sets for User
     var pjdsOptions = {
-        store: 'trustsys',
-        key: name
+        user: {
+            store: 'trustsys',
+            uid: name
+        },
+        'filter-permission-set': 'ilike(status,"active%")',
+        'filter-permission': 'ilike(status,"active%")'
     };
 
-    pjds.get(req, res, pjdsOptions, function(error, response) {
-        if (error) {
-            req.logger.error('ERROR: There was an error finding system user ' + name + ' in pJDS');
-            errorObj = new RdkError({
-                code: 'pjds.401.1003',
-                error: error
-            });
-            return callback(errorObj, null);
-        }
-        if (_.result(response, 'data.name', '') !== name) {
-            errorObj = new RdkError({
-                code: 'pjds.401.1003',
-                error: 'response name did not match the request name'
-            });
-            return callback(errorObj, null);
-        }
-
-        data.permissionSets = _.result(response, 'data.permissionSet.val', []);
-        data.permissions = _.result(response, 'data.permissionSet.additionalPermissions', []);
-        data.breakglass = true;
-        return callback(null, data);
-    });
-};
-
-/**
- * Call (p)jds for permissions related to the user to help determine some eHMP policies
- * @param {Object} req - typical default Express request object
- * @param {Object} res - typical default Express response object
- * @param {Function} authorizationCB - typical callback function
- * @param {Object} params
- * @param {Object} params.data - object of data to continue to modify
- * @return {Object|undefined}
- */
-var getPermissionsData = function(req, res, authorizationCB, params) {
-    var data = _.get(params, 'data', {});
-    var permissionSets = data.permissionSets;
-    var timer = new RdkTimer({
-        'name': 'authTimer.authorizationStep',
-        'start': true
-    });
-
-    var callback = function(err, data) {
-        timer.log(req.logger, {
-            'stop': true
-        });
-        return authorizationCB(err, data);
-    };
-    var errorObj;
-    if (!_.isEmpty(data.permissions)) {
-        data.permissions = _.uniq(data.permissions);
-    }
-    if (_.isEmpty(permissionSets)) {
-        //if permissionsets are empty just return because
-        //we don't need to get the permissions
-        return callback(null, data);
-    }
-    var permissionSetsPjdsOptions = {
-        store: 'permset',
-        key: permissionSets
-    };
-    pjds.get(req, res, permissionSetsPjdsOptions, function(error, response) {
+    //permission and permission set filters default to an active status
+    pjdsUtil.getUserWithFilteredPermissions(req, res, pjdsOptions, function (error, response) {
         if (error) {
             errorObj = new RdkError({
-                code: 'pjds.401.1002',
-                error: error
+                code: 'pjds.401.1003',
+                error: {
+                    original: error,
+                    additionalInfo: 'ERROR: There was an error finding system user ' + name + ' in pJDS'
+                },
+                logger: logger
             });
             return callback(errorObj, null);
         }
-        var permissions = data.permissions;
-        _.each(response.data.items, function(item) {
-            permissions = permissions.concat(item.permissions);
+        if (_.get(response, 'name', '') !== name) {
+            errorObj = new RdkError({
+                code: 'pjds.401.1003',
+                error: 'pjdsUtil.getUserWithFilteredPermissions response name did not match the request name',
+                logger: logger
+            });
+            return callback(errorObj, null);
+        }
+
+        var data = _.extend(response, {
+            name: name,
+            breakglass: true,
+            consumerType: 'system',
+            permissions: _.get(response, 'permissions') || _.get(response, 'permissionSet.additionalPermissions', [])
         });
-        data.permissions = _.uniq(permissions);
+
+        _.set(data, 'permissionSets', _.get(response, 'permissionSet.val', []));
+        _.set(data, 'unsuccessfulLoginAttemptCount', 0);
+
         return callback(null, data);
     });
 };
@@ -189,6 +157,7 @@ var getPermissionsData = function(req, res, authorizationCB, params) {
  * @return {Object|undefined}
  */
 var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
+    var errorObj;
     var logger = req.logger;
     var data = _.get(params, 'data', {});
     var user = _.get(req, 'session.user', data);
@@ -206,8 +175,10 @@ var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
         return loginAttemptCallback(err, data);
     };
     if (!uid) {
-        var errorObj = error || new RdkError({
-            'code': 'pjds.412.1001'
+        errorObj = error || new RdkError({
+            code: 'pjds.412.1001',
+            error: 'pjds-user-data.setLoginAttempt missing a uid',
+            logger: logger
         });
         return callback(errorObj, null);
     }
@@ -217,10 +188,10 @@ var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
         key: uid,
         data: {}
     };
-    if (_.get(params, 'error')) {
+    if (error) {
         _.set(pjdsOptions, 'data.lastUnsuccessfulLogin', moment(_.get(req, 'session.expires')).utc().format());
         _.set(pjdsOptions, 'data.unsuccessfulLoginAttemptCount', _.get(user, 'unsuccessfulLoginAttemptCount', 0) + 1);
-        _.set(user, 'unsuccessfulLoginAttemptCount', data.unsuccessfulLoginAttemptCount);
+        _.set(user, 'unsuccessfulLoginAttemptCount', _.get(data, 'unsuccessfulLoginAttemptCount'));
         if (!_.has(user, 'permissionSets')) {
             _.set(pjdsOptions, 'data.permissionSet.val', []);
             if (!_.has(user, 'permissions')) {
@@ -231,12 +202,13 @@ var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
         _.set(pjdsOptions, 'data.lastSuccessfulLogin', moment(_.get(req, 'session.expires')).utc().format());
         _.set(pjdsOptions, 'data.unsuccessfulLoginAttemptCount', 0);
     }
-    return pjds.patch(req, res, pjdsOptions, function(err, response) {
+    return pjdsUtil.patchUser(req, res, pjdsOptions, function(err, response) {
         logger.trace(response, 'pJDS ehmp users result');
         if (error || err) {
-            var errorObj = error || new RdkError({
-                'error': err,
-                'code': 'pjds.500.1001'
+            errorObj = error || new RdkError({
+                error: err,
+                code: 'pjds.500.1001',
+                logger: logger
             });
             return callback(errorObj, null);
         }
@@ -246,5 +218,4 @@ var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
 
 module.exports.getEhmpUserData = getEhmpUserData;
 module.exports.setLoginAttempt = setLoginAttempt;
-module.exports.getPermissionsData = getPermissionsData;
 module.exports.getTrustedSystemData = getTrustedSystemData;

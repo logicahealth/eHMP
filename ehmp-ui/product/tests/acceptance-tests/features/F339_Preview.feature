@@ -10,17 +10,18 @@ Background:
 @UAT_script1 @US5244 @TC141
 Scenario: Verify Preview is disabled for newly created user-defined workspaces
   And the user creates a user defined workspace named "firstpreview"
-  And the user defined workspace name "firstpreview" is listed
+  And the user defined workspace data screen id "firstpreview" is listed
   Then the "firstpreview" preview option is disabled
 
  @UAT_script2
  Scenario: Verify Preview is enabled for customized user-defined workspaces
   And the user creates a user defined workspace named "secondpreview"
-  And the user defined workspace name "secondpreview" is listed
+  And the user defined workspace data screen id "secondpreview" is listed
   When the user customizes the "secondpreview" workspace
   And the user adds an trend "activeMeds" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
   Then the "SECONDPREVIEW" screen is active
+  And the active screen displays 1 applets
   When the user clicks the Workspace Manager
   Then the "secondpreview" preview option is enabled
 
@@ -32,11 +33,12 @@ Scenario: Verify Preview displays for customized user-defined workspaces
   And the user adds an summary "allergy_grid" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
   Then the "THIRDPREVIEW" screen is active
+  And the active screen displays 2 applets
   When the user clicks the Workspace Manager
   Then the "thirdpreview" preview option is enabled
   When the user previews the workspace for "thirdpreview"
-  Then the preview displays applet "Allergies" of type "Trend"
-  And the preview displays applet "Allergies" of type "Summary"
+  Then the preview displays applet "Allergies" of type "gist"
+  And the preview displays applet "Allergies" of type "summary"
 
 @US5244 @TC141_step7
 Scenario: Verify Preview displays workspace name for user defined workspaces
@@ -46,6 +48,7 @@ Scenario: Verify Preview displays workspace name for user defined workspaces
   And the user adds an summary "allergy_grid" applet to the user defined workspace
   And the user selects done to complete customizing the user defined workspace
   Then the "FORTHPREVIEW" screen is active
+  And the active screen displays 2 applets
   When the user clicks the Workspace Manager
   Then the "forthpreview" preview option is enabled
   When the user previews the workspace for "forthpreview"
@@ -55,13 +58,13 @@ Scenario: Verify Preview displays workspace name for user defined workspaces
 Scenario: Verify Preview displays for pre defined workspaces (using Coversheet)
   When the user previews the workspace for "cover-sheet"
   Then the preview title is "Coversheet"
-  Then the preview displays applet "Problems" of type "Summary"
-  And the preview displays applet "Vitals" of type "Summary"
-  And the preview displays applet "Allergies" of type "Trend"
-  And the preview displays applet "Appointments & Visits" of type "Summary"
-  And the preview displays applet "Numeric Lab Results" of type "Summary"
-  And the preview displays applet "Community Health Summaries" of type "Summary"
-  And the preview displays applet "Immunizations" of type "Summary"
-  And the preview displays applet "Active & Recent Medications" of type "Summary"
-  And the preview displays applet "Orders" of type "Summary"
+  Then the preview displays applet "Problems" of type "summary"
+  And the preview displays applet "Vitals" of type "summary"
+  And the preview displays applet "Allergies" of type "gist"
+  And the preview displays applet "Appointments & Visits" of type "summary"
+  And the preview displays applet "Numeric Lab Results" of type "summary"
+  And the preview displays applet "Community Health Summaries" of type "summary"
+  And the preview displays applet "Immunizations" of type "summary"
+  And the preview displays applet "Active & Recent Medications" of type "summary"
+  And the preview displays applet "Orders" of type "summary"
 

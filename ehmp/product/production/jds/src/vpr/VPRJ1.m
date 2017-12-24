@@ -1,5 +1,4 @@
 VPRJ1 ;SLC/KCM -- Menu Handling for JSON Store Utilities
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 DOMENU ; display menu and execute choice
  N SEL
@@ -12,14 +11,16 @@ DOMENU ; display menu and execute choice
  . I SEL="PORT^VPRJ" D HEADER
  . I SEL="DELPID^VPRJ" D HEADER
  Q
+ ;
 HEADER ; display header information
  W !
- W "Listener Port: ",$$PORT^VPRJRCL,"   "
- W "Status: ",$$STATUS^VPRJRCL,"   "
+ W "Listener Ports: ",$$PORT^VPRJRCL,!
+ W "Status: ",$$STATUS^VPRJRCL,!
  W "Log Level: ",$$LOG^VPRJRCL,"   "
- W "VPR Patients: ",$G(^VPRPTX("count","patient","patient"))
+ W "VPR Patients: ",$G(^VPRPTX("count","patient","patient"),0)
  W !
- Q
+ QUIT
+ ;
 SHOWMENU ; display menu
  N X,I
  S I=0 F  S I=I+1,X=$P($T(MENULST+I),";;",2,99) Q:X="zzzzz"  W !,X
@@ -53,9 +54,10 @@ PAUSE ; Pause for a return
  Q
 MENULST ;; menu display list
  ;;-- Listener --                          -- Logging --
- ;; 1 Start HTTP Listener on Port 9080      4 Change Logging Level
- ;; 2 Stop HTTP Listener                    5 Clear Logs
- ;; 3 Change HTTP Listener Port             6 List Errors
+ ;; 1 Start HTTP Listeners                  5 Change Logging Level
+ ;; 2 Stop HTTP Listeners                   6 Clear Logs
+ ;; 3 Add HTTP Listener Port                7 List Errors
+ ;; 4 Remove HTTP Listener Port
  ;;
  ;;-- VPR Info --                          -- ODC Info --
  ;;11 List Synced Patients (alpha)         21 List Collections (ODC)
@@ -74,21 +76,22 @@ MENULST ;; menu display list
 MENUNUM ;; menu selection numbers
  ;;1;START^VPRJ
  ;;2;STOP^VPRJ
- ;;3;PORT^VPRJ
- ;;4;LOG^VPRJ
- ;;5;CLEAR^VPRJ
- ;;6;ERROR^VPRJ
+ ;;3;ADDPORT^VPRJ
+ ;;4;REMOVEPORT^VPRJ
+ ;;5;LOG^VPRJ
+ ;;6;CLEAR^VPRJ
+ ;;7;ERROR^VPRJ
  ;;11;LISTPTA^VPRJ
  ;;12;LISTPTP^VPRJ
  ;;13;PIDSTAT^VPRJ
  ;;14;STATUS^VPRJ2P
  ;;21;LSTCTN^VPRJ2D
  ;;22;STATUS^VPRJ2D
- ;;31;RIDXALL^VPRJ2P
+ ;;31;RIDX^VPRJ2P
  ;;32;RBLDALL^VPRJ2P
  ;;33;DELPID^VPRJ
  ;;34;RESET^VPRJ
- ;;41;RIDXALL^VPRJ2D
+ ;;41;RIDX^VPRJ2D
  ;;42;RBLDALL^VPRJ2D
  ;;43;DELCTN^VPRJ2D
  ;;44;RESET^VPRJ2D

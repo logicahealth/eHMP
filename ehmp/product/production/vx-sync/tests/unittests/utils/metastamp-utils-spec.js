@@ -17,8 +17,8 @@ var allergySubset = {
         'items': [{
             'entered': '200503172015',
             'verified': '20050317201533',
-            'uid': 'urn:va:allergy:9E7A:8:753',
-            'pid': '9E7A;8',
+            'uid': 'urn:va:allergy:SITE:8:753',
+            'pid': 'SITE;8',
             'localId': '753',
             'typeName': 'DRUG'
         }]
@@ -46,12 +46,12 @@ describe('metastamp.js', function() {
 
     describe('metastampOperational()', function() {
         it('base operational data', function() {
-            var result = metastamp.metastampOperational(operational, null, '9E7A');
+            var result = metastamp.metastampOperational(operational, null, 'SITE');
 
             expect(result).toBeDefined();
             expect(result.stampTime).toEqual('20140917195624.000');
-            expect(result.sourceMetaStamp['9E7A']).toBeTruthy();
-            expect(result.sourceMetaStamp['9E7A'].stampTime).toBe('20140917195624.000');
+            expect(result.sourceMetaStamp['SITE']).toBeTruthy();
+            expect(result.sourceMetaStamp['SITE'].stampTime).toBe('20140917195624.000');
             expect(result.icn).toBeUndefined();
         });
     });
@@ -114,9 +114,9 @@ describe('metastamp.js', function() {
             var myICN = '123456V7789';
             var result = metastamp.metastampDomain(allergySubset, myTimestamp, myICN);
             expect(result.icn).toBe(myICN);
-            expect(result.sourceMetaStamp['9E7A'].domainMetaStamp.allergy).toBeDefined();
-            expect(result.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.domain).toBeDefined();
-            expect(result.sourceMetaStamp['9E7A'].domainMetaStamp.allergy.domain).toBe('allergy');
+            expect(result.sourceMetaStamp['SITE'].domainMetaStamp.allergy).toBeDefined();
+            expect(result.sourceMetaStamp['SITE'].domainMetaStamp.allergy.domain).toBeDefined();
+            expect(result.sourceMetaStamp['SITE'].domainMetaStamp.allergy.domain).toBe('allergy');
         });
 
         it('no callback provided', function() {
@@ -127,7 +127,7 @@ describe('metastamp.js', function() {
         it('event has stampTime', function() {
             var now = '20160505193046';
             var eventStampTime = '20160505120056';
-            var uid = 'urn:va:allergy:9E7A:8:753';
+            var uid = 'urn:va:allergy:SITE:8:753';
             var batch = {
                 'apiVersion': '1.0',
                 'data': {
@@ -138,7 +138,7 @@ describe('metastamp.js', function() {
                         'entered': '200503172015',
                         'verified': '20050317201533',
                         'uid': uid,
-                        'pid': '9E7A;8',
+                        'pid': 'SITE;8',
                         'localId': '753',
                         'typeName': 'DRUG',
                         'stampTime': eventStampTime
@@ -147,9 +147,9 @@ describe('metastamp.js', function() {
             };
 
             var stamp = metastamp.metastampDomain(batch, now, null);
-            expect(stamp.sourceMetaStamp['9E7A'].stampTime).toEqual(now);
-            expect(stamp.sourceMetaStamp['9E7A'].domainMetaStamp['allergy'].stampTime).toEqual(now);
-            expect(stamp.sourceMetaStamp['9E7A'].domainMetaStamp['allergy'].eventMetaStamp[uid].stampTime).toEqual(eventStampTime);
+            expect(stamp.sourceMetaStamp['SITE'].stampTime).toEqual(now);
+            expect(stamp.sourceMetaStamp['SITE'].domainMetaStamp['allergy'].stampTime).toEqual(now);
+            expect(stamp.sourceMetaStamp['SITE'].domainMetaStamp['allergy'].eventMetaStamp[uid].stampTime).toEqual(eventStampTime);
         });
     });
 

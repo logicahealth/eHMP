@@ -11,7 +11,7 @@ Scenario: Verify error if provided identifier does not match an existing message
 Scenario:
     Given client requests communications for
       | parameter                | value                                                     |
-      | requester.userId         | urn:va:user:9E7A:10000000270                              |
+      | requester.userId         | urn:va:user:SITE:10000000270                              |
       | requester.ehmpAppVersion | sample.data                                               |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms  |
     And a successful response is returned
@@ -27,7 +27,7 @@ Scenario:
 Scenario:
     Given client requests communications for
       | parameter                | value                                                     |
-      | requester.userId         | urn:va:user:9E7A:10000000270                              |
+      | requester.userId         | urn:va:user:SITE:10000000270                              |
       | requester.ehmpAppVersion | sample.data                                               |
       | category[]               | http://ehmp.DNS   /messageCategories/announcements-terms  |
     And a successful response is returned

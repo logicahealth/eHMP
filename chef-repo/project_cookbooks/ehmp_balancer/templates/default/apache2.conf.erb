@@ -147,7 +147,7 @@ LogLevel <%= @log_level %>
 
 <% if @ssoi_deploy %>
 #Add SiteMinder Web Agent mod/config
-LoadModule sm_module <%= @web_agent_config_dir %>/bin/libmod_sm22.so
+LoadModule sm_module <%= @web_agent_dir %>/bin/libmod_sm22.so
 SmInitFile "<%= node['apache']['conf_dir'] %>/WebAgent.conf"
 <% end %>
 
@@ -291,32 +291,32 @@ Include <%= node['apache']['dir'] %>/sites-enabled/*.conf
 
 <% if @ssoi_deploy %>
 #Add SiteMinder Aliases
-Alias /siteminderagent/nocert/[0-9]+/(.*) "<%= @web_agent_config_dir %>/$1"
-<Directory "<%= @web_agent_config_dir %>/$1">
+Alias /siteminderagent/nocert/[0-9]+/(.*) "<%= @web_agent_dir %>/$1"
+<Directory "<%= @web_agent_dir %>/$1">
 	Options Indexes MultiViews
 	AllowOverride None
 	Order allow,deny
 	Allow from all
 </Directory>
 
-Alias /siteminderagent/pwcgi/ "<%= @web_agent_config_dir %>/pw/"
-<Directory "<%= @web_agent_config_dir %>/pw/">
+Alias /siteminderagent/pwcgi/ "<%= @web_agent_dir %>/pw/"
+<Directory "<%= @web_agent_dir %>/pw/">
 	Options Indexes MultiViews ExecCGI
 AllowOverride None
 	Order allow,deny
 	Allow from all
 </Directory>
 
-Alias /siteminderagent/pw/ "<%= @web_agent_config_dir %>/pw/"
-<Directory "<%= @web_agent_config_dir %>/pw/">
+Alias /siteminderagent/pw/ "<%= @web_agent_dir %>/pw/"
+<Directory "<%= @web_agent_dir %>/pw/">
 	Options Indexes MultiViews ExecCGI
 	AllowOverride None
 	Order allow,deny
 	Allow from all
 </Directory>
 
-Alias /siteminderagent/ "<%= @web_agent_config_dir %>/samples/"
-<Directory "<%= @web_agent_config_dir %>/samples/">
+Alias /siteminderagent/ "<%= @web_agent_dir %>/samples/"
+<Directory "<%= @web_agent_dir %>/samples/">
 	Options Indexes MultiViews
 	AllowOverride None
 	Order allow,deny

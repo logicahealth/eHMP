@@ -11,14 +11,21 @@ define([
     var noData = "No Data";
     var todayDayLightSetting = moment().isDST();
     var lastFilledDayLightSetting;
+    var MedicationsModel;
 
-    beforeEach(function() {
-        medication = MedicationOrderModel.create();
-        // medTypeRowView = new MedTypeRowView({
-        //  model: medication
-        // });
-        // medTypeRowView.render();
-        // el = medTypeRowView.$el;
+    beforeEach(function(done) {
+        if (_.isUndefined(MedicationsModel)) {
+            require([
+                'app/resources/fetch/medication_review/medicationOrderModel'
+            ], function(model) {
+                MedicationsModel = model;
+                medication = MedicationOrderModel.create(MedicationsModel);
+                done();
+            });
+        } else {
+            medication = MedicationOrderModel.create(MedicationsModel);
+            done();
+        }
     });
 
     /*****The following tests are testing the medicationsUngroupedModel and medTypeRowView*****/
@@ -115,8 +122,8 @@ define([
 
     describe("Colon replacement", function() {
         it("Return the uid with all 'colon' within the string replaced with 'underscore'", function() {
-            expect(medication.getUid()).toBe('urn_va_med_9E7A_8_35739');
-            // expect(el.find('#uidUnderscored').html()).toBe("urn_va_med_9E7A_8_35739");
+            expect(medication.getUid()).toBe('urn_va_med_SITE_8_35739');
+            // expect(el.find('#uidUnderscored').html()).toBe("urn_va_med_SITE_8_35739");
         });
     });
 
@@ -1347,12 +1354,12 @@ define([
 
     describe("Determine if this is the login user site", function() { //USES timeSinceDate
         // it("should not be the user site", function() {
-        //  var userSiteCode = "C877";
+        //  var userSiteCode = "SITE";
         //  expect(medication.userSiteIcon(userSiteCode)).toBe("fa-exclamation-triangle");
         //  // expect(el.find('#userSiteIcon').html()).toBe(false);
         // });
         it("should be the login user site", function() {
-            var userSiteCode = "9E7A";
+            var userSiteCode = "SITE";
             expect(medication.userSiteIcon(userSiteCode)).toBe(undefined);
             userSiteCode = "C839";
             expect(medication.userSiteIcon(userSiteCode)).toBe("fa-globe");
@@ -1653,7 +1660,7 @@ define([
     });
     describe("Determine the string output", function() {
         it("Should return the data after the last colon", function() {
-            expect(medication.sliceString("urn:va:order:9E7A:8:35739")).toBe('35739');
+            expect(medication.sliceString("urn:va:order:SITE:8:35739")).toBe('35739');
         });
     });
 
@@ -1664,45 +1671,45 @@ define([
         });
     });
 
-    describe("Determine what category a medication belongs", function() {
-        it("Should return Outpatient for Supply medication", function() {
+    describe('Determine what category a medication belongs', function() {
+        it('Should return "Outpatient and Non-VA" for Supply medication', function() {
             medication.set('supply', true);
-            expect(medication.getType().displayType).toBe('OUTPATIENT MEDS');
+            expect(medication.getType().displayType).toBe('Outpatient and Non-VA');
         });
-        it("Should return Outpatient for Non-Va medication", function() {
+        it('Should return "Outpatient and Non-VA" for Non-VA medication', function() {
             medication.set('vaType', 'n');
-            expect(medication.getType().displayType).toBe('OUTPATIENT MEDS');
+            expect(medication.getType().displayType).toBe('Outpatient and Non-VA');
         });
-        it("Should return Outpatient for Outpatient medication", function() {
+        it('Should return "Outpatient and Non-VA" for Outpatient medication', function() {
             medication.set('vaType', 'o');
-            expect(medication.getType().displayType).toBe('OUTPATIENT MEDS');
+            expect(medication.getType().displayType).toBe('Outpatient and Non-VA');
         });
-        it("Should return Inpatient for Inpatient medication", function() {
+        it('Should return "Inpatient" for Inpatient medication', function() {
             medication.set('vaType', 'i');
-            expect(medication.getType().displayType).toBe('INPATIENT MEDS');
+            expect(medication.getType().displayType).toBe('Inpatient');
         });
-        it("Should return Inpatient for IV medication", function() {
+        it('Should return "Inpatient" for IV medication', function() {
             medication.set('vaType', 'v');
-            expect(medication.getType().displayType).toBe('INPATIENT MEDS');
+            expect(medication.getType().displayType).toBe('Inpatient');
         });
-        it("Should return Clinical Orders for medication with IMO", function() {
+        it('Should return "Clinic Order" for medication with IMO', function() {
             medication.set('IMO', true);
-            expect(medication.getType().displayType).toBe('CLINIC ORDER MEDS');
+            expect(medication.getType().displayType).toBe('Clinic Order');
         });
-        it("Should return Clinical Orders for medication with kind that equals 'Medication, Clinic Order'", function() {
+        it('Should return "Clinic Order" for medication with kind that equals "Medication, Clinic Order"', function() {
             medication.set('kind', 'Medication, Clinic Order');
-            expect(medication.getType().displayType).toBe('CLINIC ORDER MEDS');
+            expect(medication.getType().displayType).toBe('Clinic Order');
         });
-        it("Should return Clinical Orders for medication with kind that equals 'Medication, Clinic Order', supply and with IMO", function() {
+        it('Should return "Clinic Order" for medication with kind that equals "Medication, Clinic Order", supply and with IMO', function() {
             medication.set('kind', 'Medication, Clinic Order');
             medication.set('IMO', true);
             medication.set('supply', true);
-            expect(medication.getType().displayType).toBe('CLINIC ORDER MEDS');
+            expect(medication.getType().displayType).toBe('Clinic Order');
         });
-        it("Should return Clinical Orders for medication with kind that equals 'Medication, Clinic Order', supply and with no IMO", function() {
+        it('Should return "Clinic Order" for medication with kind that equals "Medication, Clinic Order", supply and with no IMO', function() {
             medication.set('kind', 'Medication, Clinic Order');
             medication.set('supply', true);
-            expect(medication.getType().displayType).toBe('CLINIC ORDER MEDS');
+            expect(medication.getType().displayType).toBe('Clinic Order');
         });
     });
 
@@ -1926,7 +1933,7 @@ define([
             earlierMed.set("overallStop", "20121002");
             earlierMed.set("stopped", "20121003");
 
-            laterMed = MedicationOrderModel.create();
+            laterMed = MedicationOrderModel.create(MedicationsModel);
             laterMed.set("overallStart", "20121004");
             laterMed.set("stopped", "20121005");
             laterMed.set("overallStop", "20121006");
@@ -1985,7 +1992,7 @@ define([
             earlierMed.set("overallStop", "20121002");
             earlierMed.set("stopped", "20121003");
 
-            laterMed = MedicationOrderModel.create();
+            laterMed = MedicationOrderModel.create(MedicationsModel);
             laterMed.set("overallStart", "20121004");
             laterMed.set("stopped", "20121005");
             laterMed.set("overallStop", "20121006");
@@ -2029,7 +2036,7 @@ define([
         it("Should be graphable when outpatient med has both stop dates after start", function() {
             expect(medication.getCanBeGraphed()).toBe(true);
         });
-        it("Should be graphable when inpatient med has both stop dates after start", function() {
+        it("Should be graphable when Inpatient med has both stop dates after start", function() {
             medication.set("overallStop", "20141029");
             medication.set("stopped", "20141025");
             expect(medication.getCanBeGraphed()).toBe(true);
@@ -2123,7 +2130,7 @@ define([
             expect(medication.getFillableHeader()).toBe("Status/Fillable");
         });
         it("Should return 'Status/Fillable' for Clinical orders", function() {
-            medication.set('kind', 'Medication, Clinic Order');
+            medication.set('kind', "Medication, Clinic Order");
             medication.set('supply', true);
             medication.set("vaType", "i");
             expect(medication.getFillableHeader()).toBe("Status/Fillable");
@@ -2246,13 +2253,13 @@ define([
             expect(medication.getTooltip().fillable).toBe("Prescription status (discontinued, expired) or timeframe of next dosage");
         });
         it("Should be the tooltip for the Inpatient medication fillable", function() {
-            medication.set('kind', 'Medication, Clinic Order');
+            medication.set('kind', "Medication, Clinic Order");
             medication.set('IMO', true);
             medication.set('supply', true);
             expect(medication.getTooltip().fillable).toBe('For active medications with remaining refills, this column tells you how long until a patient will run out of valid refills (i.e. how long the medication is fillable for). This is based on the date the patient is expected to request their last refill or the expiration date, whichever is set to happen first.   For active medications with “0 refills”, “pending” medications and “non-VA” medications, you will see corresponding labels.  For expired and discontinued medications, you will see how long ago the medication order expired or was discontinued.');
         });
         it("Should be the tooltip for the Inpatient medication fillable", function() {
-            medication.set('kind', 'Medication, Clinic Order');
+            medication.set('kind', "Medication, Clinic Order");
             medication.set('supply', true);
             expect(medication.getTooltip().fillable).toBe('For active medications with remaining refills, this column tells you how long until a patient will run out of valid refills (i.e. how long the medication is fillable for). This is based on the date the patient is expected to request their last refill or the expiration date, whichever is set to happen first.   For active medications with “0 refills”, “pending” medications and “non-VA” medications, you will see corresponding labels.  For expired and discontinued medications, you will see how long ago the medication order expired or was discontinued.');
         });

@@ -219,7 +219,7 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api
 
                 it('calling changeHeaderCloseButtonOptions updates the headerCloseButtonOptions', function() {
                     expect(mockClick).not.toHaveBeenCalled();
-                    expect($workflowTestPage.find('button.close')).toHaveAttr('title', 'Press enter to close.');
+                    expect($workflowTestPage.find('button.close')).toHaveAttr('title', 'Close');
                     expect($workflowTestPage.find('button.close')).not.toHaveClass('custom-on-close-method');
                     testWorkflow.changeHeaderCloseButtonOptions({
                         title: 'Hello Close Button for Step 2',
@@ -313,7 +313,7 @@ define(['jquery', 'handlebars', 'backbone', 'marionette', 'main/UILibrary', 'api
 
                 it('calling changeHeaderCloseButtonOptions updates the headerCloseButtonOptions', function() {
                     expect(mockClick).not.toHaveBeenCalled();
-                    expect($workflowTestPage.find('button.close')).toHaveAttr('title', 'Press enter to close.');
+                    expect($workflowTestPage.find('button.close')).toHaveAttr('title', 'Close');
                     expect($workflowTestPage.find('button.close')).not.toHaveClass('custom-on-close-method');
                     testWorkflow.changeHeaderCloseButtonOptions({
                         title: 'Hello Close Button for Step 2',

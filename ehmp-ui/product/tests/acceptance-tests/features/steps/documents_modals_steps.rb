@@ -83,17 +83,6 @@ Then(/^the Documents Detail modal displays$/) do |table|
   end
 end
 
-Then(/^the modal title says "(.*?)"$/) do |modal_title|
-  aa = DocumentsAppletModalDetail.instance
-  expect(aa.wait_until_action_element_visible("Modal Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Modal Title", modal_title)).to be_true
-end
-
-Then(/^the inframe modal details is displayed$/) do
-  aa = DocumentsAppletModalDetail.instance
-  expect(aa.wait_until_action_element_visible("Modal", DefaultLogin.wait_time)).to be_true
-end
-
 Given(/^the user notes the first (\d+) documents$/) do |num_documents|
   @ehmp = PobDocumentsList.new
   @titles = @ehmp.fld_document_rows_description

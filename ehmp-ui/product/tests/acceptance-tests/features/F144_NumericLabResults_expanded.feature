@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults  @DE4084 @reg2
+@F144 @F144_numericlabresults  @DE4084 @reg4 @Lab_Results
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
@@ -20,7 +20,7 @@ Scenario: Expanded Numeric Lab results applet contains expected buttons
 @F144_numericlabresults_2
 Scenario: Expanded Numeric Lab results applet displays expected headers	
   When the user is viewing the expanded Numeric Lab Results Applet
-  And the "Numeric Lab Results Applet" table has headers
+  And the Numeric Lab Results Applet table has headers
     | Date | Lab Test | Flag | Result | Unit | Ref Range | Facility |
 
 @F144_numericlabresults_4 @testing_scroll

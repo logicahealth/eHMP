@@ -143,7 +143,6 @@ function createSimpleSyncStatusAllComplete(sites, baseTime) {
 
     var offset = 0;
     _.each(sites, function(site) {
-        var newTime = baseTime - offset;
         var pid = createPid(site);
         var siteStatus = {
             'latestJobTimestamp': baseTime - offset,
@@ -262,27 +261,26 @@ describe('expiration-rule-unittest', function() {
             var result = expirationRule._steps._removeAlreadySyncedVistaDirectSites(log, config, sites, patientIdentifiers, simpleSyncStatus);
             expect(result).toEqual(patientIdentifiersExpected);
         });
-        it('Patient is synchronized for some VistA sites, one VistA site - the only job appears to be the enterprise-sync-request job. (Implies need to sync it).', function() {
+        it('Patient is synchronized for some VistA sites, but the site that we want has not been synchronized. (Implies need to sync it).', function() {
             var config = createConfig();
             var sites = ['AAAA', 'BBBB', 'DOD', 'HDR', 'VLER'];
-            var resultSites = ['AAAA', 'DOD', 'HDR', 'VLER'];
+            var resultSites = ['AAAA', 'BBBB', 'DOD', 'HDR', 'VLER'];
             var simpleSyncStatus = createSimpleSyncStatusAllComplete(sites, Date.now());
             simpleSyncStatus.syncCompleted = false;
-            simpleSyncStatus.sites.AAAA.latestJobTimestamp = simpleSyncStatus.latestEnterpriseSyncRequestTimestamp;
+            simpleSyncStatus.sites.AAAA.sourceStampTime = '';
             simpleSyncStatus.sites.AAAA.syncCompleted = false;
+            simpleSyncStatus.sites.BBBB.sourceStampTime = '';
+            simpleSyncStatus.sites.BBBB.syncCompleted = false;
             var patientIdentifiers = createPatientIdentifiers(sites);
             var patientIdentifiersExpected = createPatientIdentifiers(resultSites);
             var result = expirationRule._steps._removeAlreadySyncedVistaDirectSites(log, config, sites, patientIdentifiers, simpleSyncStatus);
             expect(result).toEqual(patientIdentifiersExpected);
         });
-        it('Patient is synchronized for some VistA sites, one VistA site - there appears to be a job newer than the enterprise-sync-request job. (Implies do NOT sync it).', function() {
+        it('Patient is synchronized for some VistA sites, but the site that we want has already been synchronized.. (Implies do NOT sync it).', function() {
             var config = createConfig();
             var sites = ['AAAA', 'BBBB', 'DOD', 'HDR', 'VLER'];
             var resultSites = ['DOD', 'HDR', 'VLER'];
             var simpleSyncStatus = createSimpleSyncStatusAllComplete(sites, Date.now());
-            simpleSyncStatus.syncCompleted = false;
-            simpleSyncStatus.sites.AAAA.latestJobTimestamp = simpleSyncStatus.latestEnterpriseSyncRequestTimestamp + 60000;
-            simpleSyncStatus.sites.AAAA.syncCompleted = false;
             var patientIdentifiers = createPatientIdentifiers(sites);
             var patientIdentifiersExpected = createPatientIdentifiers(resultSites);
             var result = expirationRule._steps._removeAlreadySyncedVistaDirectSites(log, config, sites, patientIdentifiers, simpleSyncStatus);
@@ -485,9 +483,9 @@ describe('expiration-rule-unittest', function() {
             var sites = ['AAAA', 'BBBB', 'DOD', 'HDR', 'VLER'];
             var resultSites = ['AAAA', 'BBBB', 'HDR', 'VLER'];
             var simpleSyncStatus = createSimpleSyncStatusAllComplete(sites, Date.now());
-            simpleSyncStatus.syncCompleted = false;
-            simpleSyncStatus.sites.DOD.latestJobTimestamp = simpleSyncStatus.latestEnterpriseSyncRequestTimestamp + 60000;
-            simpleSyncStatus.sites.DOD.syncCompleted = false;
+            simpleSyncStatus.syncCompleted = true;
+            simpleSyncStatus.sites.DOD.sourceStampTime = moment(Date.now() + 60000).format('YYYYMMDDHHmmss');
+            simpleSyncStatus.sites.DOD.syncCompleted = true;
             var patientIdentifiers = createPatientIdentifiers(sites);
             var patientIdentifiersExpected = createPatientIdentifiers(resultSites);
             var result = expirationRule._steps._removeUnwantedSecondarySiteEntry(log, config, 'DOD', patientIdentifiers, simpleSyncStatus);

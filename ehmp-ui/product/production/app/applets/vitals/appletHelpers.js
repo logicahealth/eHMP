@@ -37,7 +37,7 @@ define([
             },
             yAxis: {
                 title: {
-                    text: 'Temperature (°C)'
+                    text: ''
                 }
             },
             plotOptions: {

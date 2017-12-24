@@ -1,10 +1,10 @@
 pushd ~/Projects/vistacore/ehmp/product/production/vx-sync
 beanstalkd -p 5000 -b data -f0 -V -z 2000000 > ./logs/beanstalkd.log &
-VXSYNC_LOG_SUFFIX=pollerHost-C877 node pollerHost.js --site C877 &
-VXSYNC_LOG_SUFFIX=pollerHost-9E7A node pollerHost.js --site 9E7A &
+VXSYNC_LOG_SUFFIX=pollerHost-SITE node pollerHost.js --site SITE &
+VXSYNC_LOG_SUFFIX=pollerHost-SITE node pollerHost.js --site SITE &
 VXSYNC_LOG_SUFFIX=pollerHost-2929 node pollerHost.js --site 2929 &
 VXSYNC_LOG_SUFFIX=pollerHost-FFC7 node pollerHost.js --site FFC7 &
-VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --port 9999 &
+VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --port PORT &
 VXSYNC_LOG_SUFFIX=writebackEndpoint node endpoints/writeback/writeback-endpoint.js --port 9090 &
 VXSYNC_LOG_SUFFIX=error-processor node errorProcessorHost.js &
 VXSYNC_LOG_SUFFIX=subscriberHost-primary node subscriberHost.js --profile primary &

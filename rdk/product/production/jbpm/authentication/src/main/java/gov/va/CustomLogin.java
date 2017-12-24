@@ -7,22 +7,48 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginException;
 
+import org.jboss.logging.Logger;
 import org.jboss.security.SimpleGroup;
+
 import org.jboss.security.SimplePrincipal;
 import org.jboss.security.auth.spi.UsernamePasswordLoginModule;
 
 public class CustomLogin extends UsernamePasswordLoginModule {
 	
+	private static final Logger LOGGER = Logger.getLogger(CustomLogin.class);
+	
 	private static String EHMP_USER_ROLE = "Administrators";
 	private static String REST_ALL_USER_ROLE = "rest-all";
 
 	@SuppressWarnings("rawtypes")
-	public void initialize(Subject subject, CallbackHandler callbackHandler,
-			Map sharedState, Map options) {
+	public void initialize(Subject subject, CallbackHandler callbackHandler, Map sharedState, Map options) {
 
 		super.initialize(subject, callbackHandler, sharedState, options);
 	}
 
+	/*
+	 * Overriding login so Logging in/out can be logged
+	 * CustomLogin has dependencies on jboss-jaas and jbosssx
+	 * which only support JBoss logging 3.3.0 w/o formatting
+	 */
+	@Override
+	public boolean login() throws LoginException {
+		LOGGER.debug("CustomLogin.login: User is attempting to login");
+		boolean loggedin = false;
+		String username = null;
+		try {
+			loggedin = super.login();
+			username = super.getUsernameAndPassword()[0]; // can be null
+			LOGGER.debug(String.format("CustomLogin.login: for User '%s' = %b", username, loggedin));
+		}
+		catch(LoginException le) {
+			LOGGER.debug(String.format("CustomLogin.login: User '%s' could not be logged in with CustomLogin", username));
+			throw new LoginException(le.getMessage());
+		}
+		return loggedin;
+	}
+	
+	
 	/**
 	 * (required) The UsernamePasswordLoginModule modules compares the result of
 	 * this method with the actual password.
@@ -68,9 +94,7 @@ public class CustomLogin extends UsernamePasswordLoginModule {
 	 * or if you need to perform some conversion on them.
 	 */
 	@Override
-	protected boolean validatePassword(String inputPassword,
-			String expectedPassword) {
-//		System.out.format("CustomLogin: Ignoring password and allowing login: %s\n", inputPassword);
+	protected boolean validatePassword(String inputPassword, String expectedPassword) {
 		return true;
 	}
 
@@ -81,14 +105,13 @@ public class CustomLogin extends UsernamePasswordLoginModule {
 	 */
 	@Override
 	protected Group[] getRoleSets() throws LoginException {
-		System.out.println("CustomLogin: Getting roles");
+		LOGGER.debug("Getting roles");
 		SimpleGroup group = new SimpleGroup("Roles");
 		try {
 			group.addMember(new SimplePrincipal(EHMP_USER_ROLE));
 			group.addMember(new SimplePrincipal(REST_ALL_USER_ROLE));			
 		} catch (Exception e) {
-			throw new LoginException("Failed to create group member for "
-					+ group);
+			throw new LoginException("Failed to create group member for " + group);
 		}
 		return new Group[] { group };
 	}

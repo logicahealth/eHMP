@@ -84,11 +84,11 @@ function _createRpcConfigVprContext(config, vistaId) {
 }
 
 //------------------------------------------------------------------------------------
-// Unsubscribe/Resubscribe 9E7A
+// Unsubscribe/Resubscribe SITE
 //------------------------------------------------------------------------------------
-unsubscribeOperationalData('9E7A', config, function (error, response) {
+unsubscribeOperationalData('SITE', config, function (error, response) {
 	if (!error) {
-		resubscribeOperationalData('9E7A', config, function(error, response) {
+		resubscribeOperationalData('SITE', config, function(error, response) {
 			log.debug('operational-data-reset.unsubscribeOperationalData: Completed unsubscribe of operational data with error: %s; and response: %s', error, response);
 		});
 	} else {
@@ -97,11 +97,11 @@ unsubscribeOperationalData('9E7A', config, function (error, response) {
 });
 
 //------------------------------------------------------------------------------------
-// Unsubscribe/Resubscribe C877
+// Unsubscribe/Resubscribe SITE
 //------------------------------------------------------------------------------------
-unsubscribeOperationalData('C877', config, function (error, response) {
+unsubscribeOperationalData('SITE', config, function (error, response) {
 	if (!error) {
-		resubscribeOperationalData('C877', config, function(error, response) {
+		resubscribeOperationalData('SITE', config, function(error, response) {
 			log.debug('operational-data-reset.unsubscribeOperationalData: Completed unsubscribe of operational data with error: %s; and response: %s', error, response);
 		});
 	} else {

@@ -2,15 +2,15 @@
 
 require('../env-setup');
 
-var util = require('util');
 var _ = require('underscore');
 var async = require('async');
+var util = require('util');
 
 var objUtil = require(global.VX_UTILS + 'object-utils');
+var errorProcessingApi = require(global.VX_UTILS + 'error-processing/error-processing-api');
 
 var SEVERITY = 'transient-exception';
 var CLASSIFICATION = 'job';
-
 
 /*
 name - name of error profile
@@ -106,112 +106,50 @@ ErrorProcessor.prototype._run = function() {
             return loop();
         }
 
-        // 1. iterate through this.jobTypes
-        var processEach = fetchAndProcessErrors.bind(null, self.logger, self.config, self.environment, self.ignoreSeverity, self.limit);
-        async.eachSeries(self.jobTypes, processEach, function(error) {
+        async.eachSeries(self.jobTypes, processSingleJobType.bind(self), function(error) {
             if (error) {
                 self.logger.error('Error processing errors jobTypes for "%s"', self.name);
-                return loop();
+            } else {
+                self.logger.info('Processed errors for jobTypes for "%s"', self.name);
             }
 
-            self.logger.info('Processed errors for jobTypes for "%s"', self.name);
             loop();
         });
     });
 };
 
-// Callbacks do not return errors so that processing can continue
-function fetchAndProcessErrors(logger, config, environment, ignoreSeverity, limit, jobType, callback) {
-    logger.debug('ErrorProcessor.fetchAndProcessErrors() %s', jobType);
+function processSingleJobType(jobType, callback) {
+    /*jshint validthis:true */
+    var constraints = {
+        index: 'vxsyncerr-jobType-classification-severity',
+        range: buildRange(jobType, this.ignoreSeverity),
+        filter: buildFilter(this.config),
+        limit: this.limit
+    };
+    var errorProcessingContext = errorProcessingApi.ErrorProcessingContext(this.logger, this.config, this.environment, constraints);
 
-    var items = [];
-
-    async.doWhilst(function(whileCallback) {
-        // 2. get errors
-        // Since this is background, do in series to keep connections/load on JDS low
-        findErrorsByJobType(logger, config, environment.jds, jobType, ignoreSeverity, limit, function(error, result) {
-            if (error) {
-                logger.error('Error finding errors from JDS for "%s"', jobType);
-                return whileCallback(error);
-            }
-
-            items = _.isArray(result) ? result : [];
-
-            var resubmit = resubmitError.bind(null, logger, config, environment);
-            async.eachSeries(items, resubmit, function(error) {
-                if (error) {
-                    logger.error('Error processing errors for jobType "%s"', jobType);
-                    return whileCallback(error);
-                }
-
-                logger.info('Processed errors for jobType "%s"', jobType);
-                whileCallback();
-            });
-        });
-    }, function() {
-       return items.length !== 0;
-    }, function(error) {
-        if (error) {
-            logger.error('ErrorProcessor.fetchAndProcessErrors(): Error: %s', error);
-            return callback();
-        }
-        logger.info('Processed ALL errors for jobType "%s"', jobType);
-        callback();
-    });
+    errorProcessingApi.submitByBatchQuery(errorProcessingContext, callback);
 }
 
-// Callbacks do not return errors so that processing can continue
-function resubmitError(logger, config, environment, errorRecord, callback) {
-    logger.debug('ErrorProcessor.resubmitError() %j', errorRecord);
-
-    environment.publisherRouter.publish(errorRecord.job, function(error) {
-        if (error) {
-            logger.error('error-processor.resubmitError(): publisher error: %s', error);
-            return callback(null, util.format('Unable to publish message %s: %s', errorRecord.id, error));
-        }
-
-        logger.debug('error-processor.resubmitError(): job published, complete status. jobId: %s, jobsToPublish: %j', errorRecord.job.jobId, errorRecord.job);
-
-        environment.jds.deleteErrorRecordById(errorRecord.id, function(error) {
-            if (error) {
-                logger.error('error-processor.resubmitError(): unable to delete job %s after submitting: %s', errorRecord.id, error);
-                return callback(null, util.format('Unable to delete job %s after submitting: %s', errorRecord.id, error));
-            }
-
-            logger.debug('error-processor.resubmitError(): deleted job %s after submitting', errorRecord.id);
-            callback();
-        });
-    });
-}
-
-function findErrorsByJobType(logger, config, jdsClient, jobType, ignoreSeverity, limit, callback) {
-    logger.debug('error-finder.findErrorsByJobType() jobType: "%s"', jobType);
-    var filter = buildFilter(jobType, ignoreSeverity, limit);
-
-    jdsClient.findErrorRecordsByFilter(filter, callback);
-}
-
-function buildFilter(jobType, ignoreSeverity, limit) {
+function buildRange(jobType, ignoreSeverity) {
     var jobTypeString = '';
 
-    if (!ignoreSeverity) {
-        jobTypeString += util.format('eq("severity","%s"),', SEVERITY);
-    }
-
-    jobTypeString += util.format('eq("classification","%s")', CLASSIFICATION);
-
     if (!_.isEmpty(jobType)) {
-        jobTypeString += util.format(',eq("jobType","%s")', jobType);
+        jobTypeString += util.format('"%s"', jobType);
     }
 
-    jobTypeString += '&limit=' + (limit || 1000);
+    jobTypeString += util.format('>"%s"', CLASSIFICATION);
+
+    if (!ignoreSeverity) {
+        jobTypeString += util.format('>"%s"', SEVERITY);
+    }
 
     return jobTypeString;
 }
 
+function buildFilter(config) {
+    var retryMax = objUtil.getProperty(config, 'error-processing', 'errorRetryLimit') || 3;
+    return 'lt(job.retryCount,' + retryMax + ')';
+}
 
 module.exports = ErrorProcessor;
-ErrorProcessor._buildFilter = buildFilter;
-ErrorProcessor._resubmitError = resubmitError;
-ErrorProcessor._findErrorsByJobType = findErrorsByJobType;
-ErrorProcessor._fetchAndProcessErrors = fetchAndProcessErrors;

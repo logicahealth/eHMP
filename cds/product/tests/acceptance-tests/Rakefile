@@ -53,7 +53,7 @@ end
 task :info do
   puts '=========================================================================='
   puts '#     Running codequality checks.                                        #'
-  puts '#     For details, see https://wiki.vistacore.us/display/VACORE/Ruby     #'
+  puts '#     For details, see https://wiki.vistacore.us/display/DNS RE/Ruby     #'
   puts '=========================================================================='
 end
 
@@ -82,35 +82,37 @@ end
 def environment_endpoints(env)
   case env
   when "virtualbox"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = "8888"
-    ENV["RDK_WRITEBACK_PORT"]="9999"
-    ENV["RDK_PICKLIST_PORT"]="7777"
+    ENV["RDK_IP"] = knife_search_for_ip("fetch_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("fetch_server", %w(fetch_server service_config port), "default")
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("write_back")
+    ENV["RDK_WRITEBACK_PORT"]= knife_search_for_attribute("write_back", %w(write_back service_config port), "default")
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("pick_list")
+    ENV["RDK_PICKLIST_PORT"]= knife_search_for_attribute("pick_list", %w(pick_list service_config port), "default")
     begin
-      ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation") 
-      ENV["CDSINVOCATION_PORT"] = "8080"
+      ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation")
+      ENV["CDSINVOCATION_PORT"] = "PORT"
       ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
-      ENV["OPENCDS_PORT"] = "8080"
+      ENV["OPENCDS_PORT"] = "PORT"
       ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
       ENV["CDSDB_PORT"] = knife_search_for_attribute("cdsdb", %w(mongodb config port), "default")
       ip = knife_search_for_ip("cdsdashboard")
-      ENV["CDSDASHBOARD_IP"] = 'http://' + "#{ip}:8080"
+      ENV["CDSDASHBOARD_IP"] = 'http://' + "#{ip}:PORT"
     rescue => error
       raise error
       #raise error if Rake.application.top_level_tasks.include? "cdsTests"
     end
   when "aws"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server") 
-    ENV["RDK_PORT"] = "8888"
-    ENV["RDK_WRITEBACK_PORT"]="9999"
-    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server") 
-    ENV["RDK_PICKLIST_PORT"]="7777"
-    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server") 
+    ENV["RDK_IP"] = knife_search_for_ip("fetch_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("fetch_server", %w(fetch_server service_config port), "default")
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("write_back")
+    ENV["RDK_WRITEBACK_PORT"]= knife_search_for_attribute("write_back", %w(write_back service_config port), "default")
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("pick_list")
+    ENV["RDK_PICKLIST_PORT"]= knife_search_for_attribute("pick_list", %w(pick_list service_config port), "default")
     ENV["Perf_Monitor_IP"] = 'IP           '
-    ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation") 
-    ENV["CDSINVOCATION_PORT"] = "8080"
+    ENV["CDSINVOCATION_IP"] = knife_search_for_ip("cdsinvocation")
+    ENV["CDSINVOCATION_PORT"] = "PORT"
     ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
-    ENV["OPENCDS_PORT"] = "8080"
+    ENV["OPENCDS_PORT"] = "PORT"
     ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
     ENV["CDSDB_PORT"] = knife_search_for_attribute("cdsdb", %w(mongodb config port), "default")
     ip = knife_search_for_ip("cdsdashboard")
@@ -139,7 +141,7 @@ end
 
 def knife_search_for_attribute(machine_name, attribute, attribute_type)
   release = File.read(File.dirname(__FILE__) + "/../../../infrastructure/properties/releaseVersion")
-  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}" || ENV['USER']
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
   if ENV.key?('BUNDLE_BIN_PATH')
     raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
   else
@@ -151,10 +153,8 @@ def knife_search_for_attribute(machine_name, attribute, attribute_type)
   node_attributes = parsed_search["rows"][0][attribute_type]
   depth = 0
   while node_attributes.is_a?(Hash) && node_attributes.keys.size > 0
-    node_attribute = attribute[depth]
-    node_attributes = node_attributes["#{node_attribute}"]
+    node_attributes = node_attributes["#{attribute[depth]}"]
     depth = depth + 1
-    puts "#{node_attribute} = #{node_attributes}"
   end
   return node_attributes.inspect
 end

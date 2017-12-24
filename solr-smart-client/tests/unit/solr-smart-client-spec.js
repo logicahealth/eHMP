@@ -1,260 +1,257 @@
 'use strict';
 
-var SolrSmartClient = require('../../solr-smart-client').SolrSmartClient;
+const bunyan = require('bunyan');
+const SolrSmartClient = require('../../solr-smart-client').SolrSmartClient;
+
+const dummyLogger = bunyan.createLogger({
+  name: 'test',
+  level: 'debug',
+  // comment out the next three lines to see logger output
+  streams: [{
+    path: '/dev/null',
+  }]
+});
+
+function clusterStateString(...params) {
+  return JSON.stringify(clusterState(...params));
+}
+
+function badClusterStateString(...params) {
+  let state = clusterState(...params);
+  delete state.shards;
+  return JSON.stringify(state);
+}
+
+function clusterState({
+  protocol = 'http',
+  address = 'IP        ',
+  core = 'vpr'
+} = {}) {
+  return {
+    [core]: {
+      'replicationFactor': '1',
+      'shards': {
+        'shard1': {
+          'range': '80000000-7fffffff',
+          'state': 'active',
+          'replicas': {
+            'core_node1': {
+              'core': 'vpr_shard1_replica1',
+              'base_url': (protocol ? protocol + '://' : '') + address + ':PORT/solr',
+              'node_name': 'IP             _solr',
+              'state': 'active',
+              'leader': 'true'
+            },
+            'core_node2': {
+              'core': 'vpr_shard1_replica2',
+              'base_url': (protocol ? protocol + '://' : '') + address + ':PORT/solr',
+              'node_name': 'IP             _solr',
+              'state': 'active',
+              'leader': 'true'
+            }
+          }
+        },
+        'shard2': {
+          'range': '80000000-7fffffff',
+          'state': 'active',
+          'replicas': {
+            'core_node3': {
+              'core': 'vpr_shard2_replica1',
+              'base_url': (protocol ? protocol + '://' : '') + address + ':PORT/solr',
+              'node_name': 'IP             _solr',
+              'state': 'active',
+              'leader': 'true'
+            },
+            'core_node4': {
+              'core': 'vpr_shard2_replica2',
+              'base_url': (protocol ? protocol + '://' : '') + address + ':PORT/solr',
+              'node_name': 'IP             _solr',
+              'state': 'active',
+              'leader': 'true'
+            }
+          }
+        }
+      },
+      'router': {
+        'name': 'compositeId'
+      },
+      'maxShardsPerNode': '2',
+      'autoAddReplicas': 'false'
+    }
+  };
+}
+
+console.log(clusterStateString())
 
 describe('solr-smart-client', function() {
-  describe('createSolrClientConfig()', function() {
-    var core = 'vpr';
-    var agent = 'agent';
+  describe('_getValidSolrClient()', function() {
+    it('tests that correct agent is used to create solrClient instance', function() {
+      let expectSolrConfig;
+      let finished = false;
+      let testAgent = 'test instance';
 
-    it('tests that any empty core liveNodes or parameter returns undefined', function() {
-      expect(SolrSmartClient._createSolrClientConfig(null, agent, ['127.0.0.1:8983_solr'])).toBeUndefined();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, null)).toBeUndefined();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, [])).toBeUndefined();
-    });
+      let solrClient = {
+        createClient: function(solrConfig) {
+          expectSolrConfig = solrConfig;
+        }
+      };
 
-    it('tests that urls with and without protocols are accepted', function() {
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983_solr']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983_']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://127.0.0.1:8983_solr']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://localhost:8983_solr']).length).toBe();
+      let instance = {
+        logger: dummyLogger,
+        config: {
+          core: 'vpr'
+        },
+        agent: testAgent,
+        _getValidSolrClient: SolrSmartClient.prototype._getValidSolrClient,
+        _getSolrClientInfo: function(callback) {
+          this.logger.debug('test._getSolrClient()');
+          return setTimeout(callback, 0, null, clusterStateString());
+        }
+      };
 
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983/solr']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983/']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://127.0.0.1:8983/solr']).length).toBe();
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://localhost:8983/solr']).length).toBe();
-    });
-
-    it('tests that all pieces are in the right place with underscore urls', function() {
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983_solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
+      runs(function() {
+        instance._getValidSolrClient(solrClient, error => {
+          expect(error).toBeFalsy();
+          expect(expectSolrConfig.agent).toEqual(testAgent);
+          finished = true;
+        });
       });
 
-      expect(SolrSmartClient._createSolrClientConfig(core, undefined, ['127.0.0.1:8983_solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: undefined
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983_'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://127.0.0.1:8983_solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['https://localhost:8983_solr'])).toEqual({
-        host: 'localhost',
-        port: '8983',
-        path: '/solr',
-        secure: true,
-        core: core,
-        agent: agent
-      });
-    });
-
-    it('tests that all pieces are in the right place with forward-slash urls', function() {
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983/solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, undefined, ['127.0.0.1:8983/solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: undefined
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['127.0.0.1:8983/'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['http://127.0.0.1:8983/solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['https://localhost:8983/solr'])).toEqual({
-        host: 'localhost',
-        port: '8983',
-        path: '/solr',
-        secure: true,
-        core: core,
-        agent: agent
-      });
-    });
-
-    it('tests that first valid configuration is returned', function() {
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, [null, '127.0.0.1:8983_solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['localhost:8983_solr', '127.0.0.1:8983_solr'])).toEqual({
-        host: 'localhost',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, [null, '127.0.0.1:8983/solr'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['localhost:8983/solr', '127.0.0.1:8983_solr'])).toEqual({
-        host: 'localhost',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
-
-      expect(SolrSmartClient._createSolrClientConfig(core, agent, ['localhost:8983_solr', '127.0.0.1:8983/solr'])).toEqual({
-        host: 'localhost',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: core,
-        agent: agent
-      });
+      waitsFor(function() {
+        return finished;
+      }, 500);
     });
   });
 
-  describe('copyWithout()', function() {
-    var object = {
-      host: '127.0.0.1',
-      port: '8983',
-      path: '/solr',
-      secure: false,
-      core: 'vpr',
-      agent: {}
-    };
+  describe('_findFirstReadyNodeUrl()', function() {
+    it('tests that urls with protocols are accepted', function() {
+      let result;
 
-    it('tests that empty excluded properties returns full clone', function() {
-      expect(SolrSmartClient._copyWithout(object)).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
-      });
+      result = SolrSmartClient._findFirstReadyNodeUrl(dummyLogger, clusterState().vpr.shards);
+      expect(result).toBeTruthy();
+      if (result) {
+        expect(result.length).toBe(6);
+        expect(result[2]).toBe('http');
+        expect(result[3]).toBe('IP        ');
+        expect(result[4]).toBe('PORT');
+        expect(result[5]).toBe('/solr');
+      }
 
-      expect(SolrSmartClient._copyWithout(object, null)).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
-      });
+      result = SolrSmartClient._findFirstReadyNodeUrl(dummyLogger, clusterState({
+        protocol: 'https'
+      }).vpr.shards);
 
-      expect(SolrSmartClient._copyWithout(object, '')).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
-      });
-
-      expect(SolrSmartClient._copyWithout(object, [])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
-      });
+      expect(result).toBeTruthy();
+      if (result) {
+        expect(result.length).toBe(6);
+        expect(result[2]).toBe('https');
+        expect(result[3]).toBe('IP        ');
+        expect(result[4]).toBe('PORT');
+        expect(result[5]).toBe('/solr');
+      }
     });
 
-    it('tests that string excluded properties returns correct value', function() {
-      expect(SolrSmartClient._copyWithout(object, 'agent')).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
+    it('tests that urls without protocols are accepted', function() {
+      let result;
+
+      result = SolrSmartClient._findFirstReadyNodeUrl(dummyLogger, clusterState({
+        protocol: ''
+      }).vpr.shards);
+
+      expect(result).toBeTruthy();
+      if (result) {
+        expect(result.length).toBe(6);
+        expect(result[2]).toBeFalsy();
+        expect(result[3]).toBe('IP        ');
+        expect(result[4]).toBe('PORT');
+        expect(result[5]).toBe('/solr');
+      }
+    });
+
+    it('tests that nodes that are not in the correct state are omitted', function() {
+      let result;
+      let shards = clusterState().vpr.shards;
+
+      shards.shard1.replicas.core_node1.state = 'inactive';
+      shards.shard1.replicas.core_node1.leader = 'true';
+      result = SolrSmartClient._findFirstReadyNodeUrl(dummyLogger, shards);
+      expect(result).toBeTruthy();
+      if (result) {
+        expect(result.length).toBe(6);
+        expect(result[2]).toBe('http');
+        expect(result[3]).toBe('IP        ');
+        expect(result[4]).toBe('PORT');
+        expect(result[5]).toBe('/solr');
+      }
+
+      shards.shard1.replicas.core_node1.state = 'active';
+      shards.shard1.replicas.core_node1.leader = 'false';
+      result = SolrSmartClient._findFirstReadyNodeUrl(dummyLogger, shards);
+      expect(result).toBeTruthy();
+      if (result) {
+        expect(result.length).toBe(6);
+        expect(result[2]).toBe('http');
+        expect(result[3]).toBe('IP        ');
+        expect(result[4]).toBe('PORT');
+        expect(result[5]).toBe('/solr');
+      }
+    });
+  });
+
+  describe('_createSolrClientConfig()', function() {
+    let core = 'vpr';
+    let agent = 'agent';
+
+    it('tests that any empty core or clusterState parameter returns undefined', function() {
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, null, agent, clusterState())).toBeUndefined();
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, core, agent, null)).toBeUndefined();
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, core, agent, [])).toBeUndefined();
+    });
+
+    it('tests that non-JSON clusterState parameter returns undefined', function() {
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, null, agent, 'non-JSON-test-string')).toBeUndefined();
+    });
+
+    it('tests that clusterState without "vpr" collection returns undefined', function() {
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, null, agent, clusterStateString({
+        core: 'test'
+      }))).toBeUndefined();
+    });
+
+    it('tests that bad format clusterState parameter returns undefined', function() {
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, null, agent, badClusterStateString())).toBeUndefined();
+    });
+
+    it('tests that first valid configuration is returned', function() {
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, core, agent, clusterStateString())).toEqual({
+        host: 'IP        ',
+        port: 'PORT',
         path: '/solr',
         secure: false,
-        core: 'vpr'
+        core: core,
+        agent: agent
       });
 
-      expect(SolrSmartClient._copyWithout(object, ['agent'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, core, agent, clusterStateString({
+        protocol: ''
+      }))).toEqual({
+        host: 'IP        ',
+        port: 'PORT',
         path: '/solr',
         secure: false,
-        core: 'vpr'
+        core: core,
+        agent: agent
       });
 
-      expect(SolrSmartClient._copyWithout(object, ['agent', 'secure'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
+      expect(SolrSmartClient._createSolrClientConfig(dummyLogger, core, agent, clusterStateString({
+        protocol: 'https'
+      }))).toEqual({
+        host: 'IP        ',
+        port: 'PORT',
         path: '/solr',
-        core: 'vpr'
-      });
-
-      expect(SolrSmartClient._copyWithout(object, 'non_existent')).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
-      });
-
-      expect(SolrSmartClient._copyWithout(object, ['non_existent'])).toEqual({
-        host: '127.0.0.1',
-        port: '8983',
-        path: '/solr',
-        secure: false,
-        core: 'vpr',
-        agent: {}
+        secure: true,
+        core: core,
+        agent: agent
       });
     });
   });

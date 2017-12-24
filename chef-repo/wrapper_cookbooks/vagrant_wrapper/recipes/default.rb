@@ -12,8 +12,8 @@ include_recipe "vagrant_wrapper::upgrade" if !`which vagrant`.empty? && !`vagran
 include_recipe "vagrant"
 
 #Install Centos Base box because new version of vagrant breaks if no box exist with in vagrant home during deploy
-box_name = "opscode-centos-6.5"
-box_url = "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.5/centos-6.5-provisionerless.box"
+box_name = "opscode-centos-6.5-users"
+box_url = "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.5-users/centos-6.5-users.box"
 execute 'install base box' do
   environment 'VAGRANT_HOME' => node[:vagrant_wrapper][:home]
   command "vagrant box add #{box_name} #{box_url}"

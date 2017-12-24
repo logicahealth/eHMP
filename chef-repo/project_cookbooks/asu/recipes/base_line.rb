@@ -3,6 +3,13 @@
 # Recipe:: base_line
 #
 
+user node['asu']['user']
+
+group node['asu']['group'] do
+  members node['asu']['user']
+  action :create
+end
+
 include_recipe 'bluepill_wrapper'
 
 template "/etc/init/#{node[:asu][:service]}.conf" do
@@ -21,7 +28,9 @@ template "/etc/bluepill/#{node[:asu][:service]}.pill" do
     :working_directory => node[:asu][:home_dir],
     :log_directory => node[:asu][:log_dir],
     :pid_directory => node[:asu][:pid_dir],
-    :base_directory => node[:asu][:base_dir]
+    :base_directory => node[:asu][:base_dir],
+    :user => node['asu']['user'],
+    :group => node['asu']['group']
   )
   notifies :stop, "service[#{node[:asu][:service]}]", :before
   notifies :restart, "service[#{node[:asu][:service]}]"

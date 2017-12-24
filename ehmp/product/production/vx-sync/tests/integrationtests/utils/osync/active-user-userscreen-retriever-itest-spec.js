@@ -7,14 +7,14 @@ var moment = require('moment');
 
 var logger = require(global.VX_DUMMIES + 'dummy-logger');
 var wConfig = require(global.VX_ROOT + 'worker-config');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
 var retriever = require(global.OSYNC_UTILS + 'active-user-userscreen-retriever');
 
 var user1 = {
     'duz': {
-        '9E7A': 'user1'
+        'SITE': 'user1'
     },
     'lastlogin': moment().format(),
     'patientList': [{
@@ -29,7 +29,7 @@ var user1 = {
 };
 var user2 = {
     'duz': {
-        'C877': 'user2'
+        'SITE': 'user2'
     },
     'lastlogin': '2014-01-11',
     'patientList': [{
@@ -57,7 +57,7 @@ describe('active-user-userscreen-retriever.js', function() {
         })
     };
 
-    var pjds = new PjdsClient(logger, logger, config);
+    var pjds = new PjdsClient(logger, logger, config.pjds);
     var jds = new JdsClient(logger, logger, config);
 
     var environment = {
@@ -115,7 +115,7 @@ describe('active-user-userscreen-retriever.js', function() {
         var initBlacklist = false;
 
         runs(function () {
-            pjds.addToOsyncBlist('user1', '9E7A', 'user', function (error, response) {
+            pjds.addToOsyncBlist('user1', 'SITE', 'user', function (error, response) {
                 if (error) {
                     expect(error).toBeFalsy();
                 }
@@ -146,7 +146,7 @@ describe('active-user-userscreen-retriever.js', function() {
     var clearBlacklist = false;
 
     runs(function () {
-        pjds.removeFromOsyncBlist('user1', '9E7A', 'user', function (error, response) {
+        pjds.removeFromOsyncBlist('user1', 'SITE', 'user', function (error, response) {
             if (error) {
                 expect(error).toBeFalsy();
             }

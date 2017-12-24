@@ -18,6 +18,7 @@ define([
         groupable: true,
         groupableOptions: {
             primary: true,
+            groupByDate: true,
             innerSort: 'activityDateTime',
             groupByFunction: function(collectionElement) {
                 if(collectionElement.model.get('activityDateTime')){
@@ -28,14 +29,12 @@ define([
             groupByRowFormatter: function(item) {
                 return moment(item, 'YYYYMM').format('MMMM YYYY');
             }
-        },
-        hoverTip: 'encounters_datetime'
+        }
     }, {
         name: 'activity',
         label: 'Activity',
         cell: ActivityCell,
-        sortable: false,
-        hoverTip: 'encounters_activity'
+        sortable: false
     }, {
         name: 'displayType',
         label: 'Type',
@@ -46,8 +45,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'activityDateTime'
-        },
-        hoverTip: 'encounters_type'
+        }
     }];
 
     var fullScreenColumns = summaryColumns.concat([{
@@ -60,8 +58,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'activityDateTime'
-        },
-        hoverTip: 'encounters_enteredby'
+        }
     }, {
         name: 'facilityName',
         flexWidth: 'flex-width-0_5',
@@ -72,8 +69,7 @@ define([
         groupable: true,
         groupableOptions: {
             innerSort: 'activityDateTime'
-        },
-        hoverTip: 'encounters_facility'
+        }
     }]);
 
     var DefaultDetailView = Backbone.Marionette.ItemView.extend({
@@ -89,7 +85,7 @@ define([
         'lab': 'labresults_timeline_detailview'
     };
 
-    var getDetailsModal = function(model) {
+    var getDetailsModal = function(model, collection, targetElement) {
         //ugh, why is this needed?? Is it?? The detailed modals should grab this if need be
         var currentPatient = ADK.PatientRecordService.getCurrentPatient();
         var channelObject = {
@@ -123,7 +119,8 @@ define([
                         size: 'large',
                         title: response.title,
                         'nextPreviousCollection': model.collection,
-                        'nextPreviousModel': model
+                        'nextPreviousModel': model,
+                        triggerElement: targetElement
                     },
                     callbackFunction: getDetailsModal
                 });
@@ -134,7 +131,8 @@ define([
                 view: new DefaultDetailView(),
                 options:  {
                     size: 'large',
-                    title: 'Detail - Placeholder'
+                    title: 'Detail - Placeholder',
+                    triggerElement: targetElement
                 }
             });
             modalView.show();
@@ -163,8 +161,7 @@ define([
                 fullScreenColumns: fullScreenColumns,
                 enableModal: true,
                 collection: undefined,
-                groupable: true,
-                onClickRow: getDetailsModal
+                groupable: true
             };
 
             var criteria = {
@@ -177,7 +174,27 @@ define([
 
             if (appletType === 'standard') {
                 this.setupGlobalDateListener();
+                appletOptions.tileOptions = {
+                    quickMenu: {
+                        enabled: true,
+                        buttons: [{
+                            type: 'detailsviewbutton',
+                            onClick: function(params, event) {
+                                getDetailsModal(params.model, params.collection, params.$el);
+                            }
+                        }]
+                    },
+                    primaryAction: {
+                        enabled: true,
+                        onClick: function(params) {
+                            getDetailsModal(params.model, params.collection, params.$el);
+                        }
+                    }
+                };
             } else if (appletType === 'gdt') {
+                appletOptions.onClickRow = function(model) {
+                    getDetailsModal(model, model.collection);
+                };
                 this.setupGDTListener();
                 appletOptions.runInWindow = true;
             }

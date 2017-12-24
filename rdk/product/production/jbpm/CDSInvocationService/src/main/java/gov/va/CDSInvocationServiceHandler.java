@@ -1,37 +1,28 @@
 package gov.va;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.jboss.logging.Logger;
 import org.jboss.logging.MDC;
-//import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.kie.internal.runtime.Cacheable;
 import org.kie.internal.runtime.Closeable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vistacore.jbpm.utils.logging.RequestMessageType;
@@ -40,12 +31,17 @@ import vistacore.jbpm.utils.logging.RequestMessageType;
 
 public class CDSInvocationServiceHandler implements WorkItemHandler, Closeable, Cacheable {
 	private static final Logger LOGGER = Logger.getLogger(CDSInvocationServiceHandler.class);
+	private static final String CDS_CONFIG = "cdsconfig.properties";
+	private static final String CDS_PROTOCOL = "CDSInvocation-Protocol";
+	private static final String CDS_IP = "CDSInvocation-IP";
+	private static final String CDS_PORT = "CDSInvocation-Port";
+	private static final String CDS_INVOKE_RULES_PATH = "cds-results-service/cds/invokeRules";
 
 	public CDSInvocationServiceHandler() {	
 	}	
 	
 	/** The access string. */
-	protected static String CDSInvocationEnvelope = "{\"context\":{\"location\":{\"entityType\":\"Location\",\"id\":\"Location1\",\"name\":\"Test Location\"},\"subject\":{\"entityType\":\"Subject\",\"id\":\"9E7A;129\",\"name\":\"TestSubject\"},\"user\":{\"entityType\":\"User\",\"id\":\"Id1\",\"name\":\"Tester\"}},\"target\":{\"intentsSet\":[\"FitFobtResult\"],\"mode\":\"Normal\",\"type\":\"Direct\"},\"dataModel\":@LabFHIRResult@}";
+	protected static String CDSInvocationEnvelope = "{\"context\":{\"location\":{\"entityType\":\"Location\",\"id\":\"Location1\",\"name\":\"Test Location\"},\"subject\":{\"entityType\":\"Subject\",\"id\":\"SITE;129\",\"name\":\"TestSubject\"},\"user\":{\"entityType\":\"User\",\"id\":\"Id1\",\"name\":\"Tester\"}},\"target\":{\"intentsSet\":[\"FitFobtResult\"],\"mode\":\"Normal\",\"type\":\"Direct\"},\"dataModel\":@LabFHIRResult@}";
 	
 	/**
 	 * Gets the restTemplate.
@@ -64,73 +60,9 @@ public class CDSInvocationServiceHandler implements WorkItemHandler, Closeable, 
 	 * @return the CDS invocation url string
 	 */
 	protected static String getCDSInvocationUrl() {
-		String cdsInvocationEndpoint = "";
-		Properties prop = new Properties();
-		String propertiesPath = "";
-		
-		File tempFile;
-		FileInputStream file = null;
-
-		try {
-			tempFile = new File(getCDSPath());
-			propertiesPath=tempFile.getParent();
-
-			try {
-				file = new FileInputStream(propertiesPath+"/cdsconfig.properties");
-			} catch (FileNotFoundException e) {
-				//if the properties file not found where the jar is, look for it in the project file
-				propertiesPath = tempFile.getParentFile().getParent();
-				file = new FileInputStream(propertiesPath+"/cdsconfig.properties");
-			}
-			LOGGER.debug("CDS properties path: " + propertiesPath);
-			prop.load(file);
-			cdsInvocationEndpoint = prop.getProperty("CDSInvocation-Protocol") + "://" + prop.getProperty("CDSInvocation-IP") + ":"+ prop.getProperty("CDSInvocation-Port") + "/";
-			
-		} catch (FileNotFoundException e) {
-			LOGGER.error("CDSInvocationServiceHandler.getCDSInvocationUrl: File was not found: " + e.getMessage(), e);
-		} catch (IOException e) {
-			LOGGER.error("CDSInvocationServiceHandler.getCDSInvocationUrl: An unexpected condition has happened with IO: " + e.getMessage(), e);
-		} catch (CDSException e) {
-			//Error was already logged
-		} catch (Exception e) {
-			LOGGER.error("CDSInvocationServiceHandler.getCDSInvocationUrl: An unexpected condition has happened: " + e.getMessage(), e);
-		}
-		
-		finally {
-			if (file != null) {
-				try {
-					file.close();
-				} catch (IOException e) {
-					LOGGER.info("CDSInvocationServiceHandler.getCDSInvocationUrl: Problem closing file handle: " + e.getMessage(), e);
-				}
-			}
-		}
-		return cdsInvocationEndpoint;
-	}
-
-
-	private static String getCDSPath() throws CDSException {
-		ProtectionDomain protectionDomain = CDSInvocationServiceHandler.class.getProtectionDomain();
-		if (protectionDomain == null)
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: protectionDomain cannot be null");
-		CodeSource codeSource = protectionDomain.getCodeSource();
-		if (codeSource == null)
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: codeSource cannot be null");
-		URL location = codeSource.getLocation();
-		if (location == null)
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: location cannot be null");
-		URI uri;
-		try {
-			uri = location.toURI();
-		} catch (URISyntaxException e) {
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: uri was invalid: " + e.getMessage(), e);
-		}
-		if (uri == null)
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: uri cannot be null");
-		String path = uri.getPath();
-		if (path == null)
-			throw new CDSException("CDSInvocationServiceHandler.getCDSPath: path cannot be null");
-		return path;
+		return CDSPropertiesLoaderInnerClass.getProperty(CDS_PROTOCOL) + "://" 
+				+ CDSPropertiesLoaderInnerClass.getProperty(CDS_IP) + ":"
+				+ CDSPropertiesLoaderInnerClass.getProperty(CDS_PORT) + "/";
 	}
 
 	/** 
@@ -142,7 +74,7 @@ public class CDSInvocationServiceHandler implements WorkItemHandler, Closeable, 
 		LOGGER.debug("CDSInvocationServiceHandler.invokeCDS");
 		
 		try {
-			String cdsInvocationServer = getCDSInvocationUrl() + "cds-results-service/cds/invokeRules";
+			String cdsInvocationServer = getCDSInvocationUrl() + CDS_INVOKE_RULES_PATH;
 			
 			CDSResponse results = null;
 			String jsonFHIRLabResults = CDSInvocationEnvelope.replace("@LabFHIRResult@", LabFHIRResult);
@@ -216,5 +148,29 @@ public class CDSInvocationServiceHandler implements WorkItemHandler, Closeable, 
 	
 	@Override
 	public void close() {
+	}
+	
+	/**
+	 * Inner class to remain static for dealing with the properties
+	 */
+	private static final class CDSPropertiesLoaderInnerClass {
+		private static final Properties cdsProperties = new Properties();
+		private static final Logger LOGGER = Logger.getLogger(CDSPropertiesLoaderInnerClass.class);
+		static {
+			try {
+				LOGGER.debug(String.format("Loading Properties files; %s",CDS_CONFIG));
+				cdsProperties.load(CDSPropertiesLoaderInnerClass.class.getClassLoader().getResourceAsStream(CDS_CONFIG));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		/**
+		 * Pulls a property from the properties based on the original file name
+		 * @return String
+		 */
+		public static final String getProperty(String prop) {
+			return cdsProperties.getProperty(prop);
+		}
 	}
 }

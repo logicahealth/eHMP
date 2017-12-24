@@ -2,7 +2,7 @@
     <div class="form-inline">
         <div class="form-group">
             <label for="{{instanceId}}-assigned-to-options">Assigned to:</label>
-            <select class="form-control" id="{{instanceId}}-assigned-to-options" name="assignedTo" title="Use up and down arrows to view options and then press enter to select.">
+            <select class="form-control" id="{{instanceId}}-assigned-to-options" name="assignedTo">
                 {{#each assignedTo}}
                 {{#if show}}
                 <option value="{{value}}">{{displayText}}</option>
@@ -15,7 +15,7 @@
         {{else}}
         <div class="form-group">
             <label for="{{instanceId}}-status-options">Display:</label>
-            <select class="form-control" id="{{instanceId}}-status-options" name="status" title="Use up and down arrows to view options and then press enter to select.">
+            <select class="form-control" id="{{instanceId}}-status-options" name="status">
                 {{#each status}}
                 {{#if show}}
                 <option value="{{value}}">{{displayText}}</option>

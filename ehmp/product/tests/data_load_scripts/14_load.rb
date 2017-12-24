@@ -1,6 +1,6 @@
 require 'vistarpc4r'
 
-broker = VistaRPC4r::RPCBrokerConnection.new("ec2-174-129-92-174.compute-1.amazonaws.com", 9210, "DNS   ", "REDACTED", false)
+broker = VistaRPC4r::RPCBrokerConnection.new("ec2-174-129-92-174.compute-1.amazonaws.com", PORT, "USER  ", "USER  !!", false)
 broker.connect
 broker.setContext('OR CPRS GUI CHART')
 

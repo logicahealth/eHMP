@@ -11,16 +11,16 @@ ZSTU ; Cache calls this routine at startup to perform these tasks automatically
  S $ZT="ERR"
  ;
  ; START BROKER - OLD STYLE
- ;J STRT^XWBTCP(9200):"CPM"
+ ;J STRT^XWBTCP(PORT):"CPM"
  ;
  ; START BROKER - NEW STYLE
- J ZISTCP^XWBTCPM1(9210):"VISTA"
+ J ZISTCP^XWBTCPM1(PORT):"VISTA"
  ;
  ; START TaskMan UNLESS on a hybrid front end server
  J ^ZTMB:"VISTA"
  ;
  ; START VistALink
- J START^XOBVLL(8000):"VISTA"
+ J START^XOBVLL(PORT):"VISTA"
 ERR Q
 
 

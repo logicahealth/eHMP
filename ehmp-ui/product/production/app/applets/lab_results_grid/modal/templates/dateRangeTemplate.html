@@ -2,14 +2,14 @@
 <fieldset class="all-margin-md btn-date-range left-margin-no">
     <legend class="sr-only">Date Range Filter</legend>
     <div class="btn-group btn-group-xs right-margin-md">
-        <button id="allRange" name="allRange" type="button" class="btn btn-sm btn-default" title="Press enter to select all years">All</button>
-        <button id="2yrRange" name="2yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 2 years">2yr</button>
-        <button id="1yrRange" name="1yrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last year">1yr</button>
-        <button id="3moRange" name="3moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 3 months">3m</button>
-        <button id="1moRange" name="1moRange" type="button" class="btn btn-sm btn-default" title="Press enter to select last month">1m</button>
-        <button id="7dRange" name="7dRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 7 days">7d</button>
-        <button id="72hrRange" name="72hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 72 hours">72hr</button>
-        <button id="24hrRange" name="24hrRange" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 24 hours">24hr</button>
+        <button id="allRange" type="button" class="btn btn-sm btn-default" aria-label="All years">All</button>
+        <button id="2yrRange" type="button" class="btn btn-sm btn-default" aria-label="Last 2 years">2yr</button>
+        <button id="1yrRange" type="button" class="btn btn-sm btn-default" aria-label="Last year">1yr</button>
+        <button id="3moRange" type="button" class="btn btn-sm btn-default" aria-label="Last 3 months">3m</button>
+        <button id="1moRange" type="button" class="btn btn-sm btn-default" aria-label="Last month">1m</button>
+        <button id="7dRange" type="button" class="btn btn-sm btn-default" aria-label="Last 7 days">7d</button>
+        <button id="72hrRange" type="button" class="btn btn-sm btn-default" aria-label="Last 72 hours">72hr</button>
+        <button id="24hrRange" type="button" class="btn btn-sm btn-default" aria-label="Last 24 hours">24hr</button>
     </div>
     <div class="form-group">
         <label for="filterFromDate">From</label>
@@ -17,7 +17,7 @@
             <span class="input-group-addon" aria-hidden="true" for="filterFromDate">
                 <i class="fa fa-calendar"></i>
             </span>
-            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filterFromDate" name="filterFromDate" title="Enter date in MM/DD/YYYY format" />
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filterFromDate" name="filterFromDate" aria-describedby="filterLabDateRangeFormat" />
         </div>
     </div>
     <div class="form-group">
@@ -26,8 +26,9 @@
             <span class="input-group-addon" aria-hidden="true" for="filterToDate">
                 <i class="fa fa-calendar"></i>
             </span>
-            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filterToDate" name="filterToDate" title="Enter date in MM/DD/YYYY format" />
+            <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="filterToDate" name="filterToDate" aria-describedby="filterLabDateRangeFormat" />
         </div>
     </div>
-    <button id="customRangeApply" name="customRangeApply" type="submit" class="btn btn-sm btn-primary left-margin-sm" title="Press enter to apply custom date range" disabled>Apply</button>
+    <div id="filterLabDateRangeFormat" class="sr-only" aria-hidden="true">Use format: MM/DD/YYYY</div>
+    <button id="customRangeApply" name="customRangeApply" type="submit" class="btn btn-sm btn-primary left-margin-sm" disabled>Apply</button>
 </fieldset>

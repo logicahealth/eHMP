@@ -400,7 +400,7 @@ end
 
 def check_uncompeleted_sync
   json = JSON.parse(@response.body)
-  sync_complete = json["data"]["items"][0]["syncStatusByVistaSystemId"]["9E7A"]["syncComplete"]
+  sync_complete = json["data"]["items"][0]["syncStatusByVistaSystemId"]["SITE"]["syncComplete"]
   if sync_complete
     p "operational data has been synced"
     is_synced = true

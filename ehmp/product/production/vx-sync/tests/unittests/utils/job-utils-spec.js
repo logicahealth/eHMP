@@ -26,7 +26,7 @@ describe('job.js', function() {
                 }]
             }
         };
-        var testEventUid = 'urn:va:allerfy:9E7A:123:11';
+        var testEventUid = 'urn:va:allerfy:SITE:123:11';
 
         var dummyRequest = new DummyRequest();
         dummyRequest.jpid = 'jpid';
@@ -273,10 +273,10 @@ describe('job.js', function() {
         });
 
         it('verify vistaPatientSubscribeRequest', function() {
-            var site = '9E7A';
+            var site = 'SITE';
             var patientIdentifier = {
                 type: 'pid',
-                value: '9E7A;8'
+                value: 'SITE;8'
             };
             var rootJob = {
                 jpid: uuid.v4(),
@@ -285,16 +285,16 @@ describe('job.js', function() {
             var type = jobUtil.vistaSubscribeRequestType(site);
             var job_gen = jobUtil.createVistaSubscribeRequest(site, patientIdentifier, rootJob);
             expect(job_gen.priority).toBe(38);
-            expect(jobUtil.isValid(type, job_gen, 'C877')).toBe(false);
+            expect(jobUtil.isValid(type, job_gen, 'SITE')).toBe(false);
             expect(jobUtil.isValid(type, job_gen, site)).toBe(true);
             expect(job_gen.referenceInfo).toBeUndefined();
         });
 
         it('verify vistaPatientSubscribeRequest with referenceInfo', function() {
-            var site = '9E7A';
+            var site = 'SITE';
             var patientIdentifier = {
                 type: 'pid',
-                value: '9E7A;8'
+                value: 'SITE;8'
             };
             var rootJob = {
                 jpid: uuid.v4(),
@@ -307,7 +307,7 @@ describe('job.js', function() {
             var type = jobUtil.vistaSubscribeRequestType(site);
             var job_gen = jobUtil.createVistaSubscribeRequest(site, patientIdentifier, rootJob);
             expect(job_gen.priority).toBe(38);
-            expect(jobUtil.isValid(type, job_gen, 'C877')).toBe(false);
+            expect(jobUtil.isValid(type, job_gen, 'SITE')).toBe(false);
             expect(jobUtil.isValid(type, job_gen, site)).toBe(true);
             expect(job_gen.referenceInfo).toBeDefined();
             expect(job_gen.referenceInfo.requestId).toEqual('vista-patient-subscribe-request-requestId');
@@ -318,7 +318,7 @@ describe('job.js', function() {
     describe('createEnterpriseSyncRequest()', function() {
         it('create job with demographic record', function() {
             var job = jobUtil.createEnterpriseSyncRequest({
-                value: '9E7A;3',
+                value: 'SITE;3',
                 type: 'pid'
             }, '34812353-3292-3491-5728-184920572381', [], {
                 'givenName': 'test'
@@ -348,7 +348,7 @@ describe('job.js', function() {
             }, '34812353-3292-3491-5728-184920572381');
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(true);
             job = jobUtil.createEnterpriseSyncRequest({
-                value: '9E7A;3',
+                value: 'SITE;3',
                 type: 'pid'
             }, '34812353-3292-3491-5728-184920572381', [], {
                 'givenName': 'test'
@@ -366,4 +366,23 @@ describe('job.js', function() {
             expect(jobUtil.isVistAHdrSubscribeRequestType(job.type)).toBe(false);
         });
     });
+
+    describe('createSyncNotification()', function() {
+        it('create job', function() {
+            var pid = {
+                value: 'SITE;3',
+                type: 'pid'
+            };
+            var meta = {priority: 1, referenceInfo: { 'initialSyncId': 'SITE;3' }};
+
+            var job = jobUtil.createSyncNotification(pid, 'discharge', {kind: 'discharge'}, meta);
+
+            expect(job.type).toBe('sync-notification');
+            expect(job.patientIdentifier.value).toBe('SITE;3');
+            expect(job.priority).toBe(1);
+            expect(job.dataDomain).toBe('discharge');
+            expect(job.referenceInfo).toEqual(jasmine.objectContaining(meta.referenceInfo));
+        });
+    });
+
 });

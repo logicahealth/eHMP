@@ -2,7 +2,7 @@
 
 var rdk = require('../../../core/rdk');
 var RdkError = rdk.utils.RdkError;
-var authUtils = require('../../../subsystems/authentication/utils');
+var authUtils = rdk.utils.authentication;
 var userUtil = require('../../user/user-whitelist');
 
 function refreshToken(req, res) {

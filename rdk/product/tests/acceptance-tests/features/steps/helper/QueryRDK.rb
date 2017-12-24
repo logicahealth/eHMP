@@ -126,7 +126,7 @@ class RDClass
 end
 
 class QueryRDKDomain < BuildQuery
-  # http://127.0.0.1:8888/patientrecord/domain/allergy?pid=1
+  # http://127.0.0.1:PORT/patientrecord/domain/allergy?pid=1
   def initialize(datatype, pid = nil)
     super()
     title = "patient-record-#{datatype}"
@@ -186,7 +186,7 @@ class QueryGenericRDK < BuildQuery
   end
 end # class
 
-#http://IP             /patientrecord/search/text?query=document&pid=9E7A;100022
+#http://IP             /patientrecord/search/text?query=document&pid=SITE;100022
 class QueryRDK < BuildQuery
   def initialize(pid, type)
     super()
@@ -198,7 +198,7 @@ class QueryRDK < BuildQuery
   end
 end
 
-#http://IP             /fhir/patient/urn:va:patient:9E7A:100716:100716
+#http://IP             /fhir/patient/urn:va:patient:SITE:100716:100716
 class QueryRDKDemographics < BuildQuery
   def initialize(type, uid)
     super()
@@ -211,7 +211,7 @@ class QueryRDKDemographics < BuildQuery
   end
 end
 
-#http://IP             /resource/fhir/patient/9E7A;253/observation
+#http://IP             /resource/fhir/patient/SITE;253/observation
 class QueryRDKFhir < BuildQuery
   def initialize(uid, domain)
     super()
@@ -233,7 +233,7 @@ class QueryRDKFhirMetadata < BuildQuery
   end
 end
 
-#http://IP           /resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
+#http://IP           /resource/vler/SITE;8/toc?encounterUid=urn:va:visit:SITE:8:1218
 class QueryRDKVler < BuildQuery
   def initialize(type)
     super()
@@ -271,7 +271,7 @@ class QueryRDKFilterBySummary < BuildQuery
   end
 end
 
-#http://IP             /resource/tasks?accessCode=IP    &verifyCode=IP    !!&site=9E7A
+#http://IP             /resource/tasks?accessCode=USER  &verifyCode=PW      &site=SITE
 #{"context": "patient","patientICN":"10108V420871","status":"Ready"}
 class RDKProcessList< BuildQuery
   def initialize
@@ -281,8 +281,8 @@ class RDKProcessList< BuildQuery
   end
 end
 
-#http://IP             /resource/tasks/startprocess?accessCode=IP    &verifyCode=IP    !!&site=9E7A
-#{"deploymentId":"VistaCore:FITLabProject:0.0.0","processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"10108V420871","facility":"9E7A"}}
+#http://IP             /resource/tasks/startprocess?accessCode=USER  &verifyCode=PW      &site=SITE
+#{"deploymentId":"VistaCore:FITLabProject:0.0.0","processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"10108V420871","facility":"SITE"}}
 class RDKStartProcess< BuildQuery
   def initialize
     super()

@@ -3,6 +3,12 @@
 require('../../../../../env-setup');
 
 var xformer = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/v2_3_1/jmeadows-medication-xformer');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// Be sure next lines are commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'jmeadows-xform-domain-vpr-handler-spec',
+//     level: 'debug'
+// });
 
 describe('jmeadows-medication-xformer', function() {
 
@@ -116,7 +122,7 @@ var sampleDodMedication = {
 
 
 
-var result = xformer(sampleDodMedication, mockEdipi);
+var result = xformer(log, sampleDodMedication, mockEdipi);
 
       it('verify transform sample medication to VPR', function(){
        //console.log(result);

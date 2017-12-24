@@ -11,4 +11,5 @@ Background:
 Scenario: Verify a user can access detailed view of a task
   Given My Tasks applet displays at least 1 tasks
   When the user selects a task
-  Then a detail view is displayed
+  Then the patient selection confirmation modal displays
+

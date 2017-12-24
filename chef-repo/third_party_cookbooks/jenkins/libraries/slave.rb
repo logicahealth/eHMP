@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # HWRP:: slave
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 #
-# Copyright 2013-2014, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -114,6 +114,7 @@ end
 
 class Chef
   class Provider::JenkinsSlave < Provider::LWRPBase
+    provides :jenkins_slave
     use_inline_resources
 
     include Jenkins::Helper
@@ -393,7 +394,7 @@ class Chef
         usage_mode:   new_resource.usage_mode,
         labels:       new_resource.labels.sort,
         availability: new_resource.availability,
-        environment:  new_resource.environment
+        environment:  new_resource.environment,
       }
 
       if new_resource.availability.to_s == 'demand'
@@ -413,8 +414,3 @@ class Chef
     end
   end
 end
-
-Chef::Platform.set(
-  resource: :jenkins_slave,
-  provider: Chef::Provider::JenkinsSlave
-)

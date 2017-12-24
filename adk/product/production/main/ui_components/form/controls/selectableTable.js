@@ -15,22 +15,29 @@ define([
 
     var STRowItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile(
-            '<span class="sr-only">{{#if label}}Press enter to set this as the {{label}}.{{else}}Press enter to select this row.{{/if}}</span>' +
             '{{#each columns}}' +
-            '<div class="table-cell"><span>{{value}}</span></div>' + //data
+            '<div class="table-cell"><span class="sr-only">{{title}}: </span><span>{{value}}</span></div>' + //data
             '{{/each}}'),
-        tagName: 'a',
         className: 'table-row',
         attributes: {
-            'href': '#'
+            'role': 'option',
+            'aria-selected': 'false',
+            'aria-describedby': '',
+            'tabindex': '0' //we are using a clickable div here instead of a link because JAWS reads a link with role="option" twice
         },
         initialize: function(options) {
             this.field = options.field;
             this.formModel = options.formModel;
+            this.parentDescriptionId = this.getOption('descriptionId');
         },
         onRender: function() {
             if (this.formModel.get(this.field.get('name')) && _.isEqual(this.model.attributes, this.formModel.get(this.field.get('name')).attributes)) {
-                this.$el.addClass('active');
+                this.$el
+                    .addClass('active')
+                    .attr({
+                    'aria-selected': 'true',
+                    'aria-describedby': this.parentDescriptionId
+                });
             }
         },
         serializeModel: function(model) {
@@ -38,14 +45,20 @@ define([
             return {
                 columns: _.map(this.field.get('columns'), function(column) {
                     return _.extend(column, {
-                        value: attributes[column.id]
+                        value: attributes[column.id],
+                        title: column.title
                     });
                 }),
-                label: this.field.get('label')
             };
         },
         events: {
-            'click': 'assignModel'
+            'click': 'assignModel',
+            'keydown': 'handleKeydown'
+        },
+        handleKeydown: function(e) {
+            if(/13|32/.test(e.which)){
+                this.assignModel(e);
+            }
         },
         assignModel: function(e) {
             e.preventDefault();
@@ -66,18 +79,19 @@ define([
                 '<div class="col-xs-12">' + // container
                 '<div id="{{#if id}}{{clean-for-id id}}{{else}}{{clean-for-id name}}{{/if}}" class="faux-table-container">' + // wrapper for control
                 '<div class="faux-table">' +
-                '<div class="header">' +
+                '<div class="header" aria-hidden="true">' +
                 '<div class="table-row">' +
                 '{{#each columns}}' +
                 '<div class="table-cell"><div>{{title}}</div></div>' +
                 '{{/each}}' +
                 '</div>' + // header row
                 '</div>' + // header (composite's "item view")
-                '<div class="body"></div>' + // body (composite's "collection view")
+                '<div class="body" role="listbox" aria-label="List of selectable options.{{#if label}} Select {{label}}{{/if}}"></div>' + // body (composite's "collection view")
                 '</div>' + // faux-table
                 wrapTemplate(this.field.get('loadingTemplate') || defaultLoadingTemplate, 'loading') +
                 wrapTemplate(this.field.get('emptyTemplate') || defaultEmptyTemplate, 'no-results') +
                 '</div>' + // wrapper for control
+                '<span id="{{descriptionId}}" class="sr-only" aria-hidden="true">Selected</span>' +
                 '</div>'); // container
         },
         ui: {
@@ -93,6 +107,12 @@ define([
             } else {
                 this.collection = this.field.get('collection') || new Backbone.Collection();
             }
+            this.descriptionId = this.cid + "Description";
+        },
+        templateHelpers: function() {
+            return {
+                descriptionId: this.descriptionId
+            };
         },
         childView: STRowItemView,
         childViewContainer: '@ui.BodyContainer',
@@ -101,24 +121,31 @@ define([
             return {
                 attributeMapping: this.attributeMapping,
                 field: this.field,
-                formModel: this.model
+                formModel: this.model,
+                descriptionId: this.descriptionId
             };
         },
         onChildviewClickTableRow: function(child) {
             if (!child.$el.hasClass('active')) {
                 this.children.each(function(view) {
-                    view.$el.removeClass('active');
+                    view.$el
+                        .removeClass('active')
+                        .attr({
+                            'aria-selected': 'false',
+                            'aria-describedby': ''
+                        });
                 });
-                child.$el.addClass('active');
+                child.$el
+                    .addClass('active')
+                    .attr({
+                        'aria-selected': 'true',
+                        'aria-describedby': this.descriptionId
+                    });
             }
             var currentString = '';
             _.each(this.field.get('columns'), function(column) {
                 currentString = currentString + ' ' + column.title + ': ' + this.model.get(this.field.get('name')).get(column.id);
             }, this);
-            Accessibility.Notification.new({
-                type: 'Assertive',
-                message: (this.field.get("label") ? this.field.get('label') + ' has been set' : 'Row has been selected') + ' with content of:' + currentString
-            });
             this.onUserInput.apply(this, arguments);
         },
         onRender: function() {

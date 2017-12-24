@@ -19,10 +19,10 @@ define([
             response = {
                 uid: 'urn:va:immunization:DOD:0000000013:1000001116',
                 summary: 'Anthrax',
-                pid: '9E7A;71',
+                pid: 'SITE;71',
                 contraindicated: false,
                 reactionName: 'NONE',
-                reactionCode: 'urn:va:reaction:9E7A:8:0',
+                reactionCode: 'urn:va:reaction:SITE:8:0',
                 facilityCode: 'DOD',
                 facilityName: 'DOD',
                 name: 'Anthrax',

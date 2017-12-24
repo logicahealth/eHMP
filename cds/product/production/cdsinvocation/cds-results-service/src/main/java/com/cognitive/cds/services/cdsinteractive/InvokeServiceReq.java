@@ -24,7 +24,7 @@
  */
 
 package com.cognitive.cds.services.cdsinteractive;
-import java.util.Properties;
+import java.util.Map;
 
 import com.cognitive.cds.invocation.model.Context;
 import com.cognitive.cds.invocation.model.InvocationTarget;
@@ -33,7 +33,7 @@ public class InvokeServiceReq {
 
 	private InvocationTarget target;
 	private Context context;
-	private Properties parameters;
+	private Map<String, Object> parameters;
 	private Object dataModel;
 
 	public InvocationTarget getTarget() {
@@ -52,11 +52,12 @@ public class InvokeServiceReq {
 		this.context = context;
 	}
 
-	public Properties getParameters() {
+
+	public Map<String, Object> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Properties parameters) {
+	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
 	}
 

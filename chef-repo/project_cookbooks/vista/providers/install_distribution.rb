@@ -41,7 +41,7 @@ action :install do
       Chef::Log.info("Distribution was previously loaded and installed.")
     end
 
-    shell.on(:output, /Enter RETURN to continue/) do | process, match |
+    shell.on(:output, /Type <Enter> to continue or '\^' to exit/) do | process, match |
       process.write("\n")
     end
 

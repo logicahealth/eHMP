@@ -1,5 +1,5 @@
-HMPMETA ;SLC/PJH,ASM/RRB,CPC-collect domains, uids, & stamptimes ;Jan 20, 2017 17:18:18
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;Sep 01, 2011;Build 7
+HMPMETA ;SLC/PJH,ASM/RRB,AFS/MBS,CPC-collect domains, uids, & stamptimes ;2016-07-01 13:16Z
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3,4**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  Q  ; no entry from top
@@ -74,8 +74,8 @@ METAPT(A,HMPCDOM) ; MetaStamp for patient data (within its own syncStart chunk).
  ; HMPD = Counter (sequential number) --> ^XTMP(HMPA,HMPB,HMPC,<Counter>
  ; HMPN = Subscript --> ^XTMP(HMPA,HMPB,HMPC,HMPD,<Subscript>
  ; HMPE = ^XTMP(HMPA,HMPB,HMPC,HMPD,HMPN)
- ; HMPF = Domain id (e.g. the "C877:3:751" part of "urn:va:allergy:C877:3:751"
- ; HMPID = pid --> <site-hash>;DFN (e.g. C877;3)
+ ; HMPF = Domain id (e.g. the "SITE:3:751" part of "urn:va:allergy:SITE:3:751"
+ ; HMPID = pid --> <site-hash>;DFN (e.g. SITE;3)
  ; HMPZ1 = DFN
  ; HMPP = $$PIDS^HMPDJFS(HMPZ1)  --> JSON construct containing pid, systemId, localId, icn
  ; HMPQ = " (double quote literal)
@@ -139,8 +139,8 @@ METAOP(A) ; MetaStamp for operational data (within its own syncStart chunk)
  ; HMPD = Counter (sequential number) --> ^XTMP(HMPA,HMPB,HMPC,<Counter>
  ; HMPN = Subscript --> ^XTMP(HMPA,HMPB,HMPC,HMPD,<Subscript>
  ; HMPE = ^XTMP(HMPA,HMPB,HMPC,HMPD,HMPN)
- ; HMPF = Domain id (e.g. the "C877:3:751" part of "urn:va:allergy:C877:3:751"
- ; HMPID = pid --> <site-hash>;DFN (e.g. C877;3)
+ ; HMPF = Domain id (e.g. the "SITE:3:751" part of "urn:va:allergy:SITE:3:751"
+ ; HMPID = pid --> <site-hash>;DFN (e.g. SITE;3)
  ; HMPZ1 = DFN
  ; HMPP = $$PIDS^HMPDJFS(HMPZ1)  --> JSON construct containing pid, systemId, localId, icn
  ; HMPQ = " (double quote literal)
@@ -187,68 +187,4 @@ METAOP(A) ; MetaStamp for operational data (within its own syncStart chunk)
  .S ^TMP("HMPF",$J,HMPFCNT,.3,HMPZ)=HMPX
  Q
  ;
- ;
-STATUS(STOP,HMPFHMP) ; Set HMP GLOBAL USAGE MONITOR status
- Q:$G(STOP)=""  Q:$G(HMPFHMP)=""
- N HMPFLG,HMPSTMP,HMPSRV
- S HMPSRV=$O(^HMP(800000,"B",HMPFHMP,"")) Q:'HMPSRV
- S HMPFLG=$P($G(^HMP(800000,HMPSRV,0)),U,5),HMPSTMP=$P($G(^HMP(800000,HMPSRV,0)),U,6)
- ;If stopped and already flagged as stopped do nothing
- I STOP,HMPFLG Q
- ;If stopped but not flagged as stopped set flag and timestamp
- I STOP,'HMPFLG D SET(STOP,HMPSRV) Q
- ;If running and flagged as stopped flag as running
- I 'STOP,HMPFLG D SET(STOP,HMPSRV) Q
- ;No action needed if running and not flagged as stop
- Q
- ;
-SET(STOP,HMPSRV) ; Flag set/reset, Stamptime set
- Q:'$G(HMPSRV)
- L +^HMP(800000,HMPSRV,0):5 E  Q
- S $P(^HMP(800000,HMPSRV,0),U,5,6)=STOP_U_$$NOW^XLFDT
- L -^HMP(800000,HMPSRV,0)
- Q
- ;
-CHECK(HMPFHMP) ; Check storage status and send MailMan message if appropriate
- ; Input HMPFHMP - server name
- Q:$G(HMPFHMP)=""
- N HMPDIFF,HMPFLG,HMPSRV,HMPSTTM
- S HMPSRV=$O(^HMP(800000,"B",HMPFHMP,"")) Q:'HMPSRV
- ; ^DD(800000,.05,0)="DISK USAGE STATUS^S^0:WITHIN LIMIT;1:EXCEEDED LIMIT;^0;5^Q"
- S HMPFLG=$P($G(^HMP(800000,HMPSRV,0)),U,5)
- ;No action required if status is not set
- I HMPFLG="" Q
- ; (#.06) DISK USAGE STATUS TIME [6D]
- S HMPSTTM=$P($G(^HMP(800000,HMPSRV,0)),U,6) Q:HMPSTTM=""
- ;quit if status time < five minutes ago
- I $$FMDIFF^XLFDT($$NOW^XLFDT,HMPSTTM,2)<300 Q
- ;Otherwise send message
- D MSG(HMPFLG)
- ; Clear DISK USAGE STATUS and DISK USAGE STATUS TIME
- L +^HMP(800000,HMPSRV,0):5 E  Q  ; quit if no lock
- S $P(^HMP(800000,HMPSRV,0),U,5,6)=""
- L -^HMP(800000,HMPSRV,0)
- Q
- ;
- ; DE6644: 2 MailMan message subroutines combined, 13 January 2017
-MSG(HMPFLG) ; send email about space limit for ^XTMP("HMP*")
- Q:'$D(HMPFLG)  ; must have flag, if HMPFLG then limit exceeded
- ; 1 megabyte = 2**20 bytes = 1048576 bytes
- N HMPMSG,HMPRCPNT,HMPSUBJ,HMPTXT,MAX
- S MAX=$$GETMAX^HMPUTILS  ; system parameter: HMP EXTRACT DISK SIZE LIMIT
- S HMPSUBJ="HMP namepsace XTMP Global Size Monitor "_$S(HMPFLG:"PAUSE",1:"RESTART")_" alert"
- D MSGLN(.HMPTXT,"*ALERT*: eHMP storage in the ^XTMP global has")
- D MSGLN(.HMPTXT,$S(HMPFLG:"exceeded ",1:"been below ")_$FN(MAX,",")_" bytes ("_$J(MAX/1048576,2,2)_" MB) for more than 5 minutes.")
- D MSGLN(.HMPTXT,"eHMP subscribing was "_$S(HMPFLG:"PAUSED.",1:"RESTARTED.")),MSGLN(.HMPTXT," ")
- D MSGLN(.HMPTXT,"HMP* namespace data stored in ^XTMP is "_$J($P($$GETSIZE^HMPUTILS,"^")/1048576,2,2)_" MB.")
- D MSGLN(.HMPTXT," "),MSGLN(.HMPTXT,"eHMP ^XTMP space check made "_$$HTE^XLFDT($H)),MSGLN(.HMPTXT," ")
- I $G(ZTSK) D MSGLN(.HMPTXT,"TaskMan task number: "_ZTSK)  ; add task number if available
- D MSGLN(.HMPTXT," ")
- S HMPRCPNT("G.HMP IRM GROUP")="",HMPRCPNT(DUZ)=""
- D SENDMSG^XMXAPI(DUZ,HMPSUBJ,"HMPTXT",.HMPRCPNT,,.HMPMSG)  ; HMPMSG returned as message number
- Q
- ;
-MSGLN(TXTARY,LN) ; add LN to TXTARY (passed by ref.) for MailMan message
- Q:'$L($G(LN))  ; must have some text
- S TXTARY(0)=$G(TXTARY(0))+1,TXTARY(TXTARY(0))=LN Q
  ;

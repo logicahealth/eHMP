@@ -26,7 +26,7 @@ define([
         },
         initialize: function() {
             this.bindEntityEvents(this.collection, this.patientRecordResultsCollectionEvents);
-            this.listenToOnce(ADK.Messaging.getChannel('patient-selection-myCprsList'), 'patientSearchTray.show', this.executeSearch);
+            this.listenToOnce(ADK.Messaging.getChannel(this.getOption('eventChannelName')), this.getOption('_eventPrefix') + '.show', this.executeSearch);
         },
         executeSearch: function(myCPRSSearchString) {
             var searchOptions = {

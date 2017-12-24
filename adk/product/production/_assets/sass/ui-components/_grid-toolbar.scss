@@ -1,6 +1,5 @@
-.grid-toolbar, 
-// '.toolbar-item' below, is only really needed until activites is refactored
-.toolbar-item {
+.toolbar-container,
+.grid-toolbar {
     &:empty {
         display: none;
     }

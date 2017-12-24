@@ -3,7 +3,7 @@
 # Recipe:: java_osx
 #
 
-node.default["workstation"]["java_osx"]["url"] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/jdk/8u121-macosx/jdk-8u121-macosx-x64.dmg"
+node.default["workstation"]["java_osx"]["url"] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/oracle/jdk/8u131-macosx/jdk-8u131-macosx-x64.dmg"
 
 dmg_package "JavaOSx-Installer" do
   dmg_name node["workstation"]["java_osx"]["dmg_name"]

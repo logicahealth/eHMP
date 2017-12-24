@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -65,6 +66,7 @@ public class AuthenticationDialog extends DialogBox {
   private PasswordTextBox accessCode;
   private PasswordTextBox verifyCode;
   private Button signInButton;
+  List<Site> siteList;
 
   private static String warningMessageText = "** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING"
 
@@ -84,7 +86,7 @@ public class AuthenticationDialog extends DialogBox {
 
   public AuthenticationDialog(Md_sandbox application, List<Site> siteList) {
     this.application = application;
-
+    this.siteList = siteList;
     mainPanel = new HorizontalPanel();
     mainPanel.getElement().getStyle().setProperty("backgroundColor", "#477E7E");
 
@@ -225,7 +227,11 @@ public class AuthenticationDialog extends DialogBox {
     request.setSite(facilityListBox.getValue(facilityListBox.getSelectedIndex()));
     request.setAccessCode(accessCode.getText());
     request.setVerifyCode(verifyCode.getText());
-
+    for (Site s : siteList) {
+       if(request.getSite().equals(s.getSiteCode())) {
+    	   request.setDivision(s.getDivision());
+       }
+     }
     application.login(request);
   }
 }

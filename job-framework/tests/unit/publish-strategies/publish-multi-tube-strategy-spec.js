@@ -95,7 +95,7 @@ describe('publisher-multi-tube-strategy.js', function() {
         var job = {priority: 60, type: 'multi-tube', jobId: 1};
 
         beforeEach(function() {
-            beanstalkClient = BeanstalkClient(logger, 'IP      ', PORT);
+            beanstalkClient = BeanstalkClient(logger, 'IP      ', 5000);
 
             publisherMockInstance = {logger: logger,
                 metrics: {info: function () {}},

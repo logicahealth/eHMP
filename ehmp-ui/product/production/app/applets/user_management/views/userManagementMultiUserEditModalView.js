@@ -7,13 +7,6 @@ define([
     "use strict";
     var showModal = function(options) {
         var formModelUpdate = appletUtil.getStorageModel('formModel');
-        formModelUpdate.vistaCheckboxValueBulkEdit = formModelUpdate.vistaCheckboxValue;
-        formModelUpdate.ehmpCheckboxValueBulkEdit = formModelUpdate.ehmpCheckboxValue;
-        formModelUpdate.permissionSetsForPicklist = appletUtil.getUnduplicatedPermissionSets();
-        formModelUpdate.lastNameValueBulkEdit = formModelUpdate.lastNameValue;
-        formModelUpdate.firstNameValueBulkEdit = formModelUpdate.firstNameValue;
-        formModelUpdate.duzValueBulkEdit = formModelUpdate.duzValue;
-        formModelUpdate.permissionSetValueBulkEdit = formModelUpdate.permissionSetValue;
         var session = ADK.UserService.getUserSession();
         var currentUserDuz = session.get('duz')[session.get('site')];
         var currentUserInUsersCollection = options.initialUsersCollection.where({
@@ -21,8 +14,13 @@ define([
         });
         var setSelectedToFalse = function(models) {
             _.each(models, function(model) {
-                model.set('selected', false);
-                appletUtil.appendBulkEditDataToUserModel(model);
+                var formattedPermissionSets = options.basePermissionSetsCollection.getLabels(_.get(model.get('permissionSet'), 'val', []));
+                var formattedPermissionSetsString = formattedPermissionSets.join(', ');
+                model.set({
+                    selected: false,
+                    formattedPermissionSets: formattedPermissionSets,
+                    formattedPermissionSetsString: formattedPermissionSetsString
+                });
             });
         };
         setSelectedToFalse(options.initialUsersCollection.models);
@@ -41,17 +39,12 @@ define([
             showProgress: false,
             steps: [{
                 view: UserManagementMultiUserEditFormView,
-                viewModel: appletUtil.formModel.bulkEditSearch(formModelUpdate),
-                onBeforeShow: function() {
-                    workflowController.changeHeaderCloseButtonOptions({
-                        onClick: function(e) {
-                            ADK.UI.Workflow.hide();
-                            appletUtil.focusPreviousTarget();
-                        }
-                    });
-                }
+                viewModel: appletUtil.formModel.bulkEditSearch(formModelUpdate)
             }]
         };
+        if (!_.isUndefined(options.triggerElement)) {
+            workflowOptions.triggerElement = options.triggerElement;
+        }
         var workflowController = new ADK.UI.Workflow(workflowOptions);
         workflowController.show();
     };

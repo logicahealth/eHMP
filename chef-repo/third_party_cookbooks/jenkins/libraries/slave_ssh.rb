@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # HWRP:: ssh_slave
 #
 # Author:: Seth Chisamore <schisamo@chef.io>
 #
-# Copyright 2013-2014, Chef Software, Inc.
+# Copyright:: 2013-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ class Chef
         command_suffix: 'slave.launcher.suffixStartSlaveCmd',
         launch_timeout: 'slave.launcher.launchTimeoutSeconds',
         ssh_retries: 'slave.launcher.maxNumRetries',
-        ssh_wait_retries: 'slave.launcher.retryWaitTime'
+        ssh_wait_retries: 'slave.launcher.retryWaitTime',
       }
 
       map[:credentials] = 'slave.launcher.credentialsId'

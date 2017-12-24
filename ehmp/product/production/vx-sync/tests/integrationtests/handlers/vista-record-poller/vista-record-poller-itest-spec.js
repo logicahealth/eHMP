@@ -26,8 +26,6 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 //     child: log._createLogger
 // });
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
-
 var Poller = require(global.VX_HANDLERS + 'vista-record-poller/vista-record-poller');
 var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
@@ -36,7 +34,8 @@ var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
-var host = vx_sync_ip;
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
 var tubename = 'vx-sync-test';
 
@@ -61,8 +60,8 @@ var beanstalkConfig = queueConfig.createFullBeanstalkConfig({
         'enterprise-sync-request': {},
         'vista-operational-subscribe-request': {},
 
-        'vista-9E7A-subscribe-request': {},
-        'vista-C877-subscribe-request': {},
+        'vista-SITE-subscribe-request': {},
+        'vista-SITE-subscribe-request': {},
 
         'hdr-sync-request': {},
         'vler-sync-request': {},
@@ -120,8 +119,8 @@ var beanstalkConfig = queueConfig.createFullBeanstalkConfig({
 
 var config = {
     vistaSites: {
-        '9E7A': {},
-        'C877': {}
+        'SITE': {},
+        'SITE': {}
     },
 // remove this if it has not caused an integration test build to fail
     // mvi: _.defaults(realConfig.mvi, {
@@ -695,7 +694,7 @@ describe('vista-record-poller.js', function() {
         environment.publisherRouter.close();
     });
 
-    it('poller processed the message correctly', function() {
+    it('poller processed the message correctly - single poller mode', function() {
 
         var completed = false;
         var actualError;
@@ -710,7 +709,8 @@ describe('vista-record-poller.js', function() {
         var poller = new Poller(dummyLogger, vistaIdValue, config, environment);
         runs(function() {
             dummyLogger.debug('it(poller processed correctly): started the test');
-            poller._processBatch(vistaFullMessage.data, function(error, response) {
+            var localData = JSON.parse(JSON.stringify(vistaFullMessage.data));
+            poller._processBatch(localData, function(error, response) {
                 if (error) {
                     actualError = error;
                     actualResponse = response;
@@ -740,7 +740,6 @@ describe('vista-record-poller.js', function() {
         // Now that we have published and retrieved the jobs.  Lets retrieve the SyncStatus (meta stamp)
         //-----------------------------------------------------------------------------------------------
         var completed2 = false;
-        //var completed3 = false;
         runs(function() {
             dummyLogger.debug('it(poller processed correctly): before retrieving syncStatus.  error: %s; jobs: %j;', actualError, actualResponse);
             retrieveSyncStatus({
@@ -831,4 +830,123 @@ describe('vista-record-poller.js', function() {
             clearTestSiteLastUpdateTime(environment);
         });
     });
+
+    it('poller processed the message correctly - multiple poller mode', function() {
+
+        var completed = false;
+        var actualError;
+        var actualResponse;
+        var actualSyncStatus;
+
+        var poller = new Poller(dummyLogger, vistaIdValue, config, environment, false, true);
+        runs(function() {
+            dummyLogger.debug('it(poller processed correctly): started the test');
+            var localData = JSON.parse(JSON.stringify(vistaFullMessage.data));
+            localData.allocationToken = '123456789';
+            poller._processBatch(localData, function(error, response) {
+                if (error) {
+                    actualError = error;
+                    actualResponse = response;
+                    dummyLogger.debug('it(poller processed correctly): error from _processBatch.  error: %s; response: %s;', actualError, actualResponse);
+                    completed = true;
+                    return;
+                }
+                // console.log('it(poller processed correctly): Grabbing jobs from tube.');
+                grabJobs(dummyLogger, host, port, tubename, 0, function(error, jobs) {
+                    actualResponse = jobs;
+                    if (error) {
+                        actualError = error;
+                        dummyLogger.debug('it(poller processed correctly): error from grabJobs.  error: %s; response: %j;', actualError, actualResponse);
+                        completed=true;
+                        return;
+                    }
+                    dummyLogger.debug('it(poller processed correctly): Success Grabbing jobs from tube.');
+                    completed = true;
+                });
+            });
+        });
+
+        waitsFor(function() {
+            return completed;
+        }, 'response from poller._processBatch timed out.', 10000);
+
+        // Now that we have published and retrieved the jobs.  Lets retrieve the SyncStatus (meta stamp)
+        //-----------------------------------------------------------------------------------------------
+        var completed2 = false;
+        runs(function() {
+            dummyLogger.debug('it(poller processed correctly): before retrieving syncStatus.  error: %s; jobs: %j;', actualError, actualResponse);
+            retrieveSyncStatus({
+                type: 'pid',
+                value: 'CCCC;3'
+            }, environment, function(error, syncStatus) {
+                actualError = error;
+                actualSyncStatus = syncStatus;
+                dummyLogger.debug('it(poller processed correctly): after retrieving syncStatus.  error: %s; jobs: %j; actualSyncStatus: ', actualError, actualResponse, actualSyncStatus);
+                completed2 = true;
+            });
+        });
+
+        waitsFor(function() {
+            return completed2 /*&& completed3*/;
+        }, 'response from poller._processBatch timed out.', 10000);
+
+        // Retrieve the unsolicited update poller job from JDS
+        //----------------------------------------------------
+        var completed5 = false;
+        var actualUnsolicitedUpdatePollerJobResult;
+        runs(function(){
+            retrieveUnsolicitedUpdatePollerJob(patrientIdentifierValue.value, 'allergy', vistaIdValue, environment.jds, function(error, result){
+                actualUnsolicitedUpdatePollerJobResult = result;
+                completed5 = true;
+            });
+        });
+
+        waitsFor(function(){
+            return completed5;
+        }, 'checking for unsolicited update job status in JDS', 10000);
+
+
+        runs(function() {
+            expect(actualError).toBeFalsy();
+
+            // Verify that the allocationToken was updated in the poller.
+            //-----------------------------------------------------------
+            expect(poller.allocationToken).toBe('123456789');
+            expect(poller.allocationStatus).toBe('complete');
+
+            // Verify that the jobs were published
+            //-------------------------------------
+            var jobs = _.chain(actualResponse).map(function(response) {return response.jobs;}).flatten().value();
+            expect(jobs).toBeTruthy();
+            expect(val(jobs, 'length')).toEqual(1);
+
+            var resultJobTypes = _.pluck(jobs, 'type');
+            var operationalStoreJobs = _.filter(resultJobTypes, function(job) {
+                return (job === 'operational-store-record');
+            });
+            var prioritizationJobs = _.filter(resultJobTypes, function(job) {
+                return (job === 'event-prioritization-request');
+            });
+            var vistaRecordProcessorJobs = _.filter(resultJobTypes, function(job) {
+                return (job === 'vista-record-processor-request');
+            });
+
+            expect(val(resultJobTypes, 'length')).toEqual(1);
+            expect(val(vistaRecordProcessorJobs, 'length')).toEqual(1);
+            expect(val(operationalStoreJobs, 'length')).toEqual(0);         // Regression test - make sure that we get no operational jobs
+            expect(val(prioritizationJobs, 'length')).toEqual(0);           // Regression test - make sure that we get no prioritization jobs
+
+
+            // Verify unsolicited update job sent to JDS
+            //------------------------------------------
+            expect(_.isEmpty(actualUnsolicitedUpdatePollerJobResult)).toBe(false);
+            expect(actualUnsolicitedUpdatePollerJobResult.items).toContain(jasmine.objectContaining({type: 'vista-CCCC-data-allergy-poller'}));
+
+            // Clear the syncStatus we just created.
+            //---------------------------------------
+            clearTestPatient(environment);
+            clearOperationalSyncStatus(environment);
+        });
+    });
+
 });

@@ -92,6 +92,7 @@ function handle(log, config, environment, job, handlerCallback) {
             }
 
             log.debug('jmeadows-cda-document-conversion-handler.handle for patient %s : Beginning conversion of XML document to HTML...', logPatientIdentifier);
+            xslt.addOptions('-Xss2m');
             xslt.transform(xsltConfig, function(error) {
                 if (error) {
                     log.error('jmeadows-cda-document-conversion-handler.handle for patient %s  : Error encountered when converting XML to HMTL %s', logPatientIdentifier, error);
@@ -105,7 +106,24 @@ function handle(log, config, environment, job, handlerCallback) {
         //Convert HTML to TXT
         function(callback) {
             htmlFile = path.resolve(outPath + '/' + htmlFilename);
-            html2text.fromFile(htmlFile, {}, function(err, text) {
+            html2text.fromFile(htmlFile, {
+                wordwrap: false,
+                tables: true,
+                ignoreHref: true,
+                ignoreImage: true,
+                format: {
+                    text: function(node) {
+                        var text = node.data;
+                        if (/^\s+$/.test(text)) {
+                            return '';
+                        }
+                        return text + ' ';
+                    },
+                    lineBreak: function() {
+                        return '';
+                    }
+                }
+            }, function(err, text) {
                 if (err) {
                     log.error('jmeadows-cda-document-conversion-handler.handle for patient %s: Could not convert HTML document to TXT.', logPatientIdentifier);
                 }

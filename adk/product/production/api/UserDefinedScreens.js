@@ -10,8 +10,9 @@ define([
     'api/UserService',
     'api/Messaging',
     'api/WorkspaceContextRepository',
-    'main/api/WorkspaceFilters'
-], function(_, Backbone, Marionette, $, ResourceService, PatientRecordService, Navigation, Session, UserService, Messaging, WorkspaceContextRepository, WorkspaceFilters) {
+    'main/api/WorkspaceFilters',
+    'main/Utils'
+], function(_, Backbone, Marionette, $, ResourceService, PatientRecordService, Navigation, Session, UserService, Messaging, WorkspaceContextRepository, WorkspaceFilters, Utils) {
     'use strict';
 
     var UserDefinedScreens = {};
@@ -45,66 +46,76 @@ define([
             userDefinedScreen: true
         };
         var applets = [];
-        divs.each(function() {
+        divs.each(_.bind(function(index, el) {
             var titleText;
-            var $appletEl = $(this).find('[data-appletid]');
+            var $el = $(el);
+            var $appletEl = $el.find('[data-appletid]');
             var applet = {};
             var id;
             if ($appletEl.length > 0) {
                 id = $appletEl.attr('data-appletid');
                 if (!_.isUndefined(id)) {
-                    applet = UserDefinedScreens.getAppletDefaultConfig(id);
+                    applet = this.getAppletDefaultConfig(id);
                     applet.instanceId = $appletEl.attr('data-instanceid');
                     applet.region = $appletEl.attr('data-instanceid');
-                    applet.dataRow = $(this).attr('data-row');
-                    applet.dataCol = $(this).attr('data-col');
-                    applet.dataSizeX = $(this).attr('data-sizex');
-                    applet.dataSizeY = $(this).attr('data-sizey');
+                    applet.dataRow = $el.attr('data-row');
+                    applet.dataCol = $el.attr('data-col');
+                    applet.dataSizeX = $el.attr('data-sizex');
+                    applet.dataSizeY = $el.attr('data-sizey');
 
-                    applet.dataMinSizeX = $(this).attr('data-min-sizex');
-                    applet.dataMinSizeY = $(this).attr('data-min-sizey');
-                    applet.dataMaxSizeX = $(this).attr('data-max-sizex');
-                    applet.dataMaxSizeY = $(this).attr('data-max-sizey');
-                    applet.viewType = $(this).attr('data-view-type');
+                    applet.dataMinSizeX = $el.attr('data-min-sizex');
+                    applet.dataMinSizeY = $el.attr('data-min-sizey');
+                    applet.dataMaxSizeX = $el.attr('data-max-sizex');
+                    applet.dataMaxSizeY = $el.attr('data-max-sizey');
+                    applet.viewType = $el.attr('data-view-type');
                     titleText = $('.panel-title-label', this).text() || applet.title;
                     applet.title = titleText.trim();
-                    applet.filterName = $(this).attr('data-filter-name');
+                    applet.filterName = $el.attr('data-filter-name');
                     applets.push(applet);
                 }
             } else {
-                id = $(this).attr('data-appletid');
+                id = $el.attr('data-appletid');
                 if (!_.isUndefined(id)) {
-                    applet = UserDefinedScreens.getAppletDefaultConfig(id);
-                    applet.instanceId = $(this).attr('data-instanceid');
-                    applet.region = $(this).attr('data-instanceid');
-                    applet.dataRow = $(this).attr('data-row');
-                    applet.dataCol = $(this).attr('data-col');
-                    applet.dataSizeX = $(this).attr('data-sizex');
-                    applet.dataSizeY = $(this).attr('data-sizey');
+                    applet = this.getAppletDefaultConfig(id);
+                    applet.instanceId = $el.attr('data-instanceid');
+                    applet.region = $el.attr('data-instanceid');
+                    applet.dataRow = $el.attr('data-row');
+                    applet.dataCol = $el.attr('data-col');
+                    applet.dataSizeX = $el.attr('data-sizex');
+                    applet.dataSizeY = $el.attr('data-sizey');
 
-                    applet.dataMinSizeX = $(this).attr('data-min-sizex');
-                    applet.dataMinSizeY = $(this).attr('data-min-sizey');
-                    applet.dataMaxSizeX = $(this).attr('data-max-sizex');
-                    applet.dataMaxSizeY = $(this).attr('data-max-sizey');
-                    applet.viewType = $(this).attr('data-view-type');
+                    applet.dataMinSizeX = $el.attr('data-min-sizex');
+                    applet.dataMinSizeY = $el.attr('data-min-sizey');
+                    applet.dataMaxSizeX = $el.attr('data-max-sizex');
+                    applet.dataMaxSizeY = $el.attr('data-max-sizey');
+                    applet.viewType = $el.attr('data-view-type');
 
                     var viewType = '';
                     // set default view type to first available option if user did not pick any view type
-                    if ($(this).attr('data-view-type') === 'default') {
+                    if ($el.attr('data-view-type') === 'default') {
                         viewType = $('.options-box').attr('data-viewtype');
                     } else {
-                        viewType = $(this).attr('data-view-type') || $('.options-box').attr('data-viewtype');
+                        viewType = $el.attr('data-view-type') || $('.options-box').attr('data-viewtype');
                     }
                     applet.viewType = viewType;
                     titleText = $('.applet-title', this).text() || applet.title;
                     applet.title = titleText.trim();
-                    applet.filterName = $(this).attr('data-filter-name');
+                    applet.filterName = $el.attr('data-filter-name');
                     applets.push(applet);
                 }
             }
-        });
+        }, this));
         screen.applets = applets;
         return screen;
+    };
+
+    UserDefinedScreens.getScreenModuleApplets = function(screenModule) {
+        return _.map(screenModule.applets, function(currentApplet) {
+            if (currentApplet.region.toLowerCase() !== 'none') {
+                this.setAppletDataAttribute(currentApplet);
+                return currentApplet;
+            }
+        }, this);
     };
 
     UserDefinedScreens.setAppletDataAttribute = function(currentApplet) {
@@ -130,9 +141,9 @@ define([
         if (!currentApplet.viewType) {
             currentApplet.viewType = 'summary';
         }
-        size = ADK.utils.getViewTypeSize(currentApplet.viewType);
-        minSize = ADK.utils.getViewTypeMinSize(currentApplet.viewType);
-        maxSize = ADK.utils.getViewTypeMaxSize(currentApplet.viewType);
+        size = Utils.getViewTypeSize(currentApplet.viewType);
+        minSize = Utils.getViewTypeMinSize(currentApplet.viewType);
+        maxSize = Utils.getViewTypeMaxSize(currentApplet.viewType);
         currentApplet.dataSizeX = currentApplet.dataSizeX || size.x;
         currentApplet.dataSizeY = currentApplet.dataSizeY || size.y;
         currentApplet.dataMinSizeX = currentApplet.dataMinSizeX || minSize.x;
@@ -142,10 +153,11 @@ define([
     };
 
     UserDefinedScreens.getGridsterTemplate = function(screenModule) {
+        console.warn('UserDefinedScreens.getGridsterTemplate is deprecated.  Use ADK.Views.Gridster instead');
         var template = '<div class="gridster" id="' + screenModule.id + '">';
         _.each(screenModule.applets, function(currentApplet) {
             if (currentApplet.region.toLowerCase() != 'none') {
-                UserDefinedScreens.setAppletDataAttribute(currentApplet);
+                this.setAppletDataAttribute(currentApplet);
                 template += '<div id="' + currentApplet.region +
                     '" data-row="' + currentApplet.dataRow +
                     '" data-col="' + currentApplet.dataCol +
@@ -155,11 +167,11 @@ define([
                     '" data-max-sizex="' + currentApplet.dataMaxSizeX +
                     '" data-min-sizey="' + currentApplet.dataMinSizeY +
                     '" data-max-sizey="' + currentApplet.dataMaxSizeY +
-                    '" data-filter-name="' + getFilterNameOrDefault(currentApplet) +
+                    '" data-filter-name="' + _.get(currentApplet, 'filterName', '') +
                     '" data-view-type="' + currentApplet.viewType +
                     '" ></div>';
             }
-        });
+        }, this);
         template += '</div>{{{paginationHtml}}}';
         return template;
     };
@@ -168,34 +180,27 @@ define([
         var maxCol = 0;
         _.each(screenModule.applets, function(currentApplet) {
             if (currentApplet.region.toLowerCase() != 'none') {
-                UserDefinedScreens.setAppletDataAttribute(currentApplet);
+                this.setAppletDataAttribute(currentApplet);
                 var sizeX = parseInt(currentApplet.dataSizeX);
                 var col = parseInt(currentApplet.dataCol);
                 if (sizeX + col > maxCol) maxCol = sizeX + col;
             }
-        });
+        }, this);
         return maxCol - 1;
     };
 
-    function getFilterNameOrDefault(applet) {
-        return applet.filterName || '';
-    }
-
-    function getViewTypeDisplay(type) {
-        if (type === "gist") {
-            return "trend";
-        } else {
-            return type;
-        }
-    }
+    UserDefinedScreens.getViewTypeDisplay = function(applet) {
+        var type = _.get(applet, 'viewType');
+        return type === 'gist' ? 'trend' : type;
+    };
 
     UserDefinedScreens.getGridsterTemplateForEditor = function(screenModule) {
         var deferred = new $.Deferred();
-        UserDefinedScreens.updateScreenModuleFromStorage(screenModule).done(function() {
+        this.updateScreenModuleFromStorage(screenModule).done(_.bind(function() {
             var template = '<div id="gridster2" class="gridster"><ul>';
             _.each(screenModule.applets, function(currentApplet) {
                 if (currentApplet.region.toLowerCase() != 'none') {
-                    UserDefinedScreens.setAppletDataAttribute(currentApplet);
+                    this.setAppletDataAttribute(currentApplet);
                     template += '<li data-appletid="' + currentApplet.id +
                         '" data-instanceid="' + currentApplet.instanceId +
                         '" data-row="' + currentApplet.dataRow +
@@ -206,18 +211,18 @@ define([
                         '" data-max-sizex="' + currentApplet.dataMaxSizeX +
                         '" data-min-sizey="' + currentApplet.dataMinSizeY +
                         '" data-max-sizey="' + currentApplet.dataMaxSizeY +
-                        '" data-filter-name="' + getFilterNameOrDefault(currentApplet) +
+                        '" data-filter-name="' + _.get(currentApplet, 'filterName', '') +
                         '" data-view-type="' + currentApplet.viewType +
                         '" ><button type="button" aria-label="Press enter to open view options." class="btn btn-icon ' +
                         (currentApplet.notFound ? 'applet-not-found' : currentApplet.noPermission ? 'permission-denied-applet' : 'edit-applet applet-options-button') +
                         '"><i class="fa fa-cog"></i></button><br><h5 class="applet-title all-margin-no all-padding-no">' + currentApplet.title + '</h5>' +
-                        (currentApplet.notFound ? '<span class="text-warning">Applet Not Found</span>' : currentApplet.noPermission ? '<span class="text-danger">Permission Denied</span>' : '<span class="right-padding-lg">' + _.capitalize(getViewTypeDisplay(currentApplet.viewType)) + '</span>');
+                        (currentApplet.notFound ? '<span class="text-warning">Applet Not Found</span>' : currentApplet.noPermission ? '<span class="text-danger">Permission Denied</span>' : '<span class="right-padding-lg">' + _.capitalize(this.getViewTypeDisplay(currentApplet)) + '</span>');
                 }
-            });
+            }, this);
 
             template += '</ul></div>';
             deferred.resolve(template);
-        });
+        }, this));
 
         return deferred;
     };
@@ -226,55 +231,57 @@ define([
         var template = '<div id="gridsterPreview" class="gridster"><ul>';
         _.each(screenModule.applets, function(currentApplet) {
             if (currentApplet.region.toLowerCase() !== 'none') {
-                UserDefinedScreens.setAppletDataAttribute(currentApplet);
+                this.setAppletDataAttribute(currentApplet);
                 template += '<li' +
                     ' data-row="' + currentApplet.dataRow +
                     '" data-col="' + currentApplet.dataCol +
                     '" data-sizex="' + currentApplet.dataSizeX +
                     '" data-sizey="' + currentApplet.dataSizeY +
-                    '" ><h4 class="applet-title">' + currentApplet.title + '</h4><p class="applet-type">' + getViewTypeDisplay(currentApplet.viewType) + '</p></li>';
+                    '" ><h4 class="applet-title">' + currentApplet.title + '</h4><p class="applet-type">' + this.getViewTypeDisplay(currentApplet) + '</p></li>';
             }
 
-        });
+        }, this);
         template += '</ul></div>';
         return template;
     };
 
     UserDefinedScreens.updateScreenModuleFromStorage = function(screenModule) {
         var deferred = new $.Deferred();
-        if (screenModule.config && screenModule.config.predefined) {
-            deferred.resolve();
-            return deferred;
+        if (_.get(screenModule, 'config.predefined')) {
+            return deferred.resolve();
         }
-        var gridsterScreenConfig = UserDefinedScreens.getGridsterConfigFromSession(screenModule.id);
-        if (gridsterScreenConfig && !_.isUndefined(gridsterScreenConfig.applets) && !_.isNull(gridsterScreenConfig.applets)) {
-            screenModule.applets = gridsterScreenConfig.applets;
+
+        var gridsterScreenConfig = this.getGridsterConfigFromSession(screenModule.id);
+        var applets = _.get(gridsterScreenConfig, 'applets');
+        if (applets) {
+            screenModule.applets = applets;
         }
+
         deferred.resolve();
         return deferred;
     };
 
-    UserDefinedScreens.saveConfigToJDS = function(json, key, callback) {
-        var saveFilterModel = new Backbone.Model();
-        saveFilterModel.url = ResourceService.buildUrl('write-user-defined-screens');
-        saveFilterModel.save({}, {
-            url: ResourceService.buildUrl('write-user-defined-screens', {}),
-            type: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                screenType: key,
-                param: json
-            }),
-            success: function(response) {
-                if (callback) callback(response);
-            }
+    UserDefinedScreens.saveConfigToJDS = function(json, key, id, callback, silent) {
+        if(_.has(json, 'userScreensConfig.userScreensConfig')) {
+            delete json.userScreensConfig.userScreensConfig;
+        }
+        this.model.save({
+            screenType: key,
+            param: json
+        }, {
+            id: id,
+            callback: callback,
+            silent: silent
         });
     };
 
-    UserDefinedScreens.saveGridsterConfig = function(gridsterAppletJson, key, callback) {
-        UserDefinedScreens.saveConfigToJDS(gridsterAppletJson, key, callback);
-        UserDefinedScreens.saveGridsterConfigToSession(gridsterAppletJson, key);
+    UserDefinedScreens.saveGridsterConfig = function(gridsterAppletJson, key, callback, silent) {
+        this.saveConfigToJDS(gridsterAppletJson, key, key, _.bind(function() {
+            if (_.isFunction(callback)) {
+                callback();
+            }
+            this.saveGridsterConfigToSession(gridsterAppletJson, key);
+        },this), silent);
     };
 
     UserDefinedScreens.saveGridsterConfigToSession = function(gridsterAppletJson, screenId) {
@@ -304,12 +311,13 @@ define([
     };
 
     UserDefinedScreens.saveUserConfigToSession = function(json) {
+        this.model.set(json);
         Session.set.sessionObject(USER_SCREENS_CONFIG, json);
     };
 
     UserDefinedScreens.getScreensConfigFromSession = function() {
         var json = Session.get.sessionObject(USER_SCREENS_CONFIG);
-        return json.userScreensConfig ? json.userScreensConfig : json;
+        return _.get(json, 'userScreensConfig', json);
     };
 
     UserDefinedScreens.getGridsterConfigFromSession = function(screenId) {
@@ -317,136 +325,93 @@ define([
         var screenConfig = _.find(json.userDefinedScreens || [], function(screen) {
             return screen && screen.id === screenId;
         });
-        return screenConfig || Session.get.sessionObject(screenId);
+        if (screenConfig || Session.get.sessionObject(screenId)) {
+            return screenConfig || Session.get.sessionObject(screenId);
+        }
+        return _.find(_.get(json, 'userScreensConfig.screens'), function(screen) {
+            return _.get(screen, 'id') === screenId;
+        });
     };
 
-    UserDefinedScreens.getConfig = function(key) {
-        var self = this;
-        var deferred = new $.Deferred();
+    UserDefinedScreens.fetchScreens = function(key, deferred) {
         var userSession = UserService.getUserSession();
         if (_.isUndefined(key) || _.isUndefined(userSession) || _.isUndefined(userSession.get('status')) || userSession.get('status') === 'loggedout') {
-            deferred.resolve(new Backbone.Model({}));
-            return deferred;
+            return deferred.resolve(this.model.toJSON());
         }
-
-        var res = Session.get.sessionObject(key);
-        if (!_.isUndefined(res) && !_.isEmpty(res)) {
-            deferred.resolve(new Backbone.Model(res));
-            return deferred;
-        }
-
-        var fetchOptions = {
-            resourceTitle: 'user-defined-screens',
-            criteria: {
-                screenType: key,
-                predefinedScreens: _.pluck(PreDefinedScreens.screens, 'id')
-            }
-        };
-        fetchOptions.onSuccess = function(response) {
-            if (response.length > 0) {
-                deferred.resolve(response.at(0));
-                if (userSession.get('status') === UserService.STATUS.LOGGEDIN) {
-                    self.saveUserConfigToSession(response.at(0));
-                }
-            } else {
-                deferred.resolve(new Backbone.Model({}));
-            }
-        };
-
-        fetchOptions.onError = function() {
-            deferred.resolve(new Backbone.Model({}));
-        };
-        ResourceService.fetchCollection(fetchOptions);
-        return deferred;
+        this.model.fetch({
+            key: key,
+            deferred: deferred
+        });
     };
 
-    UserDefinedScreens.cloneScreenFilters = function(origId, cloneId) {
-        WorkspaceFilters.cloneScreenFilters(origId, cloneId);
-    };
+    UserDefinedScreens.cloneScreenFilters = WorkspaceFilters.cloneScreenFilters;
 
-    UserDefinedScreens.cloneScreenFiltersToSession = function(origId, cloneId) {
-        WorkspaceFilters.cloneScreenFiltersToSession(origId, cloneId);
-    };
+    UserDefinedScreens.cloneScreenFiltersToSession = WorkspaceFilters.cloneScreenFiltersToSession;
 
-    UserDefinedScreens.cloneScreen = function(origId, cloneId, predefined) {
-        var url = ResourceService.buildUrl('write-user-defined-screens-copy', {
+    UserDefinedScreens.cloneScreen = function(origId, cloneId, predefined, clonedScreenOptions) {
+        this.model.cloneScreen({
             fromId: origId,
             toId: cloneId,
-            predefined: predefined
-        });
-        $.post(url).done(function() {
-            //console.log('Success in saving clone of workspace ' + origId);
-        }).fail(function() {
-            //console.log('Error in saving clone of workspace ' + origId);
+            predefined: predefined,
+            clonedScreenOptions: clonedScreenOptions
         });
     };
 
     UserDefinedScreens.cloneUDScreenToSession = function(origId, cloneId) {
-        var gridsterConfig = _.clone(UserDefinedScreens.getGridsterConfigFromSession(origId));
-        gridsterConfig.id = cloneId;
-        UserDefinedScreens.saveGridsterConfigToSession(gridsterConfig, cloneId);
-    };
-
-    UserDefinedScreens.saveScreensConfig = function(screenConfigJson, callback) {
-        // literally checking to see if there is a "null" value
-        // NOT SURE IF THIS IS NEEDED
-        var nullScreenExists = _.some(screenConfigJson.screens, function(screen) {
-            return !screen;
+        var gridsterConfig = _.extend({}, this.getGridsterConfigFromSession(origId), {
+            id: cloneId
         });
-        if (nullScreenExists) {
-            var definedScreensOnly = _.filter(screenConfigJson.screens, function(screen) {
-                if (!_.isUndefined(screen) && screen !== null) {
-                    return screen;
-                }
-            });
-            screenConfigJson.screens = definedScreensOnly;
-        }
-        // getting the current patient's identifier
-        var pid = getId();
-        if (pid) {
-            UserDefinedScreens.saveScreensConfigToSession(screenConfigJson);
-            UserDefinedScreens.saveConfigToJDS(screenConfigJson, USER_SCREENS_CONFIG, callback);
-        }
+        this.saveGridsterConfigToSession(gridsterConfig, cloneId);
     };
 
-    UserDefinedScreens.saveScreensConfigToSession = function(screenConfigJson) {
-        var json = Session.get.sessionObject(USER_SCREENS_CONFIG) || {};
-        if (_.get(json, 'userScreensConfig')) {
-            _.set(json, 'userScreensConfig.screens', _.get(screenConfigJson || {}, 'screens'));
-            if (!_.get(json, 'userDefinedScreens')) _.set(json, 'userDefinedScreens', []);
-        } else {
-            json = {
-                userScreensConfig: {
-                    screens: screenConfigJson.screens
-                },
-                userDefinedScreens: []
-            };
+    UserDefinedScreens.saveScreensConfig = function(screenConfigJson, id, callback, silent) {
+        this.saveConfigToJDS(screenConfigJson, USER_SCREENS_CONFIG, id, callback, silent);
+    };
+
+    UserDefinedScreens.saveScreensConfigToSession = function(screenConfigJson, model) {
+        var json;
+        try {
+            json = Session.get.sessionObject(USER_SCREENS_CONFIG) || {};
+        } catch (e) {
+            json = {};
         }
+        screenConfigJson = screenConfigJson || {};
+
+        _.set(json, 'screens', _.get(screenConfigJson, 'screens', []));
+        _.set(json, 'userScreensConfig.screens', _.get(screenConfigJson, 'screens', []));
+        _.set(json, 'userDefinedScreens', _.get(screenConfigJson, 'userDefinedScreens', []));
+        _.set(json, 'userDefinedGraphs', _.get(screenConfigJson, 'userDefinedGraphs', []));
+        _.set(json, 'userDefinedSorts', _.get(screenConfigJson, 'userDefinedSorts', []));
+        _.set(json, 'userDefinedFilters', _.get(screenConfigJson, 'userDefinedFilters', []));
+
         Session.set.sessionObject(USER_SCREENS_CONFIG, json);
+        Backbone.Model.prototype.set.call(model || this.model, json, {
+            silent: true
+        });
     };
 
     UserDefinedScreens.cloneGridsterConfig = function(origScreenId, newScreenId) {
         var configClone = Session.get.sessionObject(origScreenId);
         if (!_.isUndefined(configClone) && !_.isEmpty(configClone)) {
             configClone.id = newScreenId;
-            UserDefinedScreens.saveGridsterConfig(configClone, newScreenId);
+            this.saveGridsterConfig(configClone, newScreenId);
         }
     };
 
     UserDefinedScreens.addNewScreen = function(newScreenConfig, screenIndex, callback) {
-        var screensConfig = UserDefinedScreens.getScreensConfigFromSession();
+        var screensConfig = this.getScreensConfigFromSession();
         var screens = screensConfig.screens;
         if (screenIndex) {
             screens.splice(screenIndex, 0, newScreenConfig);
         } else {
             screens.push(newScreenConfig);
         }
-        UserDefinedScreens.saveScreensConfig(screensConfig, callback);
+        this.saveScreensConfig(screensConfig, newScreenConfig.id, callback);
     };
 
     UserDefinedScreens.screensConfigNullCheck = function() {
-        var promise = UserDefinedScreens.getScreensConfig(USER_SCREENS_CONFIG);
-        promise.done(function(screenConfig) {
+        var promise = this.getScreensConfig(USER_SCREENS_CONFIG);
+        promise.done(_.bind(function(screenConfig) {
             var definedScreensOnly = _.filter(screenConfig.screens, function(screen) {
                 if (!_.isUndefined(screen) && screen !== null) {
                     return screen;
@@ -455,8 +420,8 @@ define([
                 }
             });
             screenConfig.screens = definedScreensOnly;
-            UserDefinedScreens.saveScreensConfig(screenConfig);
-        });
+            this.saveScreensConfig(screenConfig);
+        }, this));
     };
 
     var filterScreensOnHasPermission = function(screens) {
@@ -482,153 +447,141 @@ define([
 
     UserDefinedScreens.getScreensConfig = function() {
         var deferred = new $.Deferred();
+        this.fetchScreens(USER_SCREENS_CONFIG, deferred);
+        return deferred;
+    };
 
-        UserDefinedScreens.getConfig(USER_SCREENS_CONFIG).done(function(screenConfig) {
-            var provisionedPreDefinedScreens = filterScreensOnHasPermission(PreDefinedScreens.screens);
-            var screensConfigOrig = screenConfig.toJSON();
-            if (!screensConfigOrig.userScreensConfig) {
-                screensConfigOrig.userScreensConfig = {
-                    screens: []
-                };
-            }
-            screenConfig = screensConfigOrig.userScreensConfig ? screensConfigOrig.userScreensConfig : screensConfigOrig;
-            if (_.isEmpty(screenConfig)) {
-                screenConfig = {
-                    screens: []
-                };
-            } else {
-                var filteredUserScreens = filterScreensOnHasPermission(screenConfig.screens);
-                if (filteredUserScreens.length < screenConfig.screens.length) {
-                    screenConfig.screens = filteredUserScreens;
-                }
-            }
+    UserDefinedScreens._postProcess = function(response, model) {
+        var provisionedPreDefinedScreens = filterScreensOnHasPermission(PreDefinedScreens.screens);
 
-            var isLoggedIn = UserService.getUserSession().get('status') === UserService.STATUS.LOGGEDIN;
-            var currentContextId = WorkspaceContextRepository.currentContextId;
-            var contextDefaultScreen = WorkspaceContextRepository.currentContextDefaultScreen;
-            var hasScreenConfigChanged = false;
-            var user, preferences, defaultScreen, initialDefaultScreen;
-            if (isLoggedIn) {
-                user = ADK.UserService.getUserSession();
-                if (!user.get('preferences')) {
-                    user.set('preferences', { defaultScreen: {} });
-                }
-                preferences = user.get('preferences');
-                if (!preferences.defaultScreen) {
-                    _.set(preferences, 'defaultScreen', {});
-                }
-                defaultScreen = preferences.defaultScreen;
-                initialDefaultScreen = defaultScreen[currentContextId];
+        var screens = _.get(response, 'screens', model.get('screens'));
+        if (!_.isEmpty(screens)) {
+            var filteredUserScreens = filterScreensOnHasPermission(screens);
+            if (filteredUserScreens.length < screens.length) {
+                _.set(response, 'screens', filteredUserScreens);
+            }
+        }
+
+        var isLoggedIn = UserService.getUserSession().get('status') === UserService.STATUS.LOGGEDIN;
+        var currentContextId = WorkspaceContextRepository.currentContextId;
+        var contextDefaultScreen = WorkspaceContextRepository.currentContextDefaultScreen;
+        var hasScreenConfigChanged = false;
+        var user, preferences, defaultScreen, initialDefaultScreen;
+
+        if (isLoggedIn) {
+            user = UserService.getUserSession();
+            preferences = user.get('preferences');
+            if (!preferences) {
+                user.set('preferences', {
+                    defaultScreen: {}
+                });
+            } else if (!preferences.defaultScreen) {
+                preferences.defaultScreen = {};
             }
 
-            // Sanitize current screens
-            screenConfig.screens = _.filter(screenConfig.screens, function(userScreen) {
-                if (_.isEmpty(userScreen)) {
-                    hasScreenConfigChanged = true;
-                    return false;
-                }
+            initialDefaultScreen = _.get(preferences, ['defaultScreen', currentContextId]);
+        }
 
-                if (userScreen.predefined) {
-                    var matchingIdScreen = _.find(provisionedPreDefinedScreens, function(predefinedScreen) {
-                        return predefinedScreen.id === userScreen.id;
-                    });
+        // Sanitize current screens
+        screens = _.filter(screens, function(userScreen) {
+            if (_.isEmpty(userScreen)) {
+                hasScreenConfigChanged = true;
+                return false;
+            }
 
-                    if (!_.isEmpty(matchingIdScreen) && userScreen.title !== matchingIdScreen.title) {
-                        userScreen.title = matchingIdScreen.title;
-                        hasScreenConfigChanged = true;
-                    }
-                }
-
-                // NOTE: DO NOT DELETE THE CURRENT DEFAULTSCREEN PROPERTY ON SCREEN
-                // if (userScreen.defaultScreen) {
-                //     delete userScreen.defaultScreen;
-                //     hasScreenConfigChanged = true;
-                // }
-
-                return true;
-            });
-
-            var navigateToDefaultScreen = false;
-            // Add missing predefined screens
-            _.each(provisionedPreDefinedScreens, function(predefinedScreen) {
-                var matchingTitleScreens = _.filter(screenConfig.screens, function(userScreen) {
-                    return predefinedScreen.title === userScreen.title;
+            if (userScreen.predefined) {
+                var matchingIdScreen = _.find(provisionedPreDefinedScreens, function(predefinedScreen) {
+                    return predefinedScreen.id === userScreen.id;
                 });
 
-                if (_.isEmpty(matchingTitleScreens)) {
-                    screenConfig.screens.push(predefinedScreen);
+                if (!_.isEmpty(matchingIdScreen) && userScreen.title !== matchingIdScreen.title) {
+                    userScreen.title = matchingIdScreen.title;
                     hasScreenConfigChanged = true;
-                } else {
-                    _.each(matchingTitleScreens, function(matchingScreen) {
-                        if (matchingScreen.id !== predefinedScreen.id) {
-                            // Replace screen
-                            hasScreenConfigChanged = true;
-
-                            if (isLoggedIn && defaultScreen[currentContextId] === matchingScreen.id) {
-                                defaultScreen[currentContextId] = predefinedScreen.id;
-                            }
-
-                            screenConfig.screens = _.without(screenConfig.screens, matchingScreen);
-                            screenConfig.screens.push(predefinedScreen);
-                            UserDefinedScreens.saveGridsterConfig({}, matchingScreen.id);
-
-                            if (!navigateToDefaultScreen && Backbone.history.fragment === matchingScreen.id) {
-                                navigateToDefaultScreen = true;
-                            }
-                        }
-                    });
-                }
-            });
-
-            if (isLoggedIn) {
-                if (initialDefaultScreen !== defaultScreen[currentContextId]) {
-                    UserService.savePreferences();
-                    user.trigger('change:preferences:defaultScreen');
                 }
             }
 
-            if (hasScreenConfigChanged) {
-                // UserService.setUserSession(user);
-                // Save the screens back to pJDS and locally in session storage
-                UserDefinedScreens.saveScreensConfig(screenConfig);
-            }
-
-            if (navigateToDefaultScreen) {
-                Navigation.navigate(WorkspaceContextRepository.currentContextDefaultScreen, {
-                    route: {
-                        trigger: false
-                    }
-                });
-            }
-
-            // if there is a user than save the updated screen config into session
-            if (isLoggedIn) {
-                WorkspaceContextRepository.currentContextDefaultScreen = defaultScreen[currentContextId] || contextDefaultScreen;
-                UserDefinedScreens.saveUserConfigToSession(screensConfigOrig);
-            }
-
-            deferred.resolve(screenConfig);
+            return true;
         });
 
-        return deferred;
+        var navigateToDefaultScreen = false;
+        // Add missing predefined screens
+        _.each(provisionedPreDefinedScreens, function(predefinedScreen) {
+            var matchingTitleScreens = _.filter(screens, function(userScreen) {
+                return predefinedScreen.title === userScreen.title;
+            });
+
+            if (_.isEmpty(matchingTitleScreens)) {
+                screens.push(predefinedScreen);
+                hasScreenConfigChanged = true;
+            } else {
+                _.each(matchingTitleScreens, function(matchingScreen) {
+                    if (matchingScreen.id !== predefinedScreen.id) {
+                        // Replace screen
+                        hasScreenConfigChanged = true;
+
+                        if (isLoggedIn && _.get(preferences, ['defaultScreen', currentContextId]) === matchingScreen.id) {
+                            _.set(preferences, ['defaultScreen', currentContextId], predefinedScreen.id);
+                        }
+
+                        _.set(response, 'screens', _.without(screens, matchingScreen));
+                        screens.push(predefinedScreen);
+                        this.saveGridsterConfig({}, matchingScreen.id);
+
+                        if (!navigateToDefaultScreen && Backbone.history.fragment === matchingScreen.id) {
+                            navigateToDefaultScreen = true;
+                        }
+                    }
+                }, this);
+            }
+        }, this);
+
+        if (isLoggedIn) {
+            if (initialDefaultScreen !== _.get(preferences, ['defaultScreen', currentContextId])) {
+                UserService.savePreferences();
+                user.trigger('change:preferences:defaultScreen');
+            }
+        }
+
+        if (navigateToDefaultScreen) {
+            Navigation.navigate(WorkspaceContextRepository.currentContextDefaultScreen, {
+                route: {
+                    trigger: false
+                }
+            });
+        }
+
+        // if there is a user than save the updated screen config into session
+        if (isLoggedIn) {
+            WorkspaceContextRepository.currentContextDefaultScreen = _.get(preferences, ['defaultScreen', currentContextId]) || contextDefaultScreen;
+        }
+
+        response.screens = screens;
+        return response;
     };
 
     UserDefinedScreens.sortScreensByIds = function(ids) {
         var idHashMap = _.zipObject(ids, _.range(ids.length));
 
-        var screens = UserDefinedScreens.getScreensConfigFromSession().screens;
+        var screens = this.getScreensConfigFromSession().screens;
         var sortedScreens = _.sortBy(screens, function(screen) {
             var index = idHashMap[screen.id];
             return !_.isUndefined(index) ? index : screens.length;
         });
 
-        UserDefinedScreens.saveScreensConfig({
+        this.saveScreensConfig({
             screens: sortedScreens
         });
     };
 
     UserDefinedScreens.getScreenBySnomedCt = function(snomedCt) {
-        var promise = UserDefinedScreens.getScreensConfig();
+        var promise;
+        var screensConfig = this.getScreensConfigFromSession();
+        if(_.isEmpty(screensConfig)) {
+            promise = this.getScreensConfig();
+        } else {
+            promise = new $.Deferred();
+            promise.resolve(screensConfig);
+        }
         var deferred = new $.Deferred();
         var filteredScreenList = [];
         promise.done(function(screensConfig) {
@@ -652,36 +605,21 @@ define([
 
     function getId() {
         var patient = PatientRecordService.getCurrentPatient();
-        var id;
-
-        // Get the pid param in the same way as PatientRecordService.fetchCollection does
-        if (patient.get("icn")) {
-            id = patient.get("icn");
-        } else if (patient.get("pid")) {
-            id = patient.get("pid");
-        } else {
-            id = patient.get("id");
-        }
-
-        return id;
+        return patient.get('icn') || patient.get('pid') || patient.get('id');
     }
 
     UserDefinedScreens.saveScrollPositionToSession = function(value) {
-        var scrollPositionJSON = {
+        Session.set.sessionObject('WorkspaceScrollPosition', {
             scrollPosition: value
-        };
-        Session.set.sessionObject('WorkspaceScrollPosition', scrollPositionJSON);
+        });
     };
 
     UserDefinedScreens.getScrollPositionFromSession = function() {
-        var scrollPosition = null;
-        var scrollPositionObject = Session.get.sessionObject('WorkspaceScrollPosition') || {};
-        scrollPosition = scrollPositionObject.scrollPosition;
-        return scrollPosition ? scrollPosition : 0;
+        return _.get(Session.get.sessionObject('WorkspaceScrollPosition'), 'scrollPosition', 0);
     };
 
     UserDefinedScreens.setHasCustomize = function(screenId) {
-        var screensConfig = UserDefinedScreens.getScreensConfigFromSession();
+        var screensConfig = this.getScreensConfigFromSession();
         var screens = screensConfig.screens;
         var newConfig = {
             screens: []
@@ -698,39 +636,24 @@ define([
             }
             newConfig.screens.push(screen);
         });
-        UserDefinedScreens.saveScreensConfig(newConfig);
-    };
-
-    var findIndex = function(array, callback, thisArg) {
-        var index = -1,
-            length = array ? array.length : 0;
-
-        while (++index < length) {
-            if (callback(array[index], index, array)) {
-                return index;
-            }
-        }
-        return -1;
+        this.saveScreensConfig(newConfig);
     };
 
     var findScreenIndexFromUserDefinedGraphs = function(json, screenId) {
-        var screenIndex = findIndex(json.userDefinedGraphs, function(screen) {
-            return screen.id === screenId;
+        return _.findIndex(json.userDefinedGraphs, {
+            id: screenId
         });
-        return screenIndex;
     };
 
     var findAppletIndexFromUserDefinedGraphs = function(screenConfig, instanceId) {
-        if (!screenConfig) return -1;
-        var appletIndex = findIndex(screenConfig.applets, function(applet) {
-            return applet.instanceId === instanceId;
+        return _.findIndex(screenConfig.applets, {
+            instanceId: instanceId
         });
-        return appletIndex;
     };
 
     //get stacked graph for one applet from session
     UserDefinedScreens.getStackedGraphForOneAppletFromSession = function(screenId, appletInstanceId) {
-        var json = UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) return;
         var screenConfig = json.userDefinedGraphs[screenIndex];
@@ -743,7 +666,7 @@ define([
 
     //remove one stacked graph for one applet from session
     UserDefinedScreens.removeOneStackedGraphFromSession = function(screenId, appletInstanceId, graphType, typeName) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) return;
         var screenConfig = json.userDefinedGraphs[screenIndex];
@@ -766,12 +689,12 @@ define([
             json.userDefinedGraphs[screenIndex].applets.splice(appletIndex, 1);
         }
 
-        UserDefinedScreens.saveUserConfigToSession(json);
+        this.saveUserConfigToSession(json);
     };
 
     //remove all stacked graphs for one applet from session
     UserDefinedScreens.hasStackedGraphForApplet = function(screenId, appletInstanceId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) return false;
         var screenConfig = json.userDefinedGraphs[screenIndex];
@@ -782,19 +705,19 @@ define([
 
     //remove all stacked graphs for one applet from session
     UserDefinedScreens.removeAllStackedGraphFromSession = function(screenId, appletInstanceId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) return;
         var screenConfig = json.userDefinedGraphs[screenIndex];
         var appletIndex = findAppletIndexFromUserDefinedGraphs(screenConfig, appletInstanceId);
         if (appletIndex === -1) return;
         json.userDefinedGraphs[screenIndex].applets.splice(appletIndex, 1);
-        UserDefinedScreens.saveUserConfigToSession(json);
+        this.saveUserConfigToSession(json);
     };
 
     //add one stacked graph to session
     UserDefinedScreens.addOneStackedGraphToSession = function(screenId, appletInstanceId, graphType, typeName) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         if (!json.userDefinedGraphs) json.userDefinedGraphs = [];
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) {
@@ -816,7 +739,7 @@ define([
                 }],
                 instanceId: appletInstanceId
             });
-            UserDefinedScreens.saveUserConfigToSession(json);
+            this.saveUserConfigToSession(json);
             return;
         }
         var appletConfig = screenConfig.applets[appletIndex];
@@ -836,25 +759,25 @@ define([
             typeName: typeName
         });
 
-        UserDefinedScreens.saveUserConfigToSession(json);
+        this.saveUserConfigToSession(json);
     };
 
     UserDefinedScreens.reorderStackedGraphsInSession = function(screenId, appletInstanceId, newGraphsArray) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
 
-        if (UserDefinedScreens.hasStackedGraphForApplet(screenId, appletInstanceId)) {
+        if (this.hasStackedGraphForApplet(screenId, appletInstanceId)) {
             var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
             var screenConfig = json.userDefinedGraphs[screenIndex];
             var appletIndex = findAppletIndexFromUserDefinedGraphs(screenConfig, appletInstanceId);
 
             json.userDefinedGraphs[screenIndex].applets[appletIndex].graphs = newGraphsArray;
-            UserDefinedScreens.saveUserConfigToSession(json);
+            this.saveUserConfigToSession(json);
         }
     };
 
     //clone filters from one screen to another in Session
     UserDefinedScreens.cloneScreenGraphsToSession = function(fromScreenId, toScreenId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, fromScreenId);
         if (screenIndex === -1) return;
         var screenConfig = _.clone(json.userDefinedGraphs[screenIndex]);
@@ -862,99 +785,274 @@ define([
         var toScreenIndex = findScreenIndexFromUserDefinedGraphs(json, toScreenId);
         if (toScreenIndex > -1) json.userDefinedGraphs[toScreenIndex] = screenConfig;
         else json.userDefinedGraphs.push(screenConfig);
-        ADK.UserDefinedScreens.saveUserConfigToSession(json);
+        this.saveUserConfigToSession(json);
     };
 
 
     //update screenId
     UserDefinedScreens.updateScreenId = function(oldId, newId) {
-        UserDefinedScreens.updateScreenIdInSession(oldId, newId);
+        var callback = _.bind(function() {
+            this.updateScreenIdInSession(oldId, newId);
+        }, this);
 
         //Update screenId in JDS
-        UserDefinedScreens.updateScreenIdInJDS(oldId, newId);
+        this.updateScreenIdInJDS(oldId, newId, callback, true);
     };
 
     UserDefinedScreens.updateScreenIdInSession = function(oldId, newId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+        var json = this.getUserConfigFromSession();
         //update id for screen config
-        var screenIndex = findIndex(json.userDefinedScreens, function(screen) {
-            return screen.id === oldId;
+        var screenIndex = _.findIndex(json.userDefinedScreens, {
+            id: oldId
         });
         if (screenIndex > -1) {
             json.userDefinedScreens[screenIndex].id = newId;
         }
         //update id for filters
-        var screenIndex2 = findIndex(json.userDefinedFilters, function(screen) {
-            return screen.id === oldId;
+        var screenIndex2 = _.findIndex(json.userDefinedFilters, {
+            id: oldId
         });
         if (screenIndex2 > -1) {
             json.userDefinedFilters[screenIndex2].id = newId;
         }
         //update id for stacked graph
-        var screenIndex3 = findIndex(json.userDefinedGraphs, function(screen) {
-            return screen.id === oldId;
+        var screenIndex3 = _.findIndex(json.userDefinedGraphs, {
+            id: oldId
         });
         if (screenIndex3 > -1) {
             json.userDefinedGraphs[screenIndex3].id = newId;
         }
         //update id for user sort
-        var screenIndex4 = findIndex(json.userDefinedSorts, function(screen) {
-            return screen.id === oldId;
+        var screenIndex4 = _.findIndex(json.userDefinedSorts, {
+            id: oldId
         });
         if (screenIndex4 > -1) {
             json.userDefinedSorts[screenIndex4].id = newId;
         }
-        ADK.UserDefinedScreens.saveUserConfigToSession(json);
+        this.saveUserConfigToSession(json);
+        this.saveScreensConfigToSession(json);
     };
 
-    UserDefinedScreens.updateScreenIdInJDS = function(oldId, newId, callback) {
-        var fetchOptions = {
-            resourceTitle: 'write-user-defined-screens',
+    UserDefinedScreens.updateScreenIdInJDS = function(oldId, newId, callback, silent) {
+        this.model.save({
+            oldId: oldId,
+            newId: newId
+        }, {
             fetchType: 'PUT',
-            criteria: {
-                oldId: oldId,
-                newId: newId
-            }
-        };
-        if (callback) fetchOptions.onSuccess = callback;
-        ResourceService.fetchCollection(fetchOptions);
+            callback: callback,
+            silent: silent
+        });
     };
 
     //remove the screen filters and stacked graph from session
-    UserDefinedScreens.removeOneScreenFromSession = function(screenId) {
-        WorkspaceFilters.removeAllFiltersForOneScreenFromSession(screenId);
-        UserDefinedScreens.removeAllStackedGraphForOneScreenFromSession(screenId);
-        ADK.TileSortManager.removeAllSortsForOneScreenFromSession(screenId);
+    UserDefinedScreens.removeOneScreenFromJSON = function(screenId, json) {
+        WorkspaceFilters.removeAllFiltersForOneScreenFromJSON(screenId, json);
+        this.removeAllStackedGraphForOneScreenFromJSON(screenId, json);
+        ADK.TileSortManager.removeAllSortsForOneScreenFromJSON(screenId, json);
+        return json;
     };
 
     //remove all stacked graphs for screen from session
-    UserDefinedScreens.removeAllStackedGraphForOneScreenFromSession = function(screenId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
+    UserDefinedScreens.removeAllStackedGraphForOneScreenFromJSON = function(screenId, json) {
         var screenIndex = findScreenIndexFromUserDefinedGraphs(json, screenId);
         if (screenIndex === -1) return;
         json.userDefinedGraphs.splice(screenIndex, 1);
-        UserDefinedScreens.saveUserConfigToSession(json);
-    };
-
-    var findScreenIndexFromUserDefinedSorts = function(json, screenId) {
-        var screenIndex = findIndex(json.userDefinedSorts, function(screen) {
-            return screen.id === screenId;
-        });
-        return screenIndex;
+        return json;
     };
 
     //clone user defined sorts from one screen to another in Session
     UserDefinedScreens.cloneScreenSortsToSession = function(fromScreenId, toScreenId) {
-        var json = ADK.UserDefinedScreens.getUserConfigFromSession();
-        var screenIndex = findScreenIndexFromUserDefinedSorts(json, fromScreenId);
+        var json = this.getUserConfigFromSession();
+        var userDefinedSorts = json.userDefinedSorts;
+        var screenIndex = _.findIndex(userDefinedSorts, {
+            id: fromScreenId
+        });
         if (screenIndex === -1) return;
-        var screenConfig = _.clone(json.userDefinedSorts[screenIndex]);
+        var screenConfig = _.clone(userDefinedSorts[screenIndex]);
         screenConfig.id = toScreenId;
-        var toScreenIndex = findScreenIndexFromUserDefinedSorts(json, toScreenId);
-        if (toScreenIndex > -1) json.userDefinedSorts[toScreenIndex] = screenConfig;
-        else json.userDefinedSorts.push(screenConfig);
-        ADK.UserDefinedScreens.saveUserConfigToSession(json);
+        var toScreenIndex = _.findIndex(userDefinedSorts, {
+            id: toScreenId
+        });
+        if (toScreenIndex > -1) userDefinedSorts[toScreenIndex] = screenConfig;
+        else userDefinedSorts.push(screenConfig);
+        this.saveUserConfigToSession(json);
     };
 
-    return UserDefinedScreens;
+
+    var UserDefinedScreenModel = Backbone.Model.extend({
+        defaults: {
+            screens: [],
+            userScreensConfig: []
+        },
+        initialize: function() {
+            this._requestCount = 0;
+        },
+        incrementRequest: function() {
+            if (this._requestCount === 0) {
+                Messaging.trigger('obscure:content');
+            }
+            this._requestCount += 1;
+        },
+        decrementRequest: function() {
+            this._requestCount -= 1;
+            if (this._requestCount === 0) {
+                Messaging.trigger('reveal:content');
+            }
+        },
+        parse: function(response) {
+            var userScreens = _.get(response, 'data.userScreensConfig.screens');
+            var screens = userScreens ? _.defaults({
+                screens: userScreens
+            }, response.data): response.data;
+            return UserDefinedScreens._postProcess(screens, this);
+        },
+        fetch: function(options) {
+            this.incrementRequest();
+            var params = {
+                screenType: options.key,
+                predefinedScreens: _.pluck(PreDefinedScreens.screens, 'id')
+            };
+            options.cache = false;
+            this.url = ResourceService.buildUrl('user-defined-screens', params);
+            this.trigger('fetch', this, params);
+            return Backbone.Model.prototype.fetch.call(this, _.extend({
+                success: function(model, resp, options) {
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift('fetch:success');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                },
+                error: function(model, resp, options) {
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift('fetch:error');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                }
+            }, options));
+        },
+        save: function(params, options) {
+            this.incrementRequest();
+            var isPost = _.has(params, 'screenType');
+            var requestType;
+            if (isPost) {
+                requestType = 'POST';
+                this.url = ResourceService.buildUrl('write-user-defined-screens');
+            } else {
+                requestType = 'PUT';
+                this.url = ResourceService.buildUrl('write-user-defined-screens', params);
+            }
+            this.trigger('save', this, params, options);
+            return Backbone.Model.prototype.save.call(this, params, _.extend({
+                type: requestType,
+                contentType: 'application/json',
+                dataType: 'json',
+                parse: false,
+                success: function(model, resp, options) {
+                    model.unset('param');
+                    try {
+                        var screens = _.get(JSON.parse(resp.message), 'userScreensConfig.screens');
+                        model.set('screens', screens);
+                        var json = model.toJSON();
+                        UserDefinedScreens.saveScreensConfigToSession(json, model);
+                    } catch (e) {
+                        console.error('Could not parse screen config from response');
+                    }
+                    var args = Array.prototype.slice.call(arguments);
+                    _.extend(args[2], _.result(options, 'callback'));
+                    args.unshift('save:success');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                },
+                error: function(model, resp, options) {
+                    model.unset('param');
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift('save:error');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                }
+            }, params, options));
+        },
+        cloneScreen: function(params) {
+            this.incrementRequest();
+            this.url = ResourceService.buildUrl('write-user-defined-screens-copy', params);
+            this.trigger('clone', this, params);
+            return Backbone.Model.prototype.save.call(this, {}, _.extend({
+                type: 'POST',
+                success: function(model, resp, options) {
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift('clone:success');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                },
+                error: function(model, resp, options) {
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift('clone:error');
+                    Backbone.Model.prototype.trigger.apply(model, args);
+                    model.decrementRequest();
+                },
+                id: params.toId,
+                parse: false
+            }, params));
+        }
+    });
+
+    var ScreenManager = Backbone.Marionette.Object.extend(_.extend({
+        modelEvents: {
+            'request': _.partial(Backbone.Marionette.triggerMethod, 'request'),
+            'save': _.partial(Backbone.Marionette.triggerMethod, 'save'),
+            'save:success': _.partial(Backbone.Marionette.triggerMethod, 'save:success'),
+            'save:error': _.partial(Backbone.Marionette.triggerMethod, 'save:error'),
+            'fetch': _.partial(Backbone.Marionette.triggerMethod, 'fetch'),
+            'fetch:success': _.partial(Backbone.Marionette.triggerMethod, 'fetch:success'),
+            'fetch:error': _.partial(Backbone.Marionette.triggerMethod, 'fetch:error'),
+            'clone': _.partial(Backbone.Marionette.triggerMethod, 'clone'),
+            'clone:success': _.partial(Backbone.Marionette.triggerMethod, 'clone:success'),
+            'clone:error': _.partial(Backbone.Marionette.triggerMethod, 'clone:error')
+        },
+        initialize: function() {
+            this.cid = _.uniqueId('UserDefinedScreen');
+            this.model = new UserDefinedScreenModel();
+            this.bindEntityEvents(this.model, this.modelEvents);
+        },
+        onCloneSuccess: function(model, resp, options) {
+            var fromId = options.fromId;
+            var toId = options.toId;
+
+            var _applets = _.get(ADK.ADKApp.Screens, [fromId, 'applets'], []);
+
+            var clonedScreenOptions = _.get(options, 'clonedScreenOptions', {});
+
+            var predefinedAppletConfig = {
+                applets: _applets,
+                id: toId,
+                contentRegionLayout: 'gridster',
+                userDefinedScreen: true
+            };
+
+            if(options.predefined !== true) {
+                this.cloneUDScreenToSession(fromId, toId);
+            }
+
+            this.cloneScreenFiltersToSession(fromId, toId);
+
+            //clone stacked graphs to session
+            this.cloneScreenGraphsToSession(fromId, toId);
+
+            //clone user defined sorts to session
+            this.cloneScreenSortsToSession(fromId, toId);
+
+            this.saveGridsterConfig(predefinedAppletConfig, toId);
+            ADK.ADKApp.ScreenPassthrough.addNewScreen(_.extend(predefinedAppletConfig, clonedScreenOptions), ADK.ADKApp, _.get(clonedScreenOptions, 'screenIndex', 0) + 1);
+        },
+        onFetchSuccess: function(model, resp, options) {
+            var screenJSON = model.toJSON();
+            this.saveScreensConfigToSession(screenJSON, model);
+            if(options.deferred) options.deferred.resolve(screenJSON);
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.model, this.modelEvents);
+        }
+    }, UserDefinedScreens));
+
+    return new ScreenManager();
 });

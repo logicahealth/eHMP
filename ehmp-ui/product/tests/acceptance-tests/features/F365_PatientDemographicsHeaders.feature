@@ -9,7 +9,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,patient"
   And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Patient (T0023)"
+    And the Patient View Current Patient displays the user name "Twentythree,Patient (T0023)"
     And user selects Patient Demographic drop down
   
     #group labels (In blue fonts)
@@ -41,11 +41,11 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-2.1_DetailDialogInpatient @US5116 @US4456 @DE1309 @DE2154
 Scenario: Patient Information: Demographic drop down "HEADERS" in Kodak for Inpatient
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "REDACTED" verifycode as  "REDACTED"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "USER  " verifycode as  "PW      "
     Then staff view screen is displayed
   And user searches for and selects "twentythree,inpatient"
     And Cover Sheet is active
-    And the Global Header displays the user name "Twentythree,Inpatient (T0823)"
+    And the Patient View Current Patient displays the user name "Twentythree,Inpatient (T0823)"
 
   And user selects Patient Demographic drop down
   

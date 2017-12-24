@@ -4,8 +4,8 @@
 #
 # HS init parameters
 #
-HS_FDS_CONNECT_INFO=[<%= @mssql['ipaddress'] %>]:<%= @mssql['port'] %>//<%= @node['ehmp_oracle']['mssql_database'] %>
+HS_FDS_CONNECT_INFO=[<%= @mssql['ipaddress'] %>]:<%= @mssql['port'] %>//<%= @mssql['server_database_name'] %>
 # alternate connect format is hostname/serverinstance/databasename
-HS_FDS_TRACE_LEVEL=OFF
-HS_FDS_RECOVERY_ACCOUNT=RECOVER
-HS_FDS_RECOVERY_PWD=RECOVER
+HS_FDS_SUPPORT_STATISTICS=FALSE
+HS_FDS_TRANSACTION_MODEL=READ-ONLY
+HS_FDS_TRACE_LEVEL=ON

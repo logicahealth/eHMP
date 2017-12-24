@@ -75,8 +75,8 @@
     "path" : "/jMeadows/JMeadowsDataService",
     "query": "wsdl",
     "timeoutms" : 45000,
-    "userien" : "20012",
-    "username" : "VEHU,TEN",
+    "userien" : "USER",
+    "username" : "LAST,FIRST",
     "usersitecode" : 200,
     "usersitename" : "CAMP MASTER",
     "parallelismmin" : 4
@@ -89,8 +89,8 @@
     "path" : "/jMeadows/JMeadowsDataService",
     "query": "wsdl",
     "timeoutms" : 45000,
-    "userien" : "20012",
-    "username" : "VEHU,TEN",
+    "userien" : "USER",
+    "username" : "LAST,FIRST",
     "usersitecode" : 200,
     "usersitename" : "CAMP MASTER",
     "parallelismmin" : 4
@@ -103,8 +103,8 @@
     "path" : "/jMeadows/JMeadowsDataService",
     "query": "wsdl",
     "timeoutms" : 45000,
-    "userien" : "20012",
-    "username" : "VEHU,TEN",
+    "userien" : "USER",
+    "username" : "LAST,FIRST",
     "usersitecode" : 200,
     "usersitename" : "CAMP MASTER",
     "parallelismmin" : 4
@@ -112,7 +112,7 @@
   "mvi" : {
     "host" : "IP        ",
     "path" : "/mvi",
-    "port" : 8896,
+    "port" : PORT,
     "protocol" : "http",
     "method" : "POST",
     "senderCode" : "200EHMP",

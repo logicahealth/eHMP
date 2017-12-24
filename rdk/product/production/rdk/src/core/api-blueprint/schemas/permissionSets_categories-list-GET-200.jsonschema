@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Get the permission sets categories",
+    "description": "",
+    "type": "object",
+    "required": [
+        "data",
+        "status"
+    ],
+    "properties": {
+        "data": {
+            "type": "object",
+            "required": [
+                "items"
+            ],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "label",
+                            "value"
+                        ],
+                        "properties": {
+                            "label": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "status": {
+            "type": "integer"
+        }
+    }
+}

@@ -1,17 +1,17 @@
-<h{{headingSize}} class="row"><i class="fa fa-exclamation-circle"></i>
+<h{{headingLevel}}><i class="fa fa-exclamation-circle"></i>
 {{#if message}}
 	{{message}}
 {{else}}
 	{{status}} - {{statusText}}
 {{/if}}
-</h{{headingSize}}>
+</h{{headingLevel}}>
 {{#if logId}}
-<h{{headingSize}} class="row">
+<h{{headingLevel}}>
 <p>
 For defect reporting:
 </p>
 <p>
 {{logId}}
 </p>
-</h{{headingSize}}>
+</h{{headingLevel}}>
 {{/if}}

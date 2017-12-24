@@ -7,7 +7,7 @@ Feature: F323  Normalization of Outpatient Medications Data
 @terminology_out_meds @VPR
 Scenario: An authorized user can access VA Outpatient Medications and see standardized RxNorm values when defined
   Given a patient with "Medications" in multiple VistAs
-  And a patient with pid "9E7A;8" has been synced through VX-Sync API for "9E7A" site(s)
+  And a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
   When the client requests "meds" for the patient "10110V004877" in VPR format 
   Then the VPR results contain "medications" terminology from "RxNorm codes"
       | field                 | value                                 |
@@ -34,7 +34,7 @@ Scenario: An authorized user can access VA Outpatient Medications and see standa
 @terminology_out_meds @VPR
 Scenario: An authorized user can access DoD Outpatient Medications and see standardized RxNorm values when defined
   Given a patient with "Medications" in multiple VistAs
-  And a patient with pid "9E7A;8" has been synced through VX-Sync API for "9E7A" site(s)
+  And a patient with pid "SITE;8" has been synced through VX-Sync API for "SITE" site(s)
   When the client requests "meds" for the patient "10110V004877" in VPR format 
   Then the VPR results contain "medications" terminology from "RxNorm codes"
   	  | field         | value                                       |
@@ -71,5 +71,5 @@ Scenario: An authorized user can access DoD Outpatient Medications and see stand
       | codes.display | EMPTY    |
   
 
-#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/VACORE/JLV+Terminology+Handling
+#  * Using MappingTables_prod.zip to verify the data. https://wiki.vistacore.us/display/DNS RE/JLV+Terminology+Handling
    

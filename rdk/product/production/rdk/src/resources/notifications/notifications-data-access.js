@@ -5,14 +5,24 @@ var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var async = require('async');
 var nullchecker = rdk.utils.nullchecker;
+var RdkError = rdk.utils.RdkError;
 var notificationsHelper = require('./notifications-helper');
 var navMapping = require('../activitymanagement/tasks/navigation-mapping');
 var dbAccess = require('../../subsystems/jbpm/jbpm-subsystem');
-var authUtils = rdk.utils.authentication;
+var vistaConfigUtils = rdk.utils.vistaConfig;
+var pepSubsystem = require('../../subsystems/pep/pep-subsystem');
 
 var DO_AUTO_COMMIT = true;
 
 function addRecipient(req, ntfid, recipient, callback) {
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
 
     var rcp = {
         userId: recipient.recipient.userId || '',
@@ -39,13 +49,21 @@ function addRecipient(req, ntfid, recipient, callback) {
             v_facility: '' + rcp.facility,
             v_salience: '' + rcp.salience
         },
-        query: 'BEGIN notifs_pkg.ADD_RECIPIENT(:v_ntfid,:v_user_id,:v_team_id,:v_team_type,:v_team_focus,:v_team_role,:v_patient_id,:v_patient_assignment,:v_facility,:v_salience); END; '
+        query: 'BEGIN notifdb.notifs_pkg.ADD_RECIPIENT(:v_ntfid,:v_user_id,:v_team_id,:v_team_type,:v_team_focus,:v_team_role,:v_patient_id,:v_patient_assignment,:v_facility,:v_salience); END; '
     };
 
-    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addRecip.query, addRecip.bindParams, DO_AUTO_COMMIT, callback);
+    dbAccess.doExecuteProcWithInOutParams(req, dbConfig, addRecip.query, addRecip.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function addAssociatedItem(req, ntfid, item, callback) {
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
 
     var rcp = {
         item: item || '',
@@ -56,13 +74,21 @@ function addAssociatedItem(req, ntfid, item, callback) {
             v_item: '' + rcp.item
         },
 
-        query: 'BEGIN notifs_pkg.ADD_ASSOC_ITEM(:v_ntfid,:v_item); END; '
+        query: 'BEGIN notifdb.notifs_pkg.ADD_ASSOC_ITEM(:v_ntfid,:v_item); END; '
     };
 
-    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addItem.query, addItem.bindParams, DO_AUTO_COMMIT, callback);
+    dbAccess.doExecuteProcWithInOutParams(req, dbConfig, addItem.query, addItem.bindParams, DO_AUTO_COMMIT, callback);
 }
 
-function addNotification(req, intialCallback) {
+function addNotification(req, initialCallback) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return initialCallback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var body = req.body;
 
     var addNotif = {
@@ -85,7 +111,7 @@ function addNotification(req, intialCallback) {
                 dir: oracledb.BIND_OUT
             }
         },
-        query: 'BEGIN notifs_pkg.ADD_NOTIFICATION(:prd_user_id,:prd_desc,:ntf_patient_id,:ntf_message_subject,:ntf_message_body,:ntf_resolution,:ntf_resolutionstate,:ntf_expiration,:ntf_ext_refid,:nav_channel,:nav_event,:nav_parameter,:permissions,:n_ntfid); END;'
+        query: 'BEGIN notifdb.notifs_pkg.ADD_NOTIFICATION(:prd_user_id,:prd_desc,:ntf_patient_id,:ntf_message_subject,:ntf_message_body,:ntf_resolution,:ntf_resolutionstate,:ntf_expiration,:ntf_ext_refid,:nav_channel,:nav_event,:nav_parameter,:permissions,:n_ntfid); END;'
     };
     var recipients = body.recipients;
 
@@ -108,12 +134,12 @@ function addNotification(req, intialCallback) {
                                         p_patient_identifiers: null,
                                         p_task_statuses: null
                                     },
-                                    query: 'BEGIN TASKS.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;'
+                                    query: 'BEGIN activitydb.tasks.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;'
 
                                 };
 
                                 // Get task by ID and copy NAVIGATION & PERMISSION into notification
-                                dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, getTask.query, getTask.bindParams, function(err, results) {
+                                dbAccess.doExecuteProcWithParams(req, dbConfig, getTask.query, getTask.bindParams, function(err, results) {
                                     if (results.length > 0) {
                                         var task = results[0];
                                         var params = {};
@@ -189,7 +215,7 @@ function addNotification(req, intialCallback) {
         },
         function(recipients, callback) {
 
-            dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addNotif.query, addNotif.bindParams, DO_AUTO_COMMIT, function(err, result) {
+            dbAccess.doExecuteProcWithInOutParams(req, dbConfig, addNotif.query, addNotif.bindParams, DO_AUTO_COMMIT, function(err, result) {
                 if (err) {
                     return callback(err, null);
                 }
@@ -223,14 +249,14 @@ function addNotification(req, intialCallback) {
         }
     ], function(err, result) {
         if (err) {
-            return intialCallback(err, null);
+            return initialCallback(err, null);
         }
-        return intialCallback(null, result);
+        return initialCallback(null, result);
     });
 }
 
 function buildRouteNotifQuery(req, recipient) {
-    var divisions = authUtils.getSiteDivisions(_.get(req, 'app.config.vistaSites')).join(',');
+    var divisions = vistaConfigUtils.getSiteDivisions(_.get(req, 'app.config.vistaSites')).join(',');
 
     var defaultParams = {
         p_team_role: recipient.teamRole || null,
@@ -245,7 +271,7 @@ function buildRouteNotifQuery(req, recipient) {
                 p_patient_id: null,
                 p_patient_assignment: 0
             }, defaultParams),
-            query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
+            query: 'BEGIN notifdb.notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
         };
     } else {
         return {
@@ -256,7 +282,7 @@ function buildRouteNotifQuery(req, recipient) {
                 p_patient_id: recipient.patientId || null,
                 p_patient_assignment: recipient.patientAssignment || 0
             }, defaultParams),
-            query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
+            query: 'BEGIN notifdb.notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
         };
     }
 }
@@ -268,16 +294,24 @@ function routeNotification(req, recipientToQueryMap, callback) {
         return nullchecker.isNotNullish(_.get(item, 'recipient.userId'));
     });
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     _.each(recipientToQueryMap, function(map) {
         asyncJobs.push(function(callback) {
-            dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, map.query, map.bindParams, function(err, data) {
+            dbAccess.doExecuteProcWithParams(req, dbConfig, map.query, map.bindParams, function(err, data) {
                 if (err) {
                     callback(err, null);
                 }
                 _.each(data, function(row) {
                     if (nullchecker.isNotNullish(row.userId)) {
                         // Find facility hash
-                        var site = authUtils.getSiteCode(_.get(req, 'app.config.vistaSites'), row.division);
+                        var site = vistaConfigUtils.getSiteCode(_.get(req, 'app.config.vistaSites'), row.division);
                         // Build recipient object
                         var recipient = {
                             recipient: _.extend({}, map.recipient, {
@@ -315,31 +349,55 @@ function routeNotification(req, recipientToQueryMap, callback) {
 
 function resolveNotificationById(req, callback) {
 
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var resolveNotif = {
         bindParams: {
             p_ntf_id: req.params.notificationId || null,
             p_user_id: req.body.userId || null
         },
-        query: 'BEGIN notifs_pkg.RESOLVE_NOTIF_BY_ID(:p_ntf_id,:p_user_id); END;'
+        query: 'BEGIN notifdb.notifs_pkg.RESOLVE_NOTIF_BY_ID(:p_ntf_id,:p_user_id); END;'
     };
 
-    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
+    dbAccess.doExecuteProcWithInOutParams(req, dbConfig, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function resolveNotificationsByRefId(req, callback) {
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
 
     var resolveNotif = {
         bindParams: {
             p_ref_id: req.params.referenceId || null,
             p_user_id: req.body.userId || null
         },
-        query: 'BEGIN notifs_pkg.RESOLVE_NOTIFS_BY_REF_ID(:p_ref_id,:p_user_id); END;'
+        query: 'BEGIN notifdb.notifs_pkg.RESOLVE_NOTIFS_BY_REF_ID(:p_ref_id,:p_user_id); END;'
     };
 
-    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
+    dbAccess.doExecuteProcWithInOutParams(req, dbConfig, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function getNotificationsByParams(req, params, callback) {
+
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
 
     var getNotifs = {
         bindParams: {
@@ -353,10 +411,10 @@ function getNotificationsByParams(req, params, callback) {
             p_start_date: params.startDate || null,
             p_end_date: params.endDate || null
         },
-        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_PARAMS(:p_user_id,:p_patient_ids,:p_recipient_filter,:p_resolution_state,:p_read_by_user,:p_min_salience,:p_max_salience,:p_start_date,:p_end_date,:recordset); END;'
+        query: 'BEGIN notifdb.notifs_pkg.GET_NOTIFS_BY_PARAMS(:p_user_id,:p_patient_ids,:p_recipient_filter,:p_resolution_state,:p_read_by_user,:p_min_salience,:p_max_salience,:p_start_date,:p_end_date,:recordset); END;'
     };
 
-    dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, getNotifs.query, getNotifs.bindParams, function(err, results) {
+    dbAccess.doExecuteProcWithParams(req, dbConfig, getNotifs.query, getNotifs.bindParams, function(err, results) {
         if (err) {
             return callback(err, null);
         }
@@ -365,16 +423,24 @@ function getNotificationsByParams(req, params, callback) {
 }
 
 function getNotificationsByRefId(req, callback) {
+    var dbConfig = getDatabaseConfigFromRequest(req);
+    if (!dbConfig) {
+        return callback(new RdkError({
+            code: 'oracledb.503.1001',
+            logger: req.logger
+        }));
+    }
+
     var params = req.params;
 
     var getNotifs = {
         bindParams: {
             p_ref_id: params.referenceId || null
         },
-        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_REF_ID(:p_ref_id,:recordset); END;'
+        query: 'BEGIN notifdb.notifs_pkg.GET_NOTIFS_BY_REF_ID(:p_ref_id,:recordset); END;'
     };
 
-    dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, getNotifs.query, getNotifs.bindParams, function(err, results) {
+    dbAccess.doExecuteProcWithParams(req, dbConfig, getNotifs.query, getNotifs.bindParams, function(err, results) {
         if (err) {
             return callback(err, null);
         }
@@ -382,81 +448,105 @@ function getNotificationsByRefId(req, callback) {
     });
 }
 
-function processNotifications(req, params, notifications, originalCallback) {
+function processNotifications(req, params, notifications, callback) {
 
-    async.each(notifications, function(notif, eachCallback) {
+    async.each(notifications, function(notif, callback) {
         if (nullchecker.isNullish(notif.notificationId)) {
-            return originalCallback({
+            return callback({
                 status: 500,
                 message: 'Invalid notification'
             }, null);
         }
-        async.parallel({
-                recipients: function(callback) {
-                    dbAccess.doQueryWithParams(req, req.app.config.jbpm.notifsDatabase, 'SELECT * FROM TABLE(notifs_pkg.GET_RECIPIENTS_BY_NOTIF(:p_ntf_id))', {
-                        p_ntf_id: notif.notificationId
-                    }, callback);
-                },
-                associatedItems: function(callback) {
-                    dbAccess.doQueryWithParams(req, req.app.config.jbpm.notifsDatabase, 'SELECT * FROM TABLE(notifs_pkg.GET_ASSOC_ITEMS_BY_NOTIF(:p_ntf_id))', {
-                        p_ntf_id: notif.notificationId
-                    }, callback);
-                }
-            },
-            function(err, results) {
-                if (err) {
-                    return eachCallback(err);
-                }
 
-                updateNotificationFields(req, params, results, notif);
-
-                return eachCallback();
-            });
-    }, function(err) {
-        if (err) {
-            return originalCallback(err, null);
-        }
-        // Filter out notifications without navigation info or permissions for the current user
-        if (params.navigationRequired === true) {
-            notifications = _.filter(notifications, function(notification) {
-                return (hasNavigation(notification) && hasPermission(req, notification));
-            });
-        }
-
-        // Filter out notifications with duplicate taskID (associated item) - keep only the newest ones
-        if (params.groupRows === true) {
-            notifications = groupNotificationsByTask(notifications);
-        }
-
-        // If only a counter is needed, return without further processing
-        if (params.countNotifs === true) {
-            var response = {
-                count: notifications.length
-            };
-            return originalCallback(null, response);
-        }
-
-        getPatientNames(req, notifications, originalCallback);
-    });
-
-}
-
-function groupNotificationsByTask(notifications) {
-    var modifiedNotifications = [];
-    var groupedNotifications = _.groupBy(notifications, 'taskId');
-    _.each(groupedNotifications, function(group) {
-        if (group[0].taskId === undefined) {
-            modifiedNotifications = modifiedNotifications.concat(group);
-        } else {
-            modifiedNotifications.push(_.max(group, function(item) {
-                return item.createdOn;
+        var dbConfig = getDatabaseConfigFromRequest(req);
+        if (!dbConfig) {
+            return callback(new RdkError({
+                code: 'oracledb.503.1001',
+                logger: req.logger
             }));
         }
+
+        async.parallel({
+            recipients: function(callback) {
+                dbAccess.doQueryWithParams(req, dbConfig,
+                    'SELECT * FROM TABLE(notifdb.notifs_pkg.GET_RECIPIENTS_BY_NOTIF(:p_ntf_id))', {
+                        p_ntf_id: notif.notificationId
+                    }, callback);
+            },
+            associatedItems: function(callback) {
+                dbAccess.doQueryWithParams(req, dbConfig,
+                    'SELECT * FROM TABLE(notifdb.notifs_pkg.GET_ASSOC_ITEMS_BY_NOTIF(:p_ntf_id))', {
+                        p_ntf_id: notif.notificationId
+                    }, callback);
+            }
+        }, function parallelComplete(err, results) {
+            if (err) {
+                req.logger.debug('processNotifications', err);
+                return callback(err);
+            }
+
+            updateNotificationFields(req, params, results, notif);
+            return callback();
+        });
+
+    }, function eachComplete(err) {
+        if (err) {
+            req.logger.debug('processNotifications', err);
+            return callback(err, null);
+        }
+
+        var finish = function(notifications) {
+            if (params.groupRows === true) {
+                notifications = groupNotificationsByTask(notifications);
+            }
+
+            if (params.countNotifs === true) {
+                var response = {
+                    count: notifications.length
+                };
+                return callback(null, response);
+            }
+
+            getPatientNames(req, notifications, callback);
+        };
+
+        if (params.navigationRequired === true) {
+            _.filter(notifications, function(notif) {
+                return hasNavigation(notif);
+            });
+
+            async.each(notifications, function checkPermissions(notif, callback) {
+                return hasPermissions(notif, req, callback);
+            }, function eachComplete(notification, err) {
+                if (err) {
+                    req.logger.debug('processNotifications: adding hasPermissions', err);
+                    return callback(err, null);
+                }
+                finish(notifications);
+            });
+        } else {
+            return finish(notifications);
+        }
     });
-    _.each(modifiedNotifications, function(item) {
-        delete item.taskId;
+}
+
+function hasPermissions(notification, req, callback) {
+    notification.hasPermissions = false;
+
+    var mockRequest = {
+        _resourceConfigItem: {
+            requiredPermissions: _.get(notification, 'permissions.ehmp')
+        },
+        logger: _.get(req, 'logger'),
+        session: {
+            user: _.get(req, 'session.user')
+        }
+    };
+
+    pepSubsystem.execute(mockRequest, {}, function taskOpCallback(err) {
+        notification.hasPermissions = !err;
+        return callback();
     });
-    return modifiedNotifications;
 }
 
 function hasNavigation(notification) {
@@ -470,28 +560,22 @@ function hasNavigation(notification) {
     return false;
 }
 
-function hasPermission(req, notification) {
-    var permissions = notification.permissions;
-    if (nullchecker.isNullish(permissions)) {
-        return true;
-    }
-    if (_.isEmpty(permissions.ehmp) && _.isEmpty(permissions.user)) {
-        return true;
-    }
-    var user = req.session.user;
-    var userPermissions = user.permissions;
-    var userId = user.duz[user.site];
-    if (_.intersection(userPermissions, permissions.ehmp).length > 0) {
-        if (_.isEmpty(permissions.user) || _.contains(permissions.user, userId)) {
-            return true;
+function groupNotificationsByTask(notifications) {
+    var modifiedNotifications = [];
+    var groupedNotifications = _.groupBy(notifications, 'taskId');
+    _.each(groupedNotifications, function(group) {
+        if (_.isUndefined(_.get(group, '[0].taskId'))) {
+            modifiedNotifications = modifiedNotifications.concat(group);
+        } else {
+            modifiedNotifications.push(_.max(group, function(item) {
+                return item.createdOn;
+            }));
         }
-    }
-    if (_.contains(permissions.user, userId)) {
-        if (_.isEmpty(permissions.ehmp)) {
-            return true;
-        }
-    }
-    return false;
+    });
+    _.each(modifiedNotifications, function(item) {
+        delete item.taskId;
+    });
+    return modifiedNotifications;
 }
 
 function updateNotificationFields(req, params, results, notification) {
@@ -589,6 +673,19 @@ function getPatientNames(req, notifications, callback) {
     });
 }
 
+
+/**
+ * Retrieves a notification database configuration object from a request object
+ *
+ * @param {any} req The request object
+ * @returns config object or null
+ */
+function getDatabaseConfigFromRequest(req) {
+    return _.get(req, 'app.config.oracledb.notifsDatabase', null);
+}
+
+module.exports.hasNavigation = hasNavigation;
+module.exports.hasPermissions = hasPermissions;
 module.exports.addNotification = addNotification;
 module.exports.getNotificationsByParams = getNotificationsByParams;
 module.exports.getNotificationsByRefId = getNotificationsByRefId;

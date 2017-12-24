@@ -24,7 +24,7 @@ end
 When(/^the user requests orderables of type "(.*?)"$/) do |subtype|
   query = RDKQueryPicklist.new("write-pick-list-orderables")
   query.add_parameter("searchString", "Rheu")
-  query.add_parameter("site", "C877")
+  query.add_parameter("site", "SITE")
   query.add_parameter("subtype", subtype)
   @response = HTTPartyRDK.get(query.path)
   puts @response

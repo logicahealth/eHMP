@@ -5,7 +5,7 @@
   "link": [
     {
       "rel": "self",
-      "href": "http://IP      /fhir/patient/9E7A;129/observation"
+      "href": "http://IP      /fhir/patient/SITE;129/observation"
     }
   ],
   "meta": {
@@ -45,7 +45,7 @@
           {
             "use": "official",
             "system": "http://vistacore.us/fhir/id/uid",
-            "value": "urn:va:vital:9E7A:129:235"
+            "value": "urn:va:vital:SITE:129:235"
           }
         ],
         "subject": {

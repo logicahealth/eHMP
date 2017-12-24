@@ -14,12 +14,6 @@ ENV['GEM_HOME'] = "#{ENV['WORKSPACE']}/.gems"
 ENV['GEM_PATH'] = "#{ENV['GEM_HOME']}:#{ENV['GEM_PATH']}"
 ENV['PATH'] = "#{ENV['GEM_HOME']}/bin:#{ENV['PATH']}"
 
-aws = ChefVault::Item.load(
-  "jenkins", "aws",
-  node_name: 'jenkins',
-  client_key_path: "/jenkins.pem"
-).to_hash
-
 authentication = ChefVault::Item.load(
   "jenkins", "authentication",
   node_name: 'jenkins',
@@ -55,19 +49,14 @@ jenkins_jnlp_slave node[:stack] do
   only_if  { node[:workstation][:slave][:launch_type].eql?('jnlp') }
 end
 
+aws = ChefVault::Item.load(
+  "jenkins", "aws",
+  node_name: 'jenkins',
+  client_key_path: "/jenkins.pem"
+).to_hash
+
 directory "#{node[:workstation][:user_home]}/.aws" do
  owner node[:workstation][:user]
-  group node[:workstation][:user]
-  mode "0755"
-end
-
-
-template "#{node[:workstation][:user_home]}/.aws/credentials" do
-  source "aws_credentials.erb"
-  variables(
-    :aws => aws
-  )
-  owner node[:workstation][:user]
   group node[:workstation][:user]
   mode "0755"
 end

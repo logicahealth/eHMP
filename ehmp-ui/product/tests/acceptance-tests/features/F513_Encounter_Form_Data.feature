@@ -28,7 +28,7 @@ Scenario: Set new encounter for a patient from clinic appointment
   
 @f513_3_pob_set_visit_from_hosptial_admission @DE6637
 Scenario: Set new encounter for a patient from hospital admission
-  When user searches for and selects "zzzretiredonenineteen,patient"
+  When user searches for and selects "Onehundredsixteen,patient"
   And Overview is active
   And the POB user selects change current encounter
   And POB user chooses to set a hospital admissions

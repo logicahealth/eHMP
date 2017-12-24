@@ -14,7 +14,7 @@ Then the client receives 38 VPR "VistA" result(s)
 Then the client receives 19 VPR "panorama" result(s)
 And the VPR results contain "non-va medication results"                                                      
       | field                               | panorama_value                                      |
-      | uid                                 | urn:va:med:9E7A:149:18028                           |
+      | uid                                 | urn:va:med:SITE:149:18028                           |
       | summary                             | ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING |
       | pid                                 | CONTAINS ;149                                               |
       | facilityCode                        | 500                                                 |
@@ -53,12 +53,12 @@ And the VPR results contain "non-va medication results"
       | dosages.startDateString             | Start                                               |
       | dosages.stopDateString              | Start                                               |
       | orders.summary                      | MedicationOrder{uid='null'}                         |
-      | orders.orderUid                     | urn:va:order:9E7A:149:18028                         |
+      | orders.orderUid                     | urn:va:order:SITE:149:18028                         |
       | orders.ordered                      | 200704111613                                        |
-      | orders.providerUid                  | urn:va:user:9E7A:10000000031                        |
+      | orders.providerUid                  | urn:va:user:SITE:10000000031                        |
       | orders.providerName                 | VEHU,ONEHUNDRED                                     |
       | orders.locationName                 | GENERAL MEDICINE                                    | 
-      | orders.locationUid                  | urn:va:location:9E7A:23                             |
+      | orders.locationUid                  | urn:va:location:SITE:23                             |
 	  | fills                               | IS_NOT_SET                                          |
       | qualifiedName                       | ASPIRIN TAB,EC                                      |
       | administrations                     | IS_NOT_SET                                          |
@@ -88,7 +88,7 @@ Then the client receives 38 VPR "VistA" result(s)
 Then the client receives 19 VPR "kodak" result(s)
 And the VPR results contain "non-va medication results"                                                      
       | field                               | kodak_value                                         |
-      | uid                                 | urn:va:med:C877:149:18028                           |
+      | uid                                 | urn:va:med:SITE:149:18028                           |
       | summary                             | ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING |
       | pid                                 | CONTAINS ;149                                       |
       | facilityCode                        | 500                                                 |
@@ -127,12 +127,12 @@ And the VPR results contain "non-va medication results"
       | dosages.startDateString             | Start                                               |
       | dosages.stopDateString              | Start                                               |
       | orders.summary                      | MedicationOrder{uid='null'}                         |
-      | orders.orderUid                     | urn:va:order:C877:149:18028                         |
+      | orders.orderUid                     | urn:va:order:SITE:149:18028                         |
       | orders.ordered                      | 200704111613                                        |
-      | orders.providerUid                  | urn:va:user:C877:10000000031                        |
+      | orders.providerUid                  | urn:va:user:SITE:10000000031                        |
       | orders.providerName                 | VEHU,ONEHUNDRED                                     |
       | orders.locationName                 | GENERAL MEDICINE                                    | 
-      | orders.locationUid                  | urn:va:location:C877:23                             |
+      | orders.locationUid                  | urn:va:location:SITE:23                             |
 	  | fills                               | IS_NOT_SET                                          |
       | qualifiedName                       | ASPIRIN TAB,EC                                      |
       | administrations                     | IS_NOT_SET                                          |
@@ -166,7 +166,7 @@ Then the client receives 23 VPR "panorama" result(s)
 And the VPR results contain "non-va medication results" 
 
 	| field									| value										|
-	| uid									| CONTAINS urn:va:med:9E7A:301				|
+	| uid									| CONTAINS urn:va:med:SITE:301				|
 	| facilityCode							| 500										|
 	| facilityName							| CAMP MASTER								|
 	| productFormName						| TAB,EC									|
@@ -198,7 +198,7 @@ Then the client receives 23 VPR "kodak" result(s)
 And the VPR results contain "non-va medication results" 
 
 	| field									| value										|
-	| uid									| CONTAINS urn:va:med:C877:301				|
+	| uid									| CONTAINS urn:va:med:SITE:301				|
 	| facilityCode							| 500										|
 	| facilityName							| CAMP BEE									|
 	| productFormName						| TAB,EC									|
@@ -224,8 +224,8 @@ And the VPR results contain "non-va medication results"
 @f100_5_nonva_medication_neg_vpr	
 Scenario: Negative scenario.  Client can request medication results in VPR format
 Given a patient with "No medication results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests medications for the patient "9E7A;100184" in VPR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests medications for the patient "SITE;100184" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed
 

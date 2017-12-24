@@ -82,7 +82,7 @@ function spawnClinicalObject() {
     return {
         uid: 'urn:va:ehmp-note:[<patient identifier>]:[UUID]',
         patientUid: '<patient identifier>',
-        authorUid: 'urn:va:user:9E7A:123',
+        authorUid: 'urn:va:user:SITE:123',
         domain: 'ehmp-note',
         subDomain: 'noteObject',
         ehmpState: 'active',

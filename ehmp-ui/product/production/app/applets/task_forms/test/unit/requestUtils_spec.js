@@ -33,13 +33,13 @@ define([
             it('Should build model properly for given signals', function() {
                 var model = new Backbone.Model({
                     actions: ['END', 'EDIT'],
-                    userID: '9E7A;1234'
+                    userID: 'SITE;1234'
                 });
 
                 var user = new Backbone.Model({
-                    site: '9E7A',
+                    site: 'SITE',
                     duz: {
-                        '9E7A': '1234'
+                        'SITE': '1234'
                     }
                 });
 
@@ -53,13 +53,13 @@ define([
             it('Should build model without edit button given lack of permission', function() {
                 var model = new Backbone.Model({
                     actions: ['END', 'EDIT'],
-                    userID: '9E7A;1234'
+                    userID: 'SITE;1234'
                 });
 
                 var user = new Backbone.Model({
-                    site: '9E7A',
+                    site: 'SITE',
                     duz: {
-                        '9E7A': '1234'
+                        'SITE': '1234'
                     }
                 });
 

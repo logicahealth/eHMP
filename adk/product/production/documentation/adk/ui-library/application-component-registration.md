@@ -29,6 +29,18 @@ ADK.Messaging.trigger('register:component', {
 });
 ```
 
+### Regions where used ###
+The following is a table of regions inside the _global application layout_ where registered components can be inserted. Under each location is the component `type` and `group` values that are used as the filter criteria for that region.
+
+| Region in Application                             | Component Type            | Component Group      |
+|---------------------------------------------------|---------------------------|----------------------|
+| Application Header - _Left Side_                  |`"applicationHeaderItem"`  |`"left"`              |
+| Application Header - _Right Side_                 |`"applicationHeaderItem"`  |`"right"`             |
+| Application Header - _(left of the left side)_    |`"applicationHeaderItem"`  |`"user-nav-alerts"`   |
+| Application Header - _(right of the right side)_  |`"applicationHeaderItem"`  |`"patient-nav-alerts"`|
+| Application Footer - _Left Side_                  |`"applicationFooterItem"`  |`"left"`              |
+| Application Footer - _Right Side_                 |`"applicationFooterItem"`  |`"right"`             |
+
 ## Registering Items ##
 When registered, application component **items** are placed in a central Backbone collection of component items which is instantiated upon start of the application in order to eliminate the risk of race conditions. Registering an item adds a model to this central collection and is made available to the component that has the matching `key` and `type` options. In other words, an **item** has the ability to specify to which component(s) it wants to register.
 
@@ -42,26 +54,3 @@ ADK.Messaging.trigger('register:component:item', {
                                           // ie. permissions
 });
 ```
-
-## Available Application Components ##
-|Domain/Applet | Component Type            | Component Group      | Component Key     |Location in Application|
-|--------------|---------------------------|----------------------|-------------------|-----------------------|
-|observations  |`"tray"`                   |`"writeback"`         | `"observations"`  | Patient Header bar    |
-|notes         |`"tray"`                   |`"writeback"`         | `"notes"`         | Patient Header bar    |
-|action        |`"tray"`                   |`"writeback"`         | `"actions"`       | Patient Header bar    |
-|any           |`"applicationHeaderItem"`  |`"user-nav-alerts"`   | any               | Navigation Header     |
-|any           |`"applicationHeaderItem"`  |`"patient-nav-alerts"`| any               | Navigation Header     |
-
-
-::: callout
-**Note:** When registering a component of type **"tray"** and group **"writeback"** to be used in the patient header bar, the `viewport` option on the Tray will be overwritten.
-:::
-
-## Current Application Component Items ##
-|Domain/Applet | Component Type | Component Key        |
-|--------------|----------------|----------------------|
-|allergy_grid  |`type: "tray"`  |`key: "observations"` |
-|immunizations |`type: "tray"`  |`key: "observations"` |
-|notes         |`type: "tray"`  |`key: "notes"`        |
-|orders        |`type: "tray"`  |`key: "actions"`      |
-|vitals        |`type: "tray"`  |`key: "observations"` |

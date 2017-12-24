@@ -27,8 +27,9 @@ package com.cognitive.cds.invocation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.Ignore;
@@ -103,11 +104,11 @@ public class CDSInvokerIT {
         invocationTarget.setIntentsSet(intents);
         
         Context context = new Context();
-        context.setSubject(new Subject("TestSubject", "9E7A;140"));
+        context.setSubject(new Subject("TestSubject", "SITE;140"));
         context.setLocation(new Location("Test Location", "Location1"));
         context.setUser(new User("Tester", "Id1"));
         
-		Properties parameters = null;
+		Map<String, Object> parameters = null;
         Object inputDataModel = null;
         
         
@@ -147,11 +148,11 @@ public class CDSInvokerIT {
         invocationTarget.setIntentsSet(intents);
         
         Context context = new Context();
-        context.setSubject(new Subject("TestSubject", "9E7A;140"));
+        context.setSubject(new Subject("TestSubject", "SITE;140"));
         context.setLocation(new Location("Test Location", "Location1"));
         context.setUser(new User("Tester", "Id1"));
         
-		Properties parameters = null;
+		Map<String, Object> parameters = null;
         Object inputDataModel = null;
         
         
@@ -184,11 +185,11 @@ public class CDSInvokerIT {
         invocationTarget.setIntentsSet(intents);
         
         Context context = new Context();
-        context.setSubject(new Subject("TestSubject", "9E7A;140"));
+        context.setSubject(new Subject("TestSubject", "SITE;140"));
         context.setLocation(new Location("Test Location", "Location1"));
         context.setUser(new User("Tester", "Id1"));
         
-		Properties parameters = new Properties();
+		Map<String, Object> parameters = new HashMap<>();
         Object inputDataModel = null;
         
         
@@ -235,11 +236,11 @@ public class CDSInvokerIT {
         invocationTarget.setIntentsSet(intents);
         
         Context context = new Context();
-        context.setSubject(new Subject("TestSubject", "9E7A;140"));
+        context.setSubject(new Subject("TestSubject", "SITE;140"));
         context.setLocation(new Location("Test Location", "Location1"));
         context.setUser(new User("Tester", "Id1"));
         
-		Properties parameters = null;
+		Map<String, Object> parameters = null;
         Object inputDataModel = null;
         
         ResultBundle result = instance.invoke(invocationTarget, context, parameters, inputDataModel);

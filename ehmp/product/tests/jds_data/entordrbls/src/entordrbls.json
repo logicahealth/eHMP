@@ -1,5 +1,6 @@
 [
   {
+    "uid":"urn:va:entordrbls:1",
     "name": "Physical Therapy",
     "state": "active",
     "facility-enterprise": "enterprise",
@@ -25,6 +26,7 @@
     }
   },
   {
+    "uid":"urn:va:entordrbls:2",
     "name": "Rheumatology",
     "state": "active",
     "facility-enterprise": "enterprise",
@@ -133,6 +135,7 @@
     }
   },
   {
+    "uid":"urn:va:entordrbls:3",
     "name": "Neurosurgery",
     "state": "active",
     "facility-enterprise": "enterprise",

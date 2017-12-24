@@ -20,7 +20,6 @@
         <maven.compiler.source>${javaVersion}</maven.compiler.source>
         <maven.compiler.target>${targetJavaVersion}</maven.compiler.target>
 		<jbpm.version>${kie-version}</jbpm.version>
-		<joda-time-version>2.9</joda-time-version>
 		<spring.version>${spring-version}</spring.version>
 	</properties>
 

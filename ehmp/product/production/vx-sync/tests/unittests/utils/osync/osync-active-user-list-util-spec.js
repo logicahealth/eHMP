@@ -92,8 +92,8 @@ describe('osync-active-user-list-util unit test', function() {
 			var pjdsUsers = [{
 				'id': '10000000016',
 				'lastSuccessfulLogin': '20161027134433',
-				'site': '9E7A',
-				'uid': 'urn:va:user:9E7A:10000000016'
+				'site': 'SITE',
+				'uid': 'urn:va:user:SITE:10000000016'
 			}];
 			var jdsUserScreenUsers;
 			var config = createConfig();
@@ -109,14 +109,14 @@ describe('osync-active-user-list-util unit test', function() {
 		it('Verify when we have jds user screeen users and no PJds users', function() {
 			var pjdsUsers;
 			var jdsUserScreenUsers = [{
-				'uid': 'urn:va:user:9E7A:10000000271',
+				'uid': 'urn:va:user:SITE:10000000271',
 				'id': '10000000271',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 			}, {
-				'uid': 'urn:va:user:9E7A:10000000016',
+				'uid': 'urn:va:user:SITE:10000000016',
 				'id': '10000000016',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 			}];
 			var config = createConfig();
@@ -133,18 +133,18 @@ describe('osync-active-user-list-util unit test', function() {
 			var pjdsUsers = [{
 				'id': '10000000016',
 				'lastSuccessfulLogin': '20161027134433',
-				'site': '9E7A',
-				'uid': 'urn:va:user:9E7A:10000000016'
+				'site': 'SITE',
+				'uid': 'urn:va:user:SITE:10000000016'
 			}];
 			var jdsUserScreenUsers = [{
-				'uid': 'urn:va:user:9E7A:10000000271',
+				'uid': 'urn:va:user:SITE:10000000271',
 				'id': '10000000271',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 			}, {
-				'uid': 'urn:va:user:9E7A:10000000016',
+				'uid': 'urn:va:user:SITE:10000000016',
 				'id': '10000000016',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 			}];
 			var config = createConfig();
@@ -156,10 +156,10 @@ describe('osync-active-user-list-util unit test', function() {
 			expect(_.isArray(result)).toBe(true);
 			expect(result.length).toBe(2);
 			expect(result).toContain(jasmine.objectContaining({
-				'uid': 'urn:va:user:9E7A:10000000016'
+				'uid': 'urn:va:user:SITE:10000000016'
 			}));
 			expect(result).toContain(jasmine.objectContaining({
-				'uid': 'urn:va:user:9E7A:10000000271'
+				'uid': 'urn:va:user:SITE:10000000271'
 			}));
 		});
 	});
@@ -275,8 +275,8 @@ describe('osync-active-user-list-util unit test', function() {
 					return callback(null, [{
 						'id': '10000000016',
 						'lastSuccessfulLogin': '20161027134433',
-						'site': '9E7A',
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'site': 'SITE',
+						'uid': 'urn:va:user:SITE:10000000016'
 					}]);
 				}
 			};
@@ -291,7 +291,7 @@ describe('osync-active-user-list-util unit test', function() {
 					expect(_.isArray(result)).toBe(true);
 					expect(result.length).toBe(1);
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'uid': 'urn:va:user:SITE:10000000016'
 					}));
 					finished = true;
 				});
@@ -494,14 +494,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var activeUserScreenRetrieverMock = {
 				'getAllActiveUsers': function(log, osyncConfig, environment, callback) {
 					return callback(null, [{
-						'uid': 'urn:va:user:9E7A:10000000271',
+						'uid': 'urn:va:user:SITE:10000000271',
 						'id': '10000000271',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 					}, {
-						'uid': 'urn:va:user:9E7A:10000000016',
+						'uid': 'urn:va:user:SITE:10000000016',
 						'id': '10000000016',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 					}]);
 				}
@@ -517,10 +517,10 @@ describe('osync-active-user-list-util unit test', function() {
 					expect(_.isArray(result)).toBe(true);
 					expect(result.length).toBe(2);
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'uid': 'urn:va:user:SITE:10000000016'
 					}));
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000271'
+						'uid': 'urn:va:user:SITE:10000000271'
 					}));
 					expect(environment.activeUserScreenRetriever.getAllActiveUsers).toHaveBeenCalled();
 					finished = true;
@@ -602,8 +602,8 @@ describe('osync-active-user-list-util unit test', function() {
 					return callback(null, [{
 						'id': '10000000016',
 						'lastSuccessfulLogin': '20161027134433',
-						'site': '9E7A',
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'site': 'SITE',
+						'uid': 'urn:va:user:SITE:10000000016'
 					}]);
 				}
 			};
@@ -623,7 +623,7 @@ describe('osync-active-user-list-util unit test', function() {
 					expect(_.isArray(result)).toBe(true);
 					expect(result.length).toBe(1);
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'uid': 'urn:va:user:SITE:10000000016'
 					}));
 					expect(environment.activeUserRetriever.getAllActiveUsers).toHaveBeenCalled();
 					expect(environment.activeUserScreenRetriever.getAllActiveUsers).toHaveBeenCalled();
@@ -645,14 +645,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var activeUserScreenRetrieverMock = {
 				'getAllActiveUsers': function(log, osyncConfig, environment, callback) {
 					return callback(null, [{
-						'uid': 'urn:va:user:9E7A:10000000271',
+						'uid': 'urn:va:user:SITE:10000000271',
 						'id': '10000000271',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 					}, {
-						'uid': 'urn:va:user:9E7A:10000000016',
+						'uid': 'urn:va:user:SITE:10000000016',
 						'id': '10000000016',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 					}]);
 				}
@@ -668,10 +668,10 @@ describe('osync-active-user-list-util unit test', function() {
 					expect(_.isArray(result)).toBe(true);
 					expect(result.length).toBe(2);
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'uid': 'urn:va:user:SITE:10000000016'
 					}));
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000271'
+						'uid': 'urn:va:user:SITE:10000000271'
 					}));
 					expect(environment.activeUserRetriever.getAllActiveUsers).toHaveBeenCalled();
 					expect(environment.activeUserScreenRetriever.getAllActiveUsers).toHaveBeenCalled();
@@ -690,22 +690,22 @@ describe('osync-active-user-list-util unit test', function() {
 					return callback(null, [{
 						'id': '10000000016',
 						'lastSuccessfulLogin': '20161027134433',
-						'site': '9E7A',
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'site': 'SITE',
+						'uid': 'urn:va:user:SITE:10000000016'
 					}]);
 				}
 			};
 			var activeUserScreenRetrieverMock = {
 				'getAllActiveUsers': function(log, osyncConfig, environment, callback) {
 					return callback(null, [{
-						'uid': 'urn:va:user:9E7A:10000000271',
+						'uid': 'urn:va:user:SITE:10000000271',
 						'id': '10000000271',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 					}, {
-						'uid': 'urn:va:user:9E7A:10000000016',
+						'uid': 'urn:va:user:SITE:10000000016',
 						'id': '10000000016',
-						'site': '9E7A',
+						'site': 'SITE',
 						'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 					}]);
 				}
@@ -721,10 +721,10 @@ describe('osync-active-user-list-util unit test', function() {
 					expect(_.isArray(result)).toBe(true);
 					expect(result.length).toBe(2);
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000016'
+						'uid': 'urn:va:user:SITE:10000000016'
 					}));
 					expect(result).toContain(jasmine.objectContaining({
-						'uid': 'urn:va:user:9E7A:10000000271'
+						'uid': 'urn:va:user:SITE:10000000271'
 					}));
 					expect(environment.activeUserRetriever.getAllActiveUsers).toHaveBeenCalled();
 					expect(environment.activeUserScreenRetriever.getAllActiveUsers).toHaveBeenCalled();
@@ -752,14 +752,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var config = createConfig(true);
 			var environment = createEnvironment(null, null);
 			var users = [{
-				'uid': 'urn:va:user:9E7A:10000000271',
+				'uid': 'urn:va:user:SITE:10000000271',
 				'id': '10000000271',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 			}, {
-				'uid': 'urn:va:user:9E7A:10000000016',
+				'uid': 'urn:va:user:SITE:10000000016',
 				'id': '10000000016',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 			}];
 
@@ -771,14 +771,14 @@ describe('osync-active-user-list-util unit test', function() {
 				'type': 'patientlist',
 				'source': 'active-users',
 				'user': jasmine.objectContaining({
-					'uid': 'urn:va:user:9E7A:10000000016'
+					'uid': 'urn:va:user:SITE:10000000016'
 				})
 			}));
 			expect(resultJobs).toContain(jasmine.objectContaining({
 				'type': 'patientlist',
 				'source': 'active-users',
 				'user': jasmine.objectContaining({
-					'uid': 'urn:va:user:9E7A:10000000271'
+					'uid': 'urn:va:user:SITE:10000000271'
 				})
 			}));
 		});
@@ -786,14 +786,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var config = createConfig(true);
 			var environment = createEnvironment(null, null);
 			var users = [{
-				'uid': 'urn:va:user:9E7A:10000000271',
+				'uid': 'urn:va:user:SITE:10000000271',
 				'id': '10000000271',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 			}, {
-				'uid': 'urn:va:user:9E7A:10000000016',
+				'uid': 'urn:va:user:SITE:10000000016',
 				'id': '10000000016',
-				'site': '9E7A',
+				'site': 'SITE',
 				'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 			}];
 
@@ -810,7 +810,7 @@ describe('osync-active-user-list-util unit test', function() {
 				'type': 'patientlist',
 				'source': 'active-users',
 				'user': jasmine.objectContaining({
-					'uid': 'urn:va:user:9E7A:10000000016'
+					'uid': 'urn:va:user:SITE:10000000016'
 				}),
 				'referenceInfo': jasmine.objectContaining(referenceInfo)
 			}));
@@ -818,7 +818,7 @@ describe('osync-active-user-list-util unit test', function() {
 				'type': 'patientlist',
 				'source': 'active-users',
 				'user': jasmine.objectContaining({
-					'uid': 'urn:va:user:9E7A:10000000271'
+					'uid': 'urn:va:user:SITE:10000000271'
 				}),
 				'referenceInfo': jasmine.objectContaining(referenceInfo)
 			}));
@@ -885,14 +885,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
 			spyOn(osyncActiveUserListUtil, 'getActiveUsers').andCallFake(function(callback) {
 				return callback(null, [{
-					'uid': 'urn:va:user:9E7A:10000000271',
+					'uid': 'urn:va:user:SITE:10000000271',
 					'id': '10000000271',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 				}, {
-					'uid': 'urn:va:user:9E7A:10000000016',
+					'uid': 'urn:va:user:SITE:10000000016',
 					'id': '10000000016',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 				}]);
 			});
@@ -924,14 +924,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
 			spyOn(osyncActiveUserListUtil, 'getActiveUsers').andCallFake(function(callback) {
 				return callback(null, [{
-					'uid': 'urn:va:user:9E7A:10000000271',
+					'uid': 'urn:va:user:SITE:10000000271',
 					'id': '10000000271',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 				}, {
-					'uid': 'urn:va:user:9E7A:10000000016',
+					'uid': 'urn:va:user:SITE:10000000016',
 					'id': '10000000016',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 				}]);
 			});
@@ -969,14 +969,14 @@ describe('osync-active-user-list-util unit test', function() {
 			var osyncActiveUserListUtil = new OsyncActiveUserListUtil(log, config, environment);
 			spyOn(osyncActiveUserListUtil, 'getActiveUsers').andCallFake(function(callback) {
 				return callback(null, [{
-					'uid': 'urn:va:user:9E7A:10000000271',
+					'uid': 'urn:va:user:SITE:10000000271',
 					'id': '10000000271',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-31T16:00:28-04:00'
 				}, {
-					'uid': 'urn:va:user:9E7A:10000000016',
+					'uid': 'urn:va:user:SITE:10000000016',
 					'id': '10000000016',
-					'site': '9E7A',
+					'site': 'SITE',
 					'lastSuccessfulLogin': '2016-10-27T20:01:38-04:00'
 				}]);
 			});

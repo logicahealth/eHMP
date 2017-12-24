@@ -55,7 +55,7 @@ public class MviDemographics {
 			this.birthDate = birthDate;
 		}
 		else {
-			LOG.warn("Date String " + birthDate + " is NOT a valid Date format!");
+			LOG.warn("Date String " + Utils.avoidLogForging(birthDate) + " is NOT a valid Date format!");
 		}
 
 	}

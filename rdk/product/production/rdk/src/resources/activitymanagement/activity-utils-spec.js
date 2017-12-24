@@ -206,20 +206,20 @@ describe('Task Utilities', function() {
             expect(result).to.eql(null);
         });
 
-        it('handles userId 9E7A;10000000270 value for activities', function() {
-            var routes = parseAssignedTo('9E7A;10000000270');
+        it('handles userId SITE;10000000270 value for activities', function() {
+            var routes = parseAssignedTo('SITE;10000000270');
             var result = getFormattedRoutesString(routes, {
-                '9E7A;10000000270': 'KHAN,VIHAAN'
+                'SITE;10000000270': 'LAST,FIRST'
             }, false);
-            expect(result).to.eql('KHAN,VIHAAN');
+            expect(result).to.eql('LAST,FIRST');
         });
 
-        it('handles userId 9E7A;10000000270 value for tasks', function() {
-            var routes = parseAssignedTo('9E7A;10000000270');
+        it('handles userId SITE;10000000270 value for tasks', function() {
+            var routes = parseAssignedTo('SITE;10000000270');
             var result = getFormattedRoutesString(routes, {
-                '9E7A;10000000270': 'KHAN,VIHAAN'
+                'SITE;10000000270': 'LAST,FIRST'
             }, true);
-            expect(result).to.eql('KHAN,VIHAAN');
+            expect(result).to.eql('LAST,FIRST');
         });
 
         it('handles route [TR: Nurse Practitioner(24)/TF:Physical Therapy(81)/FC: Dallas (5499AA)] value for activities', function() {
@@ -277,11 +277,11 @@ describe('Task Utilities', function() {
             expect(nullIdentifiers).to.eql([]);
         });
 
-        //Generated from GET /vpr/jpid/9E7A;3
+        //Generated from GET /vpr/jpid/SITE;3
         var sampleIdentifiers = [
             '10108V420871',
-            '9E7A;3',
-            'C877;3',
+            'SITE;3',
+            'SITE;3',
             'DOD;0000000003',
             'HDR;10108V420871',
             'JPID;07201c12-a760-41e7-b07b-99cbc2cb4132',
@@ -310,6 +310,49 @@ describe('Task Utilities', function() {
 
             var resultIdentifiers = filterIdentifiers(testIdentifiers);
             expect(resultIdentifiers).to.eql(expectedIdentifiers);
+        });
+    });
+
+    describe('parseVersionFromDeploymentId', function() {
+        var parseVersionFromDeploymentId = utils.parseVersionFromDeploymentId;
+        it('correctly parses versions', function() {
+            var deploymentId = 'Test:Deployment:1.0.x.2323';
+            var expectedVersion = '1.0.x.2323';
+
+            var version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
+        });
+
+        it ('returns empty string when given empty version string', function() {
+            var deploymentId = '';
+            var expectedVersion = '';
+
+            var version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
+        });
+
+        it ('returns empty string when given invalid version type', function() {
+            var expectedVersion = '';
+
+            var deploymentId = null;
+            var version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
+
+            deploymentId = undefined;
+            version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
+
+            deploymentId = [];
+            version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
+        });
+
+        it ('returns empty string when unable to parse version string', function() {
+            var deploymentId = 'this is an invalid version string';
+            var expectedVersion = '';
+
+            var version = parseVersionFromDeploymentId(deploymentId);
+            expect(version).to.eql(expectedVersion);
         });
     });
 

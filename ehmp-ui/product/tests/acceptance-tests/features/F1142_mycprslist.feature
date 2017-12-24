@@ -6,7 +6,7 @@ Scenario: User has option to view My CPRS list
    Then the staff view screen displays My CPRS list in the sidebar tray
 
 @US17400_2 @DE7713
-Scenario:
+Scenario: Verify My CPRS list tray elements
     When the user opens the My CPRS list tray
     And the My CPRS list tray displays a close x button
     And the My CPRS list tray displays a help button

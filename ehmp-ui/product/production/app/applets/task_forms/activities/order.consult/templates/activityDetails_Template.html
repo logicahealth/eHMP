@@ -1,11 +1,11 @@
 <div class="row">
 	<div class="col-xs-3">
 		<p><strong>Requested by</strong><br />
-		{{#if consultOrder.executionUserName}}{{consultOrder.executionUserName}} on {{formatDate consultOrder.executionDateTime "MM/DD/YYYY"}}{{else}}N/A{{/if}}</p>
+		{{#if consultOrder.executionUserName}}{{highlightText consultOrder.executionUserName}} on {{formatDate consultOrder.executionDateTime "MM/DD/YYYY"}}{{else}}N/A{{/if}}</p>
 	</div>
 	<div class="col-xs-3">
 		<p><strong>Facility requested</strong><br />
-		{{#if consultOrder.facility.name}}{{consultOrder.facility.name}}{{else}}N/A{{/if}}</p>
+		{{#if consultOrder.facility.name}}{{highlightText consultOrder.facility.name}}{{else}}N/A{{/if}}</p>
 	</div>
 	<div class="col-xs-3">
 		<p><strong>Earliest date</strong><br />
@@ -19,7 +19,7 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<p>Condition related to: {{#if consultOrderCondition}}{{consultOrderCondition}}{{else}}N/A{{/if}}</p>
+		<p>Condition related to: {{#if consultOrderCondition}}{{highlightText consultOrderCondition}}{{else}}N/A{{/if}}</p>
 	</div>
 </div>
 <div class="row" id="currentAppointmentRegion"></div>

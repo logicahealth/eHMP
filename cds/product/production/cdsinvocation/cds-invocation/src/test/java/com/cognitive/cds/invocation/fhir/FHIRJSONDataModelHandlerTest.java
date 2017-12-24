@@ -36,8 +36,9 @@ import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -104,7 +105,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = null;
+        Map<String, Object> parameter = null;
         Object inputDataModel = null;
         boolean validate = true;
         queries.add("valid");
@@ -132,7 +133,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = null;
+        Map<String, Object> parameter = null;
         Object inputDataModel = null;
         boolean validate = true;
         queries.add("invalid");
@@ -161,7 +162,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = new Properties();
+        Map<String, Object> parameter = new HashMap<>();
 
         try {
             parameter.put("Valid", getValidResource());
@@ -195,11 +196,11 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = new Properties();
+        Map<String, Object> parameter = new HashMap<>();
 
         try {
             String jsonResource = FhirUtils.newJsonParser().encodeResourceToString(getValidResource());
-            parameter.setProperty("Valid", jsonResource);
+            parameter.put("Valid", jsonResource);
         } catch (IOException e1) {
             fail("Exception geting a valid resource: " + e1.getMessage());
         }
@@ -230,7 +231,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = new Properties();
+        Map<String, Object> parameter = new HashMap<>();
 
         try {
             parameter.put("Valid", getInvalidResource());
@@ -265,7 +266,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = null;
+        Map<String, Object> parameter = null;
         Object inputDataModel = null;
         try {
             inputDataModel = getValidBundle();
@@ -299,7 +300,7 @@ public class FHIRJSONDataModelHandlerTest {
         InvocationMode mode = InvocationMode.Normal;
         List<String> queries = new ArrayList<>(1);
         Context ctx = getTestContext();
-        Properties parameter = null;
+        Map<String, Object> parameter = null;
         Object inputDataModel = null;
         try {
             inputDataModel = getInvalidBundle();
@@ -341,11 +342,11 @@ public class FHIRJSONDataModelHandlerTest {
             fail("Exception loading a valid resource bundle, valid combo test: " + e1.getMessage());
         }
         
-        Properties parameter = new Properties();
+        Map<String, Object> parameter = new HashMap<>();
 
         try {
             String jsonResource = FhirUtils.newJsonParser().encodeResourceToString(getValidResource());
-            parameter.setProperty("Valid", jsonResource);
+            parameter.put("Valid", jsonResource);
         } catch (IOException e1) {
             fail("Exception geting a paramter valid resource: " + e1.getMessage());
         }
@@ -384,11 +385,11 @@ public class FHIRJSONDataModelHandlerTest {
             fail("Exception loading a invalid resource bundle, invalid combo test: " + e1.getMessage());
         }
         
-        Properties parameter = new Properties();
+        Map<String, Object> parameter = new HashMap<>();
 
         try {
             String jsonResource = FhirUtils.newJsonParser().encodeResourceToString(getValidResource());
-            parameter.setProperty("Valid", jsonResource);
+            parameter.put("Valid", jsonResource);
         } catch (IOException e1) {
             fail("Exception geting a paramter valid resource: " + e1.getMessage());
         }

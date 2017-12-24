@@ -6,10 +6,20 @@ define([
         validateModel: function(model){
             model.errorModel.clear();
             this.validateMeasuredDateAndTime(model, model.get('onset-date'));
+            
+            if (model.get('validateSearchTerm')) {
+                this.validateProblemSearchTerm(model);
+            }
 
-            if (!_.isEmpty(model.errorModel.toJSON())) {
+            if (!model.errorModel.isEmpty()) {
                 var errorMessage = 'Validation errors. Please fix.';
                 return errorMessage;
+            }
+        },
+        validateProblemSearchTerm: function(model){
+            var problemTerm = model.get('problemTerm').trim();
+            if (!_.isString(problemTerm) || problemTerm.length < 3) {
+                model.errorModel.set('problemTerm', 'Search string must contain at least 3 characters');
             }
         },
         validateMeasuredDateAndTime: function(model, dateValue){

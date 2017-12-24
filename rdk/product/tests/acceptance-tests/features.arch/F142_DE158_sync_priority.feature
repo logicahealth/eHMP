@@ -4,9 +4,9 @@ Feature: F142 VX Cache Management and Expiration/Sync Stabilization
 
 @f142_1_parioitized @US2001 @US2008 @DE158
 Scenario: Client can request sync prioritized sites in RDK
-    Given the client requests that the patient with pid "9E7A;100716" be cleared through the RDK API
+    Given the client requests that the patient with pid "SITE;100716" be cleared through the RDK API
     And a successful response is returned
-    When the client requests load parioitized for the patient "9E7A;100716" base on priority site list in RDK format
+    When the client requests load parioitized for the patient "SITE;100716" base on priority site list in RDK format
       | prioritized_site_list |
       | Kodak                 |
       | Panorama        |
@@ -27,9 +27,9 @@ Scenario: Client can request sync prioritized sites in RDK
 
 @f142_3_parioitized @US2001 @US2008 @DE158 @future
 Scenario: Client can request sync prioritized sites in RDK
-  Given the client requests that the patient with pid "9E7A;8" be cleared through the RDK API
+  Given the client requests that the patient with pid "SITE;8" be cleared through the RDK API
     And a successful response is returned
-    When the client requests load parioitized for the patient "9E7A;8" base on priority site list in RDK format
+    When the client requests load parioitized for the patient "SITE;8" base on priority site list in RDK format
       | prioritized_site_list |
       | DOD                 |
 

@@ -37,13 +37,13 @@ define([
             this.listenTo(ADK.Messaging, 'app:logout', this.reset);
         },
         updateAnnouncements: function() {
-            if (_.isEmpty(this.userModel.get('uid'))) {
-                this.reset();
-                ADK.Messaging.getChannel('system_communication').trigger('unregister:check');
+            if (ADK.UserService.STATUS.LOGGEDIN === this.userModel.get('status')) {
+                ADK.Messaging.getChannel('system_communication').trigger('register:check');
+                this.fetch.try(this);
                 return;
             }
-            ADK.Messaging.getChannel('system_communication').trigger('register:check');
-            this.fetch.try(this);
+            this.reset();
+            ADK.Messaging.getChannel('system_communication').trigger('unregister:check');
         },
         fetchOptions: function() {
             return {

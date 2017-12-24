@@ -9,7 +9,8 @@ require('../../../../env-setup');
 
 var _ = require('underscore');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var xformer = require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-med-xformer');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
@@ -67,13 +68,13 @@ var originalVaMedRecord = {
         'fillCost': 72,
         'fillsAllowed': 3,
         'fillsRemaining': 3,
-        'orderUid': 'urn:va:order:9E7A:3:12727',
+        'orderUid': 'urn:va:order:SITE:3:12727',
         'ordered': 200203051344,
         'pharmacistName': 'TDPHARMACIST,ONE',
-        'pharmacistUid': 'urn:va:user:9E7A:10000000019',
+        'pharmacistUid': 'urn:va:user:SITE:10000000019',
         'prescriptionId': 800013,
         'providerName': 'VEHU,ONE',
-        'providerUid': 'urn:va:user:9E7A:20001',
+        'providerUid': 'urn:va:user:SITE:20001',
         'quantityOrdered': 90,
         'vaRouting': 'W',
         'expiration': 106 // Added in for testing purposes.
@@ -81,7 +82,7 @@ var originalVaMedRecord = {
     'overallStart': 20020305,
     'overallStop': 20030306,
     'patientInstruction': '',
-    'pid': '9E7A;3',
+    'pid': 'SITE;3',
     'productFormName': 'TAB',
     'products': [{
         'drugClassCode': 'urn:vadc:CV350',
@@ -110,7 +111,7 @@ var originalVaMedRecord = {
     'stampTime': 20030306000000,
     'stopped': 20030306,
     'type': 'Prescription',
-    'uid': 'urn:va:med:9E7A:3:12727',
+    'uid': 'urn:va:med:SITE:3:12727',
     'vaStatus': 'EXPIRED',
     'vaType': 'O'
 };

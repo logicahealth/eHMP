@@ -19,7 +19,11 @@ default[:vx_solr][:ehmp][:solrconfig] = {
     :size => "512",
     :initialsize => "512",
     :autowarmcount => "0"
-  }
+  },
+  :softCommitMaxTime => nil,
+  :commitMaxTime => 2000,
+  :commitOpenSearcher => true,
+  :commitMaxDocs => nil
 }
 
 

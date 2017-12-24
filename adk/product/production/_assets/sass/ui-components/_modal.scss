@@ -91,7 +91,7 @@
     .modal-footer {
         padding: 10px 15px;
         border-radius: 0 0 6px 6px;
-        .btn {
+        .btn:not(.prevent-default-styling) {
             &.btn-primary,
             &.btn-danger,
             &.btn-default {
@@ -124,11 +124,7 @@ body.overlay-open {
     #top-region,
     #center-region,
     #bottom-region {
-        -webkit-filter: blur(2px);
-        -moz-filter: blur(2px);
-        -o-filter: blur(2px);
-        -ms-filter: blur(2px);
-        filter: blur(2px);
+        opacity: .5;
     }
 }
 #modal-region {

@@ -208,12 +208,12 @@ Worker.prototype._connect = function() {
     self.client = new BeanstalkClient(self.logger, self.beanstalkJobTypeConfig.host, self.beanstalkJobTypeConfig.port);
     self.client.connect(function(error) {
         if (error) {
-            self.logger.warn('worker._connect(%s) Unable to connect to beanstalk. ERROR: %j', self.getTubeName(), error);
+            self.logger.error('worker._connect(%s) Unable to connect to beanstalk. ERROR: %j', self.getTubeName(), error);
             return setTimeout(_connect, timeout);
         }
 
         self.client.on('error', function(error) {
-            self.logger.warn('worker._connect(%s) error with connection. ERROR: %j', self.getTubeName(), error);
+            self.logger.error('worker._connect(%s) error with connection. ERROR: %j', self.getTubeName(), error);
             self._clearClient();
             setTimeout(_connect, timeout);
         });
@@ -228,7 +228,7 @@ Worker.prototype._connect = function() {
 
         self.processQueue(function(error) {
             if (error) {
-                self.logger.warn('worker._connect(%s) Unable to connect to beanstalk. ERROR: %j', self.getTubeName(), error);
+                self.logger.error('worker._connect(%s) Unable to connect to beanstalk. ERROR: %j', self.getTubeName(), error);
                 self._clearClient();
                 setTimeout(_connect, timeout);
             }

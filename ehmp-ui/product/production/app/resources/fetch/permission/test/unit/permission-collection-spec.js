@@ -1,6 +1,6 @@
 define([
     'underscore',
-    'app/resources/fetch/labs/permission/permissionCollection'
+    'app/resources/fetch/permission/permissionCollection'
 ], function(_, Collection) {
     'use strict';
 

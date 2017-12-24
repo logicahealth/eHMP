@@ -13,11 +13,11 @@ var HttpHeaderUtils = require(global.VX_UTILS + 'http-header-utils');
 /** Example Input
 
 {
-    "sites": ["9E7A", "C877"]
+    "sites": ["SITE", "SITE"]
 }
 or
 {
-    "sites": "9E7A,C877"
+    "sites": "SITE,SITE"
 }
 
 **/
@@ -44,7 +44,7 @@ function doLoad(log, environment, req, res) {
         return !(config.vistaSites[site]);
     });
     if (invalidSites.length > 0) {
-        return res.status(400).send(format('Unknown VistA site %s', invalidSites.join()));
+        return res.status(400).send('Unknown VistA site provided in parameters');
     }
 
     var childPublisher = environment.publisherRouter.childInstance(childLog);
@@ -72,7 +72,7 @@ function doLoad(log, environment, req, res) {
 
 function initialOPDSync(log, config, environment, handlerCallback) {
     log.debug('operational-sync-endpoint-handler.initialOPDSync(): Starting intial operational data sync');
-    var allVistaSites = _.keys(config.vistaSites); //['9E7A', 'C877'];
+    var allVistaSites = _.keys(config.vistaSites); //['SITE', 'SITE'];
     var sitesToSubscribeOPD = [];
     async.each(allVistaSites, function(siteId, callback) {
         log.debug('operational-sync-endpoint-handler.initialOPDSync(): Checking operational sync status for site ' + siteId + ' in JDS...');

@@ -16,8 +16,6 @@ define([
      *                                  * cancelButton: Text to use for the 'Cancel' button (default: 'Cancel')
      *                                  * confirmButtonClasses: Extra classes to for the 'Confirm' button (default: 'btn-default btn-sm')
      *                                  * cancelButtonClasses: Text to use for the 'Cancel' button (default: btn-primary btn-sm')
-     *                                  * confirmTitle: Text to user for the 'Confirm' button title
-     *                                  * cancelTitle: Text to use for the 'Cancel' button title
      *                                  * onConfirm: Function called when user presses the 'confirm' button (default: no-op)
      *                                  * onCancel: Function called when user presses the 'cancel' button (default: no-op)
      * @return {ADK.UI.Alert}         [description]
@@ -30,8 +28,6 @@ define([
         var cancelButton = options.cancelButton || 'No';
         var confirmButtonClasses = options.confirmButtonClasses || 'btn-primary btn-sm';
         var cancelButtonClasses = options.cancelButtonClasses || 'btn-default btn-sm';
-        var confirmTitle = options.confirmTitle || ('Press enter to ' + confirmButton.toLowerCase());
-        var cancelTitle = options.cancelTitle || ('Press enter to ' + cancelButton.toLowerCase());
         var onConfirm = options.onConfirm;
         var onCancel = options.onCancel;
 
@@ -47,8 +43,8 @@ define([
 
         this.FooterView = Marionette.ItemView.extend({
             template: Handlebars.compile([
-                '{{ui-button "' + cancelButton + '" classes="cancel ' + cancelButtonClasses + '" title="' + cancelTitle + '"}}',
-                '{{ui-button "' + confirmButton + '" classes="confirm ' + confirmButtonClasses + '" title="' + confirmTitle + '"}}'
+                '{{ui-button "' + cancelButton + '" classes="cancel ' + cancelButtonClasses + '"}}',
+                '{{ui-button "' + confirmButton + '" classes="confirm ' + confirmButtonClasses + '"}}'
             ].join('\n')),
             events: {
                 'click .confirm': function() {

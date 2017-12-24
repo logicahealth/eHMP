@@ -16,7 +16,6 @@ define([
             this.instanceId = options.instanceId;
         },
         template: apptsFilterTemplate,
-        className: 'toolbar-item',
         events: {
             'change .appts-type-menu': 'filterBySite',
         },

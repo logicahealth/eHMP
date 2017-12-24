@@ -1,18 +1,91 @@
 'use strict';
 var _ = require('lodash');
+var nock = require('nock');
 var httpMocks = require('node-mocks-http');
 var logger = sinon.stub(require('bunyan').createLogger({
-    name: 'pjdsUserData'
+    name: 'pjds-user-data-spec'
 }));
 var pjdsUserData = require('./pjds-user-data');
-var pjdsStore = require('../../../subsystems/pjds/pjds-store');
-var getStub;
-var patchStub;
+
+var trustUser = {
+    uid: 'CDS',
+    name: 'CDS',
+    permissionSet: {
+        additionalPermissions: ['add-fridge-sticker'],
+        val: ['read-access']
+    },
+    status: 'active',
+    systemDesignator: 'external'
+};
+var fakeUser = {
+    uid: 'FAKER',
+    name: 'FAKER',
+    permissionSet: {
+        val: ['read-access'],
+        additionalPermissions: ['knifes-edge']
+    },
+    breakglass: true
+};
+var subjectUser = {
+    uid: 'urn:va:user:B14H:0007',
+    permissionSet: {
+        additionalPermissions: [
+            'judo-chop',
+            'can-yodel'
+        ],
+        modifiedBy: 'urn:va:user:B14H:0001',
+        modifiedOn: '2017-03-14T13:59:26Z',
+        val: [
+            'read-access',
+            'sumo-wrestler',
+            'potty-trained'
+        ]
+    },
+    status: 'active'
+};
+var permissionSets = {
+    items: [{
+        'uid': 'sumo-wrestler',
+        'label': 'Sumo Wrestler',
+        'permissions': ['not-to-be-trifled-with'],
+        'status': 'active'
+    }, {
+        'uid': 'read-access',
+        'label': 'Read Access',
+        'permissions': ['i-can-has-read'],
+        'status': 'active'
+    }]
+};
+var permissions = {
+    items: [{
+        'uid': 'not-to-be-trifled-with',
+        'label': 'Seriously, don\'t trifle',
+        'status': 'active'
+    }, {
+        'uid': 'i-can-has-read',
+        'label': 'Passed 1st grade after 3rd try',
+        'status': 'active'
+    }, {
+        'uid': 'add-fridge-sticker',
+        'label': 'Celebrate Potty Time with Stickers!',
+        'status': 'active'
+    }, {
+        'uid': 'judo-chop',
+        'label': 'Judo CHOP',
+        'description': 'Downward chop to the upward facing air',
+        'status': 'active'
+    }]
+};
+var appConfig = {
+    'generalPurposeJdsServer': {
+        'baseUrl': 'http://IP             ',
+        'urlLengthLimit': 120
+    }
+};
 
 describe('pJDS eHMP User Data module', function() {
     var req;
     var res;
-    var cb;
 
     beforeEach(function(done) {
         req = httpMocks.createRequest({
@@ -20,79 +93,92 @@ describe('pJDS eHMP User Data module', function() {
             url: '/ehmpusers/{uid}'
         });
         req.logger = logger;
+        _.set(req, 'app.config', appConfig);
 
-        cb = sinon.spy();
-        getStub = sinon.stub(pjdsStore, 'get');
         res = httpMocks.createResponse();
 
+        nock('http://IP             ')
+            .get('/permset/?filter=eq(%22status%22%2C%22active%22)')
+            .reply(200, permissionSets);
+        nock('http://IP             ')
+            .get('/permission/?filter=eq(%22status%22%2C%22active%22)')
+            .reply(200, permissions);
         done();
     });
 
     afterEach(function(done) {
-        cb.reset();
-        getStub.reset();
+        nock.cleanAll();
         done();
     });
 
-    it('just makes the callback early with an error and no data if the uid is blank', function() {
+    it('makes the callback early with an error and no data if the uid is blank', function(done) {
         var data = {
             duz: {}
         };
         var params = {
-            site: '9E7A',
+            site: 'SITE',
             data: data
         };
+
+        var cb = function(err, data) {
+            expect(err.code, 'The error code should match the given error').to.match(/202.412.1001/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
         pjdsUserData.getEhmpUserData(req, res, cb, params);
-        expect(cb.called).to.be.true();
-        expect(cb.getCall(0).args[0].code).to.match(/202.412.1001/);
-        expect(cb.getCall(0).args[1]).to.be.null();
     });
-    it('just makes the callback with error when pjds returns an error', function() {
+
+    it('makes the callback with error when pjds returns an error', function(done) {
         var data = {
-            uid: 'urn:va:user:9E7A:2342565'
+            uid: 'urn:va:user:B14H:0007'
         };
         var params = {
-            site: '9E7A',
+            site: 'B14H',
             data: data
         };
-        getStub.callsArgWith(3, new Error('this is a bogus one'), null);
+
+        var cb = function (err, data) {
+            expect(err.code, 'The error code should match the given error').to.match(/202.500.1001/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
+        nock('http://IP             ')
+            .get('/ehmpusers/urn:va:user:B14H:0007')
+            .reply(404, new Error('Address Unknown'));
+
         pjdsUserData.getEhmpUserData(req, res, cb, params);
-        expect(cb.called).to.be.true();
-        expect(cb.getCall(0).args[0].code).to.match(/202.500.1001/);
-        expect(cb.getCall(0).args[1]).to.be.null();
     });
-    it('just makes the callback with error when pjds returns an error', function() {
+
+    it('makes the callback when pJDS returns data as expected', function(done) {
         var data = {
-            uid: 'urn:va:user:9E7A:2342565'
+            uid: 'urn:va:user:B14H:0007'
         };
         var params = {
-            site: '9E7A',
+            site: 'B14H',
             data: data
         };
-        var response = {
-            data: {
-                permissionSet: {
-                    val: ['read-access'],
-                    additionalPermissions: ['knifes-edge']
-                },
-                unsuccessfulLoginAttemptCount: 2
-            }
+
+        var cb = function (err, data) {
+            expect(err, 'The error should be null').to.be.null();
+            expect(data, 'The response should have the following keys').to.be.have.keys(['eHMPUIContext', 'preferences', 'permissions', 'permissionSets', 'uid', 'unsuccessfulLoginAttemptCount', 'nationalAccess']);
+            expect(_.get(data, 'unsuccessfulLoginAttemptCount'), 'The login count should be reset to 0').to.be(0);
+            expect(_.get(data, 'permissionSets'), 'The response should contain the following permission sets').to.be.a.permutationOf(['read-access', 'sumo-wrestler']);
+            done();
         };
-        getStub.callsArgWith(3, null, response);
+
+        nock('http://IP             ')
+            .get('/ehmpusers/urn:va:user:B14H:0007')
+            .reply(200, subjectUser);
+
         pjdsUserData.getEhmpUserData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.be.null();
-        expect(firstCb.args[1]).to.be.have.keys(['eHMPUIContext', 'preferences', 'permissions', 'permissionSets', 'uid', 'unsuccessfulLoginAttemptCount']);
-        expect(firstCb.args[1].unsuccessfulLoginAttemptCount).to.be(2);
-        expect(firstCb.args[1].permissionSets).to.equal(response.data.permissionSet.val);
     });
 });
 
 describe('pJDS trust system data call', function() {
     var req;
     var res;
-    var cb;
 
     beforeEach(function(done) {
         req = httpMocks.createRequest({
@@ -100,244 +186,175 @@ describe('pJDS trust system data call', function() {
             url: '/trustsys/{uid}'
         });
         req.logger = logger;
+        _.set(req, 'app.config', appConfig);
 
-        cb = sinon.spy();
-        getStub = sinon.stub(pjdsStore, 'get');
+        nock('http://IP             ')
+            .get('/permset/?filter=ilike(%22status%22%2C%22active%25%22)')
+            .reply(200, permissionSets);
+        nock('http://IP             ')
+            .get('/permission/?filter=ilike(%22status%22%2C%22active%25%22)')
+            .reply(200, permissions);
+
         res = httpMocks.createResponse();
 
         done();
     });
 
     afterEach(function(done) {
-        cb.reset();
-        getStub.reset();
+        nock.cleanAll();
         done();
     });
 
-    it('just makes the callback early with an error and no data if the name is blank', function() {
+    it('makes the callback early with an error and no data if the name is blank', function(done) {
         var params = {};
+        var cb = function (err, data)  {
+            expect(err.code, 'The error code should match the given error').to.match(/202.412.1001/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
         pjdsUserData.getTrustedSystemData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.match(/202.412.1001/);
-        expect(firstCb.args[1]).to.be.null();
     });
-    it('just makes the callback with error when pjds returns an error', function() {
+
+    it('makes the callback with error when pjds returns an error', function(done) {
+        var params = {
+            name: 'NBC'
+        };
+
+        var cb = function (err, data) {
+            expect(err.code, 'The error code should match the given error').to.match(/202.401.1003/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
+        nock('http://IP             ')
+            .get('/trustsys/NBC')
+            .reply(404, new Error('Nope. Not gonna do it!'));
+
+        pjdsUserData.getTrustedSystemData(req, res, cb, params);
+    });
+
+    it('makes the callback with no data when pjds returns no error and a name that doesn\'t match the requested name', function(done) {
         var params = {
             name: 'CDS'
         };
-        getStub.callsArgWith(3, new Error('this is a bogus one'), null);
+        var cb = function (err, data) {
+            expect(err.error).to.match(/response name did not match the request name/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
+        nock('http://IP             ')
+            .get('/trustsys/CDS')
+            .reply(200, fakeUser);
+
         pjdsUserData.getTrustedSystemData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.match(/202.401.1003/);
-        expect(firstCb.args[1]).to.be.null();
     });
-    it('just makes the callback with data when pjds returns no error and a name that doesn\'t match the requested name', function() {
+
+    it('makes the callback with data when pjds returns no error', function(done) {
         var params = {
             name: 'CDS'
         };
-        var response = {
-            data: {
-                name: 'FAKER',
-                permissionSets: {
-                    val: ['read-access'],
-                    additionalPermissions: ['knifes-edge']
-                },
-                breakglass: true,
-                corsTabs: true,
-                rptTabs: true,
-                dgSensitiveAccess: true
-            }
+        var cb = function (err, data) {
+            expect(err, 'The error should be null').to.be.null();
+            expect(_.keys(data), 'Response should have keys').to.be.permutationOf(['uid','name','permissionSet','status','systemDesignator','createdBy','createdTime','lastSuccessfulLogin','lastUnsuccessfulLogin','unsuccessfulLoginAttemptCount','permissions','breakglass','consumerType','permissionSets']);
+            done();
         };
-        getStub.callsArgWith(3, null, response);
+
+        nock('http://IP             ')
+            .get('/trustsys/CDS')
+            .reply(200, trustUser);
+
         pjdsUserData.getTrustedSystemData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].error).to.equal('response name did not match the request name');
-        expect(firstCb.args[1]).to.be.null();
-    });
-    it('just makes the callback with data when pjds returns no error', function() {
-        var params = {
-            name: 'CDS'
-        };
-        var response = {
-            data: {
-                name: 'CDS',
-                permissionSets: {
-                    val: ['read-access'],
-                    additionalPermissions: ['knifes-edge']
-                },
-                breakglass: true,
-                corsTabs: true,
-                rptTabs: true,
-                dgSensitiveAccess: true
-            }
-        };
-        getStub.callsArgWith(3, null, response);
-        pjdsUserData.getTrustedSystemData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.be.null();
-        expect(firstCb.args[1]).to.have.keys(['name', 'consumerType', 'permissions', 'permissionSets', 'breakglass']);
     });
 });
 
-describe('pJDS permissions data call', function() {
+describe('pJDS store login attempt call', function() {
     var req;
     var res;
-    var cb;
 
     beforeEach(function(done) {
         req = httpMocks.createRequest({
             method: 'GET',
-            url: '/permset/{uid}'
+            url: '/ehmpusers/{uid}'
         });
         req.logger = logger;
+        _.set(req, 'app.config', appConfig);
 
-        cb = sinon.spy();
-        getStub = sinon.stub(pjdsStore, 'get');
-        patchStub = sinon.stub(pjdsStore, 'patch');
         res = httpMocks.createResponse();
 
         done();
     });
 
     afterEach(function(done) {
-        cb.reset();
-        getStub.reset();
-        patchStub.reset();
+        nock.cleanAll();
         done();
     });
 
-    it('just makes the callback early with data if the permissionSet is blank', function() {
-        var params = {
-            data: {
-                permissionSets: [],
-                permission: ['mighty-mouse']
-            }
-        };
-        pjdsUserData.getPermissionsData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.be.null();
-        expect(firstCb.args[1]).not.to.be.empty();
-    });
-    it('just makes the callback with error when pjds returns an error', function() {
-        var params = {
-            data: {
-                permissionSets: ['tweedle-dee']
-            }
-        };
-        getStub.callsArgWith(3, new Error('this is a bogus one'), null);
-        pjdsUserData.getPermissionsData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.match(/202.401.1002/);
-        expect(firstCb.args[1]).to.be.null();
-    });
-    it('just makes the callback with data when pjds returns no error', function() {
-        var params = {
-            data: {
-                permissionSets: ['fluffy-dragon']
-            }
-        };
-        var response = {
-            data: {
-                permissions: ['knifes-edge']
-            }
-        };
-        getStub.callsArgWith(3, null, response);
-        pjdsUserData.getPermissionsData(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.be.null();
-        expect(firstCb.args[1]).to.have.keys(['permissions', 'permissionSets']);
-    });
-});
-
-describe('pJDS login attempt call', function() {
-    var req;
-    var res;
-    var cb;
-
-    beforeEach(function(done) {
-        req = httpMocks.createRequest({
-            method: 'GET',
-            url: '/permset/{uid}'
-        });
-        req.logger = logger;
-
-        cb = sinon.spy();
-        patchStub = sinon.stub(pjdsStore, 'patch');
-        res = httpMocks.createResponse();
-
-        done();
-    });
-
-    afterEach(function(done) {
-        cb.reset();
-        patchStub.reset();
-        done();
-    });
-
-    it('just makes the callback early with data if the uid is blank', function() {
+    it('makes the callback early with data if the uid is blank', function(done) {
         var params = {
             data: {}
         };
+        var cb =function (err, data) {
+            expect(err.code, 'The error code should match the given error').to.be.match(/202.412.1001/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
+
         pjdsUserData.setLoginAttempt(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.be.match(/202.412.1001/);
-        expect(firstCb.args[1]).to.be.null();
     });
-    it('just makes the callback with error when pjds returns an error', function() {
+
+    it('makes the callback with error when pjds returns an error', function(done) {
+        var cb = function (err, data) {
+            expect(err.code, 'The error code should match the given error').to.match(/202.500.1001/);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
         var params = {};
         _.set(params, 'data', {});
-        _.set(req, 'session.user.uid', 'urn:va:user:9E7A:153465246');
-        patchStub.callsArgWith(3, new Error('this is a bogus one'), null);
+        _.set(req, 'session.user.uid', 'urn:va:user:B14H:0007');
+
+        nock('http://IP             ')
+            .patch('/ehmpusers/urn:va:user:B14H:0007')
+            .reply(404, new Error('This is bogus'));
+
         pjdsUserData.setLoginAttempt(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(patchStub.calledBefore(firstCb)).to.be.true();
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.match(/202.500.1001/);
-        expect(firstCb.args[1]).to.be.null();
     });
-    it('sets default data properly for pjds patch if error during login', function() {
+
+    it('sets default data properly for pjds patch if error during login', function(done) {
         var message = 'login wasn\'t successful';
+        var cb = function (err, data) {
+            expect(err, 'The error message should match the given message').to.match(message);
+            expect(data, 'No data should be send on the callback with error').to.be.null();
+            done();
+        };
         var params = {};
         _.set(params, 'data', {});
         _.set(params, 'error', new Error(message));
-        _.set(req, 'session.user.uid', 'urn:va:user:9E7A:153465246');
-        var response = {
-            status: 200
-        };
-        patchStub.callsArgWith(3, null, response);
+        _.set(req, 'session.user.uid', 'urn:va:user:B14H:0007');
+
+        nock('http://IP             ')
+            .patch('/ehmpusers/urn:va:user:B14H:0007')
+            .reply(200, subjectUser);
+
         pjdsUserData.setLoginAttempt(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(patchStub.getCall(0).args[2]).to.be.a(Object);
-        expect(patchStub.getCall(0).args[2].data).to.have.keys(['lastUnsuccessfulLogin', 'unsuccessfulLoginAttemptCount', 'permissionSet']);
-        expect(patchStub.calledBefore(firstCb)).to.be.true();
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.match(message);
-        expect(firstCb.args[1]).to.be.null();
     });
-    it('just makes the callback with data when pjds returns no error', function() {
-        var params = {};
-        _.set(params, 'data.permissionSets', ['trigonometry-buff']);
-        _.set(params, 'data.permissions', ['write-mumps-like-pro']);
-        _.set(req, 'session.user.uid', 'urn:va:user:9E7A:153465246');
-        var response = {
-            status: 200
+
+    it('makes the callback with data when pjds returns no error', function(done) {
+        var cb = function (err, data) {
+            expect(err, 'The error should be null').to.be.null();
+            expect(data).to.have.keys(['permissions', 'permissionSets']);
+            done();
         };
-        patchStub.callsArgWith(3, null, response);
+        var params = {};
+        _.set(params, 'data.permissionSets', ['sumo-wrestler']);
+        _.set(params, 'data.permissions', ['judo-chop']);
+        _.set(req, 'session.user.uid', 'urn:va:user:B14H:0007');
+
+        nock('http://IP             ')
+            .patch('/ehmpusers/urn:va:user:B14H:0007')
+            .reply(200, subjectUser);
+
         pjdsUserData.setLoginAttempt(req, res, cb, params);
-        var firstCb = cb.getCall(0);
-        expect(patchStub.getCall(0).args[2]).to.be.a(Object);
-        expect(patchStub.getCall(0).args[2].data).to.have.keys(['lastSuccessfulLogin', 'unsuccessfulLoginAttemptCount']);
-        expect(patchStub.calledBefore(firstCb)).to.be.true();
-        expect(cb.called).to.be.true();
-        expect(firstCb.args[0]).to.be.null();
-        expect(firstCb.args[1]).to.have.keys(['permissions', 'permissionSets']);
     });
 });

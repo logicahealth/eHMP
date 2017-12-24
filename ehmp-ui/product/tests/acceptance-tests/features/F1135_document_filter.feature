@@ -117,12 +117,8 @@ Scenario: UDW with summary document - add 2 filters, should display pills
   Given Summary View is active
   And the user clicks the Workspace Manager
   And the user deletes all user defined workspaces
-  And the user creates a user defined workspace named "documentsfilter2"
-  And the user customizes the "documentsfilter2" workspace
-  And the user adds an summary "documents" applet to the user defined workspace
-  And the user selects done to complete customizing the user defined workspace
-  And the "DOCUMENTSFILTER2" screen is active
-  And the active screen displays 1 applets
+  Given the user creates and views a udw with a summary documents applet
+
   And the user has selected All within the global date picker
   And the Documents Applet grid is loaded
   And the user opens the text search filter in Documents Applet

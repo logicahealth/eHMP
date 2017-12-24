@@ -1,36 +1,29 @@
 'use strict';
-var rdk = require('../../core/rdk');
-var pjds = rdk.utils.pjdsStore;
+
 var _ = require('lodash');
+var rdk = require('../../core/rdk');
+var RdkError = rdk.utils.RdkError;
+var pjdsUtil = rdk.utils.pjdsUtil;
+
+function getUserPermissionSets(req, res) {
+    var callback = function (err, user) {
+        if (err) {
+            var error;
+            if (err instanceof RdkError) {
+                error = err;
+            } else {
+                error = new RdkError({
+                    logger: req.logger,
+                    code: '200.500.1020',
+                    error: err
+                });
+            }
+            return res.status(error.status).rdkSend(error);
+        }
+        res.status(rdk.httpstatus.ok).rdkSend(_.get(user, 'permissionSet'));
+    };
+    //the following function defaults to an ehmpuser store and grabs the user's uid from the request
+    pjdsUtil.getUserWithFilteredPermissions(req, res, {}, callback);
+}
 
 module.exports = getUserPermissionSets;
-
-function getUserPermissionSets(req, res, next) {
-    req.logger.debug('getPermissionSets resource called');
-    var uid = req.param('uid');
-    if (_.isUndefined(uid)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid');
-    }
-
-    var pjdsOptions = {
-        store: 'ehmpusers',
-        key: uid
-    };
-
-    pjds.get(req, res, pjdsOptions, function(error, response) {
-        if (error) {
-            res.status(response.statusCode || rdk.httpstatus.bad_request).rdkSend(error.message);
-        } else {
-            var data = response.data;
-            var resultObj = {};
-            var permissionSetValues = _.defaults(data.permissionSet, {
-                modifiedBy: null,
-                modifiedOn: null,
-                val: []
-            });
-            resultObj.data = permissionSetValues;
-            resultObj.statusCode = _.get(response, 'statusCode');
-            res.status(rdk.httpstatus.ok).rdkSend(resultObj);
-        }
-    });
-}

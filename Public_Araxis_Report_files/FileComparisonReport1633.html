@@ -1,0 +1,958 @@
+<!--?xml version="1.0"?--><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mg="http://www.araxis.com/2002/Merge/Reporting" xmlns="http://www.w3.org/1999/xhtml">
+ <head> 
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  <!--The layout and design of this report is Copyright © 2003-2016 Araxis Ltd. All rights reserved.--> 
+  <!--The copyright of the data content of this report belongs to the relevant copyright holders.--> 
+  <title>1633. EPMO Open Source Coordination Office Redaction File Detail Report</title> 
+  <style type="text/css">
+body { background: #fff;  color: #000; margin: 0px 14px 14px 14px; }
+h1, h2, h3, h4, h5 {
+  padding: 0em;
+  margin: 1.5em 0em .25em 0em;
+  text-align: left;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 70%;
+  max-width: 55em;
+}
+body, h4, h5, p, ol, ul, li, td, th { font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; }
+
+h4, h5, p, ol, ul, li { font-size: 70%; }
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 120%;
+}
+
+h1 { margin: 14px 0em 1.2em 0em; font-size: 112%; line-height: 130%;}
+h2 { font-size: 125%; line-height: 84%;}
+h3 { margin-top: 1.4em; font-size: 81%; }
+h4 { margin-top: 1em; font-size: 70%; }
+h5 { margin-top: 1em; font-size: 100%; font-style: italic;}
+h1 strong, h2 strong, h3 strong, h4 strong { font-weight: bold; }
+
+p { margin: 6px 0em 6px 0em; max-width: 55em;}
+p.code, code {}
+p { font-size: 70%; line-height: 125%; }
+table { font-size: 70%;}
+
+p.copyright, .small { font-size: 60%; line-height: 120%; }
+p.copyright { margin: 3px 0px 0px 0px; padding: 0px; text-align: left; }
+acronym { font-variant: small-caps; }
+div.pad { padding: 3px; }
+span.lineEndings { color: red; font-size: 70%; }
+
+table.mgRowGroup, table.mgRowGroupFolder { border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px; width: 100%; table-layout: fixed; border-collapse: collapse; }
+table.mgRowGroup td { vertical-align: top; padding: 0; }
+table.mgRowGroupFolder td { vertical-align: top; padding: 1px 0 1px 0; }
+div.IP { width: 2px; height: 1em; float: left; }
+
+img.mgFldrIcon {float: left; text-align: left; margin: -1px 2px 0px 0px;  height: 16px; width: 16px; border: none; vertical-align: top; background-color: transparent;}
+div.mgFldrIcon {float: left; width: auto;}
+span.left {float: left;width: auto;}
+span.right {float: right;width: auto;}
+
+table.bordered { border-collapse: collapse; border: 1px solid #a0a0a0; margin: 10px 0px 10px 0px;}
+table.bordered th, table.bordered td { vertical-align: top; padding: 3px; border: 1px solid #a0a0a0;}
+table.bordered th { background-color: #e5e5e5; }
+table.bordered td.group { background-color: #f5f5f5; }
+span.disabledNavigation { color: #a0a0a0; }
+div.navigation { margin-top: 14px; font-size: 70%; }
+div.comment { font-weight: normal; color: #000; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #fcfed8; padding: 2px 5px 2px 5px; border: 1px solid #E3E5C3; margin: 1px 2px 3px 2px; -moz-border-radius: 7px; border-radius: 7px; }
+
+                span.U1, span.U1 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U1 a {text-decoration: underline;}
+td.U1 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1, span.R1 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R1 a {text-decoration: underline;}
+td.R1 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1, span.I1 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I1 a {text-decoration: underline;}
+td.I1 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1, span.C1 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C1 a {text-decoration: underline;}
+td.C1 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC1 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+span.U2, span.U2 a {float: left; width: auto;color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.U2 a {text-decoration: underline;}
+td.U2 {color: #000000; background-color: #FFFFFF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2, span.R2 a {float: left; width: auto;color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.R2 a {text-decoration: underline;}
+td.R2 {color: #800000; background-color: #F3E6D8; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2, span.I2 a {float: left; width: auto;color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.I2 a {text-decoration: underline;}
+td.I2 {color: #800000; background-color: #D1E8CF; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2, span.C2 a {float: left; width: auto;color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+span.C2 a {text-decoration: underline;}
+td.C2 {color: #800000; background-color: #DACDE6; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; }
+td.nbgC2 {color: #800000; font-family: "Consolas"; font-weight: normal; font-style: normal; font-size: 9pt; text-decoration: none; background-color: #FFFFFF; }
+
+span.selected {background-color: #3d80df; color: #fff;}
+span.selected a {background-color: #3d80df; color: #fff; text-decoration: underline;}
+span.symbol {cursor: pointer;}
+      </style> 
+ </head> 
+ <body> 
+  <h1><strong>1633. EPMO Open Source Coordination Office Redaction File Detail Report</strong></h1> 
+  <p>Produced by <strong>Araxis Merge</strong> on <strong>10/13/2017 11:30:23 AM Central Daylight Time</strong>. See <a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a> for information about Merge. This report uses XHTML and CSS2, and is best viewed with a modern standards-compliant browser. For optimum results when printing this report, use landscape orientation and enable printing of background images and colours in your browser.</p> 
+  <h3><strong>1633.1&nbsp;Files compared</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th>#</th> 
+     <th>Location</th> 
+     <th>File</th> 
+     <th>Last Modified</th> 
+    </tr> 
+    <tr> 
+     <td>1</td> 
+     <td>ehmp.zip\ehmp\ehmp\product\tests\acceptance-tests\features_leipr\steps</td> 
+     <td>JLV_PerformanceTesting.rb</td> 
+     <td>Tue Dec 15 14:05:18 2015 UTC</td> 
+    </tr> 
+    <tr> 
+     <td>2</td> 
+     <td>ehmp.zip\ehmp\ehmp\product\tests\acceptance-tests\features_leipr\steps</td> 
+     <td>JLV_PerformanceTesting.rb</td> 
+     <td>Thu Oct 12 17:19:09 2017 UTC</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1633.2&nbsp;Comparison summary</strong></h3> 
+  <table class="bordered"> 
+   <tbody>
+    <tr> 
+     <th rowspan="2" style="vertical-align: bottom;">Description</th> 
+     <th colspan="2">Between<br>Files 1 and 2</th> 
+    </tr> 
+    <tr> 
+     <th style="text-align: right;">Text Blocks</th> 
+     <th style="text-align: right;">Lines</th> 
+    </tr> 
+    <tr> 
+     <td>Unchanged</td> 
+     <td style="text-align: right;">6</td> 
+     <td style="text-align: right;">292</td> 
+    </tr> 
+    <tr> 
+     <td>Changed</td> 
+     <td style="text-align: right;">5</td> 
+     <td style="text-align: right;">14</td> 
+    </tr> 
+    <tr> 
+     <td>Inserted</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+    <tr> 
+     <td>Removed</td> 
+     <td style="text-align: right;">0</td> 
+     <td style="text-align: right;">0</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1633.3&nbsp;Comparison options</strong></h3> 
+  <table class="bordered" style="width: 55em;"> 
+   <tbody>
+    <tr> 
+     <th>Whitespace</th> 
+     <td></td> 
+    </tr> 
+    <tr> 
+     <th>Character case</th> 
+     <td>Differences in character case are significant</td> 
+    </tr> 
+    <tr> 
+     <th>Line endings</th> 
+     <td>Differences in line endings (<code>CR</code> and <code>LF</code> characters) are ignored</td> 
+    </tr> 
+    <tr> 
+     <th>CR/LF characters</th> 
+     <td>Not shown in the comparison detail</td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <h3><strong>1633.4&nbsp;Active regular expressions</strong></h3> 
+  <p>No regular expressions were active.</p> 
+  <h3><strong>1633.5&nbsp;Comparison detail</strong></h3> 
+  <table class="mgRowGroup"> 
+   <colgroup>
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+    <col style="width: 1em;"> 
+    <col style="width: 5em;"> 
+    <col style="width: 1em;"> 
+    <col width="*"> 
+   </colgroup>
+   <tbody>
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">1</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">path&nbsp;=&nbsp;Fil</span> <span class="U2">e.expand_p</span> <span class="U2">ath&nbsp;'..',&nbsp;</span> <span class="U2">__FILE__</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">2</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">$LOAD_PATH</span> <span class="U2">.unshift&nbsp;p</span> <span class="U2">ath&nbsp;unless</span> <span class="U2">&nbsp;$LOAD_PAT</span> <span class="U2">H.include?</span> <span class="U2">(path)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">3</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">path&nbsp;=&nbsp;Fil</span> <span class="U2">e.expand_p</span> <span class="U2">ath&nbsp;'../..</span> <span class="U2">/../../sha</span> <span class="U2">red-test-r</span> <span class="U2">uby',&nbsp;__FI</span> <span class="U2">LE__</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">4</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">$LOAD_PATH</span> <span class="U2">.unshift&nbsp;p</span> <span class="U2">ath&nbsp;unless</span> <span class="U2">&nbsp;$LOAD_PAT</span> <span class="U2">H.include?</span> <span class="U2">(path)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">5</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">6</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;"r</span> <span class="U2">spec/expec</span> <span class="U2">tations"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">7</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;"h</span> <span class="U2">ttparty"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">8</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;"j</span> <span class="U2">son"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">9</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;"s</span> <span class="U2">elenium-we</span> <span class="U2">bdriver"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">10</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'F</span> <span class="U2">indElement</span> <span class="U2">Factory.rb</span> <span class="U2">'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">11</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'W</span> <span class="U2">ebDriverFa</span> <span class="U2">ctory.rb'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">12</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'C</span> <span class="U2">ommonDrive</span> <span class="U2">r.rb'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">13</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">require&nbsp;'S</span> <span class="U2">eleniumCom</span> <span class="U2">mand.rb'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">14</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">15</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">def&nbsp;append</span> <span class="U2">_output_to</span> <span class="U2">_file(file</span> <span class="U2">_path,&nbsp;res</span> <span class="U2">ponse_time</span> <span class="U2">_desc,&nbsp;tot</span> <span class="U2">al_time)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">16</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;file&nbsp;=&nbsp;F</span> <span class="U2">ile.open(f</span> <span class="U2">ile_path,&nbsp;</span> <span class="U2">'a')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">17</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;file.wri</span> <span class="U2">te('Date=&nbsp;</span> <span class="U2">'&nbsp;+&nbsp;Time.n</span> <span class="U2">ow.to_s&nbsp;+&nbsp;</span> <span class="U2">';&nbsp;Seleniu</span> <span class="U2">m&nbsp;id=&nbsp;'+&nbsp;@</span> <span class="U2">@web_drive</span> <span class="U2">r.to_s&nbsp;+&nbsp;'</span> <span class="U2">;&nbsp;'&nbsp;+&nbsp;resp</span> <span class="U2">onse_time_</span> <span class="U2">desc&nbsp;+&nbsp;"=&nbsp;</span> <span class="U2">'#{total_t</span> <span class="U2">ime}'&nbsp;Sec"</span> <span class="U2">+"\n")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">18</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">19</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">20</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Given(/^us</span> <span class="U2">er&nbsp;logs&nbsp;in</span> <span class="U2">&nbsp;with&nbsp;vali</span> <span class="U2">d&nbsp;credenti</span> <span class="U2">als&nbsp;to&nbsp;JLV</span> <span class="U2">$/)&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">21</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">22</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">Selenium_c</span> <span class="U2">ommand.nav</span> <span class="U2">igate_to_u</span> <span class="U2">rl("https:</span> <span class="U2">//</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">/jlv/")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">23</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">24</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.c</span> <span class="U2">lick_eleme</span> <span class="U2">nt('id',&nbsp;'</span> <span class="U2">accept')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">25</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;click_</span> <span class="U2">element('i</span> <span class="U2">d',&nbsp;'btnLo</span> <span class="U2">gon')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">26</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;elemen</span> <span class="U2">t&nbsp;=&nbsp;Seleni</span> <span class="U2">um_command</span> <span class="U2">.drive&nbsp;@@w</span> <span class="U2">eb_driver.</span> <span class="U2">find_eleme</span> <span class="U2">nt(:id,&nbsp;'b</span> <span class="U2">tnLogon')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">27</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;element&nbsp;</span> <span class="U2">=&nbsp;Selenium</span> <span class="U2">_command.d</span> <span class="U2">river.find</span> <span class="U2">_element(:</span> <span class="U2">id,&nbsp;'btnLo</span> <span class="U2">gon')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">28</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">29</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p&nbsp;=&nbsp;Hash.n</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">30</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;field&nbsp;=&nbsp;</span> <span class="U2">"PatientSe</span> <span class="U2">arch"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">31</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p["Patient</span> <span class="U2">Search"]&nbsp;=</span> <span class="U2">&nbsp;{&nbsp;:functi</span> <span class="U2">on=&gt;"wait"</span> <span class="U2">,&nbsp;:searchO</span> <span class="U2">n=&gt;"id",&nbsp;:</span> <span class="U2">locator=&gt;"</span> <span class="U2">ext-gen135</span> <span class="U2">"&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">32</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;method&nbsp;=</span> <span class="U2">&nbsp;value_map</span> <span class="U2">[field][:s</span> <span class="U2">earchOn]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">33</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;locator&nbsp;</span> <span class="U2">=&nbsp;value_ma</span> <span class="U2">p[field][:</span> <span class="U2">locator]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">34</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">35</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;element.</span> <span class="U2">click</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">36</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.s</span> <span class="U2">elect_fram</span> <span class="U2">e('index',</span> <span class="U2">&nbsp;'2')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">37</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@start_t</span> <span class="U2">ime&nbsp;=&nbsp;Time</span> <span class="U2">.now</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">38</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.w</span> <span class="U2">ait_until_</span> <span class="U2">element_pr</span> <span class="U2">esent(meth</span> <span class="U2">od,&nbsp;locato</span> <span class="U2">r)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">39</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;select</span> <span class="U2">_frame_wai</span> <span class="U2">t('index',</span> <span class="U2">&nbsp;'2',&nbsp;meth</span> <span class="U2">od,&nbsp;locato</span> <span class="U2">r)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">40</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@end_tim</span> <span class="U2">e&nbsp;=&nbsp;Time.n</span> <span class="U2">ow</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">41</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">42</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">43</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">44</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">When(/^a&nbsp;u</span> <span class="U2">ser&nbsp;search</span> <span class="U2">&nbsp;for&nbsp;patie</span> <span class="U2">nt&nbsp;with&nbsp;id</span> <span class="U2">$/)&nbsp;do&nbsp;|ta</span> <span class="U2">ble|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">45</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;paramete</span> <span class="U2">rs_class&nbsp;=</span> <span class="U2">&nbsp;Acc_Param</span> <span class="U2">eters.new</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">46</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.s</span> <span class="U2">elect_fram</span> <span class="U2">e('index',</span> <span class="U2">&nbsp;'2')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">47</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;action_m</span> <span class="U2">ap&nbsp;=&nbsp;param</span> <span class="U2">eters_clas</span> <span class="U2">s.Acc()[0]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">48</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">49</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;table.ro</span> <span class="U2">ws.each&nbsp;do</span> <span class="U2">&nbsp;|field,&nbsp;v</span> <span class="U2">alue&nbsp;|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">50</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;elemen</span> <span class="U2">t_function</span> <span class="U2">&nbsp;=&nbsp;action_</span> <span class="U2">map[field]</span> <span class="U2">[:function</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">51</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;method</span> <span class="U2">&nbsp;=&nbsp;action_</span> <span class="U2">map[field]</span> <span class="U2">[:searchOn</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">52</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;locato</span> <span class="U2">r&nbsp;=&nbsp;action</span> <span class="U2">_map[field</span> <span class="U2">][:locator</span> <span class="U2">]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">53</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">54</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;perfor</span> <span class="U2">m_function</span> <span class="U2">(element_f</span> <span class="U2">unction,&nbsp;m</span> <span class="U2">ethod,&nbsp;loc</span> <span class="U2">ator,&nbsp;valu</span> <span class="U2">e)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">55</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">56</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end&nbsp;#tab</span> <span class="U2">le</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">57</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p&nbsp;=&nbsp;Hash.n</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">58</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;field&nbsp;=&nbsp;</span> <span class="U2">"SearchRes</span> <span class="U2">ult"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">59</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p["SearchR</span> <span class="U2">esult"]&nbsp;=&nbsp;</span> <span class="U2">{&nbsp;:functio</span> <span class="U2">n=&gt;"wait",</span> <span class="U2">&nbsp;:searchOn</span> <span class="U2">=&gt;"id",&nbsp;:l</span> <span class="U2">ocator=&gt;"p</span> <span class="U2">atientsear</span> <span class="U2">chpdws-lin</span> <span class="U2">k-name-ext</span> <span class="U2">-record-6"</span> <span class="U2">&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">60</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;method&nbsp;=</span> <span class="U2">&nbsp;value_map</span> <span class="U2">[field][:s</span> <span class="U2">earchOn]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">61</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;locator&nbsp;</span> <span class="U2">=&nbsp;value_ma</span> <span class="U2">p[field][:</span> <span class="U2">locator]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">62</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">63</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@start_t</span> <span class="U2">ime&nbsp;=&nbsp;Time</span> <span class="U2">.now</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">64</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;common</span> <span class="U2">_driver.wa</span> <span class="U2">itForPageL</span> <span class="U2">oaded()</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">65</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.w</span> <span class="U2">ait_for_el</span> <span class="U2">ement_pres</span> <span class="U2">ent(method</span> <span class="U2">,&nbsp;locator)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">66</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@end_tim</span> <span class="U2">e&nbsp;=&nbsp;Time.n</span> <span class="U2">ow</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">67</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">68</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">69</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Then(/^cap</span> <span class="U2">ture&nbsp;respo</span> <span class="U2">nse&nbsp;time&nbsp;f</span> <span class="U2">or&nbsp;"(.*?)"</span> <span class="U2">$/)&nbsp;do&nbsp;|re</span> <span class="U2">sponse_tim</span> <span class="U2">e_desc|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">70</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">71</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;file_pat</span> <span class="U2">h&nbsp;=&nbsp;'/User</span> <span class="U2">s/zadehf/D</span> <span class="U2">esktop/tes</span> <span class="U2">t_run.txt'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">72</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;append_o</span> <span class="U2">utput_to_f</span> <span class="U2">ile(file_p</span> <span class="U2">ath,&nbsp;respo</span> <span class="U2">nse_time_d</span> <span class="U2">esc,&nbsp;@end_</span> <span class="U2">time-@star</span> <span class="U2">t_time)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">73</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">74</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">75</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">76</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Given(/^a&nbsp;</span> <span class="U2">patient&nbsp;wi</span> <span class="U2">th&nbsp;id&nbsp;"(.*</span> <span class="U2">?)"&nbsp;has&nbsp;no</span> <span class="U2">t&nbsp;been&nbsp;syn</span> <span class="U2">ced$/)&nbsp;do&nbsp;</span> <span class="U2">|patientId</span> <span class="U2">|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">77</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">base_url&nbsp;=</span> <span class="U2">&nbsp;ENV.keys.</span> <span class="U2">include?('</span> <span class="U2">LEIPR_IP')</span> <span class="U2">&nbsp;?&nbsp;'https:</span> <span class="U2">//'&nbsp;+&nbsp;ENV[</span> <span class="U2">'LEIPR_IP'</span> <span class="U2">]&nbsp;:&nbsp;'https</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">78</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">database_i</span> <span class="U2">p&nbsp;=&nbsp;ENV['D</span> <span class="U2">ATABASE_IP</span> <span class="U2">']&nbsp;||&nbsp;'</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">79</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;database</span> <span class="U2">_port&nbsp;=&nbsp;EN</span> <span class="U2">V['DATABAS</span> <span class="U2">E_PORT']&nbsp;|</span> <span class="U2">|&nbsp;'27017'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">80</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">auth&nbsp;=&nbsp;{&nbsp;:</span> <span class="U2">username&nbsp;=</span> <span class="U2">&gt;&nbsp;"</span> <span class="C2">DNS&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">",&nbsp;:passwo</span> <span class="U2">rd&nbsp;=&gt;&nbsp;"</span> <span class="C2">USER&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">!!"&nbsp;}</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">81</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">82</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;url_path</span> <span class="U2">&nbsp;=&nbsp;"/admin</span> <span class="U2">/clear-cac</span> <span class="U2">he?patient</span> <span class="U2">Id=#{patie</span> <span class="U2">ntId}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">83</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;full_pat</span> <span class="U2">h&nbsp;=&nbsp;"#{bas</span> <span class="U2">e_url}#{ur</span> <span class="U2">l_path}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">84</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;HTTParty</span> <span class="U2">.post(full</span> <span class="U2">_path,&nbsp;{&nbsp;:</span> <span class="U2">verify&nbsp;=&gt;&nbsp;</span> <span class="U2">false,&nbsp;:ba</span> <span class="U2">sic_auth&nbsp;=</span> <span class="U2">&gt;&nbsp;auth&nbsp;})</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">85</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">86</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">87</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">When(/^use</span> <span class="U2">r&nbsp;select&nbsp;t</span> <span class="U2">he&nbsp;patient</span> <span class="U2">&nbsp;that&nbsp;has&nbsp;</span> <span class="U2">expected&nbsp;"</span> <span class="U2">(.*?)"&nbsp;dat</span> <span class="U2">a&nbsp;as&nbsp;"(.*?</span> <span class="U2">)"$/)&nbsp;do&nbsp;|</span> <span class="U2">field,&nbsp;val</span> <span class="U2">ue|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">88</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p&nbsp;=&nbsp;Hash.n</span> <span class="U2">ew</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">89</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;select_f</span> <span class="U2">ield&nbsp;=&nbsp;"Se</span> <span class="U2">archResult</span> <span class="U2">"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">90</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;value_ma</span> <span class="U2">p["SearchR</span> <span class="U2">esult"]&nbsp;=&nbsp;</span> <span class="U2">{&nbsp;:functio</span> <span class="U2">n=&gt;"wait",</span> <span class="U2">&nbsp;:searchOn</span> <span class="U2">=&gt;"id",&nbsp;:l</span> <span class="U2">ocator=&gt;"p</span> <span class="U2">atientsear</span> <span class="U2">chpdws-lin</span> <span class="U2">k-name-ext</span> <span class="U2">-record-6"</span> <span class="U2">&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">91</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;method&nbsp;=</span> <span class="U2">&nbsp;value_map</span> <span class="U2">[select_fi</span> <span class="U2">eld][:sear</span> <span class="U2">chOn]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">92</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;locator&nbsp;</span> <span class="U2">=&nbsp;value_ma</span> <span class="U2">p[select_f</span> <span class="U2">ield][:loc</span> <span class="U2">ator]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">93</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">94</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.c</span> <span class="U2">lick_eleme</span> <span class="U2">nt(method,</span> <span class="U2">&nbsp;locator)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">95</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">96</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@start_t</span> <span class="U2">ime&nbsp;=&nbsp;Time</span> <span class="U2">.now</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">97</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">98</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;div_cont</span> <span class="U2">ainer&nbsp;=&nbsp;fi</span> <span class="U2">nd_element</span> <span class="U2">('xpath',&nbsp;</span> <span class="U2">"//span[co</span> <span class="U2">ntains(str</span> <span class="U2">ing(),&nbsp;'#{</span> <span class="U2">field}')]/</span> <span class="U2">ancestor::</span> <span class="U2">div[contai</span> <span class="U2">ns(@class,</span> <span class="U2">&nbsp;'x-portle</span> <span class="U2">t')]")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">99</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;div_cont</span> <span class="U2">ainer_id&nbsp;=</span> <span class="U2">&nbsp;div_conta</span> <span class="U2">iner.attri</span> <span class="U2">bute("id")</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">100</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;method&nbsp;=</span> <span class="U2">&nbsp;'xpath'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">101</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;locator&nbsp;</span> <span class="U2">=&nbsp;"//div[@</span> <span class="U2">id='#{div_</span> <span class="U2">container_</span> <span class="U2">id}']/desc</span> <span class="U2">endant::td</span> <span class="U2">[contains(</span> <span class="U2">string(),&nbsp;</span> <span class="U2">'#{value}'</span> <span class="U2">)]"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">102</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;test&nbsp;=</span> <span class="U2">&nbsp;find_elem</span> <span class="U2">ent('xpath</span> <span class="U2">',&nbsp;"//div[</span> <span class="U2">@id='#{div</span> <span class="U2">_container</span> <span class="U2">_id}']/des</span> <span class="U2">cendant::t</span> <span class="U2">d[contains</span> <span class="U2">(string(),</span> <span class="U2">&nbsp;'#{value}</span> <span class="U2">')]")</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">103</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">104</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.w</span> <span class="U2">ait_for_el</span> <span class="U2">ement_pres</span> <span class="U2">ent(method</span> <span class="U2">,&nbsp;locator)</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">105</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@end_tim</span> <span class="U2">e&nbsp;=&nbsp;Time.n</span> <span class="U2">ow</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">106</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">107</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">108</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">109</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Given(/^a&nbsp;</span> <span class="U2">patient&nbsp;wi</span> <span class="U2">th&nbsp;id&nbsp;"(.*</span> <span class="U2">?)"&nbsp;has&nbsp;be</span> <span class="U2">en&nbsp;synced$</span> <span class="U2">/)&nbsp;do&nbsp;|pat</span> <span class="U2">ientId|</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">110</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">111</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">base_url&nbsp;=</span> <span class="U2">&nbsp;ENV.keys.</span> <span class="U2">include?('</span> <span class="U2">LEIPR_IP')</span> <span class="U2">&nbsp;?&nbsp;'https:</span> <span class="U2">//'&nbsp;+&nbsp;ENV[</span> <span class="U2">'LEIPR_IP'</span> <span class="U2">]&nbsp;:&nbsp;'https</span> <span class="U2">://</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">112</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">database_i</span> <span class="U2">p&nbsp;=&nbsp;ENV['D</span> <span class="U2">ATABASE_IP</span> <span class="U2">']&nbsp;||&nbsp;'</span> <span class="C2">IP&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="U2">'</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">113</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;database</span> <span class="U2">_port&nbsp;=&nbsp;EN</span> <span class="U2">V['DATABAS</span> <span class="U2">E_PORT']&nbsp;|</span> <span class="U2">|&nbsp;'27017'</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="C2 ln-no" style="text-align: right;">114</td>  
+     <td class="nbgC2"><span class="I2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">auth&nbsp;=&nbsp;{&nbsp;:</span> <span class="U2">username&nbsp;=</span> <span class="U2">&gt;&nbsp;"</span> <span class="C2">USER</span> <span class="U2">",&nbsp;:passwo</span> <span class="U2">rd&nbsp;=&gt;&nbsp;"</span> <span class="C2">USER&nbsp;</span> <span class="U2">&nbsp;</span> <span class="U2">!!"&nbsp;}</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">115</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">116</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;short_pa</span> <span class="U2">th&nbsp;=&nbsp;"/pat</span> <span class="U2">ient-resou</span> <span class="U2">rce-direct</span> <span class="U2">ory?patien</span> <span class="U2">tId=#{pati</span> <span class="U2">entId}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">117</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;patient_</span> <span class="U2">resource_d</span> <span class="U2">irectory_p</span> <span class="U2">ath&nbsp;=&nbsp;"#{b</span> <span class="U2">ase_url}#{</span> <span class="U2">short_path</span> <span class="U2">}"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">118</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">119</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;director</span> <span class="U2">y&nbsp;=&nbsp;HTTPar</span> <span class="U2">ty.get(pat</span> <span class="U2">ient_resou</span> <span class="U2">rce_direct</span> <span class="U2">ory_path,&nbsp;</span> <span class="U2">{&nbsp;:verify&nbsp;</span> <span class="U2">=&gt;&nbsp;false,&nbsp;</span> <span class="U2">:basic_aut</span> <span class="U2">h&nbsp;=&gt;&nbsp;auth&nbsp;</span> <span class="U2">})</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">120</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;director</span> <span class="U2">y_json&nbsp;=&nbsp;J</span> <span class="U2">SON.parse(</span> <span class="U2">directory.</span> <span class="U2">body)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">121</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;link_arr</span> <span class="U2">ay&nbsp;=&nbsp;direc</span> <span class="U2">tory_json[</span> <span class="U2">0]["link"]</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">122</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(l</span> <span class="U2">ink_array.</span> <span class="U2">is_a?(Arra</span> <span class="U2">y)).to&nbsp;be_</span> <span class="U2">true</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">123</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;vital_li</span> <span class="U2">nk&nbsp;=&nbsp;link_</span> <span class="U2">array.find</span> <span class="U2">&nbsp;{&nbsp;|array|</span> <span class="U2">&nbsp;array["ti</span> <span class="U2">tle"]&nbsp;==&nbsp;"</span> <span class="U2">vital"&nbsp;}</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">124</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;vital_pa</span> <span class="U2">th&nbsp;=&nbsp;vital</span> <span class="U2">_link["hre</span> <span class="U2">f"]</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">125</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#&nbsp;puts&nbsp;"</span> <span class="U2">fetch&nbsp;vita</span> <span class="U2">ls&nbsp;from&nbsp;"&nbsp;</span> <span class="U2">+&nbsp;vital_pa</span> <span class="U2">th</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">126</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#--farid</span> <span class="U2">-s</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">127</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;@respons</span> <span class="U2">e&nbsp;=&nbsp;HTTPar</span> <span class="U2">ty.get(vit</span> <span class="U2">al_path,&nbsp;{</span> <span class="U2">&nbsp;:verify&nbsp;=</span> <span class="U2">&gt;&nbsp;false,&nbsp;:</span> <span class="U2">headers&nbsp;=&gt;</span> <span class="U2">&nbsp;{&nbsp;'Accept</span> <span class="U2">'&nbsp;=&gt;&nbsp;'appl</span> <span class="U2">ication/js</span> <span class="U2">on'&nbsp;},&nbsp;:ba</span> <span class="U2">sic_auth&nbsp;=</span> <span class="U2">&gt;&nbsp;auth&nbsp;})</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">128</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;response</span> <span class="U2">_http_stat</span> <span class="U2">us_code&nbsp;=&nbsp;</span> <span class="U2">@response.</span> <span class="U2">code</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">129</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;patient_</span> <span class="U2">synced&nbsp;=&nbsp;f</span> <span class="U2">alse</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">130</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;#sleep(4</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">131</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;wait_tim</span> <span class="U2">e&nbsp;=&nbsp;"2"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">132</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;time_out</span> <span class="U2">&nbsp;=&nbsp;"60"</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">133</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;http_sta</span> <span class="U2">tus_code&nbsp;=</span> <span class="U2">&nbsp;200</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">134</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;for&nbsp;i&nbsp;&nbsp;i</span> <span class="U2">n&nbsp;0..Integ</span> <span class="U2">er(time_ou</span> <span class="U2">t)/Integer</span> <span class="U2">(wait_time</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">135</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;res</span> <span class="U2">ponse_http</span> <span class="U2">_status_co</span> <span class="U2">de&nbsp;!=&nbsp;http</span> <span class="U2">_status_co</span> <span class="U2">de</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">136</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slee</span> <span class="U2">p(Integer(</span> <span class="U2">wait_time)</span> <span class="U2">)</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">137</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@res</span> <span class="U2">ponse&nbsp;=&nbsp;HT</span> <span class="U2">TParty.get</span> <span class="U2">(vital_pat</span> <span class="U2">h,&nbsp;{&nbsp;:veri</span> <span class="U2">fy&nbsp;=&gt;&nbsp;fals</span> <span class="U2">e,&nbsp;:header</span> <span class="U2">s&nbsp;=&gt;&nbsp;{&nbsp;'Ac</span> <span class="U2">cept'&nbsp;=&gt;&nbsp;'</span> <span class="U2">applicatio</span> <span class="U2">n/json'&nbsp;},</span> <span class="U2">&nbsp;:basic_au</span> <span class="U2">th&nbsp;=&gt;&nbsp;auth</span> <span class="U2">&nbsp;})</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">138</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp</span> <span class="U2">onse_http_</span> <span class="U2">status_cod</span> <span class="U2">e&nbsp;=&nbsp;@respo</span> <span class="U2">nse.code</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">139</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;else</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">140</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pati</span> <span class="U2">ent_synced</span> <span class="U2">&nbsp;=&nbsp;true</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">141</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brea</span> <span class="U2">k</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">142</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">143</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">144</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">145</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;if&nbsp;patie</span> <span class="U2">nt_synced&nbsp;</span> <span class="U2">==&nbsp;false</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">146</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;&nbsp;&nbsp;puts&nbsp;"</span> <span class="U2">Timeout&nbsp;er</span> <span class="U2">ror!&nbsp;a&nbsp;pat</span> <span class="U2">ient&nbsp;has&nbsp;n</span> <span class="U2">ot&nbsp;been&nbsp;sy</span> <span class="U2">nced&nbsp;withi</span> <span class="U2">n&nbsp;"+time_o</span> <span class="U2">ut+&nbsp;"&nbsp;seco</span> <span class="U2">nds."</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">147</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">148</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;expect(p</span> <span class="U2">atient_syn</span> <span class="U2">ced).to&nbsp;be</span> <span class="U2">_true</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">149</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">150</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2"></span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">151</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">Given(/^us</span> <span class="U2">er&nbsp;log&nbsp;out</span> <span class="U2">$/)&nbsp;do</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">152</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">&nbsp;&nbsp;Selenium</span> <span class="U2">_command.c</span> <span class="U2">lick_eleme</span> <span class="U2">nt('id',&nbsp;'</span> <span class="U2">ext-gen190</span> <span class="U2">')</span> </td> 
+    </tr> 
+    <tr>    
+     <td>&nbsp;</td> 
+     <td class="U2 ln-no" style="text-align: right;">153</td>  
+     <td class="U2"><span class="U2">&nbsp;</span> <span class="U2">end</span> </td> 
+    </tr> 
+   </tbody>
+  </table> 
+  <p class="copyright" style="margin-top: 25px; padding-top: 2px; border-top: solid #a0a0a0 1px; max-width: none;">Araxis Merge (but not the data content of this report) is Copyright © 1993-2016 Araxis Ltd (<a href="http://www.araxis.com/" title="Link to the Araxis corporate web site">www.araxis.com</a>). All rights reserved.</p>   
+ </body>
+</html>

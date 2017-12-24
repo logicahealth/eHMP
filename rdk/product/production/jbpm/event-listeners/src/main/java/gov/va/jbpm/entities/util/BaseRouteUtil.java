@@ -47,7 +47,7 @@ public class BaseRouteUtil {
 					//  anything which is not a left parenthesis followed by a left parenthesis
 					//  any ASCII letters, digits, or underscores followed by a right parenthesis
 					if (!subRoute.matches("\\w\\w:[^(]*\\(\\w+\\)")) {
-						LOGGER.warn("Unable to match the following subRoute (ignoring it): " + subRoute);
+						LOGGER.warn(String.format("Unable to match the following subRoute (ignoring it): %s", subRoute));
 						continue;
 					}
 					

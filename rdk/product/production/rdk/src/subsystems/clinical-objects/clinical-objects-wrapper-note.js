@@ -74,7 +74,7 @@ module.exports.wrapCreateNote = function(errorMessages, writebackContext) {
     }
 
     /*  For a patient with a site identifier, the format is
-        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:9E7A:3:3")
+        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:SITE:3:3")
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
@@ -127,7 +127,7 @@ module.exports.wrapCreateAddendum = function(errorMessages, writebackContext) {
         return null;
     }
     /*  For a patient with a site identifier, the format is
-        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:9E7A:3:3")
+        "urn:va:patient:[site]:[dfn]:[dfn]” (e.g. "urn:va:patient:SITE:3:3")
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */

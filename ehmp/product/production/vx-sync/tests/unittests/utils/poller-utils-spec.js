@@ -5,27 +5,35 @@ require('../../../env-setup');
 var _ = require('underscore');
 
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
+var log = require(global.VX_DUMMIES + 'dummy-logger');
+// NOTE: be sure next line is commented out before pushing
+// log = require('bunyan').createLogger({
+//     name: 'poller-utils-spec',
+//     level: 'debug'
+// });
+
+
 
 var config = {
     vistaSites: {
-        '9E7A': {
+        'SITE': {
             name: 'panorama',
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: '127.0.0.1',
             stationNumber: 500,
             localAddress: 'localhost',
             connectTimeout: 3000,
             sendTimeout: 20000
         },
-        C877: {
+        SITE: {
             name: 'kodak',
             host: 'IP        ',
             port: PORT,
-            accessCode: 'REDACTED',
-            verifyCode: 'REDACTED',
+            accessCode: 'USER  ',
+            verifyCode: 'PW      ',
             localIP: '127.0.0.1',
             stationNumber: 500,
             localAddress: 'localhost',
@@ -40,8 +48,8 @@ var config = {
                 'enterprise-sync-request',
                 'vista-operational-subscribe-request',
 
-                'vista-9E7A-subscribe-request',
-                'vista-C877-subscribe-request'
+                'vista-SITE-subscribe-request',
+                'vista-SITE-subscribe-request'
             ],
         }
     },
@@ -67,8 +75,8 @@ var config = {
             'vista-operational-subscribe-request': {},
 
 
-            'vista-9E7A-subscribe-request': {},
-            'vista-C877-subscribe-request': {}
+            'vista-SITE-subscribe-request': {},
+            'vista-SITE-subscribe-request': {}
         }
     }
 };
@@ -163,19 +171,37 @@ describe('poller-utils.js', function() {
     });
 
     describe('parseAutostart()', function() {
-        it('Verify empty value is false', function() {
-            expect(pollerUtils.parseAutostart()).toBe(true);
-            expect(pollerUtils.parseAutostart(null)).toBe(true);
-            expect(pollerUtils.parseAutostart('test')).toBe(true);
+        it('Verify empty value is true', function() {
+            expect(pollerUtils.parseAutostart(log)).toBe(true);
+            expect(pollerUtils.parseAutostart(log, null)).toBe(true);
+            expect(pollerUtils.parseAutostart(log, 'test')).toBe(true);
         });
 
         it('Verify correct parse of values', function() {
-            expect(pollerUtils.parseAutostart({ autostart: false })).toBe(true);
-            expect(pollerUtils.parseAutostart({ autostart: 'false' })).toBe(true);
-            expect(pollerUtils.parseAutostart({ autostart: 'FALSE' })).toBe(true);
-            expect(pollerUtils.parseAutostart({ autostart: true })).toBe(true);
-            expect(pollerUtils.parseAutostart({ autostart: 'true' })).toBe(true);
-            expect(pollerUtils.parseAutostart({ autostart: 'TRUE' })).toBe(true);
+            expect(pollerUtils.parseAutostart(log, { autostart: false })).toBe(false);
+            expect(pollerUtils.parseAutostart(log, { autostart: 'false' })).toBe(false);
+            expect(pollerUtils.parseAutostart(log, { autostart: 'FALSE' })).toBe(false);
+            expect(pollerUtils.parseAutostart(log, { autostart: true })).toBe(true);
+            expect(pollerUtils.parseAutostart(log, { autostart: 'true' })).toBe(true);
+            expect(pollerUtils.parseAutostart(log, { autostart: 'TRUE' })).toBe(true);
+        });
+    });
+
+    describe('parseMultipleMode()', function() {
+        it('Verify empty value is false', function() {
+            expect(pollerUtils.parseMultipleMode(log)).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, null)).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, 'test')).toBe(false);
+        });
+
+        it('Verify correct parse of values', function() {
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: undefined })).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: false })).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: 'false' })).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: 'FALSE' })).toBe(false);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: true })).toBe(true);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: 'true' })).toBe(true);
+            expect(pollerUtils.parseMultipleMode(log, { multiplemode: 'TRUE' })).toBe(true);
         });
     });
 
@@ -188,11 +214,11 @@ describe('poller-utils.js', function() {
         });
 
         it('Verify Single Site', function() {
-            expect(pollerUtils.parseSites({ site: 'C877' })).toEqual(['C877']);
+            expect(pollerUtils.parseSites({ site: 'SITE' })).toEqual(['SITE']);
         });
 
         it('Verify Multiple Sites and Numeric Site', function() {
-            expect(pollerUtils.parseSites({ site: ['C877', '9E7A', 9016, '1234']})).toEqual(['C877', '9E7A', '9016', '1234']);
+            expect(pollerUtils.parseSites({ site: ['SITE', 'SITE', 9016, '1234']})).toEqual(['SITE', 'SITE', '9016', '1234']);
         });
     });
 

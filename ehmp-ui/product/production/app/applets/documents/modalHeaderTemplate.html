@@ -4,13 +4,13 @@
             <h4 class="modal-title" id="mainModalLabel">{{title}}</h4>
         </div>
         <div class="col-xs-5 text-right top-margin-sm">
-            <button type="button" class="btn btn-default btn-xs right-margin-xs" {{#unless hasPrevious}}disabled="true" {{/unless}}id="modalPrevious" title="Press enter to load previous record.">
+            <button type="button" class="btn btn-default btn-xs right-margin-xs" {{#unless hasPrevious}}disabled="true" {{/unless}}id="modalPrevious" aria-label="Load previous record">
                 <i class="fa fa-angle-left right-padding-xs"></i>Previous
             </button>
-            <button type="button" class="btn btn-default btn-xs" {{#if shouldDisable}}disabled="true" {{/if}}id="modalNext" title="Press enter to load next record.">
+            <button type="button" class="btn btn-default btn-xs" {{#if shouldDisable}}disabled="true" {{/if}}id="modalNext" aria-label="Load next record">
                 <span {{#if fetchingNextPage}}class="right-padding-xs"{{/if}}>Next</span>{{#if fetchingNextPage}}<i class="fa fa-spinner fa-spin"></i>{{else}}<i class="fa fa-angle-right left-padding-xs"></i>{{/if}}
             </button>
-            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
+            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close">
                 <i class="fa fa-times fa-lg"></i>
             </button>
         </div>

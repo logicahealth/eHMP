@@ -26,7 +26,7 @@
 package com.cognitive.cds.services.cdsexecution;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import com.cognitive.cds.invocation.DataModelHandlerIFace;
 import com.cognitive.cds.invocation.InvocationMode;
@@ -39,7 +39,7 @@ public class MockDataModelHandler implements DataModelHandlerIFace {
 
 	
 	@Override
-	public String buildDataModel(InvocationMode mode, List<String> queries, Context ctx, Properties parameter, Object inputDataModel, boolean validate) throws DataRetrievalException {
+	public String buildDataModel(InvocationMode mode, List<String> queries, Context ctx, Map<String, Object> parameter, Object inputDataModel, boolean validate) throws DataRetrievalException {
 		
 		return "Sample Data Model";
 	}

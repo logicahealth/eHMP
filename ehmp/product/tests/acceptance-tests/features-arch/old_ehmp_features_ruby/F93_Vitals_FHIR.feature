@@ -18,8 +18,8 @@ Scenario: Client can request vital results in FHIR format
 
 	| field									| panorama_value						|
 	| content.contained.identifier.label	| facility-code							|
-#	| content.identifier.value				| urn:va:vital:9E7A:100022:24039		|
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+#	| content.identifier.value				| urn:va:vital:SITE:100022:24039		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.contained.identifier.value	| 998									|
 	| content.contained.name				| ABILENE (CAA)							|
 # Not available for this patient.
@@ -63,7 +63,7 @@ Scenario: Client can request vital results in FHIR format
     | content.valueQuantity.units           | mm[Hg]                               	|
 	
 	And the FHIR results contain "vital results"
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS TEMPERATURE 98.6 F			|
 	| content.name.coding.display			| TEMPERATURE							|
 	| content.valueQuantity.value			| 98.6									|
@@ -75,7 +75,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS RESPIRATION 22 /min			|
 	| content.name.coding.display			| RESPIRATION							|
 	| content.valueQuantity.value			| 22									|
@@ -87,7 +87,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PULSE 70 /min				|
 	| content.name.coding.display			| PULSE									|
 	| content.valueQuantity.value			| 70									|
@@ -99,7 +99,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS HEIGHT 60 in					|
 	| content.name.coding.display			| HEIGHT								|
 	| content.valueQuantity.value			| 60									|
@@ -111,7 +111,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS WEIGHT 200 lb				|
 	| content.name.coding.display			| WEIGHT								|
 	| content.valueQuantity.value			| 200									|
@@ -123,7 +123,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PULSE OXIMETRY 98 %			|
 	| content.name.coding.display			| PULSE OXIMETRY						|
 	| content.valueQuantity.value			| 98									|
@@ -135,7 +135,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PAIN 3						|
 	| content.name.coding.display			| PAIN									|
 	| content.valueQuantity.value			| 3										|
@@ -151,7 +151,7 @@ Scenario: Client can request vitals in FHIR format
 	And the FHIR results contain "vital results"
       | name                                          | value                                |
       | content.text.div                              | <div>CIRCUMFERENCE/GIRTH 42 in</div> |
-      | id											                      | CONTAINS urn:va:vital:9E7A           |
+      | id											                      | CONTAINS urn:va:vital:SITE           |
       | content.text.status                           | generated                            |
       | content.name.coding.system                    | urn:oid:2.16.840.1.113883.6.233      |
       | content.name.coding.code                      | urn:va:vuid:4688720                  |
@@ -188,8 +188,8 @@ Scenario: Client can request vital results in FHIR format
 
 	| field									| panorama_value						|
 	| content.contained.identifier.label	| facility-code							|
-#	| content.identifier.value				| urn:va:vital:C877:100022:24039		|
-	| content.identifier.value				| CONTAINS urn:va:vital:C877:100022		|
+#	| content.identifier.value				| urn:va:vital:SITE:100022:24039		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.contained.identifier.value	| 500									|
 	| content.contained.name				| CAMP BEE								|
 # Not available for this patient.
@@ -233,7 +233,7 @@ Scenario: Client can request vital results in FHIR format
     | content.valueQuantity.units           | mm[Hg]                               	|
 	
 	And the FHIR results contain "vital results"
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS TEMPERATURE 98.7 F			|
 	| content.name.coding.display			| TEMPERATURE							|
 	| content.valueQuantity.value			| 98.7									|
@@ -245,7 +245,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS RESPIRATION 20 /min			|
 	| content.name.coding.display			| RESPIRATION							|
 	| content.valueQuantity.value			| 20									|
@@ -257,7 +257,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PULSE 65 /min				|
 	| content.name.coding.display			| PULSE									|
 	| content.valueQuantity.value			| 65									|
@@ -269,7 +269,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS HEIGHT 60 in					|
 	| content.name.coding.display			| HEIGHT								|
 	| content.valueQuantity.value			| 60									|
@@ -281,7 +281,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS WEIGHT 200 lb				|
 	| content.name.coding.display			| WEIGHT								|
 	| content.valueQuantity.value			| 200									|
@@ -293,7 +293,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PULSE OXIMETRY 99 %			|
 	| content.name.coding.display			| PULSE OXIMETRY						|
 	| content.valueQuantity.value			| 99									|
@@ -305,7 +305,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100022		|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100022		|
 	| content.text.div						| CONTAINS PAIN 1						|
 	| content.name.coding.display			| PAIN									|
 	| content.valueQuantity.value			| 1										|
@@ -321,14 +321,14 @@ Scenario: Client can request vital results in FHIR format
 @f93_3_vitals_fhir	
 Scenario: Client can request vital results in FHIR format
 	Given a patient with "vitals" in multiple VistAs
-	Given a patient with pid "9E7A;100184" has been synced through Admin API
-	When the client requests vitals for the patient "9E7A;100184" in FHIR format
+	Given a patient with pid "SITE;100184" has been synced through Admin API
+	When the client requests vitals for the patient "SITE;100184" in FHIR format
 	Then a successful response is returned
 	Then the client receives 15 FHIR "VistA" result(s)
 	And the client receives 15 FHIR "panorama" result(s)
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100184					|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100184					|
 	| content.name.coding.system			| http://loinc.org									|
 	| content.name.coding.code				| 8310-5											|
 	| content.name.coding.display			| Body temperature									|
@@ -340,7 +340,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:9E7A:100184					|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:100184					|
 	| content.name.coding.system			| http://loinc.org									|
 	| content.name.coding.code				| 8867-4											|
 	| content.name.coding.display			| Heart rate										|
@@ -353,14 +353,14 @@ Scenario: Client can request vital results in FHIR format
 @f93_4_vitals_fhir	
 Scenario: Client can request vital results in FHIR format
 	Given a patient with "vitals" in multiple VistAs
-	Given a patient with pid "C877;21" has been synced through Admin API
-	When the client requests vitals for the patient "C877;21" in FHIR format
+	Given a patient with pid "SITE;21" has been synced through Admin API
+	When the client requests vitals for the patient "SITE;21" in FHIR format
 	Then a successful response is returned
 	Then the client receives 18 FHIR "VistA" result(s)
 	And the client receives 18 FHIR "kodak" result(s)
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:C877:21					|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:21					|
 	| content.name.coding.system			| http://loinc.org								|
 	| content.name.coding.code				| 8480-6										|
 	| content.name.coding.display			| Systolic blood pressure						|
@@ -372,7 +372,7 @@ Scenario: Client can request vital results in FHIR format
 	
 	And the FHIR results contain "vital results"
 	
-	| content.identifier.value				| CONTAINS urn:va:vital:C877:21					|
+	| content.identifier.value				| CONTAINS urn:va:vital:SITE:21					|
 	| content.name.coding.system			| http://loinc.org								|
 	| content.name.coding.code				| 8462-4										|
 	| content.name.coding.display			| Diastolic blood pressure						|

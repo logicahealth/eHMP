@@ -31,7 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -84,12 +84,12 @@ public class MockInvokeService implements MockInvokeIface {
         ResultBundle invokerResult = null;
 
         Object dataModel = req.getDataModel();
-        Properties props = req.getParameters();
+        Map<String, Object> params = req.getParameters();
 
         // checking Properties deser result.
-        if (props != null) {
-            LOGGER.info("PROPS SIZE = " + props.size());
-            IResource p1 = (IResource) props.get("temperature");
+        if (params != null) {
+            LOGGER.info("Params SIZE = " + params.size());
+            IResource p1 = (IResource) params.get("temperature");
             if (p1 != null)
                 LOGGER.info(p1.getResourceName());
         }

@@ -27,7 +27,7 @@ function VxSyncForeverAgent(options) {
     //This is the only change from the original forever-agent code.
     if (self.requests[name] && self.requests[name].length) {
       self.requests[name].shift().onSocket(socket)
-    } else if (self.sockets[name].length < self.minSockets) {
+    } else if (self.sockets[name].length <= self.minSockets) {
       if (!self.freeSockets[name]) self.freeSockets[name] = []
       self.freeSockets[name].push(socket)
       

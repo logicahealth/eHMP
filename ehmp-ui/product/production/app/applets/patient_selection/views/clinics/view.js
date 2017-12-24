@@ -38,7 +38,7 @@ define([
         }),
         initialize: function() {
             this.bindEntityEvents(this.collection, this.patientRecordResultsCollectionEvents);
-            this.listenTo(ADK.Messaging.getChannel('patient-selection-clinics'), 'execute-search', this.executeSearch);
+            this.listenTo(ADK.Messaging.getChannel(this.getOption('eventChannelName')), 'execute-search', this.executeSearch);
             this.setEmpty();
         },
         onBeforeShow: function() {

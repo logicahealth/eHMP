@@ -24,11 +24,11 @@ And the FHIR results contain "radiology report results"
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#hasImages       |
       | content.extension.valueString         | false                                                   |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerUid     |
-      | content.extension.valueString         | urn:va:user:9E7A:1595                                   |
+      | content.extension.valueString         | urn:va:user:SITE:1595                                   |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerName    |
       | content.extension.valueString         | PROVIDER,FIFTY                                          |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationUid     |
-      | content.extension.valueString         | urn:va:location:9E7A:40                                 |
+      | content.extension.valueString         | urn:va:location:SITE:40                                 |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationName    |
       | content.extension.valueString         | RADIOLOGY MAIN FLOOR                                |
       | content.text.status                   | generated                                           | 
@@ -43,7 +43,7 @@ And the FHIR results contain "radiology report results"
       | content.subject.reference             | Patient/10107V395912                                |      
       | content.performer.reference           | IS_SET                                              |
       | content.identifier.system             | urn:oid:2.16.840.1.113883.6.233                     |
-      | content.identifier.value              | urn:va:image:9E7A:253:7059382.8387-1                | 
+      | content.identifier.value              | urn:va:image:SITE:253:7059382.8387-1                | 
       | content.serviceCategory.coding.code   | RAD                                                 |
       | content.serviceCategory.coding.display| Radiology                                           |
       | content.serviceCategory.coding.system | http://hl7.org/fhir/v2/0074                         |
@@ -96,11 +96,11 @@ And the FHIR results contain "radiology report results"
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#hasImages       |
       | content.extension.valueString         | false                                                   |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerUid     |
-      | content.extension.valueString         | urn:va:user:C877:1595                                   |
+      | content.extension.valueString         | urn:va:user:SITE:1595                                   |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#providerName    |
       | content.extension.valueString         | PROVIDER,FIFTY                                          |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationUid     |
-      | content.extension.valueString         | urn:va:location:C877:40                                 |
+      | content.extension.valueString         | urn:va:location:SITE:40                                 |
       | content.extension.url                 | http://vistacore.us/fhir/extensions/rad#locationName    |
       | content.extension.valueString         | RADIOLOGY MAIN FLOOR                                |
       | content.text.status                   | generated                                           | 
@@ -115,7 +115,7 @@ And the FHIR results contain "radiology report results"
       | content.subject.reference             | Patient/10107V395912                                |      
       | content.performer.reference           | IS_SET                                              |
       | content.identifier.system             | urn:oid:2.16.840.1.113883.6.233                     |
-      | content.identifier.value              | urn:va:image:C877:253:7059382.8387-1                | 
+      | content.identifier.value              | urn:va:image:SITE:253:7059382.8387-1                | 
       | content.serviceCategory.coding.code   | RAD                                                 |
       | content.serviceCategory.coding.display| Radiology                                           |
       | content.serviceCategory.coding.system | http://hl7.org/fhir/v2/0074                         |
@@ -156,16 +156,16 @@ And the FHIR results contain "radiology report results"
 @f100_5_radiologyreport_fhir @fhir
 Scenario: Client can request radiology report results in FHIR format
 Given a patient with "radiology report results" in multiple VistAs
-Given a patient with pid "9E7A;1" has been synced through Admin API
-When the client requests radiology report results for the patient "9E7A;1" in FHIR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;1" in FHIR format
 Then a successful response is returned
 Then the client receives 70 FHIR "VistA" result(s)
 And the client receives 70 FHIR "panorama" result(s)
 And the FHIR results contain "radiology report results"
 
 		| field											| value										|
-		| content.identifier.value						| CONTAINS urn:va:image:9E7A:1:7039491		|
-	    | content.subject.reference             		| Patient/9E7A;1                            |   
+		| content.identifier.value						| CONTAINS urn:va:image:SITE:1:7039491		|
+	    | content.subject.reference             		| Patient/SITE;1                            |   
       	| content.contained.name.text           		| WRIST 2 VIEWS                             |
      	| content.codedDiagnosis.text           		| NORMAL                                    | 
       	| content.name.text                     		| WRIST 2 VIEWS                             |  
@@ -177,7 +177,7 @@ And the FHIR results contain "radiology report results"
       	| content.contained.name                		| CAMP MASTER                               |
        	| content.status                        		| final	                                  	|
         | content.extension.url                 		| http://vistacore.us/fhir/extensions/rad#locationUid |
-      	| content.extension.valueString         		| urn:va:location:9E7A:40                 	| 
+      	| content.extension.valueString         		| urn:va:location:SITE:40                 	| 
         | content.issued                       			| 1996-05-08T11:23:00                       |
         | content.extension.url                 		| http://vistacore.us/fhir/extensions/rad#providerName|
       	| content.extension.valueString         		| PROVIDER,FIFTY                            |
@@ -187,16 +187,16 @@ And the FHIR results contain "radiology report results"
 @f100_6_radiologyreport_fhir @fhir
 Scenario: Client can request radiology report results in FHIR format
 Given a patient with "radiology report results" in multiple VistAs
-Given a patient with pid "C877;1" has been synced through Admin API
-When the client requests radiology report results for the patient "C877;1" in FHIR format
+Given a patient with pid "SITE;1" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;1" in FHIR format
 Then a successful response is returned
 Then the client receives 70 FHIR "VistA" result(s)
 And the client receives 70 FHIR "kodak" result(s)
 And the FHIR results contain "radiology report results"
 
 		| field											| value										|
-		| content.identifier.value						| CONTAINS urn:va:image:C877:1:7039491		|
-	    | content.subject.reference             		| Patient/C877;1                            |   
+		| content.identifier.value						| CONTAINS urn:va:image:SITE:1:7039491		|
+	    | content.subject.reference             		| Patient/SITE;1                            |   
       	| content.contained.name.text           		| WRIST 2 VIEWS                             |
      	| content.codedDiagnosis.text           		| NORMAL                                    | 
       	| content.name.text                     		| WRIST 2 VIEWS                             |  
@@ -208,7 +208,7 @@ And the FHIR results contain "radiology report results"
       	| content.contained.name                		| CAMP BEE		                            |
        	| content.status                        		| final	                                  	|
         | content.extension.url                 		| http://vistacore.us/fhir/extensions/rad#locationUid |
-      	| content.extension.valueString         		| urn:va:location:C877:40                 	| 
+      	| content.extension.valueString         		| urn:va:location:SITE:40                 	| 
         | content.issued                       			| 1996-05-08T11:23:00                       |
         | content.extension.url                 		| http://vistacore.us/fhir/extensions/rad#providerName|
       	| content.extension.valueString         		| PROVIDER,FIFTY                            |
@@ -220,8 +220,8 @@ And the FHIR results contain "radiology report results"
 @f100_7_radiologyreport_neg_fhir
 Scenario: Negative scenario.  Client can request radiology results in VPR format
 Given a patient with "No radiology report results" in multiple VistAs
-Given a patient with pid "9E7A;100184" has been synced through Admin API
-When the client requests radiology report results for the patient "9E7A;100184" in FHIR format
+Given a patient with pid "SITE;100184" has been synced through Admin API
+When the client requests radiology report results for the patient "SITE;100184" in FHIR format
 Then a successful response is returned
 Then corresponding matching FHIR records totaling "0" are displayed
 		

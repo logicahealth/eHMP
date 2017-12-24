@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jenkins
+# Cookbook:: jenkins
 # HWRP:: credentials_secret_text
 #
 # Author:: Miguel Ferreira <mferreira@schubergphilis.com>
 #
-# Copyright 2015, Schuberg Philis
+# Copyright:: 2015-2016, Schuberg Philis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ class Chef
     def correct_config?
       wanted_credentials = {
         description: new_resource.description,
-        secret: new_resource.secret
+        secret: new_resource.secret,
       }
 
       attribute_to_property_map.keys.each do |key|

@@ -63,7 +63,8 @@ describe('hdr-sync-request-handler', function() {
 			expect(domainConfig.method).toEqual('GET');
 			expect(domainConfig.timeout).toEqual(60000);
 			expect(domainConfig.url).toEqual('http://localhost:54000/hdr/getData?domain=med');
-			expect(domainConfig.agentClass).toBeDefined();
+			expect(domainConfig.forever).toBeDefined();
+			expect(domainConfig.agentOptions).toBeDefined();
 		});
 	});
 

@@ -2,40 +2,40 @@
 class DefaultLogin
 #    @@hmp_url = ENV.keys.include?('LEIPR_IP') ? 'https://' + ENV['LEIPR_IP'] :"https://hmpdemo.vainnovations.us"
 #    @@facility = "HMP SANDBOX"
-#    @@accesscode = "10VEHU"
-#    @@verifycode = "VEHU10"
+#    @@accesscode = "PW    "
+#    @@verifycode = "PW    "
 
   # @@hmp_url = 'https://' + ENV['EHMP_IP'] + ":8443"
   if !ENV['VE2_ATEST'].nil? && ENV['VE2_ATEST'] == "1"
     p "Using VE2 for Acceptance Tests"
     @@hmp_url = ENV.keys.include?('VE2_EHMP_IP') ? 'https://' + ENV['VE2_EHMP_IP'] + ":8443"  : "https://IP           "
     @@fhir_url = ENV.keys.include?('VE2_VE_API_IP') ? 'https://' + ENV['VE2_VE_API_IP'] : "https://IP      "
-    @@jds_url = ENV.keys.include?('VE2_JDS_IP') ? 'http://' + ENV['VE2_JDS_IP'] + ":9080" : "http://IP             "
-    @@solr_url = ENV.keys.include?('VE2_SOLR_IP') ? 'http://' + ENV['VE2_SOLR_IP'] + ":8983" : "http://IP            "
+    @@jds_url = ENV.keys.include?('VE2_JDS_IP') ? 'http://' + ENV['VE2_JDS_IP'] + ":PORT" : "http://IP             "
+    @@solr_url = ENV.keys.include?('VE2_SOLR_IP') ? 'http://' + ENV['VE2_SOLR_IP'] + ":PORT" : "http://IP            "
     @@vx_sync_url = ENV.keys.include?('VX_SYNC_IP') ? 'http://' + ENV['VX_SYNC_IP'] + ":8080" : "https://IP           "
     @@crs_endpoint = 'http://' + ENV['CRS_IP'] + ":3030" if ENV.keys.include?("CRS_IP")
   else
     p "Using default VistA-Exchange for Acceptance Tests"
     @@hmp_url = ENV.keys.include?('EHMP_IP') ? 'https://' + ENV['EHMP_IP'] + ":8443" : "https://IP           "
-    @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":9080" : "http://IP             "
+    @@jds_url = ENV.keys.include?('JDS_IP') ? 'http://' + ENV['JDS_IP'] + ":PORT" : "http://IP             "
     @@fhir_url = ENV.keys.include?('VE_API_IP') ? 'https://' + ENV['VE_API_IP'] : "https://IP      "
-    @@solr_url = ENV.keys.include?('SOLR_IP') ? 'http://' + ENV['SOLR_IP'] + ":8983" : "http://IP            "
+    @@solr_url = ENV.keys.include?('SOLR_IP') ? 'http://' + ENV['SOLR_IP'] + ":PORT" : "http://IP            "
     @@vx_sync_url = ENV.keys.include?('VX_SYNC_IP') ? 'http://' + ENV['VX_SYNC_IP'] +":8080" : "http://IP           "
     @@wb_vx_sync_url = ENV.keys.include?('WB_VX_SYNC_PORT') && ENV.keys.include?('VX_SYNC_IP') ? 'http://' + ENV['VX_SYNC_IP'] +":"+ENV['WB_VX_SYNC_PORT'] : "http://IP           "
-    @@panorama_url = ENV.keys.include?('PANORAMA_IP') ? ENV['PANORAMA_IP'] +":9210" : "IP             "
-    @@kodak_url = ENV.keys.include?('KODAK_IP') ? ENV['KODAK_IP'] +":9210" : "IP             "
+    @@panorama_url = ENV.keys.include?('PANORAMA_IP') ? ENV['PANORAMA_IP'] +":PORT" : "IP             "
+    @@kodak_url = ENV.keys.include?('KODAK_IP') ? ENV['KODAK_IP'] +":PORT" : "IP             "
     @@crs_endpoint = 'http://' + ENV['CRS_IP'] + ":3030" if ENV.keys.include?("CRS_IP")
   end
 
   @@facility = "PANORAMA"
-  @@accesscode = "IP    "
-  @@verifycode = "IP    !!"
-  # @@jds_url = 'https://' + ENV['JDS_IP'] + ":9080"
+  @@accesscode = "USER  "
+  @@verifycode = "PW      "
+  # @@jds_url = 'https://' + ENV['JDS_IP'] + ":PORT"
 
   @@default_wait_time = 50
 
-  @@rdk_url = ENV.keys.include?('RDK_IP') ? 'http://' + ENV['RDK_IP'] + ":8888" : "http://127.0.0.1:8888"
-  @@rdk_api_url = ENV.keys.include?('RDK_API_IP') ? 'http://' + ENV['RDK_API_IP'] + ":8888" : "http://IP             "
+  @@rdk_url = ENV.keys.include?('RDK_IP') ? 'http://' + ENV['RDK_IP'] + ":PORT" : "http://127.0.0.1:PORT"
+  @@rdk_api_url = ENV.keys.include?('RDK_API_IP') ? 'http://' + ENV['RDK_API_IP'] + ":PORT" : "http://IP             "
   
   def self.rdk_url
     return @@rdk_url
@@ -47,8 +47,8 @@ class DefaultLogin
   
   @@ve2_hmp_url = ENV.keys.include?('VE2_EHMP_IP') ? 'https://' + ENV['VE2_EHMP_IP'] + ":8443" : "https://IP           "
   @@ve2_fhir_url = ENV.keys.include?('VE2_VE_API_IP') ? 'https://' + ENV['VE2_VE_API_IP'] : "https://IP      "
-  @@ve2_jds_url = ENV.keys.include?('VE2_JDS_IP') ? 'http://' + ENV['VE2_JDS_IP'] + ":9080" : "http://IP             "
-  @@ve2_solr_url = ENV.keys.include?('VE2_SOLR_IP') ? 'http://' + ENV['VE2_SOLR_IP'] + ":8983" : "http://IP            "
+  @@ve2_jds_url = ENV.keys.include?('VE2_JDS_IP') ? 'http://' + ENV['VE2_JDS_IP'] + ":PORT" : "http://IP             "
+  @@ve2_solr_url = ENV.keys.include?('VE2_SOLR_IP') ? 'http://' + ENV['VE2_SOLR_IP'] + ":PORT" : "http://IP            "
 
   def self.wait_time
     return @@default_wait_time

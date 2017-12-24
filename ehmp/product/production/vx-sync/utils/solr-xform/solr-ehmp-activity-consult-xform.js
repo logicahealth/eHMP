@@ -61,6 +61,9 @@ function setDomainSpecificFields(solrRecord, vprRecord) {
     solrXformUtil.setStringFromLatestChildArrayField(solrRecord, 'consult_orders_accepted_date', vprRecord, 'data', 'consultOrders', 'executionDateTime');
     solrXformUtil.setStringFromObjectObjectField(solrRecord, 'activity_process_instance_id', vprRecord, 'data', 'activity', 'processInstanceId');
     solrXformUtil.setStringFromObjectObjectField(solrRecord, 'activity_source_facility_id', vprRecord, 'data', 'activity', 'sourceFacilityId');
+    solrXformUtil.setStringArrayFromObjectObjectArrayField(solrRecord, 'schedules_comment', vprRecord, 'data', 'schedules', 'comment');
+    solrXformUtil.setStringArrayFromObjectObjectArrayField(solrRecord, 'triages_comment', vprRecord, 'data', 'triages', 'comment');
+    solrXformUtil.setStringFromLatestChildArrayObjectField(solrRecord, 'signals_data_comment', vprRecord, 'data', 'signals', 'data', 'comment');
 }
 
 module.exports = transformRecord;

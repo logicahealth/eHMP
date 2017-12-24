@@ -1,6 +1,8 @@
 <div class="jumbotron">
     <div class="container">
-        <p>The eHMP Clinical Practice Environment is a web application that will ultimately perform many of the functions of the VA's Computerized Patient Record System (CPRS). The CPE utilizes VistA Exchange as its source of patient data via the VistA Exchange API (VX-API). The web application is developed as a Single Page Application using a custom web SDK. The SDK provides the following:
+        <p>The Enterprise Health Management Platform (eHMP) project is a multi-year effort to evolve a modern, service-oriented platform which provides a web-based user interface (UI), clinical data services, and assembles patient clinical data from federated Veterans Health Information Systems and Technology Architecture (VistA) repositories, Department of Defense (DoD), and private partner data sources, reflective of each location providing care to the patient. This federated data is aggregated into an enterprise patient record. eHMP service components will span all application layers, including presentation, business and core services, and data access.
+        </p>
+        <p>eHMP utilizes VistA Exchange as its source of patient data via the VistA Exchange API (VX-API). The web application is developed as a Single Page Application using a custom web SDK. The SDK and associated documentation provide the following:
         </p>
         <ul>
             <li>Application Development Kit (ADK) for UI development with Marionette/Backbone</li>

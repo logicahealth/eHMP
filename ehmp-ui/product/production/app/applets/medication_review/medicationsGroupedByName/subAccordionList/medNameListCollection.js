@@ -11,7 +11,8 @@ define([
         sortTypes: {
             status: 0,
             medicationName: 1,
-            sig: 2
+            sig: 2,
+            facilityMoniker: 3
         },
         initialize: function() {
             this.setDefaults();
@@ -44,6 +45,8 @@ define([
                     this.comparator = this.medicationNameComparator;
                 } else if (this.currentSortType === this.sortTypes.sig) {
                     this.comparator = this.sigComparator;
+                } else if(this.currentSortType === this.sortTypes.facilityMoniker) {
+                    this.comparator = this.facilityComparator;
                 } else {
                     this.comparator = this.statusRankComparator;
                 }
@@ -96,5 +99,15 @@ define([
             }
             return result;
         },
+        facilityComparator: function(firstModel, secondModel) {
+            var firstMoniker = firstModel.get('facilityMoniker');
+            var secondMoniker = secondModel.get('facilityMoniker');
+            if (firstMoniker === secondMoniker) return 0;
+            var result = (firstMoniker < secondMoniker) ? -1 : 1;
+            if (this.currentSortOrder == this.descending) {
+                return result * -1;
+            }
+            return result;
+        }
     });
 });

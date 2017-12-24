@@ -1,6 +1,6 @@
 {
   "name": "job-framework",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "Vx-Sync Job-based Beanstalk client framework",
   "main": "index.js",
   "scripts": {

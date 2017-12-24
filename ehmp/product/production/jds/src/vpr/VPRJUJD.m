@@ -1,4 +1,4 @@
-VPRJUJD ;SLC/KCM -- Unit tests for JSON decoding
+VPRJUJD ;SLC/KCM,CPC -- Unit tests for JSON decoding
  ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 STARTUP  ; Run once before all tests
@@ -150,6 +150,12 @@ BADQUOTE ;; @TEST poorly formed JSON (missing close quote on LABEL)
 BADSLASH ;; @TEST poorly formed JSON (non-escaped backslash)
  N JSON,Y,ERR
  D BUILD("BADSLASH",.JSON) D DECODE^VPRJSON("JSON","Y","ERR")
+ D ASSERT(1,$D(ERR)>0)
+ Q
+BADBRACK ;; @TEST poorly formed JSON (additional close bracket)
+ N JSON,Y,ERR
+ S JSON="{""error"":{""message"":""An error occurred""}}}"
+ D DECODE^VPRJSON("JSON","Y","ERR")
  D ASSERT(1,$D(ERR)>0)
  Q
 PSNUM ;; @TEST subjects that look like a numbers shouldn't be encoded as numbers

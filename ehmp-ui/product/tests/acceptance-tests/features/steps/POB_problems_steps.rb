@@ -8,19 +8,22 @@ Then(/^problems summary view is loaded successfully$/) do
   @ehmp.wait_until_applet_loaded 
 end
 
-When(/^user opens the first problems gist item$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_for_fld_problem_gist_toolbar_trigger
-  expect(@ehmp).to have_fld_problem_gist_toolbar_trigger
-  rows = @ehmp.fld_problem_gist_toolbar_trigger
+When(/^user hovers over the problems applet trend view row$/) do
+  ehmp = PobProblemsApplet.new
+  ehmp.wait_for_fld_problems_gist
+  expect(ehmp).to have_fld_problems_gist
+  rows = ehmp.fld_problems_gist
   expect(rows.length).to be > 0
-  rows[0].click
-  @ehmp.wait_until_btn_info_visible
+  rows[0].hover
 end
 
-Then(/^problems info button is displayed$/) do
-  @ehmp = PobProblemsApplet.new
-  expect(@ehmp).to have_btn_info
+When(/^user hovers over the problems applet row$/) do
+  ehmp = PobProblemsApplet.new
+  ehmp.wait_for_tbl_problems
+  expect(ehmp).to have_tbl_problems
+  rows = ehmp.tbl_problems
+  expect(rows.length).to be > 0
+  rows[0].hover
 end
 
 Then(/^user navigates to problems expanded view$/) do
@@ -30,14 +33,6 @@ Then(/^user navigates to problems expanded view$/) do
   @ehmp.wait_until_applet_loaded 
   @ehmp.menu.wait_until_fld_screen_name_visible
   expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Problems".upcase)
-end
-
-When(/^user opens the first problems row$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_tbl_problems_visible
-  rows = @ehmp.tbl_problems
-  expect(rows.length >= 0).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
-  rows[0].click
 end
 
 Then(/^the user sorts the Problems trend view applet by column Problem$/) do 
@@ -218,49 +213,6 @@ Then(/^the message on the Problems trend view applet does not say an error has o
   expect(@ehmp).to have_no_fld_error_msg, "Problems trend view did not refresh"
 end
 
-def view_problems_quick_look_table
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_btn_quick_view_visible
-  expect(@ehmp).to have_btn_quick_view
-  @ehmp.btn_quick_view.click 
-end
-
-def view_problems_detail_modal
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_btn_detail_view_visible
-  expect(@ehmp).to have_btn_detail_view
-  @ehmp.btn_detail_view.click
-end
-
-Then(/^hovering over the right side of problem trend view and selecting the onset date field$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_fld_quick_view_no_toolbar_visible
-  expect(@ehmp).to have_fld_quick_view_no_toolbar
-  @ehmp.fld_quick_view_no_toolbar.click
-end
-
-Then(/^the problems quick look table is displayed$/) do
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_tbl_problems_quick_view_visible
-  expect(@ehmp.tbl_problems_quick_view.length > 0).to be(true), "Quick look table does not contain any data rows"
-end
-
-Then(/^problems quick look table contains headers$/) do |table|
-  @ehmp = PobProblemsApplet.new
-  @ehmp.wait_until_tbl_problems_quick_view_headers_visible
-  table.rows.each do |headers|
-    expect(object_exists_in_list(@ehmp.tbl_problems_quick_view_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} was not found"
-  end
-end
-
-When(/^user selects the quick look view toolbar$/) do
-  view_problems_quick_look_table
-end
-
-When(/^user selects the detail view toolbar$/) do
-  view_problems_detail_modal
-end
-
 Then(/^problems detail view contain fields$/) do |table|
   @ehmp = ModalElements.new
   @ehmp.wait_until_fld_modal_detail_labels_visible
@@ -332,10 +284,48 @@ When(/^the user views a problem applet row's details$/) do
   @ehmp.wait_for_tbl_problems
   expect(@ehmp.tbl_problems.length).to be > 0
   @ehmp.tbl_problems[0].click
-  view_problems_detail_modal
   ModalElements.new.wait_for_modal_body
   ModalElements.new.wait_until_fld_modal_detail_labels_visible
 end
 
+Given(/^user can view the Quick Menu Icon in problems applet$/) do
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in problems applet$/) do
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in problems applet$/) do
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.select_quick_menu(ehmp)
+end
+
+Then(/^user can see the options in the problems applet$/) do |table|
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+Then(/^there exists a quick view popover table in problems applet$/) do 
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.verify_popover_table ehmp
+end
+
+Then(/^problems quick look table contains headers$/) do |table|
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.verify_popover_table_headers ehmp, table
+end
+
+Then(/^user scrolls the problems applet into view$/) do 
+  ehmp = PobProblemsApplet.new
+  ehmp.scroll_into_view
+end
+
+When(/^user selects the detail view from Quick Menu Icon of problems applet$/) do
+  ehmp = PobProblemsApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
 
 

@@ -5,13 +5,13 @@ VPRJDSTATUS ;KRM/CJE -- Handle Operational Data Sync Status operations ; 10/20/2
 SET(ARGS,BODY) ; Store operational data metastamp from a source
  N OBJECT,ERR,JID,JPID,JPID2,ICN,PID,SOURCE,SSOURCE,DOMAIN,DOMAINSTAMP,ITEM,ITEMSTAMP,I,J,K,PREVSTAMP,OLDOBJ
  S OBJECT=$NA(^||TMP($J,"metastamp"))
- K @OBJECT
+ K:$D(@OBJECT) @OBJECT
  D DECODE^VPRJSON("BODY",OBJECT,"ERR") ; Decode JSON to OBJECT array
  ; Get the source site hash (only one allowed per post)
  S SOURCE=""
  S SOURCE=$O(@OBJECT@("sourceMetaStamp",SOURCE))
   ; No source found. Quit with error
- I SOURCE="""" D SETERROR^VPRJRER(227) K @OBJECT Q ""
+ I SOURCE="""" D SETERROR^VPRJRER(227) K:$D(@OBJECT) @OBJECT Q ""
  ;
  ; Support for all numeric site hashes
  ; The JSON Encoder/Decoder uses a magic character to tell the JSON
@@ -54,7 +54,7 @@ SET(ARGS,BODY) ; Store operational data metastamp from a source
  ; Use locking to ensure no one else is modifying the metastamp when a new one is stored
  ;
  ; ** Begin Critical Section **
- L +^VPRSTATUSOD(SSOURCE):$G(^VPRCONFIG("timeout"),5) E  D SETERROR^VPRJRER(502) K @OBJECT Q ""
+ L +^VPRSTATUSOD(SSOURCE):$G(^VPRCONFIG("timeout"),5) E  D SETERROR^VPRJRER(502) K:$D(@OBJECT) @OBJECT Q ""
  ; Set sourcestamp
  S ^VPRSTATUSOD(SSOURCE,"stampTime")=SOURCESTAMP
  ; foreach domain
@@ -80,14 +80,14 @@ SET(ARGS,BODY) ; Store operational data metastamp from a source
   L -^VPRSTATUSOD(SSOURCE)
  ; ** End of Critical Section **
  ;
- K @OBJECT
+ K:$D(@OBJECT) @OBJECT
  Q ""
  ;
 GET(RETURN,ARGS) ; Return operational data sync status based on metastamps
  N RESULT,BUILD,OBJECT,ERR,SOURCE,DOMAIN,DOMAINSTAMP,ITEM,ITEMSTAMP,FILTER,CLAUSES
  N ID,DOMAINCOMPLETE,DOMAINSTORED,ITEMSCOMPLETE,ITEMSTORED,DETAILED
  S RESULT=$NA(^||TMP($J,"RESULT"))
- K @RESULT
+ K:$D(@RESULT) @RESULT
  ; Ensure we don't have any unknown parameters
  I $$UNKARGS^VPRJCU(.ARGS,"id,detailed,filter") Q
  ; Set detailed flag if passed
@@ -102,9 +102,9 @@ GET(RETURN,ARGS) ; Return operational data sync status based on metastamps
  ;
  D DATA(RESULT,ARGS("id"),DETAILED,.CLAUSES)
  S RETURN=$NA(^||TMP($J,"RETURN"))
- K @RETURN ; Clear the output global array, avoid subtle bugs
+ K:$D(@RETURN) @RETURN ; Clear the output global array, avoid subtle bugs
  D ENCODE^VPRJSON(RESULT,RETURN,"ERR") ; From an array to JSON
- K @RESULT
+ K:$D(@RESULT) @RESULT
  I $D(ERR) D SETERROR^VPRJRER(202) Q
  Q
  ;
@@ -136,7 +136,7 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  I '$G(^VPRSTATUSOD(SOURCE,"stampTime")) Q
  ; Set BUILD up to use as a target for indirection
  S BUILD=$NA(^||TMP($J,"RESULT","BUILD"))
- K @BUILD
+ K:$D(@BUILD) @BUILD
  ;
  ; sourceMetaStamp object
  S @BUILD@("sourceMetaStamp",SSOURCE,"stampTime")=$G(^VPRSTATUSOD(SOURCE,"stampTime"))
@@ -238,13 +238,14 @@ DATA(RESULT,ID,DETAILED,CLAUSES) ; GET Operational Data Sync Status algorithm
  E  D
  . S:$G(^VPRSTATUSOD(SOURCE,"syncCompleteAsOf"))'="" @BUILD@("sourceMetaStamp",SSOURCE,"syncCompleteAsOf")=$G(^VPRSTATUSOD(SOURCE,"syncCompleteAsOf"))
  . M @RESULT@("inProgress")=@BUILD
- K @BUILD
+ K:$D(@BUILD) @BUILD
+ QUIT
  ;
 DEL(RESULT,ARGS) ; Delete all sync status data
  ; If we are passed an id only kill that site's sync status
- I $G(ARGS("id"))'="" K ^VPRSTATUSOD(ARGS("id")) Q
+ I $G(ARGS("id"))'="" K:$D(^VPRSTATUSOD(ARGS("id"))) ^VPRSTATUSOD(ARGS("id")) Q
  ; If no id passed kill the whole thing
- I $G(ARGS("id"))="" K ^VPRSTATUSOD
+ I $G(ARGS("id"))="" K:$D(^VPRSTATUSOD) ^VPRSTATUSOD
  Q
  ;
 STORERECORD(RESULT,BODY)

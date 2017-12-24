@@ -46,13 +46,13 @@ define([
             var ariaValue = button.attr('aria-expanded');
 
             el.toggleClass('fa-caret-right').toggleClass('fa-caret-down');
-            if (ariaValue ==='true') { 
+            if (ariaValue ==='true') {
                 badge.removeClass('hidden');
                 button.attr({
                     'aria-expanded' : 'false',
                     'title' : 'Press enter to expand ' + this.model.get('title') + ' accordion.'
                 }).find('.sr-only').attr('aria-hidden', 'false');
-            } else { 
+            } else {
                 badge.addClass('hidden');
                 button.attr({
                     'aria-expanded' : 'true',
@@ -127,7 +127,7 @@ define([
                             id: key,
                             title: title,
                             count: group.length,
-                            spanSize: this.columns.length,
+                            spanSize: this.getNumColumns(),
                             cell: 'string'
                         })
                     });
@@ -194,7 +194,7 @@ define([
                         id: group,
                         title: title,
                         count: 0, // Will be updated bellow
-                        spanSize: this.columns.length,
+                        spanSize: this.getNumColumns(),
                         cell: 'string'
                     })
                 });
@@ -354,6 +354,15 @@ define([
             else {
                 return '';
             }
+        },
+        getNumColumns: function() {
+            var spanSize = this.columns.length;
+
+            if (_.get(this, 'options.isQuickMenuEnabled')) {
+                spanSize += 1;
+            }
+
+            return spanSize;
         }
 
     });

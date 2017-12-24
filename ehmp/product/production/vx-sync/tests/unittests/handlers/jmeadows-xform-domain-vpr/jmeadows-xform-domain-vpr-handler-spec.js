@@ -7,7 +7,7 @@ var moment = require('moment');
 
 var handler = require(global.VX_HANDLERS + 'jmeadows-xform-domain-vpr/jmeadows-xform-domain-vpr-handler');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
-// NOTE: be sure next lines are commented out before pushing
+// Be sure next lines are commented out before pushing
 // log = require('bunyan').createLogger({
 //     name: 'jmeadows-xform-domain-vpr-handler-spec',
 //     level: 'debug'
@@ -57,6 +57,8 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
 
         var allergyXformer = require('../../../../handlers/jmeadows-xform-domain-vpr/'+jmeadowsUnitPath+'/jmeadows-allergy-xformer');
         var labXformer = require('../../../../handlers/jmeadows-xform-domain-vpr/'+jmeadowsUnitPath+'/jmeadows-lab-xformer');
+        var vitalXformer = require('../../../../handlers/jmeadows-xform-domain-vpr/'+'v2_3_3_0_2'+'/jmeadows-vital-xformer');
+
 
         var mockEdipi = '00000099';
 
@@ -151,6 +153,44 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
             'verifiedBy': ''
         };
 
+        var sampleDODVitals = [
+            {   'cdrEventId' : '1000000582',
+                'codes' : [ { 'code' : '959595', 'display' : null, 'system' : 'DOD_NCID' } ],
+                'patientId' : null,
+                'patientName' : null,
+                'site' : { 'agency' : 'DOD', 'dmisId' : null, 'endpoints' : [ ], 'id' : null,
+                           'moniker' : 'Tripler AMC, HI', 'name' : 'AHLTA', 'permissions' : [ ], 'region' : null,
+                           'siteCode' : '2.16.840.1.113883.3.42.126.100001.13', 'status' : null
+                         },
+                'sourceProtocol' : 'DODADAPTER',
+                'dateTimeTaken' : 1415152140000,
+                'qualifiers' : null,
+                'rate' : '0/10',
+                'units' : 'Adult',
+                'unitsCode' : '9170',
+                'vitalType' : 'PAIN',
+                'vitalsIEN' : '2157584331'
+            },
+            {   'cdrEventId' : '1000000582',
+                'codes' : [ { 'code' : '2051', 'display' : null, 'system' : 'DOD_NCID' } ],
+                'patientId' : null,
+                'patientName' : null,
+                'site' : { 'agency' : 'DOD', 'dmisId' : null, 'endpoints' : [ ], 'id' : null,
+                           'moniker' : 'Tripler AMC, HI', 'name' : 'AHLTA', 'permissions' : [ ], 'region' : null,
+                           'siteCode' : '2.16.840.1.113883.3.42.126.100001.13', 'status' : null
+                         },
+                'sourceProtocol' : 'DODADAPTER',
+                'dateTimeTaken' : 1415152140000,
+                'qualifiers' : null,
+                'rate' : '70',
+                'units' : '/min',
+                'unitsCode' : '1762',
+                'vitalType' : 'PULSE',
+                'vitalsIEN' : '2157584331'
+            }
+        ];
+
+
         var sampleItemCollection =
             [
                 null, {
@@ -196,6 +236,14 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                 var vprItems = handler._steps._xformItemCollection(log, 'lab', [sampleDodLab], mockEdipi, labXformer, mockRequestStampTime);
                 expect(log.error).toHaveBeenCalled();
                 expect(_.isEmpty(vprItems)).toBe(true);
+            });
+        });
+
+        describe('Normal Path with multiple vitals, same cdrEventId', function() {
+            it('includes two vitals with unique uids', function() {
+                var vprItems = handler._steps._xformItemCollection(log, 'vital', sampleDODVitals, mockEdipi, vitalXformer, mockRequestStampTime);
+                expect(vprItems.length).toEqual(2);
+                expect(vprItems.map(function(vprRecord){return vprRecord.uid}).sort()).toEqual(['urn:va:vital:DOD:00000099:1000000582-2051', 'urn:va:vital:DOD:00000099:1000000582-959595'].sort())
             });
         });
     });
@@ -370,7 +418,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
 
                 job.patientIdentifier = {
                     type: 'pid',
-                    value: '9E7A;3'
+                    value: 'SITE;3'
                 };
 
                 //spyOn(mockHandlerCallback, 'callback');
@@ -439,7 +487,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                 //job.record.data.items = dodItems;
                 job.requestStampTime = '20140102120059.000';
                 job.jpid = 'aaa-aaaaa-aaaaaaaaaaa';
-                job.icn = '9E7A;3';
+                job.icn = 'SITE;3';
                 job.patientIdentifier = {
                     type: 'pid',
                     value: 'DOD;00001'
@@ -722,7 +770,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
             return require(util.format(global.VX_HANDLERS + '/jmeadows-xform-domain-vpr/'+jmeadowsUnitPath+'/jmeadows-%s-xformer', domain));
         });
         var vprObjects = _.map(allXformers, function(xformer) {
-            return xformer({
+            return xformer(log, {
                 accession: 'TEST ACC^ESSION', //Labs only
                 orderDate: mockDodLabOrderDate, //Labs only
                 resultDate: mockDodLabOrderDate, //Labs only

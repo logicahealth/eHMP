@@ -1,0 +1,22 @@
+description "<%= @name %> monitoring process"
+
+<% if @using_vagrant %>
+start on vagrant-mounted MOUNTPOINT=<%= Chef::Config[:file_cache_path]  %>
+<% else %>
+start on runlevel [<%= @level %>]
+<% end %>
+stop on runlevel [!<%= @level %>]
+
+expect daemon
+respawn
+respawn limit 5 30
+
+env PATH=/opt/chef/bin:/opt/chef/embedded/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+exec bluepill load /etc/bluepill/<%= @name %>.pill
+
+pre-stop script
+  set -x
+  PATH=/opt/chef/bin:/opt/chef/embedded/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  exec bluepill <%= @name %> stop
+end script

@@ -71,25 +71,25 @@ Note: much of this is placeholder until we get legit infrastructure scripts. Thi
 To start the entire framework, there are 10 processes that must be run. Start them in the order listed from within `~/Projects/vistacore/VX-Sync/product/production/vx-sync`:
 
 * `beanstalkd -p 5000 -V`
-* `node mocks/vista/vista-mock.js --vistaId 9E7A --port 10001 | node_modules/.bin/bunyan -o short`
-* `node mocks/vista/vista-mock.js --vistaId C877 --port 10002 | node_modules/.bin/bunyan -o short`
+* `node mocks/vista/vista-mock.js --vistaId SITE --port PORT | node_modules/.bin/bunyan -o short`
+* `node mocks/vista/vista-mock.js --vistaId SITE --port PORT | node_modules/.bin/bunyan -o short`
 * `node endpoints/mvi/mvi-endpoint.js --connector ../../mocks/mvi/mvi-mock.js --port 3000 | node_modules/.bin/bunyan -o short`
-* `node mocks/jds/jds-mock.js --port 9080 | node_modules/.bin/bunyan -o short`
-* `node pollerHost.js --site 9E7A --site C877 | node_modules/.bin/bunyan -o short`
+* `node mocks/jds/jds-mock.js --port PORT | node_modules/.bin/bunyan -o short`
+* `node pollerHost.js --site SITE --site SITE | node_modules/.bin/bunyan -o short`
 * `node subscriberHost.js | node_modules/.bin/bunyan -o short`
 * `node endpoints/writeback/writeback-endpoint.js --port 9090 | node_modules/.bin/bunyan -o short`
 
 This is optional. It will add a __lot__ of traffic
-* `node triggerPollerHost.js --site 9E7A --site C877 | node_modules/.bin/bunyan -o short`
+* `node triggerPollerHost.js --site SITE --site SITE | node_modules/.bin/bunyan -o short`
 
 This is not really used at the moment, it just stubs out the writeback endpoint
-* `node endpoints/sync-request/sync-request-endpoint.js --port 8080 | node_modules/.bin/bunyan -o short`
+* `node endpoints/sync-request/sync-request-endpoint.js --port PORT | node_modules/.bin/bunyan -o short`
 
 There are several shell scripts that will start (and stop) these processes, which you can use if you find them more convenient. If you run the triggerPollerHost.js, messages will begin moving through the system, as the vista-mock.js will generate simulated appointment patients.
 
 Start a Patient Sync
 --------------------
-Once everything is started, you can start a simulated synchronization by doing a `GET` to the following url [http://localhost:8080/sync/doLoad?pid=9E7A;3](http://localhost:8080/sync/doLoad?pid=9E7A;3). Note that you can pass a `pid` or an `icn` as the query parameter. Alternately, you can do a `POST` to the following url [http://localhost:8080/sync/load?pid=9E7A;3](http://localhost:8080/sync/load?pid=9E7A;3).
+Once everything is started, you can start a simulated synchronization by doing a `GET` to the following url [http://localhost:PORT/sync/doLoad?pid=SITE;3](http://localhost:PORT/sync/doLoad?pid=SITE;3). Note that you can pass a `pid` or an `icn` as the query parameter. Alternately, you can do a `POST` to the following url [http://localhost:PORT/sync/load?pid=SITE;3](http://localhost:PORT/sync/load?pid=SITE;3).
 
 Run tests
 =========

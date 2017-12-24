@@ -1,6 +1,8 @@
 'use strict';
 
+var moment = require('moment');
 var rdk = require('../../../core/rdk');
+var listResource = require('../../facility/list');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 module.exports.addSpecializedResultsToResponse = addSpecializedResultsToResponse;
@@ -13,10 +15,10 @@ module.exports._isGroupingEnabled = isGroupingEnabled;
 module.exports._addSynonymsToResponse = addSynonymsToResponse;
 module.exports._removeEscapeChars = removeEscapeChars;
 
-function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
+function addSpecializedResultsToResponse(req, specializedSolrResults, reqQuery) {
     var hmpEmulatedResponseObject = buildResponseObjectSkeleton(reqQuery);
 
-    _.each(specializedSolrResults, function (specializedSolrResult) {
+    _.each(specializedSolrResults, function(specializedSolrResult) {
         if (specializedSolrResult.error) {
             hmpEmulatedResponseObject = {
                 success: false,
@@ -26,7 +28,7 @@ function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
             return false;
         }
 
-        hmpEmulatedResponseObject = transformSolrItemsToHmpFormat(specializedSolrResult, hmpEmulatedResponseObject);
+        hmpEmulatedResponseObject = transformSolrItemsToHmpFormat(req, specializedSolrResult, hmpEmulatedResponseObject);
         hmpEmulatedResponseObject = updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponseObject);
         hmpEmulatedResponseObject = addSynonymsToResponse(specializedSolrResult, hmpEmulatedResponseObject);
     });
@@ -35,10 +37,10 @@ function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
 
 function updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponseObject) {
     if (isGroupingEnabled(specializedSolrResult)) {
-        _.each(specializedSolrResult.grouped, function (group_field) {
+        _.each(specializedSolrResult.grouped, function(group_field) {
             var itemsFound = group_field.matches || 0;
             hmpEmulatedResponseObject.data.foundItemsTotal += itemsFound;
-            hmpEmulatedResponseObject.data.unfilteredTotal += itemsFound;  // these are the same in HMP
+            hmpEmulatedResponseObject.data.unfilteredTotal += itemsFound; // these are the same in HMP
         });
     } else {
         var itemsFound = specializedSolrResult.response.numFound;
@@ -51,7 +53,7 @@ function updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponse
     return hmpEmulatedResponseObject;
 }
 
-function transformSolrItemsToHmpFormat (specializedSolrResult, hmpEmulatedResponseObject) {
+function transformSolrItemsToHmpFormat(req, specializedSolrResult, hmpEmulatedResponseObject) {
     var transformSolrItemsToHmpFormatDispatch = {
         accession: transformDefaultSolrItemsToHmp,
         allergy: transformDefaultSolrItemsToHmp,
@@ -79,28 +81,29 @@ function transformSolrItemsToHmpFormat (specializedSolrResult, hmpEmulatedRespon
         document: transformDocumentSolrItemsToHmp,
         vital: transformVitalSolrItemsToHmp,
         result: transformLabSolrItemsToHmp,
-        lab: transformLabSolrItemsToHmp,  // should not be needed, but left in for safety
+        lab: transformLabSolrItemsToHmp, // should not be needed, but left in for safety
         problem: transformProblemSolrItemsToHmp,
+        'ehmp-activity': transformEHMPActivitySolrItemsToHmp,
 
         vlerdocument: transformVlerDocumentSolrItemsToHmp,
 
-//        suggest: buildSuggestQuery,
-//        tasks: buildTasksQuery,
-//        generic: buildGenericQuery,
-//        wholeDomain: buildWholeDomainQuery,
-//        labPanel: buildLabPanelQuery,
-//        labGroup: buildLabGroupQuery,
-//        infobuttonSearch: buildInfobuttonQuery  // HMP uses Infobutton as one word
+        //        suggest: buildSuggestQuery,
+        //        tasks: buildTasksQuery,
+        //        generic: buildGenericQuery,
+        //        wholeDomain: buildWholeDomainQuery,
+        //        labPanel: buildLabPanelQuery,
+        //        labGroup: buildLabGroupQuery,
+        //        infobuttonSearch: buildInfobuttonQuery  // HMP uses Infobutton as one word
         default: transformDefaultSolrItemsToHmp,
         'null': transformDefaultSolrItemsToHmp
     };
 
     var searchedDomain = getSearchedDomainFromSolrResponse(specializedSolrResult);
     if (isGroupingEnabled(specializedSolrResult)) {
-        _.each(specializedSolrResult.grouped, function (group_type) {
-            _.each(group_type.groups, function (group) {
-                _.each(group.doclist.docs, function (doc) {
-                    var transformedItem = transformSolrItemsToHmpFormatDispatch[searchedDomain](doc, searchedDomain);
+        _.each(specializedSolrResult.grouped, function(group_type) {
+            _.each(group_type.groups, function(group) {
+                _.each(group.doclist.docs, function(doc) {
+                    var transformedItem = transformSolrItemsToHmpFormatDispatch[searchedDomain](req, doc, searchedDomain);
                     transformedItem.count = group.doclist.numFound;
                     // avoid push mutation by using concat
                     hmpEmulatedResponseObject.data.items = hmpEmulatedResponseObject.data.items.concat(transformedItem);
@@ -108,8 +111,8 @@ function transformSolrItemsToHmpFormat (specializedSolrResult, hmpEmulatedRespon
             });
         });
     } else {
-        _.each(specializedSolrResult.response.docs, function (doc) {
-            var transformedItem = transformSolrItemsToHmpFormatDispatch[searchedDomain](doc, searchedDomain);
+        _.each(specializedSolrResult.response.docs, function(doc) {
+            var transformedItem = transformSolrItemsToHmpFormatDispatch[searchedDomain](req, doc, searchedDomain);
             hmpEmulatedResponseObject.data.items = hmpEmulatedResponseObject.data.items.concat(transformedItem);
         });
     }
@@ -122,8 +125,8 @@ function transformSolrHighlightingToHmpObject(specializedSolrResult, hmpEmulated
     var highlighting = specializedSolrResult.highlighting || {};
 
     // use _.each() instead of for..in to allow function scope and more concise syntax
-    _.each(highlighting, function (highlightedFields, highlightedUid) {
-        _.each(hmpEmulatedResponseObject.data.items, function (item) {
+    _.each(highlighting, function(highlightedFields, highlightedUid) {
+        _.each(hmpEmulatedResponseObject.data.items, function(item) {
             if (item.uid === highlightedUid) {
                 item.highlights = highlightedFields;
             }
@@ -142,8 +145,8 @@ function isGroupingEnabled(specializedSolrResult) {
  */
 function getSearchedDomainFromSolrResponse(solrResult) {
     var searchedDomain = null;
-    solrResult.responseHeader.params.fq.forEach(function (filterQuery) {
-        var domainFq = filterQuery.match(/domain:(\w+)/);
+    solrResult.responseHeader.params.fq.forEach(function(filterQuery) {
+        var domainFq = filterQuery.match(/domain:([\w'-]+)/);
         if (!nullchecker.isNullish(domainFq)) {
             searchedDomain = domainFq[1];
         }
@@ -153,7 +156,8 @@ function getSearchedDomainFromSolrResponse(solrResult) {
     //console.error( error.stack );
     //return error;
 }
-function transformDefaultSolrItemsToHmp(item, domain) {
+
+function transformDefaultSolrItemsToHmp(req, item, domain) {
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
     transformedItem.type = domain;
@@ -162,7 +166,7 @@ function transformDefaultSolrItemsToHmp(item, domain) {
     return transformedItem;
 }
 
-function transformMedSolrItemsToHmp(item, domain) {
+function transformMedSolrItemsToHmp(req, item, domain) {
 
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
@@ -173,7 +177,7 @@ function transformMedSolrItemsToHmp(item, domain) {
 }
 
 
-function transformOrderSolrItemsToHmp(item, domain) {
+function transformOrderSolrItemsToHmp(req, item, domain) {
 
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
@@ -191,7 +195,7 @@ function transformOrderSolrItemsToHmp(item, domain) {
     return transformedItem;
 }
 
-function transformDocumentSolrItemsToHmp(item, domain) {
+function transformDocumentSolrItemsToHmp(req, item, domain) {
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
     transformedItem.type = domain;
@@ -214,7 +218,7 @@ function transformDocumentSolrItemsToHmp(item, domain) {
     return transformedItem;
 }
 
-function transformVitalSolrItemsToHmp(item, domain) {
+function transformVitalSolrItemsToHmp(req, item, domain) {
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
     transformedItem.type = domain;
@@ -222,7 +226,8 @@ function transformVitalSolrItemsToHmp(item, domain) {
 
     return transformedItem;
 }
-function transformLabSolrItemsToHmp(item, domain) {
+
+function transformLabSolrItemsToHmp(req, item, domain) {
 
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
@@ -231,7 +236,8 @@ function transformLabSolrItemsToHmp(item, domain) {
 
     return transformedItem;
 }
-function transformProblemSolrItemsToHmp(item, domain) {
+
+function transformProblemSolrItemsToHmp(req, item, domain) {
 
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
@@ -242,7 +248,30 @@ function transformProblemSolrItemsToHmp(item, domain) {
 
 }
 
-function transformVlerDocumentSolrItemsToHmp(item, domain) {
+function transformEHMPActivitySolrItemsToHmp(req, item, domain) {
+
+    var transformedItem = item;
+
+    transformedItem.type = domain;
+    if (transformedItem.sub_domain === 'request') {
+        transformedItem.kind = 'Request Activity';
+        transformedItem.summary = _.last(transformedItem.request_title);
+        transformedItem.datetime = moment(_.last(transformedItem.request_accepted_date)).format('YYYYMMDDHHmmss');
+    } else if (transformedItem.sub_domain === 'consult') {
+        transformedItem.kind = 'Consult';
+        transformedItem.summary = transformedItem.consult_name;
+        transformedItem.datetime = moment(transformedItem.consult_orders_accepted_date, 'YYYYMMDDHHmmss+HHmm').format('YYYYMMDDHHmmss');
+    }
+    var facilityList = listResource.list(req).data.items;
+    transformedItem.where = _.find(facilityList, {
+        division: transformedItem.activity_source_facility_id
+    }).name;
+
+    return transformedItem;
+
+}
+
+function transformVlerDocumentSolrItemsToHmp(req, item, domain) {
     var transformedItem = item;
     transformedItem.where = transformedItem.facility_name;
 
@@ -328,14 +357,14 @@ function buildResponseObjectSkeleton(reqQuery) {
     var responseObject = {};
 
     var data = {};
-    data.query = reqQuery.query;     // query and original appear to be always the same
-    data.original = reqQuery.query;  // "original search", PatientSearch.java:80
-    data.altQuery = '';     // never used in HMP
-    data.elapsed = 0;  // QTime header from solr response
-    data.foundItemsTotal = 0;  // data points; not the number of returned result summaries
-    data.unfilteredTotal = 0;  // see PatientSearch.java:200, probably equal to facets.all
-    data.corrections = [];  // never used in HMP
-    data.mode = 'SEARCH';  // see NOTES for more modes
+    data.query = reqQuery.query; // query and original appear to be always the same
+    data.original = reqQuery.query; // "original search", PatientSearch.java:80
+    data.altQuery = ''; // never used in HMP
+    data.elapsed = 0; // QTime header from solr response
+    data.foundItemsTotal = 0; // data points; not the number of returned result summaries
+    data.unfilteredTotal = 0; // see PatientSearch.java:200, probably equal to facets.all
+    data.corrections = []; // never used in HMP
+    data.mode = 'SEARCH'; // see NOTES for more modes
     data.items = [];
     if (nullchecker.isNotNullish(reqQuery.returnSynonyms) && reqQuery.returnSynonyms === 'true') {
         data.synonyms = [];

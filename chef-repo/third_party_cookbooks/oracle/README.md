@@ -71,7 +71,7 @@ Quickstart (database)
 * If you're using the open source Chef Server, add this line to
   /etc/chef-server/chef-server.rb:
 
-        `erchef['s3_url_ttl'] = 9999`
+        `erchef['s3_url_ttl'] = PORT`
 
   then run `chef-server-ctl reconfigure` to reconfigure Chef Server.
   This config edit avoids running into CHEF-3045, which we are liable
@@ -155,7 +155,7 @@ number of databases you create, and how fast your nodes are. In most
 cases, this should give you room to spare to install a couple
 databases:
 
-`erchef['s3_url_ttl'] = 9999`
+`erchef['s3_url_ttl'] = PORT`
 
 then run `chef-server-ctl reconfigure` to reconfigure Chef Server.
 

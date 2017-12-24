@@ -1,21 +1,16 @@
-<div role="row" class="table-row" {{#if userWorkspace}} draggable="true" {{/if}}>
-    <div role="presentation" class="selectable border-vertical" aria-label="{{name}}, {{description}}">
-        <div data-cell-instanceid="name_desc_{{uid}}" role="gridcell" class="table-cell border-vertical" data-cell-tilesort="tilesort">
-            <span class="sr-only toolbar-instructions">Press enter to open the toolbar menu.</span>
-            <div role="presentation" class="toolbar-container"></div>
-            <strong>{{modifiedName}}</strong>
-            {{modifiedDescription}}
-        </div>
+<div role="row" class="table-row" {{#if userWorkspace}} draggable="true" {{/if}} data-content="{{tooltip}}" data-toggle="popover">
+    <!-- tile button wrapped in a role="gridcell" div will be injected here -->
+    <div data-cell-instanceid="name_desc_{{uid}}" role="gridcell" class="table-cell border-vertical" data-cell-tilesort="tilesort">
+        <strong>{{modifiedName}}</strong>
+        {{modifiedDescription}}
     </div>
-    <div role="application" class="selectable" title="{{name}}" data-content="{{tooltip}}" data-toggle="popover" tabindex="0" aria-label="Press enter to open or close the quicklook table. Button.">
-        <div data-cell-instanceid="count_{{uid}}"  class="table-cell flex-width-0_5 text-center border-vertical">
-            <span class="{{isfacilityLabel}}">{{count}}</span>
-        </div>
-        <div data-cell-instanceid="status_{{uid}}"  class="table-cell text-center valign-middle {{#if isNotActiveMeds}}border-vertical{{/if}}" title="{{isfacilityDesc}}">
-            <span class="{{isfacilityLabel}}">{{fillableStatus}}</span>
-        </div>
-        {{#if isNotActiveMeds}}
-        <div data-cell-instanceid="age_{{uid}}" class="table-cell text-center">{{formatTimeSince age}}</div>
-        {{/if}}
+    <div data-cell-instanceid="count_{{uid}}" role="gridcell" class="table-cell flex-width-0_5 text-center border-vertical">
+        <span class="{{isfacilityLabel}}">{{count}}</span>
     </div>
+    <div data-cell-instanceid="status_{{uid}}" role="gridcell" class="table-cell text-center valign-middle {{#if isNotActiveMeds}}border-vertical{{/if}}" title="{{isfacilityDesc}}">
+        <span class="{{isfacilityLabel}}">{{fillableStatus}}</span>
+    </div>
+    {{#if isNotActiveMeds}}
+    <div data-cell-instanceid="age_{{uid}}" role="gridcell" class="table-cell text-center">{{formatTimeSince age}}</div>
+    {{/if}}
 </div>

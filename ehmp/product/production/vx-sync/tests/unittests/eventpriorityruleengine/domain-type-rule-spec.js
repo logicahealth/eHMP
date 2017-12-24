@@ -33,27 +33,27 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'REDACTED    ',
+		host: 'IP        ',
 		port: PORT
 	},
 	'vistaSites': {
-		'9E7A': {
+		'SITE': {
 			'name': 'panorama',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
 			'sendTimeout': 10000
 		},
-		'C877': {
+		'SITE': {
 			'name': 'kodak',
-			'host': 'REDACTED    ',
+			'host': 'IP        ',
 			'port': PORT,
-			'accessCode': 'REDACTED',
-			'verifyCode': 'REDACTED',
+			'accessCode': 'USER  ',
+			'verifyCode': 'PW      ',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -100,7 +100,7 @@ function createJob(dataDomain, priority) {
 		type: 'event-prioritization-request',
 		patientIdentifier: {
 			type: 'pid',
-			value: '9E7A;3'
+			value: 'SITE;3'
 		},
 		jpid: '8107cc41-69eb-4060-8813-a82db245a11a',
 		rootJobId: '1',
@@ -117,17 +117,17 @@ function createJob(dataDomain, priority) {
 describe('domain-type-rule.js', function() {
 	describe('fixPriorityRange()', function() {
 		it('Happy Path with no change', function() {
-			var job = createJob('9E7A;3', 50);
+			var job = createJob('SITE;3', 50);
 			domainTypeRule._internalFunctions._fixPriorityRange(job);
 			expect(job.priority).toBe(50);
 		});
 		it('Range too low', function() {
-			var job = createJob('9E7A;3', -25);
+			var job = createJob('SITE;3', -25);
 			domainTypeRule._internalFunctions._fixPriorityRange(job);
 			expect(job.priority).toBe(1);
 		});
 		it('Range too high', function() {
-			var job = createJob('9E7A;3', 500);
+			var job = createJob('SITE;3', 500);
 			domainTypeRule._internalFunctions._fixPriorityRange(job);
 			expect(job.priority).toBe(100);
 		});

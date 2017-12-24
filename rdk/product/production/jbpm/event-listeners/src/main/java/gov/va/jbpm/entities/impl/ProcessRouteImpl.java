@@ -8,7 +8,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ACTIVITYDB.AM_PROCESSROUTE")
+@Table(name = "AM_PROCESSROUTE", schema = "ACTIVITYDB")
 public class ProcessRouteImpl extends BaseRoute {
 	
 	@Id

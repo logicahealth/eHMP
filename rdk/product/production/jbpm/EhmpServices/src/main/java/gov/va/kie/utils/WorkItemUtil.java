@@ -67,7 +67,8 @@ public class WorkItemUtil {
 			return Long.parseLong(paramValue);
 		} 
 		catch(Exception e){
-			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "Required parameter '" + paramName + "' was not a string representation of long number as expected.");
+			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "Required parameter '" + 
+					paramName + "' was not a string representation of long number as expected.", e);
 		}		
 	}
 	
@@ -95,7 +96,7 @@ public class WorkItemUtil {
 		String name = workItem.getName();
 		manager.completeWorkItem(id, serviceResult);
 		
-		LOGGER.debug("work item completed (" + id + ") - " + name);
+		LOGGER.debug(String.format("work item completed %d - %s", id, name));
 	}
 	
 	public static String buildSuccessResponse() {

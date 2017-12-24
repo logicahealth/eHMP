@@ -34,7 +34,11 @@ public class ProcessInstanceImplUtil {
 	public static final String TYPE = "type";
 	public static final String SUBDOMAIN = "subDomain";
 	public static final String DESCRIPTION = "description";
+	public static final String ACTIVITYJSON = "activityJSON";
+	public static final String PID = "pid";
+
 	private static final Logger LOGGER = Logger.getLogger(ProcessInstanceImplUtil.class);
+
 
 	public static ProcessInstanceImpl create(ProcessEvent event) throws EventListenerException {
 		LOGGER.debug("Entering ProcessInstanceImplUtil.create");
@@ -49,7 +53,7 @@ public class ProcessInstanceImplUtil {
 		long statusId = processInstance.getState();
 		String version = processInstance.getProcess().getVersion();
 		String deploymentId = manager.getIdentifier();
-		
+
 		String icn = getProcInstVariableString(processInstanceVariables, PATIENT_ID);
 		String facilityId = getProcInstVariableString(processInstanceVariables, FACILITY_ID);
 		String destinationFacilityId = getProcInstVariableString(processInstanceVariables, DESTINATION_FACILITY_ID);
@@ -66,14 +70,16 @@ public class ProcessInstanceImplUtil {
 		String type = getProcInstVariableString(processInstanceVariables, TYPE);
 		String domain = getProcInstVariableString(processInstanceVariables, SUBDOMAIN); // the subDomain field in the enterprise-orderable maps to the DOMAIN column in the activityDB
 		String description = getProcInstVariableString(processInstanceVariables, DESCRIPTION);
-		
+		String activityJSON = getProcInstVariableString(processInstanceVariables, ACTIVITYJSON);
+		String pid = getProcInstVariableString(processInstanceVariables, PID);
+
 		if (icn == null)
 			icn = "";
 		if (createdById == null)
 			createdById = "";
 		if (activityHealthy == null)
 			activityHealthy = new Boolean(true);
-		
+
 		List<ProcessRouteImpl> routesList = ProcessRouteImplUtil.create(processInstanceId, assignedTo);
 
 		ProcessInstanceImpl processInstanceImpl = new ProcessInstanceImpl(processInstanceId,
@@ -102,73 +108,78 @@ public class ProcessInstanceImplUtil {
 				type,
 				domain,
 				description,
-				routesList
-				);
+				routesList,
+				activityJSON,
+				pid
+		);
 		return processInstanceImpl;
 	}
-	
+
 	protected static Object getProcInstVariableObject(Map<String,Object> processInstanceVariables, String key) throws EventListenerException {
 		if (key == null || key.isEmpty()) {
 			throw new EventListenerException(EventListenerException.BAD_REQUEST, "key was null or empty");
 		}
-		
+
 		if (processInstanceVariables == null || processInstanceVariables.containsKey(key) == false)
 			return null;
-		
+
 		Object obj = processInstanceVariables.get(key);
 		return obj;
 	}
-	
+
 	protected static String getProcInstVariableString(Map<String,Object> processInstanceVariables, String key) throws EventListenerException {
 		Object obj = getProcInstVariableObject(processInstanceVariables, key);
-		
+
 		if (obj == null)
 			return null;
-		
-		if (!(obj instanceof java.lang.String)) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" + key + "' was not a String as expected.");
+
+		if (!(obj instanceof String)) {
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" +
+					key + "' was not a String as expected.");
 		}
-		
+
 		String retvalue = (String)obj;
 		return retvalue;
 	}
-	
+
 	protected static Long getProcInstVariableLong(Map<String,Object> processInstanceVariables, String key) throws EventListenerException {
 		String str = getProcInstVariableString(processInstanceVariables, key);
-		
+
 		if (str == null || str.length() == 0)
 			return null;
-		
+
 		Long retvalue = null;
 		try {
 			retvalue = Long.parseLong(str);
 		} catch (NumberFormatException e) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" + key + "' was not a Long as expected.  Cannot convert '" + str + "' to a Long: " + e.getMessage());
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" +
+					key + "' was not a Long as expected.  Cannot convert '" + str + "' to a Long: " + e.getMessage(),e);
 		}
-		
+
 		return retvalue;
 	}
-	
+
 	protected static Boolean getProcInstVariableBoolean(Map<String,Object> processInstanceVariables, String key) throws EventListenerException {
 		Object obj = getProcInstVariableObject(processInstanceVariables, key);
-		
+
 		if (obj == null)
 			return null;
-		
-		if (!(obj instanceof java.lang.Boolean)) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" + key + "' was not a Boolean as expected.");
+
+		if (!(obj instanceof Boolean)) {
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" +
+					key + "' was not a Boolean as expected.");
 		}
-		
+
 		Boolean retvalue = (Boolean)obj;
 		return retvalue;
 	}
-	
+
 	protected static Date getProcInstVariableDate(Map<String,Object> processInstanceVariables, String key) throws EventListenerException {
 		String str = getProcInstVariableString(processInstanceVariables, key);
-		
+
 		if (str == null || str.length() == 0)
 			return null;
-		
+
 		Date retvalue = null;
 		try {
 			DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
@@ -176,7 +187,8 @@ public class ProcessInstanceImplUtil {
 			retvalue = dtTime.toDate();
 		}
 		catch(Exception e) {
-			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" + key + "' was not a Date as expected.  Cannot convert '" + str + "' to a Date: " + e.getMessage());
+			throw new EventListenerException(EventListenerException.BAD_REQUEST, "processInstanceVariables '" +
+					key + "' was not a Date as expected.  Cannot convert '" + str + "' to a Date: " + e.getMessage(), e);
 		}
 		return retvalue;
 	}

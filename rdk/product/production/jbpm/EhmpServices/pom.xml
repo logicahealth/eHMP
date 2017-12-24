@@ -20,7 +20,6 @@
 	<properties>
 		<maven.compiler.source>${javaVersion}</maven.compiler.source>
 		<maven.compiler.target>${targetJavaVersion}</maven.compiler.target>
-		<jbpm.version>${kie-version}</jbpm.version>
 		<springframework-version>${spring-version}</springframework-version>
 	</properties>
 
@@ -44,7 +43,7 @@
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-test</artifactId>
-			<version>${jbpm.version}</version>
+			<version>${kie-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -64,37 +63,43 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.kie</groupId>
-			<artifactId>kie-api</artifactId>
-			<version>${jbpm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.kie</groupId>
-			<artifactId>kie-internal</artifactId>
-			<version>${jbpm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>VistaCore</groupId>
 			<artifactId>jbpm-utils</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>${jboss-logging}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-api</artifactId>
+			<version>${kie-version}</version>
+            <scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-internal</artifactId>
+            <version>${kie-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-core</artifactId>
+    		<version>${hibernate-core-version}</version>
+		</dependency>	
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>${hibernate-jpa-version}</version>
+		</dependency>		
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>${json-version}</version>
+		</dependency>
+		
 	</dependencies>
 </project>

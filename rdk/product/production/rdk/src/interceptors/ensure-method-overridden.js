@@ -16,7 +16,8 @@ module.exports = function(req, res, next) {
     if (req.originalMethod === req.method && req.method !== 'POST') {
         var errorCode = _.get(methodOverrideErrorCodes, req.method, methodOverrideErrorCodes._default);
         var error = new RdkError({
-            code: errorCode
+            code: errorCode,
+            logger: req.logger
         });
         return res.status(400).rdkSend(error);
     }

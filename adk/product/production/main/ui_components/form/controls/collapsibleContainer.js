@@ -37,13 +37,13 @@ define([
     requiredFields: ['name'],
     buildCollections: function(headerItems, collapseItems) {
       if (!(headerItems instanceof Backbone.Collection)) {
-        this.headerItems = new ControlService.Fields(headerItems);
+        this.headerItems = new ControlService.Fields(headerItems, { formView: _.get(this, 'field.formView') });
       } else {
         this.headerItems = headerItems;
       }
 
       if (!(collapseItems instanceof Backbone.Collection)) {
-        this.collapseItems = new ControlService.Fields(collapseItems);
+        this.collapseItems = new ControlService.Fields(collapseItems, { formView: _.get(this, 'field.formView') });
       } else {
         this.collapseItems = collapseItems;
       }

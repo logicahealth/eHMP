@@ -1,0 +1,26 @@
+{
+  "domain": "ehmp-activity",
+  "facility-enterprise": "enterprise",
+  "name": "Physical Therapy",
+  "state": "active",
+  "subDomain": "consult",
+  "type": "ehmp-enterprise-orderable",
+  "uid": "urn:va:entordrbls:1",
+  "data": {
+    "activity": {
+      "deploymentId": "VistaCore:Order",
+      "processDefinitionId": "Order:Consult"
+    },
+    "codes": [
+      {
+        "code": "444831000124102",
+        "display": "Referral for physical therapy",
+        "system": "urn:oid:2.16.840.1.113883.6.96"
+      }
+    ],
+    "team_focus": {
+      "code": 81,
+      "name": "Physical Therapy"
+    }
+  }
+}

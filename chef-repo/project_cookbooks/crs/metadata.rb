@@ -4,7 +4,7 @@ maintainer_email 'YOUR_EMAIL'
 license          'All rights reserved'
 description      'Installs/Configures crs'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.2"
+version          "2.233.8"
 
 #############################
 # 3rd party
@@ -13,4 +13,4 @@ version          "2.1.2"
 #############################
 # wrapper_cookbook
 #############################
-depends "java_wrapper", "2.1.2"
+depends "java_wrapper", "2.233.3"

@@ -330,7 +330,7 @@ define([
                 var delta = jsondiffpatch.diff(origPreferences, newPreferences);
                 _.forOwn(delta, function(changedProperty) {
                     user.trigger('change:preferences:' + changedProperty);
-                })
+                });
             }
 
             if (options.saveToSession) {
@@ -348,13 +348,11 @@ define([
                     data: JSON.stringify({
                         preferences: newPreferences
                     }),
-                    success: function(response, xhr) {
-                        // console.log('Successful Set Prefernces');
-
-
+                    success: function(model, response, xhr) {
+                        user.trigger('save:preferences:success', model, response, xhr);
                     },
-                    error: function(errorResponse) {
-                        console.error('Failed to save preferences to pJDS');
+                    error: function(model, response, xhr) {
+                        user.trigger('save:preferences:error', model, response, xhr);
                     }
                 });
             }

@@ -3,8 +3,8 @@ Feature: F420 - Enter and Store an Allergy and an Allergy EIE
   
 @allergy_writeback
 Scenario: Client can write to the VistA and add Allergy records then marked it as Entered in Error- patient with ICN
-  Given a patient with pid "C877;253" has been synced through VX-Sync API for "9E7A;C877;HDR;VLER" site(s)
-  And the client requests "ALLERGIES" for the patient "C877;253" in VPR format
+  Given a patient with pid "SITE;253" has been synced through VX-Sync API for "SITE;SITE;HDR;VLER" site(s)
+  And the client requests "ALLERGIES" for the patient "SITE;253" in VPR format
   And save the totalItems
   And a client connect to VistA using "KODAK"
   When the client add new Drug Allergy record for patient with DFN "253" 
@@ -20,7 +20,7 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
     | severity           | Severe , Moderate    | 1, 2                            |
     | comment            |                      | Test, This patient has allergy. |    
   Then the client receive the VistA write-back response
-  And the new "ALLERGY" record added for the patient "C877;253" in VPR format
+  And the new "ALLERGY" record added for the patient "SITE;253" in VPR format
   And VistA write-back generate a new localId with values record dispaly in VPR format
     | field            | value                                    |
     | codes.display    | Digitoxin                                |
@@ -36,7 +36,7 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
   #Enter and Store an Allergy EIE
   When the client mark abvoe Allergy record as Entered in Error with comment "Test - Entered in Error"
   Then the client receive the VistA write-back response
-  And the above "Allergy" record removed for the patient "C877;253"
+  And the above "Allergy" record removed for the patient "SITE;253"
   And the above record dispaly in VPR format with value of
     | field             | value        |
     | comments.comment  | CONTAINS Test - Entered in Error |
@@ -48,8 +48,8 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
   
 @allergy_writeback
 Scenario: Client can write to the VistA and add Allergy records then marked it as Entered in Error
-  Given a patient with pid "C877;66" has been synced through VX-Sync API for "C877" site(s)
-  And the client requests "ALLERGIES" for the patient "C877;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "ALLERGIES" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "KODAK"
   When the client add new Drug Allergy record for patient with DFN "66" 
@@ -65,7 +65,7 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
     | severity           | Moderate             | 2                               |
     | comment            |                      | Test, This patient has allergy. |
   Then the client receive the VistA write-back response
-  And the new "ALLERGY" record added for the patient "C877;66" in VPR format
+  And the new "ALLERGY" record added for the patient "SITE;66" in VPR format
   And VistA write-back generate a new localId with values record dispaly in VPR format
     | field                 | value                                    |
     | products.name         | APPLES                                   |
@@ -82,7 +82,7 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
   #Enter and Store an Allergy EIE
   When the client mark abvoe Allergy record as Entered in Error with comment "Test - Entered in Error"
   Then the client receive the VistA write-back response
-  And the above "Allergy" record removed for the patient "C877;66"
+  And the above "Allergy" record removed for the patient "SITE;66"
   And the above record dispaly in VPR format with value of
     | field             | value        |
     | comments.comment  | CONTAINS Test - Entered in Error |
@@ -94,8 +94,8 @@ Scenario: Client can write to the VistA and add Allergy records then marked it a
 
 @allergy_writeback
 Scenario: Client can not duplicate the same allergy reaction to the same patient in VistA
-  Given a patient with pid "9E7A;66" has been synced through VX-Sync API for "9E7A" site(s)
-  And the client requests "ALLERGIES" for the patient "9E7A;66" in VPR format
+  Given a patient with pid "SITE;66" has been synced through VX-Sync API for "SITE" site(s)
+  And the client requests "ALLERGIES" for the patient "SITE;66" in VPR format
   And save the totalItems
   And a client connect to VistA using "Panorama"
   When the client add new Drug Allergy record for patient with DFN "66" 
@@ -111,9 +111,9 @@ Scenario: Client can not duplicate the same allergy reaction to the same patient
     | severity           | Moderate             | 2                               |
     | comment            |                      | Test, This patient has allergy. |
   Then the client receive the VistA write-back response
-  And the new "ALLERGY" record added for the patient "9E7A;66" in VPR format
+  And the new "ALLERGY" record added for the patient "SITE;66" in VPR format
   
-  Given the client requests "ALLERGIES" for the patient "9E7A;66" in VPR format
+  Given the client requests "ALLERGIES" for the patient "SITE;66" in VPR format
   When the client try to add existing Drug Allergy record for patient with DFN "66" 
     | field              | desc                 | value                           |
     | reference_date     |                      | 20150911.145112                 |

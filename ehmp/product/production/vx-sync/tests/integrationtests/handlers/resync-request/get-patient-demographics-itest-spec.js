@@ -11,8 +11,9 @@ var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
-var host = require(global.VX_INTTESTS + 'test-config');
-var port = PORT;
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
+var hostPort = testConfig.vxsyncPort;
 
 function loadTestPatient(config, patientIdentifierValue) {
     var completed = false;
@@ -52,7 +53,7 @@ function waitForDemographicsInJds(environment, pid) {
                 return callback();
             }, 2000);
         });
-    }
+    };
 
     runs(function() {
         async.retry(10, task, function(err, result) {
@@ -75,7 +76,7 @@ describe('get-patient-demographics', function() {
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
-                    port: 8080,
+                    port: hostPort,
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
@@ -83,8 +84,8 @@ describe('get-patient-demographics', function() {
                     method: 'POST'
                 },
                 vistaSites: {
-                    '9E7A': {},
-                    'C877': {}
+                    'SITE': {},
+                    'SITE': {}
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
@@ -98,8 +99,8 @@ describe('get-patient-demographics', function() {
                 jds: new JdsClient(dummyLogger, dummyLogger, config)
             };
 
-            loadTestPatient(config.syncRequestApi, '9E7A;3');
-            waitForDemographicsInJds(environment, '9E7A;3')
+            loadTestPatient(config.syncRequestApi, 'SITE;3');
+            waitForDemographicsInJds(environment, 'SITE;3')
         });
 
         it('then demographics are added to the job', function() {

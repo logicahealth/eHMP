@@ -17,7 +17,8 @@ define([
             label: "",
             maxlength: 255,
             extraClasses: [],
-            helpMessage: ''
+            helpMessage: '',
+            charCount: false
         },
         template: Handlebars.compile([
             '<label class="{{form-class-name "controlLabelClassName"}}">{{label}}</label>',
@@ -27,13 +28,14 @@ define([
             '</div>'
         ].join("\n")),
         events: _.defaults({
-            "change input": function() {
-                this.onChange.apply(this, arguments);
-                this.onUserInput.apply(this, arguments);
-            }
+            "change input": '_onInputChange'
         }, ControlService.Control.prototype.events),
         getValueFromDOM: function() {
             return this.formatter.toRaw(this.$("input").val(), this.model);
+        },
+        _onInputChange: function() {
+            this.onChange.apply(this, arguments);
+            this.onUserInput.apply(this, arguments);
         }
     });
 

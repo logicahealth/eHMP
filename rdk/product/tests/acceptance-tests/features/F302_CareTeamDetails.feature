@@ -6,10 +6,10 @@ Feature: F302 - Enhance Care Team Header
 @F302-1.1_CareTeamInpatientHeaders @US4454 @US5599
 Scenario: Care Team Information headers for Inpatient
 # twentythree,inpatient
-Given a patient with pid "9E7A;100731" has been synced through the RDK API
-When the client requests demographics for the patient "9E7A;100731" with credentials
+Given a patient with pid "SITE;100731" has been synced through the RDK API
+When the client requests demographics for the patient "SITE;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | REDACTED     | REDACTED    |
+ | SITE        | USER          | PW          |
 Then a successful response is returned
 And the VPR results contain
 |field    | value  |
@@ -20,10 +20,10 @@ And the VPR results contain
 @US5256
 Scenario: Care Team Information: Detail verification for outpatient (Panorama)
 # twentythree,patient
-Given a patient with pid "9E7A;722" has been synced through the RDK API
-When the client requests demographics for the patient "9E7A;722" with credentials
+Given a patient with pid "SITE;722" has been synced through the RDK API
+When the client requests demographics for the patient "SITE;722" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | REDACTED     | REDACTED    |
+ | SITE        | USER          | PW          |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Fifteen   |  (843) 555-5455   | (843) 555-5456    | (843) 555-5454   |
 And the VPR results contain
@@ -67,10 +67,10 @@ And the VPR results contain
 @US5256
 Scenario: Care Team Information: Detail verification for inpatient (Panorama)
 # twentythree,inpatient
-Given a patient with pid "9E7A;100731" has been synced through the RDK API
-When the client requests demographics for the patient "9E7A;100731" with credentials
+Given a patient with pid "SITE;100731" has been synced through the RDK API
+When the client requests demographics for the patient "SITE;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | REDACTED     | REDACTED    |
+ | SITE        | USER          | PW          |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Fifteen   |  (843) 555-5455   | (843) 555-5456    | (843) 555-5454   |
 And the VPR results contain
@@ -116,10 +116,10 @@ And the VPR results contain
 @US5256
 Scenario: Care Team Information: Detail verification for inpatient (Kodak)
 # twentythree,inpatient
-Given a patient with pid "9E7A;100731" has been synced through the RDK API
-When the client requests demographics for the patient "9E7A;100731" with credentials
+Given a patient with pid "SITE;100731" has been synced through the RDK API
+When the client requests demographics for the patient "SITE;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | REDACTED     | REDACTED    |
+ | SITE        | USER          | PW          |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Seventythree  |  (555) 888-9900   | (555) 888-9977    | (555) 888-9999   |
 And the VPR results contain
@@ -165,18 +165,18 @@ And the VPR results contain
 @US5256
 Scenario: Care Team Information: Detail verification for outpatient (Kodak)
 # twentythree,patient
-Given a patient with pid "9E7A;722" has been synced through the RDK API
-When the client requests demographics for the patient "9E7A;722" with credentials
+Given a patient with pid "SITE;722" has been synced through the RDK API
+When the client requests demographics for the patient "SITE;722" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | REDACTED     | REDACTED    |
+ | SITE        | USER          | PW          |
 Then a successful response is returned
-#| Primary Care Provider           | Provider, Seventythree  |  (555) 888-9900   | (555) 888-9977    | (555) 888-9999   |
+#| Primary Care Provider           | Provider, Seventythree  |  (555) 888-9900   | (555) 888-9977    | (555) 888-PORT   |
 And the VPR results contain
       | field                                 | value                  |
       | teamInfo.primaryProvider.name         |  PROVIDER,SEVENTYTHREE |
       | teamInfo.primaryProvider.analogPager  | (555)888-9900          |
       | teamInfo.primaryProvider.digitalPager | (555)888-9977          |
-      | teamInfo.primaryProvider.officePhone  | (555)888-9999          |
+      | teamInfo.primaryProvider.officePhone  | (555)888-PORT          |
  #| Primary Care Assoc Provider     | Unassigned        |  not specified    | not specified     | not specified    |
  And the VPR results contain
       | field                                   | value      |
@@ -189,13 +189,13 @@ And the VPR results contain
       | field                                    | value        |
       | teamInfo.mhCoordinator.mhTeam            | MH TEAM      |
       | teamInfo.mhCoordinator.mhTeamOfficePhone | 555-888-9832 |
-#| MH Treatment Coordinator        | Vehu, Two        |  (555) 888-7771   | (555) 888-7434    | (555) 888-7777   |
+#| MH Treatment Coordinator        | Vehu, Two        |  (555) 888-7771   | (555) 888-7434    | (555) 888-PORT   |
 And the VPR results contain
       | field                               | value         |
       | teamInfo.mhCoordinator.name         | VEHU,TWO      |
       | teamInfo.mhCoordinator.analogPager  | (555)888-7771 |
       | teamInfo.mhCoordinator.digitalPager | (555)888-7434 |
-      | teamInfo.mhCoordinator.officePhone  | (555)888-7777 |  
+      | teamInfo.mhCoordinator.officePhone  | (555)888-PORT |  
 #| Inpatient Attending Provider    | Provider, One          |  (555) 888-0001   | (555) 888-0002    | (555) 888-0000   |
   And the VPR results contain
       | field                                   | value         |

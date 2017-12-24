@@ -32,7 +32,7 @@ end
 
 Then(/^the user takes note of number of existing tasks$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other("#data-grid-todo_list tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=todo_list] tbody") }
   @number_existing_tasks = PobTasksApplet.new.number_expanded_applet_rows
   p "number existing_tasks: #{@number_existing_tasks}"
 end
@@ -41,7 +41,7 @@ Then(/^a task is added to the applet$/) do
   ehmp = PobTasksApplet.new
   ehmp.wait_for_tbl_task_rows
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infinite_scroll_other("#data-grid-todo_list tbody") }
+  wait.until { infinite_scroll_other("[data-appletid=todo_list] tbody") }
   wait.until { ehmp.number_expanded_applet_rows == @number_existing_tasks + 1 }
 end
 
@@ -53,11 +53,28 @@ end
 
 Given(/^user selects the task name "([^"]*)"$/) do |task_name|
   ehmp = PobTasksApplet.new
+  
+  ehmp.wait_until_fld_earliest_date_header_visible
+  expect(ehmp).to have_fld_earliest_date_header
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  wait.until { infinite_scroll_other("[data-appletid=todo_list] tbody") }
+    
+  ehmp.fld_earliest_date_header.click 
+  ehmp.wait_until_tbl_task_rows_visible
+  ehmp.fld_earliest_date_header.click # sorting twice so the latest date comes on top  
   ehmp.wait_until_tbl_task_rows_visible
   expect(ehmp).to have_tbl_task_rows
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  wait.until { infiniate_scroll("#data-grid-todo_list tbody") }
-  click_an_object_from_list(ehmp.tbl_task_rows, task_name)
+  
+  column_values = ehmp.fld_earliest_date_column_data
+  is_descending = descending? ehmp.fld_earliest_date_column_data
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+  
+  column_index = ehmp.tbl_task_rows.index { |item| item.text.include? task_name }
+  expect(column_index).to_not be_nil, "Did not find a task with name #{task_name}"
+  ehmp.wait_for_btn_action
+  expect(ehmp.btn_action.length >= column_index).to eq(true)
+  ehmp.btn_action[column_index].click  
 end
 
 Then(/^task modal has buttons "([^"]*)", "([^"]*)" and "([^"]*)"$/) do |unlock, activity_detail, close|
@@ -102,7 +119,10 @@ end
 Then(/^Task applet shows either active or inactive tasks$/) do
   ehmp = PobTasksApplet.new
   ehmp.wait_until_fld_col_status_data_visible
-  expect(compare_text_in_list(ehmp.fld_col_status_data, "Active", "Inactive")).to eq(true), "Returned rows doesn't include Active and Inactive"
+  status_array = Array.new
+  status_array.push("Active")
+  status_array.push("Inactive")
+  expect(compare_text_in_list(ehmp.fld_col_status_data, "#{status_array}")).to eq(true), "Returned rows doesn't include Active and Inactive"
 end
 
 Then(/^user filters the Task applet by text "([^"]*)"$/) do |filter_text|
@@ -118,8 +138,16 @@ end
 
 Then(/^task applet table only diplays rows including text "([^"]*)"$/) do |input_text|
   ehmp = PobTasksApplet.new
-  ehmp.wait_until_fld_col_task_name_data_visible
-  expect(only_text_exists_in_list(ehmp.fld_col_task_name_data, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
+  max_attempt = 2
+  begin
+     ehmp.wait_until_fld_col_task_name_data_visible
+     expect(only_text_exists_in_list(ehmp.fld_col_task_name_data, "#{input_text}")).to eq(true), "Not all returned results include #{input_text}"
+   rescue Exception => e
+     p "*** Entered Rescue Block ***"
+     max_attempt -= 1
+     retry if max_attempt >= 0
+     raise e
+   end
 end
 
 Then(/^user verifies that the task applet display options are listed as$/) do |table|
@@ -213,6 +241,14 @@ Then(/^the Task applet is sorted in reverse alphabetic order based on column Tas
   expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
 end
 
+Then(/^the user sorts the Task applet by column Created On in ascending order$/) do
+  ehmp = PobTasksApplet.new
+  ehmp.wait_until_fld_created_on_header_visible
+  expect(ehmp).to have_fld_created_on_header
+  ehmp.fld_created_on_header.click
+  ehmp.fld_created_on_header.click # sorting twice so the latest date comes on top 
+end
+
 Then(/^task applet displays columns$/) do |table|
   ehmp = PobTasksApplet.new
   ehmp.wait_until_tbl_task_headers_visible
@@ -229,12 +265,10 @@ end
 
 def validate_date_format(elements)
   ehmp = PobTasksApplet.new
-  format = "%m/%d/%Y \n %H:%M"
-  date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} \n \\d{2}:\\d{2}")
   elements.each do | temp_date |
     #p "verifying #{temp_date.text}"
-    date_only = date_format.match(temp_date.text).to_s
-    expect(date_only).to_not be_nil, "#{date_only} did not match expected format"
+    date_only = temp_date.text.match(/\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}/)
+    expect(date_only).to_not be_nil, "The date #{temp_date.text} did not match expected format"
   end
 end
 
@@ -252,5 +286,55 @@ Given(/^user navigates to expanded tasks applet from staff view$/) do
   ehmp.wait_until_btn_applet_minimize_visible
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { applet_grid_loaded(ehmp.has_fld_empty_row?, ehmp.tbl_task_rows) }
+end
+
+Then(/^user makes sure there is at least one task in the provider task applet view$/) do
+  ehmp = PobTasksApplet.new
+  ehmp.wait_until_tbl_task_rows_visible
+  expect(ehmp.tbl_task_rows.length > 0).to be(true), "No tasks exist for this provider"
+end
+
+When(/^user hovers over the tasks applet row$/) do
+  ehmp = PobTasksApplet.new
+  ehmp.wait_for_tbl_task_rows
+  expect(ehmp).to have_tbl_task_rows
+  rows = ehmp.tbl_task_rows
+  expect(rows.length).to be > 0
+  rows[0].hover
+end
+
+Then(/^user scrolls the tasks applet into view$/) do 
+  ehmp = PobTasksApplet.new
+  ehmp.scroll_into_view
+end
+
+Given(/^user can view the Quick Menu Icon in Tasks applet$/) do
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.verify_quick_menu ehmp
+end
+
+Given(/^Quick Menu Icon is collapsed in Tasks applet$/) do
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.verify_quick_menu_collapsed ehmp
+end
+
+When(/^Quick Menu Icon is selected in Tasks applet$/) do
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.select_quick_menu ehmp
+end
+
+Then(/^user can see the options in the Tasks applet$/) do |table|
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.verify_menu_options ehmp, table
+end
+
+When(/^user selects the detail view from Quick Menu Icon of tasks applet$/) do
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.open_menu_click_detail_button ehmp
+end
+
+When(/^user selects the go to task option from Quick Menu Icon of tasks applet$/) do
+  ehmp = PobTasksApplet.new
+  QuickMenuActions.open_menu_click_gototask_button ehmp
 end
 

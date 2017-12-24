@@ -9,11 +9,22 @@ var inspect = require(global.VX_UTILS + 'inspect');
 var errorUtil = require(global.VX_UTILS + 'error');
 var objUtil = require(global.VX_UTILS + 'object-utils');
 var uuid = require('node-uuid');
-var VxSyncForeverAgent = require(global.VX_UTILS + 'vxsync-forever-agent');
 var async = require('async');
 var querystring = require('querystring');
 var sizeof = require('object-sizeof');
 
+/*
+config = {
+    maxMetastampSize: 20000,
+    handlerMaxSockets: 5
+    jds: {
+        protocol: 'http' // JDS protocol https|http
+        host: 'IP        ' // JDS IP
+        port: PORT // JDS port
+        timeout: 60000
+    }
+}
+*/
 function JdsClient(log, metrics, config) {
     if (!(this instanceof JdsClient)) {
         return new JdsClient(log, metrics, config);
@@ -88,7 +99,7 @@ JdsClient.prototype.saveSyncStatus = function(metastamp, patientIdentifier, call
 // patientIdentifier: A patient identifier in standard VxSync format. e.g.:
 //          {
 //              type: 'pid',
-//              value: '9E7A;3'
+//              value: 'SITE;3'
 //          }
 //
 // filter: An object containing a 'filter' property with the string to append
@@ -134,6 +145,11 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, filter, callback
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
+//----------------------------------------------------------------------------
+// Variadic Function
+// getSimpleSyncStatus(patientIdentifier, filter, callback)
+// getSimpleSyncStatus(patientIdentifier, callback)
+//----------------------------------------------------------------------------
 JdsClient.prototype.getSimpleSyncStatus = function(patientIdentifier, callback) {
     this.log.debug('Jds-client.getSimpleSyncStatus()');
     this.log.debug(inspect(patientIdentifier));
@@ -1023,7 +1039,7 @@ JdsClient.prototype.deletePatientByPid = function(pid, callback) {
 // storeEventInfo: The required event identification to correctly notify JDS
 //                 of the event status.  The event should look as follows:
 //                 {
-//                   "uid": "urn:va:vital:9E7A:3:23",
+//                   "uid": "urn:va:vital:SITE:3:23",
 //                   "eventStamp": 20040330215452,
 //                   "type": "solr"
 //                 }
@@ -1078,9 +1094,8 @@ JdsClient.prototype.execute = function(path, dataToPost, method, metricsObj, cal
 
     if (method === 'POST' || method === 'PUT') {
         if (_.isEmpty(dataToPost)) {
-            this.log.error('jds-client.execute(): Tried to POST or PUT without dataToPost. url: %s', url);
-            this.metrics.debug('JDS Execute in Error', metricsObj);
-            return setTimeout(callback, 0, errorUtil.createFatal('No dataToPost passed to store'));
+            this.log.debug('jds-client.execute(): Sending a POST or PUT without dataToPost. url: %s', url);
+            dataToPost = undefined;
         } else {
             var dataToPostWithoutPwd = objUtil.removeProperty(objUtil.removeProperty(dataToPost,'accessCode'),'verifyCode');
             this.log.debug('jds-client.execute(): Sending message to JDS. %s -> dataToPost: %j', url, dataToPostWithoutPwd);
@@ -1096,7 +1111,8 @@ JdsClient.prototype.execute = function(path, dataToPost, method, metricsObj, cal
         method: method || 'GET',
         json: dataToPost,
         timeout: this.config.jds.timeout || 60000,
-        agentClass: VxSyncForeverAgent
+        forever: true,
+        agentOptions: {maxSockets: self.config.handlerMaxSockets || 5}
     }, function(error, response, body) {
         self.log.debug('jds-client.execute(): posted data to JDS %s', url);
 
@@ -1260,79 +1276,56 @@ JdsClient.prototype.addErrorRecord = function(errorRecord, callback) {
         timer: 'start'
     };
     this.metrics.debug('JDS addErrorRecord %j', metricsObj);
-    this.execute('/error/set/this', errorRecord, 'POST', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
-
-        callback();
-    });
+    this.execute('/vxsyncerr/', errorRecord, 'PUT', metricsObj, callback);
 };
 
-JdsClient.prototype.findErrorRecordById = function(id, callback) {
-    this.log.debug('jds-client.findErrorRecordById(%s)', id);
+JdsClient.prototype.findErrorRecordByUid = function(uid, callback) {
+    this.log.debug('jds-client.findErrorRecordByUid(%s)', uid);
     var metricsObj = {
         subsystem: 'JDS',
-        action: 'findErrorRecordById',
-        id: id,
+        action: 'findErrorRecordByUid',
+        uid: uid,
         process: uuid.v4(),
         timer: 'start'
     };
-    this.metrics.debug('JDS findErrorRecordById %j', metricsObj);
-    this.execute('/error/get/' + id, null, 'GET', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
-
-        if (result.statusCode !== 200) {
-            return callback('Error finding record by id ' + id, result);
-        }
-
-        var records = result.body;
-        try {
-            records = JSON.parse(result.body);
-            if (records.items) {
-                records = records.items;
-            }
-        } catch (e) {
-            // use default
-        }
-
-        callback(null, records);
-    });
+    this.metrics.debug('JDS findErrorRecordByUid %j', metricsObj);
+    this.execute('/vxsyncerr/' + uid, null, 'GET', metricsObj, callback);
 };
 
 JdsClient.prototype.findErrorRecordsByFilter = function(filter, callback) {
     this.log.debug('jds-client.findErrorRecordsByFilter() %s', filter);
+    this.findErrorRecords({filter: filter}, callback);
+};
+
+JdsClient.prototype.findErrorRecords = function(query, callback) {
+    this.log.debug('jds-client.findErrorRecords() query: %s', query);
     var metricsObj = {
         subsystem: 'JDS',
-        action: 'findErrorRecordsByFilter',
-        filter: filter,
+        action: 'findErrorRecords',
+        query: query,
         process: uuid.v4(),
         timer: 'start'
     };
-    this.metrics.debug('JDS findErrorRecordsByFilter %j', metricsObj);
-    this.execute('/error/get?filter=' + filter, null, 'GET', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
+    this.metrics.debug('JDS findErrorRecords %j', metricsObj);
 
-        if (result.statusCode !== 200) {
-            return callback('Error finding records', result);
-        }
+    var path = '/vxsyncerr/';
 
-        var records = result.body;
-        try {
-            records = JSON.parse(result.body);
-            if (records.items) {
-                records = records.items;
-            }
-        } catch (e) {
-            // use default
-        }
+    if(_.has(query,'index')){
+        path += (query.index)?'index/'+query.index:'';
+        query = _.omit(query, 'index');
+    }
 
-        callback(null, records);
-    });
+    var queryString = querystring.stringify(query);
+    if(queryString){
+        path += '?' + queryString;
+    }
+
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
+JdsClient.prototype.findErrorRecordsByRange = function(index, range, callback){
+    this.log.debug('jds-client.findErrorRecordsByRange() index: %s, range: %s', index, range);
+    this.findErrorRecords({index: index, range: range}, callback);
 };
 
 JdsClient.prototype.getErrorRecordCount = function(callback) {
@@ -1344,50 +1337,23 @@ JdsClient.prototype.getErrorRecordCount = function(callback) {
         timer: 'start'
     };
     this.metrics.debug('JDS getErrorRecordCount %j', metricsObj);
-    this.execute('/error/length/this', null, 'GET', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
-
-        if (!result || !result.body) {
-            return callback('No result returned for error count');
-        }
-
-        var bodyVal = result.body;
-        try {
-            bodyVal = JSON.parse(result.body);
-            if (!_.has(bodyVal, 'length')) {
-                return callback('Invalid result returned for error count', bodyVal);
-            }
-        } catch (e) {
-            return callback('Invalid result returned for error count', bodyVal);
-        }
-
-        return callback(null, bodyVal.length);
+    this.execute('/vxsyncerr', null, 'GET', metricsObj, function(error, response, result) {
+        var doc_count = (result && result.doc_count)?(result.doc_count):null;
+        return callback(null, response, doc_count);
     });
 };
 
-JdsClient.prototype.deleteErrorRecordById = function(id, callback) {
-    this.log.debug('jds-client.deleteErrorRecordById(%s)', id);
+JdsClient.prototype.deleteErrorRecordByUid = function(uid, callback) {
+    this.log.debug('jds-client.deleteErrorRecordByUid(%s)', uid);
     var metricsObj = {
         subsystem: 'JDS',
-        action: 'deleteErrorRecordById',
-        id: id,
+        action: 'deleteErrorRecordByUid',
+        uid: uid,
         process: uuid.v4(),
         timer: 'start'
     };
-    this.metrics.debug('JDS deleteErrorRecordById %j', metricsObj);
-    this.execute('/error/destroy/' + id, null, 'DELETE', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
-
-        if (result.statusCode !== 200) {
-            return callback('Error deleting record: ' + id, result);
-        }
-
-        callback();
-    });
+    this.metrics.debug('JDS deleteErrorRecordByUid %j', metricsObj);
+    this.execute('/vxsyncerr/' + uid, null, 'DELETE', metricsObj, callback);
 };
 
 JdsClient.prototype.deleteAllErrorRecords = function(callback) {
@@ -1399,17 +1365,59 @@ JdsClient.prototype.deleteAllErrorRecords = function(callback) {
         timer: 'start'
     };
     this.metrics.debug('JDS deleteAllErrorRecords %j', metricsObj);
-    this.execute('/error/clear/this', null, 'DELETE', metricsObj, function(error, result) {
-        if (error) {
-            return callback(error, result);
-        }
+    this.execute('/vxsyncerr/?confirm=true', null, 'DELETE', metricsObj, callback);
+};
 
-        if (result.statusCode !== 200) {
-            return callback('Error deleting all records', result);
-        }
+JdsClient.prototype.deleteErrorRecordsByFilter = function(filter, callback){
+    this.log.debug('jds-client.deleteErrorRecordsByFilter() %s', filter);
+    var metricsObj = {
+        subsystem: 'JDS',
+        action: 'deleteErrorRecordsByFilter',
+        filter: filter,
+        process: uuid.v4(),
+        timer: 'start'
+    };
+    this.metrics.debug('JDS deleteErrorRecordsByFilter %j', metricsObj);
+    this.execute('/vxsyncerr/?filter=' + filter, null, 'DELETE', metricsObj, callback);
+};
 
-        callback();
-    });
+JdsClient.prototype.getLockOnErrorRecord = function(uid, callback) {
+    this.log.debug('jds-client.getLockOnErrorRecord(%s)', uid);
+    var metricsObj = {
+        subsystem: 'JDS',
+        action: 'getLockOnErrorRecord',
+        uid: uid,
+        process: uuid.v4(),
+        timer: 'start'
+    };
+    this.metrics.debug('JDS getLockOnErrorRecord %j', metricsObj);
+    this.execute('/vxsyncerr/lock/' + uid, null, 'GET', metricsObj, callback);
+};
+
+JdsClient.prototype.lockErrorRecord = function(uid, callback) {
+    this.log.debug('jds-client.lockErrorRecord(%s)', uid);
+    var metricsObj = {
+        subsystem: 'JDS',
+        action: 'lockErrorRecord',
+        uid: uid,
+        process: uuid.v4(),
+        timer: 'start'
+    };
+    this.metrics.debug('JDS lockErrorRecord %j', metricsObj);
+    this.execute('/vxsyncerr/lock/' + uid, null, 'PUT', metricsObj, callback);
+};
+
+JdsClient.prototype.unlockErrorRecord = function(uid, callback){
+    this.log.debug('jds-client.unlockErrorRecord() %s', uid);
+    var metricsObj = {
+        subsystem: 'JDS',
+        action: 'unlockErrorRecord',
+        uid: uid,
+        process: uuid.v4(),
+        timer: 'start'
+    };
+    this.metrics.debug('JDS unlockErrorRecord %j', metricsObj);
+    this.execute('/vxsyncerr/lock/' + uid, null, 'DELETE', metricsObj, callback);
 };
 
 JdsClient.prototype.getPatientList = function(lastAccessTime, callback) {

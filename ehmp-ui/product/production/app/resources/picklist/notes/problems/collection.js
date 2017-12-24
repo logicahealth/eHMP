@@ -11,8 +11,8 @@ define([], function() {
     var NoteProblems = ADK.Resources.Picklist.Collection.extend({
         model: NoteProblem,
         getUrl: function(method, options) {
-            var pid = this.patient.get('pid');
-            var url = 'resource/patient/record/domain/problem?filter=ne(removed%2C%20true)&pid=' + pid;
+            var pid = this.patient.getIdentifier();
+            var url = 'resource/patient/record/domain/problem?pid=' + pid;
             if (ADK.PatientRecordService.getCurrentPatient().get('acknowledged')) {
                 return url + '&_ack=true';
             }

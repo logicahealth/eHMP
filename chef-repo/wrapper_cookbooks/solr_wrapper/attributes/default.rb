@@ -10,3 +10,6 @@ default[:solr][:url]      = "#{node[:nexus_url]}/nexus/content/repositories/file
 default[:solr][:data_dir] = "#{node[:solr][:dir]}-#{node[:solr][:version]}/server/solr"
 default[:solr][:install_java] = false
 default[:solr][:java_options] = ""
+
+default['solr']['user'] = 'solr'
+default['solr']['group'] = 'solr'

@@ -5,10 +5,10 @@ var inputValue = require('./procedureOnly-resource-spec-data').inputValue;
 describe('Procedure FHIR Resource - testing FHIR conversion of non-educations procedure type data', function() {
 
     var req = {
-        'pid': '9E7A;100599',
-        originalUrl: '/fhir/patient/9E7A;100599/procedure?_tag=procedure',
+        'pid': 'SITE;100599',
+        originalUrl: '/fhir/patient/SITE;100599/procedure?_tag=procedure',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };
@@ -41,10 +41,10 @@ describe('Procedure FHIR Resource - testing FHIR conversion of non-educations pr
 
         it('Verifies that Fhir structure contains all required attributes', function() {
             expect(fhirP.resourceType).to.equal('Procedure');
-            expect(fhirP.patient.reference).to.equal('Patient/9E7A;100599');
+            expect(fhirP.patient.reference).to.equal('Patient/SITE;100599');
             expect(fhirP.status).to.equal(procedure.jdsToFHIRStatusMap.get(vprP.statusName));
             expect(fhirP.type.coding[0].display).to.equal(vprP.name);
-            expect(fhirP.identifier[0].value).to.equal('urn:va:procedure:9E7A:100599:8;MDD(702,');
+            expect(fhirP.identifier[0].value).to.equal('urn:va:procedure:SITE:100599:8;MDD(702,');
 
         });
 

@@ -9,7 +9,7 @@
  Scenario: Client can request lab (MI) results in FHIR format
  	Given a patient with "lab (MI) results" in multiple VistAs
    #And a patient with pid "11016V630869" has been synced through the RDK API
- 	When the client requests labs for the patient "9E7A;227" in FHIR format
+ 	When the client requests labs for the patient "SITE;227" in FHIR format
  	Then a successful response is returned
  	And the results contain lab "(MI)" results
        | field                 | panorama_value      |
@@ -28,16 +28,16 @@
        | resource.contained.text.div                     | CONTAINS CAMP MASTER                                       |
        | resource.contained.name                         | CAMP MASTER                                                |
        | resource.contained.type.text                    | URINE                                                      |
-       | resource.contained.subject.reference            | Patient/9E7A;227                                       |
+       | resource.contained.subject.reference            | Patient/SITE;227                                       |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                                       |
        | resource.text.status                            | generated                                                  |
        | resource.name.text                              | AFB CULTURE & SMEAR                                        |
        | resource.status                                 | final                                                      |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                        |
-       | resource.subject.reference                      | Patient/9E7A;227                                       |
+       | resource.subject.reference                      | Patient/SITE;227                                       |
        | resource.performer.display                      | CAMP MASTER                                                |
        | resource.identifier.system                      | urn:oid:2.16.840.1.113883.6.233                            |
-       | resource.identifier.value                       | urn:va:lab:9E7A:227:MI;7048982.848075                      |
+       | resource.identifier.value                       | urn:va:lab:SITE:227:MI;7048982.848075                      |
        | resource.serviceCategory.text                   | Microbiology                                               |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                                        |
        | resource.specimen.display                       | URINE                                                      |
@@ -45,9 +45,9 @@
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupName      |
        | resource.extension.valueString             | MI 95 27                                               |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
-       | resource.extension.valueString             | urn:va:accession:9E7A:227:MI;7048982.848075            |
+       | resource.extension.valueString             | urn:va:accession:SITE:227:MI;7048982.848075            |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-       | resource.extension.valueReference.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
+       | resource.extension.valueReference.reference | Composition/urn:va:document:SITE:227:MI;7048982.848075 |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
        | resource.extension.valueString             | MI;7048982.848075                                      |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
@@ -57,7 +57,7 @@
  @F138_2_labs_mi_fhir @fhir @10104V248233
  Scenario: Client can request lab (MI) results in FHIR format
  	Given a patient with "lab (MI) results" in multiple VistAs
- 	When the client requests labs for the patient "9E7A;229" in FHIR format
+ 	When the client requests labs for the patient "SITE;229" in FHIR format
  	Then a successful response is returned
        And the results contain lab "(MI)" results
        | field                                          | values                       |
@@ -78,7 +78,7 @@
  @F138_3_labs_mi_fhir @fhir @11016V630869
  Scenario: Client can request lab (MI) results in FHIR format
  	Given a patient with "lab (MI) results" in multiple VistAs
- 	When the client requests labs for the patient "9E7A;227" in FHIR format
+ 	When the client requests labs for the patient "SITE;227" in FHIR format
  	Then a successful response is returned
  	And the results contain lab "(MI)" results
        | field               | kodak_value         |
@@ -97,7 +97,7 @@
        | resource.contained.text.div                     | CONTAINS CAMP MASTER                                       |
        | resource.contained.name                         | CAMP MASTER                                                |
        | resource.contained.type.text                    | URINE                                                      |
-       | resource.contained.subject.reference            | Patient/9E7A;227                                       |
+       | resource.contained.subject.reference            | Patient/SITE;227                                       |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                                       |
        | resource.text.status                            | generated                                                  |
        | resource.name.text                              | AFB CULTURE & SMEAR                                        |
@@ -105,7 +105,7 @@
        | resource.name.coding.system                     | urn:oid:2.16.840.1.113883.6.233                       |
        | resource.status                                 | final                                                      |
        | resource.issued                                 | IS_FHIR_FORMATTED_DATE                                       |
-       | resource.subject.reference                      | Patient/9E7A;227                                       |
+       | resource.subject.reference                      | Patient/SITE;227                                       |
        | resource.performer.display                      | CAMP MASTER                                                |
        | resource.serviceCategory.text                   | Microbiology                                               |
        | resource.diagnosticDateTime                     | IS_FHIR_FORMATTED_DATE                                       |
@@ -116,18 +116,18 @@
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#groupUid       |
        | resource.extension.valueString             | Microbiology            |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#report         |
-       | resource.extension.valueReference.reference | Composition/urn:va:document:9E7A:227:MI;7048982.848075 |
+       | resource.extension.valueReference.reference | Composition/urn:va:document:SITE:227:MI;7048982.848075 |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#localId        |
        | resource.extension.valueString             | MI;7048982.848075                                      |
        | resource.extension.url                     | http://vistacore.us/fhir/extensions/lab#urineScreen    |
        | resource.extension.valueString             | Positive                                               |
     	| resource.identifier.system                 | urn:oid:2.16.840.1.113883.6.233                            |
-       | resource.identifier.value                  | urn:va:lab:9E7A:227:MI;7048982.848075                     |
+       | resource.identifier.value                  | urn:va:lab:SITE:227:MI;7048982.848075                     |
 
  @F138_4_labs_mi_fhir @fhir @10110V004877
  Scenario: Client can request lab (MI) results in FHIR format
  	Given a patient with "lab (MI) results" in multiple VistAs
- 	When the client requests lab "(MI)" results for that patient "9E7A;8"
+ 	When the client requests lab "(MI)" results for that patient "SITE;8"
  	Then a successful response is returned
        And the results contain lab "(MI)" results
        | field                                          | values                       |
@@ -147,7 +147,7 @@
 @F138_5_labs_mi_neg_fhir @fhir @5000000009V082878
  Scenario: Negative scenario.  Client can request lab (MI) results in FHIR format
        Given a patient with "No lab results" in multiple VistAs
-       When the client requests labs for the patient "9E7A;100125" in FHIR format
+       When the client requests labs for the patient "SITE;100125" in FHIR format
        Then a successful response is returned
        Then corresponding matching FHIR records totaling "1" are displayed
 
@@ -155,6 +155,6 @@
  Scenario: Client can request lab (MI) results in FHIR format
        Given a patient with "lab (MI) results" in multiple VistAs
       # And a patient with pid "11016V630869" has been synced through the RDK API
-       When the client requests "10" labs for the patient "9E7A;227" in FHIR format
+       When the client requests "10" labs for the patient "SITE;227" in FHIR format
        Then a successful response is returned
        And total returned resources are "10"

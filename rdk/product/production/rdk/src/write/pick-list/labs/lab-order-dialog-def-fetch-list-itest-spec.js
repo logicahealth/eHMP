@@ -9,7 +9,7 @@ describe('lab-order-dialog-def resource integration test', function() {
     }));
     //var log = require('bunyan').createLogger({ name: 'lab-order-dialog-def-fetch-list' }); //Uncomment this line (and comment above) to see output in IntelliJ console
 
-    var configuration = _.get(getAppConfig(), ['vistaSites', 'C877'], {});
+    var configuration = _.get(getAppConfig(), ['vistaSites', 'SITE'], {});
     configuration.context = 'OR CPRS GUI CHART';
 
     it('can call the lab-order-dialog-def', function(done) {
@@ -19,7 +19,7 @@ describe('lab-order-dialog-def resource integration test', function() {
             expect(result).to.be.truthy();
             done();
         }, {
-            location: 'urn:va:location:C877:507',
+            location: 'urn:va:location:SITE:507',
             division: '507'
         });
     });
@@ -52,11 +52,11 @@ describe('lab-order-dialog-def resource integration test', function() {
 
                 done();
             }, {
-                location: 'urn:va:location:C877:688',
+                location: 'urn:va:location:SITE:688',
                 division: '688'
             }); //WASHINGTON
         }, {
-            location: 'urn:va:location:C877:507',
+            location: 'urn:va:location:SITE:507',
             division: '507'
         }); //CAMP BEE
     });

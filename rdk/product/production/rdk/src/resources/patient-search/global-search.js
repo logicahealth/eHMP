@@ -8,7 +8,7 @@ var moment = require('moment');
 var async = require('async');
 var searchUtil = require('./results-parser');
 var formatSinglePatientSearchCommonFields = searchUtil.formatSinglePatientSearchCommonFields;
-var _s = require('underscore.string');
+var _s = require('sprintf-js');
 var parseString = require('xml2js').parseString;
 var http = rdk.utils.http;
 var mvi = require('../../subsystems/mvi-subsystem');
@@ -24,6 +24,7 @@ module.exports._parseGlobalSearchResults = parseGlobalSearchResults;
 module.exports._queryGlobalSearch = queryGlobalSearch;
 module.exports._getGlobalSearchParams = getGlobalSearchParams;
 module.exports._loadXML1305Files = loadXML1305Files;
+module.exports._getMVISoapRequestHTTPConfig = getMVISoapRequestHTTPConfig;
 
 var MVI_QUERY_DATE_FORMAT = 'YYYYMMDD';
 var loadXML1305File = function(path, callback) {
@@ -299,10 +300,6 @@ function parseGlobalPatient(searchResult, req, callback, checkPatientSensitivity
 
     patient = searchUtil.transformPatient(patient);
 
-    if (patient.idClass === 'EDIPI') {
-        patient.pid = 'DOD;' + patient.pid;
-    }
-
     if (checkPatientSensitivity) {
         return setPatientSensitivity(req, patient, callback, formatPatientSearchCommonFields, hasDGAccess);
     }
@@ -431,6 +428,7 @@ function getMVISoapRequestHTTPConfig(req, queryParams, xml1305Files) {
     }
     query = _s.sprintf(query, querySub);
     querySub = {
+        creationTime: moment().format('YYYYMMDDHHmmssZZ'),
         firstname: req.session.user.firstname || '',
         lastname: req.session.user.lastname || '',
         query: query,

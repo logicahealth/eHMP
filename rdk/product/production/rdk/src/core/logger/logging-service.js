@@ -28,9 +28,16 @@ module.exports = function(loggerConfigurations) {
             logger.addSerializers({
                 user: userSerializer,
                 session: sessionSerializer,
-                body: bodySerializer
+                body: bodySerializer,
+                'http options': httpOptionsSerializer
             });
         }
+    }
+
+    function httpOptionsSerializer(options) {
+        options = _.clone(options);
+        options.agentOptions = _.omit(options.agentOptions, ['key', 'passphrase']);
+        return options;
     }
 
     function userSerializer(user) {

@@ -17,7 +17,7 @@ require 'json'
 require_relative './patientrecord'
 require 'debugger'
 #opens broker connection to write-back to VistA Instance (kodak or panorama) uisng RPC
-broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "REDACTED, "REDACTED", true)
+broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", PORT, "USER  ", "USER  !!", true)
 broker.connect
 broker.setContext('OR CPRS GUI CHART')
 

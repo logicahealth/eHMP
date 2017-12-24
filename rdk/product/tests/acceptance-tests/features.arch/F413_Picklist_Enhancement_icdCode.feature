@@ -4,7 +4,7 @@ Feature:F413 - Enter, Store, Edit Encounter Form Data
 
 @Diagnostic_pick_lists1 @US12008
 Scenario: Searching icdCode with preferredText (Eclampsia in Labor)
-  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "REDACTED"
+  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "SITE;USER  "
       | paramter name | value                          |
       | searchString  | Eclampsia in Labor|
 
@@ -19,7 +19,7 @@ Scenario: Searching icdCode with preferredText (Eclampsia in Labor)
 
 @Diagnostic_pick_lists2 @US12008
 Scenario: Searching icdCode with icdCode (Z96.21)
-  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "REDACTED"
+  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "SITE;USER  "
       | paramter name | value                          |
       | searchString  | Z96.21|
 
@@ -34,7 +34,7 @@ Scenario: Searching icdCode with icdCode (Z96.21)
 
 @Diagnostic_pick_lists3 @US12008
 Scenario: Searching icdCode with invalid preferredText (KKLM)
-  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "REDACTED"
+  When the client requests picklist with the parameters for "progress-notes-titles-icd-10" with the user "SITE;USER  "
       | paramter name | value                          |
       | searchString  | KKLM|
 

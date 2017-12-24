@@ -2,7 +2,7 @@
 	<div class="form-inline">
 		<div class="form-group">
 			<label for="{{instanceId}}-type-options">Order type:</label>
-			<select class="form-control" id="{{instanceId}}-type-options" title="Use up and down arrows to view options and then press enter to select.">
+			<select class="form-control" id="{{instanceId}}-type-options">
 			    {{#each item}} {{#if show}}
 			    <option value="{{displayGroup}}">{{mixedName}}</option>
 			    {{/if}} {{/each}}

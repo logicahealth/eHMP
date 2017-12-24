@@ -5,8 +5,8 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'VerifyJsonRuntimeValue.rb'
 
 #lab (Chem/Hem) and (MI) >> E102 - ONEHUNDREDSIXTEEN,PATIENT - 11016 
-#lab (Cyto) >> E103 - ZZZRETSIXTWENTYEIGHT,PATIENT - B362;230
-#lab (Sp) and (Em) >> E? - ZZZRETFIVEFIFTYONE,PATIENT - B362;1 
+#lab (Cyto) >> E103 - ZZZRETSIXTWENTYEIGHT,PATIENT - SITE;230
+#lab (Sp) and (Em) >> E? - ZZZRETFIVEFIFTYONE,PATIENT - SITE;1 
 
 When(/^the client requests lab "(.*?)" results for that patient "(.*?)"$/) do |not_used, pid|
   base_url = DefaultLogin.fhir_url

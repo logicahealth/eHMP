@@ -1,7 +1,11 @@
 define([
-    'backbone'
+    'backbone',
+    'marionette'//,
+    //'api/Errors'
 ], function(
-	Backbone
+    Backbone,
+    Marionette//,
+    //Errors
 ) {
     "use strict";
     var FormControlRequirePath = 'main/ui_components/form/controls/controls';
@@ -13,7 +17,8 @@ define([
                 }).join('') + suffix;
                 var Class = require(FormControlRequirePath)[key]; // 'this' = the Controls Object
                 if (_.isUndefined(Class)) {
-                    throw new ReferenceError("Class '" + key + "' not found");
+                    //Errors.collection.add({ message: "Form Control Class '" + key + "' not found.", _type: 'uncaught'});
+                    throw new ReferenceError("Form Control Class '" + key + "' not found");
                 }
                 return Class;
             }

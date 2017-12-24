@@ -68,8 +68,8 @@ URLMAP ;
  . . I $L(PTRN) S $P(PTRNVAL,":",J)=PTRNS(PTRN)
  . . S SUBS=SUBS_","_$S($E(SEG)="{":"""?""",+SEG=SEG:SEG,1:""""_SEG_"""")
  . S CNT=CNT+1,SUBS=SUBS_",""/"","_CNT_")",@SUBS=PTRNVAL
- W ! ZW MAP
- W ! ZW PTRNS
+ W ! ZWRITE MAP
+ W ! ZWRITE PTRNS
  Q
 MATCH(METHOD,PATH,ROUTINE,ARGS) ; Given method and path return routine and arguments
  N ISEG,SEG,URLSIG,TRYSIG,FAIL

@@ -1,4 +1,4 @@
-@F153_community_health_summaries @US2113 @DE460 @US4283 @chs_expanded @reg2
+@F153_community_health_summaries @CommunityHealthSummaries_applet @US2113 @DE460 @US4283 @chs_expanded @reg4
 Feature:F153-HIE C32 - Community Health Summaries - expanded
 
 Background:

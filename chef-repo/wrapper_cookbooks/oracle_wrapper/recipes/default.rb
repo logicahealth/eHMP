@@ -17,6 +17,7 @@ include_recipe "oracle::logrotate_alert_log"
 include_recipe "oracle::logrotate_listener"
 
 # this recipe replaces oracle::createdb
+# do not create the db if we are doing the upgrade
 include_recipe "oracle_wrapper::create_dbs"
 
 include_recipe "oracle_wrapper::env_vars"
@@ -24,3 +25,7 @@ include_recipe "oracle_wrapper::env_vars"
 include_recipe "oracle_wrapper::stig_script"
 
 include_recipe "oracle_wrapper::apex"
+
+include_recipe "oracle_wrapper::configure_tls"
+
+include_recipe "oracle_wrapper::listener_ora"

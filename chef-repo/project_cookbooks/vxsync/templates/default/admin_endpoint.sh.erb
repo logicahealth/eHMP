@@ -1,1 +1,10 @@
-VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --beanstalk-port <%= @beanstalk_port %> --port <%= @options[:port] %> >  <%= @process_log %>
+#!/bin/bash
+export VXSYNC_LOG_SUFFIX=admin-endpoint
+<% if @apm_deploy %>
+export COLLECTOR_AGENT_HOST=<%= node[:apm][:host] %>
+export COLLECTOR_AGENT_PORT=<%= node[:apm][:port] %>
+export CA_APM_PROBENAME="<%= node[:vxsync][:apm][:probe_name] %>_<%= node[:db_item] %>_admin-endpoint"
+node_modules/ca-apm-probe/bin/ca-apm-run.js tools/beanstalk/admin-endpoint.js --beanstalk-port <%= @beanstalk_port %> --port <%= @options[:port] %> >  <%= @process_log %>
+<% else %>
+node tools/beanstalk/admin-endpoint.js --beanstalk-port <%= @beanstalk_port %> --port <%= @options[:port] %> >  <%= @process_log %>
+<% end %>

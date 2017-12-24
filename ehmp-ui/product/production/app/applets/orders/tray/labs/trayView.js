@@ -390,6 +390,7 @@ define([
                     }
                     this.model.unset('orderCheckList');
                     this.stopListeningSaveCallback();
+                    ADK.Messaging.getChannel('activities').trigger('create:success');
                     Utils.refreshApplet();
                     saveAlertView.show();
                 }

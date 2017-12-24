@@ -11,7 +11,7 @@ describe('orders-common-save-draft-write', function() {
         logger: sinon.stub(bunyan.createLogger({
             name: 'orders-common-save-draft-write-spec'
         })),
-        pid: '9E7A;3',
+        pid: 'SITE;3',
         appConfig: {
             generalPurposeJdsServer: {
                 baseUrl: 'localhost'
@@ -21,7 +21,7 @@ describe('orders-common-save-draft-write', function() {
             ehmpState: 'draft'
         }
     };
-    var testUid = 'urn:va:ehmp:9E7A;3:01234567-1337-dead-beef-fedcba987654';
+    var testUid = 'urn:va:ehmp:SITE;3:01234567-1337-dead-beef-fedcba987654';
 
     describe('Save *CREATES* a clinical object when writebackContext.model.uid is not present', function(done) {
         beforeEach(function() {

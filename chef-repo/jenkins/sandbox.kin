@@ -1,0 +1,7 @@
+"chef-repo-sandbox-build-%branch%" {
+	template = 'templates/sandbox-build.tpl'
+	description = "This build deploys a stack a full stack for a team pipeline."
+	
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+}

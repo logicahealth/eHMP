@@ -1,5 +1,5 @@
 When(/^the client requests the Encounters Admission for the patient "([^"]*)"$/) do |pid|
-  #filter=&timerange=04/07/1935|02/28/2016&pid=9E7A;164
+  #filter=&timerange=04/07/1935|02/28/2016&pid=SITE;164
   today = convert_cucumber_date('TODAY')
   filter_string = "or(eq(kind, 'Visit')"
   filter_string << ",eq(kind, 'Admission')"

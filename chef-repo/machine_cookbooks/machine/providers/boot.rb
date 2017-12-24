@@ -24,7 +24,8 @@ action :aws do
       :bootstrap_options => {
         :key_name => ::File.basename(node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_key]),
         :instance_type => new_resource.boot_options[:instance_type],
-        :subnet_id => new_resource.boot_options[:subnet]
+        :subnet_id => new_resource.boot_options[:subnet],
+        :block_device_mappings => node[:machine][:block_device_mappings]
       },
       :image_id => node[:machine][:image_id],
       :ssh_username => node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ssh_username],
@@ -68,6 +69,29 @@ action :aws do
     not_if { machine_action.eql?(:destroy) || machine_action.eql?(:stop)}
   end
 
+  ruby_block 'print_public_ip_#{machine_name}' do
+    block do
+      public_ip = node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ip]
+      puts "\nPublic IP for #{machine_name}:  #{public_ip} \n"
+    end
+    only_if { machine_action.eql?(:ready) }
+  end
+
+  machine "set_public_ip_#{machine_name}" do
+    name machine_name
+    machine_options machine_options
+    driver new_resource.driver
+    action machine_action
+    attributes(
+      lazy {
+        {
+          public_ip: node[:machine][:production_settings]["#{new_resource.machine_name}".to_sym][:ip]
+        }
+      }
+    )
+    only_if { machine_action.eql?(:ready) }
+  end
+
 end
 
 action :vagrant do
@@ -75,8 +99,8 @@ action :vagrant do
   require "chef/provisioning/vagrant_driver"
   with_driver "vagrant"
 
-  vagrant_box "opscode-centos-6.5" do
-    url lazy { "#{node[:common][:nexus_url]}/repositories/filerepo/third-party/program/opscode/centos/6.5/centos-6.5-provisionerless.box" }
+  vagrant_box node[:machine][:box_name] do
+    url lazy { node[:machine][:box_url] }
   end
 
   node.default[:machine][:production_settings]["#{new_resource.machine_name}".to_sym] = {

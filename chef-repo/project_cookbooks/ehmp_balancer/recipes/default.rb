@@ -17,11 +17,34 @@ yum_package "mod_nss"
 
 include_recipe "apache2"
 
+# add siteminder entries to httpd script if necessary
+template "/etc/init.d/httpd" do
+  source "httpd.erb"
+  mode   '755'
+  owner 'root'
+  group 'root'
+  variables(
+      {
+          :ssoi_deploy =>  node[:ehmp_balancer][:ssoi_deploy],
+          :web_agent_dir => node[:ehmp_balancer][:web_agent][:dir]
+      }
+  )
+  action :create
+end
+
+execute "correct ownership of SmHost.conf" do
+  command "if [ -f #{node[:ehmp_balancer][:web_agent][:dir]}/config/SmHost.conf ]; then /bin/chown #{node[:apache][:user]}:#{node[:apache][:group]} #{node[:ehmp_balancer][:web_agent][:dir]}/config/SmHost.conf; fi"
+  only_if { node[:ehmp_balancer][:ssoi_deploy] }
+end
+
+# Include worker configuration in conf-enabled
+include_recipe "apache2_wrapper::mpm_worker"
+
 edit_resource!(:template, 'apache2.conf') do
   source 'apache2.conf.erb'
   cookbook 'ehmp_balancer'
   variables.update(
-    :web_agent_config_dir => node[:ehmp_balancer][:web_agent][:config_dir],
+    :web_agent_dir => node[:ehmp_balancer][:web_agent][:dir],
     :ssoi_deploy => node[:ehmp_balancer][:ssoi_deploy],
     :log_level => node[:ehmp_balancer][:apache_log_level]
   )
@@ -54,7 +77,9 @@ cookbook_file '/var/www/maintenance.html' do
 end
 
 ehmp_ui = find_multiple_nodes_by_role("ehmp-ui", node[:stack])
-rdk = find_multiple_nodes_by_role("resource_server", node[:stack])
+fetch_server_members = find_multiple_nodes_by_role("fetch_server", node[:stack])
+write_back_members = find_multiple_nodes_by_role("write_back", node[:stack])
+pick_list_members = find_multiple_nodes_by_role("pick_list", node[:stack])
 
 unless node[:ehmp_balancer][:mix_stack_name].nil? then
   ehmp_ui_r1_2 = find_multiple_nodes_by_role("ehmp-ui", node[:ehmp_balancer][:mix_stack_name])
@@ -84,7 +109,9 @@ template "#{node[:apache][:dir]}/sites-available/proxy_balancer.conf" do
         :ehmp_ui_members_r1_2 => ehmp_ui_r1_2,
         :rdk_members_r1_2 => rdk_r1_2,
         :ehmp_ui_members => ehmp_ui,
-        :rdk_members => rdk
+        :fetch_server_members => fetch_server_members,
+        :write_back_members => write_back_members,
+        :pick_list_members => pick_list_members
       }
     }
   )
@@ -209,6 +236,12 @@ template "#{node[:ehmp_balancer][:ssl_dir]}/password.conf" do
   action :create
 end
 
+ehmp_balancer_import_nss_certs "import_nss_certs" do
+  data_bag_item lazy { node[:ehmp_balancer][:nss_certs_data_bag] }
+  password_file "#{node[:ehmp_balancer][:ssl_dir]}/password.conf"
+  not_if { node[:ehmp_balancer][:nss_certs_data_bag].nil? }
+end
+
 # remove the temporary password file
 file "#{node[:ehmp_balancer][:ssl_dir]}/password-file" do
   action :delete
@@ -230,7 +263,7 @@ template "#{node[:apache][:conf_dir]}/WebAgent.conf" do
   source 'WebAgent.conf.erb'
   variables(
     :enable_web_agent => node[:ehmp_balancer][:web_agent][:enable_web_agent],
-    :web_agent_config_dir => node[:ehmp_balancer][:web_agent][:config_dir],
+    :web_agent_dir => node[:ehmp_balancer][:web_agent][:dir],
     :agent_config_object => node[:ehmp_balancer][:web_agent][:agent_config_object],
     :server_path => node[:apache][:conf_dir]
   )
@@ -238,5 +271,28 @@ template "#{node[:apache][:conf_dir]}/WebAgent.conf" do
   group 'root'
   mode 0644
   only_if { node[:ehmp_balancer][:ssoi_deploy] }
-  notifies :restart, "service[apache2]", :delayed
+  notifies :stop, "service[apache2]", :before
+  notifies :start, "service[apache2]"
+end
+
+# This resource is a guard against the webagent directory not existing
+directory node[:ehmp_balancer][:web_agent][:dir] do
+  recursive true
+  only_if { node[:ehmp_balancer][:ssoi_deploy]}
+end
+
+template "#{node[:ehmp_balancer][:web_agent][:dir]}/LocalConfig.conf" do
+  source 'LocalConfig.conf.erb'
+  variables(
+    :enable_web_agent => node[:ehmp_balancer][:web_agent][:enable_web_agent],
+    :web_agent_dir => node[:ehmp_balancer][:web_agent][:dir],
+    :agent_config_object => node[:ehmp_balancer][:web_agent][:agent_config_object],
+    :server_path => node[:apache][:conf_dir]
+  )
+  owner 'root'
+  group 'root'
+  mode 0644
+  only_if { node[:ehmp_balancer][:ssoi_deploy] }
+  notifies :stop, "service[apache2]", :before
+  notifies :start, "service[apache2]"
 end

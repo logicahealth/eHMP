@@ -87,10 +87,10 @@ describe('medicationPrescription FHIR API parameters', function() {
 
 describe('medicationPrescription FHIR conversion methods', function() {
     var req = {
-        '_pid': '9E7A;253',
+        '_pid': 'SITE;253',
         originalUrl: '/fhir/medicationPrescription?subject.identifier=11016V630869',
         headers: {
-            host: 'localhost:8888'
+            host: 'localhost:PORT'
         },
         protocol: 'http'
     };

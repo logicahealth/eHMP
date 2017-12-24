@@ -42,7 +42,7 @@ define([
                         var resp = {
                             data: {
                                 VISTA: {
-                                    '9E7A': {
+                                    'SITE': {
                                         isSolrSyncCompleted: true
                                     },
                                     'C783': {
@@ -78,7 +78,7 @@ define([
                         var resp = {
                             data: {
                                 VISTA: {
-                                    '9E7A': {
+                                    'SITE': {
                                         isSolrSyncCompleted: true
                                     },
                                     'C783': {

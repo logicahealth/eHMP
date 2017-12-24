@@ -8,13 +8,13 @@
             "path": "/"
         },
         "csrf": {
-            "secret": "ZmozxezPMvGPKOdBNfWlEgE_"
+            "secret": "PW"
         },
         "jwt": {
-            "secret": "uPzhK7CA2f2ZJVgdSN9qQx-i"
+            "secret": "PW"
         },
         "user": {
-            "accessCode": "REDACTED",
+            "accessCode": "USER  ",
             "consumerType": "user",
             "corsTabs": "true",
             "dgRecordAccess": "false",
@@ -23,15 +23,15 @@
             "disabled": false,
             "divisionSelect": false,
             "duz": {
-                "9E7A": "10000000271"
+                "SITE": "10000000271"
             },
             "eHMPUIContext": [{
                 "lastAccessed": "20160425125730741",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100609"
+                    "value": "SITE;100609"
                 },
-                "patientIdentifier": "pid:9E7A;100609",
+                "patientIdentifier": "pid:SITE;100609",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "cover-sheet"
@@ -40,9 +40,9 @@
                 "lastAccessed": "20160425130237429",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100613"
+                    "value": "SITE;100613"
                 },
-                "patientIdentifier": "pid:9E7A;100613",
+                "patientIdentifier": "pid:SITE;100613",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "cover-sheet"
@@ -51,9 +51,9 @@
                 "lastAccessed": "20160425130754619",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100714"
+                    "value": "SITE;100714"
                 },
-                "patientIdentifier": "pid:9E7A;100714",
+                "patientIdentifier": "pid:SITE;100714",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "cover-sheet"
@@ -62,9 +62,9 @@
                 "lastAccessed": "20160426111021494",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100863"
+                    "value": "SITE;100863"
                 },
-                "patientIdentifier": "pid:9E7A;100863",
+                "patientIdentifier": "pid:SITE;100863",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "cover-sheet"
@@ -73,9 +73,9 @@
                 "lastAccessed": "20160427113323041",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;418"
+                    "value": "SITE;418"
                 },
-                "patientIdentifier": "pid:9E7A;418",
+                "patientIdentifier": "pid:SITE;418",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "orders-full"
@@ -84,9 +84,9 @@
                 "lastAccessed": "20160427131529461",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100887"
+                    "value": "SITE;100887"
                 },
-                "patientIdentifier": "pid:9E7A;100887",
+                "patientIdentifier": "pid:SITE;100887",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -95,9 +95,9 @@
                 "lastAccessed": "20160427134328447",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;217"
+                    "value": "SITE;217"
                 },
-                "patientIdentifier": "pid:9E7A;217",
+                "patientIdentifier": "pid:SITE;217",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -106,9 +106,9 @@
                 "lastAccessed": "20160427174301414",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;224"
+                    "value": "SITE;224"
                 },
-                "patientIdentifier": "pid:9E7A;224",
+                "patientIdentifier": "pid:SITE;224",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "user-defined-workspace-7"
@@ -117,9 +117,9 @@
                 "lastAccessed": "20160428084523726",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100715"
+                    "value": "SITE;100715"
                 },
-                "patientIdentifier": "pid:9E7A;100715",
+                "patientIdentifier": "pid:SITE;100715",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -128,9 +128,9 @@
                 "lastAccessed": "20160428104120039",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100861"
+                    "value": "SITE;100861"
                 },
-                "patientIdentifier": "pid:9E7A;100861",
+                "patientIdentifier": "pid:SITE;100861",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -139,9 +139,9 @@
                 "lastAccessed": "20160429142853166",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100617"
+                    "value": "SITE;100617"
                 },
-                "patientIdentifier": "pid:9E7A;100617",
+                "patientIdentifier": "pid:SITE;100617",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -150,9 +150,9 @@
                 "lastAccessed": "20160502134308414",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100614"
+                    "value": "SITE;100614"
                 },
-                "patientIdentifier": "pid:9E7A;100614",
+                "patientIdentifier": "pid:SITE;100614",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "user-defined-workspace-9"
@@ -172,9 +172,9 @@
                 "lastAccessed": "20160502150140319",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100618"
+                    "value": "SITE;100618"
                 },
-                "patientIdentifier": "pid:9E7A;100618",
+                "patientIdentifier": "pid:SITE;100618",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -183,9 +183,9 @@
                 "lastAccessed": "20160502150654101",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;253"
+                    "value": "SITE;253"
                 },
-                "patientIdentifier": "pid:9E7A;253",
+                "patientIdentifier": "pid:SITE;253",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -194,9 +194,9 @@
                 "lastAccessed": "20160502162252180",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;3"
+                    "value": "SITE;3"
                 },
-                "patientIdentifier": "pid:9E7A;3",
+                "patientIdentifier": "pid:SITE;3",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -205,9 +205,9 @@
                 "lastAccessed": "20160502164515944",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;8"
+                    "value": "SITE;8"
                 },
-                "patientIdentifier": "pid:9E7A;8",
+                "patientIdentifier": "pid:SITE;8",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "overview"
@@ -216,9 +216,9 @@
                 "lastAccessed": "20160502171309756",
                 "patientId": {
                     "type": "pid",
-                    "value": "9E7A;100615"
+                    "value": "SITE;100615"
                 },
-                "patientIdentifier": "pid:9E7A;100615",
+                "patientIdentifier": "pid:SITE;100615",
                 "workspaceContext": {
                     "contextId": "patient",
                     "workspaceId": "khaled-bug-finder-workspace-3"
@@ -229,7 +229,7 @@
             "firstname": "MARGARET",
             "infoButtonOid": "1.3.6.1.4.1.3768",
             "lastname": "XIU",
-            "password": "REDACTED",
+            "password": "PW      ",
             "permissionSets": ["read-access", "psychologist"],
             "permissions": ["access-stack-graph", "add-active-medication", "add-allergy", "add-condition-problem", "add-consult-order", "add-encounter", "add-immunization", "add-lab-order", "add-med-order", "add-non-va-medication", "add-note", "add-note-addendum", "add-patient-history", "add-radiology-order", "add-task", "add-vital", "cancel-task", "cosign-lab-order", "cosign-med-order", "cosign-note", "cosign-radiology-order", "delete-note", "discontinue-active-medication", "discontinue-consult-order", "discontinue-lab-order", "discontinue-med-order", "discontinue-radiology-order", "edit-active-medication", "edit-allergy", "edit-condition-problem", "edit-consult-order", "edit-encounter-form", "edit-lab-order", "edit-med-order", "edit-non-va-medication", "edit-note", "edit-note-addendum", "edit-patient-history", "edit-radiology-order", "edit-task", "eie-allergy", "eie-immunization", "eie-patient-history", "eie-vital", "read-active-medication", "read-allergy", "read-clinical-reminder", "read-community-health-summary", "read-condition-problem", "read-document", "read-encounter", "read-immunization", "read-medication-review", "read-order", "read-patient-history", "read-patient-record", "read-task", "read-vista-health-summary", "read-vital", "release-lab-order", "release-med-order", "release-radiology-order", "remove-condition-problem", "sign-consult-order", "sign-lab-order", "sign-med-order", "sign-note", "sign-note-addendum", "sign-radiology-order", "abort-task", "edit-encounter", "eie-encounter", "edit-immunization", "edit-vital", "read-stack-graph", "read-timeline"],
             "provider": true,
@@ -237,16 +237,16 @@
             "rptTabs": "false",
             "section": "Medicine",
             "sessionLength": 900000,
-            "site": "9E7A",
+            "site": "SITE",
             "ssn": 666000865,
             "title": "Clinician",
-            "uid": "urn:va:user:9E7A:10000000271",
-            "username": "REDACTED",
-            "verifyCode": "REDACTED",
+            "uid": "urn:va:user:SITE:10000000271",
+            "username": "SITE;USER  ",
+            "verifyCode": "PW      ",
             "vistaKeys": ["GMRA-SUPERVISOR", "ORES", "PROVIDER", "PSB CPRS MED BUTTON"],
             "vistaUserClass": [{
                 "role": "USER",
-                "uid": "urn:va:asu-class:9E7A:561"
+                "uid": "urn:va:asu-class:SITE:561"
             }]
         }
     },

@@ -68,14 +68,12 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm'],
                     label: 'Cancel',
                     type: 'button',
-                    title: 'Press enter to cancel',
                     name: 'closeModal'
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm'],
                     type: 'submit',
                     label: 'Accept',
-                    title: 'Press enter to accept',
                     name: 'accept',
                     disabled: true
                 }]

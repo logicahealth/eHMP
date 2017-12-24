@@ -19,14 +19,15 @@ var updateTubenames = require(global.VX_INTTESTS + 'framework/handler-test-frame
 var getTubenames = require(global.VX_INTTESTS + 'framework/handler-test-framework').getTubenames;
 var clearTubes = require(global.VX_INTTESTS + 'framework/handler-test-framework').clearTubes;
 var grabJobs = require(global.VX_INTTESTS + 'framework/job-grabber');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var PublisherRouter = require(global.VX_JOBFRAMEWORK).PublisherRouter;
 var OSyncActiveUserListUtil = require(global.OSYNC_UTILS + 'osync-active-user-list-util');
 
-var host = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var host = testConfig.vxsyncIP;
 var port = PORT;
 
 var tubePrefix = 'osync-active-user-list-util-itest';
@@ -167,7 +168,7 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
             }
         };
 
-        var pjds = new PjdsClient(logger, logger, config);
+        var pjds = new PjdsClient(logger, logger, config.pjds);
         var jds = new JdsClient(logger, logger, config);
 
         var environment = {
@@ -176,18 +177,18 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
         };
 
         var pjdsUser = {
-            uid: 'urn:va:user:9E7A:33',
-            site: '9E7A',
+            uid: 'urn:va:user:SITE:33',
+            site: 'SITE',
             id: '33',
             lastSuccessfulLogin: moment().format('YYYYMMDDHHmmss')
         };
 
         var userScreenUser = {
             duz: {
-                '9E7A': '34'
+                'SITE': '34'
             },
-            uid: 'urn:va:user:9E7A:34',
-            site: '9E7A',
+            uid: 'urn:va:user:SITE:34',
+            site: 'SITE',
             id: '34',
             lastlogin: moment().format()
         };
@@ -202,10 +203,10 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
                 expect(error).toBeFalsy();
                 expect(users.length >= 2).toBe(true);
                 expect(users).toContain(jasmine.objectContaining({
-                    'uid': 'urn:va:user:9E7A:33'
+                    'uid': 'urn:va:user:SITE:33'
                 }));
                 expect(users).toContain(jasmine.objectContaining({
-                    'uid': 'urn:va:user:9E7A:34'
+                    'uid': 'urn:va:user:SITE:34'
                 }));
                 testDone = true;
             });
@@ -236,7 +237,7 @@ describe('osync-active-user-list-util-itest-spec.js', function() {
         };
 
 
-        var pjds = new PjdsClient(logger, logger, config);
+        var pjds = new PjdsClient(logger, logger, config.pjds);
         var jds = new JdsClient(logger, logger, config);
 
         var environment = {

@@ -27,8 +27,8 @@ describe('solr-xform.js', function () {
 				'name': 'CHOCOLATE'
 			}],
 			'entered': '200712171515',
-			'enteredByUid': 'urn:va:user:9E7A:100',
-			'verifiedByUid': 'urn:va:user:9E7A:101',
+			'enteredByUid': 'urn:va:user:SITE:100',
+			'verifiedByUid': 'urn:va:user:SITE:101',
 			'facilityCode': '500',
 			'facilityName': 'CAMP MASTER',
 			'historical': true,
@@ -37,7 +37,7 @@ describe('solr-xform.js', function () {
 			'localId': '876',
 			'mechanism': 'ALLERGY',
 			'originatorName': 'PROVIDER,ONE',
-			'pid': '9E7A;8',
+			'pid': 'SITE;8',
 			'products': [{
 				'name': 'CHOCOLATE',
 				'summary': 'AllergyProduct{uid=\'\'}',
@@ -52,7 +52,7 @@ describe('solr-xform.js', function () {
 			'stampTime': '20071217151553',
 			'summary': 'CHOCOLATE',
 			'typeName': 'DRUG, FOOD',
-			'uid': 'urn:va:allergy:9E7A:8:876',
+			'uid': 'urn:va:allergy:SITE:8:876',
 			'verified': '20071217151553',
 			'verifierName': '<auto-verified>',
 			'comments': [{

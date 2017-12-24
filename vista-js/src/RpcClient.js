@@ -275,7 +275,7 @@ RpcClient.prototype.greetingCommand = function greetingCommand(callback) {
     var rpcString = RpcSerializer.buildRpcGreetingString(this.config.localIP, this.config.localAddress);
     this.sender.send(rpcString, function greetingCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.greetingCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.greetingCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
@@ -295,11 +295,11 @@ RpcClient.prototype.signonCommand = function signonCommand(callback) {
     var rpcString = RpcSerializer.buildRpcString('XUS SIGNON SETUP');
     this.sender.send(rpcString, function signonCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.signonCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.signonCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
-        self.logger.debug('RpcClient.greetingCommand(%s:%s) received: %j', self.config.host, self.config.port, result);
+        self.logger.debug('RpcClient.signonCommand(%s:%s) received: %j', self.config.host, self.config.port, result);
         if (!result || result.length === 0) {
             return callback('No response to signon callback');
         }
@@ -317,7 +317,7 @@ RpcClient.prototype.verifyCommand = function verifyCommand(callback) {
     var rpcString = RpcSerializer.buildRpcString('XUS AV CODE', RpcParameter.encrypted(accessCode + ';' + verifyCode));
     this.sender.send(rpcString, function verifyCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.verifyCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.verifyCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
@@ -379,7 +379,7 @@ RpcClient.prototype.divisionCommand = function divisionCommand(callback) {
     var rpcString = RpcSerializer.buildRpcString('XUS DIVISION GET');
     this.sender.send(rpcString, function divisionGetCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.divisionCommand(%s:%s) - Get divisions error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.divisionCommand(%s:%s) - Get divisions error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
@@ -391,17 +391,20 @@ RpcClient.prototype.divisionCommand = function divisionCommand(callback) {
             var userInfoRpcString = RpcSerializer.buildRpcString('XUS GET USER INFO');
             self.sender.send(userInfoRpcString, function userInfoCallback(error, result) {
                 if (error) {
-                    self.logger.debug('RpcClient.divisionCommand(%s:%s) - XUS GET USER INFO error: %j', self.config.host, self.config.port, error);
+                    self.logger.error('RpcClient.divisionCommand(%s:%s) - XUS GET USER INFO error: %j', self.config.host, self.config.port, error);
                     return callback(error, result);
                 }
 
                 self.logger.debug('RpcClient.divisionCommand(%s:%s) - XUS GET USER INFO received: %j', self.config.host, self.config.port, result);
-                var userInfo = result.split('\r\n');
-                var divisionInfo = userInfo[3].split('^');
-
-                if (String(divisionInfo[2]) === division) {
-                    return callback(null, division);
-                } else {
+                var userInfo = result.split('\r\n');                    // XUS GET USER INFO returns a caret-delimited list
+                var divisionInfo = userInfo[3].split('^');              // and the third item contains the default division for this user.
+                                                                        // The default division could be either the user account's one and only
+                                                                        // division, or it oculd be the VistA KERNEL PARAMETER default division.
+                if (String(divisionInfo[2]) === division) {             // If default division station number (3rd piece) matches the division passed,
+                    return callback(null, division);                    //   then return successful.
+                } else if (!divisionInfo[2] && division.length === 3) { // Else, if default division station number doesn't exist, and a primary division was passed,
+                    return callback(null, division);                    //   then also return successful; non-facility divisions will be treated like primary divisions.
+                } else {                                                // Otherwise, the login failed for the selected division.
                     self.logger.warn({
                         rpcResult: result,
                         divisionParameter: division
@@ -429,7 +432,7 @@ RpcClient.prototype.divisionCommand = function divisionCommand(callback) {
                 var setDivisionrpcString = RpcSerializer.buildRpcString('XUS DIVISION SET', RpcParameter.literal(division));
                 self.sender.send(setDivisionrpcString, function divisionSetCallback(error, result) {
                     if (error) {
-                        self.logger.debug('RpcClient.divisionCommand(%s:%s) - Set division error: %j', self.config.host, self.config.port, error);
+                        self.logger.error('RpcClient.divisionCommand(%s:%s) - Set division error: %j', self.config.host, self.config.port, error);
                         return callback(error, result);
                     }
 
@@ -460,7 +463,7 @@ RpcClient.prototype.contextCommand = function contextCommand(callback) {
     var rpcString = RpcSerializer.buildRpcString('XWB CREATE CONTEXT', RpcParameter.encrypted(context));
     this.sender.send(rpcString, function contextCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.contextCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.contextCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
@@ -480,7 +483,7 @@ RpcClient.prototype.signoffCommand = function signoffCommand(callback) {
     var rpcString = RpcSerializer.buildRpcSignOffString();
     this.sender.send(rpcString, function signOffCallback(error, result) {
         if (error) {
-            self.logger.debug('RpcClient.signoffCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
+            self.logger.error('RpcClient.signoffCommand(%s:%s) error: %j', self.config.host, self.config.port, error);
             return callback(error, result);
         }
 
@@ -540,7 +543,7 @@ function callRpc(logger, config, rpc, parameters, callback) {
 
     client.connect(function (error) {
         if (error) {
-            logger.debug('error: %j', error);
+            logger.error('error: %j', error);
             client.close();
             return callback(error);
         }

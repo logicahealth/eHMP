@@ -17,7 +17,7 @@ var moment = require('moment');
     vprMedication - a single medication object in VPR format
 */
 
-function dodMedicationToVPR(dodMedication, edipi){
+function dodMedicationToVPR(logger, dodMedication, edipi){
     var vprMedication = {};
 
 

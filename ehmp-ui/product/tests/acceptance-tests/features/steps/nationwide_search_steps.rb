@@ -1,16 +1,25 @@
 Then(/^the staff view screen displays Nationwide in the sidebar tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_nationwide).to eq(true), "Unselected nationwide button is not visible"
-  expect(staff_view.wait_for_btn_open_nationwide).to eq(true)
-  expect(staff_view.btn_open_nationwide.text.upcase).to eq("NATIONWIDE")
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_nationwide).to eq(true), "Unselected nationwide button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_nationwide).to eq(true)
+  expect(staff_view.patient_search_tray.btn_open_nationwide.text.upcase).to eq("NATIONWIDE")
 end
 
 When(/^the user opens the Nationwide tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_nationwide).to eq(true), "Unselected Nationwide button is not visible"
-  expect(staff_view.wait_for_btn_open_nationwide).to eq(true), "Button to open Nationwide tray is not visible"
-  staff_view.btn_open_nationwide.click
-  expect(staff_view.wait_for_open_nationwide).to eq(true), "Nationwide tray did not open"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_nationwide).to eq(true), "Unselected Nationwide button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_nationwide).to eq(true), "Button to open Nationwide tray is not visible"
+  staff_view.patient_search_tray.btn_open_nationwide.click
+  expect(staff_view.patient_search_tray.wait_for_open_nationwide).to eq(true), "Nationwide tray did not open"
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray title to display"
+end
+
+Then(/^the Nationwide tray title is "([^"]*)"$/) do |title|
+  staff_view = PobStaffView.new
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray title to display"
+  expect(staff_view.fld_tray_title.text.upcase).to eq(title.upcase)
 end
 
 When(/^the Nationwide tray displays a close x button$/) do
@@ -110,7 +119,7 @@ end
 
 When(/^the Nationwide Tray table headers are$/) do |table|
   nationwide_tray = PobStaffView.new
-  wait_until { nationwide_tray.fld_nw_result_headers.length > 0 }
+  wait_until { nationwide_tray.fld_search_result_headers.length > 0 }
   table.rows.each do | expected_header |
     expect(nationwide_tray.fld_nw_result_headers_text).to include expected_header[0].upcase
   end

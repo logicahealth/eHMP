@@ -19,7 +19,7 @@ describe('Test all policy rules', function() {
             corsTabs: false,
             dgRecordAccess: false,
             dgSensitiveAccess: false,
-            site: '9E7A',
+            site: 'SITE',
             isPublicEndpoint: true
         };
         rulesEngine.executeRules(rules, fact, function(result) {
@@ -38,7 +38,7 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
+            site: 'SITE',
             isPublicEndpoint: false
         };
         rulesEngine.executeRules(rules, fact, function(result) {
@@ -56,7 +56,7 @@ describe('Test all policy rules', function() {
             dgRecordAccess: false,
             dgSensitiveAccess: false,
             resourceConfigItemRel: 'vha.read',
-            site: '9E7A',
+            site: 'SITE',
             isPublicEndpoint: false
         };
         rulesEngine.executeRules(rules, fact, function(result) {

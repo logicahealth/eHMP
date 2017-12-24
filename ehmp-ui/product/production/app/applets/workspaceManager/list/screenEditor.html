@@ -1,16 +1,14 @@
 <div class="container-fluid percent-height-100">
     <div class="panel-primary flex-display flex-direction-column">
         <div class="panel-heading flex-display flex-grow-fixed">
-            <h2 id="workspaceManagerHeading" class="work-manager-header all-margin-no top-padding-xs font-size-14 bold-font flex-grow-loose">Workspace Manager</h2>
+            <h2 id="workspaceManagerHeading" class="work-manager-header all-margin-no top-padding-xs font-size-14 bold-font flex-grow-loose">{{getContext}} Workspace Manager</h2>
             <div class="flex-grow-fixed">
                 <span class="help-button-container"></span>
-                {{ui-button "New workspace" srOnlyLabel=true classes="btn-icon addScreen" title="Press enter to add" icon="fa-plus"}}
-                <button id="gridFilterButtonWorkspaceManager" type="button" data-toggle="collapse" data-target="#workspaceFilter" class="btn btn-icon collapsed" title="Press enter to activate filter">
-                    <i class="fa fa-filter">
-                        <span class="sr-only">Filter workspace</span>
-                    </i>
+                {{ui-button "" classes="btn-icon addScreen" title="Add New Workspace" icon="fa-plus"}}
+                <button id="gridFilterButtonWorkspaceManager" type="button" data-toggle="collapse" data-target="#workspaceFilter" class="btn btn-icon collapsed" title="Workspace Filter" aria-expanded="false">
+                    <i class="fa fa-filter"></i>
                 </button>
-                {{ui-button "Close workspace" srOnlyLabel=true classes="btn-icon done-editing" title="Press enter to close" icon="fa-times"}}
+                {{ui-button "" classes="btn-icon done-editing" title="Close Workspace Manager" icon="fa-times"}}
             </div>
         </div>
         <div id="workspaceFilter" class="grid-filter all-padding-no panel-collapse collapse flex-grow-fixed">
@@ -18,17 +16,18 @@
                 <form class="form-search all-margin-no">
                     <div class="form-group form-group--searchbar">
                         <div class="input-group submit-hidden">
-                            <label for="searchScreens" class="sr-only">Filter workspace</label>
+                            <label for="searchScreens" class="sr-only">Filter Workspaces</label>
                             <div class="input-icon--left" aria-hidden="true"><i class="fa fa-filter"></i></div>
-                            <input type="search" id="searchScreens" class="form-control workspace-filter-input" autocomplete="off" title="Enter in text to filter workspaces by title or description below." placeholder="Filter by title or description" name="searchScreens"/>
-                            {{ui-button "Clear" srOnlyLabel=true classes="btn-icon clear-input-btn clear clearSearch color-grey-darkest hidden" title="Press enter to clear filtered text" icon="fa-times"}}
+                            <input type="search" id="searchScreens" class="form-control workspace-filter-input" autocomplete="off" title="Begin typing to filter workspaces by title or description" placeholder="Filter by title or description" name="searchScreens"/>
+                            {{ui-button "" classes="btn-icon clear-input-btn clear clearSearch color-grey-darkest hidden" title="Clear filter text" icon="fa-times"}}
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+        <div id="workspace-growler-region"></div>
         <div class="workspace-table faux-table flex-grow-loose flex-display flex-direction-column" role="grid">
-            <p class="sr-only">This table represents the available workspaces that are categorized by default workspace, title of the workspace, associated conditions, description of the workspace, the author of the workspace, and workspace options.</p>
+            <p class="sr-only">This table represents the available workspaces.</p>
             <div class="header table-row flex-grow-fixed top-padding-xs bottom-padding-xs background-color-pure-white" role="row">
                 <div class="table-cell pixel-width-22">
                     <span class="sr-only" role="columnheader">Default Workspace Selector</span>
@@ -52,14 +51,17 @@
                     <span class="sr-only" role="columnheader">Preview</span>
                 </div>
                 <div class="table-cell pixel-width-70">
-                    <span class="sr-only" role="columnheader">Launch or Customize</span>
+                    <span class="sr-only" role="columnheader">Customize</span>
+                </div>
+                <div class="table-cell pixel-width-70">
+                    <span class="sr-only" role="columnheader">Launch</span>
                 </div>
             </div>
             <div id="list-group" class="body flex-grow-loose auto-overflow-y background-color-pure-white" role="rowgroup"></div>
         </div>
         <div class="panel-footer flex-display flex-grow-fixed">
             <div class="percent-width-100">
-                <button type="button" class="btn btn-primary btn-sm pull-right done-editing" title="Press enter to close">
+                <button type="button" class="btn btn-primary btn-sm pull-right done-editing">
                     Close
                 </button>
             </div>

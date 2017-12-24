@@ -57,7 +57,7 @@
 				]
 			},
 			"userid": {
-				"description": "Owner of this favorite (e.g., urn:va:user:9E7A:10000000238)",
+				"description": "Owner of this favorite (e.g., urn:va:user:SITE:10000000238)",
 				"type": "string"
 			}
 		},

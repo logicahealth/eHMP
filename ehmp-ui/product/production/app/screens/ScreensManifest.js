@@ -173,6 +173,24 @@
         routeName: 'requests-staff-full',
         fileName: 'RequestsStaffFull'
     });
+    screens.push({
+        routeName: 'individual-permissions-full',
+        fileName: 'IndividualPermissionsFull',
+        requiredPermissions: ['read-admin-screen']
+    });
+    screens.push({
+        routeName: 'permission-sets-full',
+        fileName: 'PermissionSetsFull',
+        requiredPermissions: ['read-admin-screen']
+    });
+    screens.push({
+        routeName: 'discharge-follow-up',
+        fileName: 'DischargeFollowUp'
+    });
+    screens.push({
+        routeName: 'discharge-care-coordination',
+        fileName: 'DischargeCareCoordination'
+    });
 
     screensManifest.screens = screens;
 

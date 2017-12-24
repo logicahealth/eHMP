@@ -7,7 +7,9 @@ var request = require('request');
 var fsUtil = require(global.VX_UTILS + 'fs-utils');
 var _ = require('underscore');
 var path = require('path');
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
+var vx_sync_port = testConfig.vxsyncPort;
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
 var query = {
@@ -18,10 +20,10 @@ var query = {
 var httpConfig = {
     path: '/documents',
     method: 'GET',
-    port: 8089,
+    port: 8080,
     host: vx_sync_ip,
     qs: _.clone(query),
-    url: 'http://' + vx_sync_ip + ':8080/documents',
+    url: 'http://' + vx_sync_ip + ':'+vx_sync_port+'/documents',
     timeout: 60000
 };
 

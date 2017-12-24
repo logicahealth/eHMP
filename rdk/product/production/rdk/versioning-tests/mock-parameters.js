@@ -154,13 +154,13 @@ console.log('Unable to mock parameter for ' + resource.filePath + ', definition:
 function mockCommonParameter(parameter) {
     switch (parameter.name) {
     case 'pid':
-        return '9E7A;3';
+        return 'SITE;3';
     case 'uid':
-        return 'urn:va:document:9E7A:3:3';
+        return 'urn:va:document:SITE:3:3';
     case 'id':
-        return '9E7A;12345';
+        return 'SITE;12345';
     case 'site.code':
-        return '9E7A';
+        return 'SITE';
     case 'subject.identifier':
         return '10108V420871';
     case 'ssn':

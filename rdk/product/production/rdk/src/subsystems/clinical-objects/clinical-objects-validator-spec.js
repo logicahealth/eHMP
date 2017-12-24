@@ -4,8 +4,8 @@ var _ = require('lodash');
 var validator = require('./clinical-objects-validator');
 
 var clinicalObjectCleanForCreate = {
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -19,9 +19,9 @@ var clinicalObjectCleanForCreate = {
 };
 
 var clinicalObjectCleanPass = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -35,9 +35,9 @@ var clinicalObjectCleanPass = {
 };
 
 var clinicalObjectMissingState = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -50,9 +50,9 @@ var clinicalObjectMissingState = {
 };
 
 var clinicalObjectMissingDomain = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: '',
     subDomain: 'laboratory',
     visit: {
@@ -66,7 +66,7 @@ var clinicalObjectMissingDomain = {
 };
 
 var clinicalObjectMissingPiDNoUID = {
-    authorUid: 'urn:va:user:9E7A:123',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -81,8 +81,8 @@ var clinicalObjectMissingPiDNoUID = {
 
 var clinicalObjectMissingUID = {
     uid: '',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -96,7 +96,7 @@ var clinicalObjectMissingUID = {
 };
 
 var clinicalObjectMissingAuthorIDNoUID = {
-    patientUid: 'urn:va:patient:9E7A:3:3',
+    patientUid: 'urn:va:patient:SITE:3:3',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     authorUid: '',
@@ -111,8 +111,8 @@ var clinicalObjectMissingAuthorIDNoUID = {
 };
 
 var clinicalObjectMissingSubDomainNoUID = {
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: '',
     visit: {
@@ -126,9 +126,9 @@ var clinicalObjectMissingSubDomainNoUID = {
 };
 
 var clinicalObjectMissingVisit = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: '',
@@ -138,9 +138,9 @@ var clinicalObjectMissingVisit = {
 };
 
 var clinicalObjectMissingVisitDateTime = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -155,8 +155,8 @@ var clinicalObjectMissingVisitDateTime = {
 
 var clinicalObjectBadUID1 = {
     uid: 'urn:va:ehmp-order:123412341324',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {
@@ -170,9 +170,9 @@ var clinicalObjectBadUID1 = {
 };
 
 var clinicalObjectBadUID2 = {
-    uid: 'urn:va:ehmp-order:9E7A:123123;123412341324',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
+    uid: 'urn:va:ehmp-order:SITE:123123;123412341324',
+    patientUid: 'urn:va:patient:SITE:3:3',
+    authorUid: 'urn:va:user:SITE:123',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     visit: {

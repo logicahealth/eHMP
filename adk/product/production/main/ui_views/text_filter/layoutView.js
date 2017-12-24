@@ -76,11 +76,13 @@ define([
             return {
                 instanceId: this.getOption('instanceId'),
                 // Used to determine if the filter container should be shown at first
-                isOpen: !_.isEmpty(this._filterCollection.where({ shouldShow: true }))
+                isOpen: !_.isEmpty(this._filterCollection.where({
+                    shouldShow: true
+                }))
             };
         },
         events: {
-            'click .sub-header > button': function(e){
+            'click .sub-header > button': function(e) {
                 e.stopPropagation();
                 var lengthOfTitle = _.get(this.model.get('filterTitle'), 'length', 0);
                 var input = this.$('.applet-filter-title input')[0];
@@ -101,7 +103,7 @@ define([
         },
         initialize: function(options) {
             this._filterCollection = this.getOption('collection');
-            if(!(this._filterCollection instanceof FilterLayoutView.prototype.Collection)){
+            if (!(this._filterCollection instanceof FilterLayoutView.prototype.Collection)) {
                 console.error('TextFilter View must be instantiated with a "collection" that is an instance of "TextFilter.prototype.Collection"\nDisregarding the collection passed in through options and creating a new empty collection.');
                 this._filterCollection = new FilterLayoutView.prototype.Collection();
             }
@@ -109,7 +111,7 @@ define([
             this.model = new FilterLayoutViewModel(_.extend({
                     saveFilters: !this._filterCollection.isEmpty()
                 },
-                _.pick(options, ['instanceId', 'showFilterTitle', 'multipleFilters', 'filterTitle'])));
+                _.pick(options, ['instanceId', 'showFilterTitle', 'multipleFilters', 'filterTitle', 'predefinedFilter'])));
         },
         onBeforeShow: function() {
             this.showChildView('filterTitleRegion', new ReadOnlyFilterTitleView(_.extend({
@@ -117,8 +119,8 @@ define([
             }, this.options)));
             var initalFormValues = {};
             var searchInputID = this.model.get('instanceId') + 'FilterSearchText';
-            searchInputID = searchInputID.replace(/[^a-zA-Z 0-9]+/g,'');
-            if (this.model.get('multipleFilters')) {
+            searchInputID = searchInputID.replace(/[^a-zA-Z 0-9]+/g, '');
+            if (this.model.get('multipleFilters') || this.model.get('predefinedFilter')) {
                 this.showChildView('textFilterListRegion', new FilterListView(_.extend({
                     collection: this._filterCollection
                 }, this.options)));
@@ -126,8 +128,14 @@ define([
                 initalFormValues[searchInputID] = this._filterCollection.getCombinedFilterString() || '';
             }
 
+            if (this.model.get('predefinedFilter')) {
+                initalFormValues[searchInputID] = this._filterCollection.getCombinedFilterString({
+                    removable: true
+                }) || '';
+            }
+
             var filterTitleInputID = this.model.get('instanceId') + 'FilterTitle';
-            filterTitleInputID = filterTitleInputID.replace(/[^a-zA-Z 0-9]+/g,'');
+            filterTitleInputID = filterTitleInputID.replace(/[^a-zA-Z 0-9]+/g, '');
             initalFormValues[filterTitleInputID] = this.model.get('filterTitle');
 
             this._formModel = new FilterFormModel(_.extend({
@@ -150,13 +158,27 @@ define([
             Messaging.trigger('gridster:saveAppletsConfig');
         },
         _onEnterFilter: function(newFilterText) {
-            this._filterCollection.set({
+            var filterObj = {
                 text: newFilterText,
                 shouldShow: this.model.get('multipleFilters'),
                 removable: true
-            }, {
-                remove: !this.model.get('multipleFilters')
-            });
+            };
+            if (this.model.get('predefinedFilter')) {
+                var models = _.filter(this._filterCollection.toJSON(), {
+                    removable: false
+                });
+                // Only add if we don't already have this filter to prevent deleting predefined filter.
+                if (!_.includes(_.pluck(models, 'text'), newFilterText)) {
+                    models = models.concat([filterObj]);
+                }
+                this._filterCollection.set(models, {
+                    remove: !this.model.get('multipleFilters')
+                });
+            } else {
+                this._filterCollection.set(filterObj, {
+                    remove: !this.model.get('multipleFilters')
+                });
+            }
         },
         _getFields: function() {
             var itemsArray = [{
@@ -167,7 +189,7 @@ define([
                 srOnlyLabel: true,
                 buttonOptions: {
                     type: 'submit',
-                    title: 'Press enter to filter results.',
+                    title: 'Filter results.',
                     icon: 'fa-plus'
                 },
                 icon: 'fa-filter',
@@ -175,7 +197,7 @@ define([
                 extraClasses: ['flex-width-1', 'form-group-sm'],
                 title: 'Enter filter text and press Enter to apply.'
             }];
-            if (this.model.get('showFilterTitle')) {
+            if (this.model.get('showFilterTitle') && !this.model.get('predefinedFilter')) {
                 itemsArray.push({
                     control: 'container',
                     extraClasses: ['flex-width-1'],

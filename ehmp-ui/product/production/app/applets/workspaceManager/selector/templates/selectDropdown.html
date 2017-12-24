@@ -1,16 +1,14 @@
+{{#if showFilter}}
 <div class="dropdown-header">
     <form>
-        <label for="dropdownSearchElement" class="sr-only">Filter Workspaces</label>
+        <label for="dropdownSearchElement" class="sr-only">Filter {{currentContextTitle}} Workspaces</label>
+        <div id="dropdownSearchElementDescription" class="sr-only">Enter text to filter workspaces below. Use down arrow key to access the menu options</div>
         <i class="fa fa-filter"></i>
-        <input type="text" id="dropdownSearchElement" class="form-control input-sm" placeholder="Filter workspaces" maxlength="25" title="Enter text to filter workspaces below" autocomplete="off">
-        <button class="hidden btn btn-icon btn-sm" type="button" title="Press enter to clear text">
+        <input type="text" id="dropdownSearchElement" class="form-control input-sm" placeholder="Filter {{currentContextTitle}} Workspaces" maxlength="25" autocomplete="off" aria-describedby="dropdownSearchElementDescription">
+        <button class="hidden btn btn-icon btn-sm" type="button" title="Clear filter text">
             <i class="fa fa-times color-grey-darkest"></i>
         </button>
     </form>
 </div>
+{{/if}}
 <ul role="menu" class="dropdown-body list-group"></ul>
-<div class="dropdown-footer">
-    <button class="btn btn-primary btn-block" title="Press enter to open the workspace manager." type="button" id="workspaceNavigationManagerButton">
-        <i class="fa fa-th-large right-padding-xs"></i>Manage Workspaces
-    </button>
-</div>

@@ -6,9 +6,9 @@ var logger = sinon.stub(require('bunyan').createLogger({
 }));
 var RpcClient = require('vista-js').RpcClient;
 var userInfoRPC = require('./vista-user-info');
-var SITE = '9E7A';
-var FIRST_NAME = 'JENGA';
-var LAST_NAME = 'BLOCKS';
+var SITE = 'SITE';
+var FIRST_NAME = 'FIRST';
+var LAST_NAME = 'LAST';
 var USER_NAME = LAST_NAME + ',' + FIRST_NAME;
 var DUZ = 'blanco';
 
@@ -27,7 +27,7 @@ describe('Vista User Info module', function() {
         req.logger = logger;
         _.set(req, ['app', 'config', 'vistaSites', SITE], {
             host: '12345',
-            port: 8888,
+            port: PORT,
             name: 'PIONEER',
             infoButtonOid: 'blahblahblah',
             division: 411
@@ -55,7 +55,7 @@ describe('Vista User Info module', function() {
             site: SITE,
             data: {
                 duz: {
-                    '9E7A': DUZ
+                    'SITE': DUZ
                 }
             }
         };
@@ -76,7 +76,7 @@ describe('Vista User Info module', function() {
             site: SITE,
             data: {
                 duz: {
-                    '9E7A': DUZ
+                    'SITE': DUZ
                 }
             }
         };
@@ -94,7 +94,7 @@ describe('Vista User Info module', function() {
             site: SITE,
             data: {
                 duz: {
-                    '9E7A': DUZ
+                    'SITE': DUZ
                 }
             }
         };
@@ -111,7 +111,7 @@ describe('Vista User Info module', function() {
             site: SITE,
             data: {
                 duz: {
-                    '9E7A': DUZ
+                    'SITE': DUZ
                 }
             }
         };

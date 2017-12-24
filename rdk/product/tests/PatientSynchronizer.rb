@@ -89,6 +89,13 @@ class PatientSynchronizer
     unless operational_sync_complete
       p "Operational Data Sync NOT Complete and document NOT returned."
       p "----------------"
+      p "Operational Data response from JDS:"
+      sites.each do |site|
+        path = "#{jds_url}/statusod/#{site}"
+        response = HTTParty.get(path)
+        json = JSON.parse(response.body)
+        puts JSON.pretty_generate(json)
+      end
       fail "Timeout waiting for Operational-Data to sync after #{time_out} seconds elapsed"
     end
   end

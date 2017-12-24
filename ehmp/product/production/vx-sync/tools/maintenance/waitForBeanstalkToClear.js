@@ -20,7 +20,7 @@ var logger = require('bunyan').createLogger({
 });
 
 var ErrorPublisher = require(global.VX_JOBFRAMEWORK).ErrorPublisher;
-var errorWriter = require(global.VX_HANDLERS + 'error-request/jds-error-writer').createErrorRecordWriter(logger, config);
+var errorWriter = require(global.VX_HANDLERS + 'error-request/jds-error-writer').createErrorRecordWriter(config, null, logger);
 var inspect = require(global.VX_UTILS + 'inspect');
 var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 var util = require('util');
@@ -191,9 +191,11 @@ function storeJobToLog(tubeName, jobType, beanstalkJobId, beanstalkJobPayload, c
 	handlerErrorRecord.timestamp = errorStampTime;
 	console.log('Created error record.  handlerErrorRecord: %j', handlerErrorRecord);
 
-	errorWriter(handlerErrorRecord, function(error, result) {
+	errorWriter(handlerErrorRecord, function(error, response) {
 		if (error) {
-			console.log('Error occurred writing error record.  error: %j; result: %j; beanstalkJobId: %s; handlerErrorRecord: %j', error, result, beanstalkJobId, handlerErrorRecord);
+			console.log('Error occurred writing error record.  error: %j; response: %j; beanstalkJobId: %s; handlerErrorRecord: %j', error, response, beanstalkJobId, handlerErrorRecord);
+		} else if (!response || !response.statusCode || response.statusCode !== 201) {
+			console.log('Unexpected response when writing error record. error: %j; response: %j; beanstalkJobId: %s; handlerErrorRecord: %j', error, response, beanstalkJobId, handlerErrorRecord);
 		} else {
 			console.log('Successfully wrote error record.  beanstalkJobId: %s; handlerErrorRecord: %j', beanstalkJobId, handlerErrorRecord);
 		}

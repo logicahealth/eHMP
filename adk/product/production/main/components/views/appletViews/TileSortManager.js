@@ -15,7 +15,7 @@ define([
 
         var wasSorted = false;
 
-        if(_.isUndefined(sortAttribute)){
+        if (_.isUndefined(sortAttribute)) {
             sortAttribute = 'uid';
         }
 
@@ -24,16 +24,17 @@ define([
             wasSorted = true;
 
             var currentModel = _.find(originalCollection.models, customSort);
-            originalCollection.remove(currentModel, {silent:true});
+            originalCollection.remove(currentModel, {silent: true});
             originalCollection.add(currentModel, {
                 at: i,
-                silent:true
+                silent: true
             });
         }
 
         function customSort(currentItem) {
             return currentItem.attributes[sortAttribute] == tileSortOrder[i];
         }
+
         originalCollection.trigger('sort', originalCollection);
         return wasSorted;
     };
@@ -42,17 +43,17 @@ define([
         var wasSorted = false;
         var currentScreen = Messaging.request('get:current:screen');
 
-        if (currentScreen.config.predefined && typeof cb === 'function'){
+        if (currentScreen.config.predefined && typeof cb === 'function') {
             cb(wasSorted, originalCollection);
             return;
         }
         var workspaceId = currentScreen.id;
         var userConfig = UserDefinedScreens.getUserConfigFromSession();
 
-        if(userConfig && userConfig.userDefinedSorts){
-            var tileSortConfig = _.findWhere(userConfig.userDefinedSorts, { id: workspaceId});
+        if (userConfig && userConfig.userDefinedSorts) {
+            var tileSortConfig = _.findWhere(userConfig.userDefinedSorts, {id: workspaceId});
 
-            if(tileSortConfig){
+            if (tileSortConfig) {
                 var obj = _.find(tileSortConfig.applets, function(obj) {
                     return obj.instanceId == appletId;
                 });
@@ -78,7 +79,7 @@ define([
     };
 
     TileSortManager.reorderRows = function(reorderObj, collection, sortId, sortKey, successCallback) {
-        if(_.isUndefined(sortKey)){
+        if (_.isUndefined(sortKey)) {
             sortKey = 'uid';
         }
 
@@ -89,9 +90,9 @@ define([
         collection.remove(temp, {
             silent: true
         });
-        if(reorderObj.newIndex === collection.models.length){
+        if (reorderObj.newIndex === collection.models.length) {
             $(listElement).append(removedElement);
-        }else {
+        } else {
             $(listElement).find('div.gist-item:eq(' + reorderObj.newIndex + ')').before(removedElement);
         }
         collection.add(temp, {
@@ -101,32 +102,17 @@ define([
         var newSorted = [];
 
         collection.models.forEach(function(item) {
-            if (_.isUndefined(item.attributes) || _.isUndefined(item.attributes[sortKey])){
-                return;
-            }else {
-                newSorted.push(item.attributes[sortKey]);
+            var value = _.get(item, ['attributes', sortKey]);
+            if (!_.isUndefined(value)) {
+                newSorted.push(value);
             }
         });
 
         var workspaceId = Messaging.request('get:current:screen').id;
         var SaveSortModel = Backbone.Model.extend({
-            sync: function(method, model, options) {
-
-                var params = {
-                    type: 'POST',
-                    url: model.url(),
-                    contentType: "application/json",
-                    data: JSON.stringify(model.toJSON()),
-                    dataType: "json"
-                };
-
-                $.ajax(_.extend(params, options));
-
-            },
             url: function() {
-                var id = workspaceId;
                 return ResourceService.buildUrl('user-defined-sort', {
-                    'id': id,
+                    'id': workspaceId,
                     'instanceId': sortId
                 });
             }
@@ -139,21 +125,31 @@ define([
         obj.fieldValue = newSorted.join(",");
 
         var saveInstance = new SaveSortModel(obj);
-        saveInstance.save(null, {
+
+        var params = {
+            type: 'POST',
+            url: saveInstance.url(),
+            contentType: "application/json",
+            data: JSON.stringify(obj),
+            dataType: "json"
+        };
+
+        saveInstance.save(params, {
             success: function(model, response) {
                 var currentConfig = UserDefinedScreens.getUserConfigFromSession();
                 currentConfig.userDefinedSorts = response.data.userDefinedSorts;
                 UserDefinedScreens.saveUserConfigToSession(currentConfig);
 
-                if(successCallback){
+                if (successCallback) {
                     successCallback();
                 }
             },
-            error: function(model) {}
+            error: function(model) {
+            }
         });
     };
 
-    var findIndex = function(array, callback, thisArg) {
+    var findIndex = function(array, callback) {
         var index = -1,
             length = array ? array.length : 0;
 
@@ -167,10 +163,9 @@ define([
 
 
     var findScreenIndex = function(json, workspaceId) {
-        var screenIndex = findIndex(json.userDefinedSorts, function(screen) {
+        return findIndex(json.userDefinedSorts, function(screen) {
             return screen.id === workspaceId;
         });
-        return screenIndex;
     };
 
     var findAppletIndex = function(screenConfig, instanceId) {
@@ -185,19 +180,22 @@ define([
     TileSortManager.hasSort = function(workspaceId, appletId) {
         var json = ADK.UserDefinedScreens.getUserConfigFromSession();
         var screenIndex = findScreenIndex(json, workspaceId);
-        if (screenIndex === -1) return false;
+        if (screenIndex === -1) {
+            return false;
+        }
         var screenConfig = json.userDefinedSorts[screenIndex];
         var appletIndex = findAppletIndex(screenConfig, appletId);
-        if (appletIndex === -1) return false;
-        return true;
+        return appletIndex !== -1;
     };
 
     TileSortManager.removeSort = function(instanceId, onSuccessCallback) {
 
         var workspaceId = Messaging.request('get:current:screen').id;
-        if(!TileSortManager.hasSort(workspaceId, instanceId)) {
+        if (!TileSortManager.hasSort(workspaceId, instanceId)) {
             //if there's no sort exists, just call the callback and return
-            if(onSuccessCallback) onSuccessCallback();
+            if (onSuccessCallback) {
+                onSuccessCallback();
+            }
             return;
         }
         var fetchOptions = {
@@ -207,12 +205,12 @@ define([
                 id: workspaceId,
                 instanceId: instanceId
             },
-            onSuccess: function(model, response){
+            onSuccess: function(model, response) {
                 var currentConfig = UserDefinedScreens.getUserConfigFromSession();
                 currentConfig.userDefinedSorts = response.data.userDefinedSorts;
                 UserDefinedScreens.saveUserConfigToSession(currentConfig);
 
-                if(onSuccessCallback){
+                if (onSuccessCallback) {
                     onSuccessCallback();
                 }
             }
@@ -222,12 +220,12 @@ define([
 
     };
 
-    TileSortManager.removeAllSortsForOneScreenFromSession = function(workspaceId) {
-        var json = UserDefinedScreens.getUserConfigFromSession();
+    TileSortManager.removeAllSortsForOneScreenFromJSON = function(workspaceId, json) {
         var screenIndex = findScreenIndex(json, workspaceId);
-        if (screenIndex === -1) return;
-        json.userDefinedSorts.splice(screenIndex, 1);
-        UserDefinedScreens.saveUserConfigToSession(json);
+        if (screenIndex !== -1) {
+            json.userDefinedSorts.splice(screenIndex, 1);
+        }
+        return JSON;
     };
 
     return TileSortManager;

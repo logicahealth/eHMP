@@ -175,7 +175,8 @@ define([
 
             if (!_.isUndefined(clinicalObject) && !_.isUndefined(clinicalObject.data) && !_.isUndefined(clinicalObject.data.consultOrders) && clinicalObject.data.consultOrders.length > 0) {
                 //Newest consult is last in the array
-                var consultOrder = clinicalObject.data.consultOrders[clinicalObject.data.consultOrders.length - 1];
+                var consultOrder = _.clone(_.last(_.get(clinicalObject, 'data.consultOrders')));
+                
                 model.set('consultOrder', consultOrder);
 
                 if (!_.isUndefined(consultOrder.conditions) && consultOrder.conditions.length > 0)

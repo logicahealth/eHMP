@@ -19,8 +19,45 @@ When(/^user attempts to add a problem from problem applet header$/) do
   expect(@ehmp.fld_add_problem_title.text.upcase).to eq("ADD PROBLEM")
 end
 
+Then(/^user searches for problem "([^"]*)" and selects problem "([^"]*)"$/) do |problem_node, problem_leaf|
+  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
+
+  @ehmp.define_tree_node problem_node
+  @ehmp.problem_search_result problem_leaf
+
+  @ehmp.wait_until_fld_search_problem_visible
+  max_attempt = 2
+  begin
+    @ehmp.fld_search_problem.click
+
+    @ehmp.fld_search_problem.set problem_node
+    @ehmp.wait_until_btn_search_problem_visible
+    @ehmp.btn_search_problem.click
+  rescue Exception => e
+    p "Attempt search problem #{max_attempt}: #{e}"
+    max_attempt -= 1
+    raise e if max_attempt < 0
+    @ehmp.fld_search_problem.click
+    @ehmp.fld_search_problem.native.send_keys [:end]
+    @ehmp.fld_search_problem.native.send_keys [:shift, :home], :backspace
+    retry
+  end
+  
+  @ehmp.wait_until_fld_results_header_visible
+  @ehmp.wait_until_fld_search_result_tree_node_visible
+  @ehmp.fld_search_result_tree_node.click
+
+  @ehmp.wait_until_fld_search_result_visible
+  @ehmp.fld_search_result.click
+
+  @ehmp.selected_problem problem_leaf
+  @ehmp.wait_until_fld_selected_problem_visible
+  expect(@ehmp.fld_selected_problem.text.upcase).to eq(problem_leaf.upcase)
+end
+
 When(/^user searches and selects new problem "([^"]*)"$/) do |problem_term|
   @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
+
   @ehmp.wait_until_fld_search_problem_visible
   max_attempt = 2
   begin
@@ -140,6 +177,7 @@ end
 
 Then(/^the Add Problem model displays a result for "([^"]*)"$/) do |problem_term|
   @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
+
   @ehmp.problem_search_result problem_term
   @ehmp.wait_until_fld_search_result_visible
   expect(@ehmp).to have_fld_search_result
@@ -350,7 +388,7 @@ end
 
 When(/^user searches and selects a unique new problem$/) do
   min_in_day = 1440
-  total_num_pain_problems = 292
+  total_num_pain_problems = 200#292
   problem_term = 'acute'
 
   current_time = Time.new
@@ -381,18 +419,29 @@ When(/^user searches and selects a unique new problem$/) do
   end
   p "what is hanging #{total_num_pain_problems}"
   selectable_problems = -1
-  #
   wait = Selenium::WebDriver::Wait.new(:timeout => 60)
   begin
-    wait.until { @ehmp.fld_selectable_problems.length >= total_num_pain_problems }
-    selectable_problems = @ehmp.fld_selectable_problems.length
+    wait.until { @ehmp.fld_search_results_tree_node.length >= total_num_pain_problems }
+    selectable_problems = @ehmp.fld_search_results_tree_node.length
   rescue Exception => e
     p e
     p @ehmp.fld_selectable_problems.length
     raise e
   end
-  p selectable_problems
-  selectable_problem_text = @ehmp.fld_selectable_problems[@problem_index].text.gsub(' Press enter to select.', '')
+  p "#{selectable_problems} #{@problem_index}"
+
+  @ehmp.unique_tree_items @problem_index
+  @ehmp.fld_search_results_tree_node[@problem_index].native.location_once_scrolled_into_view
+  p @ehmp.fld_search_results_tree_node[@problem_index].text
+
+  @ehmp.unique_tree_node.native.location_once_scrolled_into_view
+  expect(@ehmp.wait_for_unique_tree_node).to eq(true)
+  @ehmp.unique_tree_node.click
+  @ehmp.wait_for_unique_first_leaf
+  @ehmp.wait_for_unique_tree_leaves
+  expect(@ehmp.unique_tree_leaves.length).to be > 0
+
+  selectable_problem_text = @ehmp.unique_first_leaf.text.gsub(' Press enter to select.', '')
   p "Clicking #{@problem_index}: #{selectable_problem_text}"
   @ehmp.problem_search_result selectable_problem_text
 

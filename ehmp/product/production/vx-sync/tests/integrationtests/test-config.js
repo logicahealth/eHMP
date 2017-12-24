@@ -10,5 +10,7 @@ nconf
     });
 
 var vx_sync_ip = nconf.get('VXSYNC_IP');
+var vx_sync_port = PORT;
 
-module.exports = vx_sync_ip;
+module.exports.vxsyncIP = vx_sync_ip;
+module.exports.vxsyncPort = vx_sync_port;

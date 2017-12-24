@@ -34,9 +34,8 @@ function getPatient(obj, patientCallback) {
     };
     // Trigger the JDS fetch and run the check for sensitive data on a patient and finally run the pep paths can be as follows:
     // http://IP             /data/index/pt-select-icn/?range=5123456789V027402
-    // http://IP             /data/index/pt-select-pid/?range=9E7A;18
+    // http://IP             /data/index/pt-select-pid/?range=SITE;18
     var httpConfig = {
-        cacheTimeout: 15 * 60 * 1000,
         timeout: 5000,
         logger: obj.logger,
         baseUrl: obj.app.config.jdsServer.baseUrl,

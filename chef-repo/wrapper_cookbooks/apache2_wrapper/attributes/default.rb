@@ -17,6 +17,20 @@ end
 
 default['apache']['keepalivetimeout']  = 3
 
+# Default values for worker MPM. The values chosen are optimized for local and AWS,
+# where RAM is lower, in order to avoid swapping. In VA environments where more RAM
+# is available these values MUST be overridden and tuned based on available memory.
+# Average httpd process size should be calculated, then use that to determine maximum
+# number of request workers that can fit within available RAM
+default['apache']['worker']['startservers']        = 3
+default['apache']['worker']['serverlimit']         = 16
+default['apache']['worker']['minsparethreads']     = 60
+default['apache']['worker']['maxsparethreads']     = 120
+default['apache']['worker']['threadlimit']         = 64
+default['apache']['worker']['threadsperchild']     = 25
+default['apache']['worker']['maxrequestworkers']   = 400
+default['apache']['worker']['maxconnectionsperchild'] = 0
+
 default[:apache][:ssl_dir] = '/etc/httpd/ssl'
 default[:apache][:ssl_cert_file] = "#{node[:apache][:ssl_dir]}/server.crt"
 default[:apache][:ssl_cert_key_file] = "#{node[:apache][:ssl_dir]}/server.key"

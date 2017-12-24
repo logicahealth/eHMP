@@ -1,27 +1,20 @@
 define([
-	'test/stubs',
-	'jasminejquery',
-	'app/applets/todo_list/util'
+    'test/stubs',
+    'jasminejquery',
+    'app/applets/todo_list/util'
 ], function(Stubs, Jasmine, Util) {
-	'use strict';
+    'use strict';
 
-	describe('Unit tests for todo_list applet utils', function() {
-		function buildMessagingResponse(screenId) {
-			return  {
-				config: {
-					id: screenId
-				}
-			};
-		}
+    describe('Unit tests for todo_list applet utils', function() {
 
-		it('Should return staff view for correct view', function(){
-			spyOn(ADK.Messaging, 'request').and.returnValue(buildMessagingResponse('provider-centric-view'));
-			expect(Util.isStaffView()).toEqual(true);
-		});
+        it('Should return true for staff view', function() {
+            _.set(ADK, 'WorkspaceContextRepository.currentContextId', 'staff');
+            expect(Util.isStaffView()).toEqual(true);
+        });
 
-		it('Should return staff view for correct view', function(){
-			spyOn(ADK.Messaging, 'request').and.returnValue(buildMessagingResponse('summary'));
-			expect(Util.isStaffView()).toEqual(false);
-		});
-	});
+        it('Should return false when elsewhere', function() {
+            _.set(ADK, 'WorkspaceContextRepository.currentContextId', 'patient');
+            expect(Util.isStaffView()).toEqual(false);
+        });
+    });
 });

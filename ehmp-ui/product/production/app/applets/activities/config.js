@@ -69,7 +69,7 @@ define([
                 this.$el.html(this.column.get('template')(this.model.toJSON()));
                 this.delegateEvents();
 
-                this.$el.find('[data-toggle="tooltip"]').tooltip();
+                this.$el.find('[data-toggle="tooltip"]').tooltip({container: 'body'});
                 return this;
             },
             remove: function() {

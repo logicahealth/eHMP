@@ -20,7 +20,7 @@ describe('Default Search', function() {
                 config: {
                     rpcConfig: {
                         host: '127.0.0.1',
-                        port: '9999'
+                        port: 'PORT'
                     },
                     vistaSites: {
                         badsite: {},
@@ -41,7 +41,7 @@ describe('Default Search', function() {
             verifyCode: 'def456!!',
             siteCode: 'abc123',
             host: '127.0.0.1',
-            port: '9999',
+            port: 'PORT',
             path: '/give/me/data',
             division: 'abc123'
         };
@@ -67,7 +67,7 @@ describe('Default Search', function() {
             },
             rpcConfig: {
                 host: '127.0.0.1',
-                port: '9999'
+                port: 'PORT'
             },
             vistaSites: {
                 badsite: {},

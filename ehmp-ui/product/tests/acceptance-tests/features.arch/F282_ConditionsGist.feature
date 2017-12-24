@@ -210,4 +210,32 @@ Scenario: Problems Gist Applet is sorted by the column header Last
   Then the Problems trend view applet is sorted in alphabetic order based on Facility
   And the user sorts the Problems trend view applet by column Facility
   And the Problems trend view applet is sorted in reverse alphabetic order based on Facility 
+ 
+#below two scenarios are archived, implemented as part of F1238 
+@f282_problems_quick_view_not_through_toolbar @F282-7.1 @US4155 @4317 @DE1321
+Scenario: Problems Applet Trend view - quick view of problems
+  Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
+  Then Overview is active
+  And Problems trend view has data rows
+  And hovering over the right side of problem trend view and selecting the onset date field
+  Then the problems quick look table is displayed
+  And problems quick look table contains headers
+    |Headers 		|
+    | Date   		|
+    | Description 	| 
+    | Facility 		|
+    
+@f282_problems_quick_view_through_toolbar @F282-7.1 @US4317 @US4805
+Scenario: Problems Applet Trend view - quick view of problems
+  Given user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"  
+  Then Overview is active
+  And Problems trend view has data rows
+  When user opens the first problems gist item
+  And user selects the quick look view toolbar
+  Then the problems quick look table is displayed
+  And problems quick look table contains headers
+    |Headers 		|
+    | Date   		|
+    | Description 	| 
+    | Facility 		|
   

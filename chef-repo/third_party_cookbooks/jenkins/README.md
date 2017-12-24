@@ -104,7 +104,7 @@ end
 
 ### jenkins\_credentials
 
-**NOTES** 
+**NOTES**
 
 * Install version 1.6 or higher of the [credentials plugin](https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin) to use the Jenkins credentials resource.
 
@@ -364,6 +364,8 @@ end
 
 ### jenkins_slave
 
+**NOTE** The use of the Jenkins user resource requires the Jenkins SSH credentials plugin. This plugin is not shipped by default in jenkins 2.x.
+
 This resource manages Jenkins slaves, supporting the following actions:
 
 ```
@@ -504,6 +506,8 @@ end
 
 ### jenkins_user
 
+**NOTE** The use of the Jenkins user resource requires the Jenkins mailer plugin. This plugin is not shipped by default in jenkins 2.x.
+
 This resource manages Jenkins users, supporting the following actions:
 
 ```
@@ -586,6 +590,16 @@ node.run_state[:jenkins_username]
 node.run_state[:jenkins_password]
 ```
 
+### Jenkins 2
+
+Jenkins 2 enables an install wizard by default. To make sure you can manipulate the jenkins instance, you need to disable the wizard. You can do this by setting an attribute:
+
+```ruby
+default['jenkins']['master']['jvm_options'] = '-Djenkins.install.runSetupWizard=false'
+```
+
+This is done by default, but must be kept when overriding the jvm_options!
+
 ### Proxies
 
 If you need to pass through a proxy to communicate between your masters and slaves, you will need to set a special node attribute:
@@ -598,42 +612,6 @@ The underlying executor class (which all HWRPs use) intelligently passes proxy i
 
 ```ruby
 node.normal['jenkins']['executor']['proxy'] = '1.2.3.4:5678'
-```
-
-## Using Test Kitchen with Docker
-
-The following assumes you are on a Mac OS X workstation and have installed and started [Kitematic](https://kitematic.com/).
-
-- Install [kitchen-docker](https://github.com/portertech/kitchen-docker) into your local ChefDK install:
-
-```bash
-$ chef gem install kitchen-docker
-Successfully installed kitchen-docker-2.3.0
-1 gem installed
-```
-
-- Set environment variables to point kitchen-docker at your local Kitematic instance:
-
-```bash
-
-# Bash
-
-export DOCKER_HOST=tcp://192.168.99.100:2376
-
-export DOCKER_CERT_PATH=$HOME/.docker/machine/certs
-
-export DOCKER_TLS_VERIFY=1
-
-# Fish
-
-set -gx DOCKER_HOST "tcp://192.168.99.100:2376" set -gx DOCKER_CERT_PATH "$HOME/.docker/machine/certs" set -gx DOCKER_TLS_VERIFY 1
-```
-
-- Run Test Kitchen with the provided `.kitchen.docker.yml`:
-
-```bash
-
-KITCHEN_LOCAL_YAML=.kitchen.docker.yml kitchen verify smoke-war-stable-ubuntu-docker
 ```
 
 ## Development

@@ -1,21 +1,24 @@
 [data-appletid="encounters"] {
-    .enc-gist-list{
+    .enc-gist-list {
         -ms-overflow-style: -ms-autohiding-scrollbar;
+        > div {
+            border-bottom: 1px solid $grey-light;
+        }
     }
     [role=tab] {
         .right-side {
             padding-right: 15px;
         }
-        .btn-accordion:focus {
-            background-color: $primary-lightest;
-        }
     }
     [role=tabpanel] {
         background-color: $grey-lightest;
-        padding: 6px 20px 6px 6px;
+        padding: 6px 16px 6px 6px;
         [gistviewtype] {
             box-shadow: 0 -0px 3px 0 rgba(0, 0, 0, .4);
         }
+    }
+    .table-row[title="collapse"] {
+        background-color: $primary-lightest;
     }
 }
 .modal-body.encounter-form-modal {
@@ -79,4 +82,10 @@ form.form-container .form-group {
 }
 .ncb-comment-container-region {
     background-color: transparent;
+}
+// encounters hospital admissions table
+// the only .table-row.active that needs to have a primary background-color
+#selectableTableAdmissions .table-row.active {
+    background-color: $primary;
+    color: $pure-white;
 }

@@ -91,7 +91,7 @@ define([], function() {
             "tooltip": "Help"
         },
 
-         /****************************************
+        /****************************************
         The Patient Demographic Bar
         ****************************************/
         "patient_demographic": {
@@ -429,6 +429,14 @@ define([], function() {
         },
 
         /****************************************
+        Video Visits
+        ****************************************/
+        "video_visits_standard": {
+            "url": serverPath + "Video%20Visits%20Applet.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
         Trays (Write Backs)
         ****************************************/
 
@@ -528,8 +536,20 @@ define([], function() {
             "url": serverPath + "Action%20Tray%20-%20Request.aspx",
             "tooltip": "Help"
         },
+        "discharge_followup_expanded": {
+            "url": serverPath + "Inpatient%20Discharge%20Follow%20Up%20Applet.aspx",
+            "tooltip": "Help"
+        },
+        "discharge_followup_response_form": {
+            "url": serverPath + "Action%20Tray%20-%20Discharge%20Follow%20Up.aspx",
+            "tooltip": "Help"
+        },
         "order_search_tray": {
             "url": serverPath + "Action%20Tray.aspx",
+            "tooltip": "Help"
+        },
+        "video_visit_appointment_form": {
+            "url": serverPath + "Action%20Tray%20-%20Video%20Visit.aspx",
             "tooltip": "Help"
         },
 

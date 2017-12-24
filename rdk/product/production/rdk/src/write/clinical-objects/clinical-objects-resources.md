@@ -56,7 +56,7 @@ Find clinical objects.
                     "subDomain": {
                         "type": "string",
                         "description": "Resource subdomain of the clinical object data (e.g. for 'order', subdomain could be 'laboratory', 'radiology', etc.)",
-                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult"]
+                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult", "discharge"]
                     },
                     "referenceId": {
                         "type": "string",
@@ -97,14 +97,14 @@ Find clinical objects.
                 "status": 200,
                 "data": {
                     "items": [{
-                        "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                        "patientUid": "urn:va:patient:9E7A:3:3",
-                        "authorUid": "urn:va:user:9E7A:123",
+                        "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                        "patientUid": "urn:va:patient:SITE:3:3",
+                        "authorUid": "urn:va:user:SITE:123",
                         "domain": "ehmp-order",
                         "subDomain": "laboratory",
                         "visit" :
                         {
-                        "location": "urn:va:location:9E7A:1",
+                        "location": "urn:va:location:SITE:1",
                         "serviceCategory": "PSB",
                         "dateTime": "20160101120000"
                         },
@@ -142,14 +142,14 @@ List clinical objects.
                 "status": 200,
                 "data": {
                     "items": [{
-                        "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                        "patientUid": "urn:va:patient:9E7A:3:3",
-                        "authorUid": "urn:va:user:9E7A:123",
+                        "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                        "patientUid": "urn:va:patient:SITE:3:3",
+                        "authorUid": "urn:va:user:SITE:123",
                         "domain": "ehmp-order",
                         "subDomain": "laboratory",
                         "visit" :
                         {
-                        "location": "urn:va:location:9E7A:1",
+                        "location": "urn:va:location:SITE:1",
                         "serviceCategory": "PSB",
                         "dateTime": "20160101120000"
                         },
@@ -183,13 +183,13 @@ Create a Clinical Object. The service will perform server-side validation of the
     + Body
 
             {
-                "patientUid": "urn:va:patient:9E7A:3:3",
-                "authorUid": "urn:va:user:9E7A:123",
+                "patientUid": "urn:va:patient:SITE:3:3",
+                "authorUid": "urn:va:user:SITE:123",
                 "domain": "ehmp-order",
                 "subDomain": "laboratory",
                 "visit":
                 {
-                   "location": "urn:va:location:9E7A:1",
+                   "location": "urn:va:location:SITE:1",
                    "serviceCategory": "PSB",
                    "dateTime": "20160101120000"
                 },
@@ -225,7 +225,7 @@ Create a Clinical Object. The service will perform server-side validation of the
                     "subDomain": {
                         "type": "string",
                         "description": "Resource subdomain of the clinical object data (e.g. for 'order', subdomain could be 'laboratory', 'radiology', etc.)",
-                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult"]
+                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult", "discharge"]
                     },
                     "visit": {
                         "type": "object",
@@ -268,14 +268,14 @@ Create a Clinical Object. The service will perform server-side validation of the
             {
                 "status": 200,
                 "data": {
-                    "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                    "patientUid": "urn:va:patient:9E7A:3:3",
-                    "authorUid": "urn:va:user:9E7A:123",
+                    "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                    "patientUid": "urn:va:patient:SITE:3:3",
+                    "authorUid": "urn:va:user:SITE:123",
                     "domain": "ehmp-order",
                     "subDomain": "laboratory",
                     "visit" :
                     {
-                       "location": "urn:va:location:9E7A:1",
+                       "location": "urn:va:location:SITE:1",
                        "serviceCategory": "PSB",
                        "dateTime": "20160101120000"
                     },
@@ -312,14 +312,14 @@ Retrieve a Clinical Object.
             {
                 "status": 200,
                 "data": {
-                    "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                    "patientUid": "urn:va:patient:9E7A:3:3",
-                    "authorUid": "urn:va:user:9E7A:123",
+                    "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                    "patientUid": "urn:va:patient:SITE:3:3",
+                    "authorUid": "urn:va:user:SITE:123",
                     "domain": "ehmp-order",
                     "subDomain": "laboratory",
                     "visit" :
                     {
-                       "location": "urn:va:location:9E7A:1",
+                       "location": "urn:va:location:SITE:1",
                        "serviceCategory": "PSB",
                        "dateTime": "20160101120000"
                     },
@@ -356,14 +356,14 @@ Update a Clinical Object. The service will perform server-side validation of the
     + Body
 
             {
-                "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                "patientUid": "urn:va:patient:9E7A:3:3",
-                "authorUid": "urn:va:user:9E7A:123",
+                "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                "patientUid": "urn:va:patient:SITE:3:3",
+                "authorUid": "urn:va:user:SITE:123",
                 "domain": "ehmp-order",
                 "subDomain": "laboratory",
                 "visit" :
                 {
-                    "location": "urn:va:location:9E7A:1",
+                    "location": "urn:va:location:SITE:1",
                     "serviceCategory": "PSB",
                     "dateTime": "20160101120000"
                 },
@@ -399,7 +399,7 @@ Update a Clinical Object. The service will perform server-side validation of the
                     "subDomain": {
                         "type": "string",
                         "description": "Resource subdomain of the clinical object data (e.g. for 'order', subdomain could be 'laboratory', 'radiology', etc.)",
-                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult"]
+                        "enum": ["immunization", "laboratory", "consult", "tiu", "addendum", "noteObject", "request", "labResult", "discharge"]
                     },
                     "visit": {
                         "type": "object",
@@ -442,14 +442,14 @@ Update a Clinical Object. The service will perform server-side validation of the
             {
                 "status": 200,
                 "data": {
-                    "uid": "urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014",
-                    "patientUid": "urn:va:patient:9E7A:3:3",
-                    "authorUid": "urn:va:user:9E7A:123",
+                    "uid": "urn:va:ehmp-order:SITE:3:de305d54-75b4-431b-adb2-eb6b9e546014",
+                    "patientUid": "urn:va:patient:SITE:3:3",
+                    "authorUid": "urn:va:user:SITE:123",
                     "domain": "ehmp-order",
                     "subDomain": "laboratory",
                     "visit" :
                     {
-                        "location": "urn:va:location:9E7A:1",
+                        "location": "urn:va:location:SITE:1",
                         "serviceCategory": "PSB",
                         "dateTime": "20160101120000"
                     },

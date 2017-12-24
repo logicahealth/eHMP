@@ -57,13 +57,13 @@ Scenario: Client can request Lab (MI) results from multiple VistAs in VPR format
 	And the client receives 46 VPR "kodak" result(s)
 	And the VPR results contain "panorama labs"                                                    
       | field       | panorama_value      		 |
-      | uid 		| CONTAINS urn:va:lab:9E7A 	 |
+      | uid 		| CONTAINS urn:va:lab:SITE 	 |
       | typeName	| AFB CULTURE & SMEAR 		 |
       | resulted	| 199510261516 		 		 |
       
     And the VPR results contain "kodak labs"                                                       
       | field       | kodak_value         		 |
-      | uid 		| CONTAINS urn:va:lab:C877 	 |
+      | uid 		| CONTAINS urn:va:lab:SITE 	 |
       | typeName 	| AFB CULTURE & SMEAR 		 |
       | resulted	| 199510261516 		 		 |
 
@@ -122,21 +122,21 @@ Scenario: Client can request Lab (MI) results from multiple VistAs in FHIR forma
 	And the client receives 46 FHIR "kodak" result(s)
 	And the FHIR results contain "panorama labs"                                                    
       | field               	 | panorama_value      		 |
-      | content.identifier.value | CONTAINS urn:va:lab:9E7A |
+      | content.identifier.value | CONTAINS urn:va:lab:SITE |
       | content.name.text		 | AFB CULTURE & SMEAR 		 |
       | content.issued	 		 | 1995-10-26T15:16:00 		 |
       
     And the FHIR results contain "kodak labs"                                                       
       | field               	 | kodak_value         		 |
-      | content.identifier.value | CONTAINS urn:va:lab:C877 |
+      | content.identifier.value | CONTAINS urn:va:lab:SITE |
       | content.name.text		 | AFB CULTURE & SMEAR 		 |
       | content.issued 			 | 1995-10-26T15:16:00 		 |
 
 
 @f108_7_vistA_host_sync_panorama
 Scenario: Client can request sync for a patient on one VistA with a single PID (Panorama)
-	Given a patient with pid "9E7A;100084" has been synced through Admin API  
-	When the client requests the sync status for patient with pid "9E7A;100084"
+	Given a patient with pid "SITE;100084" has been synced through Admin API  
+	When the client requests the sync status for patient with pid "SITE;100084"
 	Then a successful response is returned
 	And the data return for "Panorama" is "True"
 	And the data return for "Kodak" is "False"
@@ -144,8 +144,8 @@ Scenario: Client can request sync for a patient on one VistA with a single PID (
 	
 @f108_8_vistA_host_sync_Kodak
 Scenario: Client can request sync for a patient on one VistA with a single PID (Kodak) 
-	Given a patient with pid "C877;100084" has been synced through Admin API
-	When the client requests the sync status for patient with pid "C877;100084"
+	Given a patient with pid "SITE;100084" has been synced through Admin API
+	When the client requests the sync status for patient with pid "SITE;100084"
 	Then a successful response is returned
 	And the data return for "Panorama" is "False"
 	And the data return for "Kodak" is "True"

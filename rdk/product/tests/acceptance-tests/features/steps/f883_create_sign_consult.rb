@@ -1,9 +1,9 @@
 def create_a_default_consult(pid)
   expect(@deployment_id).to_not be_nil
   request = RDKQuery.new('activities-start')
-  user = 'REDACTED;REDACTED'
-  default_id = 'REDACTED'
-  default_name = 'KHAN, VIHAAN'
+  user = 'SITE;USER  '
+  default_id = 'urn:va:user:SITE:10000000272'
+  default_name = 'LAST, FIRST'
   parameter_hash = {}
   parameter_hash['icn'] = pid
   parameter_hash['assignedTo'] = '[FC:PANORAMA(500)/TF:Physical Therapy(81)]'
@@ -78,7 +78,7 @@ def sign_a_default_consult(pid)
   expect(@deployment_id).to_not be_nil
   expect(@task_to_update).to_not be_nil
 
-  user = 'REDACTED;REDACTED'
+  user = 'SITE;USER  '
   # start update
   start_update_payload = {}
   start_update_payload['deploymentId'] = @deployment_id
@@ -92,13 +92,13 @@ def sign_a_default_consult(pid)
   # sign
   sign_consult_payload = {}
   sign_consult_payload['pid'] = pid                  
-  sign_consult_payload['site'] = "9E7A"                         
-  sign_consult_payload['uid'] = "urn:va:user:9E7A:10000000272" 
-  sign_consult_payload['duz site'] = "9E7A"                         
+  sign_consult_payload['site'] = "SITE"                         
+  sign_consult_payload['uid'] = "urn:va:user:SITE:10000000272" 
+  sign_consult_payload['duz site'] = "SITE"                         
   sign_consult_payload['duz id'] = "10000000272 "                 
   sign_consult_payload['facility'] = "PANORAMA"                     
-  sign_consult_payload['firstname'] = "VIHAAN"                       
-  sign_consult_payload['lastname'] = "KHAN"                         
+  sign_consult_payload['firstname'] = "FIRST"                       
+  sign_consult_payload['lastname'] = "LAST"                         
   sign_consult_payload['division'] = "500" 
   sign_consult_payload['signer'] = user
   payload = sign_consult sign_consult_payload
@@ -109,11 +109,11 @@ def sign_a_default_consult(pid)
   complete_update_payload = {}
   complete_update_payload['patient_pid'] = pid                
   complete_update_payload['icn'] = pid                  
-  complete_update_payload['executionUserId'] = 'urn:va:user:9E7A:10000000272' 
-  complete_update_payload['executionUserName'] = 'KHAN, VIHAAN'                 
+  complete_update_payload['executionUserId'] = 'urn:va:user:SITE:10000000272' 
+  complete_update_payload['executionUserName'] = 'LAST, FIRST'                 
   complete_update_payload['formAction'] =  'accepted'                   
-  complete_update_payload['orderingProvider displayName'] = 'KHAN, VIHAAN'                 
-  complete_update_payload['orderingProvider uid'] = 'urn:va:user:9E7A:10000000272' 
+  complete_update_payload['orderingProvider displayName'] = 'LAST, FIRST'                 
+  complete_update_payload['orderingProvider uid'] = 'urn:va:user:SITE:10000000272' 
   complete_update_payload['state'] = 'complete'                     
   @parameter_hash = complete_update_payload
   @patient_id = @parameter_hash['patient_pid']

@@ -430,10 +430,10 @@ Return a detailed synchronization status for the patient
                     "completedStamp": {
                         "icn": "ssss",
                         "sourceMetaStamp": {
-                            "9E7A": {
+                            "SITE": {
                                 "domainMetaStamp": {},
                                 "localId": 2,
-                                "pid": "9E7A;3",
+                                "pid": "SITE;3",
                                 "stampTime": 2,
                                 "syncCompleted": true
                             }

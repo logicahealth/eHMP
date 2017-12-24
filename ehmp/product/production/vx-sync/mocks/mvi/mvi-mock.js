@@ -7,7 +7,7 @@ var patients = [{
     name: 'Fake Patient, Another',
     ids: [{
         type: 'pid',
-        value: '9E7A;42'
+        value: 'SITE;42'
     }, {
         type: 'icn',
         value: '10101V420870'
@@ -34,10 +34,10 @@ var patients = [{
         value: '10104'
     }, {
         type: 'pid',
-        value: '9E7A;229'
+        value: 'SITE;229'
     }, {
         type: 'pid',
-        value: 'C877;229'
+        value: 'SITE;229'
     }]
 }, {
     name: 'Five,Patient',
@@ -49,10 +49,10 @@ var patients = [{
         value: '10105'
     }, {
         type: 'pid',
-        value: 'C877;231'
+        value: 'SITE;231'
     }, {
         type: 'pid',
-        value: '9E7A;231'
+        value: 'SITE;231'
     }]
 }, {
     name: 'Six,Patient',
@@ -64,10 +64,10 @@ var patients = [{
         value: '10106'
     }, {
         type: 'pid',
-        value: 'C877;418'
+        value: 'SITE;418'
     }, {
         type: 'pid',
-        value: '9E7A;418'
+        value: 'SITE;418'
     }]
 }, {
     name: 'Seven,Patient',
@@ -79,7 +79,7 @@ var patients = [{
         value: '10107'
     }, {
         type: 'pid',
-        value: '9E7A;253'
+        value: 'SITE;253'
     }]
 }, {
     name: 'Eight,Patient',
@@ -91,7 +91,7 @@ var patients = [{
         value: '0000000003'
     }, {
         type: 'pid',
-        value: '9E7A;3'
+        value: 'SITE;3'
     }]
 }, {
     name: 'Ten,Patient',
@@ -103,10 +103,10 @@ var patients = [{
         value: '10110'
     }, {
         type: 'pid',
-        value: 'C877;8'
+        value: 'SITE;8'
     }, {
         type: 'pid',
-        value: '9E7A;8'
+        value: 'SITE;8'
     }]
 }, {
     name: 'Seventeen,Patient',
@@ -118,7 +118,7 @@ var patients = [{
         value: '10117'
     }, {
         type: 'pid',
-        value: '9E7A;428'
+        value: 'SITE;428'
     }]
 }, {
     name: 'Eighteen,Patient',
@@ -130,7 +130,7 @@ var patients = [{
         value: '10118'
     }, {
         type: 'pid',
-        value: '9E7A;149'
+        value: 'SITE;149'
     }]
 }, {
     name: 'Fortsix,Patient',
@@ -142,10 +142,10 @@ var patients = [{
         value: '10146'
     }, {
         type: 'pid',
-        value: 'C877;301'
+        value: 'SITE;301'
     }, {
         type: 'pid',
-        value: '9E7A;301'
+        value: 'SITE;301'
     }]
 }, {
     name: 'Eightyt,Patient',
@@ -157,7 +157,7 @@ var patients = [{
         value: '10180'
     }, {
         type: 'pid',
-        value: '9E7A;433'
+        value: 'SITE;433'
     }]
 }, {
     name: 'Eightyone,Patient',
@@ -169,10 +169,10 @@ var patients = [{
         value: '10181'
     }, {
         type: 'pid',
-        value: '9E7A;775'
+        value: 'SITE;775'
     }, {
         type: 'pid',
-        value: 'C877;775'
+        value: 'SITE;775'
     }]
 }, {
     name: 'Ninetynine,Patient',
@@ -184,7 +184,7 @@ var patients = [{
         value: '10199'
     }, {
         type: 'pid',
-        value: '9E7A;100012'
+        value: 'SITE;100012'
     }]
 }, {
     name: 'Onehundredsixteen,Patient',
@@ -196,10 +196,10 @@ var patients = [{
         value: '11016'
     }, {
         type: 'pid',
-        value: '9E7A;227'
+        value: 'SITE;227'
     }, {
         type: 'pid',
-        value: 'C877;227'
+        value: 'SITE;227'
     }]
 }, {
     name: 'Onehunderdtwentysix,Patient',
@@ -211,10 +211,10 @@ var patients = [{
         value: '5000000009'
     }, {
         type: 'pid',
-        value: 'C877;100125'
+        value: 'SITE;100125'
     }, {
         type: 'pid',
-        value: '9E7A;100125'
+        value: 'SITE;100125'
     }]
 }, {
     name: 'Eight,Outpatient',
@@ -226,10 +226,10 @@ var patients = [{
         value: '5000000116'
     }, {
         type: 'pid',
-        value: '9E7A;100615'
+        value: 'SITE;100615'
     }, {
         type: 'pid',
-        value: 'C877;100615'
+        value: 'SITE;100615'
     }]
 }, {
     name: 'Eight,Inpatient',
@@ -241,10 +241,10 @@ var patients = [{
         value: '5000000217'
     }, {
         type: 'pid',
-        value: 'C877;100716'
+        value: 'SITE;100716'
     }, {
         type: 'pid',
-        value: '9E7A;100716'
+        value: 'SITE;100716'
     }]
 }, {
     name: 'Nine,Imagepatient',
@@ -256,112 +256,112 @@ var patients = [{
         value: '5000000318'
     }, {
         type: 'pid',
-        value: '9E7A;100817'
+        value: 'SITE;100817'
     }, {
         type: 'pid',
-        value: 'C877;100817'
+        value: 'SITE;100817'
     }]
 }, {
     name: 'Zzzretfivefiftyone,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;1'
+        value: 'SITE;1'
     }]
 }, {
     name: 'Bcma,Eight',
     ids: [{
         type: 'pid',
-        value: '9E7A;100022'
+        value: 'SITE;100022'
     }]
 }, {
     name: 'Bcma,Eighteen-Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A,100033'
+        value: 'SITE,100033'
     }]
 }, {
     name: 'Zzzretfourtwentyfive,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;11'
+        value: 'SITE;11'
     }]
 }, {
     name: 'Zzzretiredseventyseven,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;129'
+        value: 'SITE;129'
     }]
 }, {
     name: 'Zzzretsixseventysix,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;13'
+        value: 'SITE;13'
     }]
 }, {
     name: 'Zzzretiredonenineteen,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;164'
+        value: 'SITE;164'
     }]
 }, {
     name: 'Zzzretiredonefive,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;167'
+        value: 'SITE;167'
     }]
 }, {
     name: 'Zzzretfourfortyseven,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;17'
+        value: 'SITE;17'
     }]
 }, {
     name: 'Zzzretfoursixtyfive,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;21'
+        value: 'SITE;21'
     }]
 }, {
     name: 'Zzzretfivefifty,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;35'
+        value: 'SITE;35'
     }]
 }, {
     name: 'Zzzretiredzero,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;4'
+        value: 'SITE;4'
     }]
 }, {
     name: 'Zzzretsixseventyfive,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;50'
+        value: 'SITE;50'
     }]
 }, {
     name: 'Zzzretiredfiftythree,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;6'
+        value: 'SITE;6'
     }]
 }, {
     name: 'Zzzretiredfortyeight,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;71'
+        value: 'SITE;71'
     }]
 }, {
     name: 'Zzzretiredninetyfour,Patient',
     ids: [{
         type: 'pid',
-        value: '9E7A;737'
+        value: 'SITE;737'
     }]
 }, {
     name: 'Bcma,Eight',
     ids: [{
         type: 'pid',
-        value: 'C877;100022'
+        value: 'SITE;100022'
     }]
 }, ];
 

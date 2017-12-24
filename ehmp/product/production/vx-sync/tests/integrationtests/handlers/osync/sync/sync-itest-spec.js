@@ -2,6 +2,7 @@
 
 require('../../../../../env-setup');
 
+var _ = require('underscore');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 var resultsLog = require(global.VX_DUMMIES + 'dummy-logger');
 var handler = require(global.VX_HANDLERS + 'osync/sync/sync');
@@ -9,13 +10,20 @@ var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var config = require(global.VX_ROOT + 'worker-config');
 var pidUtils = require(global.VX_UTILS + 'patient-identifier-utils');
-var PjdsClient = require(global.VX_SUBSYSTEMS + 'jds/pjds-client');
+var PjdsClient = require('jds-cache-api').PjdsClient;
 
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
 // 	name: 'sync-spec',
 // 	level: 'debug'
 // });
+
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+
+var osyncConfig = _.defaults({
+	syncUrl: 'http://' + testConfig.vxsyncIP + ':' + testConfig.vxsyncPort + '/sync/doLoad',
+	statusUrl: 'http://' + testConfig.vxsyncIP + ':' + testConfig.vxsyncPort + '/sync/status',
+}, config.osync);
 
 //----------------------------------------------------------------------------------
 // This method creates an instance of the environment variable.
@@ -63,18 +71,18 @@ function retrieveEnterpriseSyncJobHistory(patientIdentifier, environment, callba
 /*
 	*** Note ***
 	This test requires a patient to be synced before it can test the utility.
-	The patient used here is 9E7A;23.
+	The patient used here is SITE;23.
 	This patient will remain synced after the test runs.
  */
 
 describe('osync sync handler integration test', function() {
 	describe('patient not on blacklist', function() {
 		var jds = new JdsClient(log, log, config);
-		var pjds = new PjdsClient(log, log, config);
+		var pjds = new PjdsClient(log, log, config.pjds);
 
 		var patientIdentifier = {
 			type: 'pid',
-			value: '9E7A;22'
+			value: 'SITE;22'
 		};
 
 		beforeEach(function() {
@@ -113,7 +121,7 @@ describe('osync sync handler integration test', function() {
 			};
 
 			runs(function() {
-				handler(log, config.osync, environment, job, function(error, result) {
+				handler(log, osyncConfig, environment, job, function(error, result) {
 					expect(error).toBeFalsy();
 					expect(result).toBeFalsy();
 
@@ -146,11 +154,11 @@ describe('osync sync handler integration test', function() {
 
 	describe('patient is on blacklist', function() {
 		var jds = new JdsClient(log, log, config);
-		var pjds = new PjdsClient(log, log, config);
+		var pjds = new PjdsClient(log, log, config.pjds);
 
 		var patientIdentifier = {
 			type: 'pid',
-			value: '9E7A;45645654'
+			value: 'SITE;45645654'
 		};
 
 		beforeEach(function() {
@@ -159,12 +167,12 @@ describe('osync sync handler integration test', function() {
 			runs(function() {
 				//Put a mock pid into the blacklist
 				var user = {
-					uid: 'urn:va:patient:9E7A:45645654:45645654',
-					site: '9E7A',
-					id: '9E7A;45645654'
+					uid: 'urn:va:patient:SITE:45645654:45645654',
+					site: 'SITE',
+					id: 'SITE;45645654'
 				};
 
-				pjds.addToOsyncBlist('9E7A;45645654', '9E7A', 'patient', function(error, response) {
+				pjds.addToOsyncBlist('SITE;45645654', 'SITE', 'patient', function(error, response) {
 					if (error) {
 						expect(error).toBeFalsy();
 					}
@@ -192,7 +200,7 @@ describe('osync sync handler integration test', function() {
 			};
 
 			runs(function() {
-				handler(log, config.osync, environment, job, function(error, result) {
+				handler(log, osyncConfig, environment, job, function(error, result) {
 					expect(error).toBeFalsy();
 					expect(result).toBeTruthy();
 					done = true;
@@ -207,7 +215,7 @@ describe('osync sync handler integration test', function() {
 			var cleanUp = false;
 
 			runs(function() {
-				pjds.removeFromOsyncBlist('9E7A;45645654', '9E7A', 'patient', function(error, response) {
+				pjds.removeFromOsyncBlist('SITE;45645654', 'SITE', 'patient', function(error, response) {
 					if (error) {
 						expect(error).toBeFalsy();
 					}

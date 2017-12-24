@@ -1,7 +1,3 @@
-<% if !@cdsinvocation.nil? %>
-CDSInvocation-IP=<%= @cdsinvocation['ipaddress']%>
-<% else %>
 CDSInvocation-IP=localhost
-<% end %>
 CDSInvocation-Protocol=http
-CDSInvocation-Port=8080
+CDSInvocation-Port=<%= @cdsinvocation_port %>

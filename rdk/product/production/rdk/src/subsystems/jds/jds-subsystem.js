@@ -10,7 +10,7 @@ var asuUtils = require('../../resources/patient-record/asu-utils');
 var vix = require('../vix/vix-subsystem');
 var async = require('async');
 var availableJdsTemplates = require('../../../config/jdsTemplates.json');
-
+var util = require('util');
 
 module.exports.constants = {};
 module.exports.constants.MAX_JDS_URL_SIZE = 1024;
@@ -21,6 +21,8 @@ module.exports.getPatientDomainData = getPatientDomainData;
 module.exports.getByUid = getByUid;
 module.exports._filterAsuDocuments = filterAsuDocuments;
 module.exports._fetchJdsAndFillPagination = fetchJdsAndFillPagination;
+module.exports._processVitals = processVitals;
+
 
 function getSubsystemConfig(app, logger) {
     return {
@@ -68,9 +70,8 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
     } else {
         return callback(new Error('Bad domain'));
     }
-
     var jdsResource;
-    if (index === 'patient') {
+    if (index === 'patient' || name === 'demographics') {
         jdsResource = '/vpr/' + pid + '/find/patient';
     } else {
         jdsResource = '/vpr/' + pid + '/index/' + index;
@@ -109,9 +110,86 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
         if (name === 'vlerdocument') {
             return transformVler(req.logger, vlerCallType, vlerUid, name, responseBody, response.statusCode, callback);
         }
+
+        if (name === 'vital') {
+            return processVitals(req, response, responseBody, options, callback);
+        }
+
         return callback(null, transformDomainData(name, responseBody), response.statusCode);
     });
 }
+
+
+/**
+ * It is possible that the JDS response is missing data need to complete the BMI calculations,
+ * this function checks the data and will create an additional request if data is missing.
+ *
+ * @param {*} req
+ * @param {*} response The response from the original request to jds
+ * @param {*} responseBodyOrig The responseBody from the original request to jds
+ * @param {*} options The original set of options used to make the request to jds
+ * @param {function} callback
+ * @return {*}
+ */
+function processVitals(req, response, responseBodyOrig, options, callback) {
+    var bodyMassIndexStatus = patientRecordAnnotator.getBodyMassStatusCode(responseBodyOrig);
+
+    if (bodyMassIndexStatus === patientRecordAnnotator.BMI_NOT_REQUIRED) {
+        patientRecordAnnotator.addReferenceRanges(responseBodyOrig);
+        return callback(null, responseBodyOrig, response.statusCode);
+    }
+
+    if (bodyMassIndexStatus === patientRecordAnnotator.BMI_DATA_PRESENT) {
+        patientRecordAnnotator.addCalculatedBMI(responseBodyOrig);
+        patientRecordAnnotator.addReferenceRanges(responseBodyOrig);
+        return callback(null, responseBodyOrig, response.statusCode);
+    }
+
+    var typeName = bodyMassIndexStatus === patientRecordAnnotator.BMI_MISSING_HEIGHT ? 'HEIGHT' : 'WEIGHT';
+    var filter = 'eq("typeName","' + typeName + '")';
+
+    var otherTypeOptions = _.clone(options);
+    otherTypeOptions.body = {
+        start: 0,
+        limit: 1,
+        filter: filter,
+        order: 'observed DESC'
+    };
+
+    return http.post(otherTypeOptions, function(error, otherTypeResponse, otherTypeResponseBody) {
+        var errorCheck = isResponseError(req, error, otherTypeResponse, otherTypeResponseBody);
+        var otherTypeItems = _.get(otherTypeResponseBody, 'data.items', []);
+
+        if (errorCheck || !otherTypeItems.length) {
+            // We still have the correct original data to form a response with
+            // and isResponseError already logged the error
+            patientRecordAnnotator.addReferenceRanges(responseBodyOrig);
+            return callback(null, responseBodyOrig, otherTypeResponse.statusCode);
+        }
+
+        var originalItems = _.get(responseBodyOrig, 'data.items', []);
+
+        // Height or weight is unavailable, but BMI calculation needs both.
+        // Temporarily add the missing item to allow BMI calculation to work, then remove it
+        let otherTypeItem = _.first(otherTypeItems);
+        originalItems.push(otherTypeItem);
+        patientRecordAnnotator.addCalculatedBMI(responseBodyOrig);
+        originalItems = _.get(responseBodyOrig, 'data.items', []); // addCalculatedBMI rewrites items so we have to get it again. TODO fix addCalculatedBMI
+        _.pull(originalItems, otherTypeItem);
+
+        // addCalculatedBMI changes the pagination numbers. We removed the temporary item, so fix the pagination numbers.
+        if (_.isNumber(responseBodyOrig.data.totalItems)) {
+            responseBodyOrig.data.totalItems -= 1;
+        }
+        if (_.isNumber(responseBodyOrig.data.currentItemCount)) {
+            responseBodyOrig.data.currentItemCount -= 1;
+        }
+
+        patientRecordAnnotator.addReferenceRanges(responseBodyOrig);
+        return callback(null, responseBodyOrig, otherTypeResponse.statusCode);
+    });
+}
+
 
 function isResponseError(req, error, response, responseBody) {
     if (error) {
@@ -119,7 +197,7 @@ function isResponseError(req, error, response, responseBody) {
         return error;
     }
     if (_.has(responseBody, 'error')) {
-        return new Error(responseBody.error);
+        return new Error(util.format(responseBody.error));
     }
     if (!_.isArray(_.get(responseBody, 'data.items'))) {
         return new Error('Missing data in JDS response. Is the patient synced?');
@@ -340,24 +418,13 @@ function requestPatient(req, pid, options, callback) {
 
 function transformCwadf(req, pid, domainData, callback) {
 
-    var filter = ['not', ['exists', 'removed'],
-        ['eq', 'removed', 'false']
-    ];
-    var filterString = jdsFilter.build(filter);
-    var queryObject = {
-        filter: filterString
-    };
     var options = _.extend({}, req.app.config.jdsServer, {
-        url: '/vpr/' + pid + '/index/cwad',
-        qs: {
-            query: true
-        },
-        body: queryObject,
+        url: '/vpr/' + pid + '/index/cwad-kind',
         logger: req.logger,
         json: true
     });
 
-    http.post(options, function(error, response, cwadData) {
+    http.get(options, function(error, response, cwadData) {
         if (error) {
             options.logger.error(error);
             return callback(error, null, 500);
@@ -370,13 +437,20 @@ function transformCwadf(req, pid, domainData, callback) {
             cwadData = results;
 
             var cwadf = {};
-            _.each(cwadData.data.items, function(cwadSiteObj) {
-                var kind = cwadSiteObj.kind;
-                cwadf.C = cwadf.C || kind === 'Crisis Note';
-                cwadf.W = cwadf.W || kind === 'Clinical Warning';
-                cwadf.A = cwadf.A || kind === 'Allergy/Adverse Reaction';
-                cwadf.D = cwadf.D || kind === 'Advance Directive';
-            });
+            if (_.isEmpty(_.get(cwadData, 'data.items'))) {
+                cwadf.C = false;
+                cwadf.W = false;
+                cwadf.A = false;
+                cwadf.D = false;
+            } else {
+                _.each(_.get(cwadData, 'data.items'), function(cwadSiteObj) {
+                    var kind = _.get(cwadSiteObj, 'kind');
+                    cwadf.C = cwadf.C || kind === 'Crisis Note';
+                    cwadf.W = cwadf.W || kind === 'Clinical Warning';
+                    cwadf.A = cwadf.A || kind === 'Allergy/Adverse Reaction';
+                    cwadf.D = cwadf.D || kind === 'Advance Directive';
+                });
+            }
 
             var patientRecordFlag = _(domainData.data.items)
                 .reject(function(item) {

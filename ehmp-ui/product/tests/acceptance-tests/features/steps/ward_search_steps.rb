@@ -1,16 +1,25 @@
 Then(/^the staff view screen displays Wards in the sidebar tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_ward).to eq(true), "Unselected Ward button is not visible"
-  expect(staff_view.wait_for_btn_open_ward).to eq(true)
-  expect(staff_view.btn_open_ward.text.upcase).to eq("WARDS")
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_ward).to eq(true), "Unselected Ward button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_ward).to eq(true)
+  expect(staff_view.patient_search_tray.btn_open_ward.text.upcase).to eq("WARDS")
 end
 
 When(/^the user opens the Ward tray$/) do
   staff_view = PobStaffView.new
-  expect(staff_view.wait_for_closed_ward).to eq(true), "Unselected Ward button is not visible"
-  expect(staff_view.wait_for_btn_open_ward).to eq(true), "Button to open Ward tray is not visible"
-  staff_view.btn_open_ward.click
-  expect(staff_view.wait_for_open_ward).to eq(true), "Ward tray did not open"
+  expect(staff_view).to have_patient_search_tray
+  expect(staff_view.patient_search_tray.wait_for_closed_ward).to eq(true), "Unselected Ward button is not visible"
+  expect(staff_view.patient_search_tray.wait_for_btn_open_ward).to eq(true), "Button to open Ward tray is not visible"
+  staff_view.patient_search_tray.btn_open_ward.click
+  expect(staff_view.patient_search_tray.wait_for_open_ward).to eq(true), "Ward tray did not open"
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray title to display"
+end
+
+When(/^the Ward tray title is "([^"]*)"$/) do |arg1|
+  staff_view = PobStaffView.new
+  expect(staff_view.wait_for_fld_tray_title).to eq(true), "Expected a tray title to display"
+  expect(staff_view.fld_tray_title.text.upcase).to eq("wards".upcase)
 end
 
 Then(/^the Ward tray displays a close x button$/) do
@@ -57,7 +66,7 @@ end
 
 Then(/^the Ward Tray table headers are$/) do |table|
   ward_tray = PobStaffView.new
-  wait_until { ward_tray.fld_ward_result_headers.length > 0 }
+  wait_until { ward_tray.fld_search_result_headers.length > 0 }
   table.rows.each do | expected_header |
     expect(ward_tray.fld_ward_result_headers_text).to include expected_header[0].upcase
   end

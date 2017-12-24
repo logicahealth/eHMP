@@ -12,53 +12,53 @@
             "data_set": "ehmp",
             "graph": "synonyms"
         },
-        "site-9E7A.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-9E7A"
+            "graph": "site-SITE"
         },
-        "site-46F1.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-46F1"
+            "graph": "site-SITE"
         },
-        "site-48B0.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-48B0"
+            "graph": "site-SITE"
         },
-        "site-51CF.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-51CF"
+            "graph": "site-SITE"
         },
-        "site-95B2.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-95B2"
+            "graph": "site-SITE"
         },
-        "site-1158.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-1158"
+            "graph": "site-SITE"
         },
-        "site-9946.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-9946"
+            "graph": "site-SITE"
         },
-        "site-AB22.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-AB22"
+            "graph": "site-SITE"
         },
-        "site-C877.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-C877"
+            "graph": "site-SITE"
         },
-        "site-D5B5.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-D5B5"
+            "graph": "site-SITE"
         },
-        "site-D5D6.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-D5D6"
+            "graph": "site-SITE"
         },
-        "site-E68F.ttl": {
+        "site-SITE.ttl": {
             "data_set": "ehmp",
-            "graph": "site-E68F"
+            "graph": "site-SITE"
         }
     }
 }

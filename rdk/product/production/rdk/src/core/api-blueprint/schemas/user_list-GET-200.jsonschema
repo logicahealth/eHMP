@@ -19,7 +19,7 @@
 					"lname",
 					"site",
 					"duz",
-					"roles"
+					"permissionSet"
 				],
 				"properties": {
 					"duz": {
@@ -52,7 +52,7 @@
 							"integer"
 						]
 					},
-					"roles": {
+					"permissionSet": {
 						"type": "object",
 						"required": [
 							"val"

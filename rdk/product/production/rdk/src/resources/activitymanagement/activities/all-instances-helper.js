@@ -67,9 +67,9 @@ function getJDSQueryFromIds(logger, type, ids) {
     // I need to get an array of chunked array coming back
     // I will iterate through the returned array
     // and create a JDS query for each entry.
-    // var ids = ['9E7A;1', '9E7A;2','9E7A;3','9E7A;4','9E7A;5','9E7A;6','9E7A;7','9E7A;8','9E7A;9','3;3','4;4'];
+    // var ids = ['SITE;1', 'SITE;2','SITE;3','SITE;4','SITE;5','SITE;6','SITE;7','SITE;8','SITE;9','3;3','4;4'];
     // should become
-    // var batchedIds = [['9E7A;1' , '9E7A;2'], [ '9E7A;3' , '9E7A;4'] ....]
+    // var batchedIds = [['SITE;1' , 'SITE;2'], [ 'SITE;3' , 'SITE;4'] ....]
 
     var batchedIds = _.chunk(ids, MAXIMUM_NUMBER_OF_IDS_PER_REQUEST);
     var retVal = [];

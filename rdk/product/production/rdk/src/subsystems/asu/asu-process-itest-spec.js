@@ -14,9 +14,9 @@ describe('Asu test', function () {
     it.skip('call java end point', function (done) {
         var jsonParams = {
             'userClassUids': [
-                'urn:va:asu-class:9E7A:561'
+                'urn:va:asu-class:SITE:561'
             ],
-            'docDefUid': 'urn:va:doc-def:9E7A:3',
+            'docDefUid': 'urn:va:doc-def:SITE:3',
             'docStatus': 'COMPLETED',
             'roleNames': [
                 'AUTHOR/DICTATOR',

@@ -313,13 +313,13 @@ CLR ;; @TEST Clear ALL Session Data
 REAL ;; @TEST with realistic data
  N RETURN,ARG,BODY,DATA,ARGS,OBJECT,ERR,HTTPERR
  ; Create Session Data
- S BODY(1)="{""_id"":""ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4"",""session"":{""cookie"":{""originalMaxAge"":900000,""expires"":""2015-01-30T04:38:30.084Z"",""httpOnly"":true,""path"":""/""},""user"":{""accessCode"":""REDACTED"",""verifyCode"":""REDACTED"",""username"":""PW         "",""password"":""REDACTED"",""firstname"":""PANORAMA"",""lastname"":""USER"",""facility"":""PANORAMA"",""vistaKeys"":[""XUPROG"",""PROVIDER"",""GMRA-SUPERVISOR"",""ORES"",""GMRC101"",""XUPROGMODE"",""GMV MANAGER"",""PSB CPRS MED BUTTON""],""title"":""Clinician"",""section"":""Medicine"",""disabled"":false,""requiresReset"":false,""divisionSelect"":false,""dgRecordAccess"":""false"",""dgSensitiveAccess"":""false"",""dgSecurityOfficer"":""false"",""duz"":{""9E7A"":""10000000226""},""site"":""9E7A"",""ssn"":""666441233"",""corsTabs"":""true"",""rptTabs"":""false"",""permissions"":[""edit-patient-record"",""add-patient-allergy"",""remove-patient-allergy"",""add-patient-vital"",""remove-patient-vital"",""add-patient-med"",""edit-patient-med"",""remove-patient-med"",""add-patient-problem"",""edit-patient-problem"",""remove-patient-problem"",""add-patient-laborder"",""edit-patient-laborder"",""remove-patient-laborder"",""add-patient-radiology"",""edit-patient-radiology"",""remove-patient-radiology"",""patient-visit"",""add-patient-order"",""add-patient-immunization"",""edit-patient-demographics""]}},""expires"":""2015-01-30T04:38:30.084Z""}"
+ S BODY(1)="{""_id"":""ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4"",""session"":{""cookie"":{""originalMaxAge"":900000,""expires"":""2015-01-30T04:38:30.084Z"",""httpOnly"":true,""path"":""/""},""user"":{""accessCode"":""USER  "",""verifyCode"":""PW      "",""username"":""PW         "",""password"":""PW      "",""firstname"":""PANORAMA"",""lastname"":""USER"",""facility"":""PANORAMA"",""vistaKeys"":[""XUPROG"",""PROVIDER"",""GMRA-SUPERVISOR"",""ORES"",""GMRC101"",""XUPROGMODE"",""GMV MANAGER"",""PSB CPRS MED BUTTON""],""title"":""Clinician"",""section"":""Medicine"",""disabled"":false,""requiresReset"":false,""divisionSelect"":false,""dgRecordAccess"":""false"",""dgSensitiveAccess"":""false"",""dgSecurityOfficer"":""false"",""duz"":{""SITE"":""10000000226""},""site"":""SITE"",""ssn"":""666441233"",""corsTabs"":""true"",""rptTabs"":""false"",""permissions"":[""edit-patient-record"",""add-patient-allergy"",""remove-patient-allergy"",""add-patient-vital"",""remove-patient-vital"",""add-patient-med"",""edit-patient-med"",""remove-patient-med"",""add-patient-problem"",""edit-patient-problem"",""remove-patient-problem"",""add-patient-laborder"",""edit-patient-laborder"",""remove-patient-laborder"",""add-patient-radiology"",""edit-patient-radiology"",""remove-patient-radiology"",""patient-visit"",""add-patient-order"",""add-patient-immunization"",""edit-patient-demographics""]}},""expires"":""2015-01-30T04:38:30.084Z""}"
  S RETURN=$$SET^VPRJSES(.ARG,.BODY)
  D ASSERT(10,$D(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4")),"Session Data does not exist and it should")
  D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error","code")),"An HTTP error should NOT have occured")
  D ASSERT("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4",$G(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4","_id")),"The _id field was not stored correctly")
  D ASSERT("900000",$G(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4","session","cookie","originalMaxAge")),"returned data for sessin cookie originalMaxAge didn't match")
- D ASSERT("10000000226",$G(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4","session","user","duz","9E7A")),"The user duz 9E7A field was not stored correctly")
+ D ASSERT("10000000226",$G(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4","session","user","duz","SITE")),"The user duz SITE field was not stored correctly")
  D ASSERT("XUPROG",$G(^VPRJSES("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4","session","user","vistaKeys",1)),"The user vistaKeys array was not stored correctly")
  ; Cleanup HTTPERR
  K ^||TMP("HTTPERR",$J)
@@ -334,7 +334,7 @@ REAL ;; @TEST with realistic data
  D ASSERT(0,$D(^||TMP("HTTPERR",$J,1,"error")),"An HTTP error should NOT have occured")
  D ASSERT("ebTxc-5Zqn6qup8LGwf4deTrJRGIw1y4",$G(OBJECT("_id")),"returned data for the wrong _id")
  D ASSERT("900000",$G(OBJECT("session","cookie","originalMaxAge")),"returned data for sessin cookie originalMaxAge didn't match")
- D ASSERT("10000000226",$G(OBJECT("session","user","duz","9E7A")),"The user duz 9E7A field was not stored correctly")
+ D ASSERT("10000000226",$G(OBJECT("session","user","duz","SITE")),"The user duz SITE field was not stored correctly")
  D ASSERT("XUPROG",$G(OBJECT("session","user","vistaKeys",1)),"The user vistaKeys array was not stored correctly")
  ; Cleanup HTTPERR
  K ^||TMP("HTTPERR",$J)

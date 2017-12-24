@@ -28,9 +28,9 @@ function getIdsArray(id, req, callback) {
 }
 
 function getNamesFromPids(pidToNameMap, req, cb) {
-    //http://IP             /vpr/9E7A;3,9E7A;8,9E7A;253/find/patient
-    //http://IP             /vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
-    //http://IP             /data/index/pt-select-pid?range=9E7A;3,9E7A;8
+    //http://IP             /vpr/SITE;3,SITE;8,SITE;253/find/patient
+    //http://IP             /vpr/SITE;100013/find/patient?filter=in(pid,["SITE;100013"])
+    //http://IP             /data/index/pt-select-pid?range=SITE;3,SITE;8
     var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit') || 120;
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/pt-select-pid?range=';

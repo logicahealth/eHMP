@@ -57,7 +57,7 @@ describe('incident-report-resource', function() {
                 return callback(null, [
                     'proc /proc proc rw,relatime 0 0',
                     '/dev/mapper/VolGroup-lv_root / ext4 rw,seclabel,relatime,barrier=1,data=ordered 0 0',
-                    '127.0.0.1:/var/log/rdk /tmp/incidents nfs4 rw,relatime,vers=4,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=127.0.0.1,minorversion=0,local_lock=none,addr=127.0.0.1 0 0'
+                    '127.0.0.1:/var/log/rdk /tmp/incidents nfs4 rw,relatime,vers=4,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,port=PORT,timeo=600,retrans=2,sec=sys,clientaddr=127.0.0.1,minorversion=0,local_lock=none,addr=127.0.0.1 0 0'
                 ].join('\n'));
             });
 
@@ -111,7 +111,7 @@ describe('incident-report-resource', function() {
                 return callback(null, [
                     'proc /proc proc rw,relatime 0 0',
                     '/dev/mapper/VolGroup-lv_root / ext4 rw,seclabel,relatime,barrier=1,data=ordered 0 0',
-                    '127.0.0.1:/var/log/rdk /tmp/incidents nfs4 rw,relatime,vers=4,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=127.0.0.1,minorversion=0,local_lock=none,addr=127.0.0.1 0 0'
+                    '127.0.0.1:/var/log/rdk /tmp/incidents nfs4 rw,relatime,vers=4,rsize=65536,wsize=65536,namlen=255,hard,proto=tcp,port=PORT,timeo=600,retrans=2,sec=sys,clientaddr=127.0.0.1,minorversion=0,local_lock=none,addr=127.0.0.1 0 0'
                 ].join('\n'));
             });
 
@@ -132,7 +132,7 @@ describe('incident-report-resource', function() {
         var requestBody;
         beforeEach(function() {
             requestBody = {
-                pid: '9E7A;3',
+                pid: 'SITE;3',
                 incidents: [{
                     simpleSyncStatus: {},
                     errorTimestamp: '2017-01-18T18:04:40.229Z',
@@ -150,8 +150,8 @@ describe('incident-report-resource', function() {
                     appVersion: '5.0 (Windows NT 6.1; WOW64; Trident/7.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E; rv:11.0) like Gecko',
                     platform: 'Win32',
                     facility: 'PANORAMA',
-                    duz: {'9E7A': '3'},
-                    site: '9E7A',
+                    duz: {'SITE': '3'},
+                    site: 'SITE',
                     title: 'Clinician',
                     pid: '',
                     icn: '',
@@ -194,9 +194,9 @@ describe('incident-report-resource', function() {
                 var logger = sinon.stub(bunyan.createLogger({name: 'incident-report-resource-spec'}));
                 return logger;
             });
-            _.set(req, 'body.pid', '9E7A;1234');
+            _.set(req, 'body.pid', 'SITE;1234');
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -211,21 +211,21 @@ describe('incident-report-resource', function() {
             _.set(req, 'app.subsystems.jdsSync.getPatientStatus', function(pid, req, callback) {
                 return callback();
             });
+            _.set(req, 'app.config.incidents.notificationEmail.to', 'root@localhost');
+            _.set(req, 'app.config.incidents.notificationEmail.from', 'nobody@localhost');
             _.set(req, 'app.subsystems.email.sendMail', function(config, callback) {
                 return callback();
             });
-            sinon.stub(async, 'series').callsFake(function(tasks, handler) {
-                return handler();
+            sinon.stub(fs, 'writeFile').callsFake(function(path, contents, callback) {
+                expect(contents).to.contain('"message": "could not be fetched"');
+                return callback();
             });
             var res = {};
-            res.status = function(status) {
+            res.status = function(code) {
+                expect(code).to.eql(200);
                 return this;
             };
             res.rdkSend = function(body) {
-                expect(body).to.be.an.error(RdkError);
-                expect(body.code).to.equal('200.500.1013');
-                expect(req.logger.error.calledWith(fetchError)).to.be.true();
-                expect(req.logger.error.calledWith('Unable to get patient status detail')).to.be.true();
                 done();
             };
             res.set = function() {
@@ -244,9 +244,9 @@ describe('incident-report-resource', function() {
                 var logger = sinon.stub(bunyan.createLogger({name: 'incident-report-resource-spec'}));
                 return logger;
             });
-            _.set(req, 'body.pid', '9E7A;1234');
+            _.set(req, 'body.pid', 'SITE;1234');
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -261,21 +261,24 @@ describe('incident-report-resource', function() {
             _.set(req, 'app.subsystems.jdsSync.getPatientStatusDetail', function(pid, req, callback) {
                 return callback();
             });
+            _.set(req, 'app.config.incidents.notificationEmail.to', 'root@localhost');
+            _.set(req, 'app.config.incidents.notificationEmail.from', 'nobody@localhost');
             _.set(req, 'app.subsystems.email.sendMail', function(config, callback) {
                 return callback();
             });
-            sinon.stub(async, 'series').callsFake(function(tasks, handler) {
-                return handler();
+            sinon.stub(fs, 'writeFile').callsFake(function(path, contents, callback) {
+                expect(contents).to.contain('"message": "could not be fetched"');
+                return callback();
             });
             var res = {};
-            res.status = function(status) {
+            res.status = function(code) {
+                expect(code).to.eql(200);
                 return this;
             };
             res.rdkSend = function(body) {
-                expect(body).to.be.an.error(RdkError);
-                expect(body.code).to.equal('200.500.1014');
-                expect(req.logger.error.calledWith(fetchError)).to.be.true();
-                expect(req.logger.error.calledWith('Unable to get patient status')).to.be.true();
+                expect(body).to.eql({
+                    incidentReportId: 'eHMP-IR-' + myUuid
+                });
                 done();
             };
             res.set = function() {
@@ -295,7 +298,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -352,7 +355,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -416,7 +419,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -466,7 +469,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -516,7 +519,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -566,7 +569,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -621,7 +624,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -672,7 +675,7 @@ describe('incident-report-resource', function() {
                 return logger;
             });
             _.set(req, 'session.user', {
-                uid: 'urn:va:user:9E7A:1',
+                uid: 'urn:va:user:SITE:1',
                 firstname: 'JOHN',
                 lastname: 'DOE'
             });
@@ -734,6 +737,26 @@ describe('incident-report-resource', function() {
             var input = 1485450505000;
             var actual = incidentReportResource._normalizeUnixTimestampToMilliseconds(input);
             expect(actual).to.equal(input);
+        });
+    });
+
+    describe('replaceErrors', function() {
+        it('ignores things that aren\'t Errors', function() {
+            var notAnError = {};
+            var handled = incidentReportResource._replaceErrors('key', notAnError);
+            expect(handled).to.be(notAnError);
+        });
+        it('ignores RdkErrors', function() {
+            var rdkError = new RdkError(new Error('test error'));
+            var handled = incidentReportResource._replaceErrors('key', rdkError);
+            expect(handled).to.be(rdkError);
+        });
+        it('converts Errors', function() {
+            var error = new Error('test error');
+            var handled = incidentReportResource._replaceErrors('key', error);
+            expect(_.isObject(handled)).to.be(true);
+            expect(_.keys(handled)).to.eql(['stack', 'message']);
+            expect(handled.message).to.be('test error');
         });
     });
 

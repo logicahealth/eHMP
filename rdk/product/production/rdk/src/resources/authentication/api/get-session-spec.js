@@ -5,8 +5,8 @@ var bunyan = require('bunyan');
 var httpMocks = require('node-mocks-http');
 var auth = require('./get-session');
 
-var validDuz = 'REDACTED';
-var validPwd = 'REDACTED';
+var validDuz = 'PW    ';
+var validPwd = 'PW    ';
 var division = '500';
 var invalidSite = '1337';
 

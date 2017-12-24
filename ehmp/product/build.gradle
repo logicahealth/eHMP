@@ -3,20 +3,20 @@ ext {
 
     versions = [
             commonsBeanutilsVersion: '1.8.3',
-            commonsLangVersion: '2.6',
+            commonsLangVersion: '3.4',
             commonsPoolVersion: '1.6',
             commonsHttpClientVersion: '3.1',
             commonsCollectionsVersion: '3.2.1',
             commonsCodecVersion: '1.4',
             commonsIoVersion: '2.4',
             easymockVersion: '3.1',
-
+            jodaTimeVersion: '2.9.7',
             healthTimeVersion: '2.1.3',
             vistaSupportVersion: '0.14.1',
             groovyVersion: '2.1.5',
             springVersion: '3.2.8.RELEASE',
             springSecurityVersion: '3.2.3.RELEASE',
-            jacksonVersion: '2.3.1',
+            jacksonVersion: '2.7.9',
             metricsVersion: '3.0.2',
             slf4jVersion: '1.7.6',
             logbackVersion: '1.1.1',
@@ -102,13 +102,11 @@ allprojects  {
 
     def repoCommitCountClosure = {
         if (System.properties['os.name'].toLowerCase().contains('windows')) {
-            return "cmd /C git rev-list --full-history --all ${->commitCountDir} | wc -l".execute().text.trim()
+            return "cmd /C git rev-list --count --first-parent HEAD ${->commitCountDir}".execute().text.trim()
         }
           else {
-            def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-            def proc2 = 'wc -l'.execute()
-            proc1 | proc2
-            return proc2.text.trim()
+            def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+            return proc.text.trim()
         }
     }
 
@@ -119,6 +117,7 @@ allprojects  {
     ext.set('branchName', getCurrentBranchName())
     ext.set('currentCommitHash', getCurrentCommitHash())
     ext.set('nexusURL', getNexusURL())
+    ext.set('npmRegistry', getNpmRegistry())
     ext.set('uploadRepo', getNexusUploadRepository())
     version = "${->repoVersion + '.' + repoCommitCount}"
 
@@ -164,6 +163,10 @@ allprojects  {
 
 def getNexusURL() {
     System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+}
+
+def getNpmRegistry() {
+    System.env.NPM_CONFIG_REGISTRY ?: 'https://store.vistacore.us/nexus/content/repositories/npm-all/'
 }
 
 def getNexusUploadRepository() {
@@ -217,10 +220,8 @@ def getVersionByCommitCountForProject(projectString, subDir = null){
         commitCountDir = "${commitCountDir}/${subDir}"
     }
 
-    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
-    def proc2 = 'wc -l'.execute()
-    proc1 | proc2
-    def version = "${getRepoVersion() + '.' + proc2.text.trim()}"
+    def proc = ['sh', '-c', "git rev-list --count --first-parent HEAD ${->commitCountDir}"].execute()
+    version = "${getRepoVersion() + '.' + proc.text.trim()}"
     return version
 }
 

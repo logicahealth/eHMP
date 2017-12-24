@@ -607,7 +607,6 @@ define([
                         id: 'saveButton',
                         name: 'save-button',
                         type: "button",
-                        title: "Press enter to save and close",
                         disabled: true
                     }, {
                         control: "dropdown",
@@ -615,7 +614,6 @@ define([
                         split: true,
                         label: "Accept & Add Another",
                         id: "acceptDrpDwnContainer",
-                        title: "Press enter to accept and add another lab order",
                         type: 'submit',
                         items: [{
                             label: "Accept & Add Another",

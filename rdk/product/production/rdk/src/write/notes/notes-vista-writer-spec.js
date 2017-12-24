@@ -7,12 +7,12 @@ describe('write-back notes vista writer', function() {
       it('returns expected object when model contains a category, dateTime, and locationUid', function() {
             var model = {
                 'authorUid': '10000000255',
-                'documentDefUid': 'urn:va:doc-def:9E7A:40',
+                'documentDefUid': 'urn:va:doc-def:SITE:40',
                 'encounterDateTime': '199310131400',
                 'encounterServiceCategory': 'A',
-                'locationUid': 'urn:va:location:9E7A:w32',
+                'locationUid': 'urn:va:location:SITE:w32',
                 'patientIcn': '10110V004877',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'status': 'UNSIGNED'
             };
             var expectedObj = {
@@ -26,10 +26,10 @@ describe('write-back notes vista writer', function() {
         it('returns empty object when model is missing encounterLocalId', function() {
             var model = {
                 'authorUid': '10000000255',
-                'documentDefUid': 'urn:va:doc-def:9E7A:40',
-                'locationUid': 'urn:va:location:9E7A:w32',
+                'documentDefUid': 'urn:va:doc-def:SITE:40',
+                'locationUid': 'urn:va:location:SITE:w32',
                 'patientIcn': '10110V004877',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'status': 'UNSIGNED'
             };
             var expectedObj = {};
@@ -39,10 +39,10 @@ describe('write-back notes vista writer', function() {
         it('returns empty object when model is missing encounterDateTime', function() {
             var model = {
                 'authorUid': '10000000255',
-                'documentDefUid': 'urn:va:doc-def:9E7A:40',
-                'locationUid': 'urn:va:location:9E7A:w32',
+                'documentDefUid': 'urn:va:doc-def:SITE:40',
+                'locationUid': 'urn:va:location:SITE:w32',
                 'patientIcn': '10110V004877',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'status': 'UNSIGNED'
             };
             var expectedObj = {};
@@ -52,10 +52,10 @@ describe('write-back notes vista writer', function() {
         it('returns empty object when model is missing locationUid', function() {
             var model = {
                 'authorUid': '10000000255',
-                'documentDefUid': 'urn:va:doc-def:9E7A:40',
+                'documentDefUid': 'urn:va:doc-def:SITE:40',
                 'encounterDateTime': '199310131400',
                 'patientIcn': '10110V004877',
-                'pid': '9E7A;8',
+                'pid': 'SITE;8',
                 'status': 'UNSIGNED'
             };
             var expectedObj = {};
@@ -67,9 +67,9 @@ describe('write-back notes vista writer', function() {
     //     it('returns expected array when model contains bare minimum ', function() {
     //         var model = {
     //             'authorUid': '10000000255',
-    //             'documentDefUid': 'urn:va:doc-def:9E7A:40',
+    //             'documentDefUid': 'urn:va:doc-def:SITE:40',
     //             'patientIcn': '10110V004877',
-    //             'pid': '9E7A;8',
+    //             'pid': 'SITE;8',
     //             'status': 'UNSIGNED'
     //         };
     //         var expectedArray = [{
@@ -85,10 +85,10 @@ describe('write-back notes vista writer', function() {
     //     it('returns expected array when model contains referenceDateTime', function() {
     //         var model = {
     //             'authorUid': '10000000255',
-    //             'documentDefUid': 'urn:va:doc-def:9E7A:40',
+    //             'documentDefUid': 'urn:va:doc-def:SITE:40',
     //             'referenceDateTime': '201507101410',
     //             'patientIcn': '10110V004877',
-    //             'pid': '9E7A;8',
+    //             'pid': 'SITE;8',
     //             'status': 'UNSIGNED'
     //         };
     //         var expectedArray = [{
@@ -104,13 +104,13 @@ describe('write-back notes vista writer', function() {
     //     it('returns expected array when model contains encounter information', function() {
     //         var model = {
     //             'authorUid': '10000000255',
-    //             'documentDefUid': 'urn:va:doc-def:9E7A:40',
+    //             'documentDefUid': 'urn:va:doc-def:SITE:40',
     //             'encounterUid': 'H2931013',
     //             'encounterDateTime': '199310131400',
     //             'referenceDateTime': '201507101410',
-    //             'locationUid': 'urn:va:location:9E7A:32',
+    //             'locationUid': 'urn:va:location:SITE:32',
     //             'patientIcn': '10110V004877',
-    //             'pid': '9E7A;8',
+    //             'pid': 'SITE;8',
     //             'status': 'UNSIGNED'
     //         };
     //         var expectedArray = [{

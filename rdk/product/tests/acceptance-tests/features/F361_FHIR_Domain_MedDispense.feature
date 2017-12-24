@@ -4,21 +4,21 @@ Feature: F361 FHIR Domain - MedicationDispense
  Scenario: Client can request Medication Dispense in FHIR format
      Given a patient with "medicationdispense" in multiple VistAs
      #And a patient with pid "10107V395912" has been synced through the RDK API
- 	 When the client requests medicationdispense for the patient "9E7A;229"
+ 	 When the client requests medicationdispense for the patient "SITE;229"
      Then a successful response is returned
      And the FHIR results contain "medicationdispense"
      	 | field 								       | value 				 |
      	 | resource.resourceType 					   | MedicationDispense	 |
          | resource.status                             | stopped |
-         | resource.patient.reference                  | Patient/9E7A;229 |
-         | resource.dispenser.reference                | Provider/urn:va:user:9E7A:10000000031|
+         | resource.patient.reference                  | Patient/SITE;229 |
+         | resource.dispenser.reference                | Provider/urn:va:user:SITE:10000000031|
          | resource.contained.resourceType             | MedicationPrescription |
-         | resource.contained.patient.reference        | Patient/9E7A;229 |
+         | resource.contained.patient.reference        | Patient/SITE;229 |
          | resource.contained.identifier.system        | CONTAINS urn:oid:2.16.840.1.113883.6.233 |
-         | resource.contained.identifier.value         | CONTAINS urn:va:med:9E7A:229:18083|
+         | resource.contained.identifier.value         | CONTAINS urn:va:med:SITE:229:18083|
          | resource.contained.status                   | stopped |
          | resource.contained.dateWritten              | IS_FHIR_FORMATTED_DATE|
-         | resource.contained.prescriber.reference     | Provider/urn:va:user:9E7A:10000000031|
+         | resource.contained.prescriber.reference     | Provider/urn:va:user:SITE:10000000031|
          | resource.contained.note                     | METOPROLOL TARTRATE 50MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY|
          | resource.contained.resourceType             | Medication |
          | resource.contained.name                     | METOPROLOL TARTRATE TAB|
@@ -38,7 +38,7 @@ Feature: F361 FHIR Domain - MedicationDispense
          | resource.contained.contained.type.coding.display      | METOPROLOL|
          | resource.contained.contained.description              | METOPROLOL TARTRATE 50MG TAB |
          | resource.identifier.system                  | CONTAINS urn:oid:2.16.840.1.113883.6.233 |
-         | resource.identifier.value                   |CONTAINS urn:va:med:9E7A:229:18083|
+         | resource.identifier.value                   |CONTAINS urn:va:med:SITE:229:18083|
          | resource.authorizingPrescription.display    |METOPROLOL TARTRATE TAB |
          | resource.quantity.value                     | 180 |
          | resource.quantity.units                     | TAB |

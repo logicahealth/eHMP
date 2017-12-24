@@ -191,24 +191,19 @@ define([
                 'click @ui.rowitem': function() {
                     var isPatientSearch = ADK.WorkspaceContextRepository.currentWorkspace.id === 'patient-search-screen';
                     var isPatientContext = ADK.WorkspaceContextRepository.currentContext.id === 'patient' && !isPatientSearch;
-                    var hasEditRequestPermission = ADK.UserService.hasPermissions('edit-coordination-request');
-                    var hasRespondRequestPermission = ADK.UserService.hasPermissions('respond-coordination-request');
                     var navigation = this.model.get('navigation') || new Backbone.Model();
                     var parameter = navigation.get('parameter') || {};
-                    var taskName = _.get(parameter, 'taskName');
-                    var isReviewRequest = (taskName === 'Review');
-                    var isResponseRequest = (taskName === 'Response');
-                    var hasEditPermissions = !isReviewRequest || hasEditRequestPermission;
-                    var hasRespondPermissions = !isResponseRequest || hasRespondRequestPermission;
-                    if (!hasEditPermissions || !hasRespondPermissions) {
+                    if (!this.model.get('hasPermissions')) {
                         var activityId = _.get(parameter, 'activityId');
                         var modal = this.taskModal(activityId);
                         modal.show();
                     } else if (_.isObject(navigation)) {
                         var patientId = this.model.get('patientId');
                         ADK.PatientRecordService.setCurrentPatient(patientId, {
-                            reconfirm: !isPatientContext,
-                            navigation: !isPatientContext || (ADK.PatientRecordService.getCurrentPatient().get('pid') !== patientId),
+                            confirmationOptions: {
+                                navigateToPatient: !isPatientContext || (ADK.PatientRecordService.getCurrentPatient().get('pid') !== patientId),
+                                reconfirm: !isPatientContext
+                            },
                             staffnavAction: {
                                 channel: navigation.get('channel'),
                                 event: navigation.get('event'),
@@ -222,20 +217,10 @@ define([
             },
             serializeModel: function() {
                 var modelJSON = this.model.toJSON();
-                modelJSON.title = 'Item ' + (this._index + 1) + '. Press enter to view notifications.';
+                modelJSON.title = 'Item ' + (this._index + 1) + '. View notifications.';
                 return modelJSON;
             },
             getTemplate: function() {
-                var navigation = this.model.get('navigation') || new Backbone.Model();
-                var parameter = navigation.get('parameter') || {};
-                var taskName = _.get(parameter, 'taskName');
-                var hasPermissions = true;
-                if (taskName === 'Review') {
-                    hasPermissions = ADK.UserService.hasPermissions('edit-coordination-request');
-                } else if (taskName === 'Response') {
-                    hasPermissions = ADK.UserService.hasPermissions('respond-coordination-request');
-                }
-                this.model.set('hasPermissions', hasPermissions);
                 return Handlebars.compile(
                     '<a href="#" title="{{title}}" class="dd-link" role="menuitem" tabindex="-1">' +
                     '{{#if hasPermissions}}<i class="fa fa-arrow-right"></i>{{/if}}' +
@@ -249,7 +234,7 @@ define([
             },
             taskModal: function(activityId) {
                 var headerView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
+                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Close"><i class="fa fa-times fa-lg"></i></button></div></div></div>')
                 });
                 var footerView = Backbone.Marionette.ItemView.extend({
                     template: StatusModalFooterTemplate,

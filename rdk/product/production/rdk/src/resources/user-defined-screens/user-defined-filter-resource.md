@@ -37,7 +37,7 @@
     + Body
 
             {
-                "id": "9E7A;12345",
+                "id": "SITE;12345",
                 "filter": "xxx",
                 "instance-id": "ssss"
             }
@@ -95,7 +95,7 @@
     + Body
 
             {
-                "id": "9E7A;12345",
+                "id": "SITE;12345",
                 "filter": "xxx",
                 "instance-id": "ssss"
             }
@@ -188,7 +188,7 @@
     + Body
 
             {
-                "id": "9E7A;12345",
+                "id": "SITE;12345",
                 "instanceId": "ssss"
             }
 

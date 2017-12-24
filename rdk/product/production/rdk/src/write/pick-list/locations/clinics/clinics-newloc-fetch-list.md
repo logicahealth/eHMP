@@ -23,27 +23,27 @@ ORWU1 NEWLOC
                     {
                       "displayName": "Audiology",
                       "name": "AUDIOLOGY",
-                      "uid": "urn:va:location:9E7A:64"
+                      "uid": "urn:va:location:SITE:64"
                     },
                     {
                       "displayName": "Cardiology",
                       "name": "CARDIOLOGY",
-                      "uid": "urn:va:location:9E7A:195"
+                      "uid": "urn:va:location:SITE:195"
                     },
                     {
                       "displayName": "Comp and Pen",
                       "name": "COMP AND PEN",
-                      "uid": "urn:va:location:9E7A:137"
+                      "uid": "urn:va:location:SITE:137"
                     },
                     {
                       "displayName": "Cwt Clinic",
                       "name": "CWT CLINIC",
-                      "uid": "urn:va:location:9E7A:246"
+                      "uid": "urn:va:location:SITE:246"
                     },
                     {
                       "displayName": "Dental",
                       "name": "DENTAL",
-                      "uid": "urn:va:location:9E7A:228"
+                      "uid": "urn:va:location:SITE:228"
                     }
                 ],
                 "status": 200

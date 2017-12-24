@@ -238,29 +238,31 @@ DELCSRV ;; @TEST delete a collection for a specific server
  F I=6:1:7 S TAGS(I)="SRV"_I_"^VPRJTP03"
  D ADDDATA^VPRJTX(.TAGS,VPRJTPID)
  D ASSERT(0,$D(^||TMP("HTTPERR",$J)),"An HTTP Error occured filing data")
- D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:9999:-7:6")))
+ D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:PORT:-7:6")))
  D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:7")))
- D DELCLTN^VPRJPS(VPRJTPID,"utesta","9999")
+ D DELCLTN^VPRJPS(VPRJTPID,"utesta","PORT")
  S PTIME=TIME
  H 1
  S TIME=$G(^VPRMETA("JPID",VPRJPID,"lastAccessTime"))
  D ASSERT(1,TIME>PTIME)
- D ASSERT(0,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:9999:-7:6")))
+ D ASSERT(0,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:PORT:-7:6")))
  D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:utesta:93EF:-7:7")))
  Q
+ ;
 DELPT ;; @TEST deleting a patient and all places data exists
- N JPID,TYPE,TYPE2,STAMP,VPRJTPID,HTTPERR
+ N PID,JPID,TYPE,TYPE2,STAMP,VPRJTPID,HTTPERR
  S VPRJTPID="93EF;-7"
  ; Add job status
  K ^VPRJOB
  K ^VPRPTJ("JPID")
  D PATIDS
  S JPID="52833885-af7c-4899-90be-b3a6630b2369"
+ S PID="93EF;-7"
  S TYPE="jmeadows-lab-sync-request"
  S TYPE2="jmeadows-vitals-sync-request"
  S STAMP=201412180711200
- D JOBSTATG^VPRJTJOB(2,1,JPID,TYPE,STAMP,"created")
- D JOBSTATG^VPRJTJOB(3,1,JPID,TYPE2,STAMP+1,"created")
+ D JOBSTATG^VPRJTJOB(2,1,"pid",PID,TYPE,STAMP,"created")
+ D JOBSTATG^VPRJTJOB(3,1,"pid",PID,TYPE2,STAMP+1,"created")
  D ASSERT(10,$D(^VPRJOB(1)),"Job status Sequential Counter 1 does not exist and should")
  D ASSERT(10,$D(^VPRJOB(2)),"Job status Sequential Counter 2 does not exist and should")
  ; Add sync status
@@ -332,6 +334,7 @@ DELPT ;; @TEST deleting a patient and all places data exists
  ; Ensure lastAccessTime is deleted
  D ASSERT(0,$D(^VPRMETA("JPID",JPID,"lastAccessTime")),"A lastAccessTime data node exists and should not")
  Q
+ ;
 DELSITE ;; @TEST Delete a site's patient data
  N VPRJTPID1,VPRJTPID2,VPRJPID1,VPRJPID2,TAGS,I
  S VPRJTPID1="93EF;-7"
@@ -359,13 +362,15 @@ DELSITE ;; @TEST Delete a site's patient data
  D ASSERT(0,$D(^VPRPTJ("JSON","52833885-af7c-4899-90be-b3a6630b2369",VPRJTPID1)))
  D ASSERT(0,$D(^VPRPTJ("TEMPLATE","52833885-af7c-4899-90be-b3a6630b2369",VPRJTPID1)))
  D ASSERT(0,^VPRPTI("52833885-af7c-4899-90be-b3a6630b2369",VPRJTPID1,"tally","collection","patient"))
- D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID1,"lastAccessTime")),"A lastAccessTime data node does not exist and should")
+ ; VPRJPID1 has HDR data, while VPRJPID2 does not. lastAccessTime will still be here because of the HDR data
+ D ASSERT(1,$D(^VPRMETA("JPID",VPRJPID1,"lastAccessTime")),"A lastAccessTime data node does not exist and it should")
  D ASSERT(0,$D(^VPRPT("52833885-af7c-4899-90be-b3a6630b2370",VPRJTPID2)))
  D ASSERT(0,$D(^VPRPTJ("JSON","52833885-af7c-4899-90be-b3a6630b2370",VPRJTPID2)))
  D ASSERT(0,$D(^VPRPTJ("TEMPLATE","52833885-af7c-4899-90be-b3a6630b2370",VPRJTPID2)))
  D ASSERT(0,^VPRPTI("52833885-af7c-4899-90be-b3a6630b2370",VPRJTPID2,"tally","collection","patient"))
  D ASSERT(0,$D(^VPRMETA("JPID",VPRJPID2,"lastAccessTime")),"A lastAccessTime data node exists and should not")
- Q
+ QUIT
+ ;
 RESENDERRDEVENT ;; @TEST resending an event that had a syncError
  N DATA,LOC,METASTAMP,VPRJTPID,HTTPERR,PTIME,TIME,VPRJPID,NEWMETASTAMP
  ; First, manually setup an entry to look like a syncError

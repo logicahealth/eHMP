@@ -6,13 +6,13 @@ var inputValue = {
         'totalItems': 99,
         'currentItemCount': 2,
         'items': [{
-            'authorUid': 'urn:va:user:9E7A:10000000049',
+            'authorUid': 'urn:va:user:SITE:10000000049',
             'authorDisplayName': 'Labtech,Fiftynine',
-            'signerUid': 'urn:va:user:9E7A:10000000049',
+            'signerUid': 'urn:va:user:SITE:10000000049',
             'signerDisplayName': 'Labtech,Fiftynine',
             'signedDateTime': '20070516094554',
             'kind': 'Advance Directive',
-            'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+            'documentDefUid': 'urn:va:doc-def:SITE:1632',
             'interdisciplinaryType': '',
             'isInterdisciplinary': 'true',
             'facilityCode': '500',
@@ -27,11 +27,11 @@ var inputValue = {
                 'vuid': 'urn:va:vuid:4693421'
             },
             'documentDefUidVuid': 'urn:va:vuid:4693421',
-            'uid': 'urn:va:document:9E7A:253:3852',
+            'uid': 'urn:va:document:SITE:253:3852',
             'summary': 'ADVANCE DIRECTIVE COMPLETED',
             'sensitive': false,
             'dodComplexNoteUri': '',
-            'pid': '9E7A;253',
+            'pid': 'SITE;253',
             'author': 'LABTECH,FIFTYNINE',
             'signer': 'LABTECH,FIFTYNINE',
             'subject': 'Subject1',
@@ -41,44 +41,44 @@ var inputValue = {
                     'name': 'LABTECH,FIFTYNINE',
                     'displayName': 'Labtech,Fiftynine',
                     'role': 'AU',
-                    'uid': 'urn:va:user:9E7A:10000000049',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                    'uid': 'urn:va:user:SITE:10000000049',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
                 }, {
                     'name': 'LABTECH,FIFTYNINE',
                     'displayName': 'Labtech,Fiftynine',
                     'role': 'S',
                     'signedDateTime': '20070516094554',
                     'signature': 'FIFTYNINE LABTECH',
-                    'uid': 'urn:va:user:9E7A:10000000049',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                    'uid': 'urn:va:user:SITE:10000000049',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
                 }, {
                     'name': 'LABTECH,FIFTYNINE',
                     'displayName': 'Labtech,Fiftynine',
                     'role': 'ES',
-                    'uid': 'urn:va:user:9E7A:10000000049',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                    'uid': 'urn:va:user:SITE:10000000049',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
                 }, {
                     'name': 'MG',
                     'displayName': 'Mg',
                     'role': 'E',
-                    'uid': 'urn:va:user:9E7A:10000000049',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                    'uid': 'urn:va:user:SITE:10000000049',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
                 }],
                 'content': '   VistA Imaging - Scanned Document\r\n',
                 'dateTime': '200705160947',
                 'status': 'COMPLETED',
-                'authorUid': 'urn:va:user:9E7A:10000000049',
+                'authorUid': 'urn:va:user:SITE:10000000049',
                 'authorDisplayName': 'Labtech,Fiftynine',
-                'signerUid': 'urn:va:user:9E7A:10000000049',
+                'signerUid': 'urn:va:user:SITE:10000000049',
                 'signer': 'LABTECH,FIFTYNINE',
                 'signerDisplayName': 'Labtech,Fiftynine',
                 'author': 'LABTECH,FIFTYNINE',
-                'uid': 'urn:va:document:9E7A:253:3852',
-                'summary': 'DocumentText{uid="urn:va:document:9E7A:253:3852"}'
+                'uid': 'urn:va:document:SITE:253:3852',
+                'summary': 'DocumentText{uid="urn:va:document:SITE:253:3852"}'
             }],
             'codes': [],
             'localId': '3852',
-            'encounterUid': 'urn:va:visit:9E7A:253:5669',
+            'encounterUid': 'urn:va:visit:SITE:253:5669',
             'encounterName': '20 MINUTE May 16, 2007',
             'urgency': 'normal',
             'status': 'COMPLETED',
@@ -87,34 +87,34 @@ var inputValue = {
                 'name': 'LABTECH,FIFTYNINE',
                 'displayName': 'Labtech,Fiftynine',
                 'role': 'AU',
-                'uid': 'urn:va:user:9E7A:10000000049',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                'uid': 'urn:va:user:SITE:10000000049',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
             }, {
                 'name': 'LABTECH,FIFTYNINE',
                 'displayName': 'Labtech,Fiftynine',
                 'role': 'S',
                 'signedDateTime': '20070516094554',
                 'signature': 'FIFTYNINE LABTECH',
-                'uid': 'urn:va:user:9E7A:10000000049',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                'uid': 'urn:va:user:SITE:10000000049',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
             }, {
                 'name': 'LABTECH,FIFTYNINE',
                 'displayName': 'Labtech,Fiftynine',
                 'role': 'ES',
-                'uid': 'urn:va:user:9E7A:10000000049',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                'uid': 'urn:va:user:SITE:10000000049',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
             }, {
                 'name': 'MG',
                 'displayName': 'Mg',
                 'role': 'E',
-                'uid': 'urn:va:user:9E7A:10000000049',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000049"}'
+                'uid': 'urn:va:user:SITE:10000000049',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000049"}'
             }]
         }, {
-            'authorUid': 'urn:va:user:9E7A:10000000225',
+            'authorUid': 'urn:va:user:SITE:10000000225',
             'authorDisplayName': 'User,Leipr',
             'kind': 'Allergy/Adverse Reaction',
-            'documentDefUid': 'urn:va:doc-def:9E7A:17',
+            'documentDefUid': 'urn:va:doc-def:SITE:17',
             'isInterdisciplinary': 'false',
             'facilityCode': '500',
             'facilityName': 'CAMP MASTER',
@@ -123,11 +123,11 @@ var inputValue = {
             'documentTypeName': 'Allergy/Adverse Reaction',
             'documentClass': 'PROGRESS NOTES',
             'localTitle': 'Adverse React/Allergy',
-            'uid': 'urn:va:document:9E7A:100022:4058',
+            'uid': 'urn:va:document:SITE:100022:4058',
             'summary': 'Adverse React/Allergy',
             'sensitive': true,
             'dodComplexNoteUri': '',
-            'pid': '9E7A;100022',
+            'pid': 'SITE;100022',
             'author': 'USER,LEIPR',
             'entered': '20141014093251',
             'subject': 'Subject2',
@@ -136,33 +136,33 @@ var inputValue = {
                     'name': 'USER,LEIPR',
                     'displayName': 'User,Leipr',
                     'role': 'AU',
-                    'uid': 'urn:va:user:9E7A:10000000225',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                    'uid': 'urn:va:user:SITE:10000000225',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
                 }, {
                     'name': 'USER,LEIPR',
                     'displayName': 'User,Leipr',
                     'role': 'ES',
-                    'uid': 'urn:va:user:9E7A:10000000225',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                    'uid': 'urn:va:user:SITE:10000000225',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
                 }, {
                     'name': 'LU',
                     'displayName': 'Lu',
                     'role': 'E',
-                    'uid': 'urn:va:user:9E7A:10000000225',
-                    'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                    'uid': 'urn:va:user:SITE:10000000225',
+                    'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
                 }],
                 'content': 'This patient has had the following reactions \r\nsigned-off on Oct 14, 2014@09:32:51.\r\n\r\nERYTHROMYCIN\r\n\r\n',
                 'dateTime': '20141014093251',
                 'status': 'UNSIGNED',
-                'authorUid': 'urn:va:user:9E7A:10000000225',
+                'authorUid': 'urn:va:user:SITE:10000000225',
                 'authorDisplayName': 'User,Leipr',
                 'author': 'USER,LEIPR',
-                'uid': 'urn:va:document:9E7A:100022:4058',
-                'summary': 'DocumentText{uid="urn:va:document:9E7A:100022:4058"}'
+                'uid': 'urn:va:document:SITE:100022:4058',
+                'summary': 'DocumentText{uid="urn:va:document:SITE:100022:4058"}'
             }],
             'codes': [],
             'localId': '4058',
-            'encounterUid': 'urn:va:visit:9E7A:100022:3050',
+            'encounterUid': 'urn:va:visit:SITE:100022:3050',
             'encounterName': 'BCMA Jan 30, 2002',
             'urgency': 'normal',
             'status': 'ACTIVE',
@@ -171,20 +171,20 @@ var inputValue = {
                 'name': 'USER,LEIPR',
                 'displayName': 'User,Leipr',
                 'role': 'AU',
-                'uid': 'urn:va:user:9E7A:10000000225',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                'uid': 'urn:va:user:SITE:10000000225',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
             }, {
                 'name': 'USER,LEIPR',
                 'displayName': 'User,Leipr',
                 'role': 'ES',
-                'uid': 'urn:va:user:9E7A:10000000225',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                'uid': 'urn:va:user:SITE:10000000225',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
             }, {
                 'name': 'LU',
                 'displayName': 'Lu',
                 'role': 'E',
-                'uid': 'urn:va:user:9E7A:10000000225',
-                'summary': 'DocumentClinician{uid="urn:va:user:9E7A:10000000225"}'
+                'uid': 'urn:va:user:SITE:10000000225',
+                'summary': 'DocumentClinician{uid="urn:va:user:SITE:10000000225"}'
             }]
         }]
     }

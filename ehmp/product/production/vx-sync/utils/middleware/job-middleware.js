@@ -74,11 +74,17 @@ var getJobHistory = function(req, res, next) {
 
     self.log.debug('job-middleware.getJobHistory - Getting job state history');
     self.jdsClient.getJobStatus(job, filter, function(error, response, result) {
+        var errorMessage;
         if (error) {
-            var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
+            errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
+            self.log.error(errorMessage);
+            return res.status(500).send(errorMessage);
+        } else if (!response || response.statusCode !== 200){
+            errorMessage = format(errorTemplate, logPatientIdentifier, inspect(response));
             self.log.error(errorMessage);
             return res.status(500).send(errorMessage);
         }
+
         self.log.debug('job-middleware.getJobHistory - Job status received');
         self.log.debug(inspect(result));
         res.jobStates = result.items;

@@ -34,34 +34,45 @@ action :execute do
     end
   end
 
-  jds = find_node_by_role("jds", node[:stack])
-  solr = find_node_by_role("solr", node[:stack], "mocks")
-  pjds = find_node_by_role("pjds", node[:stack], "jds")
-
   ruby_block 'clear jds cache' do
     block do
+      if find_optional_nodes_by_criteria(node[:stack], "role:jds_app_server").empty?
+        raise "No JDS App Server has been found, yet you attempted to point to a jds_app_server" unless node[:vxsync_client][:jds_app_server_assignment].nil?
+        jds = find_node_by_role("jds", node[:stack])
+      else
+        raise "JDS App Servers have been found in this environment, but a jds_app_server_assignment was not set." if node[:vxsync_client][:jds_app_server_assignment].nil?
+        jds = find_optional_node_by_criteria(node[:stack], "role:jds_app_server AND jds_app_server_ident:#{node[:vxsync_client][:jds_app_server_assignment]}")
+        raise "JDS App Server #{node[:vxsync_client][:jds_app_server_assignment]} not found in stack." if jds.nil?
+      end
+      solr = find_multiple_nodes_by_role("solr", node[:stack])
+
       JDSCache.clear("http://#{jds['ipaddress']}:#{jds['jds']['cache_listener_ports']['vxsync']}")
-      SolrCache.clear("http://#{solr['ipaddress']}:#{solr['solr']['port']}")
+      solr.each do |solr_machine|
+        SolrCache.clear("http://#{solr_machine['ipaddress']}:#{solr_machine['solr']['port']}")
+      end
     end
     action :create
     only_if { new_resource.reset }
   end
 
   node[:vxsync][:vxsync_applications].each do |app|
-    directory node[:vxsync][app.to_sym][:documents_dir] do
+    directory node["vxsync_#{app}".to_sym][:documents_dir] do
       recursive true
+      owner node[:vxsync][:user]
+      group node[:vxsync][:group]
       action :delete
-      notifies :create, "directory[#{node[:vxsync][app.to_sym][:documents_dir]}]", :immediately
+      notifies :create, "directory[#{node["vxsync_#{app}".to_sym][:documents_dir]}]", :immediately
       only_if { new_resource.reset}
     end
   end
 
+  first_vxsync = node[:vxsync][:vxsync_applications][0]
   ruby_block "reset vista" do
     block do
-      vxsync_config = ::File.read(node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:config_file])
+      vxsync_config = ::File.read(node["vxsync_#{first_vxsync}".to_sym][:config_file])
       vista_sites = JSON.parse(vxsync_config)["vxsync"]["vistaSites"]
       vista_sites.each do |site_name, site_config|
-        system("node #{node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:home_dir]}/tools/rpc/rpc-unsubscribe-all.js --host \"#{site_config['host']}\" \
+        system("node #{node["vxsync_#{first_vxsync}".to_sym][:home_dir]}/tools/vista-sync-tools/rpc-unsubscribe-all.js --host \"#{site_config['host']}\" \
                                                                                   --port #{site_config['port']} \
                                                                                   --accessCode #{site_config['accessCode']} \
                                                                                   --verifyCode #{site_config['verifyCode']}")
@@ -73,7 +84,7 @@ action :execute do
 
   ruby_block 'clear HDR pub/sub subscription' do
     block do
-      vxsync_config = ::File.read(node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:config_file])
+      vxsync_config = ::File.read(node["vxsync_#{first_vxsync}".to_sym][:config_file])
       hdr_config = JSON.parse(vxsync_config)["vxsync"]["hdr"]
       hdr_mode = hdr_config["operationMode"]
       if hdr_mode && "PUB/SUB".casecmp(hdr_mode) == 0
@@ -107,7 +118,7 @@ action :execute do
 
     vxsync_wait_for_connection "triggering initial operational data sync for site #{site_id}" do
       url "http://localhost:#{node[:vxsync][:web_service_port]}/data/doLoad?sites=#{site_id}"
-      only_if { node[:vxsync][:vxsync_applications].include?("client") && new_resource.reset }
+      only_if { node[:roles].include?("primary_vxsync_client") && new_resource.reset }
     end
   }
 

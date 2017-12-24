@@ -158,6 +158,12 @@ define([
                 }
             });
 
+            Object.defineProperty(this, 'currentWorkspaceId', {
+                get: function () {
+                    return this.currentWorkspace.get('id');
+                }
+            });
+
             Object.defineProperty(this, 'currentContextId', {
                 get: function () {
                     return this.currentContext.get('id');

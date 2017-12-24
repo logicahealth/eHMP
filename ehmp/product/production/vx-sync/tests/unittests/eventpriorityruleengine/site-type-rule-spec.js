@@ -35,27 +35,27 @@ var hmpServer = 'TheHmpServer';
 var config = {
     jds: {
         protocol: 'http',
-        host: 'IP',
+        host: 'IP        ',
         port: PORT
     },
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
-            'host': 'IP',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 10000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
-            'host': 'IP',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -74,27 +74,27 @@ var config = {
 var vistaHdrConfig = {
     jds: {
         protocol: 'http',
-        host: 'IP',
+        host: 'IP        ',
         port: PORT
     },
     'vistaSites': {
-        '9E7A': {
+        'SITE': {
             'name': 'panorama',
-            'host': 'IP',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
             'sendTimeout': 10000
         },
-        'C877': {
+        'SITE': {
             'name': 'kodak',
-            'host': 'IP',
+            'host': 'IP        ',
             'port': PORT,
-            'accessCode': 'REDACTED',
-            'verifyCode': 'REDACTED',
+            'accessCode': 'USER  ',
+            'verifyCode': 'PW      ',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -215,14 +215,14 @@ function setupDummyJds(environment, jobStatus) {
 describe('site-type-rule.js', function () {
     describe('extractSite()', function () {
         it('Happy Path with valid job', function () {
-            var job = createJob('9E7A;3', 1);
+            var job = createJob('SITE;3', 1);
             var site = siteTypeRule._internalFunctions._extractSite(job);
-            expect(site).toBe('9E7A');
+            expect(site).toBe('SITE');
         });
         it('Happy Path with valid jobStatus', function () {
-            var jobStatus = createJobStatus('C877;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             var site = siteTypeRule._internalFunctions._extractSite(jobStatus);
-            expect(site).toBe('C877');
+            expect(site).toBe('SITE');
         });
         it('Job or jobStatus is null', function () {
             var site = siteTypeRule._internalFunctions._extractSite(null);
@@ -247,17 +247,17 @@ describe('site-type-rule.js', function () {
     });
     describe('fixPriorityRange()', function () {
         it('Happy Path with no change', function () {
-            var job = createJob('9E7A;3', 50);
+            var job = createJob('SITE;3', 50);
             siteTypeRule._internalFunctions._fixPriorityRange(job);
             expect(job.priority).toBe(50);
         });
         it('Range too low', function () {
-            var job = createJob('9E7A;3', -25);
+            var job = createJob('SITE;3', -25);
             siteTypeRule._internalFunctions._fixPriorityRange(job);
             expect(job.priority).toBe(1);
         });
         it('Range too high', function () {
-            var job = createJob('9E7A;3', 500);
+            var job = createJob('SITE;3', 500);
             siteTypeRule._internalFunctions._fixPriorityRange(job);
             expect(job.priority).toBe(100);
         });
@@ -265,8 +265,8 @@ describe('site-type-rule.js', function () {
     describe('prioritize()', function () {
         it('Happy Path with valid my-site job (via job status retrieval)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('9E7A;3', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var job = createJob('SITE;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -288,11 +288,11 @@ describe('site-type-rule.js', function () {
         });
         it('Happy Path with valid my-site job (via data in the job - no job status retreival)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('9E7A;3', 1);
+            var job = createJob('SITE;3', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -314,8 +314,8 @@ describe('site-type-rule.js', function () {
         });
         it('Happy Path with valid Other Primary Vista Site job (via job status retrieval)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('C877;3', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var job = createJob('SITE;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -337,11 +337,11 @@ describe('site-type-rule.js', function () {
         });
         it('Happy Path with valid Other Primary Vista Site job (via data in the job - no job status retreival)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('C877;3', 1);
+            var job = createJob('SITE;3', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -365,7 +365,7 @@ describe('site-type-rule.js', function () {
         it('Happy Path with valid Other VistaHDR Site job (via job status retrieval)', function () {
             var environment = createEnvironment(vistaHdrConfig);
             var job = createJob('3A8B;3', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -390,9 +390,9 @@ describe('site-type-rule.js', function () {
             var environment = createEnvironment(vistaHdrConfig);
             var job = createJob('3A8B;3', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -416,7 +416,7 @@ describe('site-type-rule.js', function () {
         it('Happy Path with valid Other Secondary HDR Site job (via job status retrieval)', function () {
             var environment = createEnvironment(config);
             var job = createJob('HDR;10108V420871', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -441,9 +441,9 @@ describe('site-type-rule.js', function () {
             var environment = createEnvironment(config);
             var job = createJob('HDR;10108V420871', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -467,7 +467,7 @@ describe('site-type-rule.js', function () {
         it('Happy Path with valid DOD Site job (via job status retrieval)', function () {
             var environment = createEnvironment(config);
             var job = createJob('DOD;0000000003', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -492,9 +492,9 @@ describe('site-type-rule.js', function () {
             var environment = createEnvironment(config);
             var job = createJob('DOD;0000000003', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -518,7 +518,7 @@ describe('site-type-rule.js', function () {
         it('Happy Path with valid Other Secondary VLER Site job (via job status retrieval)', function () {
             var environment = createEnvironment(config);
             var job = createJob('VLER;10108V420871', 1);
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -543,9 +543,9 @@ describe('site-type-rule.js', function () {
             var environment = createEnvironment(config);
             var job = createJob('VLER;10108V420871', 1);
             job.referenceInfo = {
-                initialSyncId: '9E7A;3'
+                initialSyncId: 'SITE;3'
             };
-            var jobStatus = createJobStatus('9E7A;3', 1);
+            var jobStatus = createJobStatus('SITE;3', 1);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -568,8 +568,8 @@ describe('site-type-rule.js', function () {
 
         it('Happy Path with original priority never set. (via job status retrieval)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('9E7A;3', undefined);
-            var jobStatus = createJobStatus('9E7A;3', 50);
+            var job = createJob('SITE;3', undefined);
+            var jobStatus = createJobStatus('SITE;3', 50);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -592,8 +592,8 @@ describe('site-type-rule.js', function () {
 
         it('Happy Path with original priority not the same as the current job. (via job status retrieval)', function () {
             var environment = createEnvironment(config);
-            var job = createJob('9E7A;3', 50);
-            var jobStatus = createJobStatus('9E7A;3', 30);
+            var job = createJob('SITE;3', 50);
+            var jobStatus = createJobStatus('SITE;3', 30);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -617,7 +617,7 @@ describe('site-type-rule.js', function () {
         it('Case where priority overflows upper limit (via job status retrieval)', function () {
             var environment = createEnvironment(config);
             var job = createJob('VLER;10108V420871', 80);
-            var jobStatus = createJobStatus('9E7A;3', 80);
+            var jobStatus = createJobStatus('SITE;3', 80);
             setupDummyJds(environment, jobStatus);
 
             var finished = false;
@@ -641,38 +641,38 @@ describe('site-type-rule.js', function () {
     });
     describe('adjustJobPriority()', function () {
         it('Happy Path with my-site job', function () {
-            var job = createJob('9E7A;3', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, '9E7A', '9E7A');
+            var job = createJob('SITE;3', 1);
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, 'SITE', 'SITE');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(1);
         });
         it('Happy Path with valid Other Primary Vista Site job', function () {
-            var job = createJob('C877;3', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, '9E7A', 'C877');
+            var job = createJob('SITE;3', 1);
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, 'SITE', 'SITE');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(21);
         });
         it('Happy Path with valid Other VistaHDR Site job', function () {
             var job = createJob('3A8B;3', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, vistaHdrConfig, job, '9E7A', '3A8B');
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, vistaHdrConfig, job, 'SITE', '3A8B');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(21);
         });
         it('Happy Path with valid Other Secondary HDR Site job', function () {
             var job = createJob('HDR;10108V420871', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, '9E7A', 'HDR');
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, 'SITE', 'HDR');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(21);
         });
         it('Happy Path with valid DOD Site job', function () {
             var job = createJob('DOD;0000000003', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, '9E7A', 'DOD');
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, 'SITE', 'DOD');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(41);
         });
         it('Happy Path with valid Other Secondary VLER Site job', function () {
             var job = createJob('VLER;10108V420871', 1);
-            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, '9E7A', 'VLER');
+            var resultJob = siteTypeRule._internalFunctions._adjustJobPriority(log, config, job, 'SITE', 'VLER');
             expect(resultJob).toBeTruthy();
             expect(resultJob.priority).toBe(41);
         });

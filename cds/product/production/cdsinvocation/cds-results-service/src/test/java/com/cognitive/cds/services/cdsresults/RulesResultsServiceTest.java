@@ -49,7 +49,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import javax.ws.rs.core.Response;
 import org.apache.cxf.jaxrs.client.WebClient;
 import static org.junit.Assert.assertEquals;
@@ -88,7 +88,7 @@ public class RulesResultsServiceTest {
         
         //---------- SETTING CONTEXT ---------- 
 		com.cognitive.cds.invocation.model.Context context = new com.cognitive.cds.invocation.model.Context();
-		context.setSubject(new Subject("TestSubject", "9E7A;140"));
+		context.setSubject(new Subject("TestSubject", "SITE;140"));
 		context.setLocation(new Location("Test Location", "Location1"));
 		context.setUser(new User("Tester", "Id1"));
 		input.setContext(context);
@@ -107,7 +107,7 @@ public class RulesResultsServiceTest {
         
         
         //---------- SETTING PROPERTIES ---------- 
-        Properties parameters = null;
+        Map<String, Object> parameters = null;
 		input.setParameters(parameters);
         
         //---------- SETTING inputDataModel ---------- 

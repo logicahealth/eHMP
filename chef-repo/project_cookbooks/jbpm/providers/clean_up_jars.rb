@@ -2,7 +2,7 @@ use_inline_resources
 
 action :execute do 
 
-    Dir.glob("#{node[:jbpm][:m2_home]}/repository/**/*.jar").each do |jar_path|
+    Dir.glob("#{node[:jbpm][:m2_home]}/repository/#{node[:jbpm][:organization]}/**/*.jar").each do |jar_path|
 
         jar_info = jar_path.split("/")
         group_id = jar_info[-4]
@@ -12,7 +12,7 @@ action :execute do
         unless jar_deployed?(artifact_id,version,new_resource.user,new_resource.password)
 
             log "Deleting undeployed legacy jar:  #{jar_info[-1]}"
-            
+
             directory "#{node[:jbpm][:m2_home]}/repository/#{group_id}/#{artifact_id}/#{version}" do
                 action :delete
                 recursive true

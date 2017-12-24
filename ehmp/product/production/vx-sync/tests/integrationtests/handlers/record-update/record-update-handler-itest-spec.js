@@ -14,7 +14,8 @@ var jobUtil = require(global.VX_UTILS + 'job-utils');
 
 var _ = require('underscore');
 
-var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
+var testConfig = require(global.VX_INTTESTS + 'test-config');
+var vx_sync_ip = testConfig.vxsyncIP;
 var config = require(global.VX_ROOT + 'worker-config');
 config.terminology.host = vx_sync_ip;
 //Needed to test record-enrichment
@@ -28,7 +29,7 @@ var jdsCodedVaValue = {
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 //Needed to test solr-storage
 var solrSmartClient = require('solr-smart-client');
-var SolrClient = solrSmartClient.initClient(config.solrClient.core, config.solrClient.zooKeeperConnection, log);
+var SolrClient = solrSmartClient.createClient(log, config.solrClient);
 
 
 var patientIdentifier = {

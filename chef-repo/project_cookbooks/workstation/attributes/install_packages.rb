@@ -26,5 +26,7 @@ default[:workstation][:install_packages][:yum_packages] = [
   "libxml2",
   "libxml2-devel",
   "libxslt",
-  "libxslt-devel"
+  "libxslt-devel",
+  "openssh-clients",
+  "crontabs"
 ]

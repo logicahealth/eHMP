@@ -39,7 +39,7 @@ define([
             '<div data-flex-width="1"><p>Error loading records.<span>{{#if message}} {{message}}{{else}} Response status: {{status}}, {{statusText}}.{{/if}}</span>{{#if logId}}<span> For defect reporting: {{logId}}</span>{{/if}}</p></div>',
             '</div>',
             '<div class="text-center bottom-padding-xs">',
-            '<button type="button" class="btn btn-xs btn-default font-size-11 infinite-scroll-retry" title="Press enter to retry loading more records">',
+            '<button type="button" class="btn btn-xs btn-default font-size-11 infinite-scroll-retry" aria-label="Retry loading more records">',
             '<i class="fa fa-refresh right-margin-xs" aria-hidden="true"></i> Retry Loading',
             '</button>',
             '</div>',

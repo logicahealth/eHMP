@@ -3,10 +3,10 @@ define([
     'app/applets/orders/writeback/common/requiredFields/requiredFieldsUtils',
     'app/applets/orders/writeback/requests/responseFormFields',
     'app/applets/orders/writeback/requests/responseFormUtils',
-    'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/orders/viewUtils',
-    'app/applets/task_forms/activities/requests/responseEventHandler'
-], function(moment, RequiredFieldsUtils, FormFields, FormUtils, AssignmentTypeUtils, ViewUtils, EventHandler) {
+    'app/applets/task_forms/activities/requests/responseEventHandler',
+    'app/extensions/extensions'
+], function(moment, RequiredFieldsUtils, FormFields, FormUtils, ViewUtils, EventHandler, Extensions) {
     'use strict';
 
     var DATE_FORMAT = 'MM/DD/YYYY';
@@ -16,6 +16,9 @@ define([
     var PENDING_RESPONSE_SUBSTATE = 'Pending Response';
 
     var formView = ADK.UI.Form.extend({
+        controlClass: {
+            'assignTo': Extensions.UI.Form.Controls.AssignTo
+        },
         fields: FormFields,
         basicRequiredFields: ['action'],
         events: {
@@ -24,24 +27,12 @@ define([
             'click #activityDetails': 'fireDetail'
         },
         modelEvents: {
-            'change:assignment': 'changeAssignment',
-            'change:facility': 'handleFacilityChange',
-            'change:team': 'handleTeamChange',
-            'change:roles': 'adjustAcceptButtonProperties',
             'change:action': 'changeAction'
         },
         ui: {
-            'assignmentField': '.assignment',
-            'assignmentContainer': '.assignment-row',
+            'assignmentControl': '.assignment',
+            'beforeEarliestDateBanner': '.beforeEarliestDateBanner',
             'requestDetailsField': '.requestDetails',
-            'facilityField': '.facility',
-            'personField': '.person',
-            'teamField': '.team',
-            'rolesField': '.roles',
-            'facilityContainer': '.facility-row',
-            'personContainer': '.person-row',
-            'teamContainer': '.team-row',
-            'rolesContainer': '.roles-row',
             'commentField': '.comment',
             'commentContainer': '.comment-row',
             'requestField': '.request',
@@ -54,19 +45,20 @@ define([
             if (_.isEmpty(this.model.get('assignment'))) {
                 this.model.set('assignment', 'opt_person');
             }
+
             var requests = this.model.get("data").requests;
             this.model.set('displayName', requests[requests.length - 1].title);
 
             this.data = this.model.get('data');
             this.taskId = this.model.get('taskId');
             this.taskStatus = this.model.get('taskStatus');
+            this.setupActions();
             RequiredFieldsUtils.requireFields(this);
             this.setupRequestedByText();
             this.setupSubState();
             this.setupDates();
             this.copyRequestDetails();
             this.adjustAcceptButtonProperties();
-
             this.adjustButtonProperties();
             this.listenTo(this.model, 'change', this.adjustButtonProperties);
 
@@ -108,11 +100,8 @@ define([
         adjustAcceptButtonProperties: function() {
             RequiredFieldsUtils.makeButtonDependOnRequiredFields(this, this.ui.acceptButton);
         },
-        //This is called from assignmentContainer
         adjustButtonProperties: function() {
             this.adjustAcceptButtonProperties();
-            // this.adjustDraftButtonProperties();
-            // this.adjustAcceptButtonProperties();
         },
         copyRequestDetails: function() {
             var newRequestDetails = '';
@@ -143,8 +132,8 @@ define([
                 if (!_.isNull(division) && !_.isUndefined(division)) {
                     var facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
                     this.listenToOnce(facilities, 'read:success', function(collection, response) {
-                        var facility = collection.findWhere({facilityID: division});
-                        if(!_.isUndefined(facility)) {
+                        var facility = collection.findWhere({ facilityID: division });
+                        if (!_.isUndefined(facility)) {
                             this.model.set('requestorLocation', facility.get('vistaName'));
                         }
                     });
@@ -169,21 +158,41 @@ define([
             this.model.set('earliestDateText', moment.utc(this.data.requests[this.data.requests.length - 1].earliestDate, "YYYYMMDDHHmmSS").local().format(DATE_FORMAT));
             this.model.set('latestDateText', moment.utc(this.data.requests[this.data.requests.length - 1].latestDate, "YYYYMMDDHHmmSS").local().format(DATE_FORMAT));
         },
+        setupActions: function() {
+            var actionsPickList = [{
+                value: EventHandler.REQUEST_COMPLETE,
+                label: 'Mark as Complete'
+            }, {
+                value: EventHandler.REQUEST_CLARIFICATION,
+                label: 'Return for Clarification'
+            }, {
+                value: EventHandler.REQUEST_DECLINE,
+                label: 'Decline'
+            }, {
+                value: EventHandler.REQUEST_REASSIGN,
+                label: 'Reassign'
+            }];
+
+            var earliestDate = moment.utc(_.last(this.data.requests).earliestDate, 'YYYYMMDDHHmmSS').local();
+            if(moment().isBefore(earliestDate) && this.model.get('beforeEarliestDate') === 1) {
+                this.ui.beforeEarliestDateBanner.trigger('control:message', 'A Request cannot be marked as complete before the earliest date');
+                actionsPickList[0].disabled = true;
+            }
+
+            this.model.set('actionsPickList', actionsPickList);
+        },
         changeAction: function() {
             this.model.unset('comment');
             this.model.unset('request');
 
             this.ui.commentContainer.trigger('control:hidden', true);
             this.ui.requestContainer.trigger('control:hidden', true);
-            this.ui.assignmentContainer.trigger('control:hidden', true);
-
+            this.ui.assignmentControl.trigger('control:hidden', true);
             this.ui.commentField.trigger('control:hidden', true);
             this.ui.requestField.trigger('control:hidden', true);
-            this.ui.assignmentField.trigger('control:required', false);
 
             this.ui.commentField.trigger('control:required', false);
             this.ui.requestField.trigger('control:required', false);
-            this.ui.assignmentField.trigger('control:required', false);
 
 
             var action = this.model.get('action');
@@ -207,19 +216,21 @@ define([
                 this.ui.commentContainer.trigger('control:hidden', false);
                 this.ui.commentField.trigger('control:hidden', false);
             } else if (action === EventHandler.REQUEST_REASSIGN) {
-                this.ui.assignmentField.trigger('control:required', true);
                 this.ui.commentField.trigger('control:required', true);
 
                 RequiredFieldsUtils.requireFields(this, 'assignment');
                 RequiredFieldsUtils.requireFields(this, 'comment');
 
-                this.ui.assignmentContainer.trigger('control:hidden', false);
-                this.ui.assignmentField.trigger('control:hidden', false);
+                this.ui.assignmentControl.trigger('control:hidden', false);
                 this.ui.commentContainer.trigger('control:hidden', false);
                 this.ui.commentField.trigger('control:hidden', false);
             }
 
             this.adjustAcceptButtonProperties();
+            this.assignmentRquired(_.isEqual(action, EventHandler.REQUEST_REASSIGN));
+        },
+        assignmentRquired: function(required) {
+            this.ui.assignmentControl.trigger('control:required', required);
         },
         handleRequestInput: function(e) {
             if (e && e.changed && (e.changed.request !== undefined)) {
@@ -265,17 +276,7 @@ define([
             ADK.Messaging.getChannel('task_forms').request('activity_detail', {
                 processId: this.model.get('data').activity.processInstanceId
             });
-        },
-        changeAssignment: function() {
-            AssignmentTypeUtils.changeAssignment(this);
-        },
-        handleFacilityChange: function() {
-            AssignmentTypeUtils.handleFacilityChange(this);
-        },
-        handleTeamChange: function() {
-            AssignmentTypeUtils.handleTeamChange(this);
-            this.adjustAcceptButtonProperties();
-        },
+        }
     });
 
     return formView;
