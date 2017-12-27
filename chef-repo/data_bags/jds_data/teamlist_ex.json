@@ -1,4 +1,6 @@
-[{
+{
+  "id": "teamlist_ex",
+  "override": [{
     "facility": "C877",
     "teams": [{
         "active": true,
@@ -44,12 +46,12 @@
             "assignedByIEN": "9E7A;1000897",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": "00001",
-            "icn": "9E7A;100141"
+            "icn": "10108V429807"
         }, {
             "assignedByIEN": "9E7A;10008833",
             "assignedDateTime": 20150101000000,
             "assignedToPosition": null,
-            "icn": "9E7A;3"
+            "icn": "10108V420871"
         }],
         "position": [{
             "assignedByIEN": "9E7A;1000897",
@@ -86,3 +88,4 @@
         "teamType": 301
     }]
 }]
+}

@@ -6,8 +6,8 @@ CREATE(Name, Directory) PUBLIC
   set db=##Class(SYS.Database).%New()
   set db.Directory=Directory
   set db.Size=40
-  set db.EncryptedDB=1
-  set db.EncryptionKeyID="FB925728-1114-11E4-956B-00274DB37D00"
+  ; set db.EncryptedDB=1
+  ; set db.EncryptionKeyID="FB925728-1114-11E4-956B-00274DB37D00"
   set Status=db.%Save()
   if Status'=1 write !, "Error="_$SYSTEM.Status.GetErrorText(Status)
   ; Create Database

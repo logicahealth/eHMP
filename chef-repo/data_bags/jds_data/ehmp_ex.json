@@ -1,0 +1,35 @@
+{
+  "id": "ehmp_ex",
+  "override": [{
+	  "uid": "urn:va:user:9E7A:10000000270",
+	  "permissionSet": {
+	      "val": ["read-access", "standard-doctor"],
+	      "modifiedBy": "urn:va:user:9E7A:10000000270",
+	      "modifiedOn": "2015-08-19T19:31:41Z",
+	      "additionalPermissions": []
+	  },
+	  "firstname": "PANORAMA",
+	  "lastname": "USER",
+	  "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+	  "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+	  "unsucessfulLoginAttemptCount": 0,
+	  "createdBy": "urn:va:user:9E7A:10000000270",
+	  "createdTime": "2015-08-19T19:31:41Z"
+		}, 
+		{
+	  "uid": "urn:va:user:C877:10000000270",
+	  "permissionSet": {
+	      "val": ["read-access", "standard-doctor"],
+	      "modifiedBy": "urn:va:user:C877:10000000270",
+	      "modifiedOn": "2015-08-19T19:31:41Z",
+	      "additionalPermissions": []
+	  },
+	  "firstname": "PANORAMA",
+	  "lastname": "USER",
+	  "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+	  "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+	  "unsucessfulLoginAttemptCount": 0,
+	  "createdBy": "urn:va:user:C877:10000000270",
+	  "createdTime": "2015-08-19T19:31:41Z"
+	}]
+}

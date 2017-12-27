@@ -12,31 +12,31 @@ common_directory(node[:jds][:jds_database_location]) do
 end
 
 # Retrieve database encryption key and details from encrypted data bag
-dbkeys = nil
-begin
-  dbkeys = Chef::EncryptedDataBagItem.load("cache", "db_keys", node[:data_bag_string])
-rescue
-  Chef::Log.warn "Did not find data bag item 'db_keys'"
-end
-cache_key_file = dbkeys["db_key_file"]
-cache_key = Base64.decode64(dbkeys["db_key"])
-
-file "#{node[:jds][:cache_mgr_dir]}/#{cache_key_file}" do
-  content cache_key
-  owner node[:jds][:cache_user]
-  group node[:jds][:cache_user]
-  mode "0640"
-  action :create_if_missing
-  notifies :execute, "jds_key_block[key block]", "immediately"
-end
+#dbkeys = nil
+#begin
+#  dbkeys = Chef::EncryptedDataBagItem.load("cache", "db_keys", node[:data_bag_string])
+#rescue
+#  Chef::Log.warn "Did not find data bag item 'db_keys'"
+#end
+#cache_key_file = dbkeys["db_key_file"]
+#cache_key = Base64.decode64(dbkeys["db_key"])
+#
+#file "#{node[:jds][:cache_mgr_dir]}/#{cache_key_file}" do
+#  content cache_key
+#  owner node[:jds][:cache_user]
+#  group node[:jds][:cache_user]
+#  mode "0640"
+#  action :create_if_missing
+#  notifies :execute, "jds_key_block[key block]", "immediately"
+#end
 
 # Activate database encryption key and configure startup options
-jds_key_block "key block" do
-  cache_username node[:jds][:default_admin_user]
-  cache_password user_password
-  log node[:jds][:chef_log]
-  action :nothing
-end
+# jds_key_block "key block" do
+#   cache_username node[:jds][:default_admin_user]
+#   cache_password user_password
+#   log node[:jds][:chef_log]
+#   action :nothing
+# end
 
 # Retrieve cache license from encrypted data bag
 license_item = Chef::EncryptedDataBagItem.load(node[:jds][:cache_license_data_bag], node[:jds][:cache_license_item], node[:data_bag_string])
@@ -51,27 +51,27 @@ file "#{node[:jds][:cache_mgr_dir]}/cache.key" do
   notifies :restart, "service[#{node[:jds][:service_name]}]"
 end
 
-user_export = Chef::EncryptedDataBagItem.load("jds_data", "user_export", node[:data_bag_string])["user_export"]
+#user_export = Chef::EncryptedDataBagItem.load("jds_data", "user_export", node[:data_bag_string])["user_export"]
 
-template "#{node[:jds][:cache_mgr_dir]}/Security.xml" do
-  owner node[:jds][:cache_user]
-  group node[:jds][:cache_user]
-  variables(
-      :users => user_export
-  )
-  mode "0640"
-  source "Security.xml.erb"
-  notifies :execute, 'jds_security_block[security block]', :immediately
-end
-
-# Set database security parameters
-jds_security_block "security block" do
-  cache_username node[:jds][:default_admin_user]
-  cache_password user_password
-  xml_path "#{node[:jds][:cache_mgr_dir]}/Security.xml"
-  log node[:jds][:chef_log]
-  action :nothing
-end
+#template "#{node[:jds][:cache_mgr_dir]}/Security.xml" do
+#  owner node[:jds][:cache_user]
+#  group node[:jds][:cache_user]
+#  #variables(
+#  #    :users => user_export
+#  #)
+#  mode "0640"
+#  source "Security.xml.erb"
+#  notifies :execute, 'jds_security_block[security block]', :immediately
+#end
+#
+## Set database security parameters
+#jds_security_block "security block" do
+#  cache_username node[:jds][:default_admin_user]
+#  cache_password user_password
+#  xml_path "#{node[:jds][:cache_mgr_dir]}/Security.xml"
+#  log node[:jds][:chef_log]
+#  action :nothing
+#end
 
 # This is apache configuration for the embedded apache server in Cache
 template "#{node[:jds][:cache_dir]}/httpd/conf/httpd.conf" do
