@@ -127,19 +127,19 @@ default[:vxsync_client][:processes] = {
   :'sync-request-endpoint' => {
     :template => "sync_request_endpoint.sh.erb",
     :config => {
-      :port => PORT
+      :port => 8080
     }
   },
   :'writeback-endpoint' => {
     :template => "writeback_endpoint.sh.erb",
     :config => {
-      :port => PORT
+      :port => 9090
     }
   },
   :'admin-endpoint-client' => {
     :template => "admin_endpoint.sh.erb",
     :config => {
-      :port => PORT
+      :port => 9999
     }
   }
 }

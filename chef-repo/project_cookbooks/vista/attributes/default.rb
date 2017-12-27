@@ -13,7 +13,7 @@ default[:vista][:session]  =                 "csession cache"
 default[:vista][:shell_timeout_seconds] =    20
 default[:vista][:prompt] =           "VISTA>"
 default[:vista][:namespace] =        "VISTA"
-default[:vista][:rpc_port] = PORT
+default[:vista][:rpc_port] = 9210
 
 default[:vista][:cache_user] =   "cacheserver"
 default[:vista][:cache_dir] =    "/usr/cachesys"
@@ -36,7 +36,7 @@ default[:vista][:diedit_next_field_regex] =  /THEN EDIT FIELD:/
 default[:vista][:jds_namespace] =        "JSONVPR"
 default[:vista][:jds_jsonvpr_dir] =    "/usr/cachesys/vista/jsonvpr"
 default[:vista][:jds_jsonvpr_vista_dir] =    "/usr/cachesys/vista"
-default[:vista][:jds_listener_ports] = [PORT]
+default[:vista][:jds_listener_ports] = [9080, 9082]
 
 default[:fmql][:name] =  "USER,FMQL"
 default[:fmql][:initial] =   "FMQL"

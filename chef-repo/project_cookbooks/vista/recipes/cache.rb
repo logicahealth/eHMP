@@ -3,12 +3,22 @@
 # Recipe:: cache
 #
 
+remote_file "#{Chef::Config[:file_cache_path]}/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm" do
+  source "https://store.vistacore.us/nexus/content/repositories/yum-managed/fakepath/cache-server/2014.1.3.775.0-1.rh/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm"
+  action :create
+end
 
-yum_package node[:vista][:cache_package] do
-  version node[:vista][:cache_version]
-  arch node[:vista][:cache_arch]
+package node[:vista][:cache_package] do
+  source "#{Chef::Config[:file_cache_path]}/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm"
+  action :install
   not_if { node[:vista][:no_reset] }
 end
+
+#yum_package node[:vista][:cache_package] do
+#  version node[:vista][:cache_version]
+#  arch node[:vista][:cache_arch]
+#  not_if { node[:vista][:no_reset] }
+#end
 
 service "cache" do
   action [:enable, :start]

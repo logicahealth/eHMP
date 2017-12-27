@@ -88,7 +88,8 @@ machine machine_name do
       source: jds_source,
       jds_data: {
         source: node[:machine][:driver] == "vagrant" ? jds_data_source : ""
-      }
+      },
+      install_cache: ENV.has_key?("INSTALL_INTERSYSTEMS_CACHE") ? true : false
     },
     beats: {
       logging: node[:machine][:logging]

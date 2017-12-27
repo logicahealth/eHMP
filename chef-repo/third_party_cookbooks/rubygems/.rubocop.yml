@@ -1,0 +1,7 @@
+Lint/HandleExceptions:
+  Exclude:
+    - 'resources/api.rb'
+
+Style/Semicolon:
+  Exclude:
+    - 'libraries/rubygems_org_api.rb'

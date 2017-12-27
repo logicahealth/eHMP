@@ -28,8 +28,8 @@ end
 vista_new_person "create_leipr_proxy_user" do
   log node[:vista][:chef_log]
   action :create
-  access_code "USER  "
-  verify_code "PW"
+  access_code "LEIPR123"
+  verify_code "!!LU8729834!!"
   full_name "User,LEIPR"
   initial "LU"
   keys ["XUPROGMODE", "XUPROG"]

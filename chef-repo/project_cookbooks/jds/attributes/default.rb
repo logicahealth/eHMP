@@ -36,8 +36,8 @@ default[:jds][:cache_key_identifier] = "FB925728-1114-11E4-956B-00274DB37D00"
 default[:jds][:chef_log] = STDOUT
 
 default[:jds][:jds_database_location] = "/usr/cachesys/vista/jsonvpr"
-default[:jds][:cache_listener_ports][:general] = PORT
-default[:jds][:cache_listener_ports][:vxsync] = PORT
+default[:jds][:cache_listener_ports][:general] = 9080
+default[:jds][:cache_listener_ports][:vxsync] = 9082
 
 default[:jds][:httpd_user] = "root"
 default[:jds][:trace_enable] = "off"

@@ -104,11 +104,11 @@ machine machine_name do
         domain_name: "KODAK.VISTACORE.US",
         site_recipe: "panorama",
         import_recipe: "kodak",
-        site_id: "SITE",
+        site_id: "C877",
         site: "KODAK",
         abbreviation: "KDK",
-        access_code: "USER  ",
-        verify_code: "PW      ",
+        access_code: "ep1234",
+        verify_code: "ep1234!!",
         multidivision_proxy_access_code: "USER",
         multidivision_proxy_verify_code: "PW",
         division: [{id: "507", name: "KODAK"},{id: "613", name: "MARTINSBURG"}, {id: "688", name: "WASHINGTON"}],
@@ -127,6 +127,7 @@ machine machine_name do
             minutes: 38
           }
         ],
+        install_cache: ENV.has_key?("INSTALL_INTERSYSTEMS_CACHE") ? true : false,
         multiple_mode: false,
         poller_process_count: 1
       },

@@ -104,11 +104,11 @@ machine machine_name do
         domain_name: "PANORAMA.VISTACORE.US",
         site_recipe: "panorama",
         import_recipe: "panorama",
-        site_id: "SITE",
+        site_id: "9E7A",
         site: "PANORAMA",
         abbreviation: "PAN",
-        access_code: "USER  ",
-        verify_code: "PW      ",
+        access_code: "ep1234",
+        verify_code: "ep1234!!",
         division: [{id: "500", name: "PANORAMA"}],
         station_number: "500",
         region: "us-east",
@@ -120,6 +120,7 @@ machine machine_name do
             minutes: 37
           }
         ],
+        install_cache: ENV.has_key?("INSTALL_INTERSYSTEMS_CACHE") ? true : false,
         multiple_mode: true,
         poller_process_count: 2
       },

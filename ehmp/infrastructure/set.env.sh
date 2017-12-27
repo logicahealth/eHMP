@@ -14,7 +14,7 @@ green=$'\033[0;92m'
 NC=$'\033[0m' # No Color
 
 vagrant_version="1.4.3"
-export VAGRANT_BIN=/usr/local/bin/vagrant
+export VAGRANT_BIN=/usr/bin/vagrant
 
 export GRADLE_OPTS="-Xmx1G -Xms256m  -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=1"
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
@@ -106,9 +106,9 @@ else
 fi
 
 export PATH=$JAVA_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-export GEM_PATH=/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_PATH=/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 
-export GEM_HOME=$WORKSPACE/.aidk_gems
+export GEM_HOME=$WORKSPACE/.gems
 export GEM_PATH=$GEM_PATH:$GEM_HOME
 export PATH=$GEM_HOME/bin:$PATH
 export BERKSHELF_PATH=$WORKSPACE/.berkshelf

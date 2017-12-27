@@ -8,5 +8,5 @@ execute "correct ownership of .npm" do
 end
 
 execute "correct ownership of gem home" do
-  command "chown -R #{node[:workstation][:user]} #{node[:workstation][:osx_gem_dir]}"
+  command "chown -R #{node[:workstation][:user]} #{ENV['GEM_HOME']}"
 end
