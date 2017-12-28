@@ -37,7 +37,7 @@
       <property name="connectionAttributes" value=";create=true"></property>
     </jdbc-connection-pool>
     <jdbc-connection-pool is-isolation-level-guaranteed="false" datasource-classname="org.apache.derby.jdbc.ClientDataSource" res-type="javax.sql.DataSource" name="DerbyPool">
-      <property name="PortNumber" value="PORT"></property>
+      <property name="PortNumber" value="1527"></property>
       <property name="Password" value="<%= @derbypool_password %>"></property>
       <property name="User" value="APP"></property>
       <property name="serverName" value="localhost"></property>
@@ -57,7 +57,7 @@
       <property name="LockTimeout" value="-1"></property>
       <property name="Password" value="<%= @sqlserver_password %>"></property>
       <property name="SelectMethod" value="direct"></property>
-      <property name="PacketSize" value="PORT"></property>
+      <property name="PacketSize" value="8000"></property>
       <property name="ServerName" value="<%= @mssql_ip %>"></property>
       <property name="SendStringParametersAsUnicode" value="true"></property>
       <property name="LastUpdateCount" value="true"></property>
@@ -66,7 +66,7 @@
       <property name="TrustServerCertificate" value="false"></property>
       <property name="Encrypt" value="false"></property>
       <property name="URL" value="jdbc:sqlserver://"></property>
-      <property name="PortNumber" value="PORT"></property>
+      <property name="PortNumber" value="1433"></property>
       <property name="ResponseBuffering" value="adaptive"></property>
       <property name="LoginTimeout" value="15"></property>
     </jdbc-connection-pool>
@@ -90,7 +90,7 @@
   </nodes>
   <configs>
     <config name="server-config">
-      <system-property description="Port Number that JMS Service will listen for remote clients connection." name="JMS_PROVIDER_PORT" value="PORT"></system-property>
+      <system-property description="Port Number that JMS Service will listen for remote clients connection." name="JMS_PROVIDER_PORT" value="7676"></system-property>
       <http-service>
         <access-log></access-log>
         <virtual-server id="server" network-listeners="http-listener-1,http-listener-2"></virtual-server>
@@ -98,16 +98,16 @@
       </http-service>
       <iiop-service>
         <orb use-thread-pool-ids="thread-pool-1"></orb>
-        <iiop-listener port="PORT" id="orb-listener-1" address="0.0.0.0" lazy-init="true"></iiop-listener>
-        <iiop-listener port="PORT" id="SSL" address="0.0.0.0" security-enabled="true">
+        <iiop-listener port="3700" id="orb-listener-1" address="0.0.0.0" lazy-init="true"></iiop-listener>
+        <iiop-listener port="3820" id="SSL" address="0.0.0.0" security-enabled="true">
           <ssl classname="com.sun.enterprise.security.ssl.GlassfishSSLImpl" cert-nickname="s1as"></ssl>
         </iiop-listener>
-        <iiop-listener port="PORT" id="SSL_MUTUALAUTH" address="0.0.0.0" security-enabled="true">
+        <iiop-listener port="3920" id="SSL_MUTUALAUTH" address="0.0.0.0" security-enabled="true">
           <ssl classname="com.sun.enterprise.security.ssl.GlassfishSSLImpl" cert-nickname="s1as" client-auth-enabled="true"></ssl>
         </iiop-listener>
       </iiop-service>
       <admin-service system-jmx-connector-name="system" type="das-and-server">
-        <jmx-connector port="PORT" address="0.0.0.0" security-enabled="false" auth-realm-name="admin-realm" name="system"></jmx-connector>
+        <jmx-connector port="8686" address="0.0.0.0" security-enabled="false" auth-realm-name="admin-realm" name="system"></jmx-connector>
         <property name="adminConsoleContextRoot" value="/admin"></property>
         <property name="adminConsoleDownloadLocation" value="${com.sun.aas.installRoot}/lib/install/applications/admingui.war"></property>
         <property name="ipsRoot" value="${com.sun.aas.installRoot}/.."></property>
@@ -213,7 +213,7 @@
         <jvm-options>-DANTLR_USE_DIRECT_CLASS_LOADING=true</jvm-options>
         <jvm-options>-Dcom.sun.enterprise.config.config_environment_factory_class=com.sun.enterprise.config.serverbeans.AppserverConfigEnvironmentFactory</jvm-options>
         <jvm-options>-Dorg.glassfish.additionalOSGiBundlesToStart=org.apache.felix.shell,org.apache.felix.gogo.runtime,org.apache.felix.gogo.shell,org.apache.felix.gogo.command,org.apache.felix.shell.remote,org.apache.felix.fileinstall</jvm-options>
-        <jvm-options>-Dosgi.shell.telnet.port=PORT</jvm-options>
+        <jvm-options>-Dosgi.shell.telnet.port=22</jvm-options>
         <jvm-options>-Dosgi.shell.telnet.maxconn=1</jvm-options>
         <jvm-options>-Dosgi.shell.telnet.ip=127.0.0.1</jvm-options>
         <jvm-options>-Dgosh.args=--nointeractive</jvm-options>
@@ -260,8 +260,8 @@
           </protocol>
         </protocols>
         <network-listeners>
-          <network-listener port="PORT" protocol="http-listener-1" transport="tcp" name="http-listener-1" thread-pool="http-thread-pool"></network-listener>
-          <network-listener port="PORT" protocol="pu-protocol" transport="tcp" name="admin-listener" thread-pool="admin-thread-pool"></network-listener>
+          <network-listener port="80" protocol="http-listener-1" transport="tcp" name="http-listener-1" thread-pool="http-thread-pool"></network-listener>
+          <network-listener port="4848" protocol="pu-protocol" transport="tcp" name="admin-listener" thread-pool="admin-thread-pool"></network-listener>
         </network-listeners>
         <transports>
           <transport name="tcp"></transport>
@@ -461,16 +461,16 @@
       <group-management-service>
         <failure-detection></failure-detection>
       </group-management-service>
-      <system-property description="Port Number that JMS Service will listen for remote clients connection." name="JMS_PROVIDER_PORT" value="PORT"></system-property>
-      <system-property name="ASADMIN_LISTENER_PORT" value="PORT"></system-property>
-      <system-property name="HTTP_LISTENER_PORT" value="PORT"></system-property>
-      <system-property name="HTTP_SSL_LISTENER_PORT" value="PORT"></system-property>
-      <system-property name="IIOP_LISTENER_PORT" value="PORT"></system-property>
-      <system-property name="IIOP_SSL_LISTENER_PORT" value="PORT"></system-property>
-      <system-property name="IIOP_SSL_MUTUALAUTH_PORT" value="PORT"></system-property>
-      <system-property name="JMX_SYSTEM_CONNECTOR_PORT" value="PORT"></system-property>
-      <system-property name="OSGI_SHELL_TELNET_PORT" value="PORT"></system-property>
-      <system-property name="JAVA_DEBUGGER_PORT" value="PORT"></system-property>
+      <system-property description="Port Number that JMS Service will listen for remote clients connection." name="JMS_PROVIDER_PORT" value="27676"></system-property>
+      <system-property name="ASADMIN_LISTENER_PORT" value="24848"></system-property>
+      <system-property name="HTTP_LISTENER_PORT" value="28080"></system-property>
+      <system-property name="HTTP_SSL_LISTENER_PORT" value="28181"></system-property>
+      <system-property name="IIOP_LISTENER_PORT" value="23700"></system-property>
+      <system-property name="IIOP_SSL_LISTENER_PORT" value="23820"></system-property>
+      <system-property name="IIOP_SSL_MUTUALAUTH_PORT" value="23920"></system-property>
+      <system-property name="JMX_SYSTEM_CONNECTOR_PORT" value="28686"></system-property>
+      <system-property name="OSGI_SHELL_TELNET_PORT" value="26666"></system-property>
+      <system-property name="JAVA_DEBUGGER_PORT" value="29009"></system-property>
       <monitoring-service>
         <module-monitoring-levels></module-monitoring-levels>
       </monitoring-service>
