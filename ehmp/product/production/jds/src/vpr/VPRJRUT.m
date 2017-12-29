@@ -1,4 +1,4 @@
-VPRJRUT ;SLC/KCM -- Utilities for HTTP communications
+VPRJRUT ;SLC/KCM -- Utilities for HTTP communications;2017-12-28  2:05 PM
  ;
 LOW(X) Q $TR(X,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")
  ;
@@ -226,7 +226,7 @@ GMT() ; return HTTP date string (this is really using UTC instead of GMT)
  ;
 SYSID() ; return a likely unique system ID
  N X
- S X=$ZUTIL(110)_":"_$G(^VPRHTTP("port"),PORT)
+ S X=$ZUTIL(110)_":"_$P($PRINCIPAL,"|",3)
  Q $ZHEX($ZCRC(X,6))
  ;
 DEC2HEX(NUM) ; return a decimal number as hex

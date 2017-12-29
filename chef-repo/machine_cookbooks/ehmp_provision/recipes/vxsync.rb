@@ -122,7 +122,7 @@ if node[:machine][:driver] == "ssh"
   admissions_hash = {}
 else
   appointment_scheduling_hash = {
-    :'SITE,SITE' => {
+    :'C877,9E7A' => {
       :enabled => true,
       :weekday => '*',
       :hour => '3',
@@ -131,12 +131,12 @@ else
     }
   }
   admissions_hash = {
-    :'SITE,SITE' => {
+    :'C877,9E7A' => {
       :enabled => true,
       :minute => "30",
       :hour => "0",
       :weekday => "*",
-      :log_file => "osync-admission-SITE-SITE.log"
+      :log_file => "osync-admission-C877-9E7A.log"
     }
   }
 end

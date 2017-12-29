@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "IP      ",
+  "VXSYNC_IP": "172.16.3.6",
   "vxsync": {
     "trackSolrStorage": true,
     "configRefresh": 60000,
@@ -43,31 +43,31 @@
     "maxMetastampSize": 10485760,
     "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
-        "SITE": {
-          "name": "KODAK",
-          "host": "IP        ",
-          "port": PORT,
-          "accessCode": "USER  ",
-          "verifyCode": "PW      ",
-          "localIP": "127.0.0.1",
-          "stationNumber": "507",
-          "localAddress": "localhost",
-          "connectTimeout": 3000,
-          "sendTimeout": 20000,
-          "multipleMode": false
-      },
-        "SITE": {
+        "9E7A": {
           "name": "PANORAMA",
-          "host": "IP        ",
-          "port": PORT,
-          "accessCode": "USER  ",
-          "verifyCode": "PW      ",
+          "host": "172.16.2.101",
+          "port": 9210,
+          "accessCode": "EP1234",
+          "verifyCode": "EP1234!!",
           "localIP": "127.0.0.1",
           "stationNumber": "500",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000,
           "multipleMode": true
+      },
+        "C877": {
+          "name": "KODAK",
+          "host": "10.2.2.102",
+          "port": 9210,
+          "accessCode": "EP1234",
+          "verifyCode": "EP1234!!",
+          "localIP": "127.0.0.1",
+          "stationNumber": "507",
+          "localAddress": "localhost",
+          "connectTimeout": 3000,
+          "sendTimeout": 20000,
+          "multipleMode": false
       }
     },
     "vista": {
@@ -234,10 +234,10 @@
         ],
         "disabled": false,
         "pubsubConfig": {
-          "host": "IP        ",
+          "host": "172.16.4.205",
           "port": 8999,
           "protocol": "http",
-          "path": "repositories.URL       /fpds/vpr/",
+          "path": "repositories.med.va.gov/fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
@@ -361,7 +361,7 @@
         ],
         "disabled": false,
         "defaults": {
-            "host": "IP        ",
+            "host": "172.16.4.205",
             "port": "8891",
             "protocol": "http",
             "timeout": 60000
@@ -381,7 +381,7 @@
         },
         "notificationCallback": {
             "protocol": "http",
-            "host": "IP      ",
+            "host": "172.16.4.205",
             "port": "8080",
             "path": "/vlerdas/notification"
         },
@@ -420,10 +420,10 @@
           }
         },
         "primary": {
-          "vista-SITE-subscribe-request": {
+          "vista-9E7A-subscribe-request": {
             "workerCount": 1
           },
-          "vista-SITE-subscribe-request": {
+          "vista-C877-subscribe-request": {
             "workerCount": 1
           },
           "enterprise-sync-request": {
@@ -755,7 +755,7 @@
               "incMillis": 1000
             },
             "repoDefaults": {
-              "host": "IP      ",
+              "host": "172.16.3.6",
               "port": 5000,
               "tubename": "vx-sync",
               "tubePrefix": "vxs-",
@@ -766,8 +766,8 @@
               "operational-store-record": {},
               "enterprise-sync-request": {},
               "vista-operational-subscribe-request": {},
-              "vista-SITE-subscribe-request": {},
-              "vista-SITE-subscribe-request": {},
+              "vista-9E7A-subscribe-request": {},
+              "vista-C877-subscribe-request": {},
               "jmeadows-sync-request": {},
               "jmeadows-sync-allergy-request": {},
               "jmeadows-sync-appointment-request": {},
@@ -894,7 +894,7 @@
                   "delay": 30
               },
               "record-update": {
-                  "host": "IP      ",
+                  "host": "172.16.3.6",
                   "port": 4999
               },
               "patient-record-retirement": {},
@@ -914,7 +914,7 @@
                 "incMillis": 1000
             },
             "repoDefaults": {
-                "host": "IP      ",
+                "host": "172.16.3.6",
                 "port": 5001,
                 "tubename": "osync",
                 "tubePrefix": "osync-",
@@ -951,8 +951,8 @@
         "error-request": {},
         "enterprise-sync-request": {},
         "vista-operational-subscribe-request": {},
-        "vista-SITE-subscribe-request": {},
-        "vista-SITE-subscribe-request": {},
+        "vista-9E7A-subscribe-request": {},
+        "vista-C877-subscribe-request": {},
         "jmeadows-sync-request": {},
         "jmeadows-sync-allergy-request": {},
         "jmeadows-sync-appointment-request": {},
@@ -1087,17 +1087,17 @@
     },
         "jds": {
             "protocol": "http",
-            "host": "IP        ",
-            "port": "PORT",
+            "host": "172.16.2.110",
+            "port": "9082",
             "timeout": 300000
         },
         "pjds": {
             "protocol": "http",
-            "host": "IP        ",
-            "port": "PORT",
+            "host": "172.16.2.110",
+            "port": "9082",
             "timeout": 300000,
 
-             "ip_address": "IP        ",
+             "ip_address": "172.16.2.110",
              "tcp_port": 1972,
              "username": "b3N5bmMx",
              "password": "c2VjcmV0",
@@ -1110,7 +1110,7 @@
             "waitLoopDelayMillis": 100,
             "requeryLoopDelayMillis": 1000,
             "core": "vpr",
-            "zooKeeperConnection": "IP             ",
+            "zooKeeperConnection": "172.16.3.10",
             "path": "/collections/vpr/state.json",
             "nodeEventLogLevel": "warn",
             "zookeeperEventLogLevel": "warn",
@@ -1172,10 +1172,10 @@
             "record-enrichment",
             "event-prioritization-request",
             "vista-record-processor-request",
-            "vista-SITE-data-poller",
-            "vista-SITE-data-poller",
-            "vista-SITE-subscribe-request",
-            "vista-SITE-subscribe-request",
+            "vista-9E7A-data-poller",
+            "vista-C877-data-poller",
+            "vista-9E7A-subscribe-request",
+            "vista-C877-subscribe-request",
             "hdr-xform-allergy-vpr",
             "hdr-xform-appointment-vpr",
             "hdr-xform-consult-vpr",
@@ -1417,8 +1417,8 @@
         "syncPriority": 50,
         "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
         "configRefresh": 0,
-        "syncUrl": "http://IP           /sync/doLoad",
-        "statusUrl": "http://IP           /sync/status",
+        "syncUrl": "http://172.16.3.6:8080/sync/doLoad?",
+        "statusUrl": "http://172.16.3.6:8080/sync/status",
         "mixedEnvironmentMode": true,
         "activeUserThresholdDays": 30,
         "handlerProfiles": {

@@ -64,7 +64,7 @@ default[:vxsync][:ods_attempts] = 10
 default[:vxsync][:ods_delay] = 30
 default[:vxsync][:default_expiration] = 3600000
 default[:vxsync][:dod_expiration] = 3600000
-default[:vxsync][:site_list] = ["SITE", "SITE"]
+default[:vxsync][:site_list] = ["9E7A", "C877"]
 
 # HDR Configuration
 default[:vxsync][:hdr_enabled] = true
@@ -76,11 +76,11 @@ default[:vxsync][:jds_timeout] = 300000
 default[:vxsync][:activity_filter_sites] = nil
 default[:vxsync][:hdr_blacklist_sites] = [
   {
-    "site_hash" => "SITE",
+    "site_hash" => "2927",
     "station_number" => 202
   },
   {
-    "site_hash" => "SITE",
+    "site_hash" => "A8C2",
     "station_number" => 504
   }
 ]
