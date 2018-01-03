@@ -1,0 +1,9 @@
+{
+  "id": "store_pass",
+  "store_pass": {
+    "encrypted_data": "5vHSV6NUlba5TVIxL1yVkhp40GY0gE7gBzja/sD+h5c=\n",
+    "iv": "RhChfUgJpJy+qLaVUqQUYA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

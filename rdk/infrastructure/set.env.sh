@@ -11,7 +11,7 @@ project_name=rdk
 echo -n -e "\033]0;Vistacore-$project_name\007"
 
 vagrant_version="1.4.3"
-export VAGRANT_BIN=/usr/local/bin/vagrant
+export VAGRANT_BIN=/usr/bin/vagrant
 
 export TEMP=/tmp
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
@@ -40,7 +40,7 @@ fi
 export WORKSPACE=$INSTALL_IN_HOME/Projects/vistacore
 export BERKSHELF_PATH=$WORKSPACE/.berkshelf
 export VAGRANT_HOME=$WORKSPACE/.vagrant.d
-export GEM_HOME=$WORKSPACE/.aidk_gems
+export GEM_HOME=$WORKSPACE/.gems
 export PROJECT_HOME=$WORKSPACE/rdk
 export SLACK_GEM_HOME=$PROJECT_HOME/infrastructure/ruby
 export RAKE_SYSTEM=$PROJECT_HOME/.rake
@@ -62,7 +62,7 @@ else
 fi
 
 export PATH=$GEM_HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 export BUNDLE_PATH=$GEM_HOME
 
 function vagrant(){

@@ -17,7 +17,7 @@ export GRADLE_OPTS="-Xmx1G -Xms256m -XX:MaxPermSize=512m -XX:PermSize=256m -Dorg
 
 export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
 
-jdk_version="jdk1.8.0_121"
+jdk_version="jdk1.8.0_131"
 
 INSTALL_FOR_USER=$USER
 if [ ! -z "$SUDO_USER" ]; then
@@ -37,7 +37,7 @@ fi
 export WORKSPACE=$INSTALL_IN_HOME/Projects/vistacore
 export BERKSHELF_PATH=$WORKSPACE/.berkshelf
 export VAGRANT_HOME=$WORKSPACE/.vagrant.d
-export GEM_HOME=$WORKSPACE/.aidk_gems
+export GEM_HOME=$WORKSPACE/.gems
 
 # keep $JAVA_HOME out front to circumvent any previously installed jdks/jres
 if uname -a | grep -q "Darwin"; then
@@ -48,7 +48,7 @@ else
 fi
 
 export PATH=$GEM_HOME/bin:$JAVA_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
-export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_PATH=$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 export BUNDLE_PATH=$GEM_HOME
 
 function vagrant(){

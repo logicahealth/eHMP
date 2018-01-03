@@ -98,7 +98,7 @@ default[:write_back][:service_config] = {
 	service_run_level: '2345',
 	service_template_source: 'upstart-node_process.erb',
 	bluepill_template_source: 'node_process-cluster.pill.erb',
-	port: PORT,
+	port: 9999,
 	deploy_path: 'bin/rdk-write-server.js',
 	source: 'write-server-config.json.erb',
 	destination: "#{node[:write_back][:home_dir]}/config/rdk-write-server-config",

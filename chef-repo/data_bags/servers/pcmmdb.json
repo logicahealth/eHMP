@@ -1,0 +1,8 @@
+{
+  "id": "pcmmdb",
+  "fqdn": "pcmmdb.osehra.org",
+  "ipaddress": "0.0.0.0",
+  "port": "8000",
+  "server_name": "none",
+  "server_database_name": "none"
+}

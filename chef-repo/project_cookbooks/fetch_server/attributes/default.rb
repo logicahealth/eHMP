@@ -118,7 +118,7 @@ default[:fetch_server][:service_config] = {
 	service_run_level: '2345',
 	service_template_source: 'upstart-node_process.erb',
 	bluepill_template_source: 'node_process-cluster.pill.erb',
-	port: PORT,
+	port: 8888,
 	deploy_path: 'bin/rdk-fetch-server.js',
 	source: 'fetch-server-config.json.erb',
 	destination: "#{node[:fetch_server][:home_dir]}/config/rdk-fetch-server-config",

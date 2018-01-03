@@ -102,7 +102,7 @@ default[:pick_list][:service_config] = {
 	service_template_source: 'upstart-node_process.erb',
 	bluepill_template_source: 'node_process-cluster.pill.erb',
 	max_old_space: 2048,
-	port: PORT,
+	port: 7777,
 	deploy_path: 'bin/rdk-pick-list-server.js',
 	source: 'pick-list-server-config.json.erb',
 	destination: "#{node[:pick_list][:home_dir]}/config/rdk-pick-list-server-config",

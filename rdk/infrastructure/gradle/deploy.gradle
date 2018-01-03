@@ -253,7 +253,7 @@ allprojects  {
       doLast {
         if (rootProject."destroy${projectInfo['taskNamePart']}Flag" == false) {
           rootProject."destroy${projectInfo['taskNamePart']}Flag" = true
-          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], [:], 'destroy', projectInfo['provisioner'])
+          executeChefClient(projectInfo['machineName'], projectInfo['vagrantDir'], projectInfo['vagrantEnvVarsLocal'], 'destroy', projectInfo['provisioner'])
         }
       }
     }
@@ -335,7 +335,7 @@ def syncNodesBetweenChefServerAndChefZero(machine = '*'){
 }
 
 def local_provision_version() {
-  def text = new File("$rootDir/provisioner/provisionerVersion").text.trim()
+  def text = new File("${rootDir}/provisioner/provisionerVersion").text.trim()
   return text
 }
 
