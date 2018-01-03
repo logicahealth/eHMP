@@ -49,7 +49,6 @@ template "#{node[:jbpm][:workdir]}/jbpm_oracle_datasource.xml" do
   notifies :run, "execute[Remove previous jbpm datasource configuration]", :immediately
   notifies :run, "execute[Remove previous activitydb datasource configuration]", :immediately
   notifies :run, "execute[Add oracle datasource to standalone.xml]", :immediately
-  sensitive true
 end
 
 template "#{node[:jbpm][:workdir]}/jbpm_oracle_driver.xml" do

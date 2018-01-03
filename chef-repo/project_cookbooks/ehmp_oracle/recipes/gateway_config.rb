@@ -91,7 +91,7 @@ listener_oracle = "SID_LIST=(SID_DESC=(SID_NAME=#{SID_NAME})(ORACLE_HOME=#{node[
 tnsnames = "\\
 #{SID_NAME}  =\\
   (DESCRIPTION=\\
-    (ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=PORT))\\
+    (ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=#{node['ehmp_oracle']['oracle_config']['port']}))\\
     (CONNECT_DATA=(SID=#{SID_NAME}))\\
     (HS=OK)\\
   )"

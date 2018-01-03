@@ -22,5 +22,4 @@ execute "clear jbpm data" do
     @clear_jbpm_data.sql
     EXIT
   EOF"
-  sensitive true
 end

@@ -38,6 +38,5 @@ action :execute do
 	execute "insert vista divisions" do
 	  cwd node['ehmp_oracle']['oracle_config']['utils_dir']
 	  command "sqlldr userid=#{ehmp_user_item['username']}/#{ehmp_user_item['password']} control=#{node['ehmp_oracle']['oracle_config']['utils_dir']}/load_divisions.ctl"
-	  sensitive true
 	end
 end

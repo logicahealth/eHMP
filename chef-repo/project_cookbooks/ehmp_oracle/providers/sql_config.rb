@@ -24,7 +24,6 @@ action :execute do
       @#{file}
       EXIT
       EOF"
-      sensitive true
     end
   end
 end

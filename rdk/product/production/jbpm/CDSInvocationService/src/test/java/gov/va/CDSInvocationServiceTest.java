@@ -14,7 +14,7 @@ public class CDSInvocationServiceTest extends CDSInvocationServiceHandler {
     public void testGetCDSInvocationUrl() {
     	CDSInvocationServiceTest cdsHandler = new CDSInvocationServiceTest();
     	String cdsUrl = cdsHandler.getCDSInvocationUrl();
-        assertEquals(cdsUrl, "http://IP            /");
+      assertNotNull(cdsUrl);
     }
 
     @Test

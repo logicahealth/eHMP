@@ -33,7 +33,6 @@ action :execute do
     shutdown immediate
     exit;
     EOF"
-    sensitive true
   end
 
   execute "apply patch" do
@@ -56,7 +55,6 @@ action :execute do
       startup
       exit;
       EOF"
-      sensitive true
     end
   else
      execute "start upgrade" do
@@ -70,7 +68,6 @@ action :execute do
       startup upgrade
       exit;
       EOF"
-      sensitive true
     end
   end
 
@@ -95,7 +92,6 @@ action :execute do
     @utlrp.sql
     exit;
     EOF"
-    sensitive true
   end
 
   execute "start lsnrctl" do

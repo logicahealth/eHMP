@@ -50,7 +50,6 @@ action :execute do
 	execute "load provisioned users into routing staging" do
 	  cwd "#{node['ehmp_oracle']['oracle_config']['utils_dir']}"
 	  command "sqlldr userid=#{ehmp_user_item['username']}/#{ehmp_user_item['password']} control=#{node['ehmp_oracle']['oracle_config']['utils_dir']}/loadusers.ctl"
-	  sensitive true
 	end
 
 	execute "move users from routing staging" do
@@ -60,6 +59,5 @@ action :execute do
 	  execute EHMP_ROUTING_API.LOAD_USERS_FROM_STAGING();
 	  exit;
 	  END"
-	  sensitive true
 	end
 end

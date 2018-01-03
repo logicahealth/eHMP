@@ -230,7 +230,6 @@ execute "Clear jBPM data upon clean install" do
     @clear_jbpm_data.sql
     EXIT
   EOF"
-  sensitive true
   action :nothing
   only_if { node[:jbpm][:allow_clear_data] }
 end
@@ -293,7 +292,6 @@ execute "Update jbpm oracle schema" do
     @update_jbpm_30_schema.sql
     EXIT
   EOF"
-  sensitive true
   only_if { node[:jbpm][:cur_jbpm_version].include? "62"}
 end
 

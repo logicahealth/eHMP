@@ -41,7 +41,6 @@ template tablespace_install_file do
     :tablespaces => node['ehmp_oracle']['oracle_config']['tablespaces']
   )
   notifies :delete, "file[tablespaces_installed]", :immediately
-  sensitive true
 end
 
 ehmp_oracle_sqlplus "create_tablespaces" do
@@ -49,7 +48,6 @@ ehmp_oracle_sqlplus "create_tablespaces" do
   connect_string "sys/#{sys_password} as sysdba"
   action :execute
   not_if { ::File.exist? "#{tablespace_install_file}.success" }
-  sensitive true
 end
 
 file "tablespaces_installed" do
@@ -86,7 +84,6 @@ template user_install_file do
     :users => user_config
   )
   notifies :delete, "file[users_installed]", :immediately
-  sensitive true
 end
 
 ehmp_oracle_sqlplus "create_users" do
@@ -94,7 +91,6 @@ ehmp_oracle_sqlplus "create_users" do
   connect_string "sys/#{sys_password} as sysdba"
   action :execute
   not_if { ::File.exist? "#{user_install_file}.success" }
-  sensitive true
 end
 
 file "users_installed" do
@@ -119,16 +115,14 @@ template mssql_pcmm_install_file do
   )
   mode "0755"
   notifies :delete, "file[mssql_pcmm_installed]", :immediately
-  sensitive true
 end
 
-ehmp_oracle_sqlplus "create_pcmm" do
-  install_file mssql_pcmm_install_file
-  connect_string "sys/#{sys_password} as sysdba"
-  action :execute
-  not_if { ::File.exist? "#{mssql_pcmm_install_file}.success" }
-  sensitive true
-end
+#ehmp_oracle_sqlplus "create_pcmm" do
+#  install_file mssql_pcmm_install_file
+#  connect_string "sys/#{sys_password} as sysdba"
+#  action :execute
+#  not_if { ::File.exist? "#{mssql_pcmm_install_file}.success" }
+#end
 
 file "mssql_pcmm_installed" do
   path "#{mssql_pcmm_install_file}.success"
@@ -184,7 +178,6 @@ ehmp_oracle_sqlplus "install_communication_schema" do
   connect_string "#{communication_user['username']}/#{communication_user['password']}"
   action :execute
   not_if { ::File.exist? "#{communication_install_file}.success" }
-  sensitive true
 end
 
 file "communication_installed" do
@@ -210,7 +203,6 @@ ehmp_oracle_sqlplus "install_ehmp_schema" do
   connect_string "#{ehmp_user['username']}/#{ehmp_user['password']}"
   action :execute
   not_if { ::File.exist? "#{ehmp_install_file}.success" }
-  sensitive true
 end
 
 file "ehmp_installed" do
@@ -232,13 +224,12 @@ remote_directory "#{sql_dir}/sdsadm" do
   notifies :delete, "file[sdsadm_installed]", :immediately
 end
 
-ehmp_oracle_sqlplus "install_sdsadm_schema" do
-  install_file sdsadm_install_file
-  connect_string "#{sdsadm_username}/#{sdsadm_password}"
-  action :execute
-  not_if { ::File.exist? "#{sdsadm_install_file}.success" }
-  sensitive true
-end
+#ehmp_oracle_sqlplus "install_sdsadm_schema" do
+#  install_file sdsadm_install_file
+#  connect_string "#{sdsadm_username}/#{sdsadm_password}"
+#  action :execute
+#  not_if { ::File.exist? "#{sdsadm_install_file}.success" }
+#end
 
 file "sdsadm_installed" do
   path "#{sdsadm_install_file}.success"
@@ -257,13 +248,12 @@ remote_directory "#{sql_dir}/pcmm" do
   notifies :delete, "file[pcmm_installed]", :immediately
 end
 
-ehmp_oracle_sqlplus "install_pcmm_schema" do
-  install_file pcmm_install_file
-  connect_string "sys/#{sys_password} as sysdba"
-  action :execute
-  not_if { ::File.exist? "#{pcmm_install_file}.success" }
-  sensitive true
-end
+#ehmp_oracle_sqlplus "install_pcmm_schema" do
+#  install_file pcmm_install_file
+#  connect_string "sys/#{sys_password} as sysdba"
+#  action :execute
+#  not_if { ::File.exist? "#{pcmm_install_file}.success" }
+#end
 
 file "pcmm_installed" do
   path "#{pcmm_install_file}.success"
@@ -281,7 +271,6 @@ template migrate_tablespaces_file do
     :users => user_config
   )
   notifies :delete, "file[migrate_tablespaces_installed]", :immediately
-  sensitive true
 end
 
 ehmp_oracle_sqlplus "migrate_tablespaces" do
@@ -289,7 +278,6 @@ ehmp_oracle_sqlplus "migrate_tablespaces" do
   connect_string "sys/#{sys_password} as sysdba"
   action :execute
   not_if { ::File.exist? "#{migrate_tablespaces_file}.success" }
-  sensitive true
 end
 
 file "migrate_tablespaces_installed" do

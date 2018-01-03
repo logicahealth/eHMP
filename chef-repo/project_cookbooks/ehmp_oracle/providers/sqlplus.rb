@@ -16,7 +16,6 @@ action :execute do
     @#{new_resource.install_file}
     exit;
     EOF"
-    sensitive true
   end
 
   file "#{new_resource.install_file}.success"

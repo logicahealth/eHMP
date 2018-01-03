@@ -51,6 +51,6 @@ execute "install apex" do
   @#{install_file}
   exit;
   EOF"
-  sensitive true
+  sensitive false
   action :nothing
 end

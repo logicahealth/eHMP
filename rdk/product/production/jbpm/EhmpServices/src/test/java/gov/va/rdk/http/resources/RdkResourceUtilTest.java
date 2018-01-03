@@ -27,17 +27,17 @@ public class RdkResourceUtilTest extends RdkResourceUtil {
 		LOGGER.debug("Starting test run");
 		RdkResourceUtilTest test1 = new RdkResourceUtilTest();
 		String resourceUrl = test1.getRDKUrl(RDK_FETCHSERVER_CONFIG);
-		assertEquals(resourceUrl,"http://IP              /" );
+		assertEquals(resourceUrl,"http://172.16.4.105:8888/" );
 		resourceUrl = test1.getRDKUrl(RDK_WRITEBACKSERVER_CONFIG);
-		assertEquals(resourceUrl,"http://IP              /" );
+		assertEquals(resourceUrl,"http://172.16.4.105:9999/" );
 
 		//Check the logs to see only one entry of:
 		//Loading Properties files; rdkconfig.properties - rdkwritebackconfig.properties
 		RdkResourceUtilTest test2 = new RdkResourceUtilTest();
 		resourceUrl = test2.getRDKUrl(RDK_FETCHSERVER_CONFIG);
-		assertEquals(resourceUrl,"http://IP              /" );
+		assertEquals(resourceUrl,"http://172.16.4.105:8888/" );
 		resourceUrl = test2.getRDKUrl(RDK_WRITEBACKSERVER_CONFIG);
-		assertEquals(resourceUrl,"http://IP              /" );
+		assertEquals(resourceUrl,"http://172.16.4.105:9999/" );
 		
 		//Check the logs to see there is still only one entry of:
 		//Loading Properties files; rdkconfig.properties - rdkwritebackconfig.properties

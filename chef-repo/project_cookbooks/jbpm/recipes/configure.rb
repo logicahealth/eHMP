@@ -280,7 +280,6 @@ execute "Create jbpm indexes" do
     @create_jbpm_indexes.sql
     EXIT
   EOF"
-  sensitive true
   notifies :start, "service[jboss]", :before
 end
 
@@ -353,6 +352,5 @@ execute "cleanup activitydb" do
     @cleanup_activitydb_data.sql
     EXIT
   EOF"
-  sensitive true
   only_if { node[:jbpm][:configure][:cleanup_activitydb_data]  }
 end

@@ -24,5 +24,4 @@ ehmp_oracle_sqlplus "install_test_data" do
   install_file test_data_discharge
   connect_string "sys/#{sys_password} as sysdba"
   action :execute
-  sensitive true
 end
