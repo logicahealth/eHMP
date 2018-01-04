@@ -10,7 +10,7 @@ set +xe
 
 project_name=ehmp-ui
 
-export VAGRANT_BIN=/usr/local/bin/vagrant
+export VAGRANT_BIN=/usr/bin/vagrant
 
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6
@@ -74,8 +74,8 @@ if uname -a | grep -q "Darwin"; then
   export PATH=/usr/local/git/bin:$PATH
 fi
 
-export GEM_HOME=$WORKSPACE/.aidk_gems
-export GEM_PATH=$GEM_PATH:$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.1.0
+export GEM_HOME=$WORKSPACE/.gems
+export GEM_PATH=$GEM_PATH:$GEM_HOME:/opt/chefdk/embedded/lib/ruby/gems/2.3.0
 export PATH=$JAVA_HOME:$GEM_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH
 export BERKSHELF_PATH=$WORKSPACE/.berkshelf
 export VAGRANT_HOME=$WORKSPACE/.vagrant.d
