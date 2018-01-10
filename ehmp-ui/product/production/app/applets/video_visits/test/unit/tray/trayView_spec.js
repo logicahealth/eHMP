@@ -93,7 +93,7 @@ define(['jquery',
                 expect(form.model.errorModel.get('patientEmail'), 'Invalid email');
             });
             it('valid value set', function() {
-                form.model.set('patientEmail', PII       ');
+                form.model.set('patientEmail',' PII       ');
                 form.validateEmailAddress('patientEmail');
                 expect(form.model.errorModel.get('patientEmail')).toBeUndefined();
                 expect(form.patientContactInfo.get('emailAddress'), form.model.get('patientEmail'));
@@ -153,7 +153,7 @@ define(['jquery',
                 expect(form.model.errorModel.get('providerEmail'), 'Invalid email');
             });
             it('valid value set', function() {
-                form.model.set('providerEmail', PII       ');
+                form.model.set('providerEmail',' PII       ');
                 form.validateEmailAddress('providerEmail');
                 expect(form.model.errorModel.get('providerEmail')).toBeUndefined();
                 expect(form.providerContactInfo.get('email'), form.model.get('providerEmail'));

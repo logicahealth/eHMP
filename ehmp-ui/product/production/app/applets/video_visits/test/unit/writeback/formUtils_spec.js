@@ -99,7 +99,7 @@ define(['jquery',
                 expect(model.errorModel.get('patientEmail'), 'Invalid email');
             });
             it('valid value set', function() {
-                model.set('patientEmail', PII       ');
+                model.set('patientEmail',' PII       ');
                 model.validateEmailAddress('patientEmail');
                 expect(model.errorModel.get('patientEmail')).toBeUndefined();
             });
