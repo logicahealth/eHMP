@@ -158,7 +158,7 @@ vista_mumps_block "Reset all subscriptions on deploy" do
     "S ARGS(\"command\")=\"resetAllSubscriptions\"",
     "D API^HMPDJFS(.OUT,.ARGS)",
     # Print the results
-    "ZW @OUT",
+    "ZWRITE @OUT",
     # Clean up
     "K OUT,ARGS"
   ]

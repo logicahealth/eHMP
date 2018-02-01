@@ -69,8 +69,10 @@ action :create do
       shell << "#{node[:vista][:session]}\n"
 
       # Change namespace
-      shell.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{node[:vista][:namespace]}\"\n")
+      if node[:vista][:install_cache]
+        shell.wait_for(:output, /USER>/) do | process, match |
+          process.write("ZN \"#{node[:vista][:namespace]}\"\n")
+        end
       end
 
       if new_resource.programmer_mode
@@ -93,20 +95,28 @@ action :create do
         end
       end
 
-      shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
-        process.write("D ^%GI\n")
+      if node[:vista][:install_cache]
+        shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
+          process.write("D ^%GI\n")
+        end
+      
+        shell.wait_for(:output, /Device:/) do | process, match |
+          process.write("#{new_resource.import_file}\n")
+        end
+
+        shell.wait_for(:output, /Parameters\? "R" => /) do | process, match |
+          process.write("\n")
+        end
+
+        shell.wait_for(:output, /Input option:/) do | process, match |
+          process.write("A\n")
+        end
       end
 
-      shell.wait_for(:output, /Device:/) do | process, match |
-        process.write("#{new_resource.import_file}\n")
-      end
-
-      shell.wait_for(:output, /Parameters\? "R" => /) do | process, match |
-        process.write("\n")
-      end
-
-      shell.wait_for(:output, /Input option:/) do | process, match |
-        process.write("A\n")
+      if !node[:vista][:install_cache]
+        shell.wait_for(:output, /#{node[:vista][:prompt]}/) do | process, match |
+          process.write(%Q|zsystem "$gtm_dist/mupip load -format=go #{new_resource.import_file}"\n|)
+        end
       end
 
       # Reindex new values

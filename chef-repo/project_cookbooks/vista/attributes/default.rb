@@ -6,10 +6,19 @@ default[:vista][:existing_version] = nil
 default[:vista][:install_method] = "upgrade"
 default[:vista][:production] = "false"
 
+default[:vista][:gtm_source]  = "https://sourceforge.net/projects/fis-gtm/files/GT.M%20Installer/v0.13/gtminstall"
+default[:vista][:installer_dir] = "/tmp/gtminstall"
+default[:vista][:gtm_version] = "V6.3-001A"
+default[:vista][:gtm_arch] = "x86_64"
+default[:vista][:gtm_user]    = "gtmuser"
+default[:vista][:gtm_vista_install_dir] = "/var/db/vista"
+default[:vista][:gtm_db_name] = "VISTA"
+default[:vista][:gtm_service] = "gtm"
+
 default[:vista][:hmp_path] = "#{Chef::Config[:file_cache_path]}/hmp.zip"
 default[:vista][:hmp_manifest_name] = "kids-manifest.json"
 
-default[:vista][:session]  =                 "csession cache"
+default[:vista][:session]  = node[:vista][:install_cache] ? "csession cache" : ". #{node[:vista][:gtm_vista_install_dir]}/env.vista; $gtm_dist/mumps -dir"
 default[:vista][:shell_timeout_seconds] =    20
 default[:vista][:prompt] =           "VISTA>"
 default[:vista][:namespace] =        "VISTA"
@@ -28,7 +37,7 @@ default[:vista][:cache_key_user] =  "USER"
 default[:vista][:cache_key] =  ""
 default[:vista][:cache_key_identifier] =  "FB925728-1114-11E4-956B-00274DB37D00"
 
-default[:vista][:chef_log] = nil
+default[:vista][:chef_log] = STDOUT
 
 default[:vista][:diedit_initial_field_regex] =   /EDIT WHICH FIELD:/
 default[:vista][:diedit_next_field_regex] =  /THEN EDIT FIELD:/

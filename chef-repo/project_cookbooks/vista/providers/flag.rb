@@ -29,8 +29,10 @@ action :create do
       end
 
       # Change namespace
-      console.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
+      if node[:vista][:install_cache]
+        console.wait_for(:output, /USER>/) do | process, match |
+          process.write("ZN \"#{new_resource.namespace}\"\n")
+        end
       end
 
       if new_resource.programmer_mode

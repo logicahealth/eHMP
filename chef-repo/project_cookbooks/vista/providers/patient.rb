@@ -16,7 +16,7 @@ action :create do
   ruby_block "appointment:create:#{new_resource}" do
     block do
 
-      broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", PORT, "USER  ", "PW", false)
+      broker = VistaRPC4r::RPCBrokerConnection.new("127.0.0.1", 9210, "PU1234", "PU1234!!", false)
       broker.connect
       broker.setContext('OR CPRS GUI CHART')
 

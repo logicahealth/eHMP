@@ -57,7 +57,7 @@ patient_edipis.each do |patient, edipi|
       "S edipi=\"#{edipi}^NI^USDOD^200DOD\"",
       "D NEWTF^VAFCTFU2(.DATA,dfn,edipi)",
       'D FILENEW^VAFCTFU(dfn,500,"","","",.ERROR,"",dfn,"A")',
-      "zw DATA"
+      "ZWRITE DATA"
     ]
     not_if { node[:vista][:no_reset] }
   end
