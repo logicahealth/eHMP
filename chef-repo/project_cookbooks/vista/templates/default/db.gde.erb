@@ -1,0 +1,41 @@
+! Change the default segment's file 
+! to be g/mumps.dat
+! to have 4096 byte blocks
+! to have an initial DB size of 1048576*4096=4GB
+! to allow 1000 locks
+! On production environments, add -extension_count=0 to prevent the database
+! -> from growing automatically. You need to monitor it and expand it yourself.
+! -> Here, it extends by 100MB each time.
+! Global buffer count is how many buffers of size block_size should stay in
+! -> RAM to cache the data read and written to disk. This set-up uses about 33MB in RAM.
+change -segment DEFAULT -file="$vista_home/g/mumps.dat" -access_method=BG -allocation=1048576  -block_size=4096 -lock_space=1000 -global_buffer_count=8192 -extension_count=25600
+
+! Ditto pretty much, except this is smaller. Note that we create a new segment
+! rather than modify an existing one.
+! TEMPGBL unlike the others will be memory mapped to the RAM to allow instant
+! access.
+! Since it's located in RAM, global_buffer_count does not apply to it.
+add    -segment TEMPGBL -file="$vista_home/g/tempgbl.dat" -access_method=MM -allocation=10000   -block_size=4096 -lock_space=1000 -extension_count=2560
+
+! Each global node can be 1024 bytes long; subscripts can be combined to be 512 bytes long
+! You will need to increase this for RPMS
+change -region  DEFAULT -record_size=32768 -stdnullcoll -key_size=512
+
+! Ditto, but note that we need to assign the new region to its associated segment
+add    -region  TEMPGBL -record_size=32768 -stdnullcoll -key_size=512 -dynamic=TEMPGBL
+
+! Add globals to the temporary region
+add    -name    HLTMP   -region=TEMPGBL
+add    -name    TMP     -region=TEMPGBL
+add    -name    UTILITY -region=TEMPGBL
+add    -name    XTMP    -region=TEMPGBL
+add    -name    BMXTMP  -region=TEMPGBL
+add    -name    XUTL    -region=TEMPGBL
+add    -name    VPRHTTP -region=TEMPGBL
+add    -name    ZZ*     -region=TEMPGBL
+
+! show all for verification
+show -all
+
+! save
+exit
