@@ -4,16 +4,23 @@ default[:jds][:cache_arch] = "lnxrhx64"
 default[:jds][:cache_source] = "#{node[:nexus_url]}/nexus/content/repositories/filerepo/third-party/project/intersystems/cache/#{node[:jds][:cache_version]}/cache-#{node[:jds][:cache_version]}-#{node[:jds][:cache_arch]}.tar.gz"
 default[:jds][:security_domain] = "#{node[:hostname]}"
 
+default[:jds][:gtm_source]  = "https://sourceforge.net/projects/fis-gtm/files/GT.M%20Installer/v0.13/gtminstall"
+default[:jds][:gtm_version] = "V6.3-001A"
+default[:jds][:gtm_arch] = "x86_64"
+default[:jds][:gtm_user]    = "gtmuser"
+default[:jds][:gtm_jds_install_dir] = "/var/db/jds"
+default[:jds][:gtm_db_name] = "JDS"
+
 default[:jds][:cache_user] = "cacheserver"
 default[:jds][:cache_dir] = "/usr/cache-#{node[:jds][:cache_version]}"
 default[:jds][:cache_mgr_dir] = "#{node[:jds][:cache_dir]}/mgr"
 default[:jds][:installer_dir] = "#{Chef::Config[:file_cache_path]}/cache"
 default[:jds][:cache_temp] = "/tmp"
 default[:jds][:instance_name] = "jds"
-default[:jds][:service_name] = "cache_jds_#{node[:jds][:cache_version]}"
+default[:jds][:service_name] = node[:jds][:install_cache] ? "cache_jds_#{node[:jds][:cache_version]}" : "gtm_jds"
 default[:jds][:cache_install_type] = "Normal"
 
-default[:jds][:install_user] = node[:jds][:cache_user]
+default[:jds][:install_user] = node[:jds][:install_cache] ? node[:jds][:cache_user] : default[:jds][:gtm_user]
 default[:jds][:shell] = "sudo -H -u #{node[:jds][:install_user]} sh"
 default[:jds][:shell_prompt] = /sh-[0-9\.]+/
 default[:jds][:session] = "csession #{node[:jds][:instance_name]}"

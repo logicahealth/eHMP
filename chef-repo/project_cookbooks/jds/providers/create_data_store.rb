@@ -31,7 +31,7 @@ action :execute do
     log node[:jds][:chef_log]
   end
 
-  http_request "ensure cache is listening before hitting #{store}" do
+  http_request "ensure M is listening before hitting #{store}" do
     url store_url
     retries 5
     action :get
