@@ -29,6 +29,7 @@ when "centos", "redhat", "fedora", "suse"
     not_if "rpm -qa | grep dos2unix"
   end
   yum_package "git"
+  yum_package "lsof"
 end
 
 gem_package 'greenletters'
