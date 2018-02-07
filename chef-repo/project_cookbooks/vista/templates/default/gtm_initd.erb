@@ -33,7 +33,7 @@
 # Start VistA
 start() {
   source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista &&
+  su <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista &&
     if [ -f ${vista_home}/j/mumps.mjl ]; then
       echo \"Recovering old journals...\"
       mupip journal -recover -backward ${vista_home}/j/mumps.mjl
@@ -44,16 +44,16 @@ start() {
     find ${vista_home}/j -name '*_*' -mtime +3 -print -delete
   fi
 
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mupip rundown -region '*'" 
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mupip set -journal=\"enable,on,before,f=${vista_home}/j/mumps.mjl\" -region DEFAULT"
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mumps -run %XCMD 'J ZISTCP^XWBTCPM1(9210)'" 
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mumps -run ZTMB"
-  su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mumps -run %XCMD 'J START^XOBVLL(8000)'"
+  su <%= node[:vista][:gtm_user] %> -c "cd <%= node[:vista][:gtm_vista_install_dir] %>; source ./env.vista; mupip rundown -region '*'" 
+  su <%= node[:vista][:gtm_user] %> -c "cd <%= node[:vista][:gtm_vista_install_dir] %>; source ./env.vista; mupip set -journal=\"enable,on,before,f=${vista_home}/j/mumps.mjl\" -region DEFAULT"
+  su <%= node[:vista][:gtm_user] %> -c "cd <%= node[:vista][:gtm_vista_install_dir] %>; source ./env.vista; mumps -run %XCMD 'J ZISTCP^XWBTCPM1(9210)'" 
+  su <%= node[:vista][:gtm_user] %> -c "cd <%= node[:vista][:gtm_vista_install_dir] %>; source ./env.vista; mumps -run ZTMB"
+  su <%= node[:vista][:gtm_user] %> -c "cd <%= node[:vista][:gtm_vista_install_dir] %>; source ./env.vista; mumps -run %XCMD 'J START^XOBVLL(8000)'"
 }
 
 # Stop VistA
 stop() {
-    su - <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mumps -run %XCMD 'S U=\"^\" D STOP^ZTMKU' << EOF
+    su <%= node[:vista][:gtm_user] %> -c "source <%= node[:vista][:gtm_vista_install_dir] %>/env.vista; mumps -run %XCMD 'S U=\"^\" D STOP^ZTMKU' << EOF
 Y
 Y
 Y
