@@ -100,7 +100,7 @@ $description
 set -e
 
 echo "APP_VERSION=\${APP_VERSION}"
-curl https://store.vistacore.us/nexus/content/repositories/releases/us/vistacore/artifact-versions-shell/\$APP_VERSION/artifact-versions-shell-\$APP_VERSION.sh -o artifact_versions.sh
+curl http://nexus.osehra.org:8081/nexus/content/repositories/releases/us/vistacore/artifact-versions-shell/\$APP_VERSION/artifact-versions-shell-\$APP_VERSION.sh -o artifact_versions.sh
 source artifact_versions.sh
 export DRIVER=aws
 export PANORAMA_HMP_VERSION=2.2.T13-static

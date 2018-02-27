@@ -54,7 +54,7 @@ task smokeTest{
 }
 
 def getNexusURL() {
-    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+    System.env.OVERRIDE_NEXUS_URL ?: 'http://nexus.osehra.org:8081'
 }
 
 def getNexusUploadRepository() {

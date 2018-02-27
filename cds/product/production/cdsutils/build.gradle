@@ -5,7 +5,7 @@ targetCompatibility = property('targetJavaVersion')
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-     maven { url "https://store.vistacore.us/nexus/content/repositories/public"	 }
+     maven { url "http://nexus.osehra.org:8081/nexus/content/repositories/public"	 }
 }
 dependencies {
 	compile group: 'javax.servlet', name: 'javax.servlet-api', version:property('servlet-api')

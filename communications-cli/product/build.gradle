@@ -46,8 +46,8 @@ allprojects  {
     version = "${->repoVersion + '.' + repoCommitCount}"
 
     repositories {
-        maven { url "https://store.vistacore.us/nexus/content/groups/public" }
-        maven { url "https://store.vistacore.us/nexus/content/repositories/filerepo/" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/repositories/filerepo/" }
     }
 
     uploadArchives {
@@ -67,7 +67,7 @@ allprojects  {
 }
 
 def getNexusURL() {
-    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+    System.env.OVERRIDE_NEXUS_URL ?: 'http://nexus.osehra.org:8081'
 }
 
 def getNexusUploadRepository() {

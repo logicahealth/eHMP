@@ -8,7 +8,7 @@ var _ = require('underscore');
 var ResponseHandler = require('./response-handler.js');
 
 var DEFAULT_HOST = '127.0.0.1';
-var DEFAULT_PORT = PORT;
+var DEFAULT_PORT = 8080;
 var LOWEST_PRIORITY = 1000;
 
 var CRLF = new Buffer([0x0d, 0x0a]);

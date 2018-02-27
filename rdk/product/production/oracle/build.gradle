@@ -15,7 +15,7 @@ subprojects {
 
   repositories {
     maven {
-      url 'https://store.vistacore.us/nexus/content/groups/public'
+      url 'http://nexus.osehra.org:8081/nexus/content/groups/public'
     }
   }
 

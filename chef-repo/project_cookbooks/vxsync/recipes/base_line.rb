@@ -19,7 +19,7 @@ include_recipe 'nodejs_wrapper::node_6_dev_tools' unless "#{node[:vxsync][:sourc
 #  action :install
 #end
 remote_file "#{Chef::Config[:file_cache_path]}/daemonize-1.7.3-1.el6.x86_64.rpm" do
-  source "https://store.vistacore.us/nexus/content/repositories/yum-managed/fakepath/daemonize/1.7.3-1.el6.x86_64.rpm/daemonize-1.7.3-1.el6.x86_64.rpm"
+  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/daemonize/1.7.3-1.el6.x86_64.rpm/daemonize-1.7.3-1.el6.x86_64.rpm"
   action :create
 end
 
@@ -29,7 +29,7 @@ package 'daemonize' do
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/beanstalkd-1.10-2.el6.x86_64.rpm" do
-  source "https://store.vistacore.us/nexus/content/repositories/yum-managed/fakepath/beanstalkd/1.10-2.el6.x86_64/beanstalkd-1.10-2.el6.x86_64.rpm"
+  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/beanstalkd/1.10-2.el6.x86_64/beanstalkd-1.10-2.el6.x86_64.rpm"
   action :create
 end
 

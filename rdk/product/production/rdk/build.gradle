@@ -26,20 +26,20 @@ if(Os.isFamily(Os.FAMILY_MAC)) {
   task installNpm(type: Exec) {
     group "RDK Tasks"
     description "installs package(s)"
-    commandLine "npm", "install", "--registry", npmRegistry
+    commandLine "npm", "install"
   }
 } else {
   task installNpm(type: Exec) {
     group "RDK Tasks"
     description "installs package(s)"
-    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry ${->npmRegistry}"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install"
   }
 }
 
 task installNpmOracleDB(type: Exec) {
   group "RDK Tasks"
   description "installs the Oracle DB node package"
-  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install oracledb@1.12.2 --unsafe-perm --registry ${->npmRegistry}"
+  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install oracledb@1.12.2 --unsafe-perm"
 }
 
 task installFakeOracleDB(type: Exec) {

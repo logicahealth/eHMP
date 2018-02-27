@@ -53,7 +53,7 @@ class JobDestroyer {
     }
     }
 
-    @GrabResolver(name = "nexus", root = "https://store.vistacore.us/nexus/content/groups/public")
+    @GrabResolver(name = "nexus", root = "http://nexus.osehra.org:8081/nexus/content/groups/public")
     @Grab('jenkins:jenkins-cli:1.642.1')
     def runCliCommand(List<String> args, InputStream input = System.in,
         OutputStream output = System.out, OutputStream err = System.err)

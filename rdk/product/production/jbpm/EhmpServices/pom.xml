@@ -27,7 +27,7 @@
 		<repository>
 			<id>internal</id>
 			<name>internal</name>
-			<url>https://store.vistacore.us/nexus/content/groups/public/</url>
+			<url>http://nexus.osehra.org:8081/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>

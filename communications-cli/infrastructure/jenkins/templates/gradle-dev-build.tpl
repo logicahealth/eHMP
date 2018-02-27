@@ -102,7 +102,7 @@ manager.build.addAction(paramAction)</script>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
     <EnvInjectBuildWrapper plugin="envinject@1.93.1">
       <info>
-        <propertiesContent>NPM_CONFIG_REGISTRY=&quot;https://store.vistacore.us/nexus/content/repositories/npm-all/&quot;</propertiesContent>
+        <propertiesContent>NPM_CONFIG_REGISTRY=&quot;http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/&quot;</propertiesContent>
         <loadFilesFromMaster>false</loadFilesFromMaster>
       </info>
     </EnvInjectBuildWrapper>

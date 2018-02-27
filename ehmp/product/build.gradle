@@ -132,8 +132,8 @@ allprojects  {
     }
 
     repositories {
-        maven { url "https://store.vistacore.us/nexus/content/groups/public" }
-        maven { url "https://store.vistacore.us/nexus/content/repositories/filerepo/" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+        maven { url "http://nexus.osehra.org:8081/nexus/content/repositories/filerepo/" }
         maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "http://repository.springsource.com/maven/bundles/release" }
         maven { url "http://repository.springsource.com/maven/bundles/external" }
@@ -162,11 +162,11 @@ allprojects  {
 }
 
 def getNexusURL() {
-    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+    System.env.OVERRIDE_NEXUS_URL ?: 'http://nexus.osehra.org:8081'
 }
 
 def getNpmRegistry() {
-    System.env.NPM_CONFIG_REGISTRY ?: 'https://store.vistacore.us/nexus/content/repositories/npm-all/'
+    System.env.NPM_CONFIG_REGISTRY ?: 'http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/'
 }
 
 def getNexusUploadRepository() {

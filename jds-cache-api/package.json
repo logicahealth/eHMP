@@ -24,7 +24,7 @@
     "async": "^2.0.1",
     "bunyan": "^1.8.10",
     "bunyan-format": "^0.2.1",
-    "cache": "~6.10.1",
+    "cache": "sleeplessinc/cache",
     "docopt": "^0.6.2",
     "doctrine": "^2.0.0",
     "esprima": "^2.7.3",

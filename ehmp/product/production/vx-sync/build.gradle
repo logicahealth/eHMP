@@ -20,7 +20,7 @@ if(Os.isFamily(Os.FAMILY_MAC))
   task installNpm(type: Exec, dependsOn: cleanNPM) {
     group "VX-Sync Tasks"
     description "installs package(s)"
-    commandLine "npm", "install", "--registry", npmRegistry
+    commandLine "npm", "install"
   }
 
   task buildJava(type: Exec, dependsOn: installNpm) {
@@ -33,14 +33,14 @@ if(Os.isFamily(Os.FAMILY_MAC))
   task installNpm(type: Exec, dependsOn: cleanNPM) {
     group "VX-Sync Tasks"
     description "installs package(s)"
-    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry ${->npmRegistry}"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm"
   }
 
   task buildJava(type: Exec, dependsOn: installNpm) {
     group "VX-Sync Tasks"
     description "installs package(s)"
     workingDir "${projectDir}/node_modules/java"
-    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm run install --unsafe-perm --registry ${->npmRegistry}"
+    commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm run install --unsafe-perm"
   }
 }
 

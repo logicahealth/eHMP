@@ -19,7 +19,7 @@
         <hudson.model.StringParameterDefinition>
           <name>NEXUS_URL</name>
           <description></description>
-          <defaultValue>https://store.vistacore.us</defaultValue>
+          <defaultValue>http://nexus.osehra.org:8081</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
