@@ -26,7 +26,7 @@ allprojects {
 
   repositories {
     maven {
-      url 'http://nexus.osehra.org:8081/nexus/content/groups/public'
+      url 'https://nexus.osehra.org:8444/nexus/content/groups/public'
     }
   }
  uploadArchives {

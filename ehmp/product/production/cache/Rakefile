@@ -33,7 +33,7 @@ end
 task :upload_cache, :version do |t, args|
   puts "CACHE_VERSION='#{args[:version]}'"
   puts "INFO:  Uploading cache version: #{args[:version]} to "
-  puts "INFO:  http://nexus.osehra.org:8081/nexus/content/repositories/releases/us/vistacore/vista/#{args[:version]}/vista-#{args[:version]}.zip"
+  puts "INFO:  https://nexus.osehra.org:8444/nexus/content/repositories/releases/us/vistacore/vista/#{args[:version]}/vista-#{args[:version]}.zip"
   artifact_path = File.expand_path("vista/vista.zip", File.dirname(__FILE__))
   upload_artifact("us.vistacore", "vista", "zip", args[:version], "releases", artifact_path)
 end
@@ -47,7 +47,7 @@ def upload_artifact(group_id, artifact_id, artifact_ext, version, repository, ar
 	coordinates = "#{group_id}:#{artifact_id}:#{artifact_ext}:#{version}"
 	username = ENV["NEXUS_USER_NAME"]
 	password = ENV["NEXUS_PASSWORD"]
-	base_url = "http://nexus.osehra.org:8081/nexus"
+	base_url = "https://nexus.osehra.org:8444/nexus"
 	nexus_remote = NexusCli::RemoteFactory.create(
 	  {
 	    'url' => base_url,

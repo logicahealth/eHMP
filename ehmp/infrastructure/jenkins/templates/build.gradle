@@ -1,7 +1,7 @@
 
 buildscript {
   repositories {
-    maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+    maven { url "https://nexus.osehra.org:8444/nexus/content/groups/public" }
   }
   dependencies {
     classpath 'jenkins:jenkins-cli:1.642.1'

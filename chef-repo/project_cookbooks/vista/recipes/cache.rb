@@ -4,7 +4,7 @@
 #
 
 remote_file "#{Chef::Config[:file_cache_path]}/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm" do
-  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/cache-server/2014.1.3.775.0-1.rh/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm"
+  source "https://nexus.osehra.org:8444/nexus/content/repositories/yum-managed/fakepath/cache-server/2014.1.3.775.0-1.rh/cache-server-2014.1.3.775.0-1.rh.x86_64.rpm"
   action :create
 end
 

@@ -153,7 +153,7 @@ manager.build.addAction(paramAction)</groovyScript>
     <EnvInjectBuildWrapper plugin="envinject@1.92.1">
       <info>
         <propertiesContent>
-          NPM_CONFIG_REGISTRY="http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+          NPM_CONFIG_REGISTRY="https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
           ARTIFACT_VERSION_PREFIX=0.$gitBranch.0.
           ORGNAME=$gitBranch
           OPSCODE_USER=jenkins_sandbox

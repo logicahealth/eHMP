@@ -3,17 +3,17 @@
 # Recipe:: client
 #
 remote_file "#{Chef::Config[:file_cache_path]}/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm" do
-  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-basic/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm"
+  source "https://nexus.osehra.org:8444/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-basic/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm"
   action :create
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm" do
-  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-devel/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm"
+  source "https://nexus.osehra.org:8444/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-devel/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm"
   action :create
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/oracle-instantclient12.1-sqlplus-12.1.0.2.0-1.x86_64.rpm" do
-  source "http://nexus.osehra.org:8081/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-sqlplus/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-sqlplus-12.1.0.2.0-1.x86_64.rpm"
+  source "https://nexus.osehra.org:8444/nexus/content/repositories/yum-managed/fakepath/oracle-instantclient12.1-sqlplus/12.1.0.2.0-1.x86_64/oracle-instantclient12.1-sqlplus-12.1.0.2.0-1.x86_64.rpm"
   action :create
 end
 

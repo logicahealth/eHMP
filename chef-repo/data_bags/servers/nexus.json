@@ -1,5 +1,5 @@
 {
   "id": "nexus",
-  "fqdn": "http://nexus.osehra.org:8081",
+  "fqdn": "https://nexus.osehra.org:8444",
   "ip": "198.61.149.201"
 }

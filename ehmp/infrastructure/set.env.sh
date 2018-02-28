@@ -102,7 +102,7 @@ fi
 #  export PATH=/usr/local/git/bin:$PATH
 #  export NPM_CONFIG_REGISTRY=https://sandstore.vistacore.us/nexus/content/repositories/npm-all/
 #else
-#  export NPM_CONFIG_REGISTRY="http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+#  export NPM_CONFIG_REGISTRY="https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
 #fi
 
 export PATH=$JAVA_HOME/bin:/opt/chefdk/bin:/opt/chefdk/embedded/bin:$PATH

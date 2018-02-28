@@ -17,14 +17,14 @@ version = "${->repoVersion + '.' + repoCommitCount}"
 ext.set('infrastructureVersion', version)
 
 repositories {
-  maven {url "http://nexus.osehra.org:8081/nexus/content/groups/public"}
+  maven {url "https://nexus.osehra.org:8444/nexus/content/groups/public"}
 }
 
 uploadArchives {
   repositories.mavenDeployer {
     pom.groupId = "${->groupId}"
     pom.version = "${->infrastructureVersion}"
-    repository(url: "http://nexus.osehra.org:8081/nexus/content/repositories/${->repo}") {
+    repository(url: "https://nexus.osehra.org:8444/nexus/content/repositories/${->repo}") {
       authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
     }
   }

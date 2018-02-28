@@ -98,7 +98,7 @@
     <repositories>
         <repository>
             <id>vistacore</id>
-            <url>http://nexus.osehra.org:8081/nexus/content/repositories/filerepo</url>
+            <url>https://nexus.osehra.org:8444/nexus/content/repositories/filerepo</url>
         </repository>
     </repositories>
 </project>

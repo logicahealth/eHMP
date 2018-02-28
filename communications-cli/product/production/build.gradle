@@ -16,7 +16,7 @@ clean.dependsOn cleanNPM
 task installNpm(type: Exec) {
   group "Communication CLI Tasks"
   description "installs package(s)"
-  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
 }
 
 task build(dependsOn: [clean, installNpm]) {
@@ -33,7 +33,7 @@ task test(type: Exec, dependsOn: [build]) {
 task installNpmOracleDB(type: Exec) {
   group "RDK Tasks"
   description "installs the Oracle DB node package"
-  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install oracledb@1.12.2 --unsafe-perm --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+  commandLine "scl", "enable", "python27", "devtoolset-3", "CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install oracledb@1.12.2 --unsafe-perm --registry https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
 }
 
 task tarCommunicationsCLI(type: Tar, dependsOn: [build]) {

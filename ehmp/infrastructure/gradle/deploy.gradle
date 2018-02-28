@@ -12,7 +12,7 @@ configurations {
 
 buildscript {
   repositories {
-    maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+    maven { url "https://nexus.osehra.org:8444/nexus/content/groups/public" }
   }
 
   dependencies {
@@ -689,5 +689,5 @@ def getVersionParams(String repoName, String buildType) {
 }
 
 repositories {
-  maven { url "http://nexus.osehra.org:8081/nexus/content/groups/public" }
+  maven { url "https://nexus.osehra.org:8444/nexus/content/groups/public" }
 }

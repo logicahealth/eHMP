@@ -32,16 +32,16 @@ allprojects {
   ext.set('currentCommitHash', getCurrentCommitHash())
 
   repositories {
-    maven {url "http://nexus.osehra.org:8081/nexus/content/groups/public"}
+    maven {url "https://nexus.osehra.org:8444/nexus/content/groups/public"}
   }
 }
 
 def getNexusURL() {
-    System.env.OVERRIDE_NEXUS_URL ?: 'http://nexus.osehra.org:8081'
+    System.env.OVERRIDE_NEXUS_URL ?: 'https://nexus.osehra.org:8444'
 }
 
 def getNpmRegistry() {
-    System.env.NPM_CONFIG_REGISTRY ?: 'http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/'
+    System.env.NPM_CONFIG_REGISTRY ?: 'https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/'
 }
 
 def getNexusUploadRepository() {

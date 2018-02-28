@@ -19,7 +19,7 @@ sourceCompatibility = property('javaVersion')
 targetCompatibility = property('targetJavaVersion')
 
 repositories {
-     maven { url "http://nexus.osehra.org:8081/nexus/content/repositories/public" }
+     maven { url "https://nexus.osehra.org:8444/nexus/content/repositories/public" }
 }
 dependencies {
     compile project(':production:cdsdashboard:cds-dashboard-client')

@@ -32,7 +32,7 @@ node('ehmpdocker') {
                 runIntegrationTest = env.BRANCH_NAME ==~ /master/
 
                 stage('Unit Test') {
-                    withEnv(['NPM_CONFIG_REGISTRY=http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/']) {
+                    withEnv(['NPM_CONFIG_REGISTRY=https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/']) {
                         sh 'node -v'
                         sh 'npm -v'
                         sh 'npm prune'
@@ -44,7 +44,7 @@ node('ehmpdocker') {
 
                 if (runIntegrationTest) {
                     stage('Deploy') {
-                        withEnv(['DRIVER=aws', 'NEXUS_URL=http://nexus.osehra.org:8081', 'ACTION=converge', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
+                        withEnv(['DRIVER=aws', 'NEXUS_URL=https://nexus.osehra.org:8444', 'ACTION=converge', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
                             sh '''
                                 set -e
                                 curl "$NEXUS_URL/nexus/service/local/repositories/releases/content/us/vistacore/artifact-versions-shell/$APP_VERSION/artifact-versions-shell-$APP_VERSION.sh" -o artifact_versions.sh
@@ -79,7 +79,7 @@ node('ehmpdocker') {
                     }
 
                     stage('Shutdown') {
-                        withEnv(['DRIVER=aws', 'NEXUS_URL=http://nexus.osehra.org:8081', 'ACTION=stop', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
+                        withEnv(['DRIVER=aws', 'NEXUS_URL=https://nexus.osehra.org:8444', 'ACTION=stop', 'ORGNAME=vistacore', 'OPSCODE_USER=jenkins']) {
                             if (env.BRANCH_NAME ==~ /master|features\/.+/) {
                                 // master and feature branches get stopped
                                 sh '''
@@ -104,7 +104,7 @@ node('ehmpdocker') {
                 if (env.BRANCH_NAME ==~ /master/) {
                     // master publish
                     stage('Publish to store') {
-                        withEnv(['NPM_CONFIG_REGISTRY=http://nexus.osehra.org:8081/nexus/content/repositories/npm-internal/']) {
+                        withEnv(['NPM_CONFIG_REGISTRY=https://nexus.osehra.org:8444/nexus/content/repositories/npm-internal/']) {
                             sh 'npm publish'
                         }
                     }

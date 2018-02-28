@@ -302,7 +302,7 @@ ENV['APP_VERSIONS'].split(/\n+/).each do |app_version|
   `mkdir #{folder}`
 
   Dir.chdir(folder) do
-    `curl -s -O 'http://nexus.osehra.org:8081/nexus/service/local/repositories/releases-export/content/us/vistacore/artifact-versions-shell/#{app_version}/artifact-versions-shell-#{app_version}.sh'`
+    `curl -s -O 'https://nexus.osehra.org:8444/nexus/service/local/repositories/releases-export/content/us/vistacore/artifact-versions-shell/#{app_version}/artifact-versions-shell-#{app_version}.sh'`
 
     File.readlines("artifact-versions-shell-#{app_version}.sh").each do |line|
       key, value = line.gsub("export ", "").split "="
@@ -314,8 +314,8 @@ ENV['APP_VERSIONS'].split(/\n+/).each do |app_version|
         exported = false
         mapping.each { |artifact_name,coords|
           if coords[:version] == key
-            puts "Curling #{artifact_name} with command: curl -s -O 'http://nexus.osehra.org:8081/nexus/service/local/repositories/releases-export/content/#{coords[:group].gsub('.','/')}/#{coords[:artifact]}/#{value.chomp}/#{coords[:artifact]}-#{value.chomp}.#{coords[:extension]}'"
-            `curl -s -O 'http://nexus.osehra.org:8081/nexus/service/local/repositories/releases-export/content/#{coords[:group].gsub('.','/')}/#{coords[:artifact]}/#{value.chomp}/#{coords[:artifact]}-#{value.chomp}.#{coords[:extension]}'`
+            puts "Curling #{artifact_name} with command: curl -s -O 'https://nexus.osehra.org:8444/nexus/service/local/repositories/releases-export/content/#{coords[:group].gsub('.','/')}/#{coords[:artifact]}/#{value.chomp}/#{coords[:artifact]}-#{value.chomp}.#{coords[:extension]}'"
+            `curl -s -O 'https://nexus.osehra.org:8444/nexus/service/local/repositories/releases-export/content/#{coords[:group].gsub('.','/')}/#{coords[:artifact]}/#{value.chomp}/#{coords[:artifact]}-#{value.chomp}.#{coords[:extension]}'`
             exported = true
           end
         }

@@ -27,7 +27,7 @@
 		<repository>
 			<id>internal</id>
 			<name>internal</name>
-			<url>http://nexus.osehra.org:8081/nexus/content/groups/public/</url>
+			<url>https://nexus.osehra.org:8444/nexus/content/groups/public/</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>

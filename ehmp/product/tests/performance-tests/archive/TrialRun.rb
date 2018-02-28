@@ -83,7 +83,7 @@ When /^the load is increased by "([^"]*)" requests per second after "([^"]*)" mi
         @provider.providerBoxURL= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
         #@provider.providerName= :virtualbox
         #@provider.providerBoxName= "opscode-centos-6.3"
-        #@provider.providerBoxURL= "http://nexus.osehra.org:8081/repositories/filerepo/com/vagrantup/basebox/opscode-centos/6.3/opscode-centos-6.3.box"
+        #@provider.providerBoxURL= "https://nexus.osehra.org:8444/repositories/filerepo/com/vagrantup/basebox/opscode-centos/6.3/opscode-centos-6.3.box"
 
 
     @tr = LoadGenerator.testRun :NormalTestRun

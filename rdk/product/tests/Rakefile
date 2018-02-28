@@ -33,7 +33,7 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("write_back", ["write_back", "service_config", "port"], "default")
     ENV["RDK_PICKLIST_HOST"] = pick_list_ip
     ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("pick_list", ["pick_list", "service_config", "port"], "default")
-    ENV["NPM_CONFIG_REGISTRY"] = ENV["NPM_CONFIG_REGISTRY"] || "http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+    ENV["NPM_CONFIG_REGISTRY"] = ENV["NPM_CONFIG_REGISTRY"] || "https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
     begin
       ENV["JDS_IP"] = knife_search_for_ip("jds")
     rescue

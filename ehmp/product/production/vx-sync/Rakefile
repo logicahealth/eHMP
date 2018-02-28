@@ -20,7 +20,7 @@ end
 def npm_command(env)
 
   if env == "aws"
-    npm_registry = ENV['NPM_CONFIG_REGISTRY'] || "http://nexus.osehra.org:8081/nexus/content/repositories/npm-all/"
+    npm_registry = ENV['NPM_CONFIG_REGISTRY'] || "https://nexus.osehra.org:8444/nexus/content/repositories/npm-all/"
     ret = "scl enable python27 devtoolset-3 'CC=/opt/rh/devtoolset-3/root/usr/bin/gcc CXX=/opt/rh/devtoolset-3/root/usr/bin/g++ /usr/local/bin/npm install --unsafe-perm --registry #{npm_registry}'"
   else
     ret = "npm install --registry https://sandstore.vistacore.us/nexus/content/repositories/npm-all/"

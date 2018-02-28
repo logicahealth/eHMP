@@ -54,7 +54,7 @@ task smokeTest{
 }
 
 def getNexusURL() {
-    System.env.OVERRIDE_NEXUS_URL ?: 'http://nexus.osehra.org:8081'
+    System.env.OVERRIDE_NEXUS_URL ?: 'https://nexus.osehra.org:8444'
 }
 
 def getNexusUploadRepository() {

@@ -65,7 +65,7 @@
       <command>npm install --save-dev</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>npm publish --registry http://nexus.osehra.org:8081/nexus/content/repositories/npm-internal/</command>
+      <command>npm publish --registry https://nexus.osehra.org:8444/nexus/content/repositories/npm-internal/</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
