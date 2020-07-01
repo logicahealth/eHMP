@@ -76,7 +76,7 @@
         <!-- other libs -->
         <commons.pool2.version>2.2</commons.pool2.version>
         <commons.lang3.version>3.3.2</commons.lang3.version>
-        <quartz.version>2.2.1</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
 
         <!-- databases -->
         <bdb.je.version>6.2.7</bdb.je.version>
