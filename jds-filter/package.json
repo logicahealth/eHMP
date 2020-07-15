@@ -8,7 +8,7 @@
   },
   "author": "David Aderton <david.aderton@accenturefederal.com>",
   "dependencies": {
-    "lodash": "^3.9.3"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "browserify": "^10.2.3",
