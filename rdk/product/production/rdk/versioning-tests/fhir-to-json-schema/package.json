@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "commander": "~2.9.0",
-    "lodash": "~3.10.0"
+    "lodash": "~4.17.19"
   },
   "devDependencies": {
     "ajv": "~1.4.8",
