@@ -42,7 +42,7 @@
     "job-framework": "1.2.10",
     "jds-cache-api": "1.0.3",
     "js-yaml": "3.5.5",
-    "lodash": "3.10.1",
+    "lodash": "4.17.19",
     "memory-cache": "0.0.5",
     "lzma": "2.3.2",
     "mitm": "1.2.1",
