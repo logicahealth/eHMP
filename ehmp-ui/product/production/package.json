@@ -32,6 +32,6 @@
     "karma-jasmine-jquery": "^0.1.1",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-requirejs": "^1.1.0",
-    "lodash": "~3.10.1"
+    "lodash": "~4.17.19"
   }
 }
