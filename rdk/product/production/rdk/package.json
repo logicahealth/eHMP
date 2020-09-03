@@ -62,7 +62,7 @@
     "nock": "2.10.0",
     "node-cache": "1.0.3",
     "node-mocks-http": "1.5.6",
-    "node-rules": "3.1.0",
+    "node-rules": "5.0.0",
     "node-schedule": "0.2.9",
     "node-uuid": "1.4.8",
     "nodemailer": "2.7.2",
