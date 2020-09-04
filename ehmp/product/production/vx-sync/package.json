@@ -48,7 +48,7 @@
     "mitm": "1.2.1",
     "mkdirp": "0.5.1",
     "moment": "2.10.6",
-    "mongodb": "2.2.31",
+    "mongodb": "3.6.1",
     "namecase": "1.1.2",
     "nconf": "0.6.9",
     "node-schedule": "0.2.9",
