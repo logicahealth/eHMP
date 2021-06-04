@@ -42,7 +42,7 @@
         <sisu.version>0.3.2</sisu.version>
         <aether.connector.wagon.version>1.13.1</aether.connector.wagon.version>
         <wagon.provider.api.version>2.6</wagon.provider.api.version>
-        <httpcomponents.version>4.4</httpcomponents.version>
+        <httpcomponents.version>4.5.13</httpcomponents.version>
         <plexus-utils.version>3.0.17</plexus-utils.version>
         <jcl-over-slf4j.version>1.7.10</jcl-over-slf4j.version>
         <aether.version>1.0.0.v20140518</aether.version>
