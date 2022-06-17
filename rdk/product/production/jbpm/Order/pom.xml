@@ -12,7 +12,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<kie-version>6.4.0.Final</kie-version>
+		<kie-version>7.60.0.Final</kie-version>
 		<jboss-logging>3.3.0.Final</jboss-logging>
 	<joda-time>1.6.2.redhat-5</joda-time>
 	</properties>
