@@ -22,7 +22,7 @@
 		<maven.compiler.source>${javaVersion}</maven.compiler.source>
 		<maven.compiler.target>${targetJavaVersion}</maven.compiler.target>
 		<jbpm.version>${kie-version}</jbpm.version>
-		<jackson-core-version>2.6.3</jackson-core-version>
+		<jackson-core-version>2.12.7.1</jackson-core-version>
 		<springframework-version>${spring-version}</springframework-version>
 		<slf4j-version>1.7.12</slf4j-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
